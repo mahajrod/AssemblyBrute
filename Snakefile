@@ -625,17 +625,20 @@ include: "workflow/rules/Kmer/Smudgeplot.smk"
 include: "workflow/rules/Kmer/KAT.smk"
 include: "workflow/rules/Kmer/GCplot.smk"
 include: "workflow/rules/Kmer/Genomescope.smk"
-"""
-if "hifi" in data_types:
-    include: "workflow/rules/Contigs/Hifiasm.smk"
 
-include: "workflow/rules/Contigs/Graph.smk"
 include: "workflow/rules/QCAssembly/BUSCO5.smk"
 include: "workflow/rules/QCAssembly/Merqury.smk"
 include: "workflow/rules/QCAssembly/QUAST.smk"
 include: "workflow/rules/QCAssembly/General.smk"
 include: "workflow/rules/Contamination/FCS.smk"
 include: "workflow/rules/Contamination/Kraken2.smk"
+
+"""
+if "hifi" in data_types:
+    include: "workflow/rules/Contigs/Hifiasm.smk"
+
+include: "workflow/rules/Contigs/Graph.smk"
+
 include: "workflow/rules/Stats/General.smk"
 
 if "purge_dups" in config["stage_list"]:

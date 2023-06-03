@@ -35,6 +35,7 @@ rule multiqc:
         parameters["threads"]["multiqc"]
     shell:
         " REPORT_PREFIX={output.report}; "
-        " REPORT_PREFIX=${{REPORT_PREFIX%.html}}; "
-        " multiqc --filename ${{REPORT_PREFIX}} -p --outdir {output.dir} "
+        " REPORT_PREFIX=`basename ${{REPORT_PREFIX%.html}}`; "
+        " OUTDIR=`dirname {output.report}`; "
+        " multiqc --filename ${{REPORT_PREFIX}} -p --outdir ${{OUTDIR}} "
         " --comment {wildcards.datatype} {params.input_dir} > {log.std} 2>&1; "

@@ -7,9 +7,9 @@ rule fastqc:
         zip=output_dict["qc"] / "fastqc/{datatype}/{stage}/{fileprefix}_fastqc.zip" ,
         #stats=merged_raw_fastqc_dir_path / "{library_id}/{library_id}.raw.fastqc.stats"
     params:
-        kmer=parameters["tool_options"]["fastqc"]["kmer_length"],
-        out_dir=lambda wildcards: output_dict["qc"] / "fastqc/{0}/{1}/".format(wildcards.datatype,
-                                                                               wildcards.stage),
+        kmer=lambda wildcards: parse_option("kmer_length", parameters["tool_options"]["fastqc"][wildcards.datatype], " -k "),
+        #out_dir=lambda wildcards: output_dict["qc"] / "fastqc/{0}/{1}/".format(wildcards.datatype,
+        #                                                                       wildcards.stage),
         nogroup=lambda wildcards: "" if wildcards.datatype in config["long_read_data"] else "--nogroup" # turns off base grouping for short reads
 
     log:
@@ -28,8 +28,6 @@ rule fastqc:
     threads:
         parameters["threads"]["fastqc"]
     shell:
-        " fastqc {params.nogroup} --memory {resources.mem} -k {params.kmer} -t {threads} "
-        " -o {params.out_dir} {input} 1>{log.std} 2>&1; "
-        #" workflow/scripts/convert_fastqc_output.py -f {output.forward_fastqc} -r {output.reverse_fastqc} "
-        #" -s {wildcards.library_id} -o {output.stats} 1>{log.stats} 2>&1 "
-
+        " OUTDIR=`dirname {output.zip}`;"
+        " fastqc {params.nogroup} --memory {resources.mem} {params.kmer} -t {threads} "
+        " -o ${{OUTDIR}} {input} 1>{log.std} 2>&1; "

@@ -7,15 +7,15 @@ rule multiqc:
                                  fileprefix=input_file_prefix_dict[wildcards.datatype],
                                  allow_missing=True)
     output:
-        dir=directory(output_dict["qc"] / "multiqc/{datatype}/{stage}/"),
+        #dir=directory(output_dict["qc"] / "multiqc/{datatype}/{stage}/"),
         report=output_dict["qc"] / "multiqc/{datatype}/{stage}/multiqc.{datatype}.{stage}.report.html"
         #stats=merged_raw_multiqc_dir_path / "{library_id}/{library_id}.raw.multiqc.stats"
     params:
         # multiqc adds report filename to outdir path and even creates additional subdirectories if necessary.
         # So if you set --outdir option --filename should not contain directories.
         # Moreover, --filename is in fact not filename but prefix
-        report_filename=lambda wildcards: "multiqc.{0}.{1}.report".format(wildcards.datatype,
-                                                                          wildcards.stage),
+        #report_filename=lambda wildcards: "multiqc.{0}.{1}.report".format(wildcards.datatype,
+        #                                                                  wildcards.stage),
         input_dir=lambda wildcards: output_dict["qc"] / "fastqc/{0}/{1}/".format(wildcards.datatype,
                                                                                  wildcards.stage)
     log:
@@ -34,5 +34,8 @@ rule multiqc:
     threads:
         parameters["threads"]["multiqc"]
     shell:
-        " multiqc --filename {params.report_filename} -p --outdir {output.dir} "
+        " REPORT_PREFIX={output.report}; "
+        " REPORT_PREFIX=${{REPORT_PREFIX%.html}}; "
+        " OUTDIR=`dirname {output.report}`; "
+        " multiqc --filename ${{REPORT_PREFIX}} -p --outdir ${{OUTDIR}} "
         " --comment {wildcards.datatype} {params.input_dir} > {log.std} 2>&1; "

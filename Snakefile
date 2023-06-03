@@ -261,7 +261,7 @@ if "read_qc" in config["stage_list"]:
 if "draft_qc" in config["stage_list"]:
     results_list += [ ] # TODO: implement
 
-"""
+
 if "filter_reads" in config["stage_list"]:
     #print(genome_size_estimation_data_type_set)
     results_list += [expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),
@@ -348,7 +348,7 @@ if ("gcp" in config["stage_list"]) and (not config["skip_gcp"]):
 
 if "filter_draft" in config["stage_list"]:
     results_list += [ ] # TODO: implement
-
+"""
 if "contig" in config["stage_list"]:
     assembler_list = config["stage_coretools"]["contig"][config["contig_datatype"]]
     stage_dict["contig"]["parameters"] = {}
@@ -618,14 +618,14 @@ include: "workflow/rules/QCFiltering/Cutadapt.smk"
 include: "workflow/rules/QCFiltering/Nanopore.smk"
 include: "workflow/rules/QCFiltering/NanoQC.smk"
 include: "workflow/rules/QCFiltering/NanoPlot.smk"
-"""
+
 include: "workflow/rules/Kmer/Jellyfish.smk"
 include: "workflow/rules/Kmer/Meryl.smk"
 include: "workflow/rules/Kmer/Smudgeplot.smk"
 include: "workflow/rules/Kmer/KAT.smk"
 include: "workflow/rules/Kmer/GCplot.smk"
 include: "workflow/rules/Kmer/Genomescope.smk"
-
+"""
 if "hifi" in data_types:
     include: "workflow/rules/Contigs/Hifiasm.smk"
 

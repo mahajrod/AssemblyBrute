@@ -1,0 +1,8 @@
+#---- Bioconda config ----
+"name": "kat"
+"channels":
+  - "bioconda"
+  - "conda-forge"
+  - "anaconda"
+"dependencies":
+  - "kat=2.4.1"

@@ -1,0 +1,4 @@
+The folder contains set of RapidCuration scripts copied from https://gitlab.com/wtsi-grit/rapid-curation/-/tree/main
+
+Script are not available from conda or pip or other distribution systems.
+I decide just to copy them within the pipeline as MIT licence allows it.

@@ -1,0 +1,112 @@
+---
+title: "![](logo/globe_long.png){width=6in} \\vspace{0.2in} \nRunning VGPsnake pipeline v`r params$version`"
+subtitle: ""
+author: "Sergei Kliver"
+date: "PDF generated on `r format(Sys.time(), '%B %d, %Y')`"
+lang: en-US
+
+params:
+  usage: "For internal use only"
+  version: "0.1a"
+
+header-includes:
+    - \usepackage{svg}
+    - \usepackage{fancyhdr}
+    - \usepackage{indentfirst}
+    - \pagestyle{fancy}
+    - \setlength{\headheight}{29pt}
+    - \fancyhead[L]{\includegraphics[height=25pt]{logo/globe_long.png}}
+
+output:
+    pdf_document:
+        toc: true
+        toc_depth: 5
+        keep_tex: true
+        number_sections: true
+        includes:
+            in_header: latex/preamble.tex
+            before_body: latex/before_body.tex
+        latex_engine: pdflatex
+        pandoc_args:
+            - "--listings"
+            - "--pdf-engine-opt=--shell-escape"
+            - "--verbose"
+---
+
+\newpage
+
+# Ways to run
+
+There are three ways to run the pipeline:
+
+1. Run pipeline directly from source code. Setting of the environment (tools, databases and resources) is necessary.
+This option theoretically allows to run pipeline on cluster or in cloud, but it was not tested.
+
+2. Run pipeline packaged in docker container. Installation of container is necessary and is described in document
+*DOCKER.pdf*. Tools, databases and resources are embedded in it.
+
+3. Run pipeline packaged in docker via wrapper script **run_vgpsnake_docker.py**.
+It simplifies and shortens the command necessary to run thr pipeline. Requirements are same as for previous cases.
+
+# Installation of the docker container
+
+First , you will have to install Docker itself. You could use the official instructions https://docs.docker.com/engine/install/ubuntu/ for your operating system.
+Please, make sure that the  user you are going to use to run the pipeline is added to a docker group.
+This step will require assistance of an IT team.
+Next, you will need to download and install docker image of the pipeline
+To unpack and install image run:
+
+\begin{lstlisting}
+docker image load -i vgpsnake.tar
+\end{lstlisting}
+
+
+# Quick start
+## Minimal input
+
+
+## Running the pipeline
+
+
+
+# Same but with call of docker container via **run_vgpsnake_docker.py**
+
+
+
+
+# Same but with direct call of docker container
+
+
+
+
+\newpage
+
+# Pipeline inputs and settings
+## Starting points
+
+
+## Input files
+
+## Modes
+Pipeline could be run in several modes:
+
+1. "full"              - full assembly pipeline
+
+
+
+
+
+
+# Output files
+## Structure of output directory
+Pipeline stores all intermediate files including
+
+\begin{lstlisting}
+results/
+
+\end{lstlisting}
+
+
+
+
+\newpage

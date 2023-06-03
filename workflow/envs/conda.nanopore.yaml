@@ -1,0 +1,14 @@
+#---- Bioconda config ----
+#TODO: check tools and versions
+"name": "nanopore"
+"channels":
+  - "mahajrod"
+  - "bioconda"
+  - "conda-forge"
+  - "anaconda"
+"dependencies":
+  - "nanoqc"
+  - "chopper"
+  - "filtlong"
+  - "porechop_abi"
+  - "nanoplot"

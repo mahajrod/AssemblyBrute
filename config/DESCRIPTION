@@ -1,0 +1,3 @@
+Configuration files:
+    - core.yaml        -         configuration file containing setting for tools and pipeline. Usually you don't need to modify it
+    - default.yaml     -

@@ -1,0 +1,151 @@
+---
+title: "![](logo/globe_long.png){width=6in} \\vspace{0.2in} \nDescription of the configuration file for InterArray pipeline v`r params$version`"
+subtitle: ""
+author: "Sergei Kliver"
+date: "PDF generated on `r format(Sys.time(), '%B %d, %Y')`"
+lang: en-US
+
+params:
+  usage: "For internal use only"
+  version: "0.1a"
+
+header-includes:
+    - \usepackage{svg}
+    - \usepackage{fancyhdr}
+    - \usepackage{indentfirst}
+    - \pagestyle{fancy}
+    - \setlength{\headheight}{29pt}
+    - \fancyhead[L]{\includegraphics[height=25pt]{logo/globe_long.png}}
+
+output:
+    pdf_document:
+        toc: true
+        toc_depth: 5
+        keep_tex: true
+        number_sections: true
+        includes:
+            in_header: latex/preamble.tex
+            before_body: latex/before_body.tex
+        latex_engine: pdflatex
+        pandoc_args:
+            - "--listings"
+            - "--pdf-engine-opt=--shell-escape"
+            - "--verbose"
+---
+
+\newpage
+
+# Introduction
+Configuration (config) file of the pipeline is a simple YAML file, allowing to set and tune various options of pipeline.
+Both docker package and source code contain default config file. Please, keep in mind that option values you set via
+command line will overwrite corresponding options set by config, i.e. options are read first from config file and then
+modified by values from command line.
+
+# Configuration file
+## Options setting folder structure
+In overhelming number of cases you will not need to modify values of these options, especially if you use dockerized version of the pipeline.
+
+### Folders with resources
+### Input folders
+Set of options controlling input.
+\begin{lstlisting}
+
+
+\end{lstlisting}
+
+
+### Output folders and subfolders
+Set of option controlling structure of the output
+Please keep in minfd that if you use dockerized pipeline and will change the value of \textbf{out\_dir} option, you will need to modify docker command too.
+
+\begin{lstlisting}
+out_dir: "results"
+#--------- Subdirectories --------
+log_dir: "logs"
+error_dir: "errors"
+benchmark_dir: "benchmarks"
+
+cluster_log_dir: "cluster_logs"
+preprocessing_dir: "preprocessing"
+
+basecall_dir: "basecalling"
+fastq_dir: "fastq"
+per_lane_raw_fastq_dir: "per_lane_raw"
+merged_raw_fastq_dir: "merged_raw"
+filtered_fastq_dir: "filtered"
+consensus_fastq_dir: "consensus"
+fastqc_dir: "fastqc"
+per_lane_raw_fastqc_dir: "per_lane_raw"
+merged_raw_fastqc_dir: "merged_raw"
+filtered_fastqc_dir: "filtered"
+merged_target_regions_dir: "merged_target"
+alignment_dir: "alignment"
+variantcall_dir: "variantcall"
+panel_of_normals_dir: "panel_of_normals"
+final_dir: "final"
+\end{lstlisting}
+
+## Resource settings for rules
+Every Snakemake-based pipeline consist of steps named rules which run tools.
+For each rule you have to set number of threads, memory and time limit.
+Default options were optimized for 20 core server with hyperthreding enabled and 256 RAM.
+
+### Thread settings for rules
+Options for CPU usage.
+
+\begin{lstlisting}
+threads:
+
+\end{lstlisting}
+
+### Memory settings for rules
+Options for memory usage (in megabytes).
+
+\begin{lstlisting}
+memory_mb:
+
+\end{lstlisting}
+
+### Time limit for rules
+Time limit for rules. Limits are ignored if pipeline is run via docker or on local serverr and have effect only if you will run pipeline on cluster.
+\begin{lstlisting}
+time:
+
+map_time: "48:00:00"
+\end{lstlisting}
+
+
+
+## Tool/rule related variables
+
+
+### Quality control and adapter trimming
+
+Adapter trimming is performed using \textbf{cutadapt} tool.
+\begin{lstlisting}
+cutadapt:
+  minlength: 50
+  adapter_seq: "AGATCGGAAGAGC"
+fastqc:
+  kmer_length: 7
+\end{lstlisting}
+
+
+
+## Pipeline modes
+Pipeline could be run in several modes:
+
+1. "full"              - full assembly pipeline
+
+
+\begin{lstlisting}
+mode: "full"
+\end{lstlisting}
+
+
+## Starting starting point
+
+
+\begin{lstlisting}
+
+\end{lstlisting}

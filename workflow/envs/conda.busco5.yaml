@@ -1,0 +1,10 @@
+#---- Bioconda config for salsa2 ----
+
+"name": "busco5"
+"channels":
+  - "bioconda"
+  - "conda-forge"
+  - "anaconda"
+"dependencies":
+  - "python>=3"
+  - "busco=5.4"

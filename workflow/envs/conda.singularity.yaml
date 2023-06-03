@@ -1,0 +1,10 @@
+#---- Bioconda config ----
+#TODO: check tools and versions
+"name": "yggbase"
+"channels":
+  - "bioconda"
+  - "conda-forge"
+  - "anaconda"
+"dependencies":
+  - "singularity=3.5"
+  - "python=3.8"

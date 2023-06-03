@@ -1,0 +1,168 @@
+---
+title: "![](logo/globe_long.png){width=6in} \\vspace{0.2in} \nManual for building and installation of docker container for VGPsnake pipeline v`r params$version`"
+subtitle: ""
+author: "Sergei Kliver"
+date: "PDF generated on `r format(Sys.time(), '%B %d, %Y')`"
+
+params:
+  usage: "For internal use only"
+  version: "0.1a"
+
+output:
+    pdf_document:
+        toc: true
+        toc_depth: 5
+        number_sections: true
+        includes:
+            before_body: latex/before_body.tex
+        latex_engine: pdflatex
+        pandoc_args: "--pdf-engine-opt=--shell-escape"
+
+header-includes:
+    - \usepackage{svg}
+    - \usepackage{fancyhdr}
+    - \pagestyle{fancy}
+    - \setlength{\headheight}{29pt}
+    - \fancyhead[L]{\includegraphics[height=25pt]{logo/Novel_64px_small.png}}
+---
+\newpage
+# Docker installation
+
+Install docker using instruction from https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
+
+Here is the sample commands log from this instruction:
+
+```
+apt-get update
+
+apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+    
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+echo \
+  "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  
+sudo apt-get update
+
+sudo apt-get install docker-ce docker-ce-cli containerd.io
+```
+
+# Add current user to a `docker` group
+Replace %user% with desired user name
+```
+usermod -a -G docker %user%
+```
+
+
+# Docker image creation
+Pipeline consists of two docker images:
+1. Baseline 'vgpsnake_base' containing all required libraries and packages and can be reused between multiple pipelines
+2. Pipline 'vgpsnake' containing code and data specific to this pipeline
+
+Create base docker image. This operation takes 1.5 hours first time 
+
+All paths are relative to this directory
+
+```
+cd docker_base/
+time docker build -t vgpsnake_base .
+```
+
+Create pipeline image:
+
+```
+cd ..
+time docker build -t vgpsnake .
+```
+ 
+This step takes about 40-50 minutes first time
+
+# Run Docker image
+
+```
+time docker run \
+        --mount type=bind,source=/input,target=/workdir/input \
+	--mount type=bind,source=/test_volume,target=/workdir/results \
+	--rm  \
+	-a stdin -a stdout -i -t \
+	--user=$(id -u):1000 \
+	interpace_array \
+	snakemake # TODO: add command here
+```
+
+Explaination:
+
+```
+--mount type=bind,source=/input,target=/workdir/input
+```
+
+Mounts host directory with an input sample to a container
+
+```
+--mount type=bind,source=/test_volume,target=/workdir/results
+```
+
+Mounts output directory to a container. This directory will contains pipeline results
+
+```
+--rm
+```
+
+Clean container after pipeline was finished
+
+```
+-a stdin -a stdout -i -t
+```
+
+Run container foreground to let user see processing log
+
+```
+--user=$(id -u):1000
+```
+
+Run container as a current user and use `micromamba` group inside a container. This will let container to write results to a host directory
+
+```
+vgpsnake
+```
+
+docker image name
+
+```
+snakemake --cores 8 --configfile config/default.yaml --printshellcmds --latency-wait 30 --config mode="test"
+```
+
+A command to run inside a container
+
+
+For debug purposes, last command `snakemake ...` can be replaced to `/bin/bash`
+
+```
+time docker run \
+        --mount type=bind,source=/input,target=/workdir/input \
+	--mount type=bind,source=/test_volume,target=/workdir/results \
+	--rm  \
+	-a stdin -a stdout -i -t \
+	--user=$(id -u):1000 \
+	interpace_array \
+	/bin/bash
+```
+
+# Save Docker image to a file
+In order to transfer docker image to another server it should be saved to a tar file:
+
+```
+time docker save -o vgpsnake.tar vgpsnake
+```
+
+To load image from file, run:
+
+```
+docker image load -i vgpsnake.tar
+```

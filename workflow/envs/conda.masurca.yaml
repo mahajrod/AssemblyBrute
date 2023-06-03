@@ -1,0 +1,10 @@
+#---- Bioconda config ----
+#TODO: check tools and versions
+"name": "masurca"
+"channels":
+  - "mahajrod"
+  - "bioconda"
+  - "conda-forge"
+  - "anaconda"
+"dependencies":
+  - "masurca"

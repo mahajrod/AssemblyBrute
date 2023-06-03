@@ -8,7 +8,10 @@ from collections.abc import Mapping
 from copy import deepcopy
 from pathlib import Path, PosixPath
 
-#---- Include sctions for functions ----
+#---- Read main_config ----
+config.update(yaml.safe_load(config["main_config_file"]))
+
+#---- Include sections for functions ----
 include: "workflow/functions/option_parsing.py"
 include: "workflow/functions/general_parsing.py"
 
@@ -152,6 +155,9 @@ for key in list(config["parameters"].keys()): # remove unused sets of parameters
 
 parameters = config["parameters"][config["parameter_set"]] # short alias for used set of parameters
 
+for tool in config["other_tool_option_sets"]: # select active set of option for tools other than coretools
+    parameters["tool_options"][tool] = parameters["tool_options"][tool][config["other_tool_option_sets"][tool]]
+
 #check if final_kmer_tool is present in "kmer_counter_list"
 if config["final_kmer_counter"] not in config["kmer_counter_list"]:
     config["kmer_counter_list"].append(config["final_kmer_counter"])
@@ -230,6 +236,7 @@ if "check_reads" in config["stage_list"]:
 
 if "check_draft" in config["stage_list"]:
     results_list += [ ] # TODO: implement
+"""
 
 if "read_qc" in config["stage_list"]:
     results_list += [*[expand(output_dict["qc"] / "fastqc/{datatype}/{stage}/{fileprefix}_fastqc.zip",
@@ -344,40 +351,7 @@ if "contig" in config["stage_list"]:
     assembler_list = config["stage_coretools"]["contig"][config["contig_datatype"]]
     stage_dict["contig"]["parameters"] = {}
 
-    """
-    option_cluster_dict = {}
-    option_cluster_reverse_dict = {}
-    # Cluster assembler option sets by options affecting read correction:
-    for assembler in assembler_list:
-        option_cluster_dict[assembler] = {}
-        for option_set in config["coretool_option_sets"][assembler]:
-            for option_supergroup in ["options_affecting_error_correction"]:
-                option_cluster_dict[assembler][option_supergroup] = {}
-                option_set_list = []
-                for option in config["tool_specific_features"][assembler][option_supergroup]:
-                    if option in parameters["tool_options"][assembler][option_set]:
-                        option_set_list.append("{0}_{1}".format(option, parameters["tool_options"][assembler][option_set]))
-                    else:
-                        option_set_list.append("{0}_default".format(option))
-                option_set_cluster_name = ".".join(option_set_list)
 
-                if option_set_cluster_name in option_cluster_dict[assembler]:
-                    option_cluster_dict[assembler][option_supergroup][option_set_cluster_name].append(option_set)
-                else:
-                    option_cluster_dict[assembler][option_supergroup][option_set_cluster_name] = [option_set]
-
-    for assembler in assembler_list:
-        option_cluster_reverse_dict[assembler] = {}
-        for option_supergroup in ["options_affecting_error_correction"]:
-            option_cluster_reverse_dict[assembler][option_supergroup] = {}
-            cluster_index = 1
-
-            for option_set_cluster in option_cluster_dict[assembler][option_supergroup]:
-                cluster_code = "ec_opt_cl_{0}".format(cluster_index)
-                for option_set in option_cluster_dict[assembler][option_supergroup][option_set_cluster]:
-                    option_cluster_reverse_dict[assembler][option_supergroup][option_set] = cluster_code
-
-    """
     for assembler in assembler_list:
         for option_set in config["coretool_option_sets"][assembler]:
             parameters_label="{0}_{1}".format(assembler, option_set)
@@ -622,7 +596,7 @@ if "curation" in config["stage_list"]:
                      ]
 
 #----
-
+"""
 #---- Final rule ----
 rule all:
     input:
@@ -637,6 +611,7 @@ include: "workflow/rules/QCFiltering/FastQC.smk"
 include: "workflow/rules/QCFiltering/MultiQC.smk"
 include: "workflow/rules/QCFiltering/Cutadapt.smk"
 
+"""
 #if "nanopore" in data_types:
 include: "workflow/rules/QCFiltering/Nanopore.smk"
 include: "workflow/rules/QCFiltering/NanoQC.smk"
@@ -681,3 +656,4 @@ if "curation" in config["stage_list"]:
     include: "workflow/rules/Curation/TelomereTrack.smk"
 
 #----
+"""

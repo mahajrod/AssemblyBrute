@@ -123,8 +123,11 @@ rule meryl_extract:
 
 rule subset_extracted_kmers:
     input:
-        kmer=output_dict["kmer"] / ("{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.meryl.L%s.U%s.extracted.kmer" % (min(parameters["tool_options"]["smudgeplot"]["lower_boundary"]),
-                                                                                                                             max(parameters["tool_options"]["smudgeplot"]["upper_boundary"])))
+        kmer=lambda wildcards: output_dict["kmer"] / "{0}/{1}/{0}.{1}.{2}.meryl.L{3}.U{4}.extracted.kmer".format(wildcards.datatype,
+                                                                                                                 wildcards.stage,
+                                                                                                                 wildcards.kmer_length,
+                                                                                                                 min(parameters["tool_options"]["smudgeplot"][wildcards.datatype]["lower_boundary"]),
+                                                                                                                 max(parameters["tool_options"]["smudgeplot"][wildcards.datatype]["upper_boundary"]))
     output:
         kmer=temp(output_dict["kmer"] / "{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.subset.kmer")
     log:

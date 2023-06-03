@@ -7,7 +7,7 @@ rule multiqc:
                                  fileprefix=input_file_prefix_dict[wildcards.datatype],
                                  allow_missing=True)
     output:
-        #dir=directory(output_dict["qc"] / "multiqc/{datatype}/{stage}/"),
+        dir=directory(output_dict["qc"] / "multiqc/{datatype}/{stage}/"),
         report=output_dict["qc"] / "multiqc/{datatype}/{stage}/multiqc.{datatype}.{stage}.report.html"
         #stats=merged_raw_multiqc_dir_path / "{library_id}/{library_id}.raw.multiqc.stats"
     params:
@@ -36,6 +36,5 @@ rule multiqc:
     shell:
         " REPORT_PREFIX={output.report}; "
         " REPORT_PREFIX=${{REPORT_PREFIX%.html}}; "
-        " OUTDIR=`dirname {output.report}`; "
-        " multiqc --filename ${{REPORT_PREFIX}} -p --outdir ${{OUTDIR}} "
+        " multiqc --filename ${{REPORT_PREFIX}} -p --outdir {output.dir} "
         " --comment {wildcards.datatype} {params.input_dir} > {log.std} 2>&1; "

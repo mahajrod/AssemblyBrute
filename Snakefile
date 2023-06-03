@@ -256,11 +256,12 @@ if "read_qc" in config["stage_list"]:
                                stage=["raw", ],
                                fileprefix=input_file_prefix_dict[dat_type],) for dat_type in long_read_data_type_set],
                      ]
-"""
+
 
 if "draft_qc" in config["stage_list"]:
     results_list += [ ] # TODO: implement
 
+"""
 if "filter_reads" in config["stage_list"]:
     #print(genome_size_estimation_data_type_set)
     results_list += [expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),

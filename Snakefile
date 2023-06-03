@@ -237,7 +237,7 @@ if "check_reads" in config["stage_list"]:
 
 if "check_draft" in config["stage_list"]:
     results_list += [ ] # TODO: implement
-"""
+
 
 if "read_qc" in config["stage_list"]:
     results_list += [*[expand(output_dict["qc"] / "fastqc/{datatype}/{stage}/{fileprefix}_fastqc.zip",
@@ -256,7 +256,7 @@ if "read_qc" in config["stage_list"]:
                                stage=["raw", ],
                                fileprefix=input_file_prefix_dict[dat_type],) for dat_type in long_read_data_type_set],
                      ]
-
+"""
 
 if "draft_qc" in config["stage_list"]:
     results_list += [ ] # TODO: implement
@@ -608,7 +608,6 @@ rule all:
 #---- Include section ----
 include: "workflow/rules/Install/Pip.smk"
 include: "workflow/rules/Preprocessing/Files.smk"
-"""
 include: "workflow/rules/QCFiltering/FastQC.smk"
 include: "workflow/rules/QCFiltering/MultiQC.smk"
 include: "workflow/rules/QCFiltering/Cutadapt.smk"
@@ -618,7 +617,7 @@ include: "workflow/rules/QCFiltering/Cutadapt.smk"
 include: "workflow/rules/QCFiltering/Nanopore.smk"
 include: "workflow/rules/QCFiltering/NanoQC.smk"
 include: "workflow/rules/QCFiltering/NanoPlot.smk"
-
+"""
 include: "workflow/rules/Kmer/Jellyfish.smk"
 include: "workflow/rules/Kmer/Meryl.smk"
 include: "workflow/rules/Kmer/Smudgeplot.smk"

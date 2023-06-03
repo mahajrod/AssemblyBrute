@@ -138,8 +138,8 @@ rule subset_extracted_kmers:
         cluster_log=output_dict["cluster_log"] / "subset_extracted_kmers.{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "subset_extracted_kmers.{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.cluster.err"
     params:
-        min_lower_boundary=min(parameters["tool_options"]["smudgeplot"]["lower_boundary"]),
-        max_upper_boundary=max(parameters["tool_options"]["smudgeplot"]["upper_boundary"])
+        min_lower_boundary=lambda wildcards: min(parameters["tool_options"]["smudgeplot"][wildcards.datatype]["lower_boundary"]),
+        max_upper_boundary=lambda wildcards: max(parameters["tool_options"]["smudgeplot"][wildcards.datatype]["upper_boundary"])
     benchmark:
         output_dict["benchmark"] / "subset_extracted_kmers.{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.benchmark.txt"
     conda:

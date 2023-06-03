@@ -9,7 +9,8 @@ from copy import deepcopy
 from pathlib import Path, PosixPath
 
 #---- Read main_config ----
-config.update(yaml.safe_load(config["main_config_file"]))
+with open(config["main_config_file"], "r") as core_yaml_fd:
+    config.update(yaml.safe_load(core_yaml_fd))
 
 #---- Include sections for functions ----
 include: "workflow/functions/option_parsing.py"

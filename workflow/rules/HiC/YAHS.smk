@@ -1,7 +1,7 @@
 
 rule yahs: #
     input:
-        bam=lambda wildcards: out_dir_path / "{0}/{1}/{2}/alignment/{3}/{4}.{5}.{3}.{2}.bwa.filtered.rmdup.bam".format(stage_dict["hic_scaffolding"]["prev_stage"],
+        bam=lambda wildcards: out_dir_path / "{0}/{1}/{2}/alignment/{3}/{4}.{5}.{3}.{2}.rmdup.bam".format(stage_dict["hic_scaffolding"]["prev_stage"],
                                                                                     wildcards.prev_stage_parameters, wildcards.haplotype,
                                                                                     stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..yahs_" + wildcards.hic_scaffolding_parameters]["option_set"]["phasing_kmer_length"],
                                                                                     wildcards.genome_prefix,

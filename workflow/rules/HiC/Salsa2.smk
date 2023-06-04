@@ -3,7 +3,7 @@ rule bam2bed:
         bam=rules.rmdup.output.bam
     output:
         #bed=out_dir_path  / ("{assembly_stage}/{assembler}/{haplotype}/alignment/%s.{assembly_stage}.{assembler}.{haplotype}.bwa.filtered.rmdup.bed"  % config["genome_name"]),
-        bed=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.filtered.rmdup.bed"
+        bed=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bed"
     log:
         convert=output_dict["log"] / "bam2bed.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.convert.log",
         sort=output_dict["log"] / "bam2bed.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.sort.log",
@@ -24,7 +24,7 @@ rule bam2bed:
 
 rule salsa2: #
     input:
-        bed=lambda wildcards: out_dir_path / "{0}/{1}/{2}/alignment/{3}/{4}.{5}.{3}.{2}.bwa.filtered.rmdup.bed".format(stage_dict["hic_scaffolding"]["prev_stage"],
+        bed=lambda wildcards: out_dir_path / "{0}/{1}/{2}/alignment/{3}/{4}.{5}.{3}.{2}.rmdup.bed".format(stage_dict["hic_scaffolding"]["prev_stage"],
                                                                                     wildcards.prev_stage_parameters, wildcards.haplotype,
                                                                                     stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..salsa2_" + wildcards.hic_scaffolding_parameters]["option_set"]["phasing_kmer_length"],
                                                                                     wildcards.genome_prefix,

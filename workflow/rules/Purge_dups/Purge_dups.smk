@@ -67,6 +67,7 @@ rule get_purge_dups_read_stat: #TODO: adjust -d -m -u options for calcuts
     input:
         paf=lambda wildcards: expand(rules.minimap2_purge_dups_reads.output.paf,
                    fileprefix=input_file_prefix_dict[stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"]],
+                   genome_prefix=[config["genome_prefix"]],
                    allow_missing=True),
         genomescope_report=output_dict["kmer"] / "{0}/filtered/genomescope/{1}.{0}.filtered.{2}.{3}.genomescope.parameters".format(config["final_kmer_datatype"],
                                                                                                                                    config["genome_prefix"],
@@ -369,6 +370,7 @@ rule minimap2_purge_dups_qc:
 rule get_purge_dups_read_stat_qc:
     input:
         paf=lambda wildcards: expand(rules.minimap2_purge_dups_qc.output.paf,
+                           genome_prefix=[config["genome_prefix"]],
                            fileprefix=input_file_prefix_dict[stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"]],
                            allow_missing=True),
         genomescope_report=output_dict["kmer"] / "{0}/filtered/genomescope/{1}.{0}.filtered.{2}.{3}.genomescope.parameters".format(config["final_kmer_datatype"],

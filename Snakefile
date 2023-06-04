@@ -357,7 +357,7 @@ if "contig" in config["stage_list"]:
     for assembler in assembler_list:
         option_set_group_dict, option_set_group_assignment_dict = None, None
         if assembler == "hifiasm":
-            option_set_group_dict, option_set_group_assignment_dict = group_option_sets(config["parameters"]["default"]["tool_options"]["hifiasm"],
+            option_set_group_dict, option_set_group_assignment_dict = group_option_sets(parameters["tool_options"]["hifiasm"],
                                                                                         config["tool_specific_features"]["hifiasm"]['options_affecting_error_correction'])
             assembler_option_set_group_dict[assembler] = option_set_group_dict
         for option_set in config["coretool_option_sets"][assembler]:

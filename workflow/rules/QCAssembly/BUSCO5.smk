@@ -23,7 +23,7 @@ rule busco5_download:
     shell:
          " busco --download_path {params.busco_download_dir} --download {wildcards.busco_lineage} > {log.std} 2>&1; "
 
-rule busco5: # Downloading of busco datasets is performed by a different rule
+rule busco5: # Downloading of busco datasets is performed by a different rule to avoid conflict between different instances of busco5
     priority: 500
     input:
         busco_lineage=rules.busco5_download.output.lineage_dir,

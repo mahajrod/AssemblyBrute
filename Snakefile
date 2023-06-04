@@ -528,14 +528,14 @@ if "hic_scaffolding" in config["stage_list"]:
     #print(list(stage_dict[prev_stage]["parameters"].keys()))
     #raise AttributeError()
     results_list += [
-                     #expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{resolution}.map.{ext}",
-                     #       genome_prefix=[config["genome_prefix"], ],
-                     #       assembly_stage=[prev_stage,],
-                     #       haplotype=haplotype_list,
-                     #       phasing_kmer_length=set([stage_dict["hic_scaffolding"]["parameters"][parameter_set]["option_set"]["phasing_kmer_length"] for parameter_set in stage_dict["hic_scaffolding"]["parameters"]]), #[stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["phasing_kmer_length"] for parameter_label in stage_dict["hic_scaffolding"]["parameters"]],
-                     #       parameters=stage_dict[prev_stage]["parameters"],
-                     #       resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
-                     #       ext=parameters["tool_options"]["pretextsnapshot"]["format"]),
+                     expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{resolution}.map.{ext}",
+                            genome_prefix=[config["genome_prefix"], ],
+                            assembly_stage=[prev_stage,],
+                            haplotype=haplotype_list,
+                            phasing_kmer_length=set([stage_dict["hic_scaffolding"]["parameters"][parameter_set]["option_set"]["phasing_kmer_length"] for parameter_set in stage_dict["hic_scaffolding"]["parameters"]]), #[stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["phasing_kmer_length"] for parameter_label in stage_dict["hic_scaffolding"]["parameters"]],
+                            parameters=stage_dict[prev_stage]["parameters"],
+                            resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
+                            ext=parameters["tool_options"]["pretextsnapshot"]["format"]),
                      #*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{resolution}.map.{ext}",
                      #       genome_prefix=[config["genome_prefix"], ],
                      #       assembly_stage=["hic_scaffolding",],

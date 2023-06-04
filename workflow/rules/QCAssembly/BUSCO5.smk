@@ -1,8 +1,32 @@
 #localrules: handle_busco5_output
 
-rule busco5:
+rule busco5_download:
+    priority: 500
+    output:
+        lineage_dir=directory(out_dir_path / "download/busco5/lineages/{busco_lineage}"),
+    params:
+        busco_download_dir=out_dir_path / "download/busco5/"
+    log:
+        std=output_dict["log"] / "busco5_download.{busco_lineage}.log",
+        cluster_log=output_dict["cluster_log"] / "busco5_download.{busco_lineage}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "busco5_download.{busco_lineage}.cluster.err"
+    benchmark:
+        output_dict["benchmark"] / "busco5_download.{busco_lineage}.benchmark.txt"
+    conda:
+        config["conda"]["busco"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["busco5_download"],
+        time=parameters["time"]["busco5_download"],
+        mem=parameters["memory_mb"]["busco5_download"],
+    threads:
+        parameters["threads"]["busco5_download"]
+    shell:
+         " busco --download_path {params.busco_download_dir} --download {wildcards.busco_lineage} > {log.std} 2>&1; "
+
+rule busco5: # Downloading of busco datasets is performed by a different rule
     priority: 500
     input:
+        busco_lineage=rules.busco5_download.output.lineage_dir,
         assembly=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
     output:
         tar_gz=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype,[^.]+}.busco5.{busco_lineage}.tar.gz",
@@ -29,7 +53,7 @@ rule busco5:
     shell:
          " BUSCO_DIR={output.tar_gz}; "
          " BUSCO_DIR=${{BUSCO_DIR%.tar.gz}}; "
-         " busco -m genome -l {wildcards.busco_lineage} -c {threads} -i {input.assembly} "
+         " busco --offline -m genome -l {input.busco_lineage} -c {threads} -i {input.assembly} "
          " -o `basename ${{BUSCO_DIR}}` --out_path `dirname ${{BUSCO_DIR}}` > {log.std} 2>&1;"
          " cp ${{BUSCO_DIR}}/short_summary.specific.{wildcards.busco_lineage}.{wildcards.genome_prefix}.{wildcards.assembly_stage}.{wildcards.haplotype}.busco5.{wildcards.busco_lineage}.txt {output.summary} ; "
          " cp ${{BUSCO_DIR}}/short_summary.specific.{wildcards.busco_lineage}.{wildcards.genome_prefix}.{wildcards.assembly_stage}.{wildcards.haplotype}.busco5.{wildcards.busco_lineage}.json {output.summary_json} ; "

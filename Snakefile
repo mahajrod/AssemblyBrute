@@ -546,7 +546,7 @@ if "hic_scaffolding" in config["stage_list"]:
                      #       ext=parameters["tool_options"]["pretextsnapshot"]["format"]) for parameter_set in stage_dict["hic_scaffolding"]["parameters"]],
                     expand(out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam",
                            phasing_kmer_length=[31],
-                           fileprefix=map(lambda s: s[:-1] + "_", input_file_prefix_dict["hic"]),
+                           fileprefix=list(map(lambda s: s[:-1] + "_1", input_file_prefix_dict["hic"])) + list(map(lambda s: s[:-1] + "_2", input_file_prefix_dict["hic"])) ,
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=[config["phasing_stage"],],
                            haplotype=haplotype_list,

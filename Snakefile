@@ -382,7 +382,6 @@ if "contig" in config["stage_list"]:
                             assembly_stage=["contig",],
                             haplotype=haplotype_list + ["alt"], # TODO: modify "alt" when assemblers other than hifiasm will be added
                             parameters=parameters_list ),
-
                     expand(output_dict["contig"] / "{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.gfa.cov",
                             genome_prefix=[config["genome_prefix"],],
                             assembly_stage=["contig",],
@@ -416,6 +415,7 @@ if "contig" in config["stage_list"]:
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=["contig"],),
                     ] # Tested only on hifiasm
+    """
     if not config["skip_busco"]:
         results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
                                 busco_lineage=config["busco_lineage_list"],

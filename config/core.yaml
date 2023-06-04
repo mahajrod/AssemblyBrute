@@ -48,6 +48,7 @@
 "tmp_dir": "results/tmp/"
 #--------- Subdirectories --------
 "first_level_subdir_list":
+  - "download"
   - "config"
   - "data"
   - "qc"

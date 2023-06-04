@@ -365,7 +365,7 @@ rule minimap2_purge_dups_qc:
     threads: parameters["threads"]["minimap2"]
 
     shell:
-        " minimap2 {params.alignment_scheme} -I {params.index_size} -t {threads}  {input.reference} "
+        " minimap2 {params.alignment_scheme} {params.index_size} -t {threads}  {input.reference} "
         " {input.fastq} 2>{log.std} |  gzip -c - > {output.paf}; "
 
 rule get_purge_dups_read_stat_qc:

@@ -97,7 +97,6 @@ rule hifiasm_hic: # TODO: implement modes without hic data as independent rule
         cpus=parameters["threads"]["hifiasm"],
         time=parameters["time"]["hifiasm"],
         mem=parameters["memory_mb"]["hifiasm"],
-        hifiasm=1
     threads:
         parameters["threads"]["hifiasm"]
     shell:

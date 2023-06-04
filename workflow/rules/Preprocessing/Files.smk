@@ -1,4 +1,5 @@
 localrules: create_fastq_links, create_links_for_draft
+ruleorder: extract_pe_reads_by_unique_hap_kmers > create_fastq_links
 
 rule create_fastq_links:
     priority: 1000

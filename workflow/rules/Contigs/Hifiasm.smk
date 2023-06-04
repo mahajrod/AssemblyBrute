@@ -1,5 +1,5 @@
 
-"""
+
 rule hifiasm_correct:
     priority: 2000
     input:
@@ -7,49 +7,49 @@ rule hifiasm_correct:
                     fileprefix=input_file_prefix_dict["hifi"],
                     allow_missing=True),
     output:
-        ec_bin=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hifi.ec.bin",
-        ovlp_reverse_bin=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hifi.ovlp.reverse.bin",
+        ec_bin=output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.hifi.ec.bin",
+        ovlp_reverse_bin=output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.hifi.ovlp.reverse.bin",
+        ovlp_source_bin=output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.hifi.ovlp.source.bin",
         #primary_contig_graph=output_dict["contig"] / ("hifiasm/%s.contig.hifiasm.hifi.hic.p_ctg.gfa" % config["genome_name"]),
         #alternative_contig_graph=output_dict["contig"] / ("hifiasm/%s.contig.hifiasm.hifi.hic.a_ctg.gfa" % config["genome_name"]),
     params:
-        dir=lambda wildcards: output_dict["contig"] / "hifiasm_{0}/".format(wildcards.contig_options),
-        ec_bin=lambda wildcards: output_dict["contig"] / "hifiasm_*/{0}.contig.hifi.ec.bin".format(wildcards.genome_prefix),
-        ovlp_reverse_bin=lambda wildcards: output_dict["contig"] / "hifiasm_*/{0}.contig.hifi.ovlp.reverse.bin".format(wildcards.genome_prefix),
-        ovlp_source_bin=lambda wildcards: output_dict["contig"] / "hifiasm_*/{0}.contig.hifi.ovlp.source.bin".format(wildcards.genome_prefix),
-
-        output_prefix=lambda wildcards: output_dict["contig"] / "hifiasm_{0}/{1}.contig.hifi".format(wildcards.contig_options,
-                                                                                                     wildcards.genome_prefix),
-        window_size=lambda wildcards: parse_option("window_size", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -w "),
-        bloom_filter_bits=lambda wildcards: parse_option("bloom_filter_bits", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -f "),
-        rounds_of_error_correction=lambda wildcards: parse_option("rounds_of_error_correction", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -r "),
-        length_of_adapters=lambda wildcards: parse_option("length_of_adapters", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -z "),
-        max_kocc=lambda wildcards: parse_option("max-kocc", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --max-kocc "),
-        hg_size=lambda wildcards: parse_option("hg-size", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --hg-size "),
-        kmer_length=lambda wildcards: parse_option("kmer_len", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -k "),
-        D=lambda wildcards: parse_option("D", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -D "), #" -D {0} ".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["D"]) if "D" in parameters["tool_options"]["hifiasm"][wildcards.contig_options] else "",
-        N=lambda wildcards: parse_option("N", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -N "), #" -N {0} ".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["N"]) if "N" in parameters["tool_options"]["hifiasm"][wildcards.contig_options] else "",
+        #output_prefix=lambda wildcards: output_dict["contig"] / "hifiasm_{0}/{1}.contig.hifi".format(wildcards.contig_options,
+        #                                                                                             wildcards.genome_prefix),
+        #dir=lambda wildcards: output_dict["contig"] / "hifiasm_{0}/".format(wildcards.contig_options),
+        #ec_bin=lambda wildcards: output_dict["contig"] / "hifiasm_*/{0}.contig.hifi.ec.bin".format(wildcards.genome_prefix),
+        #ovlp_reverse_bin=lambda wildcards: output_dict["contig"] / "hifiasm_*/{0}.contig.hifi.ovlp.reverse.bin".format(wildcards.genome_prefix),
+        #ovlp_source_bin=lambda wildcards: output_dict["contig"] / "hifiasm_*/{0}.contig.hifi.ovlp.source.bin".format(wildcards.genome_prefix),
+        window_size=lambda wildcards: parse_option("window_size", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -w "),
+        bloom_filter_bits=lambda wildcards: parse_option("bloom_filter_bits", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -f "),
+        rounds_of_error_correction=lambda wildcards: parse_option("rounds_of_error_correction", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -r "),
+        length_of_adapters=lambda wildcards: parse_option("length_of_adapters", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -z "),
+        max_kocc=lambda wildcards: parse_option("max-kocc", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " --max-kocc "),
+        hg_size=lambda wildcards: parse_option("hg-size", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " --hg-size "),
+        kmer_length=lambda wildcards: parse_option("kmer_len", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -k "),
+        D=lambda wildcards: parse_option("D", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -D "), #" -D {0} ".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["D"]) if "D" in parameters["tool_options"]["hifiasm"][wildcards.contig_options] else "",
+        N=lambda wildcards: parse_option("N", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -N "), #" -N {0} ".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["N"]) if "N" in parameters["tool_options"]["hifiasm"][wildcards.contig_options] else "",
     log:
-        std=output_dict["log"] / "hifiasm_correct.{contig_options}.{genome_prefix}.log",
-        cluster_log=output_dict["cluster_log"] / "hifiasm_correct{contig_options}.{genome_prefix}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "hifiasm_correct{contig_options}.{genome_prefix}.cluster.err"
+        std=output_dict["log"] / "hifiasm_correct.{correction_options}.{genome_prefix}.log",
+        cluster_log=output_dict["cluster_log"] / "hifiasm_correct{correction_options}.{genome_prefix}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "hifiasm_correct{correction_options}.{genome_prefix}.cluster.err"
     benchmark:
-        output_dict["benchmark"] / "hifiasm_correct.{contig_options}.{genome_prefix}.benchmark.txt"
+        output_dict["benchmark"] / "hifiasm_correct.{correction_options}.{genome_prefix}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         cpus=parameters["threads"]["hifiasm"],
         time=parameters["time"]["hifiasm"],
         mem=parameters["memory_mb"]["hifiasm"],
-        hifiasm=1
     threads:
         parameters["threads"]["hifiasm"]
     shell:
+         " OUTPUT_PREFIX={output.ec_bin}; "
+         " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.ec.bin}}; "
          " hifiasm -t {threads} -e --write-ec {params.window_size} {params.bloom_filter_bits} "
          " {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size}"
          " {params.kmer_length} {params.D} {params.N} "
-         " -o {params.output_prefix} {input.hifi}  1>{log.std} 2>&1;"
+         " -o ${{OUTPUT_PREFIX}} {input.hifi}  1>{log.std} 2>&1;"
 
-"""
 rule hifiasm: # TODO: implement modes without hic data
     priority: 1000
     input:

@@ -61,13 +61,7 @@ rule merge_meryl:
                    allow_missing=True,)  if wildcards.datatype not in config["paired_fastq_based_data"] else \
             expand(rules.meryl_pe.output,
                    pairprefix=input_pairprefix_dict[wildcards.datatype],
-                   allow_missing=True,)#peoutput_dict["kmer"] / ("%s/%s/%s.%s.%s.meryl.{pairprefix}" % (wildcards.datatype,
-                   #                                                                 wildcards.stage,
-                   #                                                                  wildcards.datatype,
-                   #                                                                  wildcards.stage,
-                   #                                                                  wildcards.kmer_length,)),
-                   #pairprefix=input_pairprefix_dict[wildcards.datatype],
-                   #    allow_missing=True,)
+                   allow_missing=True,)
     output:
         db_dir=directory(output_dict["kmer"] / "{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.meryl"),
         histo=output_dict["kmer"] / "{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.meryl.histo"
@@ -115,11 +109,9 @@ rule meryl_extract:
     threads:
         parameters["threads"]["meryl_extract"]
     shell:
-         #" OUTPUT={output.kmer}; "
          " meryl threads={threads} memory={resources.mem}m "
          " print less-than {wildcards.max_upper_boundary} greater-than {wildcards.min_lower_boundary}  {input.db} 2>{log.meryl} | "
          " sort > {output.kmer} 2>{log.sort};"
-         #" pigz -p {threads} ${{OUTPUT%.gz}} 2>{log.pigz}; "
 
 rule subset_extracted_kmers:
     input:
@@ -132,9 +124,7 @@ rule subset_extracted_kmers:
         kmer=temp(output_dict["kmer"] / "{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.subset.kmer")
     log:
         cp=output_dict["log"] / "subset_extracted_kmers.{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.cp.log",
-        #gunzip=output_dict["log"] / "subset_extracted_kmers.{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.gunzip.log",
         awk=output_dict["log"] / "subset_extracted_kmers.{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.awk.log",
-        #gzip=output_dict["log"] / "subset_extracted_kmers.{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.gzip.log",
         cluster_log=output_dict["cluster_log"] / "subset_extracted_kmers.{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "subset_extracted_kmers.{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.cluster.err"
     params:
@@ -157,4 +147,3 @@ rule subset_extracted_kmers:
          " else "
          " awk '{{if (($2 >= {wildcards.lower_boundary}) && ($2 <= {wildcards.upper_boundary})) print $0}}' {input.kmer} > {output.kmer} 2>{log.awk}; "
          " fi "
-         #" gzip -c > {output.kmer} 2>{log.gzip}; "

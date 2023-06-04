@@ -216,7 +216,7 @@ localrules: all
 
 results_dict = {}
 
-assembler_list = ["hifiasm", ] # TODO: implement possibility of other assemblers
+#assembler_list = ["hifiasm", ] # TODO: implement possibility of other assemblers
 
 haplotype_list = ["hap{0}".format(i) for i in range(1, config["ploidy"] + 1)]
 primary_haplotype = "hap1"
@@ -348,23 +348,35 @@ if ("gcp" in config["stage_list"]) and (not config["skip_gcp"]):
 
 if "filter_draft" in config["stage_list"]:
     results_list += [ ] # TODO: implement
-"""
+
 if "contig" in config["stage_list"]:
     assembler_list = config["stage_coretools"]["contig"][config["contig_datatype"]]
     stage_dict["contig"]["parameters"] = {}
-
+    assembler_option_set_group_dict = {}
 
     for assembler in assembler_list:
+        option_set_group_dict, option_set_group_assignment_dict = None, None
+        if assembler == "hifiasm":
+            option_set_group_dict, option_set_group_assignment_dict = group_option_sets(option_set_dict, grouping_option_list)
+            assembler_option_set_group_dict[assembler] = option_set_group_dict
         for option_set in config["coretool_option_sets"][assembler]:
             parameters_label="{0}_{1}".format(assembler, option_set)
             stage_dict["contig"]["parameters"][parameters_label] = {}
             stage_dict["contig"]["parameters"][parameters_label]["assembler"] = assembler
             stage_dict["contig"]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][assembler][option_set]
+            stage_dict["contig"]["parameters"][parameters_label]["option_set_group"] = option_set_group_assignment_dict[option_set] if option_set_group_assignment_dict is not None else none
+
             #for option_supergroup in ["options_affecting_error_correction"]:
             #    stage_dict["contig"]["parameters"][parameters_label][option_supergroup] = option_cluster_reverse_dict[assembler][option_supergroup][option_set]
 
-
     parameters_list = list(stage_dict["contig"]["parameters"].keys())
+    if "hifiasm" in assembler_list:
+        results_list += [expand(output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.hifi.ec.bin",
+                                genome_prefix=[config["genome_prefix"],],
+                                correction_options=assembler_option_set_group_dict[assembler])
+                         ]
+
+    """
     results_list += [
                      expand(output_dict["contig"] / "{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
                             genome_prefix=[config["genome_prefix"],],
@@ -633,13 +645,14 @@ include: "workflow/rules/QCAssembly/General.smk"
 include: "workflow/rules/Contamination/FCS.smk"
 include: "workflow/rules/Contamination/Kraken2.smk"
 
-"""
 if "hifi" in data_types:
     include: "workflow/rules/Contigs/Hifiasm.smk"
 
 include: "workflow/rules/Contigs/Graph.smk"
-
 include: "workflow/rules/Stats/General.smk"
+
+"""
+
 
 if "purge_dups" in config["stage_list"]:
     include: "workflow/rules/Purge_dups/Purge_dups.smk"

@@ -60,6 +60,7 @@
   #- "basecall"
   - "kmer"
   - "draft"
+  - "error_correction"
   - "contig"
   - "purge_dups"
   - "lr_scaffolding"

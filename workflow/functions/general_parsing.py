@@ -79,6 +79,8 @@ def detect_phasing_parameters(current_stage_parameters, phasing_stage, stage_sep
     for entry in parameter_list:
         for tool in phasing_stage_coretools:
             if entry[:len(tool)] == tool:
+                print(entry)
+                raise AssertionError("")
                 return entry
     else:
         raise ValueError("Impossible to detect phasing stage parameters for {0} and phasing stage {1}".format(current_stage_parameters,

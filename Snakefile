@@ -526,6 +526,7 @@ if "hic_scaffolding" in config["stage_list"]:
     #print(stage_dict["hic_scaffolding"]["prev_stage"])
 
     print(stage_dict[prev_stage]["parameters"])
+    raise AttributeError()
     results_list += [
                      #expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{resolution}.map.{ext}",
                      #       genome_prefix=[config["genome_prefix"], ],

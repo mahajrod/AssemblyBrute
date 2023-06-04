@@ -334,7 +334,10 @@ rule get_purge_dups_read_stat_qc:
         cutoffs=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/assembly_qc/purge_dups/{haplotype, [^.]+}/cutoffs",
         coverage_plot=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/assembly_qc/purge_dups/{haplotype, [^.]+}/{haplotype}.before-after.comparison.coverage.png"
     params:
-        cov_multiplicator=lambda wildcards: stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["cov_multiplicator"]
+        cov_multiplicator=lambda wildcards: stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["cov_multiplicator"],
+        calcuts_lower_threshold=lambda wildcards: parse_option("lower_threshold", config["tool_manually_adjusted_features"]["calcuts"], " -l "),
+        calcuts_haploid_diploid_threshold=lambda wildcards: parse_option("haploid_diploid_threshold", config["tool_manually_adjusted_features"]["calcuts"], " -m "),
+        calcuts_upper_threshold=str(config["tool_manually_adjusted_features"]["calcuts"]["upper_threshold"]), # None needs to be converted to "None"
     log:
         pbstat=output_dict["log"] / "get_purge_dups_read_stat_qc.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.{haplotype}.pbstat.log",
         png=output_dict["log"] / "get_purge_dups_read_stat_qc.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.{haplotype}.png.log",
@@ -355,8 +358,10 @@ rule get_purge_dups_read_stat_qc:
         " OUT_DIR=`dirname {output.pbbasecov}`;"
         " COV_PLOT={output.coverage_plot}; "
         " COV_UPPER_BOUNDARY=`awk 'NR==2 {{printf \"%.0f\", {params.cov_multiplicator} * $2}}' {input.genomescope_report}`;"
+        " if [ '{params.calcuts_upper_threshold}' != 'None' ] ; then COV_UPPER_BOUNDARY={params.calcuts_upper_threshold}; fi; "
         " pbcstat -O ${{OUT_DIR}} {input.paf} 1>{log.pbstat} 2>&1; "
-        " calcuts -d 1 -u ${{COV_UPPER_BOUNDARY}} {output.pbstat} > {output.cutoffs} 2>{log.calcuts}; " #check parameters for calcuts
+        " calcuts -d 1 {params.calcuts_lower_threshold} {params.calcuts_haploid_diploid_threshold }"
+        " -u ${{COV_UPPER_BOUNDARY}} {output.pbstat} > {output.cutoffs} 2>{log.calcuts}; " #check parameters for calcuts
         " workflow/scripts/purge_dups/draw_purge_dups_plot_all_haplotypes.py -b {input.before_pbstat},{output.pbstat} "
         " -l before,after -c {input.before_cutoffs},{output.cutoffs} -e png,svg -o ${{COV_PLOT%.png}} > {log.png} 2>&1; "
 

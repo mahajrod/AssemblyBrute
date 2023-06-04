@@ -52,10 +52,6 @@
          - "l1primary"
          #- "l2primary"
          #- "l3primary"
-         #- "l0"
-         #- "l1"
-         #- "l2"
-         #- "l3"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
     "purge_dups":

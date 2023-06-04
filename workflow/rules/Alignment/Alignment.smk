@@ -12,7 +12,7 @@ rule bwa_map: #
                                                                                          config["fastq_extension"]
                                                                                          )
     output:
-        bam=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.filtered.{fileprefix, (?!rmdup)}.bam"
+        bam=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.filtered.{fileprefix}.bam"
     params:
         id="{0}_hic".format(config["genome_prefix"])
     log:

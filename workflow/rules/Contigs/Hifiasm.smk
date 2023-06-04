@@ -7,6 +7,7 @@ rule hifiasm_correct:
                     allow_missing=True),
     output:
         ec_bin=output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.ec.bin",
+        ec_fasta=output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.ec.fa",
         ovlp_reverse_bin=output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.ovlp.reverse.bin",
         ovlp_source_bin=output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.ovlp.source.bin",
     params:
@@ -61,27 +62,15 @@ rule hifiasm_hic: # TODO: implement modes without hic data as independent rule
                                                                                                                                         config["final_kmer_length"],
                                                                                                                                         config["final_kmer_counter"])),
     output:
-        #ec_bin=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.ec.bin",
-        #ovlp_reverse_bin=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.ovlp.reverse.bin",
         primary_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.hap1.p_ctg.gfa",
         alternative_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.hap2.p_ctg.gfa",
         alt_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.a_ctg.gfa",
         primary_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hap1.gfa",
         alternative_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hap2.gfa",
         alt_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.alt.gfa",
-        #primary_contig_graph=output_dict["contig"] / ("hifiasm/%s.contig.hifiasm.hifi.hic.p_ctg.gfa" % config["genome_name"]),
-        #alternative_contig_graph=output_dict["contig"] / ("hifiasm/%s.contig.hifiasm.hifi.hic.a_ctg.gfa" % config["genome_name"]),
     params:
-        #dir=lambda wildcards: output_dict["contig"] / "hifiasm_{0}/".format(wildcards.contig_options),
-        #ec_bin=lambda wildcards: output_dict["contig"] / "hifiasm_*/{0}.contig.hifi.ec.bin".format(wildcards.genome_prefix),
-        #ovlp_reverse_bin=lambda wildcards: output_dict["contig"] / "hifiasm_*/{0}.contig.hifi.ovlp.reverse.bin".format(wildcards.genome_prefix),
-        #ovlp_source_bin=lambda wildcards: output_dict["contig"] / "hifiasm_*/{0}.contig.hifi.ovlp.source.bin".format(wildcards.genome_prefix),
-        #hic_lk_bin= lambda wildcards: output_dict["contig"] / "hifiasm_*/{0}.contig.hifi.hic.lk.bin".format(wildcards.genome_prefix),
-        #hic_tlb_bin=lambda wildcards: output_dict["contig"] / "hifiasm_*/{0}.contig.hifi.hic.tlb.bin".format(wildcards.genome_prefix),
         purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge level"],
         ploidy=config["ploidy"],
-        #output_prefix=lambda wildcards: output_dict["contig"] / "hifiasm_{0}/{1}.contig.hifi".format(wildcards.contig_options,
-        #                                                                                             wildcards.genome_prefix),
         cov_multiplicator=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["cov_multiplicator"],
         window_size=lambda wildcards: parse_option("window_size", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -w "),
         bloom_filter_bits=lambda wildcards: parse_option("bloom_filter_bits", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -f "),
@@ -128,20 +117,3 @@ rule hifiasm_hic: # TODO: implement modes without hic data as independent rule
          " ln {output.primary_contig_graph} {output.primary_alias};"
          " ln {output.alternative_contig_graph} {output.alternative_alias};"
          " ln {output.alt_contig_graph} {output.alt_alias}; "
-         #" # check if there was a hifiasm run\n"
-         #" if [ '{params.ignore_bin}' = ' -i ' ]; then"
-         #"      echo 'Option -i is set. Ignoring previous hifiasm runs...'; "
-         #" else"
-         #"      echo 'Option -i is not set. Seeking for previous hifiasm runs...'; "
-         #"      EC_BIN=(`find ./ -wholename \"*{params.ec_bin}\"`); "
-         #"      OVLP_REVERSE_BIN=(`find ./ -wholename \"*{params.ovlp_reverse_bin}\"`); "
-         #"      OVLP_SOURCE_BIN=(`find ./ -wholename \"*{params.ovlp_source_bin}\"`); "
-         #"      HIC_LK_BIN=(`find ./ -wholename \"*{params.hic_lk_bin}\"`); "
-         #"      HIC_TLB_BIN=(`find ./ -wholename \"*{params.hic_tlb_bin}\"`); "
-         #"      if [ ${{#EC_BIN[@]}} -eq 0 ]; then "
-         #"              echo 'First hifiasm run!'; "
-         #"      else "
-         #"          echo 'Previous hifiasm run detected! *.bin files from previous run will be used...'; "
-         #"          cp ${{EC_BIN[0]}} ${{OVLP_REVERSE_BIN[0]}} ${{OVLP_SOURCE_BIN[0]}} ${{HIC_LK_BIN[0]}} ${{HIC_TLB_BIN[0]}} {params.dir};  "
-         #"      fi ; "
-         #" fi;"

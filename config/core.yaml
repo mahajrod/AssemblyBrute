@@ -626,7 +626,7 @@
             "meryl": 10
             "genomescope": 1
             "parse_genomescope_output": 1
-            "hifiasm": 20
+            "hifiasm": 60
             "gfa2fasta": 1
             "busco5": 10
             "quast": 4

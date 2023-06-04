@@ -42,7 +42,8 @@ config/
     core.yaml      <----- modify this file only if you know what you are doing. In most case you don't need it
 ```
 Some of the options (all nonested options from default.yaml) could also be set via command line. See examples before
-IV.
+
+IV. Run pipeline directly or via wrapper script (**Not written yet**). See examples below
 
 # Examples
 

@@ -507,7 +507,7 @@ if config["phasing_stage"] in config["stage_list"]:
                                     assembly_kmer_length=config["assembly_kmer_length"]
                                     ),
                             ]
-"""
+
 if "hic_scaffolding" in config["stage_list"]:
     prev_stage = stage_dict["hic_scaffolding"]["prev_stage"]
     hic_scaffolder_list = config["stage_coretools"]["hic_scaffolding"]["default"]
@@ -524,6 +524,8 @@ if "hic_scaffolding" in config["stage_list"]:
     parameters_list = list(stage_dict["hic_scaffolding"]["parameters"].keys())
 
     #print(stage_dict["hic_scaffolding"]["prev_stage"])
+
+
     results_list += [
                      #expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{resolution}.map.{ext}",
                      #       genome_prefix=[config["genome_prefix"], ],
@@ -557,6 +559,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                 assembly_stage=["hic_scaffolding", ],
                                 haplotype=haplotype_list,
                                 parameters=parameters_list),]
+"""
 if "curation" in config["stage_list"]:
     prev_stage = stage_dict["curation"]["prev_stage"]
     curation_tool_list = config["stage_coretools"]["curation"]["default"]
@@ -640,17 +643,16 @@ include: "workflow/rules/Stats/General.smk"
 include: "workflow/rules/Purge_dups/Purge_dups.smk"
 include: "workflow/rules/HiC/ReadPhasing.smk"
 
-"""
-
 include: "workflow/rules/Alignment/Index.smk"
 
 
-if "hic_scaffolding" in config["stage_list"]:
-    include: "workflow/rules/Alignment/Alignment.smk"
-    include: "workflow/rules/Alignment/Pretext.smk"
-    include: "workflow/rules/HiC/Salsa2.smk"
-    include: "workflow/rules/HiC/YAHS.smk"
+#if "hic_scaffolding" in config["stage_list"]:
+include: "workflow/rules/Alignment/Alignment.smk"
+include: "workflow/rules/Alignment/Pretext.smk"
+include: "workflow/rules/HiC/Salsa2.smk"
+include: "workflow/rules/HiC/YAHS.smk"
 
+"""
 if "curation" in config["stage_list"]:
     include: "workflow/rules/Curation/RapidCuration.smk"
     include: "workflow/rules/Curation/GapTrack.smk"

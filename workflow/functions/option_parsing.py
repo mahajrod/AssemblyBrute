@@ -5,11 +5,14 @@ This file contains functions necessary for manipulations with options inside Sna
 """
 
 
-def parse_option(option, option_dict, option_prefix, default_value="default"):
+def parse_option(option, option_dict, option_prefix, default_value="default", none_value=None):
     if option not in option_dict:
         return ""
     if option_dict[option] is None:
-        return ""
+        if none_value is None:
+            return ""
+        else:
+            " {0} {1}".format(option_prefix, none_value)
     if option_dict[option] == default_value:
         return ""
     return " {0} {1}".format(option_prefix, option_dict[option])

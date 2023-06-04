@@ -76,15 +76,13 @@ def detect_phasing_parameters(current_stage_parameters, phasing_stage, stage_sep
     phasing_stage_coretools = []
     for settings in config["stage_coretools"][phasing_stage]:
         phasing_stage_coretools += config["stage_coretools"][phasing_stage][settings]
+    stage_subparameters = None
     for entry in parameter_list:
         for tool in phasing_stage_coretools:
             if entry[:len(tool)] == tool:
                 stage_subparameters = entry
-                print("AAAAAAAA")
-                break
-                #raise AssertionError("")
-                #return entry
-    else:
+
+    if stage_subparameters is None:
         raise ValueError("Impossible to detect phasing stage parameters for {0} and phasing stage {1}".format(current_stage_parameters,
                                                                                                               phasing_stage))
     for stage_parameters in stage_dict[phasing_stage]["parameters"].keys():

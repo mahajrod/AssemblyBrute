@@ -108,7 +108,7 @@ rule get_purge_dups_read_stat: #TODO: adjust -d -m -u options for calcuts
         " LEN_FILE={output.len}; "
         " COV_UPPER_BOUNDARY=`awk 'NR==2 {{printf \"%.0f\", {params.cov_multiplicator} * $2}}' {input.genomescope_report}`;"
         " pbcstat -O ${{OUT_DIR}} {input.paf} 1>{log.pbstat} 2>&1; "
-        " calcuts -d 1 -u ${{COV_UPPER_BOUNDARY}} {output.pbstat} > {output.cutoffs} 2>{log.calcuts} " #check parameters for calcuts
+        " calcuts -d 1 -u ${{COV_UPPER_BOUNDARY}} {output.pbstat} > {output.cutoffs} 2>{log.calcuts}; " #check parameters for calcuts
         " convert_coverage_file_to_bed.py -i {output.pbbasecov}  -o ${{LEN_FILE%.len}} > {log.convert} 2>&1; "
 
 rule minimap2_purge_dups_assembly:
@@ -138,7 +138,7 @@ rule minimap2_purge_dups_assembly:
     shell:
         " split_fa {input.reference} > {output.split_reference} 2>{log.split_fa};"
         " minimap2 -DP {params.alignment_scheme} {params.index_size} -t {threads}  {output.split_reference} "
-        " {output.split_reference} 2>{log.minimap2} |  gzip -c - > {output.paf} "
+        " {output.split_reference} 2>{log.minimap2} |  gzip -c - > {output.paf}; "
 
 rule purge_dups: # TODO: find what options are used in ERGA for get_seqs
     input:
@@ -207,7 +207,7 @@ rule merge_pri_hapdups_with_alt: # TODO: add handling of polyploid cases
     threads: parameters["threads"]["merge_pri_hapdups_with_alt"]
 
     shell:
-        " cat {input.alt_contig} {input.pri_hapdups} > {output.alt_plus_pri_hapdup} 2>{log.std}"
+        " cat {input.alt_contig} {input.pri_hapdups} > {output.alt_plus_pri_hapdup} 2>{log.std}; "
 
 rule merge_pri_hapdups_with_alt_for_len_files: # TODO: add handling of polyploid cases
     input:
@@ -308,9 +308,9 @@ rule extract_stats_from_purge_dups_file:
     threads: parameters["threads"]["extract_stats_from_purge_dups_file"]
 
     shell:
-        " STATS_FILE={output.stat};  "
-        " ./workflow/scripts/purge_dups/calculate_purge_dups_stats.py  -b {input.bed} -s {input.stat} -l {input.len}"
-        " -o ${{STATS_FILE%.stat}} > {log.std} 2>&1;"
+        " STATS_FILE={output.stat}; "
+        " ./workflow/scripts/purge_dups/calculate_purge_dups_stats.py  -b {input.bed} -s {input.stat} -l {input.len} "
+        " -o ${{STATS_FILE%.stat}} > {log.std} 2>&1; "
 
 rule extract_artefact_sequences:
     input:
@@ -335,7 +335,7 @@ rule extract_artefact_sequences:
 
     shell:
         " extract_sequences_by_ids.py -i {input.reference} -d {input.artefact_ids} "
-        " -o {output.artefact_fasta} > {log.std} 2>&1 ;"
+        " -o {output.artefact_fasta} > {log.std} 2>&1 ; "
 
 
 rule minimap2_purge_dups_qc:
@@ -365,7 +365,7 @@ rule minimap2_purge_dups_qc:
 
     shell:
         " minimap2 {params.alignment_scheme} -I {params.index_size} -t {threads}  {input.reference} "
-        " {input.fastq} 2>{log.std} |  gzip -c - > {output.paf} "
+        " {input.fastq} 2>{log.std} |  gzip -c - > {output.paf}; "
 
 rule get_purge_dups_read_stat_qc:
     input:
@@ -410,7 +410,7 @@ rule get_purge_dups_read_stat_qc:
         " pbcstat -O ${{OUT_DIR}} {input.paf} 1>{log.pbstat} 2>&1; "
         " calcuts -d 1 -u ${{COV_UPPER_BOUNDARY}} {output.pbstat} > {output.cutoffs} 2>{log.calcuts}; " #check parameters for calcuts
         " workflow/scripts/purge_dups/draw_purge_dups_plot_all_haplotypes.py -b {input.before_pbstat},{output.pbstat} "
-        " -l before,after -c {input.before_cutoffs},{output.cutoffs} -e png,svg -o ${{COV_PLOT%.png}} > {log.png} 2>&1"
+        " -l before,after -c {input.before_cutoffs},{output.cutoffs} -e png,svg -o ${{COV_PLOT%.png}} > {log.png} 2>&1; "
 
 rule get_purge_stat_haplotype_comparison: #TODO: adjust -d -m -u options for calcuts
     input:

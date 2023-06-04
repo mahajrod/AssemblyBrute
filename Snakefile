@@ -550,7 +550,7 @@ if "hic_scaffolding" in config["stage_list"]:
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=[prev_stage,],
                            haplotype=haplotype_list,
-                           parameters=stage_dict[prev_stage]["parameters"]),
+                           parameters=stage_dict[prev_stage]["parameters"].keys()),
                     #expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
                     #       genome_prefix=[config["genome_prefix"], ],
                     #       assembly_stage=["hic_scaffolding", ],

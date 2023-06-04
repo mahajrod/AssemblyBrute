@@ -559,6 +559,7 @@ if "hic_scaffolding" in config["stage_list"]:
                     #       genome_prefix=[config["genome_prefix"], ],
                     #       assembly_stage=["hic_scaffolding"],),
                     ]
+    """
     if not config["skip_busco"]:
         results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
                                 busco_lineage=config["busco_lineage_list"],
@@ -566,6 +567,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                 assembly_stage=["hic_scaffolding", ],
                                 haplotype=haplotype_list,
                                 parameters=parameters_list),]
+    """
 """
 if "curation" in config["stage_list"]:
     prev_stage = stage_dict["curation"]["prev_stage"]

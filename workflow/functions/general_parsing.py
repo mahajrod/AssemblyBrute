@@ -80,6 +80,7 @@ def detect_phasing_parameters(current_stage_parameters, phasing_stage, stage_sep
         for tool in phasing_stage_coretools:
             if entry[:len(tool)] == tool:
                 stage_subparameters = entry
+                print("AAAAAAAA")
                 break
                 #raise AssertionError("")
                 #return entry

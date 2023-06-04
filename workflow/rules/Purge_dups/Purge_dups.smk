@@ -36,7 +36,7 @@ rule create_primary_contig_link:
 
 rule minimap2_purge_dups_reads:
     input:
-        fastq=lambda wildcards: output_dict["data"] / "fastq/{0}/filtered/{1}{2}".format(parameters["tool_options"]["minimap2"][parameters["tool_options"]["purge_dups"][wildcards.purge_dups_parameters]["datatype"]],
+        fastq=lambda wildcards: output_dict["data"] / "fastq/{0}/filtered/{1}{2}".format(parameters["tool_options"]["minimap2"][stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"]],
                                                                                          wildcards.fileprefix,
                                                                                          config["fastq_extension"]),
         reference=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/input/{genome_prefix}.purge_dups_input.{haplotype}.fasta"

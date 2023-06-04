@@ -674,13 +674,11 @@ include: "workflow/rules/HiC/ReadPhasing.smk"
 
 include: "workflow/rules/Alignment/Index.smk"
 
-
 #if "hic_scaffolding" in config["stage_list"]:
 include: "workflow/rules/Alignment/Alignment.smk"
 include: "workflow/rules/Alignment/Pretext.smk"
 include: "workflow/rules/HiC/Salsa2.smk"
 include: "workflow/rules/HiC/YAHS.smk"
-
 
 #if "curation" in config["stage_list"]:
 include: "workflow/rules/Curation/RapidCuration.smk"
@@ -688,6 +686,3 @@ include: "workflow/rules/Curation/GapTrack.smk"
 include: "workflow/rules/Curation/RepeatTrack.smk"
 include: "workflow/rules/Curation/CoverageTrack.smk"
 include: "workflow/rules/Curation/TelomereTrack.smk"
-
-
-"""

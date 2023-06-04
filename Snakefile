@@ -579,9 +579,9 @@ if "hic_scaffolding" in config["stage_list"]:
                            assembly_stage=["hic_scaffolding", ],
                            haplotype=haplotype_list,
                            parameters=parameters_list),
-                    #expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
-                    #       genome_prefix=[config["genome_prefix"], ],
-                    #       assembly_stage=["hic_scaffolding"],),
+                    expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
+                           genome_prefix=[config["genome_prefix"], ],
+                           assembly_stage=["hic_scaffolding"],),
                     ]
 
     if not config["skip_busco"]:

@@ -44,7 +44,7 @@ rule minimap2_purge_dups_reads:
         paf=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{haplotype, [^.]+}/{genome_prefix}.{haplotype}.{fileprefix}.paf.gz"
     params:
         index_size=lambda wildcards: parse_option("index_size", parameters["tool_options"]["minimap2"][stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"]], " -I "),
-        alignment_scheme=lambda wildcards: parse_option("alignment_scheme", parameters["tool_options"][stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"]], " -x "),
+        alignment_scheme=lambda wildcards: parse_option("alignment_scheme", parameters["tool_options"]["minimap2"][stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"]], " -x "),
     log:
         std=output_dict["log"]  / "minimap2_purge_dups_reads.{prev_stage_parameters}.{purge_dups_parameters}.{haplotype}.{genome_prefix}.{fileprefix}.log",
         cluster_log=output_dict["cluster_log"] / "minimap2_purge_dups_reads.{prev_stage_parameters}.{purge_dups_parameters}.{haplotype}.{genome_prefix}.{fileprefix}..cluster.log",

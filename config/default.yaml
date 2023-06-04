@@ -126,6 +126,8 @@
 "custom_assembly_stages": []
 "skip_busco": False
 "skip_gcp": False
+"skip_fcs": False
+"skip_fcs_adaptor": False
 #"adaptor_scan": True
 #"fcs_gx_scan": True
 # Allowed modes:

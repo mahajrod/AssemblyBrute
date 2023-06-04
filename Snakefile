@@ -372,18 +372,19 @@ if "contig" in config["stage_list"]:
 
     parameters_list = list(stage_dict["contig"]["parameters"].keys())
     if "hifiasm" in assembler_list:
-        results_list += [expand(output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.hifi.ec.bin",
+        results_list += [expand(output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.ec.bin",
                                 genome_prefix=[config["genome_prefix"],],
-                                correction_options=assembler_option_set_group_dict[assembler])
-                         ]
-
-    """
-    results_list += [
-                     expand(output_dict["contig"] / "{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
+                                correction_options=assembler_option_set_group_dict[assembler]),
+                         expand(output_dict["contig"] / "{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
                             genome_prefix=[config["genome_prefix"],],
                             assembly_stage=["contig",],
                             haplotype=haplotype_list + ["alt"], # TODO: modify "alt" when assemblers other than hifiasm will be added
                             parameters=parameters_list ),
+                         ]
+
+    """
+    results_list += [
+                     
                      expand(output_dict["contig"] / "{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.gfa.cov",
                             genome_prefix=[config["genome_prefix"],],
                             assembly_stage=["contig",],

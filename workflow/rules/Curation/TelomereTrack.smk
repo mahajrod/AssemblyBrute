@@ -63,7 +63,7 @@ rule telo_finder: #
         " else "
         "       touch `basename {output.canonical_kmer}`; "
         "       touch `basename {output.canonical_top_kmer}`;  "
-        " fi"
+        " fi; "
         " cp non_canonical.txt `basename {output.non_canonical}` > ${{CP1_LOG}} 2>&1; "
         " if [ -s `basename {output.non_canonical}` ]; "
         " then "

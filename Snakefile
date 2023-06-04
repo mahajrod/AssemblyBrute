@@ -392,37 +392,23 @@ if "contig" in config["stage_list"]:
                             assembly_stage=["contig",],
                             haplotype=haplotype_list + ["alt"], # TODO: modify "alt" when assemblers other than hifiasm will be added
                             parameters=parameters_list ),
-                    #expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/quast/{genome_prefix}.{assembly_stage}.{haplotype}",
-                    #       genome_prefix=[config["genome_prefix"], ],
-                    #       assembly_stage=["contig"],
-                    #       haplotype=haplotype_list,
-                    #       parameters=parameters_list),
                     expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=["contig"],
                            haplotype=haplotype_list,
                            parameters=parameters_list),
-                    #expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{genome_prefix}.{assembly_stage}.qv",
-                    #       genome_prefix=[config["genome_prefix"], ],
-                    #       assembly_stage=["contig"],
-                    #       haplotype=haplotype_list,
-                    #       parameters=parameters_list),
-                    #expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{genome_prefix}.{assembly_stage}.stats",
-                    #       genome_prefix=[config["genome_prefix"], ],
-                    #       assembly_stage=["contig"],
-                    #       parameters=parameters_list),
                     expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=["contig"],),
                     ] # Tested only on hifiasm
-    """
-    if not config["skip_busco"]:
-        results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
-                                busco_lineage=config["busco_lineage_list"],
-                                genome_prefix=[config["genome_prefix"], ],
-                                assembly_stage=["contig"],
-                                haplotype=haplotype_list,
-                                parameters=parameters_list),]
+
+    #if not config["skip_busco"]:
+    #    results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
+    #                            busco_lineage=config["busco_lineage_list"],
+    #                            genome_prefix=[config["genome_prefix"], ],
+    #                            assembly_stage=["contig"],
+    #                            haplotype=haplotype_list,
+    #                            parameters=parameters_list),]
     if (config["tax_id"] is None) or (not config["tax_id"]):
         print("Tax id was not set, skipping contamination scan in FCS databases...")
     else:
@@ -521,7 +507,7 @@ if config["phasing_stage"] in config["stage_list"]:
                                     assembly_kmer_length=config["assembly_kmer_length"]
                                     ),
                             ]
-
+"""
 if "hic_scaffolding" in config["stage_list"]:
     prev_stage = stage_dict["hic_scaffolding"]["prev_stage"]
     hic_scaffolder_list = config["stage_coretools"]["hic_scaffolding"]["default"]

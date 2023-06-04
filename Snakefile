@@ -636,12 +636,12 @@ if "hifi" in data_types:
 
 include: "workflow/rules/Contigs/Graph.smk"
 include: "workflow/rules/Stats/General.smk"
-
+include: "workflow/rules/Purge_dups/Purge_dups.smk"
 """
 
 
 if "purge_dups" in config["stage_list"]:
-    include: "workflow/rules/Purge_dups/Purge_dups.smk"
+
 
 include: "workflow/rules/Alignment/Index.smk"
 include: "workflow/rules/HiC/ReadPhasing.smk"

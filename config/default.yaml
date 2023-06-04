@@ -134,6 +134,7 @@
 "skip_gcp": False
 "skip_fcs": False
 "skip_fcs_adaptor": False
+"skip_kraken": False
 #"adaptor_scan": True
 #"fcs_gx_scan": True
 # Allowed modes:

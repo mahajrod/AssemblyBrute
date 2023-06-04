@@ -299,7 +299,7 @@ if "filter_reads" in config["stage_list"]:
                                stage=["trimmed", ],
                                fileprefix=input_file_prefix_dict["nanopore"],) if "nanopore" in long_read_data_type_set else [],
                     ]
-    if config["database_set"]["kraken2"] and kraken_scan_data_type_set:
+    if config["database_set"]["kraken2"] and kraken_scan_data_type_set and (not config["skip_kraken"]):
         results_list += [expand(out_dir_path / "contamination_scan/kraken2/{datatype}/kraken2.{database}.report",
                                datatype=kraken_scan_data_type_set,
                                database=config["database_set"]["kraken2"],

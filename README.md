@@ -1,4 +1,48 @@
+# AssemblyBrute - Pipeline to "bruteforce" de novo genome assembly and evaluation
 
+It allows to generate multiple assemblies (with different parameters and different tools) from one command
+It is based on VGP-pipeline (bionano scaffolding was not included) and Rapid curation but with multiple additions for QC and evaluation
+
+# Dependencies
+
+If you wish to run it using conda via snakemake, then you will need:
+    - conda
+    - mamba
+    - snakemake
+    - FCS database and FCS_GX singularity container      # optional
+    - FCS_adapter singularity container                  # optional
+    - Kraken databases                                   # optional
+    - RapidCuration singularity containers               # this dependency will be excluded soon
+
+# Usage
+I. Clone this repository
+```commandline
+git clone https://github.com/mahajrod/AssemblyBrute 
+
+```
+
+II. Place you fastqs in corresponding folders in the input directory:
+```commandline
+AssemblyBrute/
+    input/
+        hic/
+            fastq/
+        hifi/
+            fastq/
+        nanopore/
+            fastq/
+        illumina/
+            fastq/
+```
+
+III. Modify config files. I recommend to copy *default.yaml* and do all modifications in this copy.
+```commandline
+config/
+    default.yaml   <----- modify this file, add paths to databases, set tax_id, ploidy, etc
+    core.yaml      <----- modify this file only if you know what you are doing. In most case you don't need it
+```
+Some of the options (all nonested options from default.yaml) could also be set via command line. See examples before
+IV.
 
 # Examples
 

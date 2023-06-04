@@ -81,12 +81,10 @@ rule get_purge_dups_read_stat: #TODO: adjust -d -m -u options for calcuts
         stat=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{haplotype, [^.]+}/PB.base.cov.stat",
         bed=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{haplotype, [^.]+}/PB.base.cov.bed"
     params:
-        #out_dir=lambda wildcards: out_dir_path  / "purge_dups/{0}..{1}/{2}".format(wildcards.prev_stage_parameters,
-        #                                                                          wildcards.purge_dups_parameters,
-        #                                                                          wildcards.haplotype),
-        cov_multiplicator=lambda wildcards: stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["cov_multiplicator"]
-        #cov_multiplicator=parameters["tool_options"]["purge_dups"]["cov_multiplicator"]
-
+        cov_multiplicator=lambda wildcards: stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["cov_multiplicator"],
+        calcuts_lower_threshold=lambda wildcards: parse_option("lower_threshold", config["tool_manually_adjusted_features"]["calcuts"], " -l "),
+        calcuts_haploid_diploid_threshold=lambda wildcards: parse_option("haploid_diploid_threshold", config["tool_manually_adjusted_features"]["calcuts"], " -m "),
+        calcuts_upper_threshold=str(config["tool_manually_adjusted_features"]["calcuts"]["upper_threshold"]), # None needs to be converted to "None"
     log:
         pbstat=output_dict["log"] / "get_purge_dups_read_stat.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.{haplotype}.pbstat.log",
         calcuts=output_dict["log"]  / "get_purge_dups_read_stat.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.{haplotype}.calcuts.log",
@@ -102,13 +100,14 @@ rule get_purge_dups_read_stat: #TODO: adjust -d -m -u options for calcuts
         time=parameters["time"]["get_purge_dups_read_stat"],
         mem=parameters["memory_mb"]["get_purge_dups_read_stat"]
     threads: parameters["threads"]["get_purge_dups_read_stat"]
-
     shell:
         " OUT_DIR=`dirname {output.pbstat}`; "
         " LEN_FILE={output.len}; "
-        " COV_UPPER_BOUNDARY=`awk 'NR==2 {{printf \"%.0f\", {params.cov_multiplicator} * $2}}' {input.genomescope_report}`;"
+        " COV_UPPER_BOUNDARY=`awk 'NR==2 {{printf \"%.0f\", {params.cov_multiplicator} * $2}}' {input.genomescope_report}`; "
+        " if [ '{params.calcuts_upper_threshold}' != 'None' ] ; then COV_UPPER_BOUNDARY={params.calcuts_upper_threshold}; fi; "
         " pbcstat -O ${{OUT_DIR}} {input.paf} 1>{log.pbstat} 2>&1; "
-        " calcuts -d 1 -u ${{COV_UPPER_BOUNDARY}} {output.pbstat} > {output.cutoffs} 2>{log.calcuts}; " #check parameters for calcuts
+        " calcuts -d 1 {params.calcuts_lower_threshold} {params.calcuts_haploid_diploid_threshold} "
+        " -u ${{COV_UPPER_BOUNDARY}} {output.pbstat} > {output.cutoffs} 2>{log.calcuts}; " #check parameters for calcuts
         " convert_coverage_file_to_bed.py -i {output.pbbasecov}  -o ${{LEN_FILE%.len}} > {log.convert} 2>&1; "
 
 rule minimap2_purge_dups_assembly:
@@ -152,10 +151,6 @@ rule purge_dups: # TODO: find what options are used in ERGA for get_seqs
         hapdups=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{haplotype, [^.]+}/{genome_prefix}.purge_dups.{haplotype}.hap.fasta",
         purged_alias=out_dir_path / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{genome_prefix}.purge_dups.{haplotype, [^.]+}.fasta",
     params:
-        #bed_local_path=lambda wildcards: "{0}.dups.bed".format(wildcards.genome_prefix),
-        #out_dir=lambda wildcards: out_dir_path  / "purge_dups/{0}..{1}/{2}".format(wildcards.prev_stage_parameters,
-        #                                                                         wildcards.purge_dups_parameters,
-        #                                                                         wildcards.haplotype),
         get_seq_prefix=lambda wildcards: "{0}.purge_dups.{1}".format(wildcards.genome_prefix, wildcards.haplotype)
     log:
         purge_dups=output_dict["log"]  / "purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.purge_dups.{haplotype}.purge_dups.log",
@@ -234,53 +229,6 @@ rule merge_pri_hapdups_with_alt_for_len_files: # TODO: add handling of polyploid
     shell:
         " cat {input.alt_len} {input.pri_hapdups_len} > {output.alt_plus_pri_len} 2>{log.std}"
 
-#rule create_link_for_purged_fasta: # command moved to rules.purge_dups
-#    input:
-#        purged=rules.purge_dups.output.purged
-#    output:
-#        purged=out_dir_path / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{genome_prefix}.purge_dups.{haplotype, [^.]+}.fasta"
-#    log:
-#        std=output_dict["log"]  / "create_link_for_purged_fasta.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.purge_dups.{haplotype}.log",
-#        cluster_log=output_dict["cluster_log"] / "create_link_for_purged_fasta.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.purge_dups.{haplotype}.cluster.log",
-#        cluster_err=output_dict["cluster_error"] / "create_link_for_purged_fasta.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.purge_dups.{haplotype}.cluster.err"
-#    benchmark:
-#        output_dict["benchmark"]  / "merge_pri_hapdups_with_alt.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.purge_dups.{haplotype}.benchmark.txt"
-#    conda:
-#        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
-#    resources:
-#        cpus=parameters["threads"]["create_links"] ,
-#        time=parameters["time"]["create_links"],
-#        mem=parameters["memory_mb"]["create_links"]
-#    threads: parameters["threads"]["create_links"]
-#
-#    shell:
-#        " ln {input.purged} {output.purged} > {log.std} 2>&1;"
-
-#rule extract_coverage_from_purge_dups_file: # moved to rules.get_purge_dups_read_stat
-#    input:
-#        pbbasecov=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{haplotype}/PB.base.cov"
-#    output:
-#        len=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{haplotype, [^.]+}/PB.base.cov.len",
-#        stat=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{haplotype, [^.]+}/PB.base.cov.stat",
-#        bed=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{haplotype, [^.]+}/PB.base.cov.bed"
-#    log:
-#        std=output_dict["log"]  / "extract_coverage_from_purge_dups_file.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.{haplotype}.log",
-#        cluster_log=output_dict["cluster_log"] / "extract_coverage_from_purge_dups_file.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.{haplotype}.cluster.log",
-#        cluster_err=output_dict["cluster_error"] / "extract_coverage_from_purge_dups_file.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.{haplotype}.cluster.err"
-#    benchmark:
-#        output_dict["benchmark"]  / "extract_coverage_from_purge_dups_file..{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.{haplotype}.benchmark.txt"
-#    conda:
-#        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
-#    resources:
-#        cpus=parameters["threads"]["extract_coverage_from_purge_dups_file"] ,
-#        time=parameters["time"]["extract_coverage_from_purge_dups_file"],
-#        mem=parameters["memory_mb"]["extract_coverage_from_purge_dups_file"]
-#    threads: parameters["threads"]["extract_coverage_from_purge_dups_file"]
-#
-#    shell:
-#        " LEN_FILE={output.len}; "
-#        " convert_coverage_file_to_bed.py -i {input.pbbasecov}  -o ${{LEN_FILE%.len}} > {log.std} 2>&1; "
-
 rule extract_stats_from_purge_dups_file:
     input:
         stat=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{haplotype}/PB.base.cov.stat",
@@ -337,7 +285,6 @@ rule extract_artefact_sequences:
     shell:
         " extract_sequences_by_ids.py -i {input.reference} -d {input.artefact_ids} "
         " -o {output.artefact_fasta} > {log.std} 2>&1 ; "
-
 
 rule minimap2_purge_dups_qc:
     input:

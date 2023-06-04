@@ -560,6 +560,13 @@ if "hic_scaffolding" in config["stage_list"]:
                            haplotype=haplotype_list,
                            parameters=stage_dict[config["phasing_stage"]]["parameters"]
                            ),
+                    expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.bam",
+                           phasing_kmer_length=["NA", 31],
+                           pairprefix=input_pair_prefix_dict["hic"],
+                           genome_prefix=[config["genome_prefix"], ],
+                           assembly_stage=[config["phasing_stage"],],
+                           haplotype=haplotype_list,
+                           parameters=stage_dict[config["phasing_stage"]]["parameters"]),
                     #expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
                     #       genome_prefix=[config["genome_prefix"], ],
                     #       assembly_stage=["hic_scaffolding", ],

@@ -179,10 +179,11 @@ rule purge_dups: # TODO: find what options are used in ERGA for get_seqs
         " PURGE_DUPS_BED=`realpath {output.bed}`; "
         " REFERENCE=`realpath {input.reference}`; "
         " GET_SEQ_LOG=`realpath {log.get_seqs}`; "
+        " LN_LOG=`realpath {log.ln}`; "
         " cd ${{OUT_DIR}}; "
         " get_seqs -p {params.get_seq_prefix} ${{PURGE_DUPS_BED}} ${{REFERENCE}} > ${{GET_SEQ_LOG}} 2>&1; "
         " for FILE in *.fa; do mv ${{FILE}} ${{FILE%fa}}fasta; done; "
-        " ln `basename {output.purged}` ../`basename {output.purged_alias}` > {log.ln} 2>&1; "
+        " ln `basename {output.purged}` ../`basename {output.purged_alias}` > ${{LN_LOG}} 2>&1; "
 
 rule merge_pri_hapdups_with_alt: # TODO: add handling of polyploid cases
     input:

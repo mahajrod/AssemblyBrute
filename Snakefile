@@ -547,7 +547,7 @@ if "hic_scaffolding" in config["stage_list"]:
                            phasing_kmer_length=["NA", 31],
                            fileprefix=input_file_prefix_dict["hic"],
                            genome_prefix=[config["genome_prefix"], ],
-                           assembly_stage=["hic_scaffolding", ],
+                           assembly_stage=["purge_dups", ],
                            haplotype=haplotype_list,
                            parameters=parameters_list),
                     #expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",

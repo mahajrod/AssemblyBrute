@@ -525,8 +525,8 @@ if "hic_scaffolding" in config["stage_list"]:
 
     #print(stage_dict["hic_scaffolding"]["prev_stage"])
 
-    print(list(stage_dict[prev_stage]["parameters"].keys()))
-    raise AttributeError()
+    #print(list(stage_dict[prev_stage]["parameters"].keys()))
+    #raise AttributeError()
     results_list += [
                      #expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{resolution}.map.{ext}",
                      #       genome_prefix=[config["genome_prefix"], ],
@@ -550,7 +550,8 @@ if "hic_scaffolding" in config["stage_list"]:
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=[prev_stage,],
                            haplotype=haplotype_list,
-                           parameters=stage_dict[prev_stage]["parameters"].keys()),
+                           parameters=list(stage_dict[prev_stage]["parameters"].keys())
+                           ),
                     #expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
                     #       genome_prefix=[config["genome_prefix"], ],
                     #       assembly_stage=["hic_scaffolding", ],

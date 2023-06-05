@@ -7,7 +7,8 @@ rule hifiasm_correct:
                     allow_missing=True),
     output:
         ec_bin=output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.ec.bin",
-        ec_fasta=output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.ec.fa",
+        ec_fasta=output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.ec.fasta.gz",
+        alias_fasta=out_dir_path / "data/fastq/hifi/error_corrected_hifiasm_{correction_options}/{genome_prefix}.contig.ec.fasta.gz",
         ovlp_reverse_bin=output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.ovlp.reverse.bin",
         ovlp_source_bin=output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.ovlp.source.bin",
     params:
@@ -22,6 +23,9 @@ rule hifiasm_correct:
         N=lambda wildcards: parse_option("N", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -N "), #" -N {0} ".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["N"]) if "N" in parameters["tool_options"]["hifiasm"][wildcards.contig_options] else "",
     log:
         std=output_dict["log"] / "hifiasm_correct.{correction_options}.{genome_prefix}.log",
+        pigz=output_dict["log"] / "hifiasm_correct.{correction_options}.{genome_prefix}.pigz.log",
+        mv=output_dict["log"] / "hifiasm_correct.{correction_options}.{genome_prefix}.mv.log",
+        ln=output_dict["log"] / "hifiasm_correct.{correction_options}.{genome_prefix}.ln.log",
         cluster_log=output_dict["cluster_log"] / "hifiasm_correct{correction_options}.{genome_prefix}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "hifiasm_correct{correction_options}.{genome_prefix}.cluster.err"
     benchmark:
@@ -37,10 +41,15 @@ rule hifiasm_correct:
     shell:
          " OUTPUT_PREFIX={output.ec_bin}; "
          " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.ec.bin}}; "
+         " UNCOMPRESSED_FASTA={output.ec_fasta}; "
+         " UNCOMPRESSED_FASTA=${{UNCOMPRESSED_FASTA%sta.gz};  }"
          " hifiasm -t {threads} -e --write-ec {params.window_size} {params.bloom_filter_bits} "
          " {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size}"
          " {params.kmer_length} {params.D} {params.N} "
          " -o ${{OUTPUT_PREFIX}} {input.hifi}  1>{log.std} 2>&1;"
+         " pigz -p {threads} ${{UNCOMPRESSED_FASTA}} > {log.pigz} 2>&1 ; "
+         " mv ${{UNCOMPRESSED_FASTA}}.gz {output.ec_fasta} > {log.mv} 2>&1; "
+         " ln ../../../../../{output.ec_fasta} > {log.ln} 2>&1; "
 
 rule hifiasm_hic: # TODO: implement modes without hic data as independent rule
     priority: 1000

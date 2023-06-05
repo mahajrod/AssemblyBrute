@@ -49,7 +49,7 @@ rule hifiasm_correct:
          " -o ${{OUTPUT_PREFIX}} {input.hifi}  1>{log.std} 2>&1;"
          " pigz -p {threads} ${{UNCOMPRESSED_FASTA}} > {log.pigz} 2>&1 ; "
          " mv ${{UNCOMPRESSED_FASTA}}.gz {output.ec_fasta} > {log.mv} 2>&1; "
-         " ln -s ../../../../../{output.ec_fasta} {output.alias_ec_fasta} > {log.ln} 2>&1; "
+         " ln -sf ../../../../../{output.ec_fasta} {output.alias_ec_fasta} > {log.ln} 2>&1; "
 
 rule hifiasm_hic: # TODO: implement modes without hic data as independent rule
     priority: 1000
@@ -122,6 +122,6 @@ rule hifiasm_hic: # TODO: implement modes without hic data as independent rule
          " --n-hap {params.ploidy} --purge-max ${{COV_UPPER_BOUNDARY}} "
          " {params.hic_forward} {params.hic_reverse} {params.nanopore} "
          " {input.hifi}  1>{log.std} 2>&1;"
-         " ln {output.primary_contig_graph} {output.primary_alias};"
-         " ln {output.alternative_contig_graph} {output.alternative_alias};"
-         " ln {output.alt_contig_graph} {output.alt_alias}; "
+         " ln -sf `basename {output.primary_contig_graph}` `basename {output.primary_alias}`;"
+         " ln -sf `basename {output.alternative_contig_graph}` `basename {output.alternative_alias}`;"
+         " ln -sf `basename {output.alt_contig_graph}` `basename {output.alt_alias}`; "

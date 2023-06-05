@@ -46,6 +46,9 @@
             "in_memory":    True
             "taxonomy":     "eukaryota"
 
+"tool_containers":
+    "rapid_telomere":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/rapid-curation/rapid_hic_software/runTelo.sif"
+
 "coretool_option_sets":
     "hifiasm":
          #- "l0primary"

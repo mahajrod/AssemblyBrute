@@ -1,4 +1,4 @@
-# AssemblyBrute - Pipeline to "bruteforce" de novo genome assembly and evaluation
+# AssemblyBrute - Pipeline to "brute force" and evaluate de novo genome assemblies
 
 It allows to generate multiple assemblies (with different parameters and different tools) from one command
 It is based on VGP-pipeline (bionano scaffolding was not included) and Rapid curation but with multiple additions for QC and evaluation

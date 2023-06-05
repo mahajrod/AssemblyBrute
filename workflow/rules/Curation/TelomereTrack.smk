@@ -1,4 +1,4 @@
-rule telo_finder: #
+rule telo_finder:
     input:
         fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.fasta",
     output:
@@ -73,3 +73,89 @@ rule telo_finder: #
         "       touch `basename {output.non_canonical_kmer}`; "
         "       touch `basename {output.non_canonical_top_kmer}`;  "
         " fi; "
+
+rule telo_container: #TODO: add possibility to use custom telomere c
+    input:
+        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.fasta",
+        non_cannonicaL_top_kmer=rules.telo_finder.output.non_canonical_top_kmer,
+        cannonicaL_top_kmer=rules.telo_finder.output.canonical_top_kmer
+    output:
+        cannonical_telo_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.cannonical.telomere.bedgraph",
+        cannonical_telo_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.cannonical.telomere.bed",
+        cannonical_telo=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.cannonical.telomere",
+        cannonical_telo_win=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.cannonical.telomere.windows",
+        non_cannonical_telo_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.non_cannonical.telomere.bedgraph",
+        non_cannonical_telo_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.non_cannonical.telomere.bed",
+        non_cannonical_telo=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.non_cannonical.telomere",
+        non_cannonical_telo_win=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.non_cannonical.telomere.windows",
+    params:
+        container=config["tool_containers"]["rapid_telomere"]
+    log:
+        std=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.log",
+        mkdir=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.mkdir.log",
+        cp=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cp.log",
+        cp_cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cp_cannonical.log",
+        cp_non_cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cp_non_cannonical.log",
+        touch_cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.touch_cannonical.log",
+        touch_non_cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.rm_non_cannonical.log",
+        rm_cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.rm_cannonical.log",
+        rm_non_cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.touch_non_cannonical.log",
+        rm=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.rm.log",
+        cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cannonical.log",
+        non_cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.non_cannonical.log",
+        cluster_log=output_dict["cluster_log"] / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["telo_finder"] ,
+        time=parameters["time"]["telo_finder"],
+        mem=parameters["memory_mb"]["telo_finder"]
+    threads: parameters["threads"]["telo_finder"]
+
+    shell:
+        " FINALDIR=`dirname {output.cannonical_telo_track}`; "
+        " WORKDIR=${{FINALDIR}}/telo_tmp/; "
+        " DESTDIR=${{WORKDIR}}/results/; "
+        " TEMPDIR=${{WORKDIR}}/tmp/; "
+        " HICDIR=${{WORKDIR}}/hic/; "
+        " mkdir -p ${{DESTDIR}} ${{TEMPDIR}} > {log.mkdir} 2>&1; "
+        " cp {input.fasta} ${{WORKDIR}}/ref.fa > {log.cp} 2>&1; "
+        #" cd ${{WORKDIR}}; "
+        " export SINGULARITY_BIND=${{WORKDIR}}:/data,${{HICDIR}}:/hic,${{DESTDIR}}:/output,${{TEMPDIR}}:/tmp; "
+        " if [ -s `basename {input.cannonicaL_top_kmer}` ]; "
+        " then "
+        "       CANNONICAL_TEL_KMER=`head -n 1 {input.cannonicaL_top_kmer}`; "
+        "       singularity run {params.container} -t {wildcards.genome_prefix}_cannonical "
+        "       -s ${{CANNONICAL_TEL_KMER}}> {log.cannonical} 2>&1; "
+        "       cp ${{DESTDIR}}/{wildcards.genome_prefix}_cannonical_telomere.bedgraph {output.cannonical_telo_track} > {log.cp_cannonical} 2>&1; "
+        "       cp ${{DESTDIR}}/{wildcards.genome_prefix}_cannonical_telomere.bed {output.cannonical_telo_bed} >> {log.cp_cannonical} 2>&1; "
+        "       cp ${{DESTDIR}}/ref.telomere {output.cannonical_telo} >> {log.cp_cannonical} 2>&1; "
+        "       cp ${{DESTDIR}}/ref.windows {output.cannonical_telo_win} >> {log.cp_cannonical} 2>&1; "
+        "       rm -r ${{DESTDIR}}/* > {log.rm_cannonical} 2>&1; "
+        " else "
+        "       touch {output.cannonical_telo_track} > {log.touch_cannonical} 2>&1; "
+        "       touch {output.cannonical_telo_bed} >> {log.touch_cannonical} 2>&1; "
+        "       touch {output.cannonical_telo} >> {log.touch_cannonical} 2>&1; "
+        "       touch {output.cannonical_telo_win} >> > {log.touch_cannonical}  2>&1; "
+        " fi; "
+        
+        " if [ -s `basename {input.non_cannonicaL_top_kmer}` ]; "
+        " then "
+         "      NON_CANNONICAL_TEL_KMER=`head -n 1 {input.non_cannonicaL_top_kmer}`; "
+        "       singularity run {params.container} -t {wildcards.genome_prefix}_non_cannonical "
+        "       -s ${{NON_CANNONICAL_TEL_KMER}}> {log.non_cannonical} 2>&1; "
+        "       cp ${{DESTDIR}}/{wildcards.genome_prefix}_non_cannonical_telomere.bedgraph {output.non_cannonical_telo_track} > {log.cp_non_cannonical} 2>&1; "
+        "       cp ${{DESTDIR}}/{wildcards.genome_prefix}_non_cannonical_telomere.bed {output.non_cannonical_telo_bed} >> {log.cp_non_cannonical} 2>&1; "
+        "       cp ${{DESTDIR}}/ref.telomere {output.non_cannonical_telo} >> {log.cp_non_cannonical} 2>&1; "
+        "       cp ${{DESTDIR}}/ref.windows {output.non_cannonical_telo_win} >> {log.cp_non_cannonical} 2>&1; "
+        "       rm -r ${{DESTDIR}}/* > {log.rm_non_cannonical} 2>&1; "
+        " else "
+        "       touch {output.non_cannonical_telo_track} > {log.touch_non_cannonical} 2>&1; "
+        "       touch {output.non_cannonical_telo_bed} >> {log.touch_non_cannonical} 2>&1; "
+        "       touch {output.non_cannonical_telo} >> {log.touch_non_cannonical} 2>&1; "
+        "       touch {output.non_cannonical_telo_win} >> > {log.touch_non_cannonical}  2>&1; "
+        " fi; "
+        " rm -r ${{WORKDIR}} > {log.rm} 2>&1; "

@@ -5,7 +5,6 @@ rule merqury: # TODO: add handling for cases of haploid and polyploid genomes
         primary_assembly=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.hap1.fasta",
         alternative_assembly=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.hap2.fasta",
     output:
-        #dir=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/",
         qv_file=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{genome_prefix}.{assembly_stage}.qv",
         completeness_stats_file=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{genome_prefix}.{assembly_stage}.completeness.stats",
     params:
@@ -36,7 +35,5 @@ rule merqury: # TODO: add handling for cases of haploid and polyploid genomes
          " cd {params.dir}; "
          " OMP_NUM_THREADS={threads} merqury.sh ${{MERYL_DB}} "
          " ${{PRIMARY_ASSEMBLY}} ${{ALTERNATIVE_ASSEMBLY}} {params.out_prefix}  1>{log.std} 2>&1;"
-         #" OMP_NUM_THREADS={threads} merqury.sh {input.meryl_db_dir} "
-         #" {input.primary_assembly} {input.alternative_assembly} {params.out_prefix}  1>{log.std} 2>&1 || true;"
 
 

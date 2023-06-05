@@ -30,7 +30,7 @@ rule merqury: # TODO: add handling for cases of haploid and polyploid genomes
     threads:
         parameters["threads"]["merqury"]
     shell:
-         " MERYL_DB=`realpath {input.meryl_db_dir}`;"
+         " MERYL_DB=`realpath -s {input.meryl_db_dir}`;"
          " PRIMARY_ASSEMBLY=`realpath -s {input.primary_assembly}`;"
          " ALTERNATIVE_ASSEMBLY=`realpath -s {input.alternative_assembly}`;"
          " cd {params.dir}; "

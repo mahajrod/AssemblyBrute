@@ -29,7 +29,7 @@ rule fcs: #
 
     shell:
         " OUTDIR=`dirname {output.taxonomy}`; "
-        " OUTDIR=`realpath ${{OUTDIR}}`; "
+        " OUTDIR=`realpath -s ${{OUTDIR}}`; "
         " TMPDIR=${{OUTDIR}}'/tmp/'; "
         " SINGULARITYENV_TMPDIR=${{OUTDIR}}'/singularity/'; "
         " SINGULARITYENV_SQLITE_TMPDIR=${{OUTDIR}}'/singularity_sqlite/'; "
@@ -74,7 +74,7 @@ rule extract_fcs_contaminants: #
 
     shell:
         " OUTDIR=`dirname {output.report}`; "
-        " OUTDIR=`realpath ${{OUTDIR}}`; "
+        " OUTDIR=`realpath -s ${{OUTDIR}}`; "
         " TMPDIR=${{OUTDIR}}'/tmp/'; "
         " SINGULARITYENV_TMPDIR=${{OUTDIR}}'/singularity/'; "
         " SINGULARITYENV_SQLITE_TMPDIR=${{OUTDIR}}'/singularity_sqlite/'; "
@@ -122,7 +122,7 @@ rule fcs_adaptor: #
 
     shell:
         " OUTDIR=`dirname {output.report}`; "
-        " OUTDIR=`realpath ${{OUTDIR}}`; "
+        " OUTDIR=`realpath -s ${{OUTDIR}}`; "
         " TMPDIR=${{OUTDIR}}'/tmp/'; "
         " SINGULARITYENV_TMPDIR=${{OUTDIR}}'/singularity/'; "
         " SINGULARITYENV_SQLITE_TMPDIR=${{OUTDIR}}'/singularity_sqlite/'; "

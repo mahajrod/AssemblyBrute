@@ -8,7 +8,7 @@ rule hifiasm_correct:
     output:
         ec_bin=output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.ec.bin",
         ec_fasta=output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.ec.fasta.gz",
-        alias_fasta=out_dir_path / "data/fastq/hifi/error_corrected_hifiasm_{correction_options}/{genome_prefix}.contig.ec.fasta.gz",
+        alias_ec_fasta=out_dir_path / "data/fastq/hifi/error_corrected_hifiasm_{correction_options}/{genome_prefix}.contig.ec.fasta.gz",
         ovlp_reverse_bin=output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.ovlp.reverse.bin",
         ovlp_source_bin=output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.ovlp.source.bin",
     params:
@@ -49,7 +49,7 @@ rule hifiasm_correct:
          " -o ${{OUTPUT_PREFIX}} {input.hifi}  1>{log.std} 2>&1;"
          " pigz -p {threads} ${{UNCOMPRESSED_FASTA}} > {log.pigz} 2>&1 ; "
          " mv ${{UNCOMPRESSED_FASTA}}.gz {output.ec_fasta} > {log.mv} 2>&1; "
-         " ln ../../../../../{output.ec_fasta} > {log.ln} 2>&1; "
+         " ln ../../../../../{output.ec_fasta} {output.alias_ec_fasta} > {log.ln} 2>&1; "
 
 rule hifiasm_hic: # TODO: implement modes without hic data as independent rule
     priority: 1000

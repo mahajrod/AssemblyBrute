@@ -116,7 +116,7 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         telosif=1
     threads: parameters["threads"]["telo_finder"]
 
-    shell:
+    shell: # TODO pack code below as script
         " FINALDIR=`dirname {output.cannonical_telo_track}`; "
         " WORKDIR=${{FINALDIR}}/telo_tmp/; "
         " DESTDIR=${{WORKDIR}}/results/; "
@@ -130,7 +130,7 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         " then "
         "       CANNONICAL_TEL_KMER=`head -n 1 {input.cannonicaL_top_kmer}`; "
         "       singularity run {params.container} -t {wildcards.genome_prefix}_cannonical "
-        "       -s ${{CANNONICAL_TEL_KMER}} > {log.cannonical} 2>&1; "
+        "       -s ${{CANNONICAL_TEL_KMER}} > {log.cannonical} 2>&1 || true ; "
         "       cp ${{DESTDIR}}/{wildcards.genome_prefix}_cannonical_telomere.bedgraph {output.cannonical_telo_track} > {log.cp_cannonical} 2>&1; "
         "       cp ${{DESTDIR}}/{wildcards.genome_prefix}_cannonical_telomere.bed {output.cannonical_telo_bed} >> {log.cp_cannonical} 2>&1; "
         "       cp ${{DESTDIR}}/ref.telomere {output.cannonical_telo} >> {log.cp_cannonical} 2>&1; "
@@ -147,7 +147,7 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         " then "
          "      NON_CANNONICAL_TEL_KMER=`head -n 1 {input.non_cannonicaL_top_kmer}`; "
         "       singularity run {params.container} -t {wildcards.genome_prefix}_non_cannonical "
-        "       -s ${{NON_CANNONICAL_TEL_KMER}}> {log.non_cannonical} 2>&1; "
+        "       -s ${{NON_CANNONICAL_TEL_KMER}}> {log.non_cannonical} 2>&1 || true; "
         "       cp ${{DESTDIR}}/{wildcards.genome_prefix}_non_cannonical_telomere.bedgraph {output.non_cannonical_telo_track} > {log.cp_non_cannonical} 2>&1; "
         "       cp ${{DESTDIR}}/{wildcards.genome_prefix}_non_cannonical_telomere.bed {output.non_cannonical_telo_bed} >> {log.cp_non_cannonical} 2>&1; "
         "       cp ${{DESTDIR}}/ref.telomere {output.non_cannonical_telo} >> {log.cp_non_cannonical} 2>&1; "

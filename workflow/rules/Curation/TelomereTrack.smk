@@ -139,7 +139,7 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         "       touch {output.cannonical_telo_track} > {log.touch_cannonical} 2>&1; "
         "       touch {output.cannonical_telo_bed} >> {log.touch_cannonical} 2>&1; "
         "       touch {output.cannonical_telo} >> {log.touch_cannonical} 2>&1; "
-        "       touch {output.cannonical_telo_win} >> > {log.touch_cannonical}  2>&1; "
+        "       touch {output.cannonical_telo_win} >>  {log.touch_cannonical}  2>&1; "
         " fi; "
         
         " if [ -s {input.non_cannonicaL_top_kmer} ]; "
@@ -156,6 +156,6 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         "       touch {output.non_cannonical_telo_track} > {log.touch_non_cannonical} 2>&1; "
         "       touch {output.non_cannonical_telo_bed} >> {log.touch_non_cannonical} 2>&1; "
         "       touch {output.non_cannonical_telo} >> {log.touch_non_cannonical} 2>&1; "
-        "       touch {output.non_cannonical_telo_win} >> > {log.touch_non_cannonical}  2>&1; "
+        "       touch {output.non_cannonical_telo_win} >>  {log.touch_non_cannonical}  2>&1; "
         " fi; "
         " rm -r ${{WORKDIR}} > {log.rm} 2>&1; "

@@ -116,7 +116,7 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         telosif=1
     threads: parameters["threads"]["telo_finder"]
 
-    shell: # TODO pack code below as script
+    shell: # TODO pack code below as script. Issue with container - it return 111 inside of 0 and snakemake breaks. Added ' || true'
         " FINALDIR=`dirname {output.cannonical_telo_track}`; "
         " WORKDIR=${{FINALDIR}}/telo_tmp/; "
         " DESTDIR=${{WORKDIR}}/results/; "

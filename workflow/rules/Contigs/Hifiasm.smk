@@ -49,7 +49,7 @@ rule hifiasm_correct:
          " -o ${{OUTPUT_PREFIX}} {input.hifi}  1>{log.std} 2>&1;"
          " pigz -p {threads} ${{UNCOMPRESSED_FASTA}} > {log.pigz} 2>&1 ; "
          " mv ${{UNCOMPRESSED_FASTA}}.gz {output.ec_fasta} > {log.mv} 2>&1; "
-         " ln -s ../../../../../{output.ec_fasta} {output.alias_ec_fasta} > {log.ln} 2>&1; "
+         " ln {output.ec_fasta} {output.alias_ec_fasta} > {log.ln} 2>&1; "
 
 rule hifiasm_hic: # TODO: implement modes without hic data as independent rule
     priority: 1000

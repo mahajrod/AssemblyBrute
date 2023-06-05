@@ -42,7 +42,7 @@ rule hifiasm_correct:
          " OUTPUT_PREFIX={output.ec_bin}; "
          " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.ec.bin}}; "
          " UNCOMPRESSED_FASTA={output.ec_fasta}; "
-         " UNCOMPRESSED_FASTA=${{UNCOMPRESSED_FASTA%sta.gz};  }"
+         " UNCOMPRESSED_FASTA=${{UNCOMPRESSED_FASTA%sta.gz}}; "
          " hifiasm -t {threads} -e --write-ec {params.window_size} {params.bloom_filter_bits} "
          " {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size}"
          " {params.kmer_length} {params.D} {params.N} "

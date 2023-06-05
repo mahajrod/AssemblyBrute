@@ -22,7 +22,7 @@ rule create_fastq_links:
     threads:
         parameters["threads"]["create_fastq_links"]
     shell:
-         " ln -s {input} {output} 2>{log.std}"
+         " ln -sf {input} {output} 2>{log.std}"
 
 rule create_links_for_draft:
     priority: 1000
@@ -46,4 +46,4 @@ rule create_links_for_draft:
     threads:
         parameters["threads"]["create_links_for_draft"]
     shell:
-         " ln -s {input} {output} 2>{log.std}"
+         " ln -sf {input} {output} 2>{log.std}"

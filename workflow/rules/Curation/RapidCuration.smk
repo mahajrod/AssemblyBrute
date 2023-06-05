@@ -25,5 +25,5 @@ rule create_curation_input_links: #
     threads: parameters["threads"]["create_curation_input_links"]
 
     shell:
-        " ln -s `realpath {input.fasta}` {output.fasta} > {log.ln1} 2>&1; "
-        " ln -s `realpath {input.fai}` {output.fai} > {log.ln2} 2>&1; "
+        " ln -sf `realpath {input.fasta}` {output.fasta} > {log.ln1} 2>&1; "
+        " ln -sf `realpath {input.fai}` {output.fai} > {log.ln2} 2>&1; "

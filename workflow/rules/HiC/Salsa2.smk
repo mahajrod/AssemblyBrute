@@ -64,4 +64,4 @@ rule salsa2: #
         " run_pipeline.py -a {input.reference} -l {input.reference_fai} -b {input.bed} -e {params.restriction_seq} "
         " -m yes -p yes "
         " -o {output.dir} > {log.salsa} 2>&1;"
-        " ln {output.fasta} {output.alias} > {log.ln} 2>&1"
+        " ln -sf {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}/`basename {output.fasta}` {output.alias} > {log.ln} 2>&1"

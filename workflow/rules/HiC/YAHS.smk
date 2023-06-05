@@ -39,4 +39,4 @@ rule yahs: #
     shell:
         " yahs -q {params.min_mapping_quality} -l {params.min_contig_len} -o {params.output_prefix} "
         " {input.reference} {input.bam} > {log.yahs} 2>&1;"
-        " ln {output.fasta} {output.alias} > {log.ln} 2>&1"
+        " ln -sf {wildcards.haplotype}/scaffolding/`basename {output.fasta}` {output.alias} > {log.ln} 2>&1"

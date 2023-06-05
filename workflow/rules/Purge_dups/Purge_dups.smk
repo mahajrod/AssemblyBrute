@@ -31,8 +31,8 @@ rule create_primary_contig_link:
     threads: parameters["threads"]["create_links"]
 
     shell:
-        " ln -s ../../../../{input.fasta} {output.fasta} 1>{log.ln1} 2>&1; "
-        " ln -s ../../../../{input.len} {output.len} 1>{log.ln2} 2>&1"
+        " ln -sf ../../../../{input.fasta} {output.fasta} 1>{log.ln1} 2>&1; "
+        " ln -sf ../../../../{input.len} {output.len} 1>{log.ln2} 2>&1"
 
 rule minimap2_purge_dups_reads:
     input:
@@ -178,7 +178,7 @@ rule purge_dups: # TODO: find what options are used in ERGA for get_seqs
         " cd ${{OUT_DIR}}; "
         " get_seqs -p {params.get_seq_prefix} ${{PURGE_DUPS_BED}} ${{REFERENCE}} > ${{GET_SEQ_LOG}} 2>&1; "
         " for FILE in *.fa; do mv ${{FILE}} ${{FILE%fa}}fasta; done; "
-        " ln `basename {output.purged}` ../`basename {output.purged_alias}` > ${{LN_LOG}} 2>&1; "
+        " ln -sf {wildcards.haplotype}/`basename {output.purged}` ../`basename {output.purged_alias}` > ${{LN_LOG}} 2>&1; "
 
 rule merge_pri_hapdups_with_alt: # TODO: add handling of polyploid cases
     input:

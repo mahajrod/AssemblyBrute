@@ -122,7 +122,7 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         " DESTDIR=${{WORKDIR}}/results/; "
         " TEMPDIR=${{WORKDIR}}/tmp/; "
         " HICDIR=${{WORKDIR}}/hic/; "
-        " mkdir -p ${{DESTDIR}} ${{TEMPDIR}} > {log.mkdir} 2>&1; "
+        " mkdir -p ${{DESTDIR}} ${{TEMPDIR}} ${{HICDIR}} > {log.mkdir} 2>&1; "
         " cp {input.fasta} ${{WORKDIR}}/ref.fa > {log.cp} 2>&1; "
         #" cd ${{WORKDIR}}; "
         " export SINGULARITY_BIND=${{WORKDIR}}:/data,${{HICDIR}}:/hic,${{DESTDIR}}:/output,${{TEMPDIR}}:/tmp; "

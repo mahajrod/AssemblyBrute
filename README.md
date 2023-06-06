@@ -48,9 +48,17 @@ IV. Run pipeline directly or via wrapper script (**Not written yet**). See examp
 # Examples
 
 ```commandline
-snakemake --cores 60  --configfile config/default.yaml --printshellcmds --latency-wait 30   --config mode="assembly" "assembly_mode"="hic_scaffolding" "parameter_set"="normal" "busco_lineage_list"='["vertebrata_odb10","actinopterygii_odb10"]' "data_types"="hifi,hic" "tax_id"=206126 "use_existing_envs"=False --latency-wait 30 --use-conda --rerun-incomplete --res fcs=1 hifiasm=1
+snakemake --cores 60  --configfile config/default.yaml --printshellcmds --latency-wait 30   --config mode="assembly" "assembly_mode"="hic_scaffolding" "parameter_set"="normal" "busco_lineage_list"='["vertebrata_odb10","actinopterygii_odb10"]' "data_types"="hifi,hic" "tax_id"=206126 "use_existing_envs"=False --latency-wait 30 --use-conda --rerun-incomplete --res fcs=1 fcs_adaptor=1 mem=800000 kmer_counter=1  telosif=1
 ```
 
 ```commandline
-snakemake --cores 70  --configfile config/default.yaml --printshellcmds --latency-wait 60   --config mode="purge_dups" "parameter_set"="big"  "data_types"="hifi,hic "use_existing_envs"=False "skip_busco"=True   --use-conda --rerun-incomplete --res hifiasm=1  fcs=1 fcs_adaptor=1 mem=800000
+snakemake --cores 70  --configfile config/default.yaml --printshellcmds --latency-wait 60   --config mode="purge_dups" "parameter_set"="big"  "data_types"="hifi,hic "use_existing_envs"=False "skip_busco"=True   --use-conda --rerun-incomplete --res fcs=1 fcs_adaptor=1 mem=800000 kmer_counter=1  telosif=1
+```
+
+```commandline
+snakemake --cores 140  --configfile config/test1.yaml --printshellcmds --latency-wait 60   --config mode="assembly" assembly_mode="curation" "parameter_set"="micro"  "data_types"="hifi,hic" "tax_id"=4932  "use_existing_envs"=False "skip_busco"=True  "final_kmer_datatype"="hifi" "busco_lineage_list"='["saccharomycetes_odb10"]' "skip_gcp"=True  --use-conda --rerun-incomplete --res   fcs=1 fcs_adaptor=1 mem=800000 kmer_counter=1  telosif=1
+```
+
+```commandline
+snakemake --cores 60 --configfile config/default.yaml --printshellcmds --latency-wait 60   --config mode="qc" "parameter_set"="large"  "data_types"="illumina" "tax_id"=30532  "use_existing_envs"=False "skip_busco"=True "skip_kraken"=True "skip_gcp"=True  "final_kmer_datatype"="illumina"   --use-conda --rerun-incomplete --res hifiasm=1  fcs=1 fcs_adaptor=1 mem=800000 kmer_counter=1
 ```

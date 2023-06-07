@@ -14,6 +14,19 @@ If you wish to run it using conda via snakemake, then you will need:
     - Kraken databases                                   # optional
     - RapidCuration singularity containers               # this dependency will be excluded soon
 
+# Datatypes and implemented stages of the pipeline
+| Datatype \ Stage | read QC | read filtration | ec | contig | purge_dups | hic_scaffolding | curation |
+| ---------------- | ------- | --------------- | -- | ------ | ---------- | --------------- | -------- |
+| hifi + hic | v | v | v | v | v | v | v |
+| hifi | v | v |  |  |  |  |  |
+| clr | v | v |  |  |  |  |  |
+| nanopore | v | v |  |  |  |  |  |
+| illumina | v | v |  |  |  |  |  |
+| nanopore + illumina | v | v |  |  |  |  |  |
+| nanopore + illumina + hic | v | v |  |  |  |  |  |
+| clr + illumina | v | v |  |  |  |  |  |
+
+
 # Usage
 I. Clone this repository
 ```commandline

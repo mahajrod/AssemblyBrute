@@ -58,7 +58,7 @@ rule telo_finder:
         " cp canonical.txt `basename {output.canonical}` > ${{CP_LOG}} 2>&1; "
         " if [ -s `basename {output.canonical}` ]; "
         " then "
-        "       grep 'candidate_telo_kmer:' `basename {output.canonical}` 2>${{GREP_LOG}} | sed 's/.*\\t//' 2>${{SED_LOG}} | "
+        "       grep 'telo_kmer:' `basename {output.canonical}` 2>${{GREP_LOG}} | sed 's/.*\\t//' 2>${{SED_LOG}} | "
         "       tee `basename {output.canonical_kmer}` 2>${{TEE_LOG}} | head -n 1 > `basename {output.canonical_top_kmer}` 2>${{HEAD_LOG}}; "
         " else "
         "       touch `basename {output.canonical_kmer}`; "

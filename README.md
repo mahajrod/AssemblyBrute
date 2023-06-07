@@ -16,7 +16,7 @@ If you wish to run it using conda via snakemake, then you will need:
 
 # Input datatypes and implemented stages of the pipeline
 | Datatype \ Stage | read QC | read filtration | ec | contig | purge_dups | hic_scaffolding | curation |
-| :----------------: | :-------: | :---------------: | :--: | :------: | :----------: | :---------------: | :--------: |
+| :--------------: | :-----: | :-------------: | :: | :----: | :--------: | :-------------: | :------: |
 | hifi + hic | v | v | v | v | v | v | v |
 | hifi | v | v |  |  |  |  |  |
 | clr | v | v |  |  |  |  |  |

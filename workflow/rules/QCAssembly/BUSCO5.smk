@@ -102,8 +102,7 @@ rule busco5_intersect_haplotypes: # Downloading of busco datasets is performed b
     shell:
          " OUTPUT_PREFIX={output.busco_legend};"
          " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.busco.legend}};  "
-         " BUSCO_DIR=${{BUSCO_DIR%.tar.gz}}; "
-         " workflow/scripts/busco/intersect_busco_results.py -b `echo '{input.busco_tables}` | tr ' ' ',' ` "
+         " workflow/scripts/busco/intersect_busco_results.py -b `echo '{input.busco_tables}' | tr ' ' ',' ` "
          " -l {params.haplotypes} -o ${{OUTPUT_PREFIX}} > {log.std} 2>&1; "
 
 
@@ -147,7 +146,7 @@ rule busco5_intersect_stages:
     shell:
          " OUTPUT_PREFIX={output.busco_legend};"
          " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.busco.legend}};  "
-         " workflow/scripts/busco/intersect_busco_results.py -b `echo '{input.busco_tables}'` | tr ' ' ',' ` "
+         " workflow/scripts/busco/intersect_busco_results.py -b `echo '{input.busco_tables}' | tr ' ' ',' ` "
          " -l {params.stages} -o ${{OUTPUT_PREFIX}} > {log.std} 2>&1;"
 
 
@@ -206,6 +205,5 @@ rule busco5_intersect_all: # Downloading of busco datasets is performed by a dif
     shell:
          " OUTPUT_PREFIX={output.busco_legend};"
          " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.busco.legend}};  "
-         " BUSCO_DIR=${{BUSCO_DIR%.tar.gz}}; "
-         " workflow/scripts/busco/intersect_busco_results.py -b `echo '{input.busco_tables}` | tr ' ' ',' ` "
+         " workflow/scripts/busco/intersect_busco_results.py -b `echo '{input.busco_tables}' | tr ' ' ',' ` "
          " -l {params.assemblies} -o ${{OUTPUT_PREFIX}} > {log.std} 2>&1;"

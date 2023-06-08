@@ -23,7 +23,7 @@ If you wish to run it using conda via snakemake, then you will need:
 | clr | v | v | v |  |  |  | NA |  |  |
 | nanopore | v | v | v |  |  |  | NA |  |  |
 | illumina | v | v | v |  |  |  | NA |  |  |
-| nanopore + illumina | **v** | v | v |  |  |  | NA |  |  |
+| nanopore + illumina | v | v | v |  |  |  | NA |  |  |
 | nanopore + illumina + hic | v | v | v |  |  |  |  |  |  |
 | clr + illumina | v | v | v |  |  |  | NA |  |  |
 | clr + illumina + hic | v | v | v |  |  |  |  |  |  |

@@ -1,11 +1,21 @@
 localrules: create_curation_input_links
 
+def get_bed_file(wildcards):
+    parameters_label = detect_phasing_parameters(wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters, config["phasing_stage"], stage_separator="..")
+    phasing_kmer_length = stage_dict[config["phasing_stage"]]["parameters"][parameters_label]["option_set"]["phasing_kmer_length"]
+    return out_dir_path / "{0}/{1}/{2}/alignment/{3}/{4}.{0}.{3}.{2}.rmdup.bed".format(stage_dict["curation"]["prev_stage"],
+                                                                                       wildcards.prev_stage_parameters,
+                                                                                       wildcards.haplotype,
+                                                                                       phasing_kmer_length,
+                                                                                       wildcards.genome_prefix)
+
 rule create_curation_input_links: #
     input:
         fasta=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta" % (stage_dict["curation"]["prev_stage"],
                                                                                                    stage_dict["curation"]["prev_stage"])),
         fai=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta.fai" % (stage_dict["curation"]["prev_stage"],
-                                                                                                       stage_dict["curation"]["prev_stage"]))
+                                                                                                       stage_dict["curation"]["prev_stage"])),
+        bed=get_bed_file
     output:
         fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.fasta",
         fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.fasta.fai"

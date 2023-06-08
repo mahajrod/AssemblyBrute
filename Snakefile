@@ -409,7 +409,7 @@ if "contig" in config["stage_list"]:
                                 assembly_stage=["contig"],
                                 haplotype=haplotype_list,
                                 parameters=parameters_list),
-                         expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{busco_lineage}.busco.merged.tsv",
+                         expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.merged.tsv",
                                 busco_lineage=config["busco_lineage_list"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["contig"],
@@ -501,7 +501,7 @@ if "purge_dups" in config["stage_list"]:
                                 assembly_stage=["purge_dups", ],
                                 haplotype=haplotype_list,
                                 parameters=parameters_list),
-                         expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{busco_lineage}.busco.merged.tsv",
+                         expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.merged.tsv",
                                 busco_lineage=config["busco_lineage_list"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["purge_dups"],
@@ -620,14 +620,13 @@ if "hic_scaffolding" in config["stage_list"]:
                     ]
 
     if not config["skip_busco"]:
-        print("AAAAAAAA")
         results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
                                 busco_lineage=config["busco_lineage_list"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["hic_scaffolding", ],
                                 haplotype=haplotype_list,
                                 parameters=parameters_list),
-                         expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{busco_lineage}.busco.merged.tsv",
+                         expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.merged.tsv",
                                 busco_lineage=config["busco_lineage_list"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["hic_scaffolding"],

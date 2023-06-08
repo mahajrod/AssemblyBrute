@@ -6,15 +6,16 @@ It is based on VGP-pipeline (bionano scaffolding was not included) and Rapid cur
 # Dependencies
 
 If you wish to run it using conda via snakemake, then you will need:
-    - conda
-    - mamba
-    - snakemake
-    - FCS database and FCS_GX singularity container      # optional
-    - FCS_adapter singularity container                  # optional
-    - Kraken databases                                   # optional
-    - RapidCuration singularity containers               # this dependency will be excluded soon
+- conda
+- mamba
+- snakemake
+- FCS database and FCS_GX singularity container      # optional
+- FCS_adapter singularity container                  # optional
+- Kraken databases                                   # optional
+- RapidCuration singularity containers               # this dependency will be excluded soon
 
 # Input datatypes and implemented stages of the pipeline
+
 | Datatypes | read QC | read filtration | contamination check | ec | contig | purge_dups | hic scaffolding | curation | qc |
 |:-------:|:-----:|:-------------:|:-----------------:|:-:|:----:|:--------:|:-------------:|:------:|:-:|
 | hifi + hic | v | v | v | v | v | v | v | v | v |

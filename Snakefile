@@ -420,7 +420,16 @@ if "contig" in config["stage_list"]:
                                 assembly_stage=["contig"],
                                 haplotype=haplotype_list,
                                 parameters=parameters_list
-                                ),]
+                                ),
+                         expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/all_intersection/{genome_prefix}.{busco_lineage}.busco.merged.tsv",
+                                busco_lineage=config["busco_lineage_list"],
+                                genome_prefix=[config["genome_prefix"], ],
+                                assembly_stage=["contig"],
+                                haplotype=haplotype_list,
+                                parameters=parameters_list
+                                ),
+
+                         ]
     if (config["tax_id"] is None) or (not config["tax_id"]):
         print("Tax id was not set, skipping contamination scan in FCS databases...")
     else:
@@ -499,6 +508,13 @@ if "purge_dups" in config["stage_list"]:
                                 assembly_stage=["purge_dups"],
                                 parameters=parameters_list),
                          expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.merged.tsv",
+                                busco_lineage=config["busco_lineage_list"],
+                                genome_prefix=[config["genome_prefix"], ],
+                                assembly_stage=["purge_dups"],
+                                haplotype=haplotype_list,
+                                parameters=parameters_list
+                                ),
+                         expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/all_intersection/{genome_prefix}.{busco_lineage}.busco.merged.tsv",
                                 busco_lineage=config["busco_lineage_list"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["purge_dups"],
@@ -618,6 +634,13 @@ if "hic_scaffolding" in config["stage_list"]:
                                 assembly_stage=["hic_scaffolding"],
                                 parameters=parameters_list),
                          expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.merged.tsv",
+                                busco_lineage=config["busco_lineage_list"],
+                                genome_prefix=[config["genome_prefix"], ],
+                                assembly_stage=["hic_scaffolding"],
+                                haplotype=haplotype_list,
+                                parameters=parameters_list
+                                ),
+                         expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/all_intersection/{genome_prefix}.{busco_lineage}.busco.merged.tsv",
                                 busco_lineage=config["busco_lineage_list"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["hic_scaffolding"],

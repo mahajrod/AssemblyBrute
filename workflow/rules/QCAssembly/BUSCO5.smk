@@ -172,9 +172,11 @@ def get_busco_tables_for_all_assemblies_in_chain(wildcards):
         for haplotype in haplotype_list:
             busco_table_list += expand(rules.busco5.output.busco_table,
                                        assembly_stage=[stage],
+                                       parameters=[parameters_dict[stage]],
                                        haplotype=[haplotype],
                                        allow_missing=True,)
     return busco_table_list
+
 
 rule busco5_intersect_all: # Downloading of busco datasets is performed by a different rule to avoid conflict between different instances of busco5
     priority: 500

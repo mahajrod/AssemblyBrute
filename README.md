@@ -28,8 +28,8 @@ If you wish to run it using conda via snakemake, then you will need:
 | clr + illumina + hic | v | v | v |  |  |  |  |  |  |
 | assembly | NA | NA |  | NA | NA | NA | NA | NA | NA |
 | assembly + hic |  | |  | | |  | | | |
-| assembly + nanopore + hic |  |  |  |  |  |  |  |  |  |
-| assembly + hifi + hic | | |  |  | |  |  | |  |
+| assembly + nanopore + hic |  |  |  |  | NA |  |  |  |  |
+| assembly + hifi + hic |  |  |  |  | NA |  |  |  |  |
 # Usage
 I. Clone this repository
 ```commandline

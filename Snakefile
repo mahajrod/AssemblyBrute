@@ -755,3 +755,4 @@ if "curation" in config["stage_list"]:
     include: "workflow/rules/Curation/RepeatTrack.smk"
     include: "workflow/rules/Curation/CoverageTrack.smk"
     include: "workflow/rules/Curation/TelomereTrack.smk"
+    include: "workflow/rules/Curation/HiGlassTrack.smk"

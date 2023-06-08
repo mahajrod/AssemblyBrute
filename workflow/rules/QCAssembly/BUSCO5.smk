@@ -74,27 +74,27 @@ rule busco5_intersect_haplotypes: # Downloading of busco datasets is performed b
     params:
         haplotypes=",".join(haplotype_list)
     output:
-        busco_legend=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{busco_lineage}.busco.legend",
-        busco_orderlist=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{busco_lineage}.busco.orderlist",
-        busco_merged_tsv=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{busco_lineage}.busco.merged.tsv",
-        busco_len=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{busco_lineage}.busco.len",
-        busco_counts_bedgraph=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{busco_lineage}.busco.counts.bedgraph",
-        busco_counts_png=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{busco_lineage}.busco.png",
-        no_complete_busco_len=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{busco_lineage}.no_complete.busco.len",
-        no_complete_busco_counts_bedgraph=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{busco_lineage}.no_complete.busco.counts.bedgraph",
-        no_complete_busco_counts_png=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{busco_lineage}.no_complete.busco.png",
-        informative_busco_len=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{busco_lineage}.informative.busco.len",
-        informative_busco_counts_bedgraph=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{busco_lineage}.informative.busco.counts.bedgraph",
-        informative_busco_counts_png=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{busco_lineage}.informative.busco.png",
+        busco_legend=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.legend",
+        busco_orderlist=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.orderlist",
+        busco_merged_tsv=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.merged.tsv",
+        busco_len=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.len",
+        busco_counts_bedgraph=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.counts.bedgraph",
+        busco_counts_png=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.png",
+        no_complete_busco_len=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.no_complete.busco.len",
+        no_complete_busco_counts_bedgraph=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.no_complete.busco.counts.bedgraph",
+        no_complete_busco_counts_png=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.no_complete.busco.png",
+        informative_busco_len=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.informative.busco.len",
+        informative_busco_counts_bedgraph=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.informative.busco.counts.bedgraph",
+        informative_busco_counts_png=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.informative.busco.png",
     log:
-        std=output_dict["log"] / "busco5_intersect_haplotypes.{assembly_stage}.{parameters}.{genome_prefix}.{busco_lineage}.log",
-        draw=output_dict["log"] / "busco5_intersect_haplotypes.{assembly_stage}.{parameters}.{genome_prefix}.{busco_lineage}.draw.log",
-        draw_no_complete=output_dict["log"] / "busco5_intersect_haplotypes.{assembly_stage}.{parameters}.{genome_prefix}.{busco_lineage}.draw_no_complete.log",
-        draw_informative=output_dict["log"] / "busco5_intersect_haplotypes.{assembly_stage}.{parameters}.{genome_prefix}.{busco_lineage}.draw_informative.log",
-        cluster_log=output_dict["cluster_log"] / "busco5_intersect_haplotypes.{assembly_stage}.{parameters}.{genome_prefix}.{busco_lineage}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "busco5_intersect_haplotypes.{assembly_stage}.{parameters}.{genome_prefix}.{busco_lineage}.cluster.err"
+        std=output_dict["log"] / "busco5_intersect_haplotypes.{assembly_stage}.{parameters}.{genome_prefix}.{assembly_stage}.{busco_lineage}.log",
+        draw=output_dict["log"] / "busco5_intersect_haplotypes.{assembly_stage}.{parameters}.{genome_prefix}.{assembly_stage}.{busco_lineage}.draw.log",
+        draw_no_complete=output_dict["log"] / "busco5_intersect_haplotypes.{assembly_stage}.{parameters}.{genome_prefix}.{assembly_stage}.{busco_lineage}.draw_no_complete.log",
+        draw_informative=output_dict["log"] / "busco5_intersect_haplotypes.{assembly_stage}.{parameters}.{genome_prefix}.{assembly_stage}.{busco_lineage}.draw_informative.log",
+        cluster_log=output_dict["cluster_log"] / "busco5_intersect_haplotypes.{assembly_stage}.{parameters}.{genome_prefix}.{assembly_stage}.{busco_lineage}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "busco5_intersect_haplotypes.{assembly_stage}.{parameters}.{genome_prefix}.{assembly_stage}.{busco_lineage}.cluster.err"
     benchmark:
-        output_dict["benchmark"] / "busco5_intersect_haplotypes.{assembly_stage}.{parameters}.{genome_prefix}.{busco_lineage}.benchmark.txt"
+        output_dict["benchmark"] / "busco5_intersect_haplotypes.{assembly_stage}.{parameters}.{genome_prefix}.{assembly_stage}.{busco_lineage}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -148,14 +148,18 @@ rule busco5_intersect_stages:
         busco_merged_tsv=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.merged.tsv",
         busco_len=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.len",
         busco_counts_bedgraph=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.counts.bedgraph",
+        busco_counts_png=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.png",
         no_complete_busco_len=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.no_complete.busco.len",
         no_complete_busco_counts_bedgraph=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.no_complete.busco.counts.bedgraph",
+        no_complete_busco_counts_png=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.no_complete.busco.png",
         informative_busco_len=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.informative.busco.len",
         informative_busco_counts_bedgraph=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.informative.busco.counts.bedgraph",
+        informative_busco_counts_png=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.informative.busco.png",
     log:
         std=output_dict["log"] / "busco5_intersect_stages.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.log",
-        pigz=output_dict["log"] / "busco5_intersect_stages.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.pigz.log",
-        cp=output_dict["log"] / "busco5_intersect_stages.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.cp.log",
+        draw=output_dict["log"] / "busco5_intersect_stages.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.draw.log",
+        draw_no_complete=output_dict["log"] / "busco5_intersect_stages.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.draw_no_complete.log",
+        draw_informative=output_dict["log"] / "busco5_intersect_stages.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.draw_informative.log",
         cluster_log=output_dict["cluster_log"] / "busco5_intersect_stages.{assembly_stage}.{parameters}.{haplotype}.{genome_prefix}.{busco_lineage}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "busco5_intersect_stages.{assembly_stage}.{parameters}.{haplotype}.{genome_prefix}.{busco_lineage}.cluster.err"
     benchmark:
@@ -173,6 +177,20 @@ rule busco5_intersect_stages:
          " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.busco.legend}};  "
          " workflow/scripts/busco/intersect_busco_results.py -b `echo '{input.busco_tables}' | tr ' ' ',' ` "
          " -l {params.stages} -o ${{OUTPUT_PREFIX}} > {log.std} 2>&1;"
+         " draw_features.py  -i {output.busco_counts_bedgraph} -o ${{OUTPUT_PREFIX}}.busco -t bedgraph  "
+         " -n {output.busco_len} -z {output.busco_orderlist} -g {output.busco_legend} --hide_track_label "
+         " --color_column_name value -l {wildcards.busco_lineage} --figure_header_height 2 --subplots_adjust_top 0.7 "
+         " --x_tick_type int_number > {log.draw} 2>&1; "
+         " draw_features.py  -i {output.no_complete_busco_counts_bedgraph} -o ${{OUTPUT_PREFIX}}.no_complete.busco "
+         " -t bedgraph  -n {output.no_complete_busco_len} -z {output.busco_orderlist} -g {output.busco_legend} "
+         " --hide_track_label  --color_column_name value -l {wildcards.busco_lineage} "
+         " --figure_header_height 2 --subplots_adjust_top 0.7 "
+         " --x_tick_type int_number > {log.draw_no_complete} 2>&1; "
+         " draw_features.py  -i {output.informative_busco_counts_bedgraph} -o ${{OUTPUT_PREFIX}}.informative.busco "
+         " -t bedgraph  -n {output.informative_busco_len} -z {output.busco_orderlist} -g {output.busco_legend} "
+         " --hide_track_label  --color_column_name value -l {wildcards.busco_lineage} "
+         " --figure_header_height 2 --subplots_adjust_top 0.7 "
+         " --x_tick_type int_number > {log.draw_informative} 2>&1; "
 
 
 def get_labels_for_all_assemblies_in_chain(wildcards):

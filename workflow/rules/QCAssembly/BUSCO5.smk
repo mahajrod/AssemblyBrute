@@ -92,7 +92,7 @@ rule busco5_intersect_haplotypes: # Downloading of busco datasets is performed b
     benchmark:
         output_dict["benchmark"] / "busco5_intersect_haplotypes.{assembly_stage}.{parameters}.{genome_prefix}.{busco_lineage}.benchmark.txt"
     conda:
-        config["conda"]["busco"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco"]["yaml"])
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         cpus=parameters["threads"]["busco5_intersect_haplotypes"],
         time=parameters["time"]["busco5_intersect_haplotypes"],
@@ -136,7 +136,7 @@ rule busco5_intersect_stages:
     benchmark:
         output_dict["benchmark"] / "busco5_intersect_stages.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.benchmark.txt"
     conda:
-        config["conda"]["busco"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco"]["yaml"])
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         cpus=parameters["threads"]["busco5_intersect_stages"],
         time=parameters["time"]["busco5_intersect_stages"],
@@ -195,7 +195,7 @@ rule busco5_intersect_all: # Downloading of busco datasets is performed by a dif
     benchmark:
         output_dict["benchmark"] / "busco5_intersect_all.{assembly_stage}.{parameters}.{genome_prefix}.{busco_lineage}.benchmark.txt"
     conda:
-        config["conda"]["busco"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco"]["yaml"])
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         cpus=parameters["threads"]["busco5_intersect_all"],
         time=parameters["time"]["busco5_intersect_all"],

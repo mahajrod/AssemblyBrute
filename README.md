@@ -19,15 +19,17 @@ If you wish to run it using conda via snakemake, then you will need:
 | :-------: | :-----: | :-------------: | :-----------------: | :-: | :----: | :--------: | :-------------: | :------: | :-: |
 | hifi + hic | v | v | v | v | v | v | v | v | v |
 | hifi | v | v | v |  |  |  | NA |  |  |
-| clr | v | v | v |  |  |  |  | NA |  |
+| clr | v | v | v |  |  |  | NA |  |  |
 | nanopore | v | v | v |  |  |  | NA |  |  |
 | illumina | v | v | v |  |  |  | NA |  |  |
 | nanopore + illumina | v | v | v |  |  |  | NA |  |  |
 | nanopore + illumina + hic | v | v | v |  |  |  |  |  |  |
 | clr + illumina | v | v | v |  |  |  | NA |  |  |
 | clr + illumina + hic | v | v | v |  |  |  |  |  |  |
-| assembly | NA | NA |  |  | NA |  |  |  |  |
-
+| assembly | NA | NA |  | NA | NA | NA | NA | NA | NA |
+| assembly + hic |  | |  | | |  | | | |
+| assembly + nanopore + hic |  |  |  |  |  |  |  |  |  |
+| assembly + hifi + hic | | |  |  | |  |  | |  |
 # Usage
 I. Clone this repository
 ```commandline

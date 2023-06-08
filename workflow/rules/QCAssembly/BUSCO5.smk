@@ -172,7 +172,7 @@ def get_busco_tables_for_all_assemblies_in_chain(wildcards):
         for haplotype in haplotype_list:
             busco_table_list += expand(rules.busco5.output.busco_table,
                                        assembly_stage=[stage],
-                                       parameters=[parameters_dict[stage]],
+                                       parameters=[chain_stage_dict[stage]],
                                        haplotype=[haplotype],
                                        allow_missing=True,)
     return busco_table_list

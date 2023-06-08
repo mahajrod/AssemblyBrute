@@ -100,9 +100,10 @@ def get_parameters_for_all_stages_in_chain(current_stage_parameters, stage_separ
     for index in range(0, number_of_stages_in_chain):
         parameters = stage_separator.join(sub_parameter_list[:index+1])
         for st in stage_dict:
-            if parameters in stage_dict[st]["parameters"]:
-                stage = st
-                break
+            if "parameters" in stage_dict[st]:
+                if parameters in stage_dict[st]["parameters"]:
+                    stage = st
+                    break
         else:
             raise ValueError("Impossible to recognize stage for parameters {0}".format(parameters))
         chain_stage_dict[stage] = parameters

@@ -122,6 +122,9 @@ rule busco5_intersect_haplotypes: # Downloading of busco datasets is performed b
          " --hide_track_label  --color_column_name value -l {wildcards.busco_lineage} "
          " --figure_header_height 2 --subplots_adjust_top 0.7 "
          " --x_tick_type int_number > {log.draw_informative} 2>&1; "
+         " touch {output.busco_counts_png}; "
+         " touch {output.no_complete_busco_counts_png}; "
+         " touch {output.informative_busco_counts_png}"
 
 
 def get_busco_table_for_all_assemblies_in_chain_per_haplotype(wildcards):
@@ -191,6 +194,9 @@ rule busco5_intersect_stages:
          " --hide_track_label  --color_column_name value -l {wildcards.busco_lineage} "
          " --figure_header_height 2 --subplots_adjust_top 0.7 "
          " --x_tick_type int_number > {log.draw_informative} 2>&1; "
+         " touch {output.busco_counts_png}; "
+         " touch {output.no_complete_busco_counts_png}; "
+         " touch {output.informative_busco_counts_png}"
 
 
 def get_labels_for_all_assemblies_in_chain(wildcards):

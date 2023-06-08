@@ -109,7 +109,7 @@ rule busco5_intersect_haplotypes: # Downloading of busco datasets is performed b
 rule busco5_intersect_stages:
     priority: 500
     input:
-        busco_tables=lambda wildcards: [*expand(rules.busco5.output.busco_table,
+        busco_tables=lambda wildcards: *[expand(rules.busco5.output.busco_table,
                                                assembly_stage=[stage],
                                                parameters=[get_parameters_for_all_stages_in_chain(wildcards.parameters)[stage]],
                                                #haplotype=haplotype_list,

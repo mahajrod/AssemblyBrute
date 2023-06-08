@@ -147,8 +147,7 @@ rule busco5_intersect_stages:
     shell:
          " OUTPUT_PREFIX={output.busco_legend};"
          " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.busco.legend}};  "
-         " BUSCO_DIR=${{BUSCO_DIR%.tar.gz}}; "
-         " workflow/scripts/busco/intersect_busco_results.py -b `echo '{input.busco_tables}` | tr ' ' ',' ` "
+         " workflow/scripts/busco/intersect_busco_results.py -b `echo '{input.busco_tables}'` | tr ' ' ',' ` "
          " -l {params.stages} -o ${{OUTPUT_PREFIX}} > {log.std} 2>&1;"
 
 

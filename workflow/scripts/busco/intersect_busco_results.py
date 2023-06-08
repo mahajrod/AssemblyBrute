@@ -76,8 +76,8 @@ hap_file_dict = {label: filename for label, filename in zip(args.label_list, arg
 
 busco_table_dict = {label: BUSCOtable(in_file=hap_file_dict[label]) for label in hap_file_dict}
 
-number_of_buscos = len(busco_table_dict["hap1"].records[["OG"]].drop_duplicates().reset_index(level=1, drop=True))
-
+number_of_buscos = len(busco_table_dict[args.label_list[0]].records[["OG"]].drop_duplicates().reset_index(level=1, drop=True))
+print(busco_table_dict)
 pd.Series(args.label_list).to_csv("{0}.busco.orderlist".format(args.output_prefix), sep="\t", index=False, header=False)
 
 

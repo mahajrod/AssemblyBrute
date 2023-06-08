@@ -15,14 +15,14 @@ If you wish to run it using conda via snakemake, then you will need:
     - RapidCuration singularity containers               # this dependency will be excluded soon
 
 # Input datatypes and implemented stages of the pipeline
-| Datatype  | read QC | read filtration | contamination check | ec | contig | purge_dups | hic scaffolding | curation | qc |
-| :-------: | :-----: | :-------------: | :-----------------: | :-: | :----: | :--------: | :-------------: | :------: | :-: |
+| Datatypes | read QC | read filtration | contamination check | ec | contig | purge_dups | hic scaffolding | curation | qc |
+|:-------:|:-----:|:-------------:|:-----------------:|:-:|:----:|:--------:|:-------------:|:------:|:-:|
 | hifi + hic | v | v | v | v | v | v | v | v | v |
 | hifi | v | v | v |  |  |  | NA |  |  |
 | clr | v | v | v |  |  |  | NA |  |  |
 | nanopore | v | v | v |  |  |  | NA |  |  |
 | illumina | v | v | v |  |  |  | NA |  |  |
-| nanopore + illumina | v | v | v |  |  |  | NA |  |  |
+| nanopore + illumina | **v** | v | v |  |  |  | NA |  |  |
 | nanopore + illumina + hic | v | v | v |  |  |  |  |  |  |
 | clr + illumina | v | v | v |  |  |  | NA |  |  |
 | clr + illumina + hic | v | v | v |  |  |  |  |  |  |
@@ -30,6 +30,20 @@ If you wish to run it using conda via snakemake, then you will need:
 | assembly + hic |  | |  | | |  | | | |
 | assembly + nanopore + hic |  |  |  |  | NA |  |  |  |  |
 | assembly + hifi + hic |  |  |  |  | NA |  |  |  |  |
+
+# Implemented assemblers
+|  Assembler  |       Datatypes       | Status |
+|:-----------:|:---------------------:|:------:|
+|   hifiasm   |      hifi + hic       |   v    |
+|   hifiasm   |         hifi          |        | 
+|   hifiasm   | hifi + nanopore + hic |        | 
+|   hifiasm   |    hifi + nanopore    |   ?    | 
+|   hicanu    |       nanopore        |        |
+|    flye2    |       nanopore        |        | 
+|     IPA     |       nanopore        |        | 
+| SmartDenovo |       nanopore        |        | 
+|   MaSurCa   |  nanopore + Illumina  |        | 
+
 # Usage
 I. Clone this repository
 ```commandline

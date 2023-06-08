@@ -106,14 +106,21 @@ rule busco5_intersect_haplotypes: # Downloading of busco datasets is performed b
          " -l {params.haplotypes} -o ${{OUTPUT_PREFIX}} > {log.std} 2>&1; "
 
 
+def get_busco_table_for_all_assemblies_in_chain_per_haplotype(wildcards):
+    busco_table_list = []
+    parameters_dict = get_parameters_for_all_stages_in_chain(wildcards.parameters)
+    for stage in parameters_dict:
+        busco_table_list += expand(rules.busco5.output.busco_table,
+                                               assembly_stage=[stage],
+                                               parameters=[parameters_dict[stage]],
+                                               #haplotype=haplotype_list,
+                                               allow_missing=True,)
+    return  busco_table_list
+
 rule busco5_intersect_stages:
     priority: 500
     input:
-        busco_tables=lambda wildcards: *[expand(rules.busco5.output.busco_table,
-                                               assembly_stage=[stage],
-                                               parameters=[get_parameters_for_all_stages_in_chain(wildcards.parameters)[stage]],
-                                               #haplotype=haplotype_list,
-                                               allow_missing=True,) for stage in get_parameters_for_all_stages_in_chain(wildcards.parameters)]
+        busco_tables=get_busco_table_for_all_assemblies_in_chain_per_haplotype,
         #out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype,[^.]+}.busco5.{busco_lineage}.full_table.tsv",
     params:
         stages=lambda wildcards: ",".join(get_parameters_for_all_stages_in_chain(wildcards.parameters))

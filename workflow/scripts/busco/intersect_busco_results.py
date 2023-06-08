@@ -10,17 +10,21 @@ from RouToolPa.Parsers.BUSCO import BUSCOtable
 
 
 def create_track_from_series(series,):
-    prev_element = series.iloc[0]
-    count_list = []
-    counter = 1
-    for element in series.iloc[1:]:
-        if element == prev_element:
-            counter += 1
-        else:
-            count_list.append([prev_element, counter])
-            prev_element = element
-            counter = 1
-    count_list.append([element, counter])
+    if series.empty:
+        count_list = [[]]
+    else:
+        prev_element = series.iloc[0]
+        count_list = []
+        counter = 1
+        for element in series.iloc[1:]:
+            if element == prev_element:
+                counter += 1
+            else:
+                count_list.append([prev_element, counter])
+                prev_element = element
+                counter = 1
+        count_list.append([element, counter])
+
     count_df = pd.DataFrame.from_records(count_list, columns=("status", "counts"))
     count_df["end"] = count_df["counts"].cumsum()
     count_df["start"] = count_df["end"].shift(1, fill_value=0)

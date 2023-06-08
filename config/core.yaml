@@ -102,6 +102,9 @@
             "busco5_download": 1
             "busco5": 30
             "compress_busco5": 1
+            "busco5_intersect_haplotypes": 1
+            "busco5_intersect_stages": 1
+            "busco5_intersect_all": 1
             "handle_busco5_output": 1
             "quast": 4
             "merqury": 20
@@ -166,6 +169,9 @@
             "busco5": 20000
             "compress_busco5": 1000
             "handle_busco5_output": 100
+            "busco5_intersect_haplotypes": 100
+            "busco5_intersect_stages": 100
+            "busco5_intersect_all": 200
             "quast": 10000
             "merqury": 20000 # TODO: adjust
             "meryl": 80000
@@ -246,6 +252,9 @@
             "busco5": "24:00:00"
             "compress_busco5": "05:00:00"
             "handle_busco5_output": "00:05:00"
+            "busco5_intersect_haplotypes": "00:05:00"
+            "busco5_intersect_stages": "00:05:00"
+            "busco5_intersect_all": "00:10:00"
             "quast": "02:00:00"
             "merqury": "12:00:00"
             "minimap2_index": "12:00:00"

@@ -15,17 +15,17 @@ If you wish to run it using conda via snakemake, then you will need:
     - RapidCuration singularity containers               # this dependency will be excluded soon
 
 # Input datatypes and implemented stages of the pipeline
-| Datatype  | read QC | read filtration | contamination check | ec | contig | purge_dups | hic_scaffolding | curation | qc |
+| Datatype  | read QC | read filtration | contamination check | ec | contig | purge_dups | hic scaffolding | curation | qc |
 | :-------: | :-----: | :-------------: | :-----------------: | :-: | :----: | :--------: | :-------------: | :------: | :-: |
 | hifi + hic | v | v | v | v | v | v | v | v | v |
-| hifi | v | v |  |  |  |  |  |  |  |
-| clr | v | v |  |  |  |  |  |  |  |
-| nanopore | v | v |  |  |  |  |  |  |  |
-| illumina | v | v |  |  |  |  |  |  |  |
-| nanopore + illumina | v | v |  |  |  |  |  |  |  |
-| nanopore + illumina + hic | v | v |  |  |  |  |  |  |  |
-| clr + illumina | v | v |  |  |  |  |  |  |  |
-| clr + illumina + hic | v | v |  |  |  |  |  |  |  |
+| hifi | v | v | v |  |  |  |  |  |  |
+| clr | v | v | v |  |  |  |  |  |  |
+| nanopore | v | v | v |  |  |  |  |  |  |
+| illumina | v | v | v |  |  |  |  |  |  |
+| nanopore + illumina | v | v | v |  |  |  |  |  |  |
+| nanopore + illumina + hic | v | v | v |  |  |  |  |  |  |
+| clr + illumina | v | v | v |  |  |  |  |  |  |
+| clr + illumina + hic | v | v | v |  |  |  |  |  |  |
 | assembly |  |  |  |  |  |  |  |  |  |
 
 # Usage

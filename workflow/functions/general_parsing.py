@@ -92,3 +92,20 @@ def detect_phasing_parameters(current_stage_parameters, phasing_stage, stage_sep
         raise ValueError("Impossible to detect phasing stage parameters for {0} and phasing stage {1}".format(current_stage_parameters,
                                                                                                               phasing_stage))
 
+
+def get_parameters_for_all_stages_in_chain(current_stage_parameters, stage_separator=".."):
+    sub_parameter_list = current_stage_parameters.split(stage_separator)
+    number_of_stages_in_chain = len(sub_parameter_list)
+    chain_stage_dict = {}
+    for index in range(0, number_of_stages_in_chain):
+        parameters = stage_separator.join(sub_parameter_list[:index+1])
+        for st in stage_dict:
+            if parameters in stage_dict[st]["parameters"]:
+                stage = st
+                break
+        else:
+            raise ValueError("Impossible to recognize stage for parameters {0}".format(parameters))
+        chain_stage_dict[stage] = parameters
+
+    return chain_stage_dict
+

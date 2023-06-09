@@ -58,7 +58,7 @@ rule yahs_juicer_pre: #
         assembly_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.assembly.agp",
         log=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.log",
     log:
-        std=output_dict["log"]  / "yahs_juicer_pre.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.log",
+        #std=output_dict["log"]  / "yahs_juicer_pre.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.log",
         mv=output_dict["log"]  / "yahs_juicer_pre.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.mv.log",
         cluster_log=output_dict["cluster_log"] / "yahs_juicer_pre.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "yahs_juicer_pre{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.err"
@@ -75,6 +75,6 @@ rule yahs_juicer_pre: #
     shell:
         " OUTPUT_PREFIX={output.links_bed}; "
         " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.bed}}; "
-        " juicer pre -a -o ${{OUTPUT_PREFIX}} {input.bin} {input.agp} {input.reference_fai} > {output.log} 2>{log.std};"
+        " juicer pre -a -o ${{OUTPUT_PREFIX}} {input.bin} {input.agp} {input.reference_fai} > {output.log} 2>&1;"
         " mv ${{OUTPUT_PREFIX}}.txt {output.links_bed} > {log.mv} 2>&1; "
 

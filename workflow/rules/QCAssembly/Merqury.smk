@@ -8,11 +8,11 @@ rule merqury: # TODO: add handling for cases of haploid and polyploid genomes
         primary_assembly=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}.fasta".format(wildcards.assembly_stage,
                                                                                              wildcards.parameters,
                                                                                              wildcards.genome_prefix,
-                                                                                             "hap1" if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else "hap0"),
+                                                                                             "hap1" if stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["option_set"]["assembly_ploidy"] > 1 else "hap0"),
         alternative_assembly=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}.fasta".format(wildcards.assembly_stage,
                                                                                              wildcards.parameters,
                                                                                              wildcards.genome_prefix,
-                                                                                             "hap2") if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else [],
+                                                                                             "hap2") if stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["option_set"]["assembly_ploidy"] > 1 else [],
     output:
         qv_file=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{genome_prefix}.{assembly_stage}.qv",
         completeness_stats_file=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{genome_prefix}.{assembly_stage}.completeness.stats",

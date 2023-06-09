@@ -506,6 +506,7 @@ if "purge_dups" in config["stage_list"]:
                          *[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.merged.tsv",
                                 busco_lineage=config["busco_lineage_list"],
                                 genome_prefix=[config["genome_prefix"], ],
+                                assembly_stage=["purge_dups"],
                                 haplotype=stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"],
                                 parameters=[parameters_label]) for parameters_label in parameters_list],
                          *[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.merged.tsv",

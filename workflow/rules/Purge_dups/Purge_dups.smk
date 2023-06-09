@@ -1,7 +1,8 @@
 
-localrules: create_primary_contig_link, merge_pri_hapdups_with_alt, extract_stats_from_purge_dups_file #create_link_for_purged_fasta,
+localrules: create_primary_contig_link_hap1, create_primary_contig_link_hap0, merge_pri_hapdups_with_alt, extract_stats_from_purge_dups_file #create_link_for_purged_fasta,
 localrules: merge_pri_hapdups_with_alt_for_len_files # create_primary_contig_len_file_link,
-ruleorder: create_primary_contig_link > merge_pri_hapdups_with_alt
+ruleorder: create_primary_contig_link_hap1 > merge_pri_hapdups_with_alt
+ruleorder: create_primary_contig_link_hap0 > merge_pri_hapdups_with_alt
 ruleorder:  minimap2_purge_dups_qc > minimap2_purge_dups_reads
 ruleorder: get_purge_dups_read_stat_qc > get_purge_dups_read_stat
 

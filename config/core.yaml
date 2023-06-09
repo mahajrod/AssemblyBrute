@@ -460,27 +460,61 @@
                 "default":
                     "purge level": 0 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  True
+                    "assembly_ploidy": None # set None if assembly ploidy will be the same as species ploidy set via ploidy option
                 "l0primary":
                     "purge level": 0 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  True
+                    "assembly_ploidy": None # set None if assembly ploidy will be the same as species ploidy set via ploidy option
                 "l1primary":
                     "purge level": 1 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  True
+                    "assembly_ploidy": None # set None if assembly ploidy will be the same as species ploidy set via ploidy option
                 "l2primary":
                     "purge level": 2 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  True
+                    "assembly_ploidy": None # set None if assembly ploidy will be the same as species ploidy set via ploidy option
                 "l3primary":
                     "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  True
+                    "assembly_ploidy": None # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                "l0primary_no_hic":
+                    "purge level": 0 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  False
+                    "assembly_ploidy": 1
+                "l1primary_no_hic":
+                    "purge level": 1 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  False
+                    "assembly_ploidy": 1
+                "l2primary_no_hic":
+                    "purge level": 2 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  False
+                    "assembly_ploidy": 1
+                "l3primary_no_hic":
+                    "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  False
+                    "assembly_ploidy": 1
                 "repeat_enhanced_l1":
                     "purge level": 1 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  True
+                    "assembly_ploidy": None # set None if assembly ploidy will be the same as species ploidy set via ploidy option
                     "D": 10
                     "N": 200
                     #"ignore_bin": True
                 "repeat_enhanced_l2":
                     "purge level": 2 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  True
+                    "ploidy": None # set None if assembly ploidy will be the same as species ploidy set via ploidy option
                     "D": 10
                     "N": 200
                     #"ignore_bin": True

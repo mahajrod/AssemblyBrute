@@ -365,6 +365,9 @@ if "contig" in config["stage_list"]:
             stage_dict["contig"]["parameters"][parameters_label] = {}
             stage_dict["contig"]["parameters"][parameters_label]["assembler"] = assembler
             stage_dict["contig"]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][assembler][option_set]
+            if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] is None:
+               stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]
+            stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
             stage_dict["contig"]["parameters"][parameters_label]["option_set_group"] = option_set_group_assignment_dict[option_set] if option_set_group_assignment_dict is not None else none
 
             #for option_supergroup in ["options_affecting_error_correction"]:
@@ -377,77 +380,74 @@ if "contig" in config["stage_list"]:
     #                            correction_options=assembler_option_set_group_dict[assembler]),
     #
     #                     ]
-    results_list += [expand(output_dict["contig"] / "{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
+    results_list += [*[expand(output_dict["contig"] / "{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
                             genome_prefix=[config["genome_prefix"],],
                             assembly_stage=["contig",],
-                            haplotype=haplotype_list + ["alt"], # TODO: modify "alt" when assemblers other than hifiasm will be added
-                            parameters=parameters_list ),
-                    expand(output_dict["contig"] / "{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.gfa.cov",
+                            haplotype=stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] + (["alt"] if stage_dict["contig"]["parameters"][parameters_label]["assembler"] == "hifiasm" else []), # TODO: modify "alt" when assemblers other than hifiasm will be added
+                            parameters=[parameters_label]) for parameters_label in parameters_list],
+                     *[expand(output_dict["contig"] / "{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.gfa.cov",
                             genome_prefix=[config["genome_prefix"],],
                             assembly_stage=["contig",],
-                            haplotype=haplotype_list + ["alt"], # TODO: modify "alt" when assemblers other than hifiasm will be added
-                            parameters=parameters_list ),
-                     expand(output_dict["contig"] / "{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.gfa.lencov",
+                            haplotype=stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] +  (["alt"] if stage_dict["contig"]["parameters"][parameters_label]["assembler"] == "hifiasm" else []), # TODO: modify "alt" when assemblers other than hifiasm will be added
+                            parameters=[parameters_label])  for parameters_label in parameters_list],
+                     *[expand(output_dict["contig"] / "{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.gfa.lencov",
                             genome_prefix=[config["genome_prefix"],],
                             assembly_stage=["contig",],
-                            haplotype=haplotype_list + ["alt"], # TODO: modify "alt" when assemblers other than hifiasm will be added
-                            parameters=parameters_list ),
-                    expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
+                            haplotype=stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] + (["alt"] if stage_dict["contig"]["parameters"][parameters_label]["assembler"] == "hifiasm" else []), # TODO: modify "alt" when assemblers other than hifiasm will be added
+                            parameters=[parameters_label]) for parameters_label in parameters_list],
+                     *[expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=["contig"],
-                           haplotype=haplotype_list,
-                           parameters=parameters_list),
+                           haplotype=stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"],
+                           parameters=[parameters_label]) for parameters_label in parameters_list],
                     expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=["contig"],),
                     ] # Tested only on hifiasm
 
     if not config["skip_busco"]:
-        results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
+        results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
                                 busco_lineage=config["busco_lineage_list"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["contig"],
-                                haplotype=haplotype_list,
-                                parameters=parameters_list),
-                         expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.merged.tsv",
+                                haplotype=stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"],
+                                parameters=[parameters_label]) for parameters_label in parameters_list],
+                         *[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.merged.tsv",
                                 busco_lineage=config["busco_lineage_list"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["contig"],
-                                parameters=parameters_list),
-                         expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.merged.tsv",
+                                parameters=[parameters_label]) for parameters_label in parameters_list],
+                         *[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.merged.tsv",
                                 busco_lineage=config["busco_lineage_list"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["contig"],
-                                haplotype=haplotype_list,
-                                parameters=parameters_list
-                                ),
-                         expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/all_intersection/{genome_prefix}.{busco_lineage}.busco.merged.tsv",
+                                haplotype=stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"],
+                                parameters=[parameters_label]) for parameters_label in parameters_list],
+                         *[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/all_intersection/{genome_prefix}.{busco_lineage}.busco.merged.tsv",
                                 busco_lineage=config["busco_lineage_list"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["contig"],
-                                parameters=parameters_list
-                                ),
-
+                                parameters=[parameters_label]) for parameters_label in parameters_list],
                          ]
     if (config["tax_id"] is None) or (not config["tax_id"]):
         print("Tax id was not set, skipping contamination scan in FCS databases...")
     else:
         if config["database_set"]["fcs_adaptor"] and (not config["skip_fcs_adaptor"]):
             results_list += [
-                            expand(out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.{database}.report",
+                            *[expand(out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.{database}.report",
                                    genome_prefix=[config["genome_prefix"], ],
                                    assembly_stage=["contig"],
-                                   haplotype=haplotype_list,
-                                   parameters=parameters_list,
-                                   database=config["database_set"]["fcs_adaptor"])
+                                   haplotype=stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"],
+                                   parameters=[parameters_label],
+                                   database=config["database_set"]["fcs_adaptor"]) for parameters_label in parameters_list],
                             ]
         if config["database_set"]["fcs"] and (not config["skip_fcs"]):
-            results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.{database}.taxonomy",
+            results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.{database}.taxonomy",
                                     genome_prefix=[config["genome_prefix"], ],
                                     assembly_stage=["contig"],
-                                    haplotype=haplotype_list + ["alt"], # TODO: modify "alt" when assemblers other than hifiasm will be added
-                                    parameters=parameters_list,
-                                    database=config["database_set"]["fcs"])
+                                    haplotype=stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] + (["alt"] if stage_dict["contig"]["parameters"][parameters_label]["assembler"] == "hifiasm" else []), # TODO: modify "alt" when assemblers other than hifiasm will be added
+                                    parameters=[parameters_label],
+                                    database=config["database_set"]["fcs"]) for parameters_label in parameters_list]
                             ]
 
 if "purge_dups" in config["stage_list"]:

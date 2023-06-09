@@ -364,7 +364,7 @@ if "contig" in config["stage_list"]:
             parameters_label="{0}_{1}".format(assembler, option_set)
             stage_dict["contig"]["parameters"][parameters_label] = {}
             stage_dict["contig"]["parameters"][parameters_label]["assembler"] = assembler
-            stage_dict["contig"]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][assembler][option_set]
+            stage_dict["contig"]["parameters"][parameters_label]["option_set"] = deepcopy(parameters["tool_options"][assembler][option_set])
             if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] is None:
                stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]
             print(stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"])

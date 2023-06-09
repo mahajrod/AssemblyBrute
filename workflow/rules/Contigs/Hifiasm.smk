@@ -1,4 +1,4 @@
-
+ruleorder: hifiasm_hic > hifiasm_hifi
 rule hifiasm_correct:
     priority: 2000
     input:

@@ -1,6 +1,7 @@
 rule create_higlass_track: #
     input:
         fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.fasta.fai",
+        bed=rules.create_curation_input_links.output.bed
     output:
         genome_higlass=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.higlass.genome",
         higlass_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.higlass.bed",
@@ -30,7 +31,7 @@ rule create_higlass_track: #
     threads: parameters["threads"]["create_higlass_track"]
     shell:
         " cut -f1,2 {input.fai} 2>{log.cut} | sed 's/-/_/g' 2>{log.sed1} | sort -k2,2 -nr > {output.genome_higlass} 2>{log.sort}; "
-        " paste -d '\\t' - - < $bed 2>{log.paste} | sed 's/-/_/g' 2>{log.sed2} | "
+        " paste -d '\\t' - - < {input.bed} 2>{log.paste} | sed 's/-/_/g' 2>{log.sed2} | "
         " awk 'BEGIN {{FS=\"\\t\"; OFS=\"\\t\"}} {{if ($1 > $7) {{print substr($4,1,length($4)-2),$12,$7,$8,\"16\",$6,$1,$2,\"8\",$11,$5}} "
         "                                          else {{ print substr($4,1,length($4)-2),$6,$1,$2,\"8\",$12,$7,$8,\"16\",$5,$11}} }}' 2>{log.awk} | "
         " tr '\\-+' '01' 2>{log.tr} | sort --parallel={threads} -S{resources.mem}M -k3,3d -k7,7d > {output.higlass_bed} 2>{log.sort2}; "

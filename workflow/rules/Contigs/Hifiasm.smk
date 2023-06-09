@@ -1,4 +1,4 @@
-ruleorder: hifiasm_hic > hifiasm_hifi
+#ruleorder: hifiasm_hic > hifiasm_hifi
 rule hifiasm_correct:
     priority: 2000
     input:
@@ -147,7 +147,7 @@ rule hifiasm_hifi:
         primary_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.p_ctg.gfa",
         alt_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.a_ctg.gfa",
         primary_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hap0.gfa",
-        alt_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.alt.gfa",
+        alt_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.alt0.gfa",
     params:
         purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge level"],
         ploidy=config["ploidy"],

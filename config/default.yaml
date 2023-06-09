@@ -55,6 +55,10 @@
          - "l1primary"
          #- "l2primary"
          #- "l3primary"
+         #- "l0primary_no_hic"
+         #- "l1primary_no_hic"
+         #- "l2primary_no_hic"
+         #- "l3primary_no_hic"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
     "purge_dups":

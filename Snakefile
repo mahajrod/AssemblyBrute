@@ -367,8 +367,8 @@ if "contig" in config["stage_list"]:
             stage_dict["contig"]["parameters"][parameters_label]["option_set"] = deepcopy(parameters["tool_options"][assembler][option_set])
             if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] is None:
                stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]
-            print(stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"])
-            print(config["ploidy"])
+            #print(stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"])
+            #print(config["ploidy"])
             stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
             stage_dict["contig"]["parameters"][parameters_label]["option_set_group"] = option_set_group_assignment_dict[option_set] if option_set_group_assignment_dict is not None else none
 
@@ -385,17 +385,17 @@ if "contig" in config["stage_list"]:
     results_list += [*[expand(output_dict["contig"] / "{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
                             genome_prefix=[config["genome_prefix"],],
                             assembly_stage=["contig",],
-                            haplotype=stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] + (["alt"] if stage_dict["contig"]["parameters"][parameters_label]["assembler"] == "hifiasm" else []), # TODO: modify "alt" when assemblers other than hifiasm will be added
+                            haplotype=stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] + (["alt" if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else "alt0"] if stage_dict["contig"]["parameters"][parameters_label]["assembler"] == "hifiasm" else []), # TODO: modify "alt" when assemblers other than hifiasm will be added
                             parameters=[parameters_label]) for parameters_label in parameters_list],
                      *[expand(output_dict["contig"] / "{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.gfa.cov",
                             genome_prefix=[config["genome_prefix"],],
                             assembly_stage=["contig",],
-                            haplotype=stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] +  (["alt"] if stage_dict["contig"]["parameters"][parameters_label]["assembler"] == "hifiasm" else []), # TODO: modify "alt" when assemblers other than hifiasm will be added
+                            haplotype=stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] +  (["alt" if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else "alt0"] if stage_dict["contig"]["parameters"][parameters_label]["assembler"] == "hifiasm" else []), # TODO: modify "alt" when assemblers other than hifiasm will be added
                             parameters=[parameters_label])  for parameters_label in parameters_list],
                      *[expand(output_dict["contig"] / "{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.gfa.lencov",
                             genome_prefix=[config["genome_prefix"],],
                             assembly_stage=["contig",],
-                            haplotype=stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] + (["alt"] if stage_dict["contig"]["parameters"][parameters_label]["assembler"] == "hifiasm" else []), # TODO: modify "alt" when assemblers other than hifiasm will be added
+                            haplotype=stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] + (["alt" if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else "alt0"] if stage_dict["contig"]["parameters"][parameters_label]["assembler"] == "hifiasm" else []), # TODO: modify "alt" when assemblers other than hifiasm will be added
                             parameters=[parameters_label]) for parameters_label in parameters_list],
                      *[expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
                            genome_prefix=[config["genome_prefix"], ],

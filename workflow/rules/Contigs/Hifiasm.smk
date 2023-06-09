@@ -162,8 +162,6 @@ rule hifiasm_hifi:
         D=lambda wildcards: parse_option("D", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -D "), #" -D {0} ".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["D"]) if "D" in parameters["tool_options"]["hifiasm"][wildcards.contig_options] else "",
         N=lambda wildcards: parse_option("N", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -N "),
         ignore_bin=lambda wildcards: " -i " if ("ignore_bin" in parameters["tool_options"]["hifiasm"][wildcards.contig_options]) and parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ignore_bin"] else "",
-        hic_forward=(" --h1 " + ",".join(map(str, input_filedict["hic"][::2]))) if "hic" in input_filedict else "", #in case of multiple hic libraries files in the list MUST be COMMA-separated
-        hic_reverse=(" --h2 " + ",".join(map(str, input_filedict["hic"][1::2]))) if "hic" in input_filedict else "",
         nanopore=(" --ul " + ",".join(map(str, input_filedict["nanopore"]))) if "nanopore" in input_filedict else "",
     log:
         std=output_dict["log"] / "hifiasm.{contig_options}.{genome_prefix}.log",
@@ -190,8 +188,7 @@ rule hifiasm_hifi:
          " hifiasm {params.window_size} {params.bloom_filter_bits} "
          " {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size}"
          " {params.kmer_length} {params.D} {params.N} {params.ignore_bin} --primary -t {threads} -l {params.purge_level}  -o ${{OUTPUT_PREFIX}} "
-         " --n-hap {params.ploidy} --purge-max ${{COV_UPPER_BOUNDARY}} "
-         " {params.hic_forward} {params.hic_reverse} {params.nanopore} "
+         " --n-hap {params.ploidy} --purge-max ${{COV_UPPER_BOUNDARY}} {params.nanopore} "
          " {input.hifi}  1>{log.std} 2>&1;"
          " ln -sf `basename {output.primary_contig_graph}` {output.primary_alias};"
          " ln -sf `basename {output.alt_contig_graph}` {output.alt_alias};"

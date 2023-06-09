@@ -5,7 +5,41 @@ ruleorder: create_primary_contig_link > merge_pri_hapdups_with_alt
 ruleorder:  minimap2_purge_dups_qc > minimap2_purge_dups_reads
 ruleorder: get_purge_dups_read_stat_qc > get_purge_dups_read_stat
 
+"""
 rule create_primary_contig_link:
+    input:
+        fasta=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}.fasta".format(stage_dict["purge_dups"]["prev_stage"],
+                                                                                  wildcards.prev_stage_parameters, 
+                                                                                  wildcards.genome_prefix,
+                                                                                  stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["haplotype_list"][0]),
+        len=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}.len".format(stage_dict["purge_dups"]["prev_stage"],
+                                                                              wildcards.prev_stage_parameters, 
+                                                                              wildcards.genome_prefix,
+                                                                              stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["haplotype_list"][0]),
+    output:
+        fasta=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/input/{genome_prefix}.purge_dups_input.hap1.fasta",
+        len=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/input/{genome_prefix}.purge_dups_input.hap1.len"
+        #fasta=out_dir_path / ("purge_dups/{assembler}/input/%s.contig.{assembler}.hap1.fasta" % config["genome_name"])
+    log:
+        ln1=output_dict["log"]  / "create_contig_links.purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.hap1.ln1.log",
+        ln2=output_dict["log"]  / "create_contig_links.purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.hap1.ln2.log",
+        cluster_log=output_dict["cluster_log"] / "create_contig_links.purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.hap1.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_contig_links.purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.hap1.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "create_contig_links.purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.hap1.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["create_links"] ,
+        time=parameters["time"]["create_links"],
+        mem=parameters["memory_mb"]["create_links"]
+    threads: parameters["threads"]["create_links"]
+
+    shell:
+        " ln -sf ../../../../{input.fasta} {output.fasta} 1>{log.ln1} 2>&1; "
+        " ln -sf ../../../../{input.len} {output.len} 1>{log.ln2} 2>&1"
+"""
+rule create_primary_contig_link_hap1:
     input:
         fasta=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.hap1.fasta" % (stage_dict["purge_dups"]["prev_stage"],
                                                                                             stage_dict["purge_dups"]["prev_stage"])),
@@ -14,6 +48,36 @@ rule create_primary_contig_link:
     output:
         fasta=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/input/{genome_prefix}.purge_dups_input.hap1.fasta",
         len=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/input/{genome_prefix}.purge_dups_input.hap1.len"
+        #fasta=out_dir_path / ("purge_dups/{assembler}/input/%s.contig.{assembler}.hap1.fasta" % config["genome_name"])
+    log:
+        ln1=output_dict["log"]  / "create_contig_links.purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.hap1.ln1.log",
+        ln2=output_dict["log"]  / "create_contig_links.purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.hap1.ln2.log",
+        cluster_log=output_dict["cluster_log"] / "create_contig_links.purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.hap1.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_contig_links.purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.hap1.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "create_contig_links.purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.hap1.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["create_links"] ,
+        time=parameters["time"]["create_links"],
+        mem=parameters["memory_mb"]["create_links"]
+    threads: parameters["threads"]["create_links"]
+
+    shell:
+        " ln -sf ../../../../{input.fasta} {output.fasta} 1>{log.ln1} 2>&1; "
+        " ln -sf ../../../../{input.len} {output.len} 1>{log.ln2} 2>&1"
+
+
+rule create_primary_contig_link_hap0:
+    input:
+        fasta=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.hap0.fasta" % (stage_dict["purge_dups"]["prev_stage"],
+                                                                                            stage_dict["purge_dups"]["prev_stage"])),
+        len=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.hap0.len" % (stage_dict["purge_dups"]["prev_stage"],
+                                                                                            stage_dict["purge_dups"]["prev_stage"]))
+    output:
+        fasta=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/input/{genome_prefix}.purge_dups_input.hap0.fasta",
+        len=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/input/{genome_prefix}.purge_dups_input.hap0.len"
         #fasta=out_dir_path / ("purge_dups/{assembler}/input/%s.contig.{assembler}.hap1.fasta" % config["genome_name"])
     log:
         ln1=output_dict["log"]  / "create_contig_links.purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.hap1.ln1.log",

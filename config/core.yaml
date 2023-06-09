@@ -146,6 +146,7 @@
             "mosdepth": 4
             "create_coverage_track": 1
             "create_higlass_track": 10
+            "yahs_juicer_pre": 5
             #"fcs_gx": 50 # set via allowed_databases variable
 
         "memory_mb":
@@ -220,6 +221,7 @@
             "mosdepth": 10000 #The amount of memory is approximately equal to 32-bits * longest chrom length, so for the 249MB chromosome 1, it will require 1GB of memory.
             "create_coverage_track": 4000
             "create_higlass_track": 20000
+            "yahs_juicer_pre": 10000
             #"fcs_gx": 512000 # set via allowed_databases variable
 
         "time": #TODO: adjust
@@ -296,6 +298,7 @@
             "mosdepth": "08:00:00"
             "create_coverage_track": "04:00:00"
             "create_higlass_track": "08:00:00"
+            "yahs_juicer_pre": "04:00:00"
             #"fcs_gx": "03:00:00" # set via allowed_databases variable
 
         "tool_options":

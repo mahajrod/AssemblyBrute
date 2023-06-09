@@ -367,6 +367,7 @@ if "contig" in config["stage_list"]:
             stage_dict["contig"]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][assembler][option_set]
             if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] is None:
                stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]
+            print(stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"])
             stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
             stage_dict["contig"]["parameters"][parameters_label]["option_set_group"] = option_set_group_assignment_dict[option_set] if option_set_group_assignment_dict is not None else none
 

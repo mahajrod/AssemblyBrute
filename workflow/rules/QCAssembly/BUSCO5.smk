@@ -67,12 +67,12 @@ rule busco5: # Downloading of busco datasets is performed by a different rule to
 rule busco5_intersect_haplotypes: # Downloading of busco datasets is performed by a different rule to avoid conflict between different instances of busco5
     priority: 500
     input:
-        busco_tables=expand(rules.busco5.output.busco_table,
-                           haplotype=haplotype_list,
-                           allow_missing=True,)
+        busco_tables=lambda wildcards: expand(rules.busco5.output.busco_table,
+                                              haplotype=stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
+                                              allow_missing=True,)
         #out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype,[^.]+}.busco5.{busco_lineage}.full_table.tsv",
     params:
-        haplotypes=",".join(haplotype_list)
+        haplotypes=lambda wildcards: ",".join(stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"])
     output:
         busco_legend=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.legend",
         busco_orderlist=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.orderlist",
@@ -203,7 +203,7 @@ def get_labels_for_all_assemblies_in_chain(wildcards):
     chain_stage_dict = get_parameters_for_all_stages_in_chain(wildcards.parameters)
     label_list = []
     for stage in chain_stage_dict:
-        for haplotype in haplotype_list:
+        for haplotype in stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"]:
             label_list.append("{0}_{1}".format(stage, haplotype))
     return label_list
 
@@ -211,7 +211,7 @@ def get_busco_tables_for_all_assemblies_in_chain(wildcards):
     chain_stage_dict = get_parameters_for_all_stages_in_chain(wildcards.parameters)
     busco_table_list = []
     for stage in chain_stage_dict:
-        for haplotype in haplotype_list:
+        for haplotype in stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"]:
             busco_table_list += expand(rules.busco5.output.busco_table,
                                        assembly_stage=[stage],
                                        parameters=[chain_stage_dict[stage]],

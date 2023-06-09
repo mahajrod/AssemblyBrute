@@ -1,9 +1,18 @@
+
+stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"]
+
 rule merqury: # TODO: add handling for cases of haploid and polyploid genomes
     input:
         meryl_db_dir=output_dict["kmer"] / "{0}/filtered/{0}.filtered.{1}.meryl".format(config["final_kmer_datatype"],
                                                                                         config["final_kmer_length"],),
-        primary_assembly=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.hap1.fasta",
-        alternative_assembly=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.hap2.fasta",
+        primary_assembly=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}.fasta".format(wildcards.assembly_stage,
+                                                                                             wildcards.parameters,
+                                                                                             wildcards.genome_prefix,
+                                                                                             "hap1" if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else "hap0"),
+        alternative_assembly=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}.fasta".format(wildcards.assembly_stage,
+                                                                                             wildcards.parameters,
+                                                                                             wildcards.genome_prefix,
+                                                                                             "hap2") if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else [],
     output:
         qv_file=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{genome_prefix}.{assembly_stage}.qv",
         completeness_stats_file=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{genome_prefix}.{assembly_stage}.completeness.stats",

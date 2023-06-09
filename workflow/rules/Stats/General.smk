@@ -2,13 +2,13 @@ localrules: gather_stats_per_stage_parameter, gather_stage_stats
 
 rule gather_stats_per_stage_parameter:
     input:
-        summary=expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.summary",
-                       busco_lineage=config["busco_lineage_list"],
-                       haplotype=haplotype_list,
-                       allow_missing=True) if not config["skip_busco"] else [],
-        quast_dirs=expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/quast/{genome_prefix}.{assembly_stage}.{haplotype}",
-                          haplotype=haplotype_list,
-                          allow_missing=True),
+        summary=lambda wildcards: expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.summary",
+                                         busco_lineage=config["busco_lineage_list"],
+                                         haplotype=stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
+                                         allow_missing=True) if not config["skip_busco"] else [],
+        quast_dirs=lambda wildcards: expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/quast/{genome_prefix}.{assembly_stage}.{haplotype}",
+                                            haplotype=stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
+                                            allow_missing=True),
         qv_file=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{genome_prefix}.{assembly_stage}.qv",
         completeness_stats_file=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{genome_prefix}.{assembly_stage}.completeness.stats",
     params:
@@ -19,7 +19,7 @@ rule gather_stats_per_stage_parameter:
         #               busco_lineage=config["busco_lineage_list"],
         #               haplotype=haplotype_list,
         #               allow_missing=True) )) if not config["skip_busco"] else "",
-        haplotype_list=",".join(haplotype_list),
+        haplotype_list=lambda wildcards: ",".join(stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"]),
         busco_lineage_list=(" -b " + ",".join(config["busco_lineage_list"])) if not config["skip_busco"] else ""
     output:
         stats=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{genome_prefix}.{assembly_stage}.parameter_stats"

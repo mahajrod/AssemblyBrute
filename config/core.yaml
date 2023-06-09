@@ -506,7 +506,7 @@
                     "purge level": 1 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  True
-                    "assembly_ploidy": None # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
                     "D": 10
                     "N": 200
                     #"ignore_bin": True
@@ -514,7 +514,7 @@
                     "purge level": 2 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  True
-                    "ploidy": None # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
                     "D": 10
                     "N": 200
                     #"ignore_bin": True

@@ -196,7 +196,7 @@
             "ref_faidx": 3000
             "ref_dict": 3000
             "rmdup": 15000
-            "bam2bed": 40000 # TODO: adjust depending on the genome size
+            "bam2bed": 30000 # TODO: adjust depending on the genome size
             "pretextmap": 10000
             "pretextsnapshot": 5000
             "salsa2": 50000 # TODO: adjust

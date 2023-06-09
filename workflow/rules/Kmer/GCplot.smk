@@ -24,13 +24,13 @@ rule gc_count:
     resources:
         cpus=parameters["threads"]["gc_count"],
         time=parameters["time"]["gc_count"],
-        mem=parameters["memory_mb"]["gc_count"],
+        mem=parameters["memory_mb"]["gc_count"] + 30000,
     threads:
         parameters["threads"]["gc_count"]
     shell: # output: coverage\tgc\tcount\n
          " meryl threads={threads} memory={resources.mem}m greater-than {wildcards.min_coverage} "
          " print {input.db} 2>{log.meryl} | count_kmer_gc.py 2>{log.gc_count} | "
-         " sort -S30G -T {params.tmp_dir} -k2,2n -k1,1n 2>{log.sort} | "
+         " sort -S30000M -T {params.tmp_dir} -k2,2n -k1,1n 2>{log.sort} | "
          " uniq -c 2>{log.uniq} |  sed 's/^\s\+//;s/ /\\t/' 2>{log.sed} | "
          " awk '{{printf \"%i\\t%i\\t%i\\n\", $3,$2,$1 }}' > {output.counts} 2>{log.awk} "
 

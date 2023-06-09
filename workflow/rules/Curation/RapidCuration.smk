@@ -2,6 +2,8 @@ localrules: create_curation_input_links
 
 def get_hic_bed_file(wildcards):
     phasing_parameters_label = detect_phasing_parameters(wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters, config["phasing_stage"], stage_separator="..")
+    print(phasing_parameters_label)
+    print(stage_dict[config["phasing_stage"]]["parameters"][phasing_parameters_label]["option_set"])
     phasing_kmer_length = stage_dict[config["phasing_stage"]]["parameters"][phasing_parameters_label]["option_set"]["phasing_kmer_length"]
     return out_dir_path / "{0}/{1}/{2}/alignment/{3}/{4}.{0}.{3}.{2}.rmdup.bed".format(stage_dict["curation"]["prev_stage"],
                                                                                        wildcards.prev_stage_parameters,

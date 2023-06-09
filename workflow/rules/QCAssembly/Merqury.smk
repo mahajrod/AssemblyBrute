@@ -19,8 +19,6 @@ rule merqury: # TODO: add handling for cases of haploid and polyploid genomes
     params:
         #dir=lambda wildcards: out_dir_path / "{0}/{1}/assembly_qc/merqury/".format(wildcards.assembly_stage,
         #                                                                           wildcards.parameters),
-        primary_assembly=lambda wildcards: f"`realpath -s {wildcards.primary_assembly}` ",
-        #alternative_assembly=,
         out_prefix=lambda wildcards: "{0}.{1}".format(wildcards.genome_prefix,
                                                       wildcards.assembly_stage)
     log:

@@ -464,25 +464,25 @@ if "purge_dups" in config["stage_list"]:
                 stage_dict["purge_dups"]["parameters"][parameters_label] = {}
                 stage_dict["purge_dups"]["parameters"][parameters_label]["purge_dupser"] = purge_dupser
                 stage_dict["purge_dups"]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][purge_dupser][option_set]
+                stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["purge_dups"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
     #print(stage_dict["purge_dups"]["parameters"])
     parameters_list = list(stage_dict["purge_dups"]["parameters"].keys())
     results_list += [
-                     expand(out_dir_path / "purge_dups/{parameters}/{genome_prefix}.purge_dups.{haplotype}.fasta",
-                     genome_prefix=[config["genome_prefix"], ],
-                     assembly_stage=["contig"],
-                     haplotype=haplotype_list,
-                     parameters=parameters_list,
-                     ),
-                    expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
+                     *[expand(out_dir_path / "purge_dups/{parameters}/{genome_prefix}.purge_dups.{haplotype}.fasta",
+                              genome_prefix=[config["genome_prefix"], ],
+                              assembly_stage=["contig"],
+                              haplotype=stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"],
+                              parameters=[parameters_label]) for parameters_label in parameters_list],
+                    *[expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
+                             genome_prefix=[config["genome_prefix"], ],
+                             assembly_stage=["purge_dups"],
+                             haplotype=stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"],
+                             parameters=[parameters_label]) for parameters_label in parameters_list],
+                    *[expand(out_dir_path /  "{assembly_stage}/{parameters}/assembly_qc/purge_dups/{haplotype}/PB.stat",
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=["purge_dups"],
-                           haplotype=haplotype_list,
-                           parameters=parameters_list),
-                    expand(out_dir_path /  "{assembly_stage}/{parameters}/assembly_qc/purge_dups/{haplotype}/PB.stat",
-                           genome_prefix=[config["genome_prefix"], ],
-                           assembly_stage=["purge_dups"],
-                           haplotype=haplotype_list,
-                           parameters=parameters_list),
+                           haplotype=stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"],
+                           parameters=[parameters_label]) for parameters_label in parameters_list],
                     expand(out_dir_path /  "{assembly_stage}/{parameters}/assembly_qc/purge_dups/before.comparison.coverage.png",
                            assembly_stage=["purge_dups"],
                            parameters=parameters_list
@@ -490,31 +490,30 @@ if "purge_dups" in config["stage_list"]:
                     expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=["purge_dups"],),
-                    expand(out_dir_path  / "purge_dups/{parameters}/{haplotype}/{genome_prefix}.dups.{artefact}.fasta",
+                    *[expand(out_dir_path  / "purge_dups/{parameters}/{haplotype}/{genome_prefix}.dups.{artefact}.fasta",
                            genome_prefix=[config["genome_prefix"], ],
                            artefact=["junk", "repeat", "haplotig", "ovlp", "highcov"],
-                           haplotype=haplotype_list,
-                           parameters=parameters_list)
+                           haplotype=stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"],
+                           parameters=[parameters_label]) for parameters_label in parameters_list],
                     ]
     if not config["skip_busco"]:
-        results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
+        results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
                                 busco_lineage=config["busco_lineage_list"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["purge_dups", ],
-                                haplotype=haplotype_list,
-                                parameters=parameters_list),
-                         expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.merged.tsv",
+                                haplotype=stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"],
+                                parameters=[parameters_label]) for parameters_label in parameters_list],
+                         *[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.merged.tsv",
+                                busco_lineage=config["busco_lineage_list"],
+                                genome_prefix=[config["genome_prefix"], ],
+                                haplotype=stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"],
+                                parameters=[parameters_label]) for parameters_label in parameters_list],
+                         *[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.merged.tsv",
                                 busco_lineage=config["busco_lineage_list"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["purge_dups"],
-                                parameters=parameters_list),
-                         expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.merged.tsv",
-                                busco_lineage=config["busco_lineage_list"],
-                                genome_prefix=[config["genome_prefix"], ],
-                                assembly_stage=["purge_dups"],
-                                haplotype=haplotype_list,
-                                parameters=parameters_list
-                                ),
+                                haplotype=stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"],
+                                parameters=[parameters_label]) for parameters_label in parameters_list],
                          expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/all_intersection/{genome_prefix}.{busco_lineage}.busco.merged.tsv",
                                 busco_lineage=config["busco_lineage_list"],
                                 genome_prefix=[config["genome_prefix"], ],
@@ -527,26 +526,26 @@ if config["phasing_stage"] in config["stage_list"]:
 
     for datatype in set(data_types) & set(config["read_phasing_data"]):
         if datatype in config["paired_fastq_based_data"]:
-            results_list += [expand(out_dir_path / "{stage}/{parameters}/fastq/{haplotype}/{assembly_kmer_length}/{datatype}/{pairprefix}_1.fastq.gz",
+            results_list += [*[(expand(out_dir_path / "{stage}/{parameters}/fastq/{haplotype}/{assembly_kmer_length}/{datatype}/{pairprefix}_1.fastq.gz",
                                     datatype=[datatype],
                                     stage=[config["phasing_stage"], ],
-                                    parameters=stage_dict[config["phasing_stage"]]["parameters"],
+                                    parameters=[parameters_label],
                                     pairprefix=input_pairprefix_dict[datatype],
                                     genome_prefix=[config["genome_prefix"], ],
-                                    haplotype=haplotype_list,
+                                    haplotype=stage_dict[config["phasing_stage"]]["parameters"][parameters_label]["haplotype_list"],
                                     assembly_kmer_length=config["assembly_kmer_length"]
-                                    ),
+                                    ) if len(stage_dict[config["phasing_stage"]]["parameters"][parameters_label]["haplotype_list"]) > 1 else []) for parameters_label in list(stage_dict[config["phasing_stage"]]["parameters"].keys())] ,
                             ]
         else:
-            results_list += [expand(out_dir_path / "{stage}/{parameters}/fastq/{haplotype}/{assembly_kmer_length}/{datatype}/{fileprefix}.fastq.gz",
+            results_list += [*[(expand(out_dir_path / "{stage}/{parameters}/fastq/{haplotype}/{assembly_kmer_length}/{datatype}/{fileprefix}.fastq.gz",
                                     datatype=[datatype],
                                     stage=[config["phasing_stage"], ],
-                                    parameters=stage_dict[config["phasing_stage"]]["parameters"],
+                                    parameters=[parameters_label],
                                     fileprefix=input_file_prefix_dict[datatype],
                                     genome_prefix=[config["genome_prefix"], ],
-                                    haplotype=haplotype_list,
+                                    haplotype=stage_dict[config["phasing_stage"]]["parameters"][parameters_label]["haplotype_list"],
                                     assembly_kmer_length=config["assembly_kmer_length"]
-                                    ),
+                                    ) if len(stage_dict[config["phasing_stage"]]["parameters"][parameters_label]["haplotype_list"]) > 1 else []) for parameters_label in list(stage_dict[config["phasing_stage"]]["parameters"].keys())],
                             ]
 
 if "hic_scaffolding" in config["stage_list"]:

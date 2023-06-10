@@ -22,7 +22,8 @@ rule yahs: #
         #                                                                                                     wildcards.genome_prefix),
         min_contig_len=lambda wildcards: stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..yahs_" + wildcards.hic_scaffolding_parameters]["option_set"]["min_contig_len"],
         min_mapping_quality=lambda wildcards: stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..yahs_" + wildcards.hic_scaffolding_parameters]["option_set"]["min_mapping_quality"],
-        restriction_seq=parameters["tool_options"]["yahs"]["restriction_seq"][config["hic_enzyme_set"]],
+        #restriction_seq=parameters["tool_options"]["yahs"]["restriction_seq"][config["hic_enzyme_set"]],
+        restriction_seq=parse_option(config["hic_enzyme_set"], parameters["tool_options"]["yahs"]["restriction_seq"], "-e",)
     log:
         yahs=output_dict["log"]  / "yahs.hic_scaffolding.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.yahs.log",
         ln=output_dict["log"]  / "yahs.hic_scaffolding.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.ln.log",

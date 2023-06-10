@@ -609,6 +609,7 @@
                     "MboI": "GATCGATC"
                     "NcoI": "CCATGCATGG"
                     "Csp6I_MseI": "TTATAA,GTATAC,GTATAA,TTATAC"
+                    "OmniC": null
                 "default":
                      "min_contig_len": 1000
                      "min_mapping_quality": 10
@@ -635,6 +636,7 @@
                     "MboI": "GATCGATC"
                     "NcoI": "CCATGCATGG"
                     "Csp6I_MseI": "TTATAA,GTATAC,GTATAA,TTATAC"
+                    "OmniC": null
                 "default":
                      "min_contig_len": 1000
                 "phased_reads":
@@ -989,7 +991,7 @@
         "memory_mb":
             "jellyfish": 600000
             "kat_gcp":   600000
-            "meryl":     300000
+            "meryl":     500000
             "hifiasm":   500000
             "minimap2_index": 20000
             "minimap2":       40000
@@ -1049,7 +1051,7 @@
         "memory_mb":
             "jellyfish": 1100000
             "kat_gcp":   1100000
-            "meryl":      300000
+            "meryl":      800000
             "hifiasm":   1000000
             "minimap2_index": 30000
             "minimap2":       70000

@@ -79,3 +79,30 @@ rule yahs_juicer_pre: #
         " juicer pre -a -o ${{OUTPUT_PREFIX}} {input.bin} {input.agp} {input.reference_fai} > {output.log} 2>&1;"
         " mv ${{OUTPUT_PREFIX}}.txt {output.links_bed} > {log.mv} 2>&1; "
 
+rule juicer_tools_pre: #
+    input:
+        yahs_juicer_pre_log=rules.yahs_juicer_pre.output.log,
+        yahs_juicer_pre_bed=rules.yahs_juicer_pre.output.links_bed
+    output:
+        hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic",
+    log:
+        juicer=output_dict["log"]  / "juicer_tools_pre.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.juicer.log",
+        cat=output_dict["log"]  / "juicer_tools_pre.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cat.log",
+        grep=output_dict["log"]  / "juicer_tools_pre.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.grep.log",
+        awk=output_dict["log"]  / "juicer_tools_pre.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.awk.log",
+        cluster_log=output_dict["cluster_log"] / "juicer_tools_pre.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "juicer_tools_pre.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "juicer_tools_pre.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["juicer_tools_pre"] ,
+        time=parameters["time"]["juicer_tools_pre"],
+        mem=parameters["memory_mb"]["juicer_tools_pre"]
+    threads: parameters["threads"]["juicer_tools_pre"]
+
+    shell:
+        " java -jar -Xmx{resources.mem}m workflow/external_tools/juicer/juicer_tools.jar pre --threads {threads}  "
+        " {input.yahs_juicer_pre_bed} {output.hic} <(cat {input.yahs_juicer_pre_log} 2>{log.cat} | "
+        " grep PRE_C_SIZE 2>{log.grep} | awk '{{print $2\" \"$3}}' 2>{log.awk}) > {log.juicer} 2>&1; "

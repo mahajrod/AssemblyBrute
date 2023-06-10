@@ -17,9 +17,10 @@ If you wish to run it using conda via snakemake, then you will need:
 # Input datatypes and implemented stages of the pipeline
 
 | Datatypes | read QC | read filtration | contamination check | ec | contig | purge_dups | hic scaffolding | curation | qc |
-|:-------:|:-----:|:-------------:|:-----------------:|:-:|:----:|:--------:|:-------------:|:------:|:-:|
+|:---------:|:-------:|:---------------:|:-------------------:|:--:|:------:|:----------:|:---------------:|:--------:|:--:|
 | hifi + hic | v | v | v | v | v | v | v | v | v |
-| hifi | v | v | v |  |  |  | NA |  |  |
+| hifi + hic (no phasing) | v | v | v | v | v | v | v | v | v |
+| hifi | v | v | v | v | v | v | NA |  | v |
 | clr | v | v | v |  |  |  | NA |  |  |
 | nanopore | v | v | v |  |  |  | NA |  |  |
 | illumina | v | v | v |  |  |  | NA |  |  |
@@ -36,7 +37,7 @@ If you wish to run it using conda via snakemake, then you will need:
 |  Assembler  |       Datatypes       | Status |
 |:-----------:|:---------------------:|:------:|
 |   hifiasm   |      hifi + hic       |   v    |
-|   hifiasm   |         hifi          |        | 
+|   hifiasm   |         hifi          |   v    | 
 |   hifiasm   | hifi + nanopore + hic |        | 
 |   hifiasm   |    hifi + nanopore    |   ?    | 
 |   hicanu    |       nanopore        |        |

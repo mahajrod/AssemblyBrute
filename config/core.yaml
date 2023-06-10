@@ -147,7 +147,7 @@
             "create_coverage_track": 1
             "create_higlass_track": 10
             "yahs_juicer_pre": 5
-            "juicer_tools_pre": 10
+            "juicer_tools_pre": 10 # TODO: adjust.
             #"fcs_gx": 50 # set via allowed_databases variable
 
         "memory_mb":
@@ -223,7 +223,7 @@
             "create_coverage_track": 4000
             "create_higlass_track": 20000
             "yahs_juicer_pre": 10000
-            "juicer_tools_pre": 30000
+            "juicer_tools_pre": 30000 # TODO: adjust
             #"fcs_gx": 512000 # set via allowed_databases variable
 
         "time": #TODO: adjust
@@ -301,7 +301,7 @@
             "create_coverage_track": "04:00:00"
             "create_higlass_track": "08:00:00"
             "yahs_juicer_pre": "04:00:00"
-            "juicer_tools_pre": "04:00:00"
+            "juicer_tools_pre": "04:00:00" # TODO: adjust
             #"fcs_gx": "03:00:00" # set via allowed_databases variable
 
         "tool_options":

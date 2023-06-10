@@ -689,43 +689,46 @@ if "curation" in config["stage_list"]:
             for prev_parameters in stage_dict[prev_stage]["parameters"]:
                 parameters_label = "{0}..{1}_{2}".format(prev_parameters, curation_tool, option_set)
                 stage_dict["curation"]["parameters"][parameters_label] = {}
+                stage_dict["curation"]["parameters"][parameters_label]["included"] = True
                 stage_dict["curation"]["parameters"][parameters_label]["curationeer"] = curation_tool
+                stage_dict["curation"]["parameters"][parameters_label]["prev_stage"] = prev_stage
+                stage_dict["curation"]["parameters"][parameters_label]["prev_parameters"] = prev_parameters
                 stage_dict["curation"]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][curation_tool][option_set] if curation_tool in parameters["tool_options"] else None
+                stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["curation"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
 
     parameters_list = list(stage_dict["curation"]["parameters"].keys())
 
-    results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.repeat.binned.bedgraph",
+    results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.repeat.binned.bedgraph",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],
-                            haplotype=haplotype_list,
-                            parameters=parameters_list),
-                     expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.gap.bedgraph",
+                            haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
+                            parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
+                     *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.gap.bedgraph",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],
-                            haplotype=haplotype_list,
-                            parameters=parameters_list),
-                     expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.stat",
+                            haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
+                            parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
+                     *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.stat",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],
-                            haplotype=haplotype_list,
-                            parameters=parameters_list,
-                            datatype=coverage_track_data_type_set),
-                     expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.canonical.txt",
+                            datatype=coverage_track_data_type_set,
+                            haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
+                            parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
+                     *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.canonical.txt",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],
-                            haplotype=haplotype_list,
-                            parameters=parameters_list),
-                     expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.cannonical.telomere.bedgraph",
+                            haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
+                            parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
+                     *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.cannonical.telomere.bedgraph",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],
-                            haplotype=haplotype_list,
-                            parameters=parameters_list),
-                     expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.higlass.mcool",
+                            haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
+                            parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
+                     *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.higlass.mcool",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],
-                            haplotype=haplotype_list,
-                            parameters=parameters_list
-                           )
+                            haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
+                            parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
                      ]
 
 #----

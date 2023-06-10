@@ -1,5 +1,5 @@
 #---- Bioconda config ----
-#TODO: check tools and versions
+#TODO: check external_tools and versions
 "name": "nanopore"
 "channels":
   - "mahajrod"

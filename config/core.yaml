@@ -1050,7 +1050,7 @@
                     "self":
                         "index_size": "15G"
                         "alignment_scheme": "asm5"     # -x
-    "giant": # < 15000 Mbp, big plant genomes
+    "giant": # < 15000 Mbp, big plant, shark, amphibian genomes
         "threads":
             "hifiasm": 100
         "memory_mb":

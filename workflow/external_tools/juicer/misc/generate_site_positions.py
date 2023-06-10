@@ -54,7 +54,7 @@ def process_args(args):
     'DpnII'       : 'GATC',
     'MboI'        : 'GATC',
     'Sau3AI'      : 'GATC',
-    'Arima'       : [ 'GATC', 'GANTC' ],
+    'Arima'       : [ 'GATC', 'GANTC' ], #TODO: add Arima4
   }
 
   if len(args) != 3 and len(args) != 4:

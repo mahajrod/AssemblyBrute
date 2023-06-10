@@ -564,9 +564,9 @@ if "hic_scaffolding" in config["stage_list"]:
                 stage_dict["hic_scaffolding"]["parameters"][parameters_label]["included"] = True
                 stage_dict["hic_scaffolding"]["parameters"][parameters_label]["hic_scaffolder"] = hic_scaffolder
                 stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][hic_scaffolder][option_set]
-                stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["purge_dups"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
+                stage_dict["hic_scaffolding"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["purge_dups"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
 
-                if (len(stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"]) == 1) and (stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["use_phased_reads"]):
+                if (len(stage_dict["hic_scaffolding"]["parameters"][parameters_label]["haplotype_list"]) == 1) and (stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["use_phased_reads"]):
                     #stage_dict["hic_scaffolding"]["parameters"][parameters_label]["included"] = False
                     stage_dict["hic_scaffolding"]["parameters"].pop(parameters_label)
 

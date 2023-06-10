@@ -363,6 +363,7 @@ if "contig" in config["stage_list"]:
         for option_set in config["coretool_option_sets"][assembler]:
             parameters_label="{0}_{1}".format(assembler, option_set)
             stage_dict["contig"]["parameters"][parameters_label] = {}
+            stage_dict["contig"]["parameters"][parameters_label]["included"] = True
             stage_dict["contig"]["parameters"][parameters_label]["assembler"] = assembler
             stage_dict["contig"]["parameters"][parameters_label]["option_set"] = deepcopy(parameters["tool_options"][assembler][option_set])
             if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] is None:
@@ -462,6 +463,7 @@ if "purge_dups" in config["stage_list"]:
             for prev_parameters in stage_dict[prev_stage]["parameters"]:
                 parameters_label = "{0}..{1}_{2}".format(prev_parameters, purge_dupser, option_set)
                 stage_dict["purge_dups"]["parameters"][parameters_label] = {}
+                stage_dict["purge_dups"]["parameters"][parameters_label]["included"] = True
                 stage_dict["purge_dups"]["parameters"][parameters_label]["purge_dupser"] = purge_dupser
                 stage_dict["purge_dups"]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][purge_dupser][option_set]
                 stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["purge_dups"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
@@ -507,7 +509,7 @@ if "purge_dups" in config["stage_list"]:
                                 busco_lineage=config["busco_lineage_list"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["purge_dups"],
-                                haplotype=stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"],
+                                #haplotype=stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"],
                                 parameters=[parameters_label]) for parameters_label in parameters_list],
                          *[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.merged.tsv",
                                 busco_lineage=config["busco_lineage_list"],
@@ -559,28 +561,42 @@ if "hic_scaffolding" in config["stage_list"]:
             for prev_parameters in stage_dict[prev_stage]["parameters"]:
                 parameters_label = "{0}..{1}_{2}".format(prev_parameters, hic_scaffolder, option_set)
                 stage_dict["hic_scaffolding"]["parameters"][parameters_label] = {}
+                stage_dict["hic_scaffolding"]["parameters"][parameters_label]["included"] = True
                 stage_dict["hic_scaffolding"]["parameters"][parameters_label]["hic_scaffolder"] = hic_scaffolder
                 stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][hic_scaffolder][option_set]
+                stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["purge_dups"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
+
+                if (len(stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"]) == 1) and (stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["use_phased_reads"]):
+                    #stage_dict["hic_scaffolding"]["parameters"][parameters_label]["included"] = False
+                    stage_dict["hic_scaffolding"]["parameters"].pop(parameters_label)
+
+    #for parameter_label in stage_dict["hic_scaffolding"]["parameters"].keys(): # remove ignore
+    #    if not stage_dict["hic_scaffolding"]["parameters"][parameter_label]["included"]:
+    #        stage_dict["hic_scaffolding"]["parameters"].pop(parameter_label)
 
     parameters_list = list(stage_dict["hic_scaffolding"]["parameters"].keys())
 
+    #haplotype=stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"],
+    #                            parameters=[parameters_label]) for parameters_label in parameters_list]
+    # stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"]
+
     results_list += [
-                     expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{resolution}.map.{ext}",
+                     *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{resolution}.map.{ext}",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=[prev_stage,],
-                            haplotype=haplotype_list,
+                            haplotype=stage_dict[prev_stage]["parameters"][parameters_label]["haplotype_list"],
                             phasing_kmer_length=set([stage_dict["hic_scaffolding"]["parameters"][parameter_set]["option_set"]["phasing_kmer_length"] for parameter_set in stage_dict["hic_scaffolding"]["parameters"]]), #[stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["phasing_kmer_length"] for parameter_label in stage_dict["hic_scaffolding"]["parameters"]],
-                            parameters=stage_dict[prev_stage]["parameters"],
+                            parameters=[parameters_label],
                             resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
-                            ext=parameters["tool_options"]["pretextsnapshot"]["format"]),
+                            ext=parameters["tool_options"]["pretextsnapshot"]["format"]) for parameters_label in stage_dict[prev_stage]["parameters"]],
                      *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{resolution}.map.{ext}",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["hic_scaffolding",],
-                           haplotype=haplotype_list,
-                            phasing_kmer_length=[stage_dict["hic_scaffolding"]["parameters"][parameter_set]["option_set"]["phasing_kmer_length"]], #[stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["phasing_kmer_length"]],
-                            parameters=[parameter_set],
-                           resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
-                            ext=parameters["tool_options"]["pretextsnapshot"]["format"]) for parameter_set in stage_dict["hic_scaffolding"]["parameters"]],
+                            haplotype=stage_dict["hic_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
+                            phasing_kmer_length=[stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["phasing_kmer_length"]], #[stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["phasing_kmer_length"]],
+                            parameters=[parameters_label],
+                            resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
+                            ext=parameters["tool_options"]["pretextsnapshot"]["format"]) for parameters_label in stage_dict["hic_scaffolding"]["parameters"]],
                     #expand(out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam",
                     #       phasing_kmer_length=[31],
                     #       fileprefix=list(map(lambda s: s[:-1] + "_1", input_file_prefix_dict["hic"])) + list(map(lambda s: s[:-1] + "_2", input_file_prefix_dict["hic"])) ,
@@ -611,11 +627,11 @@ if "hic_scaffolding" in config["stage_list"]:
                     #       assembly_stage=[config["phasing_stage"],],
                     #       haplotype=haplotype_list,
                     #       parameters=stage_dict[config["phasing_stage"]]["parameters"]),
-                    expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
+                    *[expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=["hic_scaffolding", ],
-                           haplotype=haplotype_list,
-                           parameters=parameters_list),
+                           haplotype=stage_dict["hic_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
+                           parameters=[parameters_label]) for parameters_label in stage_dict["hic_scaffolding"]["parameters"]],
                     expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=["hic_scaffolding"],),
@@ -623,31 +639,32 @@ if "hic_scaffolding" in config["stage_list"]:
 
     for parameters_label in parameters_list:
         if stage_dict["hic_scaffolding"]["parameters"][parameters_label]["hic_scaffolder"] == "yahs":
-            results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/scaffolding/{genome_prefix}.bed",
+            results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/scaffolding/{genome_prefix}.bed",
                                     genome_prefix=[config["genome_prefix"], ],
                                     assembly_stage=["hic_scaffolding", ],
-                                    haplotype=haplotype_list,
-                                    parameters=parameters_list)]
+                                    haplotype=stage_dict["hic_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
+                                    parameters=[parameters_label]) for parameters_label in stage_dict["hic_scaffolding"]["parameters"]]
+                             ]
 
     if not config["skip_busco"]:
-        results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
+        results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
                                 busco_lineage=config["busco_lineage_list"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["hic_scaffolding", ],
-                                haplotype=haplotype_list,
-                                parameters=parameters_list),
-                         expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.merged.tsv",
+                                haplotype=stage_dict["hic_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
+                                parameters=[parameters_label]) for parameters_label in stage_dict["hic_scaffolding"]["parameters"]],
+                         *[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.merged.tsv",
                                 busco_lineage=config["busco_lineage_list"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["hic_scaffolding"],
-                                parameters=parameters_list),
-                         expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.merged.tsv",
+                                #haplotype=stage_dict["hic_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
+                                parameters=[parameters_label]) for parameters_label in stage_dict["hic_scaffolding"]["parameters"]],
+                         *[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.merged.tsv",
                                 busco_lineage=config["busco_lineage_list"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["hic_scaffolding"],
-                                haplotype=haplotype_list,
-                                parameters=parameters_list
-                                ),
+                                haplotype=stage_dict["hic_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
+                                parameters=[parameters_label]) for parameters_label in stage_dict["hic_scaffolding"]["parameters"]],
                          expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/all_intersection/{genome_prefix}.{busco_lineage}.busco.merged.tsv",
                                 busco_lineage=config["busco_lineage_list"],
                                 genome_prefix=[config["genome_prefix"], ],

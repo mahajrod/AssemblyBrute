@@ -102,7 +102,7 @@ rule juicer_tools_pre: #
         mem=parameters["memory_mb"]["juicer_tools_pre"]
     threads: parameters["threads"]["juicer_tools_pre"]
 
-    shell:
-        " java -jar -Xmx{resources.mem}m workflow/external_tools/juicer/juicer_tools.1.9.9_jcuda.0.8.jar pre " #--threads {threads}  
+    shell: # juicer_tools elder than 1.9.9 seems to be incompartible with yahs
+        " java -jar -Xmx{resources.mem}m workflow/external_tools/juicer/juicer_tools.jar pre " #--threads {threads}  
         " {input.yahs_juicer_pre_bed} {output.hic} <(cat {input.yahs_juicer_pre_log} 2>{log.cat} | "
         " grep PRE_C_SIZE 2>{log.grep} | awk '{{print $2\" \"$3}}' 2>{log.awk}) > {log.juicer} 2>&1; "

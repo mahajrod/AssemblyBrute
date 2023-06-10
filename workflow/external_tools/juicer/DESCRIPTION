@@ -1,0 +1,6 @@
+Juicer was cloned from https://github.com/aidenlab/juicer
+Only scripts from CPU and misc folders, as well as original LICENSE and README.md files were retained. The rest was removed.
+
+Juicer Tools (juicer_tools.jar) were downloaded from https://hicfiles.tc4ga.com/public/juicer/juicer_tools.1.9.9_jcuda.0.8.jar . Version suffix was removed from jar filename.
+
+

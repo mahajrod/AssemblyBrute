@@ -1,5 +1,5 @@
 #---- Bioconda config ----
-#TODO: check external_tools and versions
+#TODO: check tools and versions
 "name": "masurca"
 "channels":
   - "mahajrod"

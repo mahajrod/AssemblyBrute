@@ -30,7 +30,7 @@ rule meryl_extract_unique_hap_kmers:
                                                                                                        wildcards.genome_prefix,
                                                                                                        wildcards.stage,
                                                                                                        wildcards.assembly_kmer_length)) ,
-                                                 haplotype=set(haplotype_list) - {wildcards.haplotype},
+                                                 haplotype=set(stage_dict[wildcards.stage]["parameters"][wildcards.parameters]["haplotype_list"]) - {wildcards.haplotype},
                                                  allow_missing=True)
     output:
         unique_hap_db_dir=directory(out_dir_path / "{stage}/{parameters}/kmer/{genome_prefix}.{stage}.{haplotype, [^.]+}.{assembly_kmer_length, [^.]+}.unique"),
@@ -59,7 +59,7 @@ rule extract_pe_reads_by_unique_hap_kmers:
                                                                                                               config["genome_prefix"],
                                                                                                               wildcards.stage,
                                                                                                               wildcards.assembly_kmer_length)),
-                                                 haplotype=set(haplotype_list) - {wildcards.haplotype},
+                                                 haplotype=set(stage_dict[wildcards.stage]["parameters"][wildcards.parameters]["haplotype_list"]) - {wildcards.haplotype},
                                                  allow_missing=True),
         forward_read=lambda wildcards: output_dict["data"]  / ("fastq/{0}/{1}/{2}{3}{4}".format(wildcards.datatype,
                                                                                                 "filtered" if wildcards.datatype in config["filtered_data"] else "raw",
@@ -100,7 +100,7 @@ rule extract_se_reads_by_unique_hap_kmers:
                                                                                                               config["genome_prefix"],
                                                                                                               wildcards.stage,
                                                                                                               wildcards.assembly_kmer_length)),
-                                                 haplotype=set(haplotype_list) - {wildcards.haplotype},
+                                                 haplotype=set(stage_dict[wildcards.stage]["parameters"][wildcards.parameters]["haplotype_list"]) - {wildcards.haplotype},
                                                  allow_missing=True),
         se_read=lambda wildcards: output_dict["data"]  / ("fastq/{0}/{1}/{2}{3}".format(wildcards.datatype,
                                                                                         "filtered" if wildcards.datatype in config["filtered_data"] else "raw",

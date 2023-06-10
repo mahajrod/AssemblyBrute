@@ -464,6 +464,8 @@ if "purge_dups" in config["stage_list"]:
                 parameters_label = "{0}..{1}_{2}".format(prev_parameters, purge_dupser, option_set)
                 stage_dict["purge_dups"]["parameters"][parameters_label] = {}
                 stage_dict["purge_dups"]["parameters"][parameters_label]["included"] = True
+                stage_dict["purge_dup"]["parameters"][parameters_label]["prev_stage"] = prev_stage
+                stage_dict["purge_dup"]["parameters"][parameters_label]["prev_parameters"] = prev_parameters
                 stage_dict["purge_dups"]["parameters"][parameters_label]["purge_dupser"] = purge_dupser
                 stage_dict["purge_dups"]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][purge_dupser][option_set]
                 stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["purge_dups"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
@@ -562,6 +564,8 @@ if "hic_scaffolding" in config["stage_list"]:
                 parameters_label = "{0}..{1}_{2}".format(prev_parameters, hic_scaffolder, option_set)
                 stage_dict["hic_scaffolding"]["parameters"][parameters_label] = {}
                 stage_dict["hic_scaffolding"]["parameters"][parameters_label]["included"] = True
+                stage_dict["hic_scaffolding"]["parameters"][parameters_label]["prev_stage"] = prev_stage
+                stage_dict["hic_scaffolding"]["parameters"][parameters_label]["prev_parameters"] = prev_parameters
                 stage_dict["hic_scaffolding"]["parameters"][parameters_label]["hic_scaffolder"] = hic_scaffolder
                 stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][hic_scaffolder][option_set]
                 stage_dict["hic_scaffolding"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["hic_scaffolding"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
@@ -579,16 +583,17 @@ if "hic_scaffolding" in config["stage_list"]:
     #haplotype=stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"],
     #                            parameters=[parameters_label]) for parameters_label in parameters_list]
     # stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"]
-
+    #prev_parameters_label = stage_dict["hic_scaffolding"]["parameters"][parameters_label]["prev_parameters"]
     results_list += [
                      *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{resolution}.map.{ext}",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=[prev_stage,],
-                            haplotype=stage_dict[prev_stage]["parameters"][parameters_label]["haplotype_list"],
-                            phasing_kmer_length=set([stage_dict["hic_scaffolding"]["parameters"][parameter_set]["option_set"]["phasing_kmer_length"] for parameter_set in stage_dict["hic_scaffolding"]["parameters"]]), #[stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["phasing_kmer_length"] for parameter_label in stage_dict["hic_scaffolding"]["parameters"]],
-                            parameters=[parameters_label],
+                            haplotype=stage_dict[prev_stage]["parameters"][stage_dict["hic_scaffolding"]["parameters"][current_parameter_label]["prev_parameters"]]["haplotype_list"],
+                            phasing_kmer_length=[stage_dict["hic_scaffolding"]["parameters"][current_parameter_label]["option_set"]["phasing_kmer_length"]], #[stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["phasing_kmer_length"] for parameter_label in stage_dict["hic_scaffolding"]["parameters"]],
+                            parameters=[stage_dict["hic_scaffolding"]["parameters"][current_parameter_label]["prev_parameters"]],
                             resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
-                            ext=parameters["tool_options"]["pretextsnapshot"]["format"]) for parameters_label in stage_dict[prev_stage]["parameters"]],
+                            ext=parameters["tool_options"]["pretextsnapshot"]["format"])  for current_parameter_label in stage_dict["hic_scaffolding"]["parameters"]],
+
                      *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{resolution}.map.{ext}",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["hic_scaffolding",],

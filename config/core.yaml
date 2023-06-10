@@ -1051,6 +1051,8 @@
                         "index_size": "15G"
                         "alignment_scheme": "asm5"     # -x
     "giant": # < 15000 Mbp, big plant genomes
+        "threads":
+            "hifiasm": 100
         "memory_mb":
             "jellyfish": 1100000
             "kat_gcp":   1100000

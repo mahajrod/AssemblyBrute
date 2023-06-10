@@ -464,8 +464,8 @@ if "purge_dups" in config["stage_list"]:
                 parameters_label = "{0}..{1}_{2}".format(prev_parameters, purge_dupser, option_set)
                 stage_dict["purge_dups"]["parameters"][parameters_label] = {}
                 stage_dict["purge_dups"]["parameters"][parameters_label]["included"] = True
-                stage_dict["purge_dup"]["parameters"][parameters_label]["prev_stage"] = prev_stage
-                stage_dict["purge_dup"]["parameters"][parameters_label]["prev_parameters"] = prev_parameters
+                stage_dict["purge_dups"]["parameters"][parameters_label]["prev_stage"] = prev_stage
+                stage_dict["purge_dups"]["parameters"][parameters_label]["prev_parameters"] = prev_parameters
                 stage_dict["purge_dups"]["parameters"][parameters_label]["purge_dupser"] = purge_dupser
                 stage_dict["purge_dups"]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][purge_dupser][option_set]
                 stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["purge_dups"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]

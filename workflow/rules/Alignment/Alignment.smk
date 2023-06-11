@@ -141,7 +141,7 @@ rule generate_site_positions: #
     input:
         fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
     output:
-        restriction_site_file=ut_dir_path / ("{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}_%s.txt" % config["hic_enzyme_set"])
+        restriction_site_file=out_dir_path / ("{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}_%s.txt" % config["hic_enzyme_set"])
     params:
         restriction_seq=config["hic_enzyme_set"]
     log:

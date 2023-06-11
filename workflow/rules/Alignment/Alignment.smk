@@ -195,7 +195,7 @@ rule juicer_tools_qc:
         mem=parameters["memory_mb"]["juicer_tools_qc"]
     threads: parameters["threads"]["juicer_tools_qc"]
     shell: # juicer_tools appends to {output.inter} instead of rewritting. Added cmd to empty file
-        " samtools view $sthreadstring -F 1024 -O sam {input.bam}  2>{log.samtools} | "
+        " samtools view -@ {threads} -F 1024 -O sam {input.bam}  2>{log.samtools} | "
         " awk -v mapq={wildcards.mapq} -f workflow/external_tools/juicer/scripts/common/sam_to_pre.awk > {output.merged} 2>{log.awk}; "
         " > {output.inter}; "
         " workflow/external_tools/juicer/scripts/common/juicer_tools statistics --threads {threads} {params.restriction_site_file} "

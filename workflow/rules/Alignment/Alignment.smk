@@ -198,5 +198,5 @@ rule juicer_tools_qc:
         " samtools view $sthreadstring -F 1024 -O sam {input.bam}  2>{log.samtools} | "
         " awk -v mapq={wildcards.mapq} -f workflow/external_tools/juicer/scripts/common/sam_to_pre.awk > {output.merged} 2>{log.awk}; "
         " > {output.inter}; "
-        " external_tools/juicer/scripts/common/juicer_tools statistics --threads {threads} {params.restriction_site_file} "
+        " workflow/external_tools/juicer/scripts/common/juicer_tools statistics --threads {threads} {params.restriction_site_file} "
         " {output.inter} {output.merged} none > {log.juicer_tools} 2>&1; "

@@ -150,6 +150,7 @@
             "juicer_tools_pre": 10 # TODO: adjust
             "juicer": 50
             "generate_site_positions": 2
+            "juicer_tools_qc": 10
             #"fcs_gx": 50 # set via allowed_databases variable
 
         "memory_mb":
@@ -228,8 +229,8 @@
             "juicer_tools_pre": 30000 # TODO: adjust
             "juicer": 50000
             "generate_site_positions": 10000
+            "juicer_tools_qc": 10000
             #"fcs_gx": 512000 # set via allowed_databases variable
-
         "time": #TODO: adjust
             "install_from_pip": "01:00:00"
             "create_fastq_links": "00:05:00"
@@ -308,8 +309,8 @@
             "juicer_tools_pre": "04:00:00" # TODO: adjust
             "juicer":   "24:00:00"
             "generate_site_positions": "01:00:00"
+            "juicer_tools_qc": "10:00:00"
             #"fcs_gx": "03:00:00" # set via allowed_databases variable
-
         "tool_options":
             "cutadapt":
                 "default":
@@ -634,6 +635,11 @@
                      "min_mapping_quality": 10
                      "phasing_kmer_length": "NA"
                      "use_phased_reads": False
+            "juicer_tools_qc":
+                "default":
+                    "mapping_quality":
+                        - 1
+                        - 30
             "3ddna":
                 "restriction_seq":
                     "Arima": "GATC,GANTC"
@@ -1331,3 +1337,6 @@
             - "n-perturb"       # --n-perturb
             - "f-perturb"       # --f-perturb
             - "l-misjoin"       # --l-msjoin
+
+"no_motif_enzyme_sets":
+    - "OmniC"

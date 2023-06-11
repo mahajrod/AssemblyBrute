@@ -145,6 +145,9 @@ if config["custom_enzyme_set"] is not None:
                     config["parameters"][config["parameter_set"]]["tool_options"]["salsa2"]["restriction_seq"]["custom"] = config["custom_enzyme_set"]
     config["hic_enzyme_set"] = "custom"
 
+    if config["custom_enzyme_set_is_no_motif"]: # register custom enzyme as producicing no ligation motives
+        config["no_motif_enzyme_sets"].append(custom)
+
 if config["parameter_set"] not in config["parameters"]:
     raise ValueError("Error!!! Unknown set of tool parameters: {0}".format(config["parameter_set"]))
 
@@ -593,7 +596,6 @@ if "hic_scaffolding" in config["stage_list"]:
                             parameters=[stage_dict["hic_scaffolding"]["parameters"][current_parameter_label]["prev_parameters"]],
                             resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
                             ext=parameters["tool_options"]["pretextsnapshot"]["format"])  for current_parameter_label in stage_dict["hic_scaffolding"]["parameters"]],
-
                      *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{resolution}.map.{ext}",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["hic_scaffolding",],

@@ -86,6 +86,7 @@
     "pretextsnapshot":          "default"   # Allowed: default
     "gcp":                      "default"   # Allowed: default
     "kat":                      "default"   # Allowed: default
+    "juicer_tools_qc":          "default"   # Allowed: default
 
 "tool_manually_adjusted_features":
     "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions
@@ -122,6 +123,7 @@
 "contig_datatype": "hifi"
 "hic_enzyme_set": "Arima"
 "custom_enzyme_set": null # None
+"custom_enzyme_set_is_no_motif": False
 
 "starting_point": "fastq" # Allowed: "draft"
 "data_types": "hifi,hic" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others

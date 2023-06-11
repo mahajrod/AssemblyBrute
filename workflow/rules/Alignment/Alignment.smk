@@ -137,3 +137,66 @@ rule rmdup:
         " samtools index {output.bam}; "
         " get_stats.pl {output.bam} > {output.bam_stats}"
 
+rule generate_site_positions: #
+    input:
+        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
+    output:
+        restriction_site_file=ut_dir_path / ("{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}_%s.txt" % config["hic_enzyme_set"])
+    params:
+        restriction_seq=config["hic_enzyme_set"]
+    log:
+        sites=output_dict["log"]  / "generate_site_positions.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.sites.log",
+        cluster_log=output_dict["cluster_log"] / "generate_site_positions.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "generate_site_positions.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "generate_site_positions.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["generate_site_positions"] ,
+        time=parameters["time"]["generate_site_positions"],
+        mem=parameters["memory_mb"]["generate_site_positions"]
+    threads: parameters["threads"]["generate_site_positions"]
+
+    shell:
+        #" ln -sf ../../../../../../{input.fasta} {output.alias_fasta} > {log.ln} 2>&1; "
+        " OUTPUT_PREFIX={output.restriction_site_file}; "
+        " OUTPUT_PREFIX=${{OUTPUT_PREFIX%_{params.restriction_seq}.txt}; "
+        " ./workflow/external_tools/juicer/misc/generate_site_positions.py {params.restriction_seq} ${{OUTPUT_PREFIX}} {input.fasta} > {log.sites} 2>&1; "
+
+
+rule juicer_tools_qc:
+    input:
+        bam=rules.rmdup.output.bam,
+        restriction_site_file=rules.generate_site_positions.output.restriction_site_file if config["hic_enzyme_set"] not in config["no_motif_enzyme_sets"] else []
+    output:
+        inter30=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.inter_{mapq}.txt",
+        inter=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.inter_{mapq}.txt",
+        merged30=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.merged_{mapq}.txt"),
+        merged=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.merged_{mapq}.txt"),
+    params:
+        restriction_site_file=rules.generate_site_positions.output.restriction_site_file if config["hic_enzyme_set"] not in config["no_motif_enzyme_sets"] else "none"
+    log:
+        samtools=output_dict["log"] / "juicer_tools_qc.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.samtools.log",
+        awk=output_dict["log"] / "juicer_tools_qc.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.awk.log",
+        juicer_tools=output_dict["log"] / "juicer_tools_qc.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.juicer_tools.log",
+        #samtools30=output_dict["log"] / "juicer_tools_qc.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.samtools30.log",
+        #awk30=output_dict["log"] / "juicer_tools_qc.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.awk30.log",
+        #juicer_tools30=output_dict["log"] / "juicer_tools_qc.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.juicer_tools30.log",
+        cluster_log=output_dict["cluster_log"] / "juicer_tools_qc.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "juicer_tools_qc.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["juicer_tools_qc"] ,
+        time=parameters["time"]["juicer_tools_qc"],
+        mem=parameters["memory_mb"]["juicer_tools_qc"]
+    threads: parameters["threads"]["juicer_tools_qc"]
+    shell: # juicer_tools appends to {output.inter} instead of rewritting. Added cmd to empty file
+        " samtools view $sthreadstring -F 1024 -O sam {input.bam}  2>{log.samtools} | "
+        " awk -v mapq={wildcards.mapq} -f workflow/external_tools/juicer/scripts/common/sam_to_pre.awk > {output.merged} 2>{log.awk}; "
+        " > {output.inter}; "
+        " external_tools/juicer/scripts/common/juicer_tools statistics --threads {threads} {params.restriction_site_file} "
+        " {output.inter} {output.merged} none > {log.juicer_tools} 2>&1; "

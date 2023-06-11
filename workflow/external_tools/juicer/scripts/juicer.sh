@@ -381,8 +381,6 @@ then
 		if [ ! $splitdirexists ]
 		then
 		    echo "(-: Created $splitdir."
-		    echo ${fastqdir}
-		    echo ${splitdir}
 		    ln -s ${fastqdir} ${splitdir}/.
 		else
 		    echo -e "---  Using already created files in $splitdir\n"

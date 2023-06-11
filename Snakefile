@@ -555,7 +555,7 @@ if config["phasing_stage"] in config["stage_list"]:
                                     assembly_kmer_length=config["assembly_kmer_length"]
                                     ) if len(stage_dict[config["phasing_stage"]]["parameters"][parameters_label]["haplotype_list"]) > 1 else []) for parameters_label in list(stage_dict[config["phasing_stage"]]["parameters"].keys())],
                             ]
-print(parameters["tool_options"]["juicer_tools_qc"])
+#print(parameters["tool_options"]["juicer_tools_qc"])
 if "hic_scaffolding" in config["stage_list"]:
     prev_stage = stage_dict["hic_scaffolding"]["prev_stage"]
     hic_scaffolder_list = config["stage_coretools"]["hic_scaffolding"]["default"]

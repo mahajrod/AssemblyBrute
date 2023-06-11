@@ -161,7 +161,7 @@ rule generate_site_positions: #
     shell:
         #" ln -sf ../../../../../../{input.fasta} {output.alias_fasta} > {log.ln} 2>&1; "
         " OUTPUT_PREFIX={output.restriction_site_file}; "
-        " OUTPUT_PREFIX=${{OUTPUT_PREFIX%_{params.restriction_seq}.txt}; "
+        " OUTPUT_PREFIX=${{OUTPUT_PREFIX%_{params.restriction_seq}.txt; "
         " ./workflow/external_tools/juicer/misc/generate_site_positions.py {params.restriction_seq} ${{OUTPUT_PREFIX}} {input.fasta} > {log.sites} 2>&1; "
 
 

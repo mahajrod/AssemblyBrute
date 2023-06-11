@@ -147,7 +147,9 @@
             "create_coverage_track": 1
             "create_higlass_track": 10
             "yahs_juicer_pre": 5
-            "juicer_tools_pre": 10 # TODO: adjust.
+            "juicer_tools_pre": 10 # TODO: adjust
+            "juicer": 50
+            "generate_site_positions": 2
             #"fcs_gx": 50 # set via allowed_databases variable
 
         "memory_mb":
@@ -224,6 +226,8 @@
             "create_higlass_track": 20000
             "yahs_juicer_pre": 10000
             "juicer_tools_pre": 30000 # TODO: adjust
+            "juicer": 50000
+            "generate_site_positions": 10000
             #"fcs_gx": 512000 # set via allowed_databases variable
 
         "time": #TODO: adjust
@@ -302,6 +306,8 @@
             "create_higlass_track": "08:00:00"
             "yahs_juicer_pre": "04:00:00"
             "juicer_tools_pre": "04:00:00" # TODO: adjust
+            "juicer":   "24:00:00"
+            "generate_site_positions": "01:00:00"
             #"fcs_gx": "03:00:00" # set via allowed_databases variable
 
         "tool_options":
@@ -616,6 +622,8 @@
                 "default":
                      "min_contig_len": 1000
                      "min_mapping_quality": 10
+                     "phasing_kmer_length": "NA"
+                     "use_phased_reads": False
                 "phased_reads":
                      "min_contig_len": 1000
                      "min_mapping_quality": 10
@@ -623,6 +631,35 @@
                      "use_phased_reads": True
                 "unphased_reads":
                      "min_contig_len": 1000
+                     "min_mapping_quality": 10
+                     "phasing_kmer_length": "NA"
+                     "use_phased_reads": False
+            "3ddna":
+                "restriction_seq":
+                    "Arima": "GATC,GANTC"
+                    "Arima4": "GATC,GANTC,CTNAG,TTAA"
+                    #"OmniC": "DNASE"
+                    "MboI": "GATC"
+                "ligation_motif":
+                    "Arima": "GAATAATC,GAATACTC,GAATAGTC,GAATATTC,GAATGATC,GACTAATC,GACTACTC,GACTAGTC,GACTATTC,GACTGATC,GAGTAATC,GAGTACTC,GAGTAGTC,GAGTATTC,GAGTGATC,GATCAATC,GATCACTC,GATCAGTC,GATCATTC,GATCGATC,GATTAATC,GATTACTC,GATTAGTC,GATTATTC,GATTGATC"
+                    "HindIII": "AAGCTAGCTT"
+                    "DpnII": "GATCGATC"
+                    "MboI": "GATCGATC"
+                    "NcoI": "CCATGCATGG"
+                    "Csp6I_MseI": "TTATAA,GTATAC,GTATAA,TTATAC"
+                    #"OmniC": null
+                "default":
+                     "min_contig_len": 10000
+                     "min_mapping_quality": 10
+                     "phasing_kmer_length": "NA"
+                     "use_phased_reads": False
+                "phased_reads":
+                     "min_contig_len": 10000
+                     "min_mapping_quality": 10
+                     "phasing_kmer_length": 31
+                     "use_phased_reads": True
+                "unphased_reads":
+                     "min_contig_len": 10000
                      "min_mapping_quality": 10
                      "phasing_kmer_length": "NA"
                      "use_phased_reads": False

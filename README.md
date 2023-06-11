@@ -16,22 +16,22 @@ If you wish to run it using conda via snakemake, then you will need:
 
 # Input datatypes and implemented stages of the pipeline
 
-| Datatypes | read QC | read filtration | contamination check | ec | contig | purge_dups | hic scaffolding | curation | qc |
-|:---------:|:-------:|:---------------:|:-------------------:|:--:|:------:|:----------:|:---------------:|:--------:|:--:|
-| hifi + hic | v | v | v | v | v | v | v | v | v |
-| hifi + hic (no phasing) | v | v | v | v | v | v | v | v | v |
-| hifi | v | v | v | v | v | v | NA |  | v |
-| clr | v | v | v |  |  |  | NA |  |  |
-| nanopore | v | v | v |  |  |  | NA |  |  |
-| illumina | v | v | v |  |  |  | NA |  |  |
-| nanopore + illumina | v | v | v |  |  |  | NA |  |  |
-| nanopore + illumina + hic | v | v | v |  |  |  |  |  |  |
-| clr + illumina | v | v | v |  |  |  | NA |  |  |
-| clr + illumina + hic | v | v | v |  |  |  |  |  |  |
-| assembly | NA | NA |  | NA | NA | NA | NA | NA | NA |
-| assembly + hic |  | |  | | |  | | | |
-| assembly + nanopore + hic |  |  |  |  | NA |  |  |  |  |
-| assembly + hifi + hic |  |  |  |  | NA |  |  |  |  |
+| Datatypes | read QC | read filtration | contamination check | ec | contig | purge_dups | hic qc | hic scaffolding | curation | qc |
+|:---------:|:-------:|:---------------:|:-------------------:|:--:|:------:|:----------:|:------:|:---------------:|:--------:|:--:|
+| hifi + hic | v | v | v | v | v | v | v | v | v | v |
+| hifi + hic (no phasing) | v | v | v | v | v | v | v | v | v | v |
+| hifi | v | v | v | v | v | v | NA | NA |  | v |
+| clr | v | v | v |  |  |  | NA | NA |  |  |
+| nanopore | v | v | v |  |  |  | NA | NA |  |  |
+| illumina | v | v | v |  |  |  | NA | NA |  |  |
+| nanopore + illumina | v | v | v |  |  |  | NA | NA |  |  |
+| nanopore + illumina + hic | v | v | v |  |  |  |  |  |  |  |
+| clr + illumina | v | v | v |  |  |  | NA | NA |  |  |
+| clr + illumina + hic | v | v | v |  |  |  |  |  |  |  |
+| assembly | NA | NA |  | NA | NA | NA | NA | NA | NA | NA |
+| assembly + hic |  |  |  | |  |  |  |  |  |  |
+| assembly + nanopore + hic |  |  |  |  | NA |  |  |  |  |  |
+| assembly + hifi + hic |  |  |  |  | NA |  |  |  |  |  |
 
 # Implemented assemblers
 |  Assembler  |       Datatypes       | Status |
@@ -93,4 +93,9 @@ snakemake --cores 140  --configfile config/test1.yaml --printshellcmds --latency
 
 ```commandline
 snakemake --cores 60 --configfile config/default.yaml --printshellcmds --latency-wait 60   --config mode="qc" "parameter_set"="large"  "data_types"="illumina" "tax_id"=30532  "use_existing_envs"=False "skip_busco"=True "skip_kraken"=True "skip_gcp"=True  "final_kmer_datatype"="illumina"   --use-conda --rerun-incomplete --res hifiasm=1  fcs=1 fcs_adaptor=1 mem=800000 kmer_counter=1
+```
+
+```commandline
+#shark
+git pull; snakemake --cores 80  --configfile config/somniosus.yaml --printshellcmds --latency-wait 60   --config mode="assembly" assembly_mode="contig" "parameter_set"="giant"  "data_types"="hifi,hic" "tax_id"=191813  "use_existing_envs"=False "skip_busco"=True  "final_kmer_datatype"="hifi" "busco_lineage_list"='["vertebrata_odb10"]' "skip_gcp"=True  --use-conda --rerun-incomplete --res   fcs=1 fcs_adaptor=1 mem=800000 kmer_counter=1  telosif=1
 ```

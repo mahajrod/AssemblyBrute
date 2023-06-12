@@ -71,7 +71,8 @@ rule juicer: #
     threads: parameters["threads"]["juicer"]
 
     shell:
-        " OUTPUT_DIR=`dirname {output.merged_no_dups}`;"
+        " OUTPUT_DIR=`dirname {output.merged_no_dups}`; "
+        " OUTPUT_DIR=`realpath ${{OUTPUT_DIR}}`; "
         " mkdir -p ${{OUTPUT_DIR}}/fastq > {log.mkdir} 2>&1 ; "
         " > {log.ln}; "
         " for FILE in {input.forward_fastqs}; "

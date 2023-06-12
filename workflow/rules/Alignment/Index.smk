@@ -28,7 +28,7 @@ rule ref_faidx:
         fai=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.fai",
         #fai_alias=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.fai"
     log:
-        std=output_dict["log"]  / "ref_faidx.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}..log",
+        std=output_dict["log"]  / "ref_faidx.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.log",
         cluster_log=output_dict["cluster_log"] / "ref_faidx.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "ref_faidx.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
@@ -42,7 +42,7 @@ rule ref_faidx:
     threads: parameters["threads"]["ref_faidx"]
 
     shell:
-        " samtools faidx -o {output.fai} {input.fasta} 1>{log.std} 2>&1;"
+        " samtools faidx -o {output.fai} {input.fasta} >{log.std} 2>&1;"
 
 rule ref_dict:
     input:
@@ -52,7 +52,7 @@ rule ref_dict:
     log:
         std=output_dict["log"]  / "ref_dict.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.log",
         cluster_log=output_dict["cluster_log"] / "ref_dict.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "ref_dict.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}..cluster.err"
+        cluster_err=output_dict["cluster_error"] / "ref_dict.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
         output_dict["benchmark"]  / "ref_dict.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}..benchmark.txt"
     conda:

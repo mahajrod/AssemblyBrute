@@ -71,7 +71,7 @@ rule juicer: #
     threads: parameters["threads"]["juicer"]
 
     shell:
-        " START_DIR=`pwd`; "
+        " START_DIR=`pwd`; q"
         " OUTPUT_DIR=`dirname {output.merged_no_dups}`; "
         " OUTPUT_DIR=`realpath ${{OUTPUT_DIR}}`; "
         " mkdir -p ${{OUTPUT_DIR}}/fastq > {log.mkdir} 2>&1 ; "
@@ -93,7 +93,7 @@ rule juicer: #
         " JUICER_LOG=`realpath {log.juicer}`; "
         " cd ${{OUTPUT_DIR}}; "
         " ${{SCRIPT}} -t {threads} -D ${{JUICER_DIR}} -g {wildcards.genome_prefix} -s {params.restriction_seq} "
-        " –z ${{FASTA}} –y ${{RESTRICTION_SITE_FILE}} –-assembly -d ${{OUTPUT_DIR}} > ${{JUICER_LOG}} 2>&1; "
+        " -z ${{FASTA}} –y ${{RESTRICTION_SITE_FILE}} –-assembly -d ${{OUTPUT_DIR}} > ${{JUICER_LOG}} 2>&1; "
         " cd ${{START_DIR}}; "
         " mv ${{OUTPUT_DIR}}/aligned/merged_nodups.txt {output.merged_no_dups}; "
         " mv ${{OUTPUT_DIR}}/aligned/merged_dedup.bam {output.merged_dedup_bam}; " 

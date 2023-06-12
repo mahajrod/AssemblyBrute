@@ -76,7 +76,7 @@ rule create_fastq_links_for_juicer:
     run:
         shell(" > {0}; ".format(log.ln))
         shell("mkdir -p {0} ; ".format(output.fastq_dir))
-        for input_forward, input_reverse, output_forward, output_reverse in zip(get_hic_reads_for_juicer(wildcards)):
+        for input_forward, input_reverse, output_forward, output_reverse in zip(*get_hic_reads_for_juicer(wildcards)):
             shell("ln -sf `realpath {0}` {1} >> {2} 2>&1; ".format(input_forward, output_forward, log.ln))
             shell("ln -sf `realpath {0}` {1} >> {2} 2>&1; ".format(input_reverse, output_reverse, log.ln))
 

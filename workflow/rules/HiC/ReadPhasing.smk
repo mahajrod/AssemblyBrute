@@ -73,8 +73,8 @@ rule extract_pe_reads_by_unique_hap_kmers:
                                                                                                 input_reverse_suffix_dict[wildcards.datatype],
                                                                                                 config["fastq_extension"])),
     output:
-        forward_hap_read=out_dir_path / "{stage}/{parameters}/fastq/{haplotype, [^.]+}/{assembly_kmer_length, [^.]+}/{datatype}/{pairprefix}_1.fastq.gz",
-        reverse_hap_read=out_dir_path / "{stage}/{parameters}/fastq/{haplotype, [^.]+}/{assembly_kmer_length, [^.]+}/{datatype}/{pairprefix}_2.fastq.gz",
+        forward_hap_read=out_dir_path / "{stage}/{parameters}/fastq/{haplotype, [^.]+}/{assembly_kmer_length, [^.]+}/{datatype}/{pairprefix}_1.fastq.gz", # TODO: change to forward_suffix
+        reverse_hap_read=out_dir_path / "{stage}/{parameters}/fastq/{haplotype, [^.]+}/{assembly_kmer_length, [^.]+}/{datatype}/{pairprefix}_2.fastq.gz", # TODO: change to reverse_suffix
     log:
         std=output_dict["log"] / "extract_reads_by_unique_hap_kmers.{datatype}.{stage}.{parameters}.{pairprefix}.{assembly_kmer_length}.{haplotype}.log",
         cluster_log=output_dict["cluster_log"] / "extract_reads_by_unique_hap_kmers.{datatype}.{stage}.{parameters}.{pairprefix}.{assembly_kmer_length}.{haplotype}.cluster.log",

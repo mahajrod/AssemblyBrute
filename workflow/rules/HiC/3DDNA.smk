@@ -1,20 +1,42 @@
-
+localrules: create_fastq_links_for_juicer
 #stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["option_set"]
-def get_forward_reads(wildcards):
 
-    forward_reads = expand(output_dict["data"] / "fastq/hic/raw/{0}{1}".format("{fileprefix}", config["fastq_extension"]) if stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["option_set"]["phasing_kmer_length"] == "NA" else \
-                                        out_dir_path / "{0}/{1}/fastq/{2}/{3}/hic/{4}{5}".format(config["phasing_stage"], #wildcards.assembly_stage,
-                                                                                                 detect_phasing_parameters(wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters,
-                                                                                                                           config["phasing_stage"], stage_separator=".."), #wildcards.parameters,
-                                                                                                 wildcards.haplotype,
-                                                                                                 stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["option_set"]["phasing_kmer_length"],
-                                                                                                 "{fileprefix}",
-                                                                                                 config["fastq_extension"]
-                                                                                                 ),
-                                        fileprefix=input_file_prefix_dict["hic"][::2])
+#input_pairprefix_dict["hic"]
+#input_forward_suffix_dict["hic"]
+#input_reverse_suffix_dict["hic"]
+def get_hic_reads_for_juicer(wildcards):
+    output_directory = out_dir_path / "hic_scaffolding/{0}..threeddna_{1}/{2}/scaffolding/fastq/".format(wildcards.prev_stage_parameters,
+                                                                                                         wildcards.hic_scaffolding_parameters,
+                                                                                                         wildcards.haplotype)
+    output_forward_suffix = "_R1_001"
+    output_reverse_suffix = "_R2_001"
+    if stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["option_set"]["phasing_kmer_length"] == "NA":
+        forward_suffix = input_forward_suffix_dict["hic"]
+        reverse_suffix = input_reverse_suffix_dict["hic"]
+        directory = output_dict["data"] / "fastq/hic/raw/"
+    else:
+        forward_suffix = "_1"
+        reverse_suffix = "_2"
+        directory = out_dir_path / "{0}/{1}/fastq/{2}/{3}/hic/".format(config["phasing_stage"],
+                                                                      detect_phasing_parameters(wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters,
+                                                                                                config["phasing_stage"], stage_separator=".."),
+                                                                      wildcards.haplotype,
+                                                                      stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["option_set"]["phasing_kmer_length"],
+                                                                      )
+    input_forward_filelist = []
+    input_reverse_filelist = []
+    output_forward_filelist = []
+    output_reverse_filelist = []
 
-    return forward_reads
+    for pairprefix in input_pairprefix_dict["hic"]:
+        input_forward_filelist.append("{0}/{1}/{2}{3}".format(directory, pairprefix, forward_suffix,config["fastq_extension"]))
+        input_reverse_filelist.append("{0}/{1}/{2}{3}".format(directory, pairprefix, reverse_suffix,config["fastq_extension"]))
+        output_forward_filelist.append("{0}/{1}/{2}{3}".format(output_directory, pairprefix, output_forward_suffix,config["fastq_extension"]))
+        output_reverse_filelist.append("{0}/{1}/{2}{3}".format(output_directory, pairprefix, output_reverse_suffix,config["fastq_extension"]))
 
+    return input_forward_filelist, input_reverse_filelist, output_forward_filelist, output_reverse_filelist
+
+"""
 def get_reverse_reads(wildcards):
     reverse_reads = expand(output_dict["data"] / "fastq/hic/raw/{0}{1}".format("{fileprefix}", config["fastq_extension"]) if stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["option_set"]["phasing_kmer_length"] == "NA" else \
                                         out_dir_path / "{0}/{1}/fastq/{2}/{3}/hic/{4}{5}".format(config["phasing_stage"], #wildcards.assembly_stage,
@@ -28,6 +50,34 @@ def get_reverse_reads(wildcards):
                                         fileprefix=input_file_prefix_dict["hic"][1::2])
 
     return reverse_reads
+"""
+rule create_fastq_links_for_juicer:
+    input:
+        forward_fastqs=lambda wildcards: get_hic_reads(wildcards)[0],
+        reverse_fastqs=lambda wildcards: get_hic_reads(wildcards)[1],
+
+    output:
+        fastq_dir=directory(out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/fastq")
+    log:
+        ln=output_dict["log"]  / "create_fastq_links_for_juicer.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{haplotype}.ln.log",
+        cluster_log=output_dict["cluster_log"] / "create_fastq_links_for_juicer.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_fastq_links_for_juicer.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{haplotype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "create_fastq_links_for_juicer.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{haplotype}.benchmark.txt"
+    #conda:
+    #    config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["create_fastq_links_for_juicer"] ,
+        time=parameters["time"]["create_fastq_links_for_juicer"],
+        mem=parameters["memory_mb"]["create_fastq_links_for_juicer"]
+    threads: parameters["threads"]["create_fastq_links_for_juicer"]
+
+    run:
+        shell(" > {0}; ".format(log.ln))
+        for input_forward, input_reverse, output_forward, output_reverse in zip(get_hic_reads_for_juicer(wildcards)):
+            shell("ln -sf `realpath {0}` {1} >> {2} 2>&1; ".format(input_forward, output_forward, log.ln))
+            shell("ln -sf `realpath {0}` {1} >> {2} 2>&1; ".format(input_reverse, output_reverse, log.ln))
+
 
 rule juicer: #
     input:
@@ -44,8 +94,9 @@ rule juicer: #
                                                                                                      wildcards.genome_prefix,
                                                                                                      wildcards.haplotype,
                                                                                                      config["hic_enzyme_set"]) ) if config["hic_enzyme_set"] not in config["no_motif_enzyme_sets"] else [],
-        forward_fastqs=get_forward_reads,
-        reverse_fastqs=get_reverse_reads
+        fastq_dir=rules.create_fastq_links_for_juicer.output.fastq_dir
+        #forward_fastqs=lambda wildcards: get_hic_reads(wildcards)[0],
+        #reverse_fastqs=lambda wildcards: get_hic_reads(wildcards)[1],
     params:
         restriction_seq=config["hic_enzyme_set"]  if config["hic_enzyme_set"] not in config["no_motif_enzyme_sets"] else "none",
         fastq_extensions=config["fastq_extension"]
@@ -76,16 +127,6 @@ rule juicer: #
         " OUTPUT_DIR=`realpath -s ${{OUTPUT_DIR}}`; "
         " mkdir -p ${{OUTPUT_DIR}}/fastq > {log.mkdir} 2>&1 ; "
         " > {log.ln}; "
-        " for FILE in {input.forward_fastqs}; "
-        " do"
-        "       BASE_FILENAME=`basename ${{FILE}}`; "    
-        "       ln -f ${{FILE}} ${{OUTPUT_DIR}}/fastq/${{BASE_FILENAME%{params.fastq_extensions}}}_R1_001{params.fastq_extensions} >> {log.ln} 2>&1; "
-        " done;"
-        " for FILE in {input.reverse_fastqs}; "
-        " do"
-        "       BASE_FILENAME=`basename ${{FILE}}`; "    
-        "       ln -f ${{FILE}} ${{OUTPUT_DIR}}/fastq/${{BASE_FILENAME%{params.fastq_extensions}}}_R2_001{params.fastq_extensions} >> {log.ln} 2>&1; "
-        " done;"
         " SCRIPT=`realpath -s ./workflow/external_tools/juicer/scripts/juicer.sh`;"
         " JUICER_DIR=`realpath -s ./workflow/external_tools/juicer/`; "
         " FASTA=`realpath -s {input.fasta}`; "
@@ -98,9 +139,16 @@ rule juicer: #
         " mv ${{OUTPUT_DIR}}/aligned/inter_30.txt {output.merged_inter_30}; "
         " mv ${{OUTPUT_DIR}}/aligned/inter.txt {output.merged_inter}; " 
         " rm -r ${{OUTPUT_DIR}}/splits ${{OUTPUT_DIR}}/aligned; "
-
-        #" cd ${{OUTPUT_DIR}}; "
-        #" cd ${{START_DIR}}; "
+        #" for FILE in {input.forward_fastqs}; "
+        #" do "
+        #"       BASE_FILENAME=`basename ${{FILE}}`; "
+        #"       ln -f ${{FILE}} ${{OUTPUT_DIR}}/fastq/${{BASE_FILENAME%{params.fastq_extensions}}}_R1_001{params.fastq_extensions} >> {log.ln} 2>&1; "
+        #" done; "
+        #" for FILE in {input.reverse_fastqs}; "
+        #" do "
+        #"       BASE_FILENAME=`basename ${{FILE}}`; "
+        #"       ln -f ${{FILE}} ${{OUTPUT_DIR}}/fastq/${{BASE_FILENAME%{params.fastq_extensions}}}_R2_001{params.fastq_extensions} >> {log.ln} 2>&1; "
+        #" done; "
 
 rule threeddna: #
     input:

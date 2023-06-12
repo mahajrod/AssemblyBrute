@@ -152,6 +152,7 @@
             "generate_site_positions": 2
             "juicer_tools_qc": 10
             "threeddna": 30
+            "create_fastq_links_for_juicer": 1
             #"fcs_gx": 50 # set via allowed_databases variable
 
         "memory_mb":
@@ -232,6 +233,7 @@
             "generate_site_positions": 10000
             "juicer_tools_qc": 10000
             "threeddna": 50000
+            "create_fastq_links_for_juicer": 100
             #"fcs_gx": 512000 # set via allowed_databases variable
         "time": #TODO: adjust
             "install_from_pip": "01:00:00"
@@ -313,6 +315,7 @@
             "generate_site_positions": "01:00:00"
             "juicer_tools_qc": "10:00:00"
             "threeddna": "48:00:00"
+            "create_fastq_links_for_juicer": "00:05:00"
             #"fcs_gx": "03:00:00" # set via allowed_databases variable
         "tool_options":
             "cutadapt":

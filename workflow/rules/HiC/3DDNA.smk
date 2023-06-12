@@ -130,19 +130,19 @@ rule threeddna: #
         restriction_seq=config["hic_enzyme_set"]  if config["hic_enzyme_set"] not in config["no_motif_enzyme_sets"] else "none",
         fastq_extensions=config["fastq_extension"]
     output:
-        draft_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.input.{haplotype}.fasta",
-        rawchrom_hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.input.{haplotype}.rawchrom.hic",
-        rawchrom_assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.input.{haplotype}.rawchrom.assembly",
-        hic_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.input.{haplotype}_HiC.fasta",
-        alias_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype, [^.]+}.fasta",
+        draft_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.input.{haplotype}.fasta",
+        rawchrom_hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.input.{haplotype}.rawchrom.hic",
+        rawchrom_assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.input.{haplotype}.rawchrom.assembly",
+        hic_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.input.{haplotype}_HiC.fasta",
+        alias_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype, [^.]+}.fasta",
 
     log:
-        threeddna=output_dict["log"]  / "threeddna.{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.threeddna.log",
-        ln=output_dict["log"]  / "threeddna.{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.ln.log",
-        cluster_log=output_dict["cluster_log"] / "threeddna.{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "threeddna.{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+        threeddna=output_dict["log"]  / "threeddna.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.threeddna.log",
+        ln=output_dict["log"]  / "threeddna.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.ln.log",
+        cluster_log=output_dict["cluster_log"] / "threeddna.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "threeddna.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "threeddna.{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+        output_dict["benchmark"]  / "threeddna.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

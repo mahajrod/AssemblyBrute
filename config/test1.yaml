@@ -70,7 +70,7 @@
         - "phased_reads"
         - "unphased_reads"
     "threeddna":
-        - "phased_reads"
+        #- "phased_reads"
         - "unphased_reads"
     "curation":
         - "default"

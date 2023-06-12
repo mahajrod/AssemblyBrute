@@ -124,7 +124,6 @@ rule juicer: #
     threads: parameters["threads"]["juicer"]
 
     shell:
-        " START_DIR=`pwd`; "
         " OUTPUT_DIR=`dirname {output.merged_no_dups}`; "
         " OUTPUT_DIR=`realpath -s ${{OUTPUT_DIR}}`; "
         " > {log.ln}; "
@@ -132,9 +131,8 @@ rule juicer: #
         " JUICER_DIR=`realpath -s ./workflow/external_tools/juicer/`; "
         " FASTA=`realpath -s {input.fasta}`; "
         " RESTRICTION_SITE_FILE=`realpath -s {input.restriction_site_file}`; "
-        " JUICER_LOG=`realpath -s {log.juicer}`; "
-        " ${{SCRIPT}} -t {threads} -D ${{JUICER_DIR}} -g {wildcards.genome_prefix} -s {params.restriction_seq} "
-        " -z ${{FASTA}} -y ${{RESTRICTION_SITE_FILE}} --assembly -d ${{OUTPUT_DIR}} > ${{JUICER_LOG}} 2>&1; "
+        " ${{SCRIPT}} -t {threads} -T {threads} -D ${{JUICER_DIR}} -g {wildcards.genome_prefix} -s {params.restriction_seq} "
+        " -z ${{FASTA}} -y ${{RESTRICTION_SITE_FILE}} --assembly -d ${{OUTPUT_DIR}} > {log.juicer} 2>&1; "
         " mv ${{OUTPUT_DIR}}/aligned/merged_nodups.txt {output.merged_no_dups}; "
         " mv ${{OUTPUT_DIR}}/aligned/merged_dedup.bam {output.merged_dedup_bam}; " 
         " mv ${{OUTPUT_DIR}}/aligned/inter_30.txt {output.merged_inter_30}; "
@@ -187,10 +185,10 @@ rule threeddna: #
 
     shell:
         " OUTPUT_DIR=`dirname {output.draft_fasta}`; "
-        " SCRIPT=`realpath workflow/external_tools/3d-dna/run-3ddna-pipeline.sh`; "
-        " INPUT_FASTA=`realpath {input.fasta}`; "
-        " THREEDDNA_LOG=`realpath {log.threeddna}`; "
-        " LN_LOG=`realpath {log.ln}`; "
+        " SCRIPT=`realpath -s workflow/external_tools/3d-dna/run-3ddna-pipeline.sh`; "
+        " INPUT_FASTA=`realpath -s {input.fasta}`; "
+        " THREEDDNA_LOG=`realpath -s  {log.threeddna}`; "
+        " LN_LOG=`realpath -s {log.ln}`; "
         " > ${{LN_LOG}}; "
         " cd ${{OUTPUT_DIR}}; " 
         " ln ${{INPUT_FASTA}} {output.draft_fasta} >> ${{LN_LOG}} 2>&1; "

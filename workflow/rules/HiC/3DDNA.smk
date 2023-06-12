@@ -1,4 +1,5 @@
 localrules: create_fastq_links_for_juicer
+ruleorder: create_fastq_links_for_juicer > create_fastq_links
 #stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["option_set"]
 
 #input_pairprefix_dict["hic"]

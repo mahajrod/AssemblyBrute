@@ -152,7 +152,7 @@ rule threeddna: #
     threads: parameters["threads"]["threeddna"]
 
     shell:
-        " OUTPUT_DIR=`dirname {output}`; "
+        " OUTPUT_DIR=`dirname {output.draft_fasta}`; "
         " SCRIPT=`realpath workflow/external_tools/3d-dna/run-3ddna-pipeline.sh`; "
         " INPUT_FASTA=`realpath {input.fasta}`; "
         " THREEDDNA_LOG=`realpath {log.threeddna}`; "

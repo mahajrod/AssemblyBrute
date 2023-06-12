@@ -646,11 +646,11 @@ if "hic_scaffolding" in config["stage_list"]:
 
     for parameters_label in parameters_list:
         if stage_dict["hic_scaffolding"]["parameters"][parameters_label]["hic_scaffolder"] == "yahs":
-            results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/scaffolding/{genome_prefix}.hic",
+            results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/scaffolding/{genome_prefix}.hic",
                                     genome_prefix=[config["genome_prefix"], ],
                                     assembly_stage=["hic_scaffolding", ],
                                     haplotype=stage_dict["hic_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
-                                    parameters=[parameters_label]) for parameters_label in stage_dict["hic_scaffolding"]["parameters"]]
+                                    parameters=[parameters_label])
                              ]
 
     if not config["skip_busco"]:

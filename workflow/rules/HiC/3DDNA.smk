@@ -1,37 +1,3 @@
-"""
-rule generate_site_positions: #
-    input:
-        fasta=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}.fasta".format(stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..3ddna_" + wildcards.hic_scaffolding_parameters]["prev_stage"],
-                                                                                      wildcards.prev_stage_parameters,
-                                                                                      wildcards.genome_prefix,
-                                                                                      wildcards.haplotype)
-    output:
-        #alias_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.input.{haplotype}.fasta",
-        restriction_site_file=out_dir_path / ("hic_scaffolding/{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.input.{haplotype}_%s.txt" % ["hic_enzyme_set"]),
-    params:
-        restriction_seq=config["hic_enzyme_set"]
-    log:
-        #ln=output_dict["log"]  / "generate_site_positions.hic_scaffolding.{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.ln.log",
-        #ln=output_dict["log"]  / "generate_site_positions.hic_scaffolding.{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.ln.log",
-        sites=output_dict["log"]  / "generate_site_positions.hic_scaffolding.{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.sites.log",
-        cluster_log=output_dict["cluster_log"] / "generate_site_positions.hic_scaffolding.{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "generate_site_positions.hic_scaffolding.{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.err"
-    benchmark:
-        output_dict["benchmark"]  / "generate_site_positions.hic_scaffolding.{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
-    conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
-    resources:
-        cpus=parameters["threads"]["generate_site_positions"] ,
-        time=parameters["time"]["generate_site_positions"],
-        mem=parameters["memory_mb"]["generate_site_positions"]
-    threads: parameters["threads"]["generate_site_positions"]
-
-    shell:
-        #" ln -sf ../../../../../../{input.fasta} {output.alias_fasta} > {log.ln} 2>&1; "
-        " OUTPUT_PREFIX={output.restriction_site_file}; "
-        " OUTPUT_PREFIX=${{OUTPUT_PREFIX%_{params.restriction_seq}.txt}; "
-        " ./workflow/external_tools/juicer/misc/generate_site_positions.py {params.restriction_seq} ${{OUTPUT_PREFIX}} {input.fasta} > {log.sites} 2>&1; "
-"""
 
 rule juicer: #
     input:
@@ -125,7 +91,8 @@ rule threeddna: #
                                                                                   wildcards.prev_stage_parameters,
                                                                                   wildcards.genome_prefix,
                                                                                   wildcards.haplotype),
-        merged_nodups=rules.juicer.output.merged_no_dups
+        #merged_nodups=rules.juicer.output.merged_no_dups
+        merged_nodups=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.merged_nodups.txt"
     params:
         restriction_seq=config["hic_enzyme_set"]  if config["hic_enzyme_set"] not in config["no_motif_enzyme_sets"] else "none",
         fastq_extensions=config["fastq_extension"]

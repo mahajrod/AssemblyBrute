@@ -87,10 +87,10 @@ rule juicer: #
 
 rule threeddna: #
     input:
-        fasta=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}.fasta".format(stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["prev_stage"],
-                                                                                  wildcards.prev_stage_parameters,
-                                                                                  wildcards.genome_prefix,
-                                                                                  wildcards.haplotype),
+        #fasta=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}.fasta".format(stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["prev_stage"],
+        #                                                                          wildcards.prev_stage_parameters,
+        #                                                                          wildcards.genome_prefix,
+        #                                                                          wildcards.haplotype),
         #merged_nodups=rules.juicer.output.merged_no_dups
         merged_nodups=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.merged_nodups.txt"
     params:

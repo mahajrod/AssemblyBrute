@@ -788,6 +788,7 @@ if "hic_scaffolding" in config["stage_list"]:
     include: "workflow/rules/Alignment/Pretext.smk"
     include: "workflow/rules/HiC/Salsa2.smk"
     include: "workflow/rules/HiC/YAHS.smk"
+    include: "workflow/rules/HiC/3DDNA.smk"
 
 if "curation" in config["stage_list"]:
     include: "workflow/rules/Curation/RapidCuration.smk"

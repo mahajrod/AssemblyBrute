@@ -91,7 +91,6 @@ rule threeddna: #
                                                                                   wildcards.prev_stage_parameters,
                                                                                   wildcards.genome_prefix,
                                                                                   wildcards.haplotype),
-        #merged_nodups=rules.juicer.output.merged_no_dups
         merged_nodups=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.merged_nodups.txt"
     params:
         restriction_seq=config["hic_enzyme_set"]  if config["hic_enzyme_set"] not in config["no_motif_enzyme_sets"] else "none",

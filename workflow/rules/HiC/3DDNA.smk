@@ -35,35 +35,35 @@ rule generate_site_positions: #
 
 rule juicer: #
     input:
-        fasta=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}.fasta".format(stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..3ddna_" + wildcards.hic_scaffolding_parameters]["prev_stage"],
+        fasta=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}.fasta".format(stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["prev_stage"],
                                                                                   wildcards.prev_stage_parameters,
                                                                                   wildcards.genome_prefix,
                                                                                   wildcards.haplotype),
-        index=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}.fasta.bwt".format(stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..3ddna_" + wildcards.hic_scaffolding_parameters]["prev_stage"],
+        index=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}.fasta.bwt".format(stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["prev_stage"],
                                                                                       wildcards.prev_stage_parameters,
                                                                                       wildcards.genome_prefix,
                                                                                       wildcards.haplotype),
-        restriction_site_file=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}_{4}.txt".format(stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..3ddna_" + wildcards.hic_scaffolding_parameters]["prev_stage"],
+        restriction_site_file=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}_{4}.txt".format(stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["prev_stage"],
                                                                                                     wildcards.prev_stage_parameters,
                                                                                                     wildcards.genome_prefix,
                                                                                                     wildcards.haplotype,
                                                                                                     config[["hic_enzyme_set"]]) if config["hic_enzyme_set"] not in config["no_motif_enzyme_sets"] else [],
-        forward_fastqs=lambda wildcards: expand(output_dict["data"] / "fastq/hic/raw/{0}{1}".format("{fileprefix}", config["fastq_extension"]) if parameters["tool_options"]["3ddna"][wildcards.prev_stage_parameters + "..3ddna_" + wildcards.hic_scaffolding_parameters]["phasing_kmer_length"] == "NA" else \
+        forward_fastqs=lambda wildcards: expand(output_dict["data"] / "fastq/hic/raw/{0}{1}".format("{fileprefix}", config["fastq_extension"]) if parameters["tool_options"]["threeddna"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["phasing_kmer_length"] == "NA" else \
                                         out_dir_path / "{0}/{1}/fastq/{2}/{3}/hic/{4}{5}".format(config["phasing_stage"], #wildcards.assembly_stage,
-                                                                                                 detect_phasing_parameters(wildcards.prev_stage_parameters + "..3ddna_" + wildcards.hic_scaffolding_parameters,
+                                                                                                 detect_phasing_parameters(wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters,
                                                                                                                            config["phasing_stage"], stage_separator=".."), #wildcards.parameters,
                                                                                                  wildcards.haplotype,
-                                                                                                 parameters["tool_options"]["3ddna"][wildcards.prev_stage_parameters + "..3ddna_" + wildcards.hic_scaffolding_parameters]["phasing_kmer_length"],
+                                                                                                 parameters["tool_options"]["threeddna"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["phasing_kmer_length"],
                                                                                                  "{fileprefix}",
                                                                                                  config["fastq_extension"]
                                                                                                  ),
                                         fileprefix=input_file_prefix_dict["hic"][::2]),
-        reverse_fastqs=lambda wildcards: expand(output_dict["data"] / "fastq/hic/raw/{0}{1}".format("{fileprefix}", config["fastq_extension"]) if parameters["tool_options"]["3ddna"][wildcards.prev_stage_parameters + "..3ddna_" + wildcards.hic_scaffolding_parameters]["phasing_kmer_length"] == "NA" else \
+        reverse_fastqs=lambda wildcards: expand(output_dict["data"] / "fastq/hic/raw/{0}{1}".format("{fileprefix}", config["fastq_extension"]) if parameters["tool_options"]["threeddna"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["phasing_kmer_length"] == "NA" else \
                                         out_dir_path / "{0}/{1}/fastq/{2}/{3}/hic/{4}{5}".format(config["phasing_stage"], #wildcards.assembly_stage,
-                                                                                                 detect_phasing_parameters(wildcards.prev_stage_parameters + "..3ddna_" + wildcards.hic_scaffolding_parameters,
+                                                                                                 detect_phasing_parameters(wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters,
                                                                                                                            config["phasing_stage"], stage_separator=".."), #wildcards.parameters,
                                                                                                  wildcards.haplotype,
-                                                                                                 parameters["tool_options"]["3ddna"][wildcards.prev_stage_parameters + "..3ddna_" + wildcards.hic_scaffolding_parameters]["phasing_kmer_length"],
+                                                                                                 parameters["tool_options"]["threeddna"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["phasing_kmer_length"],
                                                                                                  "{fileprefix}",
                                                                                                  config["fastq_extension"]
                                                                                                  ),
@@ -121,7 +121,7 @@ rule juicer: #
 
 rule threeddna: #
     input:
-        fasta=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}.fasta".format(stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..3ddna_" + wildcards.hic_scaffolding_parameters]["prev_stage"],
+        fasta=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}.fasta".format(stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["prev_stage"],
                                                                                   wildcards.prev_stage_parameters,
                                                                                   wildcards.genome_prefix,
                                                                                   wildcards.haplotype),

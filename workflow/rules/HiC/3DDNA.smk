@@ -93,7 +93,7 @@ rule juicer: #
     threads: parameters["threads"]["juicer"]
 
     shell:
-        " OUTPUT_DIR=`dirname {output.merged_no_dups}; `"
+        " OUTPUT_DIR=`dirname {output.merged_no_dups}`;"
         " mkdir -p ${{OUTPUT_DIR}}/fastq > {log.mkdir} 2>&1 ; "
         " > {log.ln}; "
         " for FILE in {input.forward_fastqs}; "
@@ -152,7 +152,7 @@ rule threeddna: #
     threads: parameters["threads"]["threeddna"]
 
     shell:
-        " OUTPUT_DIR=`dirname {output}; ` "
+        " OUTPUT_DIR=`dirname {output}`; "
         " SCRIPT=`realpath workflow/external_tools/3d-dna/run-3ddna-pipeline.sh`; "
         " INPUT_FASTA=`realpath {input.fasta}`; "
         " THREEDDNA_LOG=`realpath {log.threeddna}`; "

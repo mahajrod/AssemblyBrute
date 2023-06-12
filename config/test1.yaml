@@ -69,7 +69,7 @@
     "yahs":
         - "phased_reads"
         - "unphased_reads"
-    "3ddna":
+    "threeddna":
         - "phased_reads"
         - "unphased_reads"
     "curation":

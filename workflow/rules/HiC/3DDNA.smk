@@ -53,8 +53,8 @@ def get_reverse_reads(wildcards):
 """
 rule create_fastq_links_for_juicer:
     input:
-        forward_fastqs=lambda wildcards: get_hic_reads(wildcards)[0],
-        reverse_fastqs=lambda wildcards: get_hic_reads(wildcards)[1],
+        forward_fastqs=lambda wildcards: get_hic_reads_for_juicer(wildcards)[0],
+        reverse_fastqs=lambda wildcards: get_hic_reads_for_juicer(wildcards)[1],
 
     output:
         fastq_dir=directory(out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/fastq")

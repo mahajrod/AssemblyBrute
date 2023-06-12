@@ -193,5 +193,5 @@ rule threeddna: #
         " ln -s ${{INPUT_FASTA}} {output.draft_fasta} >> ${{LN_LOG}} 2>&1; "
         " cd ${{OUTPUT_DIR}}; "
         " ${{SCRIPT}} `basename {output.draft_fasta}` `basename {input.merged_nodups}` > ${{THREEDDNA_LOG}} 2>&1; "
-        " ln -s {wildcards.genome_prefix}.input.{wildcards.haplotype}_HiC.fasta "
+        " ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}_HiC.fasta "
         " ../../`basename {output.alias_fasta}` >> ${{LN_LOG}} 2>&1"

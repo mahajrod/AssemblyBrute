@@ -26,6 +26,7 @@
 # 3D-DNA de novo genome assembly pipeline.
 #
 
+
 version=210623
 
 echo `readlink -f $0`" "$*

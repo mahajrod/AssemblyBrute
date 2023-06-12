@@ -164,7 +164,7 @@ rule generate_site_positions: #
         " OUTPUT_PREFIX=${{OUTPUT_PREFIX%_{params.restriction_seq}.txt}}; "
         " ./workflow/external_tools/juicer/misc/generate_site_positions.py {params.restriction_seq} ${{OUTPUT_PREFIX}} {input.fasta} > {log.sites} 2>&1; "
 
-
+"""
 rule juicer_tools_qc:
     input:
         bam=rules.rmdup.output.bam,
@@ -200,3 +200,4 @@ rule juicer_tools_qc:
         " > {output.inter}; "
         " workflow/external_tools/juicer/scripts/common/juicer_tools statistics --threads {threads} {params.restriction_site_file} "
         " {output.inter} {output.merged} none > {log.juicer_tools} 2>&1; "
+"""

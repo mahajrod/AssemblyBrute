@@ -74,6 +74,7 @@ rule create_fastq_links_for_juicer:
 
     run:
         shell(" > {0}; ".format(log.ln))
+        shell("mkdir -p {0} ; ".format(output.fastq_dir))
         for input_forward, input_reverse, output_forward, output_reverse in zip(get_hic_reads_for_juicer(wildcards)):
             shell("ln -sf `realpath {0}` {1} >> {2} 2>&1; ".format(input_forward, output_forward, log.ln))
             shell("ln -sf `realpath {0}` {1} >> {2} 2>&1; ".format(input_reverse, output_reverse, log.ln))
@@ -125,7 +126,6 @@ rule juicer: #
         " START_DIR=`pwd`; "
         " OUTPUT_DIR=`dirname {output.merged_no_dups}`; "
         " OUTPUT_DIR=`realpath -s ${{OUTPUT_DIR}}`; "
-        " mkdir -p ${{OUTPUT_DIR}}/fastq > {log.mkdir} 2>&1 ; "
         " > {log.ln}; "
         " SCRIPT=`realpath -s ./workflow/external_tools/juicer/scripts/juicer.sh`;"
         " JUICER_DIR=`realpath -s ./workflow/external_tools/juicer/`; "
@@ -139,6 +139,8 @@ rule juicer: #
         " mv ${{OUTPUT_DIR}}/aligned/inter_30.txt {output.merged_inter_30}; "
         " mv ${{OUTPUT_DIR}}/aligned/inter.txt {output.merged_inter}; " 
         " rm -r ${{OUTPUT_DIR}}/splits ${{OUTPUT_DIR}}/aligned; "
+        #
+        #" mkdir -p ${{OUTPUT_DIR}}/fastq > {log.mkdir} 2>&1 ; "
         #" for FILE in {input.forward_fastqs}; "
         #" do "
         #"       BASE_FILENAME=`basename ${{FILE}}`; "

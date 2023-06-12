@@ -72,18 +72,18 @@ rule juicer: #
         restriction_seq=config["hic_enzyme_set"]  if config["hic_enzyme_set"] not in config["no_motif_enzyme_sets"] else "none",
         fastq_extensions=config["fastq_extension"]
     output:
-        merged_no_dups=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.merged_nodups.txt",
-        merged_dedup_bam=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.merged_dedup.bam",
-        merged_inter_30=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.inter_30.txt",
-        merged_inter=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.inter.txt",
+        merged_no_dups=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.merged_nodups.txt",
+        merged_dedup_bam=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.merged_dedup.bam",
+        merged_inter_30=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.inter_30.txt",
+        merged_inter=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.inter.txt",
     log:
-        juicer=output_dict["log"]  / "juicer.{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.juicer.log",
-        mkdir=output_dict["log"]  / "juicer.{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.mkdir.log",
-        ln=output_dict["log"]  / "juicer.{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.ln.log",
-        cluster_log=output_dict["cluster_log"] / "juicer.{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "juicer.{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+        juicer=output_dict["log"]  / "juicer.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.juicer.log",
+        mkdir=output_dict["log"]  / "juicer.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.mkdir.log",
+        ln=output_dict["log"]  / "juicer.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.ln.log",
+        cluster_log=output_dict["cluster_log"] / "juicer.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "juicer.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "juicer.{prev_stage_parameters}..3ddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+        output_dict["benchmark"]  / "juicer.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

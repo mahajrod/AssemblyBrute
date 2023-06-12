@@ -92,7 +92,7 @@ rule juicer: #
         " RESTRICTION_SITE_FILE=`realpath {input.restriction_site_file}`; "
         " JUICER_LOG=`realpath {log.juicer}`; "
         " ${{SCRIPT}} -t {threads} -D ${{JUICER_DIR}} -g {wildcards.genome_prefix} -s {params.restriction_seq} "
-        " -z ${{FASTA}} –y ${{RESTRICTION_SITE_FILE}} –-assembly -d ${{OUTPUT_DIR}} > ${{JUICER_LOG}} 2>&1; "
+        " -z ${{FASTA}} -y ${{RESTRICTION_SITE_FILE}} --assembly -d ${{OUTPUT_DIR}} > ${{JUICER_LOG}} 2>&1; "
         " mv ${{OUTPUT_DIR}}/aligned/merged_nodups.txt {output.merged_no_dups}; "
         " mv ${{OUTPUT_DIR}}/aligned/merged_dedup.bam {output.merged_dedup_bam}; " 
         " mv ${{OUTPUT_DIR}}/aligned/inter_30.txt {output.merged_inter_30}; "

@@ -88,7 +88,7 @@ rule juicer: #
         " done;"
         " SCRIPT=`realpath -s ./workflow/external_tools/juicer/scripts/juicer.sh`;"
         " JUICER_DIR=`realpath -s ./workflow/external_tools/juicer/`; "
-        " FASTA=`realpath -s{input.fasta}`; "
+        " FASTA=`realpath -s {input.fasta}`; "
         " RESTRICTION_SITE_FILE=`realpath -s {input.restriction_site_file}`; "
         " JUICER_LOG=`realpath -s {log.juicer}`; "
         " ${{SCRIPT}} -t {threads} -D ${{JUICER_DIR}} -g {wildcards.genome_prefix} -s {params.restriction_seq} "

@@ -640,7 +640,7 @@
                     "mapping_quality":
                         - 1
                         - 30
-            "3ddna":
+            "threeddna":
                 "restriction_seq":
                     "Arima": "GATC,GANTC"
                     "Arima4": "GATC,GANTC,CTNAG,TTAA"

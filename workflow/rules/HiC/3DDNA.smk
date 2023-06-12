@@ -9,11 +9,11 @@ rule juicer: #
                                                                                       wildcards.prev_stage_parameters,
                                                                                       wildcards.genome_prefix,
                                                                                       wildcards.haplotype),
-        restriction_site_file=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}_{4}.txt".format(stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["prev_stage"],
+        restriction_site_file=lambda wildcards: (out_dir_path / "{0}/{1}/{2}.{0}.{3}_{4}.txt".format(stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["prev_stage"],
                                                                                                     wildcards.prev_stage_parameters,
                                                                                                     wildcards.genome_prefix,
                                                                                                     wildcards.haplotype,
-                                                                                                    config[["hic_enzyme_set"]]) if config["hic_enzyme_set"] not in config["no_motif_enzyme_sets"] else [],
+                                                                                                    config[["hic_enzyme_set"]]) ) if config["hic_enzyme_set"] not in config["no_motif_enzyme_sets"] else [],
         forward_fastqs=lambda wildcards: expand(output_dict["data"] / "fastq/hic/raw/{0}{1}".format("{fileprefix}", config["fastq_extension"]) if parameters["tool_options"]["threeddna"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["phasing_kmer_length"] == "NA" else \
                                         out_dir_path / "{0}/{1}/fastq/{2}/{3}/hic/{4}{5}".format(config["phasing_stage"], #wildcards.assembly_stage,
                                                                                                  detect_phasing_parameters(wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters,

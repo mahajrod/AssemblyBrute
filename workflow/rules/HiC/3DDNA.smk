@@ -30,10 +30,10 @@ def get_hic_reads_for_juicer(wildcards):
     output_reverse_filelist = []
 
     for pairprefix in input_pairprefix_dict["hic"]:
-        input_forward_filelist.append("{0}/{1}/{2}{3}".format(directory, pairprefix, forward_suffix,config["fastq_extension"]))
-        input_reverse_filelist.append("{0}/{1}/{2}{3}".format(directory, pairprefix, reverse_suffix,config["fastq_extension"]))
-        output_forward_filelist.append("{0}/{1}/{2}{3}".format(output_directory, pairprefix, output_forward_suffix,config["fastq_extension"]))
-        output_reverse_filelist.append("{0}/{1}/{2}{3}".format(output_directory, pairprefix, output_reverse_suffix,config["fastq_extension"]))
+        input_forward_filelist.append("{0}/{1}{2}{3}".format(directory, pairprefix, forward_suffix,config["fastq_extension"]))
+        input_reverse_filelist.append("{0}/{1}{2}{3}".format(directory, pairprefix, reverse_suffix,config["fastq_extension"]))
+        output_forward_filelist.append("{0}/{1}{2}{3}".format(output_directory, pairprefix, output_forward_suffix,config["fastq_extension"]))
+        output_reverse_filelist.append("{0}/{1}{2}{3}".format(output_directory, pairprefix, output_reverse_suffix,config["fastq_extension"]))
 
     return input_forward_filelist, input_reverse_filelist, output_forward_filelist, output_reverse_filelist
 

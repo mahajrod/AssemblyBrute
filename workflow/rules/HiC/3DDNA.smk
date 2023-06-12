@@ -79,10 +79,10 @@ rule juicer: #
         " JUICER_LOG=`realpath {log.juicer}`; "
         " ${{SCRIPT}} -t {threads} -D ${{JUICER_DIR}} -g {wildcards.genome_prefix} -s {params.restriction_seq} "
         " –z ${{FASTA}} –y ${{RESTRICTION_SITE_FILE}} –p assembly -d ${{OUTPUT_DIR}} > ${{JUICER_LOG}} 2>&1; "
-        " mv ${{OUTPUT_DIR}}/fastq/merged_nodups.txt {output.merged_no_dups}; "
-        " mv ${{OUTPUT_DIR}}/fastq/merged_dedup.bam {output.merged_dedup_bam}; " 
-        " mv ${{OUTPUT_DIR}}/fastq/inter_30.txt {output.merged_inter_30}; "
-        " mv ${{OUTPUT_DIR}}/fastq/inter.txt {output.merged_inter}; " 
+        " mv ${{OUTPUT_DIR}}/aligned/merged_nodups.txt {output.merged_no_dups}; "
+        " mv ${{OUTPUT_DIR}}/aligned/merged_dedup.bam {output.merged_dedup_bam}; " 
+        " mv ${{OUTPUT_DIR}}/aligned/inter_30.txt {output.merged_inter_30}; "
+        " mv ${{OUTPUT_DIR}}/aligned/inter.txt {output.merged_inter}; " 
         " rm -r ${{OUTPUT_DIR}}/splits ${{OUTPUT_DIR}}/aligned; "
 
 rule threeddna: #

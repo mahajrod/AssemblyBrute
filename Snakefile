@@ -728,6 +728,7 @@ if "curation" in config["stage_list"]:
                 stage_dict["curation"]["parameters"][parameters_label]["curationeer"] = curation_tool
                 stage_dict["curation"]["parameters"][parameters_label]["prev_stage"] = prev_stage
                 stage_dict["curation"]["parameters"][parameters_label]["prev_parameters"] = prev_parameters
+                print(curation_tool, option_set)
                 stage_dict["curation"]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][curation_tool][option_set] if curation_tool in parameters["tool_options"] else None
                 stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["curation"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
 

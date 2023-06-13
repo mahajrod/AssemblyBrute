@@ -167,6 +167,9 @@
 "skip_fcs": False
 "skip_fcs_adaptor": False
 "skip_kraken": False
+"skip_prescaf_pretext": False
+"skip_postscaf_pretext": False
+"skip_both_pretext": False
 #"adaptor_scan": True
 #"fcs_gx_scan": True
 # Allowed modes:

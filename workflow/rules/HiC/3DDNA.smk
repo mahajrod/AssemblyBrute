@@ -137,7 +137,7 @@ rule juicer: #
         " mv ${{OUTPUT_DIR}}/aligned/merged_dedup.bam {output.merged_dedup_bam}; " 
         " mv ${{OUTPUT_DIR}}/aligned/inter_30.txt {output.merged_inter_30}; "
         " mv ${{OUTPUT_DIR}}/aligned/inter.txt {output.merged_inter}; " 
-        " rm -r ${{OUTPUT_DIR}}/splits ${{OUTPUT_DIR}}/aligned; "
+        " rm -r ${{OUTPUT_DIR}}/splits ; " # ${{OUTPUT_DIR}}/aligned
         #
         #" mkdir -p ${{OUTPUT_DIR}}/fastq > {log.mkdir} 2>&1 ; "
         #" for FILE in {input.forward_fastqs}; "

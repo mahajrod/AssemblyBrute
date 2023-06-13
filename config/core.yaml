@@ -1304,27 +1304,6 @@
                 - "contig"
             "draft": []
 
-"stage_coretools":     #TODO: add bionano
-    "filtering":
-        "hifi": "cutadapt"
-        "illumina": "cutadapt"
-    "contig":
-        "hifi":
-            - "hifiasm" # Allowed: "hifiasm". TODO: "hicanu", "ipa", "flye", "nextdenovo"
-        #"clr":
-        #"nanopore":
-    "purge_dups":
-        "default":
-            - "purge_dups"
-    "hic_scaffolding":
-        "default":
-            #- "salsa2" # Allowed: "salsa2", "yahs", "3d-dna"
-            - "yahs"
-            - "threeddna"
-    "curation":
-        "default":
-            - "curation"
-
 "tool_specific_features":
     "hifiasm":
         "options_affecting_error_correction":

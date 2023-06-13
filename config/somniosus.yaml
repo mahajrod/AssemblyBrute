@@ -49,6 +49,27 @@
 "tool_containers":
     "rapid_telomere":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/rapid-curation/rapid_hic_software/runTelo.sif"
 
+"stage_coretools":     #TODO: add bionano
+    "filtering":
+        "hifi": "cutadapt"
+        "illumina": "cutadapt"
+    "contig":
+        "hifi":
+            - "hifiasm" # Allowed: "hifiasm". TODO: "hicanu", "ipa", "flye", "nextdenovo"
+        #"clr":
+        #"nanopore":
+    "purge_dups":
+        "default":
+            - "purge_dups"
+    "hic_scaffolding":
+        "default":
+            #- "salsa2" # Allowed: "salsa2", "yahs", "3d-dna"
+            #- "yahs"
+            - "threeddna"
+    "curation":
+        "default":
+            - "curation"
+
 "coretool_option_sets":
     "hifiasm":
          #- "l0primary"
@@ -69,8 +90,12 @@
     "yahs":
         - "phased_reads"
         - "unphased_reads"
+    "threeddna":
+        #- "phased_reads"
+        - "unphased_reads"
     "curation":
         - "default"
+
 "other_tool_option_sets":
     "cutadapt":                 "default"   # Allowed: default
     "porechop_abi":             "default"   # Allowed: default

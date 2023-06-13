@@ -69,7 +69,7 @@
     "curation":
         "default":
             - "curation"
-            -
+
 "coretool_option_sets":
     "hifiasm":
          #- "l0primary"

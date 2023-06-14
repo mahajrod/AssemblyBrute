@@ -92,7 +92,7 @@
         - "unphased_reads"
     "curation":
         - "default"
-        -
+
 "other_tool_option_sets":
     "cutadapt":                 "default"   # Allowed: default
     "porechop_abi":             "default"   # Allowed: default

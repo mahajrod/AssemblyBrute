@@ -72,7 +72,7 @@
 
 "coretool_option_sets":
     "hifiasm":
-         #- "l0primary"
+         - "l0primary"
          - "l1primary"
          #- "l2primary"
          #- "l3primary"
@@ -88,7 +88,7 @@
         - "phased_reads"
         - "unphased_reads"
     "threeddna":
-        #- "phased_reads"
+        - "phased_reads"
         - "unphased_reads"
     "curation":
         - "default"

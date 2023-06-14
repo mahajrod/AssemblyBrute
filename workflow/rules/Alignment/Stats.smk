@@ -1,16 +1,16 @@
 
 rule bam_stats:
     input:
-        bam="{bam_path}.bam"
+        bam="{bam_prefix}.bam"
     output:
-        stats="{bam_path}.bam.stats"
+        stats="{bam_prefix}.bam.stats"
         #fai_alias=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.fai"
     log:
-        std="{bam_path}.bam_stats.log",
-        cluster_log="{bam_path}.bam_stats.cluster.log",
-        cluster_err="{bam_path}.bam_stats.cluster.err"
+        std="{bam_prefix}.bam.stats.log",
+        cluster_log="{bam_prefix}.bam_stats.cluster.log",
+        cluster_err="{bam_prefix}.bam_stats.cluster.err"
     benchmark:
-        "{bam_path}.bam_stats.benchmark.txt"
+        "{bam_prefix}.bam_stats.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

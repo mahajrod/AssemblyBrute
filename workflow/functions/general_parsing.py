@@ -112,7 +112,7 @@ def get_parameters_for_all_stages_in_chain(current_stage_parameters, stage_separ
 
 
 def get_input_assemblies(input_folder_path, ploidy, fasta_extention):
-    print(input_folder_path)
+    print(input_folder_path, fasta_extention)
     fasta_filelist = list(input_folder_path.glob("*.{0}".format(fasta_extention)))
     print(fasta_filelist)
     if len(fasta_filelist) != ploidy:

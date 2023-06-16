@@ -417,33 +417,33 @@ if ("gcp" in config["stage_list"]) and (not config["skip_gcp"]):
 if "filter_draft" in config["stage_list"]:
     results_list += [ ] # TODO: implement
 
+
+assembler_list = config["stage_coretools"]["contig"][config["contig_datatype"]]
+stage_dict["contig"]["parameters"] = {}
+assembler_option_set_group_dict = {}
+
+for assembler in assembler_list:
+    option_set_group_dict, option_set_group_assignment_dict = None, None
+    if assembler == "hifiasm":
+        option_set_group_dict, option_set_group_assignment_dict = group_option_sets(parameters["tool_options"]["hifiasm"],
+                                                                                    config["tool_specific_features"]["hifiasm"]['options_affecting_error_correction'])
+        assembler_option_set_group_dict[assembler] = option_set_group_dict
+    for option_set in config["coretool_option_sets"][assembler]:
+        parameters_label="{0}_{1}".format(assembler, option_set)
+        stage_dict["contig"]["parameters"][parameters_label] = {}
+        stage_dict["contig"]["parameters"][parameters_label]["included"] = True
+        stage_dict["contig"]["parameters"][parameters_label]["assembler"] = assembler
+        stage_dict["contig"]["parameters"][parameters_label]["option_set"] = deepcopy(parameters["tool_options"][assembler][option_set])
+        if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] is None:
+           stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]
+        #print(stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"])
+        #print(config["ploidy"])
+        stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
+        stage_dict["contig"]["parameters"][parameters_label]["option_set_group"] = option_set_group_assignment_dict[option_set] if option_set_group_assignment_dict is not None else none
+
+        #for option_supergroup in ["options_affecting_error_correction"]:
+        #    stage_dict["contig"]["parameters"][parameters_label][option_supergroup] = option_cluster_reverse_dict[assembler][option_supergroup][option_set]
 if "contig" in config["stage_list"]:
-    assembler_list = config["stage_coretools"]["contig"][config["contig_datatype"]]
-    stage_dict["contig"]["parameters"] = {}
-    assembler_option_set_group_dict = {}
-
-    for assembler in assembler_list:
-        option_set_group_dict, option_set_group_assignment_dict = None, None
-        if assembler == "hifiasm":
-            option_set_group_dict, option_set_group_assignment_dict = group_option_sets(parameters["tool_options"]["hifiasm"],
-                                                                                        config["tool_specific_features"]["hifiasm"]['options_affecting_error_correction'])
-            assembler_option_set_group_dict[assembler] = option_set_group_dict
-        for option_set in config["coretool_option_sets"][assembler]:
-            parameters_label="{0}_{1}".format(assembler, option_set)
-            stage_dict["contig"]["parameters"][parameters_label] = {}
-            stage_dict["contig"]["parameters"][parameters_label]["included"] = True
-            stage_dict["contig"]["parameters"][parameters_label]["assembler"] = assembler
-            stage_dict["contig"]["parameters"][parameters_label]["option_set"] = deepcopy(parameters["tool_options"][assembler][option_set])
-            if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] is None:
-               stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]
-            #print(stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"])
-            #print(config["ploidy"])
-            stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
-            stage_dict["contig"]["parameters"][parameters_label]["option_set_group"] = option_set_group_assignment_dict[option_set] if option_set_group_assignment_dict is not None else none
-
-            #for option_supergroup in ["options_affecting_error_correction"]:
-            #    stage_dict["contig"]["parameters"][parameters_label][option_supergroup] = option_cluster_reverse_dict[assembler][option_supergroup][option_set]
-
     parameters_list = list(stage_dict["contig"]["parameters"].keys())
     #if "hifiasm" in assembler_list:
     #    results_list += [expand(output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.ec.bin",

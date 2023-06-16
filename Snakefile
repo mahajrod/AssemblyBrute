@@ -282,9 +282,7 @@ if "draft_qc" in config["stage_list"]:
 
     parameters_list = list(stage_dict["draft_qc"]["parameters"].keys())
 
-    results_list += [expand(output_dict["draft"] / "/raw/{filename}",
-                            filename=draft_file_dict.values()),
-                     expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
+    results_list += [expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=["draft_qc"],),
                      ]

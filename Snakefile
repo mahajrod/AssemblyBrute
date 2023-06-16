@@ -266,7 +266,7 @@ if "read_qc" in config["stage_list"]:
 if "draft_qc" in config["stage_list"]:
     stage_dict["draft_qc"]["parameters"] = {}
 
-    for qcer in ["qc"]:
+    for qcer in config["stage_coretools"]["draft_qc"]["default"]:
         option_set_group_dict, option_set_group_assignment_dict = None, None
         for option_set in config["coretool_option_sets"][qcer]:
             parameters_label="{0}_{1}".format(assembler, option_set)

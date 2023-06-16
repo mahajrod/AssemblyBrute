@@ -271,7 +271,7 @@ if "draft_qc" in config["stage_list"]:
             parameters_label="{0}_{1}".format(qcer, option_set)
             stage_dict["draft_qc"]["parameters"][parameters_label] = {}
             stage_dict["draft_qc"]["parameters"][parameters_label]["qcer"] = qcer
-            stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"] = None
+            stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"] = {}
             stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]
             stage_dict["draft_qc"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
             stage_dict["draft_qc"]["parameters"][parameters_label]["option_set_group"] = None

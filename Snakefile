@@ -308,17 +308,18 @@ if "draft_qc" in config["stage_list"]:
 
         for gap_closer in gap_closer_list:
             for option_set in config["coretool_option_sets"][gap_closer]:
-                parameters_label="{0}_{1}".format(gap_closer, option_set)
-                stage_dict["gap_closing"]["parameters"][parameters_label] = {}
-                stage_dict["gap_closing"]["parameters"][parameters_label]["included"] = True
-                stage_dict["gap_closing"]["parameters"][parameters_label]["gap_closer"] = gap_closer
-                stage_dict["gap_closing"]["parameters"][parameters_label]["prev_stage"] = prev_stage
-                stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"] = deepcopy(parameters["tool_options"][gap_closer][option_set])
-                stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]
-                #print(stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"])
-                #print(config["ploidy"])
-                stage_dict["gap_closing"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
-                stage_dict["gap_closing"]["parameters"][parameters_label]["option_set_group"] = None
+                for prev_parameters in stage_dict[prev_stage]["parameters"]:
+                    parameters_label = "{0}..{1}_{2}".format(prev_parameters, gap_closer, option_set)
+                    stage_dict["gap_closing"]["parameters"][parameters_label] = {}
+                    stage_dict["gap_closing"]["parameters"][parameters_label]["included"] = True
+                    stage_dict["gap_closing"]["parameters"][parameters_label]["gap_closer"] = gap_closer
+                    stage_dict["gap_closing"]["parameters"][parameters_label]["prev_stage"] = prev_stage
+                    stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"] = deepcopy(parameters["tool_options"][gap_closer][option_set])
+                    stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]
+                    #print(stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"])
+                    #print(config["ploidy"])
+                    stage_dict["gap_closing"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
+                    stage_dict["gap_closing"]["parameters"][parameters_label]["option_set_group"] = None
 
         parameters_list = list(stage_dict["gap_closing"]["parameters"].keys())
         results_list += [*[expand(out_dir_path / "gap_closing/{parameters}/{genome_prefix}.gap_closing.{haplotype}.fasta",

@@ -187,7 +187,7 @@ elif config["mode"] == "qc":
     mega_stage_list = ["preprocessing", "qc"]
 elif config["mode"] == "assembly":
     mega_stage_list = ["preprocessing", "qc", "assembly"]
-elif config["mode"] == "finalize":
+elif config["mode"] == "finalization":
     mega_stage_list = ["preprocessing", "qc", "gap_closing"]
 else:
     raise ValueError("ERROR!!! Unknown mode: %s" % config["mode"])

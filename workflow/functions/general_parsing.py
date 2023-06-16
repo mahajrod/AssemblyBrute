@@ -129,7 +129,7 @@ def get_input_assemblies(input_folder_path, ploidy, fasta_extention):
                 print(filename.name)
                 print(filename.name[:-len(suffix)])
                 print(suffix)
-                if filename.name[:-len(suffix)] == suffix:
+                if filename.name[-len(suffix):] == suffix:
 
                     fasta_dict[haplotype] = filename.name
                     break

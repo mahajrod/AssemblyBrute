@@ -23,7 +23,7 @@ rule create_fastq_links:
         parameters["threads"]["create_fastq_links"]
     shell:
          " ln -sf {input} {output} 2>{log.std}"
-
+"""
 rule create_links_for_draft:
     priority: 1000
     input:
@@ -47,11 +47,11 @@ rule create_links_for_draft:
         parameters["threads"]["create_links_for_draft"]
     shell:
          " ln -sf {input} {output} 2>{log.std}"
-
+"""
 
 rule create_links_for_input_assembly:
     input:
-        rules.create_links_for_draft.output
+        lambda wildcards: input_dir_path.resolve() / "draft/fasta/{0}".format(draft_file_dict[wildcards.haplotype])
     output:
         out_dir_path / "draft_qc/{parameters}/{genome_prefix}.draft_qc.{haplotype}.fasta"
         #paf=out_dir_path  / ("purge_dups/{assembler}/{haplotype}/%s.purge_dups.{assembler}.{haplotype}.minimap2.{fileprefix}.paf.gz" % config["genome_name"])

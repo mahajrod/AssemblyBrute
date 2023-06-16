@@ -300,7 +300,6 @@ if "draft_qc" in config["stage_list"]:
                          ]
 
     if "gap_closing" in config["stage_list"]:
-        print("AAAAAAAA")
         prev_stage = "draft_qc"
 
         gap_closer_list = config["stage_coretools"]["gap_closing"]["default"]
@@ -327,8 +326,6 @@ if "draft_qc" in config["stage_list"]:
                                 genome_prefix=[config["genome_prefix"], ],
                                 haplotype=stage_dict["gap_closing"]["parameters"][parameters_label]["haplotype_list"]
                                 ) for parameters_label in parameters_list]]
-        print(results_list)
-
 
 if "filter_reads" in config["stage_list"]:
     #print(genome_size_estimation_data_type_set)

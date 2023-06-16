@@ -327,6 +327,21 @@ if "draft_qc" in config["stage_list"]:
                                 haplotype=stage_dict["gap_closing"]["parameters"][parameters_label]["haplotype_list"]
                                 ) for parameters_label in parameters_list]]
 
+        if not config["skip_busco"]:
+            results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
+                                    busco_lineage=config["busco_lineage_list"],
+                                    genome_prefix=[config["genome_prefix"], ],
+                                    assembly_stage=["gap_closing"],
+                                    haplotype=stage_dict["gap_closing"]["parameters"][parameters_label]["haplotype_list"],
+                                    parameters=[parameters_label]) for parameters_label in parameters_list],
+                             *[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.merged.tsv",
+                                    busco_lineage=config["busco_lineage_list"],
+                                    genome_prefix=[config["genome_prefix"], ],
+                                    assembly_stage=["gap_closing"],
+                                    haplotype=stage_dict["gap_closing"]["parameters"][parameters_label]["haplotype_list"],
+                                    parameters=[parameters_label]) for parameters_label in parameters_list],
+                         ]
+
 if "filter_reads" in config["stage_list"]:
     #print(genome_size_estimation_data_type_set)
     results_list += [expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),

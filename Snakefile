@@ -325,7 +325,10 @@ if "draft_qc" in config["stage_list"]:
                                 parameters=[parameters_label],
                                 genome_prefix=[config["genome_prefix"], ],
                                 haplotype=stage_dict["gap_closing"]["parameters"][parameters_label]["haplotype_list"]
-                                ) for parameters_label in parameters_list]]
+                                ) for parameters_label in parameters_list],
+                         expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
+                           genome_prefix=[config["genome_prefix"], ],
+                           assembly_stage=["gap_closing"],),]
 
         if not config["skip_busco"]:
             results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",

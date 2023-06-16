@@ -110,3 +110,23 @@ def get_parameters_for_all_stages_in_chain(current_stage_parameters, stage_separ
 
     return chain_stage_dict
 
+
+def get_input_assemblies(input_folder_path, ploidy, fasta_extention):
+    fasta_filelist = list(input_folder_path.glob("*.{0}".format(fasta_extention)))
+    if len(fasta_filelist) != ploidy:
+        raise ValueError("ERROR!!! Number of input fasta files ({0}) differs from ploidy ({1})!".format(len(fasta_filelist),
+                                                                                                       ploidy))
+    if ploidy == 1:
+        return {"hap0": fasta_filelist[0]}
+    else:
+        fasta_dict = {}
+        for hap in range(1, ploidy+1):
+            haplotype = "hap{0}".format(hap)
+            suffix = "hap{0}.{1}".format(hap, fasta_extention)
+            for filename in fasta_filelist:
+                if filename[:-len(suffix)] == suffix:
+                    fasta_dict[haplotype] = filename
+                    break
+            else:
+                raise ValueError("ERROR!!! Fasta file for haplotype hap{0} was not found!".format(hap))
+        return fasta_dict

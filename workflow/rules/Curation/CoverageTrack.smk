@@ -62,33 +62,66 @@ rule calculate_coverage:
         " PREFIX=${{PREFIX%.per-base.bed.gz}}; "
         " mosdepth -t {threads} ${{PREFIX}} {input.bam} 2>{log.std}; "
 
-rule create_coverage_track:
+rule create_coverage_table:
     input:
-        per_base=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.per-base.bed.gz"
+        per_base=rules.calculate_coverage.output.per_base,
     output:
-        stat_file=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.stat"
-    params:
-        bin_size=lambda wildcards: stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["option_set"]["bin_size"],
-        step_size=lambda wildcards: stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["option_set"]["bin_size"]
+        stat_file=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.stat",
+        all_stat_file=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.all.stat"
+    #params:
+    #    bin_size=lambda wildcards: stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["option_set"]["bin_size"],
+    #    step_size=lambda wildcards: stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["option_set"]["bin_size"]
     log:
-        std=output_dict["log"]  / "create_coverage_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.log",
-        cp=output_dict["log"]  / "create_coverage_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.cp.log",
-        cluster_log=output_dict["cluster_log"] / "create_coverage_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_coverage_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.cluster.err"
+        std=output_dict["log"]  / "create_coverage_table.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.log",
+        #cp=output_dict["log"]  / "create_coverage_table.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.cp.log",
+        cluster_log=output_dict["cluster_log"] / "create_coverage_table.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_coverage_table.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "create_coverage_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.benchmark.txt"
+        output_dict["benchmark"]  / "create_coverage_table.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        cpus=parameters["threads"]["create_coverage_track"],
-        time=parameters["time"]["create_coverage_track"],
-        mem=parameters["memory_mb"]["create_coverage_track"]
-    threads: parameters["threads"]["create_coverage_track"]
+        cpus=parameters["threads"]["create_coverage_table"],
+        time=parameters["time"]["create_coverage_table"],
+        mem=parameters["memory_mb"]["create_coverage_table"]
+    threads: parameters["threads"]["create_coverage_table"]
 
     shell:
         " PREFIX={output.stat_file};"
-        " PREFIX=${{PREFIX%.stat}}; "
-        " get_windows_stats_mosdepth_per_base_file.py -i {input.per_base} -w {params.bin_size} -s {params.step_size} "
+        " PREFIX=${{PREFIX%.win{wildcards.window}.step{wildcards.step}.stat}}; "
+        " get_windows_stats_mosdepth_per_base_file.py -i {input.per_base} -w {wildcards.window} -s {wildcards.step} "
         " -o ${{PREFIX}} 2>{log.std}; "
-        " cp ${{PREFIX}}.win{params.bin_size}.step{params.step_size}.stat ${{PREFIX}}.stat > {log.cp} 2>&1;"
+        #" cp ${{PREFIX}}.win{params.bin_size}.step{params.step_size}.stat ${{PREFIX}}.stat > {log.cp} 2>&1;"
 
+rule draw_coverage_heatmap:
+    input:
+        stat_file=rules.create_coverage_table.output.stat_file,
+        whitelist=rules.select_long_scaffolds.output.whitelist,
+        orderlist=rules.select_long_scaffolds.output.orderlist,
+        len_file=rules.create_curation_input_links.output.len,
+        all_stat_file=rules.create_coverage_table.output.all_stat_file
+    output:
+        png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.png"
+    #params:
+    #    bin_size=lambda wildcards: stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["option_set"]["bin_size"],
+    #    step_size=lambda wildcards: stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["option_set"]["bin_size"]
+    log:
+        std=output_dict["log"]  / "draw_coverage_heatmap.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.log",
+        cluster_log=output_dict["cluster_log"] / "draw_coverage_heatmap.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "draw_coverage_heatmap.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "draw_coverage_heatmap.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["draw_coverage_heatmap"],
+        time=parameters["time"]["draw_coverage_heatmap"],
+        mem=parameters["memory_mb"]["draw_coverage_heatmap"]
+    threads: parameters["threads"]["draw_coverage_heatmap"]
+
+    shell:
+        " PREFIX={output.png}; "
+        " PREFIX=${{PREFIX%.png}}; "
+        " draw_coverage.py -i {input.stat_file} -a {input.whitelist}  -w {wildcards.window} -s {wildcards.step} "
+        " -z {input.orderlist}  -n {input.len_file} -m `tail -n 1 {input.all_stat_file} | cut -f 6` --stranded_end  "
+        " --hide_track_label  --coverage_column_name_list median --rounded -o ${{PREFIX}} > {log.std} 2>&1; "

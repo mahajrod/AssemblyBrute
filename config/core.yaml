@@ -144,7 +144,7 @@
             "windowmasker": 1
             "create_repeat_bins": 1
             "mosdepth": 4
-            "create_coverage_track": 1
+            "create_coverage_table": 1
             "create_higlass_track": 10
             "yahs_juicer_pre": 5
             "juicer_tools_pre": 10 # TODO: adjust
@@ -153,6 +153,8 @@
             "juicer_tools_qc": 10
             "threeddna": 30
             "create_fastq_links_for_juicer": 1
+            "draw_coverage_heatmap": 1
+            "create_links_for_input_assembly": 1
             #"fcs_gx": 50 # set via allowed_databases variable
 
         "memory_mb":
@@ -225,7 +227,7 @@
             "windowmasker": 10000
             "create_repeat_bins": 3000
             "mosdepth": 10000 #The amount of memory is approximately equal to 32-bits * longest chrom length, so for the 249MB chromosome 1, it will require 1GB of memory.
-            "create_coverage_track": 4000
+            "create_coverage_table": 4000
             "create_higlass_track": 20000
             "yahs_juicer_pre": 10000
             "juicer_tools_pre": 30000 # TODO: adjust
@@ -234,6 +236,8 @@
             "juicer_tools_qc": 10000
             "threeddna": 50000
             "create_fastq_links_for_juicer": 100
+            "draw_coverage_heatmap": 5000
+            "create_links_for_input_assembly": 100
             #"fcs_gx": 512000 # set via allowed_databases variable
         "time": #TODO: adjust
             "install_from_pip": "01:00:00"
@@ -307,7 +311,7 @@
             "windowmasker": "10:00:00"
             "create_repeat_bins": "02:00:00"
             "mosdepth": "08:00:00"
-            "create_coverage_track": "04:00:00"
+            "create_coverage_table": "04:00:00"
             "create_higlass_track": "08:00:00"
             "yahs_juicer_pre": "04:00:00"
             "juicer_tools_pre": "04:00:00" # TODO: adjust
@@ -316,6 +320,8 @@
             "juicer_tools_qc": "10:00:00"
             "threeddna": "48:00:00"
             "create_fastq_links_for_juicer": "00:05:00"
+            "draw_coverage_heatmap": "02:00:00"
+            "create_links_for_input_assembly": "00:05:00"
             #"fcs_gx": "03:00:00" # set via allowed_databases variable
         "tool_options":
             "cutadapt":
@@ -557,6 +563,25 @@
                         "alignment_scheme": "asm5"     # -x
             "curation":
                 "default":
+                    "coverage":
+                        "w1000k.s1000k":
+                            "window": 1000000
+                            "step":   1000000
+                        "w1000k.s100k":
+                            "window": 1000000
+                            "step":   100000
+                        "w100k.s100k":
+                            "window": 100000
+                            "step":   100000
+                        "w100k.s10k":
+                            "window": 100000
+                            "step":   10000
+                        "w10k.s10k":
+                            "window": 10000
+                            "step":   10000
+                        "w10k.s1k":
+                            "window": 10000
+                            "step":   1000
                     "bin_size": 10000
                     "bin_step": 10000
             "two_read_bam_combiner":
@@ -1303,6 +1328,11 @@
             "fastq":
                 - "contig"
             "draft": []
+    "finalization":
+        "gap_closing":
+            "fastq": []
+            "draft":
+                - "gap_closing"
 
 "tool_specific_features":
     "hifiasm":

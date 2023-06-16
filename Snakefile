@@ -187,6 +187,8 @@ elif config["mode"] == "qc":
     mega_stage_list = ["preprocessing", "qc"]
 elif config["mode"] == "assembly":
     mega_stage_list = ["preprocessing", "qc", "assembly"]
+elif config["mode"] == "finalize":
+    mega_stage_list = ["preprocessing", "qc", "gap_closing"]
 else:
     raise ValueError("ERROR!!! Unknown mode: %s" % config["mode"])
 
@@ -262,7 +264,24 @@ if "read_qc" in config["stage_list"]:
 
 
 if "draft_qc" in config["stage_list"]:
-    results_list += [ ] # TODO: implement
+    results_list += [expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
+                           genome_prefix=[config["genome_prefix"], ],
+                           assembly_stage=["draft_qc"],),
+                     ]
+    if not config["skip_busco"]:
+        results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
+                                busco_lineage=config["busco_lineage_list"],
+                                genome_prefix=[config["genome_prefix"], ],
+                                assembly_stage=["draft_qc"],
+                                haplotype=haplotype_list,
+                                parameters=["default"]),
+                         expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.merged.tsv",
+                                busco_lineage=config["busco_lineage_list"],
+                                genome_prefix=[config["genome_prefix"], ],
+                                assembly_stage=["draft_qc"],
+                                haplotype=haplotype_list,
+                                parameters=["default"]),
+                         ]
 
 
 if "filter_reads" in config["stage_list"]:
@@ -683,7 +702,7 @@ if "hic_scaffolding" in config["stage_list"]:
     #                        ]
 
 
-    out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.merged_nodups.txt",
+    #out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.merged_nodups.txt",
 
 
     if not config["skip_busco"]:
@@ -745,12 +764,15 @@ if "curation" in config["stage_list"]:
                             assembly_stage=["curation", ],
                             haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                             parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
-                     *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.stat",
+
+                     *[[expand(out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.png",
+                            window=stage_dict["curation"]["parameters"]["coverage"][window_step_set]["window"],
+                            step=stage_dict["curation"]["parameters"]["coverage"][window_step_set]["step"],
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],
                             datatype=coverage_track_data_type_set,
                             haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                            parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
+                            parameters=[parameters_label]) for window_step_set in stage_dict["curation"]["parameters"][parameters_label]["coverage"]] for parameters_label in stage_dict["curation"]["parameters"]],
                      *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.canonical.txt",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],

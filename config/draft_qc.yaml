@@ -1,0 +1,192 @@
+#---- Main config file ----
+"main_config_file": "config/core.yaml"      # Path to main config file relative to Snakefile
+#--------------------------
+
+"allowed_databases":
+    "kraken2":
+        "silva":
+            "path":         "" # add path to silva database
+            "memory_mb":    10000
+            "threads":      15
+            "time":         "06:00:00"
+            "in_memory":    True
+        "rdp":
+            "path":         "" # add path to rdp database
+            "memory_mb":    10000
+            "threads":      15
+            "time":         "06:00:00"
+            "in_memory":    True
+        "greengenes":
+            "path":         "" # add path to greengenes database
+            "memory_mb":    10000
+            "threads":      15
+            "time":         "06:00:00"
+            "in_memory":    True
+        "nt":
+            "path":         "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/db/kraken2/nt/20220915/" # add path to nt database
+            "memory_mb":    500000
+            "threads":      30
+            "time":         "03:00:00"
+            "in_memory":    True
+    "fcs":
+        "fcs_gx":
+            "path":         "/scratch/yggdrasil/db/fcs/gxdb/" # add path to fcs_gx database
+            "image_path":   "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/FCS-GX/fcs-gx.sif"
+            "memory_mb":    512000 # Entire database must be in memory, it requires at least 490 Gbp
+            "threads":      30
+            "time":         "06:00:00"
+            "in_memory":    True
+    "fcs_adaptor":
+        "adaptor":
+            "path":         null # database is embedded in singularity image
+            "image_path":   "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/fcsadaptor/fcs-adaptor.sif"
+            "memory_mb":    20000 #
+            "threads":      1
+            "time":         "01:00:00"
+            "in_memory":    True
+            "taxonomy":     "eukaryota"
+
+"tool_containers":
+    "rapid_telomere":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/rapid-curation/rapid_hic_software/runTelo.sif"
+
+"stage_coretools":     #TODO: add bionano
+    "filtering":
+        "hifi": "cutadapt"
+        "illumina": "cutadapt"
+    "contig":
+        "hifi":
+            - "hifiasm" # Allowed: "hifiasm". TODO: "hicanu", "ipa", "flye", "nextdenovo"
+        #"clr":
+        #"nanopore":
+    "purge_dups":
+        "default":
+            - "purge_dups"
+    "hic_scaffolding":
+        "default":
+            #- "salsa2" # Allowed: "salsa2", "yahs", "3d-dna"
+            - "yahs"
+            - "threeddna"
+    "curation":
+        "default":
+            - "curation"
+
+"coretool_option_sets":
+    "hifiasm":
+         #- "l0primary"
+         - "l1primary"
+         #- "l2primary"
+         #- "l3primary"
+         #- "l0primary_no_hic"
+         #- "l1primary_no_hic"
+         #- "l2primary_no_hic"
+         #- "l3primary_no_hic"
+         #- "repeat_enhanced_l1"
+         #- "repeat_enhanced_l2"
+    "purge_dups":
+        - "default"
+    "salsa2":
+        - "phased_reads"
+        - "unphased_reads"
+    "yahs":
+        - "phased_reads"
+        - "unphased_reads"
+    "3ddna":
+        - "phased_reads"
+        - "unphased_reads"
+    "curation":
+        - "default"
+"other_tool_option_sets":
+    "cutadapt":                 "default"   # Allowed: default
+    "porechop_abi":             "default"   # Allowed: default
+    "chopper":                  "default"   # Allowed: default
+    "fastqc":                   "default"   # Allowed: default
+    "mosdepth":                 "default"   # Allowed: default
+    "jellyfish":                "default"   # Allowed: default
+    "meryl":                    "default"   # Allowed: default
+    "smudgeplot":               "default"   # Allowed: default
+    "telo_finder":              "default"   # Allowed: default
+    "quast":                    "default"   # Allowed: default
+    "minimap2":                 "default"   # Allowed: default
+    #"curation":                 "default"   # Allowed: default
+    "two_read_bam_combiner":    "default"   # Allowed: default
+    "pretextmap":               "default"   # Allowed: default
+    "pretextsnapshot":          "default"   # Allowed: default
+    "gcp":                      "default"   # Allowed: default
+    "kat":                      "default"   # Allowed: default
+    "juicer_tools_qc":          "default"   # Allowed: default
+
+"tool_manually_adjusted_features":
+    "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions
+        "lower_threshold": null
+        "haploid_diploid_threshold": null
+        "upper_threshold": null
+
+"ploidy": 2
+"genome_prefix": "genome"
+"busco_lineage_list":
+    - "mammalia_odb10" #
+"species_name": "species species"
+"tax_id": null # necessary for contamination scan via FCS
+
+"database_set":
+    "kraken2":
+        - "nt"                      # configure corresonding entry in "allowed_databases"
+    "fcs_adaptor":
+        - "adaptor"
+    "fcs":
+        - "fcs_gx"
+#Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
+#                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
+
+
+"final_kmer_counter": "meryl" # pipeline allows usage of different kmer counter tools, but only one genomesize assessment could be used
+"final_kmer_length": 21 # pipeline allows usage of different kmer length, but only one genomesize assessment could be used
+
+"final_kmer_datatype": "hifi"
+"assembly_kmer_length":
+    - 31 # kmer length to be used for phasing hic reads using assembled and purge_dupsed contigs
+"phasing_stage": "purge_dups"
+
+"contig_datatype": "hifi"
+"hic_enzyme_set": "Arima"
+"custom_enzyme_set": null # None
+
+"starting_point": "draft" #
+"data_types": "hifi,hic"  # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
+
+"mode": "qc"                      # Allowed: "preprocessing", "qc", "assembly", "finalization"
+"preprocessing_mode": "default"   # Allowed: "default"
+"qc_mode": "default"              # Allowed: "default"
+"assembly_mode": "full"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
+
+"custom_preprocessing_stages": []
+"custom_qc_stages": []
+"custom_assembly_stages": []
+"skip_busco": False
+"skip_gcp": False
+"skip_fcs": False
+"skip_fcs_adaptor": False
+"skip_kraken": False
+"skip_prescaf_pretext": False
+"skip_postscaf_pretext": False
+"skip_both_pretext": False
+#"adaptor_scan": True
+#"fcs_gx_scan": True
+# Allowed modes:
+#       with starting_point "fastq":
+#           "check_input"              : check of the input data and generation of the final config
+#           "qc"                       : "check_input" + QC
+#           "filtering"                : "qc" + filtering of the input data
+#           "contig"                   : "filtering" + contig assembly
+#           "purge_dups"               : "contig" + purging of haplotype duplicates
+#           "hic_scaffolding"          : "purge_dups" + HiC-scaffolding
+#           "full"                     : same as "hic_scaffolding"
+#       with starting_point "draft":
+#           "purge_dups"               : purging of haplotype duplicates from draft assembly
+#           "hic_scaffolding"          : "purge_dups" + HiC-scaffolding
+
+
+# TODO:  add modes:  "create_map_bionano", "bionano_scaffolding"
+
+"parameter_set": "default" # Choice of genome-size based set of parameters
+"use_existing_envs": False # works only if --use-conda flag was set in snakemake command

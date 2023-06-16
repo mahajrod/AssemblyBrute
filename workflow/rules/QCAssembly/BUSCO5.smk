@@ -68,7 +68,7 @@ rule busco5_intersect_haplotypes: # Downloading of busco datasets is performed b
     priority: 500
     input:
         busco_tables=lambda wildcards: expand(rules.busco5.output.busco_table,
-                                              haplotype=stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
+                                              haplotype=stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"] if wildcards.assembly_stage != "draft_qc" else haplotype_list,
                                               allow_missing=True,)
         #out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype,[^.]+}.busco5.{busco_lineage}.full_table.tsv",
     params:

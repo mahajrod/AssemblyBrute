@@ -5,7 +5,7 @@ rule samba: #TODO: FIX CASE OF ERROR CORRECTED READS,NOW IT IS HARDCODED TO erro
         reads=lambda wildcards: list(map(lambda s: s.resolve(), expand(output_dict["data"] / ("fastq/%s/filtered/{fileprefix}%s" % (config["gap_closing_datatype"],
                                                                                                    config["fastq_extension"])),
                                         fileprefix=input_file_prefix_dict[config["gap_closing_datatype"]]))) if not stage_dict["gap_closing"]["parameters"][wildcards.prev_stage_parameters + "..samba_" + wildcards.gap_closing_parameters]["option_set"][config["gap_closing_datatype"]]["use_corrected_reads"] \
-                                                            else out_dir_path / ("data/fastq/%s/error_corrected_hifiasm_option_set_1/%s.contig.ec.fasta.gz" % (config["gap_closing_datatype"], wildcards.genome_prefix)),
+                                                            else (out_dir_path / ("data/fastq/%s/error_corrected_hifiasm_option_set_1/%s.contig.ec.fasta.gz" % (config["gap_closing_datatype"], wildcards.genome_prefix))).resolve(),
         fasta=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}.fasta".format(stage_dict["gap_closing"]["parameters"][wildcards.prev_stage_parameters + "..samba_" + wildcards.gap_closing_parameters]["prev_stage"],
                                                                                   wildcards.prev_stage_parameters, wildcards.genome_prefix, wildcards.haplotype)
 

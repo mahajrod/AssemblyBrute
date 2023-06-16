@@ -1259,6 +1259,7 @@
     - "nanopore"
 
 "fastq_extension": ".fastq.gz"
+"fasta_extension": ".fasta"
 "cmap_extension": ".cmap"
 
 "allowed_stage_list": # Dictionary containing description of stage variants

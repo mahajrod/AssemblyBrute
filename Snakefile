@@ -264,6 +264,10 @@ if "read_qc" in config["stage_list"]:
 
 
 if "draft_qc" in config["stage_list"]:
+    draft_file_dict = get_input_assemblies(input_dir_path / "draft/fasta", config["ploidy"], config["fasta_extension"])
+    print(draft_file_dict)
+
+
     stage_dict["draft_qc"]["parameters"] = {}
 
     for qcer in config["stage_coretools"]["draft_qc"]["default"]:
@@ -278,7 +282,9 @@ if "draft_qc" in config["stage_list"]:
 
     parameters_list = list(stage_dict["draft_qc"]["parameters"].keys())
 
-    results_list += [expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
+    results_list += [expand(output_dict["draft"] / "/raw/{fileprefix}.{haplotype}.fasta",
+                            haplotype=haplotype_list),
+                     expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=["draft_qc"],),
                      ]

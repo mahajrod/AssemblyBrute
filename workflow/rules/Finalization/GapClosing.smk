@@ -5,7 +5,7 @@ rule samba: #TODO: FIX CASE OF ERROR CORRECTED READS,NOW IT IS HARDCODED TO erro
         reads=lambda wildcards: expand(output_dict["data"] / ("fastq/%s/filtered/{fileprefix}%s" % (config["gap_closing_datatype"],
                                                                                                    config["fastq_extension"])),
                                         fileprefix=input_file_prefix_dict[config["gap_closing_datatype"]],
-                                        allow_missing=True) if stage_dict["gap_closing"]["parameters"][wildcards.prev_stage_parameters + "..samba_" + wildcards.gap_closing_parameters]["option_set"][config["gap_closing_datatype"]]["use_corrected_reads"] \
+                                        allow_missing=True) if not stage_dict["gap_closing"]["parameters"][wildcards.prev_stage_parameters + "..samba_" + wildcards.gap_closing_parameters]["option_set"][config["gap_closing_datatype"]]["use_corrected_reads"] \
                                                             else out_dir_path / ("data/fastq/%s/error_corrected_hifiasm_option_set_1/%s.contig.ec.fasta.gz" % (config["gap_closing_datatype"], wildcards.genome_prefix)),
         fasta=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}.fasta".format(stage_dict["gap_closing"]["parameters"][wildcards.prev_stage_parameters + "..samba_" + wildcards.gap_closing_parameters]["prev_stage"],
                                                                                   wildcards.prev_stage_parameters, wildcards.genome_prefix, wildcards.haplotype)
@@ -36,6 +36,6 @@ rule samba: #TODO: FIX CASE OF ERROR CORRECTED READS,NOW IT IS HARDCODED TO erro
          " INPUT_FASTA=`realpath -s {input.fasta}`; "
          " INPUT_FASTA_BASENAME=`basename {input.fasta}`; "
          " cd ${{OUTPUT_DIR}}; "
-         " close_scaffold_gaps.sh -t {threads} -q <(zcat {input.reads})  -d {params.datatype} -r ${{INPUT_FASTA}} "
-         " -m {params.matching_len} -v > {log.samba} 2>&1; "
+         " close_scaffold_gaps.sh -t {threads} -q <(zcat {input.reads}) {params.datatype} -r ${{INPUT_FASTA}} "
+         " {params.matching_len} -v > {log.samba} 2>&1; "
          " ln -sf {wildcards.haplotype}/${{INPUT_FASTA_BASENAME}}.split.joined.fa {output.fasta} > {log.ln} 2>&1; "

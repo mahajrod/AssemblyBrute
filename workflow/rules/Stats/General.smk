@@ -49,7 +49,7 @@ rule gather_stage_stats:
         stats=lambda wildcards: expand(out_dir_path / ("%s/{parameters}/assembly_qc/%s.%s.parameter_stats" % (wildcards.assembly_stage,
                                                                                                     wildcards.genome_prefix,
                                                                                                     wildcards.assembly_stage)),
-                                       parameters=stage_dict[wildcards.assembly_stage]["parameters"].keys() if wildcards.assembly_stage != "draft_qc" else "default",
+                                       parameters=stage_dict[wildcards.assembly_stage]["parameters"].keys(),
                                        allow_missing=True)
 
     output:

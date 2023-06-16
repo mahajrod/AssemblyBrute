@@ -16,22 +16,22 @@ If you wish to run it using conda via snakemake, then you will need:
 
 # Input datatypes and implemented stages of the pipeline
 
-| Datatypes | read QC | read filtration | contamination check | ec | contig | purge_dups | hic qc | hic scaffolding | curation | qc |
-|:---------:|:-------:|:---------------:|:-------------------:|:--:|:------:|:----------:|:------:|:---------------:|:--------:|:--:|
-| hifi + hic | v | v | v | v | v | v | v | v | v | v |
+| Datatypes | read QC | read filtration | contamination check | ec | contig | purge_dups | hic qc | hic scaffolding | curation | gap_closing | qc |
+|:---------:|:-------:|:---------------:|:-------------------:|:--:|:------:|:----------:|:------:|:---------------:|:--------:|:-----------:|:--:|
+| hifi + hic | v | v | v | v | v | v | v | v | v |  | v |
 | hifi + hic (no phasing) | v | v | v | v | v | v | v | v | v | v |
-| hifi | v | v | v | v | v | v | NA | NA |  | v |
-| clr | v | v | v |  |  |  | NA | NA |  |  |
-| nanopore | v | v | v |  |  |  | NA | NA |  |  |
-| illumina | v | v | v |  |  |  | NA | NA |  |  |
-| nanopore + illumina | v | v | v |  |  |  | NA | NA |  |  |
-| nanopore + illumina + hic | v | v | v |  |  |  |  |  |  |  |
-| clr + illumina | v | v | v |  |  |  | NA | NA |  |  |
-| clr + illumina + hic | v | v | v |  |  |  |  |  |  |  |
-| assembly | NA | NA |  | NA | NA | NA | NA | NA | NA | NA |
+| hifi | v | v | v | v | v | v | NA | NA |  |  | v |
+| clr | v | v | v |  |  |  | NA | NA |  |  | |
+| nanopore | v | v | v |  |  |  | NA | NA |  |  |  |
+| illumina | v | v | v |  |  |  | NA | NA |  |  |  |
+| nanopore + illumina | v | v | v |  |  |  | NA | NA |  |  |  |
+| nanopore + illumina + hic | v | v | v |  |  |  |  |  |  |  |  |
+| clr + illumina | v | v | v |  |  |  | NA | NA |  |  |  |
+| clr + illumina + hic | v | v | v |  |  |  |  |  |  |  |  |
+| assembly | NA | NA | v | NA | NA | NA | NA | NA | NA | v | v |
 | assembly + hic |  |  |  | |  |  |  |  |  |  |
 | assembly + nanopore + hic |  |  |  |  | NA |  |  |  |  |  |
-| assembly + hifi + hic |  |  |  |  | NA |  |  |  |  |  |
+| assembly + hifi + hic |  |  |  |  | NA |  |  |  |  | v | v |
 
 # Implemented assemblers
 |  Assembler  |       Datatypes       | Status |

@@ -312,7 +312,7 @@ if "draft_qc" in config["stage_list"]:
                 stage_dict["gap_closing"]["parameters"][parameters_label] = {}
                 stage_dict["gap_closing"]["parameters"][parameters_label]["included"] = True
                 stage_dict["gap_closing"]["parameters"][parameters_label]["gap_closer"] = gap_closer
-                stage_dict["purge_dups"]["parameters"][parameters_label]["prev_stage"] = prev_stage
+                stage_dict["gap_closing"]["parameters"][parameters_label]["prev_stage"] = prev_stage
                 stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"] = deepcopy(parameters["tool_options"][gap_closer][option_set])
                 stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]
                 #print(stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"])
@@ -322,6 +322,7 @@ if "draft_qc" in config["stage_list"]:
 
         results_list += [expand(out_dir_path / "gap_closing/{parameters}/{genome_prefix}.gap_closing.{haplotype}.fasta",
                                 parameters=parameters_list,
+                                genome_prefix=[config["genome_prefix"], ],
                                 haplotype=stage_dict["gap_closing"]["parameters"][parameters_label]["haplotype_list"]
                                 )]
 

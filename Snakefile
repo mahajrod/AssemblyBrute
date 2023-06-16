@@ -300,7 +300,7 @@ if "draft_qc" in config["stage_list"]:
                          ]
 
     if "gap_closing" in config["stage_list"]:
-
+        print("AAAAAAAA")
         prev_stage = "draft_qc"
 
         gap_closer_list = config["stage_coretools"]["gap_closing"]["default"]

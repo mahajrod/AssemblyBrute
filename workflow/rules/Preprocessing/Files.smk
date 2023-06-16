@@ -27,7 +27,7 @@ rule create_fastq_links:
 rule create_links_for_draft:
     priority: 1000
     input:
-        input_dir_path.resolve() / "draft/fasta/{fileprefix}.{haplotype}.fasta"
+        lambda wildcards: input_dir_path.resolve() / "draft/fasta/{0}".format(draft_file_dict[wildcards.haplotype])
     output:
         #directory(output_dict["data"] / "/fastq/{datatype}/raw"),
         output_dict["draft"] / "raw/{fileprefix, [^/]+}.{haplotype, [^/]+}.fasta"

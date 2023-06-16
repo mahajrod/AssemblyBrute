@@ -124,7 +124,7 @@ def get_input_assemblies(input_folder_path, ploidy, fasta_extention):
         fasta_dict = {}
         for hap in range(1, ploidy+1):
             haplotype = "hap{0}".format(hap)
-            suffix = "hap{0}.{1}".format(hap, fasta_extention)
+            suffix = "hap{0}{1}".format(hap, fasta_extention)
             for filename in fasta_filelist:
                 print(filename.name)
                 if filename.name[:-len(suffix)] == suffix:

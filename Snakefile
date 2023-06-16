@@ -321,7 +321,7 @@ if "draft_qc" in config["stage_list"]:
                     stage_dict["gap_closing"]["parameters"][parameters_label]["option_set_group"] = None
 
         parameters_list = list(stage_dict["gap_closing"]["parameters"].keys())
-        results_list += [*[expand(out_dir_path / "gap_closing/{parameters}/{genome_prefix}.gap_closing.{haplotype}.fasta",
+        results_list += [*[expand(out_dir_path / "gap_closing/{parameters}/{haplotype}/{genome_prefix}.gap_closing.{haplotype}.fasta",
                                 parameters=[parameters_label],
                                 genome_prefix=[config["genome_prefix"], ],
                                 haplotype=stage_dict["gap_closing"]["parameters"][parameters_label]["haplotype_list"]

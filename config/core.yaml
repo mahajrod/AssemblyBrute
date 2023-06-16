@@ -155,6 +155,7 @@
             "create_fastq_links_for_juicer": 1
             "draw_coverage_heatmap": 1
             "create_links_for_input_assembly": 1
+            "samba": 20
             #"fcs_gx": 50 # set via allowed_databases variable
 
         "memory_mb":
@@ -238,6 +239,7 @@
             "create_fastq_links_for_juicer": 100
             "draw_coverage_heatmap": 5000
             "create_links_for_input_assembly": 100
+            "samba": 50000
             #"fcs_gx": 512000 # set via allowed_databases variable
         "time": #TODO: adjust
             "install_from_pip": "01:00:00"
@@ -322,6 +324,7 @@
             "create_fastq_links_for_juicer": "00:05:00"
             "draw_coverage_heatmap": "02:00:00"
             "create_links_for_input_assembly": "00:05:00"
+            "samba": "10:00:00" # TODO: adjust
             #"fcs_gx": "03:00:00" # set via allowed_databases variable
         "tool_options":
             "cutadapt":
@@ -724,6 +727,46 @@
                      "min_contig_len": 1000
                      "use_phased_reads": False
                      "phasing_kmer_length": "NA"
+            "samba":
+                "default":
+                    "hifi":
+                        "use_corrected_reads": True
+                        "matching_len": 3500
+                        "datatype": "asm"
+                    "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 3500
+                        "datatype": "ont"
+                    "clr":
+                        "use_corrected_reads": True
+                        "matching_len": 3500
+                        "datatype": "pbclr"
+                "raw_reads":
+                    "hifi":
+                        "use_corrected_reads": False
+                        "matching_len": 3500
+                        "datatype": "asm"
+                    "nanopore":
+                        "use_corrected_reads": False
+                        "matching_len": 3500
+                        "datatype": "ont"
+                    "clr":
+                        "use_corrected_reads": False
+                        "matching_len": 3500
+                        "datatype": "pbclr"
+                "corrected_reads":
+                    "hifi":
+                        "use_corrected_reads": True
+                        "matching_len": 3500
+                        "datatype": "asm"
+                    "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 3500
+                        "datatype": "ont"
+                    "clr":
+                        "use_corrected_reads": True
+                        "matching_len": 3500
+                        "datatype": "pbclr"
     "micro": # < 15 Mbp, yeasts and bacteria
         "threads":
             "create_fastq_links": 1
@@ -816,6 +859,37 @@
                     "self":
                         "index_size": "4G"
                         "alignment_scheme": "asm5"     # -x
+            "samba":
+                "default":
+                    "hifi":
+                        "use_corrected_reads": True
+                        "matching_len": 1000
+                    "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 1000
+                    "clr":
+                        "use_corrected_reads": True
+                        "matching_len": 1000
+                "raw_reads":
+                    "hifi":
+                        "use_corrected_reads": False
+                        "matching_len": 1000
+                    "nanopore":
+                        "use_corrected_reads": False
+                        "matching_len": 1000
+                    "clr":
+                        "use_corrected_reads": False
+                        "matching_len": 1000
+                "corrected_reads":
+                    "hifi":
+                        "use_corrected_reads": True
+                        "matching_len": 1000
+                    "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 1000
+                    "clr":
+                        "use_corrected_reads": True
+                        "matching_len": 1000
     "mini": # < 150 Mbp, fungi, Arabidopsis thaliana and Caenorabditis elegans
         "threads":
             "bwa_map": 16
@@ -878,6 +952,37 @@
                     "self":
                         "index_size": "4G"
                         "alignment_scheme": "asm5"     # -x
+            "samba":
+                "default":
+                    "hifi":
+                        "use_corrected_reads": True
+                        "matching_len": 1500
+                    "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 1500
+                    "clr":
+                        "use_corrected_reads": True
+                        "matching_len": 1500
+                "raw_reads":
+                    "hifi":
+                        "use_corrected_reads": False
+                        "matching_len": 1500
+                    "nanopore":
+                        "use_corrected_reads": False
+                        "matching_len": 1500
+                    "clr":
+                        "use_corrected_reads": False
+                        "matching_len": 1500
+                "corrected_reads":
+                    "hifi":
+                        "use_corrected_reads": True
+                        "matching_len": 1500
+                    "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 1500
+                    "clr":
+                        "use_corrected_reads": True
+                        "matching_len": 1500
     "small": # < 500 Mbp, drosophilla, tetraodon
         "threads":
             "bwa_map": 32
@@ -941,6 +1046,37 @@
                     "self":
                         "index_size": "4G"
                         "alignment_scheme": "asm5"     # -x
+            "samba":
+                "default":
+                    "hifi":
+                        "use_corrected_reads": True
+                        "matching_len": 3500
+                    "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 2500
+                    "clr":
+                        "use_corrected_reads": True
+                        "matching_len": 2500
+                "raw_reads":
+                    "hifi":
+                        "use_corrected_reads": False
+                        "matching_len": 2500
+                    "nanopore":
+                        "use_corrected_reads": False
+                        "matching_len": 2500
+                    "clr":
+                        "use_corrected_reads": False
+                        "matching_len": 2500
+                "corrected_reads":
+                    "hifi":
+                        "use_corrected_reads": True
+                        "matching_len": 2500
+                    "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 2500
+                    "clr":
+                        "use_corrected_reads": True
+                        "matching_len": 2500
     "normal": # < 1500 Mbp, most of the birds
         "memory_mb":
             "jellyfish": 200000
@@ -1001,6 +1137,37 @@
                     "self":
                         "index_size": "4G"
                         "alignment_scheme": "asm5"     # -x
+            "samba":
+                "default":
+                    "hifi":
+                        "use_corrected_reads": True
+                        "matching_len": 3500
+                    "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 3500
+                    "clr":
+                        "use_corrected_reads": True
+                        "matching_len": 3500
+                "raw_reads":
+                    "hifi":
+                        "use_corrected_reads": False
+                        "matching_len": 3500
+                    "nanopore":
+                        "use_corrected_reads": False
+                        "matching_len": 3500
+                    "clr":
+                        "use_corrected_reads": False
+                        "matching_len": 3500
+                "corrected_reads":
+                    "hifi":
+                        "use_corrected_reads": True
+                        "matching_len": 3500
+                    "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 3500
+                    "clr":
+                        "use_corrected_reads": True
+                        "matching_len": 3500
     "big": # < 2500 Mbp, most of the mammals
         "memory_mb":
             "jellyfish": 300000
@@ -1064,6 +1231,37 @@
                     "self":
                         "index_size": "10G"
                         "alignment_scheme": "asm5"     # -x
+            "samba":
+                "default":
+                    "hifi":
+                        "use_corrected_reads": True
+                        "matching_len": 5000
+                    "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 5000
+                    "clr":
+                        "use_corrected_reads": True
+                        "matching_len": 5000
+                "raw_reads":
+                    "hifi":
+                        "use_corrected_reads": False
+                        "matching_len": 5000
+                    "nanopore":
+                        "use_corrected_reads": False
+                        "matching_len": 5000
+                    "clr":
+                        "use_corrected_reads": False
+                        "matching_len": 5000
+                "corrected_reads":
+                    "hifi":
+                        "use_corrected_reads": True
+                        "matching_len": 5000
+                    "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 5000
+                    "clr":
+                        "use_corrected_reads": True
+                        "matching_len": 5000
     "large": # < 5000 Mbp, human
         "memory_mb":
             "jellyfish": 600000
@@ -1124,6 +1322,37 @@
                     "self":
                         "index_size": "15G"
                         "alignment_scheme": "asm5"     # -x
+            "samba":
+                "default":
+                    "hifi":
+                        "use_corrected_reads": True
+                        "matching_len": 5000
+                    "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 5000
+                    "clr":
+                        "use_corrected_reads": True
+                        "matching_len": 5000
+                "raw_reads":
+                    "hifi":
+                        "use_corrected_reads": False
+                        "matching_len": 5000
+                    "nanopore":
+                        "use_corrected_reads": False
+                        "matching_len": 5000
+                    "clr":
+                        "use_corrected_reads": False
+                        "matching_len": 5000
+                "corrected_reads":
+                    "hifi":
+                        "use_corrected_reads": True
+                        "matching_len": 5000
+                    "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 5000
+                    "clr":
+                        "use_corrected_reads": True
+                        "matching_len": 5000
     "giant": # < 15000 Mbp, big plant, shark, amphibian genomes
         "threads":
             "hifiasm": 100
@@ -1184,6 +1413,37 @@
                     "self":
                         "index_size": "30G"
                         "alignment_scheme": "asm5"     # -x
+            "samba":
+                "default":
+                    "hifi":
+                        "use_corrected_reads": True
+                        "matching_len": 10000
+                    "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 10000
+                    "clr":
+                        "use_corrected_reads": True
+                        "matching_len": 10000
+                "raw_reads":
+                    "hifi":
+                        "use_corrected_reads": False
+                        "matching_len": 10000
+                    "nanopore":
+                        "use_corrected_reads": False
+                        "matching_len": 10000
+                    "clr":
+                        "use_corrected_reads": False
+                        "matching_len": 10000
+                "corrected_reads":
+                    "hifi":
+                        "use_corrected_reads": True
+                        "matching_len": 10000
+                    "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 10000
+                    "clr":
+                        "use_corrected_reads": True
+                        "matching_len": 10000
 
 "kmer_counter_list":
     #- "jellyfish"
@@ -1254,6 +1514,11 @@
     - "nanopore"
 
 "purge_dups_data": # Data which might be used for purging haplotypic duplications
+    - "hifi"
+    - "clr"
+    - "nanopore"
+    -
+"gap_filling_data": # Data which might be used for filling gaps
     - "hifi"
     - "clr"
     - "nanopore"
@@ -1331,7 +1596,8 @@
             "draft": []
     "finalization":
         "gap_closing":
-            "fastq": []
+            "fastq":
+                - "gap_closing"
             "draft":
                 - "gap_closing"
 

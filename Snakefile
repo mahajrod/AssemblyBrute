@@ -221,10 +221,8 @@ localrules: all
 
 results_dict = {}
 
-#assembler_list = ["hifiasm", ] # TODO: implement possibility of other assemblers
-
-haplotype_list = ["hap{0}".format(i) for i in range(1, config["ploidy"] + 1)]
-primary_haplotype = "hap1"
+haplotype_list = ["hap{0}".format(i) for i in range(1, config["ploidy"] + 1)] # TODO: obsolete: remove and fix issues
+primary_haplotype = "hap1" # TODO: obsolete: remove and fix issues
 
 results_list = []
 
@@ -300,6 +298,32 @@ if "draft_qc" in config["stage_list"]:
                                 haplotype=haplotype_list,
                                 parameters=parameters_list),
                          ]
+
+    if "gap_closing" in config["stage_list"]:
+
+        prev_stage = "draft_qc"
+
+        gap_closer_list = config["stage_coretools"]["gap_closing"]["default"]
+        stage_dict["gap_closing"]["parameters"] = {}
+        parameters_list = list(stage_dict["gap_closing"]["parameters"].keys())
+        for gap_closer in gap_closer_list:
+            for option_set in config["coretool_option_sets"][gap_closer]:
+                parameters_label="{0}_{1}".format(assembler, option_set)
+                stage_dict["gap_closing"]["parameters"][parameters_label] = {}
+                stage_dict["gap_closing"]["parameters"][parameters_label]["included"] = True
+                stage_dict["gap_closing"]["parameters"][parameters_label]["assembler"] = gap_closer
+                stage_dict["purge_dups"]["parameters"][parameters_label]["prev_stage"] = prev_stage
+                stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"] = deepcopy(parameters["tool_options"][gap_closer][option_set])
+                stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]
+                #print(stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"])
+                #print(config["ploidy"])
+                stage_dict["gap_closing"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
+                stage_dict["gap_closing"]["parameters"][parameters_label]["option_set_group"] = None
+
+        results_list += [expand(out_dir_path / "gap_closing/{parameters}/{genome_prefix}.gap_closing.{haplotype}.fasta",
+                                parameters=parameters_list,
+                                haplotype=stage_dict["gap_closing"]["parameters"][parameters_label]["haplotype_list"]
+                                )]
 
 
 if "filter_reads" in config["stage_list"]:
@@ -872,3 +896,6 @@ if "curation" in config["stage_list"]:
     include: "workflow/rules/Curation/CoverageTrack.smk"
     include: "workflow/rules/Curation/TelomereTrack.smk"
     include: "workflow/rules/Curation/HiGlassTrack.smk"
+
+if "gap_closing" in config["stage_list"]:
+    include: "workflow/rules/Finalization/GapClosing.smk"

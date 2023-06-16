@@ -264,6 +264,19 @@ if "read_qc" in config["stage_list"]:
 
 
 if "draft_qc" in config["stage_list"]:
+    stage_dict["draft_qc"]["parameters"] = {}
+
+    for qcer in ["qc"]:
+        option_set_group_dict, option_set_group_assignment_dict = None, None
+        for option_set in config["coretool_option_sets"][qcer]:
+            parameters_label="{0}_{1}".format(assembler, option_set)
+            stage_dict["draft_qc"]["parameters"][parameters_label] = {}
+            stage_dict["draft_qc"]["parameters"][parameters_label]["qcer"] = qcer
+            stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"] = None
+            stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]
+            stage_dict["draft_qc"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
+            stage_dict["draft_qc"]["parameters"][parameters_label]["option_set_group"] = None
+
     results_list += [expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=["draft_qc"],),

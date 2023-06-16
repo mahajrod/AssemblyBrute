@@ -69,6 +69,9 @@
     "curation":
         "default":
             - "curation"
+    "draft_qc":
+        "default":
+            - "assembly_qc"
 
 "coretool_option_sets":
     "hifiasm":
@@ -95,6 +98,9 @@
         - "unphased_reads"
     "curation":
         - "default"
+    "assembly_qc":
+        - "default"
+
 "other_tool_option_sets":
     "cutadapt":                 "default"   # Allowed: default
     "porechop_abi":             "default"   # Allowed: default

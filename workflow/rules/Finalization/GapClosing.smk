@@ -14,8 +14,8 @@ rule samba: #TODO: FIX CASE OF ERROR CORRECTED READS,NOW IT IS HARDCODED TO erro
     output: 
         fasta=out_dir_path / "gap_closing/{prev_stage_parameters}..samba_{gap_closing_parameters}/{genome_prefix}.gap_closing.{haplotype,[^./]+}.fasta",
     params:
-        datatype=lambda wildcards: parse_option("datatype", parameters["samba"][wildcards.gap_closing_parameters][config["gap_closing_datatype"]], " -d "),
-        matching_len=lambda wildcards: parse_option("matching_len", parameters["samba"][wildcards.gap_closing_parameters][config["gap_closing_datatype"]], " -m ")
+        datatype=lambda wildcards: parse_option("datatype", parameters["tool_options"]["samba"][wildcards.gap_closing_parameters][config["gap_closing_datatype"]], " -d "),
+        matching_len=lambda wildcards: parse_option("matching_len", parameters["tool_options"]["samba"][wildcards.gap_closing_parameters][config["gap_closing_datatype"]], " -m ")
     log:
         samba=output_dict["log"] / "samba.gap_closing.{prev_stage_parameters}..samba_{gap_closing_parameters}.{genome_prefix}.{haplotype}.samba.log",
         ln=output_dict["log"] / "samba.gap_closing.{prev_stage_parameters}..samba_{gap_closing_parameters}.{genome_prefix}.{haplotype}.ln.log",

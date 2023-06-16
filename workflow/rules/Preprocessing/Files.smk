@@ -30,7 +30,7 @@ rule create_links_for_draft:
         input_dir_path.resolve() / "draft/fasta/{fileprefix}.{haplotype}.fasta"
     output:
         #directory(output_dict["data"] / "/fastq/{datatype}/raw"),
-        output_dict["draft"] / "/raw/{fileprefix, [^/]+}.{haplotype, [^/]+}.fasta"
+        output_dict["draft"] / "raw/{fileprefix, [^/]+}.{haplotype, [^/]+}.fasta"
     log:
         std=output_dict["log"] / "create_links_for_draft.{fileprefix}.{haplotype}.log",
         cluster_log=output_dict["cluster_log"] / "create_links_for_draft.{fileprefix}.{haplotype}.cluster.log",

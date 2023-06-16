@@ -126,8 +126,9 @@ def get_input_assemblies(input_folder_path, ploidy, fasta_extention):
             haplotype = "hap{0}".format(hap)
             suffix = "hap{0}.{1}".format(hap, fasta_extention)
             for filename in fasta_filelist:
+                print(filename.name)
                 if filename.name[:-len(suffix)] == suffix:
-                    print(filename.name)
+
                     fasta_dict[haplotype] = filename.name
                     break
             else:

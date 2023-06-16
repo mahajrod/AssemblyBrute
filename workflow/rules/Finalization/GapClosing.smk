@@ -12,7 +12,7 @@ rule samba: #TODO: FIX CASE OF ERROR CORRECTED READS,NOW IT IS HARDCODED TO erro
 
 
     output: 
-        fasta=out_dir_path / "gap_closing/{prev_stage_parameters}..samba_{gap_closing_parameters}/{haplotype,[^./]+}/{genome_prefix}.gap_closing.{haplotype}.fasta",
+        fasta=out_dir_path / "gap_closing/{prev_stage_parameters}..samba_{gap_closing_parameters}/{genome_prefix}.gap_closing.{haplotype}.fasta",
     params:
         datatype=lambda wildcards: parse_option("datatype", parameters["tool_options"]["samba"][wildcards.gap_closing_parameters][config["gap_closing_datatype"]], " -d "),
         matching_len=lambda wildcards: parse_option("matching_len", parameters["tool_options"]["samba"][wildcards.gap_closing_parameters][config["gap_closing_datatype"]], " -m ")
@@ -33,6 +33,7 @@ rule samba: #TODO: FIX CASE OF ERROR CORRECTED READS,NOW IT IS HARDCODED TO erro
         parameters["threads"]["samba"]
     shell:
          " OUTPUT_DIR=`dirname {output.fasta}`/{wildcards.haplotype}; "
+         " mkdir -p ${{OUTPUT_DIR}}; "
          " INPUT_FASTA=`realpath -s {input.fasta}`; "
          " INPUT_FASTA_BASENAME=`basename {input.fasta}`; "
          " cd ${{OUTPUT_DIR}}; "

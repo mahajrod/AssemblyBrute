@@ -2,10 +2,9 @@
 rule samba: #TODO: FIX CASE OF ERROR CORRECTED READS,NOW IT IS HARDCODED TO error_corrected_hifiasm_option_set_1
     priority: 500
     input:
-        reads=lambda wildcards: expand(output_dict["data"] / ("fastq/%s/filtered/{fileprefix}%s" % (config["gap_closing_datatype"],
+        reads=lambda wildcards: list(map(lambda s: s.resolve(), expand(output_dict["data"] / ("fastq/%s/filtered/{fileprefix}%s" % (config["gap_closing_datatype"],
                                                                                                    config["fastq_extension"])),
-                                        fileprefix=input_file_prefix_dict[config["gap_closing_datatype"]],
-                                        allow_missing=True) if not stage_dict["gap_closing"]["parameters"][wildcards.prev_stage_parameters + "..samba_" + wildcards.gap_closing_parameters]["option_set"][config["gap_closing_datatype"]]["use_corrected_reads"] \
+                                        fileprefix=input_file_prefix_dict[config["gap_closing_datatype"]]))) if not stage_dict["gap_closing"]["parameters"][wildcards.prev_stage_parameters + "..samba_" + wildcards.gap_closing_parameters]["option_set"][config["gap_closing_datatype"]]["use_corrected_reads"] \
                                                             else out_dir_path / ("data/fastq/%s/error_corrected_hifiasm_option_set_1/%s.contig.ec.fasta.gz" % (config["gap_closing_datatype"], wildcards.genome_prefix)),
         fasta=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}.fasta".format(stage_dict["gap_closing"]["parameters"][wildcards.prev_stage_parameters + "..samba_" + wildcards.gap_closing_parameters]["prev_stage"],
                                                                                   wildcards.prev_stage_parameters, wildcards.genome_prefix, wildcards.haplotype)
@@ -36,7 +35,9 @@ rule samba: #TODO: FIX CASE OF ERROR CORRECTED READS,NOW IT IS HARDCODED TO erro
          " mkdir -p ${{OUTPUT_DIR}}; "
          " INPUT_FASTA=`realpath -s {input.fasta}`; "
          " INPUT_FASTA_BASENAME=`basename {input.fasta}`; "
+         " LOG_SAMBA=`realpath -s {log.samba}`; "
+         " LOG_LN=`realpath -s {log.ln}`; "
          " cd ${{OUTPUT_DIR}}; "
          " close_scaffold_gaps.sh -t {threads} -q <(zcat {input.reads}) {params.datatype} -r ${{INPUT_FASTA}} "
-         " {params.matching_len} -v > {log.samba} 2>&1; "
-         " ln -sf {wildcards.haplotype}/${{INPUT_FASTA_BASENAME}}.split.joined.fa {output.fasta} > {log.ln} 2>&1; "
+         " {params.matching_len} -v > ${{LOG_SAMBA}} 2>&1; "
+         " ln -sf {wildcards.haplotype}/${{INPUT_FASTA_BASENAME}}.split.joined.fa ../`basename {output.fasta}` > ${{LOG_LN}} 2>&1; "

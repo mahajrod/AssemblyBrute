@@ -417,7 +417,7 @@ if ("gcp" in config["stage_list"]) and (not config["skip_gcp"]):
 if "filter_draft" in config["stage_list"]:
     results_list += [ ] # TODO: implement
 
-
+stage_dict["contig"] = {}
 assembler_list = config["stage_coretools"]["contig"][config["contig_datatype"]]
 stage_dict["contig"]["parameters"] = {}
 assembler_option_set_group_dict = {}

@@ -1,5 +1,4 @@
-localrules: create_fastq_links, create_links_for_draft, create_links_for_input_assembly
-
+localrules: create_fastq_links, create_links_for_draft
 rule create_fastq_links:
     priority: 1000
     input:
@@ -49,25 +48,25 @@ rule create_links_for_draft:
          " ln -sf {input} {output} 2>{log.std}"
 """
 
-rule create_links_for_input_assembly:
+rule create_links_for_draft:
     input:
         lambda wildcards: input_dir_path.resolve() / "draft/fasta/{0}".format(draft_file_dict[wildcards.haplotype])
     output:
         out_dir_path / "draft_qc/{parameters}/{genome_prefix}.draft_qc.{haplotype}.fasta"
         #paf=out_dir_path  / ("purge_dups/{assembler}/{haplotype}/%s.purge_dups.{assembler}.{haplotype}.minimap2.{fileprefix}.paf.gz" % config["genome_name"])
     log:
-        ln=output_dict["log"]  / "create_links_for_input_assembly.{genome_prefix}.{parameters}.draft_qc.{haplotype}.ln.log",
-        cluster_log=output_dict["cluster_log"] / "create_links_for_input_assembly.{genome_prefix}.{parameters}.draft_qc.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_links_for_input_assembly.{genome_prefix}.{parameters}.draft_qc.{haplotype}.cluster.err"
+        ln=output_dict["log"]  / "create_links_for_draft.{genome_prefix}.{parameters}.draft_qc.{haplotype}.ln.log",
+        cluster_log=output_dict["cluster_log"] / "create_links_for_draft.{genome_prefix}.{parameters}.draft_qc.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_links_for_draft.{genome_prefix}.{parameters}.draft_qc.{haplotype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "create_links_for_input_assembly.{genome_prefix}.{parameters}.draft_qc.{haplotype}.benchmark.txt"
+        output_dict["benchmark"]  / "create_links_for_draft.{genome_prefix}.{parameters}.draft_qc.{haplotype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        cpus=parameters["threads"]["create_links_for_input_assembly"],
-        time=parameters["time"]["create_links_for_input_assembly"],
-        mem=parameters["memory_mb"]["create_links_for_input_assembly"]
-    threads: parameters["threads"]["create_links_for_input_assembly"]
+        cpus=parameters["threads"]["create_links_for_draft"],
+        time=parameters["time"]["create_links_for_draft"],
+        mem=parameters["memory_mb"]["create_links_for_draft"]
+    threads: parameters["threads"]["create_links_for_draft"]
 
     shell:
         " ln -sf {input} {output} 2>{log.ln}; "

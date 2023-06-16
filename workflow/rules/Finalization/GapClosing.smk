@@ -2,7 +2,7 @@
 rule samba: #TODO: FIX CASE OF ERROR CORRECTED READS,NOW IT IS HARDCODED TO error_corrected_hifiasm_option_set_1
     priority: 500
     input:
-        reads=lambda wildcards: expand(output_dict["data"] / ("fastq/%dfiltered/{fileprefix}%s" % (config["gap_closing_datatype"],
+        reads=lambda wildcards: expand(output_dict["data"] / ("fastq/%s/filtered/{fileprefix}%s" % (config["gap_closing_datatype"],
                                                                                                    config["fastq_extension"])),
                                         fileprefix=input_file_prefix_dict[config["gap_closing_datatype"]],
                                         allow_missing=True) if stage_dict["gap_closing"]["parameters"][wildcards.prev_stage_parameters + "..samba_" + wildcards.gap_closing_parameters]["option_set"][config["gap_closing_datatype"]]["use_corrected_reads"] \

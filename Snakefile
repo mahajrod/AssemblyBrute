@@ -308,10 +308,10 @@ if "draft_qc" in config["stage_list"]:
         parameters_list = list(stage_dict["gap_closing"]["parameters"].keys())
         for gap_closer in gap_closer_list:
             for option_set in config["coretool_option_sets"][gap_closer]:
-                parameters_label="{0}_{1}".format(assembler, option_set)
+                parameters_label="{0}_{1}".format(gap_closer, option_set)
                 stage_dict["gap_closing"]["parameters"][parameters_label] = {}
                 stage_dict["gap_closing"]["parameters"][parameters_label]["included"] = True
-                stage_dict["gap_closing"]["parameters"][parameters_label]["assembler"] = gap_closer
+                stage_dict["gap_closing"]["parameters"][parameters_label]["gap_closer"] = gap_closer
                 stage_dict["purge_dups"]["parameters"][parameters_label]["prev_stage"] = prev_stage
                 stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"] = deepcopy(parameters["tool_options"][gap_closer][option_set])
                 stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]

@@ -1263,6 +1263,89 @@
                         "use_corrected_reads": True
                         "matching_len": 5000
     "large": # < 5000 Mbp, human
+        "threads":
+            "install_from_pip": 1
+            "create_fastq_links": 1
+            "create_links_for_draft": 1
+            "fastqc": 1
+            "multiqc": 1
+            "nanoqc": 1
+            "nanoplot": 4
+            "cutadapt": 20
+            "porechop_abi": 16
+            "chopper": 8
+            "jellyfish": 50
+            "meryl": 50
+            "meryl_extract": 10
+            "gc_count": 10
+            "gc_plot": 1
+            "meryl_assembly": 5
+            "meryl_extract_unique_hap_kmers": 10
+            "extract_reads_by_unique_hap_kmers": 10
+            "subset_extracted_kmers": 1
+            "genomescope": 1
+            "parse_genomescope_output": 1
+            "hifiasm": 80
+            "gfa2fasta": 1
+            "get_coverage_from_hifiasm_graph": 1
+            "get_read_bed_from_hifiasm_graph": 1
+            "busco5_download": 1
+            "busco5": 60
+            "compress_busco5": 1
+            "busco5_intersect_haplotypes": 1
+            "busco5_intersect_stages": 1
+            "busco5_intersect_all": 1
+            "handle_busco5_output": 1
+            "quast": 4
+            "merqury": 20
+            "minimap2_index": 10
+            "minimap2": 60
+            "get_purge_dups_read_stat": 5 # ToDO: adjust, maybe even one is enough
+            "purge_dups": 5 # TODO: adjust, maybe even one is enough
+            "merge_pri_hapdups_with_alt": 1
+            "get_purge_stat_haplotype_comparison": 1
+            "create_links": 1
+            "bwa_index": 1
+            "bwa_map": 60
+            "two_read_bam_combiner": 1
+            "samtools_sort": 4
+            "ref_faidx": 1
+            "ref_dict": 1
+            "rmdup": 4
+            "bam2bed": 4
+            "pretextmap": 3
+            "pretextsnapshot": 4
+            "salsa2": 10 #TODO: adjust
+            "yahs": 10
+            #"kraken2": 15 # set via allowed_databases variable
+            "smudgeplot_hetkmers": 1
+            "smudgeplot_plot": 1
+            "compress_kmer": 10
+            "get_seq_len": 1
+            "kat_gcp": 4
+            "gather_stage_stats": 1
+            "extract_coverage_from_purge_dups_file": 1
+            "extract_stats_from_purge_dups_file": 1
+            "extract_artefact_sequences": 1
+            "create_curation_input_links" : 1
+            "create_gap_track": 1
+            "telo_finder" : 1
+            "rapid_split": 1
+            "windowmasker": 1
+            "create_repeat_bins": 1
+            "mosdepth": 4
+            "create_coverage_table": 1
+            "create_higlass_track": 10
+            "yahs_juicer_pre": 5
+            "juicer_tools_pre": 10 # TODO: adjust
+            "juicer": 80
+            "generate_site_positions": 2
+            "juicer_tools_qc": 10
+            "threeddna": 50
+            "create_fastq_links_for_juicer": 1
+            "draw_coverage_heatmap": 1
+            "create_links_for_input_assembly": 1
+            "samba": 20
         "memory_mb":
             "jellyfish": 600000
             "kat_gcp":   600000
@@ -1271,10 +1354,85 @@
             "minimap2_index": 20000
             "minimap2":       40000
         "time":
-            "jellyfish": "24:00:00"
-            "hifiasm": "24:00:00"
-            "minimap2_index": "04:00:00"
-            "minimap2": "40:00:00"
+            "install_from_pip": "01:00:00"
+            "create_fastq_links": "00:05:00"
+            "create_links_for_draft": "00:05:00"
+            "fastqc": "04:00:00"
+            "multiqc": "00:10:00"
+            "nanoqc": "04:00:00"
+            "nanoplot": "04:00:00"
+            "cutadapt": "04:00:00"
+            "filter_nanopore": "08:00:00"
+            "porechop_abi": "08:00:00"
+            "chopper": "08:00:00"
+            "kat_gcp": "02:00:00"
+            "meryl": "08:00:00"
+            "meryl_extract": "04:00:00"
+            "gc_count": "08:00:00"
+            "gc_plot": "01:00:00"
+            "meryl_assembly": "05:00:00"
+            "meryl_extract_unique_hap_kmers": "25:00:00"
+            "extract_reads_by_unique_hap_kmers": "24:00:00"
+            "subset_extracted_kmers": "01:00:00"
+            "genomescope": "01:00:00"
+            "parse_genomescope_output": "00:10:00"
+            "gfa2fasta": "08:00:00"
+            "get_coverage_from_hifiasm_graph": "02:00:00"
+            "get_read_bed_from_hifiasm_graph": "02:00:00"
+            "busco5_download": "02:00:00"
+            "busco5": "48:00:00"
+            "compress_busco5": "05:00:00"
+            "handle_busco5_output": "00:05:00"
+            "busco5_intersect_haplotypes": "00:05:00"
+            "busco5_intersect_stages": "00:05:00"
+            "busco5_intersect_all": "00:10:00"
+            "quast": "04:00:00"
+            "merqury": "36:00:00"
+            "get_purge_dups_read_stat": "12:00:00" # TODO: adjust
+            "purge_dups": "10:00:00" # TODO adjust depending on genome size
+            "merge_pri_hapdups_with_alt": "01:00:00"
+            "get_purge_stat_haplotype_comparison": "01:00:00"
+            "create_links": "00:01:00"
+            "bwa_index": "5:00:00"
+            "bwa_map": "12:00:00"
+            "two_read_bam_combiner": "5:00:00"
+            "samtools_sort": "8:00:00"
+            "ref_faidx": "02:00:00"
+            "ref_dict": "02:00:00"
+            "rmdup": "120:00:00"
+            "bam2bed": "5:00:00"
+            "pretextmap": "8:00:00"
+            "pretextsnapshot": "04:00:00"
+            "salsa2": "24:00:00"
+            "yahs": "24:00:00"
+            #"kraken2": "12:00:00" # set via allowed_databases variable
+            "smudgeplot_hetkmers": "60:00:00" #TODO make genomesize dependent
+            "smudgeplot_plot": "24:00:00" #TODO make genomesize dependent
+            "compress_kmer": "03:00:00"
+            "get_seq_len": "01:00:00"
+            "gather_stage_stats": "00:05:00"
+            "extract_coverage_from_purge_dups_file": "05:00:00"
+            "extract_stats_from_purge_dups_file" : "01:00:00"
+            "extract_artefact_sequences": "01:00:00"
+            "create_curation_input_links": "00:05:00"
+            "create_gap_track": "00:30:00"
+            "telo_finder": "00:30:00"
+            "rapid_split": "00:30:00"
+            "windowmasker": "10:00:00"
+            "create_repeat_bins": "02:00:00"
+            "mosdepth": "08:00:00"
+            "create_coverage_table": "04:00:00"
+            "create_higlass_track": "08:00:00"
+            "yahs_juicer_pre": "04:00:00"
+            "juicer_tools_pre": "04:00:00" # TODO: adjust
+            "juicer":   "120:00:00"
+            "generate_site_positions": "01:00:00"
+            "juicer_tools_qc": "10:00:00"
+            "threeddna": "120:00:00"
+            "create_fastq_links_for_juicer": "00:05:00"
+            "draw_coverage_heatmap": "02:00:00"
+            "create_links_for_input_assembly": "00:05:00"
+            "samba": "10:00:00" # TODO: adjust
         "tool_options":
             "jellyfish":
                 "default":
@@ -1368,6 +1526,85 @@
             "hifiasm": "48:00:00"
             "minimap2_index": "08:00:00"
             "minimap2": "100:00:00"
+            "install_from_pip": "01:00:00"
+            "create_fastq_links": "00:05:00"
+            "create_links_for_draft": "00:05:00"
+            "fastqc": "04:00:00"
+            "multiqc": "00:10:00"
+            "nanoqc": "04:00:00"
+            "nanoplot": "04:00:00"
+            "cutadapt": "04:00:00"
+            "filter_nanopore": "08:00:00"
+            "porechop_abi": "08:00:00"
+            "chopper": "08:00:00"
+            "kat_gcp": "02:00:00"
+            "meryl": "08:00:00"
+            "meryl_extract": "04:00:00"
+            "gc_count": "08:00:00"
+            "gc_plot": "01:00:00"
+            "meryl_assembly": "05:00:00"
+            "meryl_extract_unique_hap_kmers": "25:00:00"
+            "extract_reads_by_unique_hap_kmers": "24:00:00"
+            "subset_extracted_kmers": "01:00:00"
+            "genomescope": "01:00:00"
+            "parse_genomescope_output": "00:10:00"
+            "gfa2fasta": "08:00:00"
+            "get_coverage_from_hifiasm_graph": "02:00:00"
+            "get_read_bed_from_hifiasm_graph": "02:00:00"
+            "busco5_download": "02:00:00"
+            "busco5": "48:00:00"
+            "compress_busco5": "05:00:00"
+            "handle_busco5_output": "00:05:00"
+            "busco5_intersect_haplotypes": "00:05:00"
+            "busco5_intersect_stages": "00:05:00"
+            "busco5_intersect_all": "00:10:00"
+            "quast": "04:00:00"
+            "merqury": "36:00:00"
+            "get_purge_dups_read_stat": "12:00:00" # TODO: adjust
+            "purge_dups": "10:00:00" # TODO adjust depending on genome size
+            "merge_pri_hapdups_with_alt": "01:00:00"
+            "get_purge_stat_haplotype_comparison": "01:00:00"
+            "create_links": "00:01:00"
+            "bwa_index": "5:00:00"
+            "bwa_map": "12:00:00"
+            "two_read_bam_combiner": "5:00:00"
+            "samtools_sort": "8:00:00"
+            "ref_faidx": "02:00:00"
+            "ref_dict": "02:00:00"
+            "rmdup": "120:00:00"
+            "bam2bed": "5:00:00"
+            "pretextmap": "8:00:00"
+            "pretextsnapshot": "04:00:00"
+            "salsa2": "24:00:00"
+            "yahs": "24:00:00"
+            #"kraken2": "12:00:00" # set via allowed_databases variable
+            "smudgeplot_hetkmers": "60:00:00" #TODO make genomesize dependent
+            "smudgeplot_plot": "24:00:00" #TODO make genomesize dependent
+            "compress_kmer": "03:00:00"
+            "get_seq_len": "01:00:00"
+            "gather_stage_stats": "00:05:00"
+            "extract_coverage_from_purge_dups_file": "05:00:00"
+            "extract_stats_from_purge_dups_file" : "01:00:00"
+            "extract_artefact_sequences": "01:00:00"
+            "create_curation_input_links": "00:05:00"
+            "create_gap_track": "00:30:00"
+            "telo_finder": "00:30:00"
+            "rapid_split": "00:30:00"
+            "windowmasker": "10:00:00"
+            "create_repeat_bins": "02:00:00"
+            "mosdepth": "08:00:00"
+            "create_coverage_table": "04:00:00"
+            "create_higlass_track": "08:00:00"
+            "yahs_juicer_pre": "04:00:00"
+            "juicer_tools_pre": "04:00:00" # TODO: adjust
+            "juicer":   "120:00:00"
+            "generate_site_positions": "01:00:00"
+            "juicer_tools_qc": "10:00:00"
+            "threeddna": "120:00:00"
+            "create_fastq_links_for_juicer": "00:05:00"
+            "draw_coverage_heatmap": "02:00:00"
+            "create_links_for_input_assembly": "00:05:00"
+            "samba": "10:00:00" # TODO: adjust
         "tool_options":
             "jellyfish":
                 "default":

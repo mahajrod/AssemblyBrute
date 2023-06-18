@@ -1476,7 +1476,7 @@
     - "hifi"
     - "illumina"
     #- "hic"
-    - "nanopore"
+    #- "nanopore"
 
 "kraken_scan_data":
     - "hifi"

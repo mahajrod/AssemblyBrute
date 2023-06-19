@@ -31,7 +31,7 @@
     "fcs":
         "fcs_gx":
             "path":         "/scratch/yggdrasil/db/fcs/gxdb/" # add path to fcs_gx database
-            "image_path":   "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/FCS-GX/fcs-gx.sif"
+            "image_path":   "workflow/external_tools/fcs-gx/fcs-gx.sif"
             "memory_mb":    512000 # Entire database must be in memory, it requires at least 490 Gbp
             "threads":      30
             "time":         "06:00:00"
@@ -39,7 +39,7 @@
     "fcs_adaptor":
         "adaptor":
             "path":         null # database is embedded in singularity image
-            "image_path":   "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/fcsadaptor/fcs-adaptor.sif"
+            "image_path":   "workflow/external_tools/fcsadaptor/fcs-adaptor.sif"
             "memory_mb":    20000 #
             "threads":      1
             "time":         "01:00:00"

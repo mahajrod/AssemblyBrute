@@ -122,7 +122,7 @@ for d_type in set(config["paired_fastq_based_data"]) & fastq_based_data_type_set
         input_reverse_suffix_dict[d_type].add(reverse_suffix)
     if (len(input_forward_suffix_dict[d_type]) > 1) or (len(input_reverse_suffix_dict[d_type]) > 1):
         raise ValueError("ERROR!!! Multiple different suffixes in filenames of %s data!" % d_type)
-    print(input_forward_suffix_dict, input_reverse_suffix_dict)
+    #print(input_forward_suffix_dict, input_reverse_suffix_dict)
     input_forward_suffix_dict[d_type] = list(input_forward_suffix_dict[d_type])[0]
     input_reverse_suffix_dict[d_type] = list(input_reverse_suffix_dict[d_type])[0]
 

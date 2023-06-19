@@ -164,7 +164,7 @@
             "create_links_for_draft": 100
             "fastqc": 9999
             "multiqc": 1000
-            "nanoqc": 10000
+            "nanoqc": 50000
             "nanoplot": 10000
             "cutadapt": 10000
             "porechop_abi": 20000
@@ -1353,6 +1353,7 @@
             "hifiasm":   500000
             "minimap2_index": 20000
             "minimap2":       40000
+            "nanoqc": 80000
         "time":
             "install_from_pip": "01:00:00"
             "create_fastq_links": "00:05:00"
@@ -1521,6 +1522,7 @@
             "hifiasm":   1000000
             "minimap2_index": 30000
             "minimap2":       70000
+            "nanoqc": 80000
         "time":
             "jellyfish": "48:00:00"
             "hifiasm": "48:00:00"

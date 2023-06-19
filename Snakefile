@@ -841,8 +841,8 @@ if "curation" in config["stage_list"]:
                             parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
 
                      *[[expand(out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.png",
-                            window=stage_dict["curation"]["parameters"][parameters_label]["coverage"][window_step_set]["window"],
-                            step=stage_dict["curation"]["parameters"][parameters_label]["coverage"][window_step_set]["step"],
+                            window=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"][window_step_set]["window"],
+                            step=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"][window_step_set]["step"],
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],
                             datatype=coverage_track_data_type_set,

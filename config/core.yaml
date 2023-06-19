@@ -1846,6 +1846,11 @@
             "draft":
                 - "gap_closing"
                 - "curation"
+        "curation_only":
+            "fastq":
+                - "curation"
+            "draft":
+                - "curation"
 
 "tool_specific_features":
     "hifiasm":

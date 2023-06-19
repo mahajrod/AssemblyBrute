@@ -5,7 +5,7 @@ localrules: create_curation_input_links, select_long_scaffolds
 def get_hic_bed_file(wildcards):
     #print(stage_dict["curation"]["prev_stage"]
     #print(stage_dict["curation"]["prev_stage"]["parameters"][wildcards.prev_stage_parameters])
-    phasing_kmer_length = stage_dict[stage_dict["curation"]["prev_stage"]]["parameters"][wildcards.prev_stage_parameters]["option_set"]["phasing_kmer_length"]
+    phasing_kmer_length = stage_dict[stage_dict["curation"]["prev_stage"]]["parameters"][wildcards.prev_stage_parameters]["option_set"]["phasing_kmer_length"] if "phasing_kmer_length" in stage_dict[stage_dict["curation"]["prev_stage"]]["parameters"][wildcards.prev_stage_parameters]["option_set"] else config["phasing_kmer_length"]
     return out_dir_path / "{0}/{1}/{2}/alignment/{3}/{4}.{0}.{3}.{2}.rmdup.bed".format(stage_dict["curation"]["prev_stage"],
                                                                                        wildcards.prev_stage_parameters,
                                                                                        wildcards.haplotype,

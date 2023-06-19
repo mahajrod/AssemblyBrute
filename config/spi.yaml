@@ -153,6 +153,9 @@
 "starting_point": "fastq" # Allowed: "draft"
 "data_types": "hifi,hic" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
 
+#-------- Options specific for starting point 'draft' --------
+"phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads
+
 "mode": "assembly"                # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"

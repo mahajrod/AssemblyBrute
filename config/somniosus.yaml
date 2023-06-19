@@ -171,6 +171,8 @@
 "skip_prescaf_pretext": False
 "skip_postscaf_pretext": False
 "skip_both_pretext": False
+"skip_nanoqc": False
+"skip_nanoplot": False
 #"adaptor_scan": True
 #"fcs_gx_scan": True
 # Allowed modes:

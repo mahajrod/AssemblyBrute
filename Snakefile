@@ -370,24 +370,30 @@ if "filter_reads" in config["stage_list"]:
                            kmer_tool=[kmer_tool,],
                            kmer_length=parameters["tool_options"][kmer_tool][dat_type]["kmer_length"],
                            ) for kmer_tool in config["kmer_counter_list"] ]  for dat_type in genome_size_estimation_data_type_set],
-
-                    *[expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{fileprefix}.Yield_By_Length.png",
-                               datatype=[dat_type, ],
-                               stage=["filtered", ],
-                               fileprefix=input_file_prefix_dict[dat_type],) for dat_type in long_read_data_type_set],
-                    expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{fileprefix}.Yield_By_Length.png",
-                               datatype=["nanopore", ],
-                               stage=["trimmed", ],
-                               fileprefix=input_file_prefix_dict["nanopore"],) if "nanopore" in long_read_data_type_set else [],
-                    *[expand(output_dict["qc"] / "nanoqc/{datatype}/{stage}/{fileprefix}",
-                               datatype=[dat_type, ],
-                               stage=["filtered", ],
-                               fileprefix=input_file_prefix_dict[dat_type],) for dat_type in long_read_data_type_set],
-                    expand(output_dict["qc"] / "nanoqc/{datatype}/{stage}/{fileprefix}",
-                               datatype=["nanopore", ],
-                               stage=["trimmed", ],
-                               fileprefix=input_file_prefix_dict["nanopore"],) if "nanopore" in long_read_data_type_set else [],
                     ]
+    if not config["skip_nanoqc"]:
+        results_list += [
+
+                        *[expand(output_dict["qc"] / "nanoqc/{datatype}/{stage}/{fileprefix}",
+                                   datatype=[dat_type, ],
+                                   stage=["filtered", ],
+                                   fileprefix=input_file_prefix_dict[dat_type],) for dat_type in long_read_data_type_set],
+                        expand(output_dict["qc"] / "nanoqc/{datatype}/{stage}/{fileprefix}",
+                                   datatype=["nanopore", ],
+                                   stage=["trimmed", ],
+                                   fileprefix=input_file_prefix_dict["nanopore"],) if "nanopore" in long_read_data_type_set else [],
+                        ]
+    if not config["skip_nanoplot"]:
+        results_list += [*[expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{fileprefix}.Yield_By_Length.png",
+                               datatype=[dat_type, ],
+                               stage=["filtered", ],
+                               fileprefix=input_file_prefix_dict[dat_type],) for dat_type in long_read_data_type_set],
+                        expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{fileprefix}.Yield_By_Length.png",
+                                   datatype=["nanopore", ],
+                                   stage=["trimmed", ],
+                                   fileprefix=input_file_prefix_dict["nanopore"],) if "nanopore" in long_read_data_type_set else [],
+                        ]
+
     if config["database_set"]["kraken2"] and kraken_scan_data_type_set and (not config["skip_kraken"]):
         results_list += [expand(out_dir_path / "contamination_scan/kraken2/{datatype}/kraken2.{database}.report",
                                datatype=kraken_scan_data_type_set,

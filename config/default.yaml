@@ -113,7 +113,7 @@
     "telo_finder":              "default"   # Allowed: default
     "quast":                    "default"   # Allowed: default
     "minimap2":                 "default"   # Allowed: default
-    #"curation":                 "default"   # Allowed: default
+    "curation":                 "default"   # Allowed: default
     "two_read_bam_combiner":    "default"   # Allowed: default
     "pretextmap":               "default"   # Allowed: default
     "pretextsnapshot":          "default"   # Allowed: default

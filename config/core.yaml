@@ -1177,7 +1177,7 @@
             "minimap2_index": 20000
             "minimap2":       30000
         "threads":
-            "hifiasm": 90
+            "hifiasm": 80
             "meryl": 70
         "time":
             "jellyfish": "12:00:00"
@@ -1845,7 +1845,7 @@
                 - "curation"
             "draft":
                 - "gap_closing"
-                - "curationc"
+                - "curation"
 
 "tool_specific_features":
     "hifiasm":

@@ -809,7 +809,6 @@ if "hic_scaffolding" in config["stage_list"]:
 
 
 if "curation" in config["stage_list"]:
-    print("AAAAAAAAA")
     prev_stage = stage_dict["curation"]["prev_stage"]
     curation_tool_list = config["stage_coretools"]["curation"]["default"]
     stage_dict["curation"]["parameters"] = {}
@@ -829,7 +828,7 @@ if "curation" in config["stage_list"]:
                 stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["curation"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
 
     parameters_list = list(stage_dict["curation"]["parameters"].keys())
-
+    print(stage_dict["curation"]["parameters"])
     results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.repeat.binned.bedgraph",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],

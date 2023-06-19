@@ -847,7 +847,7 @@ if "curation" in config["stage_list"]:
                             assembly_stage=["curation", ],
                             datatype=coverage_track_data_type_set,
                             haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                            parameters=[parameters_label]) for window_step_set in stage_dict["curation"]["parameters"][parameters_label]["coverage"]] for parameters_label in stage_dict["curation"]["parameters"]],
+                            parameters=[parameters_label]) for window_step_set in stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"]] for parameters_label in stage_dict["curation"]["parameters"]],
                      *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.canonical.txt",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],

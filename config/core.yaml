@@ -156,6 +156,7 @@
             "draw_coverage_heatmap": 1
             "create_links_for_input_assembly": 1
             "samba": 20
+            "select_long_scaffolds": 1
             #"fcs_gx": 50 # set via allowed_databases variable
 
         "memory_mb":
@@ -240,6 +241,7 @@
             "draw_coverage_heatmap": 5000
             "create_links_for_input_assembly": 100
             "samba": 50000
+            "select_long_scaffolds": 100
             #"fcs_gx": 512000 # set via allowed_databases variable
         "time": #TODO: adjust
             "install_from_pip": "01:00:00"
@@ -325,6 +327,7 @@
             "draw_coverage_heatmap": "02:00:00"
             "create_links_for_input_assembly": "00:05:00"
             "samba": "10:00:00" # TODO: adjust
+            "select_long_scaffolds": "00:30:00"
             #"fcs_gx": "03:00:00" # set via allowed_databases variable
         "tool_options":
             "cutadapt":

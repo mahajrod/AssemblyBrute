@@ -1182,6 +1182,7 @@
         "threads":
             "hifiasm": 80
             "meryl": 70
+            "busco5": 50
         "time":
             "jellyfish": "12:00:00"
             "hifiasm": "100:00:00"
@@ -1518,7 +1519,8 @@
                         "matching_len": 5000
     "giant": # < 15000 Mbp, big plant, shark, amphibian genomes
         "threads":
-            "hifiasm": 100
+            "hifiasm": 90
+            "busco5": 70
         "memory_mb":
             "jellyfish": 1100000
             "kat_gcp":   1100000

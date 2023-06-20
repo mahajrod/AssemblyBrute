@@ -267,7 +267,7 @@
             "subset_extracted_kmers": "01:00:00"
             "genomescope": "01:00:00"
             "parse_genomescope_output": "00:10:00"
-            "hifiasm": "08:00:00"
+            "hifiasm": "60:00:00"
             "gfa2fasta": "08:00:00"
             "get_coverage_from_hifiasm_graph": "02:00:00"
             "get_read_bed_from_hifiasm_graph": "02:00:00"
@@ -1184,7 +1184,7 @@
             "meryl": 70
         "time":
             "jellyfish": "12:00:00"
-            "hifiasm": "16:00:00"
+            "hifiasm": "100:00:00"
             "minimap2_index": "02:00:00"
             "minimap2": "20:00:00"
         "tool_options":
@@ -1437,6 +1437,7 @@
             "draw_coverage_heatmap": "02:00:00"
             "create_links_for_input_assembly": "00:05:00"
             "samba": "10:00:00" # TODO: adjust
+            "hifiasm": "150:00:00"
         "tool_options":
             "jellyfish":
                 "default":
@@ -1528,7 +1529,7 @@
             "nanoqc": 80000
         "time":
             "jellyfish": "48:00:00"
-            "hifiasm": "48:00:00"
+            "hifiasm": "200:00:00"
             "minimap2_index": "08:00:00"
             "minimap2": "100:00:00"
             "install_from_pip": "01:00:00"

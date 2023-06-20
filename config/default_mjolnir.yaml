@@ -23,7 +23,7 @@
             "time":         "06:00:00"
             "in_memory":    True
         "nt":
-            "path":         "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/db/kraken2/nt/20220915/" # add path to nt database
+            "path":         "/projects/mjolnir1/data/databases/kraken2/nt/20230502/" # add path to nt database
             "memory_mb":    500000
             "threads":      30
             "time":         "03:00:00"

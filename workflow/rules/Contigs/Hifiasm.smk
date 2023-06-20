@@ -50,6 +50,7 @@ rule hifiasm_correct:
          " pigz -p {threads} ${{UNCOMPRESSED_FASTA}} > {log.pigz} 2>&1 ; "
          " mv ${{UNCOMPRESSED_FASTA}}.gz {output.ec_fasta} > {log.mv} 2>&1; "
          " ln -sf ../../../../../{output.ec_fasta} {output.alias_ec_fasta} > {log.ln} 2>&1; "
+         " sleep 60; "
 
 rule hifiasm_hic: # TODO: add support for polyploid assemblies
     priority: 1000
@@ -121,10 +122,11 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
          " {params.kmer_length} {params.D} {params.N} {params.ignore_bin} --primary -t {threads} -l {params.purge_level}  -o ${{OUTPUT_PREFIX}} "
          " --n-hap {params.ploidy} --purge-max ${{COV_UPPER_BOUNDARY}} "
          " {params.hic_forward} {params.hic_reverse} {params.nanopore} "
-         " {input.hifi}  1>{log.std} 2>&1;"
+         " {input.hifi}  1>{log.std} 2>&1;"         
          " ln -sf `basename {output.primary_contig_graph}` {output.primary_alias};"
          " ln -sf `basename {output.alternative_contig_graph}` {output.alternative_alias};"
          " ln -sf `basename {output.alt_contig_graph}` {output.alt_alias}; "
+         " sleep 60;"
 
 rule hifiasm_hifi:
     priority: 1000

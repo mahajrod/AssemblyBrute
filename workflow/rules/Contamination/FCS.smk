@@ -128,7 +128,7 @@ rule fcs_adaptor: #
         " SINGULARITYENV_SQLITE_TMPDIR=${{OUTDIR}}'/singularity_sqlite/'; "
         " mkdir -p ${{TMPDIR}} ${{SINGULARITYENV_TMPDIR}} ${{SINGULARITYENV_SQLITE_TMPDIR}}; "
         " TMPDIR=${{TMPDIR}} SINGULARITYENV_TMPDIR=${{SINGULARITYENV_TMPDIR}} SINGULARITYENV_SQLITE_TMPDIR=${{SINGULARITYENV_SQLITE_TMPDIR}} "
-        " workflow/external_tools/run_fcsadaptor.sh --image {input.image} --fasta-input {input.fasta} --output-dir `dirname {output.report}` {params.taxonomy} --container-engine singularity > {log.std} 2>&1; "
+        " workflow/external_tools/fcsadaptor/run_fcsadaptor.sh --image {input.image} --fasta-input {input.fasta} --output-dir `dirname {output.report}` {params.taxonomy} --container-engine singularity > {log.std} 2>&1; "
         " mv `dirname {output.report}`/fcs_adaptor_report.txt {output.report}; "
         " mv `dirname {output.report_jsonl}`/combined.calls.jsonl {output.report_jsonl}; "
         " rm -rf ${{TMPDIR}} ${{SINGULARITYENV_TMPDIR}} ${{SINGULARITYENV_SQLITE_TMPDIR}}; "

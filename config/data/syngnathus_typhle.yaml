@@ -115,7 +115,7 @@
 
 "tool_manually_adjusted_features":
     "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions
-        "lower_threshold": 4
+        "lower_threshold": 5
         "haploid_diploid_threshold": 45
         "upper_threshold": 135
 

@@ -167,7 +167,7 @@
             "multiqc": 1000
             "nanoqc": 50000
             "nanoplot": 10000
-            "cutadapt": 10000
+            "cutadapt": 20000
             "porechop_abi": 20000
             "chopper": 10000
             "jellyfish": 200000
@@ -1180,6 +1180,7 @@
             "minimap2_index": 20000
             "minimap2":       30000
             "gfa2fasta": 20000
+            "cutadapt": 30000
         "threads":
             "hifiasm": 80
             "meryl": 70
@@ -1189,6 +1190,7 @@
             "hifiasm": "100:00:00"
             "minimap2_index": "02:00:00"
             "minimap2": "20:00:00"
+            "busco5": "60:00:00"
         "tool_options":
             "jellyfish":
                 "default":
@@ -1276,7 +1278,7 @@
             "multiqc": 1
             "nanoqc": 1
             "nanoplot": 4
-            "cutadapt": 20
+            "cutadapt": 40000
             "porechop_abi": 16
             "chopper": 8
             "jellyfish": 50
@@ -1388,7 +1390,7 @@
             "get_coverage_from_hifiasm_graph": "02:00:00"
             "get_read_bed_from_hifiasm_graph": "02:00:00"
             "busco5_download": "02:00:00"
-            "busco5": "48:00:00"
+            "busco5": "90:00:00"
             "compress_busco5": "05:00:00"
             "handle_busco5_output": "00:05:00"
             "busco5_intersect_haplotypes": "00:05:00"
@@ -1534,6 +1536,7 @@
             "nanoqc": 80000
             "gfa2fasta": 30000
             "busco5": 100000
+            "cutadapt": 50000
         "time":
             "jellyfish": "48:00:00"
             "hifiasm": "200:00:00"
@@ -1565,7 +1568,7 @@
             "get_coverage_from_hifiasm_graph": "02:00:00"
             "get_read_bed_from_hifiasm_graph": "02:00:00"
             "busco5_download": "02:00:00"
-            "busco5": "48:00:00"
+            "busco5": "120:00:00"
             "compress_busco5": "05:00:00"
             "handle_busco5_output": "00:05:00"
             "busco5_intersect_haplotypes": "00:05:00"

@@ -340,6 +340,7 @@ if "draft_qc" in config["stage_list"]:
                       *[expand(out_dir_path / "{stage}/{parameters}/fasta/{haplotype}/{assembly_kmer_length}/{datatype}/{fileprefix}.fasta.gz",
                                 stage=["draft_qc"],
                               parameters=[parameters_label],
+                                datatype=["hifi"],
                               genome_prefix=[config["genome_prefix"], ],
                               haplotype=stage_dict["draft_qc"]["parameters"][parameters_label]["haplotype_list"],
                               assembly_kmer_length=[31]) for parameters_label in parameters_list],

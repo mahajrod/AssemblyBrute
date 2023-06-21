@@ -1,7 +1,11 @@
 #ruleorder: meryl_pe > create_fastq_links
 rule meryl:
     input:
-        output_dict["data"] / ("fastq/{datatype}/{stage}/{fileprefix}%s" % config["fastq_extension"])
+        lambda wildcards: output_dict["data"] / "{0}/{1}/{2}/{3}{4}".format(datatype_format_dict[wildcards.datatype],
+                                                                                                wildcards.datatype,
+                                                                                                wildcards.stage,
+                                                                                                wildcards.fileprefix,
+                                                                                                config[datatype_format_dict[wildcards.datatype + "_extension"]])
     output:
         db_dir=directory(output_dict["kmer"] / "{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.meryl.{fileprefix}") #, (?!^histo$)
     log:
@@ -57,7 +61,7 @@ rule merge_meryl:
                                                                                  wildcards.datatype,
                                                                                  wildcards.stage,
                                                                                  wildcards.kmer_length,)),
-                   fileprefix=input_file_prefix_dict[wildcards.datatype],
+                   fileprefix=input_file_prefix_dict[wildcards.datatype] if datatype_format_dict[wildcards.datatype] == "fastq" else input_fasta_file_prefix_dict[wildcards.datatype],
                    allow_missing=True,)  if wildcards.datatype not in config["paired_fastq_based_data"] else \
             expand(rules.meryl_pe.output,
                    pairprefix=input_pairprefix_dict[wildcards.datatype],

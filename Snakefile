@@ -94,7 +94,7 @@ if config["final_kmer_datatype"] not in fastq_based_data_type_set:
 
 input_filedict = {}
 input_file_prefix_dict = {}
-input_fastafiledict = {}
+input_fasta_filedict = {}
 input_fasta_file_prefix_dict = {}
 
 input_forward_suffix_dict = {}

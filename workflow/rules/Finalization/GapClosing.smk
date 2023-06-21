@@ -21,7 +21,7 @@ def get_read_files_for_samba(wildcards):
                          allow_missing=True)
     print(filelist)
 
-    return list(map(lambda s: s.resolve(), filelist))
+    return list(map(lambda s: Path(s).resolve(), filelist))
 
 
 rule samba:

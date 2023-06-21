@@ -1360,6 +1360,7 @@
             "minimap2":       40000
             "nanoqc": 80000
             "gfa2fasta": 20000
+            "busco5": 50000
         "time":
             "install_from_pip": "01:00:00"
             "create_fastq_links": "00:05:00"
@@ -1532,6 +1533,7 @@
             "minimap2":       70000
             "nanoqc": 80000
             "gfa2fasta": 30000
+            "busco5": 100000
         "time":
             "jellyfish": "48:00:00"
             "hifiasm": "200:00:00"

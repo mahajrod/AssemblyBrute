@@ -116,7 +116,7 @@ datatype_format_dict = {}
 datatype_extension_dict = {}
 for d_type in set(data_types):
     if (d_type in fastq_based_data_type_set) and (d_type in fasta_based_data_type_set):
-        if (len(input_fasta_filedict[d_type]) > 0) and (len(input_fastq_filedict[d_type]) > 0):
+        if (len(input_fasta_filedict[d_type]) > 0) and (len(input_filedict[d_type]) > 0):
             raise  ValueError("Error!!! Datatype {0} has input files in both fastq ({1}) and fasta ({2}) formats!".format(d_type,
                                                                                                                           " ".join(input_filedict[d_type]),
                                                                                                                           " ".join(input_fasta_filedict[d_type])))

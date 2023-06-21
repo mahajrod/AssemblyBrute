@@ -5,7 +5,7 @@ rule meryl:
                                                                                                 wildcards.datatype,
                                                                                                 wildcards.stage,
                                                                                                 wildcards.fileprefix,
-                                                                                                config[datatype_format_dict[wildcards.datatype + "_extension"]])
+                                                                                                config[datatype_format_dict[wildcards.datatype] + "_extension"])
     output:
         db_dir=directory(output_dict["kmer"] / "{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.meryl.{fileprefix}") #, (?!^histo$)
     log:

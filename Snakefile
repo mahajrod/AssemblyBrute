@@ -49,7 +49,7 @@ for datatype in data_types:
         input_dict[datatype]["cmap"] = None # TODO: implement parsing bionano .cmap filename
     else:
         input_dict[datatype]["fastq_dir"] = input_dict[datatype]["dir"] / "fastq"
-
+        input_dict[datatype]["fasta_dir"] = input_dict[datatype]["dir"] / "fasta"
 #----
 #---- Initialization of path variables for output ----
 out_dir_path = Path(config["out_dir"])
@@ -70,6 +70,7 @@ for first_level_sub_dir in config["first_level_subdir_list"]:
 #-------- Verification of input datatypes --------
 
 fastq_based_data_type_set = set(data_types) & set(config["fastq_based_data"])
+fasta_based_data_type_set = set(data_types) & set(config["fasta_based_data"])
 fastqc_data_type_set = fastq_based_data_type_set & set(config["fastqc_data_types"])
 long_read_data_type_set = set(data_types) & set(config["long_read_data"])
 genome_size_estimation_data_type_set = set(config["genome_size_estimation_data"]) & fastq_based_data_type_set & set(data_types)
@@ -93,6 +94,9 @@ if config["final_kmer_datatype"] not in fastq_based_data_type_set:
 
 input_filedict = {}
 input_file_prefix_dict = {}
+input_fastafiledict = {}
+input_fasta_file_prefix_dict = {}
+
 input_forward_suffix_dict = {}
 input_reverse_suffix_dict = {}
 input_pairprefix_dict = {}
@@ -101,6 +105,29 @@ for d_type in fastq_based_data_type_set:
     input_filedict[d_type] = find_fastqs(input_dict[d_type]["fastq_dir"], fastq_extension=config["fastq_extension"])
     input_file_prefix_dict[d_type] = list(map(lambda s: str(s.name)[:-len(config["fastq_extension"])],
                                                 input_filedict[d_type]))
+
+for d_type in fasta_based_data_type_set:
+    input_fasta_filedict[d_type] = find_fastas(input_dict[d_type]["fasta_dir"], fasta_extension=config["fasta_extension"])
+    input_fasta_file_prefix_dict[d_type] = list(map(lambda s: str(s.name)[:-len(config["fasta_extension"])],
+                                                input_fasta_filedict[d_type]))
+
+#---- detect datatypes and check if datatype has files in both fasta and fastq formats ----
+datatype_format_dict = {}
+datatype_extension_dict = {}
+for d_type in set(data_types):
+    if (d_type in fastq_based_data_type_set) and (d_type in fasta_based_data_type_set):
+        if (len(input_fasta_filedict[d_type]) > 0) and (len(input_fastq_filedict[d_type]) > 0):
+            raise  ValueError("Error!!! Datatype {0} has input files in both fastq ({1}) and fasta ({2}) formats!".format(d_type,
+                                                                                                                          " ".join(input_filedict[d_type]),
+                                                                                                                          " ".join(input_fasta_filedict[d_type])))
+        elif len(input_fasta_filedict[d_type]) > 0:
+            datatype_format_dict[d_type] = "fasta"
+            datatype_extension_dict[d_type] = config["fasta_extension"]
+        elif len(input_fastq_filedict[d_type]) > 0:
+             datatype_format_dict[d_type] = "fastq"
+             datatype_extension_dict[d_type] = config["fastq_extension"]
+#------------------------------------------------------------------------------------------
+
 # check filenames of paired data
 for d_type in set(config["paired_fastq_based_data"]) & fastq_based_data_type_set:
    if (len(input_filedict[d_type]) % 2) != 0:
@@ -263,10 +290,8 @@ if "read_qc" in config["stage_list"]:
 
 
 if "draft_qc" in config["stage_list"]:
-    draft_file_dict = get_input_assemblies(input_dir_path / "draft/fasta", config["ploidy"], config["fasta_extension"])
+    draft_file_dict = get_input_assemblies(input_dir_path / "draft/fasta", config["ploidy"], config["assembly_fasta_extension"])
     print(draft_file_dict)
-
-
     stage_dict["draft_qc"]["parameters"] = {}
 
     for qcer in config["stage_coretools"]["draft_qc"]["default"]:

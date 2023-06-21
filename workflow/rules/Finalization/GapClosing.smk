@@ -64,7 +64,7 @@ rule samba:
          " LOG_SAMBA=`realpath -s {log.samba}`; "
          " LOG_LN=`realpath -s {log.ln}`; "
          " INPUT_FILES='';"
-         " for FILE in {input.reads}; do INPUT_FILES=\"${{INPUT_FILES}} \"`realpath -s ${{FILE}}` done; "
+         " for FILE in {input.reads}; do INPUT_FILES=\"${{INPUT_FILES}} \"`realpath -s ${{FILE}}`; done; "
          " cd ${{OUTPUT_DIR}}; "
          " close_scaffold_gaps.sh -t {threads} -q <(zcat ${{INPUT_FILES}}) {params.datatype} -r ${{INPUT_FASTA}} "
          " {params.matching_len} -v > ${{LOG_SAMBA}} 2>&1; "

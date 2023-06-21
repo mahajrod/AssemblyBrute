@@ -104,8 +104,8 @@
     "assembly_qc":
         - "default"
     "samba":
-        #- "raw_reads"
-        - "corrected_reads"
+        - "phased_reads"
+        - "unphased_reads"
 
 "other_tool_option_sets":
     "cutadapt":                 "default"   # Allowed: default

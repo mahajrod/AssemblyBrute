@@ -123,7 +123,7 @@ for d_type in set(data_types):
         elif len(input_fasta_filedict[d_type]) > 0:
             datatype_format_dict[d_type] = "fasta"
             datatype_extension_dict[d_type] = config["fasta_extension"]
-        elif len(input_fastq_filedict[d_type]) > 0:
+        elif len(input_filedict[d_type]) > 0:
              datatype_format_dict[d_type] = "fastq"
              datatype_extension_dict[d_type] = config["fastq_extension"]
 #------------------------------------------------------------------------------------------

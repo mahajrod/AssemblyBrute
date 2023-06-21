@@ -91,7 +91,7 @@ def detect_phasing_parameters(current_stage_parameters, phasing_stage, stage_sep
         raise ValueError("Impossible to detect phasing stage parameters for {0} and phasing stage {1}".format(current_stage_parameters,
                                                                                                               phasing_stage))
     for stage_parameters in stage_dict[phasing_stage]["parameters"].keys():
-        if stage_subparameters in stage_parameters:
+        if (stage_subparameters in stage_parameters) and (stage_parameters in current_stage_parameters):
             return stage_parameters
     else:
         raise ValueError("Impossible to detect phasing stage parameters for {0} and phasing stage {1}".format(current_stage_parameters,

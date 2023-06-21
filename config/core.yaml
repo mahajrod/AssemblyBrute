@@ -1743,11 +1743,6 @@
     #- "hifi" # optional, uncomment only when necessary
     # - "clr"
 
-"filtered_data":
-    - "hifi"
-    - "illumina"
-    - "nanopore"
-
 "fastq_based_data":
     - "hifi"
     - "clr"
@@ -1755,6 +1750,14 @@
     - "hic"
     - "lr"
     - "illumina"
+
+"fasta_based_data": # Datatypes that might be in fasta format. For example corrected hifi or nanopore reads
+    - "hifi"
+    - "clr"
+    - "nanopore"
+    #- "hic"
+    #- "lr"
+    #- "illumina"
 
 "paired_fastq_based_data":
     - "hic"
@@ -1778,8 +1781,9 @@
     - "nanopore"
 
 "fastq_extension": ".fastq.gz"
-"fasta_extension": ".fasta"
+"fasta_extension": ".fasta.gz"
 "cmap_extension": ".cmap"
+"assembly_fasta_extension": ".fasta"
 
 "allowed_stage_list": # Dictionary containing description of stage variants
     "preprocessing":                 # mega_stage

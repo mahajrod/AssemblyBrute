@@ -21,7 +21,7 @@ def get_read_files_for_samba(wildcards):
                          allow_missing=True)
     print(filelist)
 
-    return list(map(lambda s: Path(s).resolve(), filelist))
+    return filelist
 
 
 rule samba:
@@ -63,7 +63,9 @@ rule samba:
          " INPUT_FASTA_BASENAME=`basename {input.fasta}`; "
          " LOG_SAMBA=`realpath -s {log.samba}`; "
          " LOG_LN=`realpath -s {log.ln}`; "
+         " INPUT_FILES='';"
+         " for FILE in {input.reads}; do INPUT_FILES=\"${{INPUT_FILES}} \"`realpath -s ${{FILE}}` done; "
          " cd ${{OUTPUT_DIR}}; "
-         " close_scaffold_gaps.sh -t {threads} -q <(zcat {input.reads}) {params.datatype} -r ${{INPUT_FASTA}} "
+         " close_scaffold_gaps.sh -t {threads} -q <(zcat ${{INPUT_FILES}}) {params.datatype} -r ${{INPUT_FASTA}} "
          " {params.matching_len} -v > ${{LOG_SAMBA}} 2>&1; "
          " ln -sf {wildcards.haplotype}/${{INPUT_FASTA_BASENAME}}.split.joined.fa ../`basename {output.fasta}` > ${{LOG_LN}} 2>&1; "

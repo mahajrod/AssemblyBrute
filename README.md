@@ -99,3 +99,25 @@ snakemake --cores 60 --configfile config/default.yaml --printshellcmds --latency
 #shark
 git pull; snakemake --cores 80  --configfile config/somniosus.yaml --printshellcmds --latency-wait 60   --config mode="assembly" assembly_mode="contig" "parameter_set"="giant"  "data_types"="hifi,hic" "tax_id"=191813  "use_existing_envs"=False "skip_busco"=True  "final_kmer_datatype"="hifi" "busco_lineage_list"='["vertebrata_odb10"]' "skip_gcp"=True  --use-conda --rerun-incomplete --res   fcs=1 fcs_adaptor=1 mem=800000 kmer_counter=1  telosif=1
 ```
+
+
+```commandline
+#Stage by stage (recommended)
+#qc and filtering
+
+#contig assembly
+
+#purge dups
+
+#purge_dups with calcuts thresholds adjusted, skip if the thresholds correspond to plots
+
+# hic scaffolding
+
+# curation
+
+# finalization
+
+
+
+
+```

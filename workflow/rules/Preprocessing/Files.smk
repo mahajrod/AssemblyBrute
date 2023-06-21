@@ -1,4 +1,4 @@
-localrules: create_fastq_links, create_links_for_draft
+localrules: create_fastq_links, create_links_for_draft, create_fasta_links
 rule create_fastq_links:
     priority: 1000
     input:

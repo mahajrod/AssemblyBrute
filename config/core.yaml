@@ -1278,7 +1278,7 @@
             "multiqc": 1
             "nanoqc": 1
             "nanoplot": 4
-            "cutadapt": 40000
+            "cutadapt": 10
             "porechop_abi": 16
             "chopper": 8
             "jellyfish": 50
@@ -1363,6 +1363,7 @@
             "nanoqc": 80000
             "gfa2fasta": 20000
             "busco5": 50000
+            "cutadapt": 50000
         "time":
             "install_from_pip": "01:00:00"
             "create_fastq_links": "00:05:00"

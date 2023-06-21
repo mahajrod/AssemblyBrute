@@ -1,6 +1,7 @@
 #---- Main config file ----
 "main_config_file": "config/core.yaml"      # Path to main config file relative to Snakefile
 #--------------------------
+
 "allowed_databases":
     "kraken2":
         "silva":
@@ -63,11 +64,17 @@
     "hic_scaffolding":
         "default":
             #- "salsa2" # Allowed: "salsa2", "yahs", "3d-dna"
-            #- "yahs"
+            - "yahs"
             - "threeddna"
     "curation":
         "default":
             - "curation"
+    "draft_qc":
+        "default":
+            - "assembly_qc"
+    "gap_closing":
+        "default":
+            - "samba"
 
 "coretool_option_sets":
     "hifiasm":
@@ -88,12 +95,18 @@
         - "unphased_reads"
     "yahs":
         - "phased_reads"
-        #- "unphased_reads"
-    "threeddna":
-        #- "phased_reads"
+        - "unphased_reads"
+    "3ddna":
+        - "phased_reads"
         - "unphased_reads"
     "curation":
         - "default"
+    "assembly_qc":
+        - "default"
+    "samba":
+        #- "raw_reads"
+        - "corrected_reads"
+
 "other_tool_option_sets":
     "cutadapt":                 "default"   # Allowed: default
     "porechop_abi":             "default"   # Allowed: default
@@ -138,10 +151,7 @@
     "fcs":
         - "fcs_gx"
 
-"filtered_data":
-    - "hifi"
-    - "illumina"
-    - "nanopore"
+"filtered_data": [] # this stage expects already filtered input data
 
 "final_kmer_counter": "meryl" # pipeline allows usage of different kmer counter tools, but only one genomesize assessment could be used
 "final_kmer_length": 21 # pipeline allows usage of different kmer length, but only one genomesize assessment could be used
@@ -149,23 +159,30 @@
 "final_kmer_datatype": "hifi"
 "assembly_kmer_length":
     - 31 # kmer length to be used for phasing hic reads using assembled and purge_dupsed contigs
-"phasing_stage": "purge_dups"
+"phasing_stage": "draft_qc"
 
 "contig_datatype": "hifi"
+"gap_closing_datatype": "hifi"
 "hic_enzyme_set": "Arima"
 "custom_enzyme_set": null # None
 
-"starting_point": "fastq" # Allowed: "draft"
-"data_types": "hifi,hic" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
+"starting_point": "draft" #
+"data_types": "hifi,hic"  # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
 
-"mode": "assembly"                # Allowed: "preprocessing", "qc", "assembly"
+#-------- Options specific for starting point 'draft' ----------------
+"phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads
+#---------------------------------------------------------------------
+
+"mode": "qc"                      # Allowed: "preprocessing", "qc", "assembly", "finalization"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
 "assembly_mode": "full"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
+"finalization_mode": "gap_closing"
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []
 "custom_assembly_stages": []
+"custom_finalization_stages": []
 "skip_busco": False
 "skip_gcp": False
 "skip_fcs": False

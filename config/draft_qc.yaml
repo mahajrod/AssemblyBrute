@@ -137,6 +137,9 @@
 "genome_prefix": "genome"
 "busco_lineage_list":
     - "mammalia_odb10" #
+#Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
+#                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
+
 "species_name": "species species"
 "tax_id": null # necessary for contamination scan via FCS
 
@@ -147,9 +150,11 @@
         - "adaptor"
     "fcs":
         - "fcs_gx"
-#Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
-#                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
 
+"filtered_data":
+    - "hifi"
+    - "illumina"
+    - "nanopore"
 
 "final_kmer_counter": "meryl" # pipeline allows usage of different kmer counter tools, but only one genomesize assessment could be used
 "final_kmer_length": 21 # pipeline allows usage of different kmer length, but only one genomesize assessment could be used

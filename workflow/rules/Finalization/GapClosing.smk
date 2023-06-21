@@ -17,6 +17,7 @@ def get_read_files_for_samba(wildcards):
                                                                                           config["gap_closing_datatype"],
                                                                                           config[datatype_format_dict[config["gap_closing_datatype"]] + "_extension"])),
                          fileprefix=input_file_prefix_dict[config["gap_closing_datatype"]])
+    print(filelist)
 
     return list(map(lambda s: s.resolve(), filelist))
 

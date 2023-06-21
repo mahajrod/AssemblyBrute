@@ -1047,7 +1047,7 @@
                 "default":
                     "hifi":
                         "use_corrected_reads": True
-                        "matching_len": 3500
+                        "matching_len": 2500
                     "nanopore":
                         "use_corrected_reads": True
                         "matching_len": 2500

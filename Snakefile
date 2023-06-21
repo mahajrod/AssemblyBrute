@@ -270,7 +270,7 @@ if "check_draft" in config["stage_list"]:
     results_list += [ ] # TODO: implement
 
 
-if "read_qc" in config["stage_list"]:
+if ("read_qc" in config["stage_list"]) and (not config["skip_read_qc"]):
     results_list += [*[expand(output_dict["qc"] / "fastqc/{datatype}/{stage}/{fileprefix}_fastqc.zip",
                                datatype=[dat_type, ],
                                stage=["raw", ],
@@ -377,7 +377,7 @@ if "draft_qc" in config["stage_list"]:
                                     parameters=[parameters_label]) for parameters_label in parameters_list],
                          ]
 
-if "filter_reads" in config["stage_list"]:
+if ("filter_reads" in config["stage_list"]) and (not config["skip_filter_reads"]):
     #print(genome_size_estimation_data_type_set)
     results_list += [expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),
                             fileprefix=input_file_prefix_dict["hifi"]) if "hifi" in fastq_based_data_type_set else [],

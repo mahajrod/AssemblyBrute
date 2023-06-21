@@ -331,6 +331,7 @@ if "draft_qc" in config["stage_list"]:
                                 parameters=[parameters_label]) for parameters_label in parameters_list],
                          ]
     #TODO: remove after debugging
+    """
     results_list += [ *[expand(out_dir_path / "{stage}/{parameters}/kmer/{genome_prefix}.{stage}.{haplotype}.{assembly_kmer_length}",
                                stage=["draft_qc"],
                               parameters=[parameters_label],
@@ -347,7 +348,7 @@ if "draft_qc" in config["stage_list"]:
                               assembly_kmer_length=[31]) for parameters_label in parameters_list],
 
                       ]
-
+    """
     if "gap_closing" in config["stage_list"]:
         prev_stage = "draft_qc"
 

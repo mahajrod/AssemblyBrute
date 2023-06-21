@@ -1179,6 +1179,7 @@
             "meryl":     300000
             "minimap2_index": 20000
             "minimap2":       30000
+            "gfa2fasta": 20000
         "threads":
             "hifiasm": 80
             "meryl": 70
@@ -1358,6 +1359,7 @@
             "minimap2_index": 20000
             "minimap2":       40000
             "nanoqc": 80000
+            "gfa2fasta": 20000
         "time":
             "install_from_pip": "01:00:00"
             "create_fastq_links": "00:05:00"
@@ -1529,6 +1531,7 @@
             "minimap2_index": 30000
             "minimap2":       70000
             "nanoqc": 80000
+            "gfa2fasta": 30000
         "time":
             "jellyfish": "48:00:00"
             "hifiasm": "200:00:00"

@@ -7,6 +7,7 @@ def get_read_files_for_samba(wildcards):
         filelist = expand(output_dict["data"] / ("%s/%s/raw/{fileprefix}%s" % (datatype_format_dict[config["gap_closing_datatype"]],
                                                                               config["gap_closing_datatype"],
                                                                               config[datatype_format_dict[config["gap_closing_datatype"]] + "_extension"])),
+                          allow_missing=True,
                           fileprefix=input_file_prefix_dict[config["gap_closing_datatype"]] if datatype_format_dict[config["gap_closing_datatype"]] == "fastq" else input_fasta_file_prefix_dict[config["gap_closing_datatype"]])
     else:
         print("CCCCCCCCCC")
@@ -16,7 +17,8 @@ def get_read_files_for_samba(wildcards):
                                                                                           stage_dict["gap_closing"]["parameters"][wildcards.prev_stage_parameters + "..samba_" + wildcards.gap_closing_parameters]["option_set"]["phasing_kmer_length"],
                                                                                           config["gap_closing_datatype"],
                                                                                           config[datatype_format_dict[config["gap_closing_datatype"]] + "_extension"])),
-                         fileprefix=input_file_prefix_dict[config["gap_closing_datatype"]] if datatype_format_dict[config["gap_closing_datatype"]] == "fastq" else input_fasta_file_prefix_dict[config["gap_closing_datatype"]])
+                         fileprefix=input_file_prefix_dict[config["gap_closing_datatype"]] if datatype_format_dict[config["gap_closing_datatype"]] == "fastq" else input_fasta_file_prefix_dict[config["gap_closing_datatype"]],
+                         allow_missing=True)
     print(filelist)
 
     return list(map(lambda s: s.resolve(), filelist))

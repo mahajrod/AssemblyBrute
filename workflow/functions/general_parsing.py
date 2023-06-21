@@ -82,20 +82,25 @@ def detect_phasing_parameters(current_stage_parameters, phasing_stage, stage_sep
     for settings in config["stage_coretools"][phasing_stage]:
         phasing_stage_coretools += config["stage_coretools"][phasing_stage][settings]
     stage_subparameters = None
-    for entry in parameter_list:
+    stage_subparameters_index = None
+    for index in range(0, len(parameter_list)):
         for tool in phasing_stage_coretools:
-            if entry[:len(tool)] == tool:
-                stage_subparameters = entry
+            if parameter_list[index][:len(tool)] == tool:
+                stage_subparameters = parameter_list[index]
+                stage_subparameters_index = index
 
     if stage_subparameters is None:
         raise ValueError("Impossible to detect phasing stage parameters for {0} and phasing stage {1}".format(current_stage_parameters,
                                                                                                               phasing_stage))
+    return stage_separator.join(parameter_list[:stage_subparameters_index+1])
+    """
     for stage_parameters in stage_dict[phasing_stage]["parameters"].keys():
-        if stage_subparameters in stage_parameters:
+        if (stage_subparameters in stage_parameters) and (stage_parameters in current_stage_parameters):
             return stage_parameters
     else:
         raise ValueError("Impossible to detect phasing stage parameters for {0} and phasing stage {1}".format(current_stage_parameters,
                                                                                                               phasing_stage))
+    """
 
 
 def get_parameters_for_all_stages_in_chain(current_stage_parameters, stage_separator=".."):

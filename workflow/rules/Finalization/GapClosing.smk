@@ -1,6 +1,6 @@
 
 def get_read_files_for_samba(wildcards):
-    phasing_kmer_length = stage_dict["gap_closing"]["parameters"][wildcards.prev_stage_parameters + "..samba_" + wildcards.gap_closing_parameters]["options_set"]["phasing_kmer_length"]
+    phasing_kmer_length = stage_dict["gap_closing"]["parameters"][wildcards.prev_stage_parameters + "..samba_" + wildcards.gap_closing_parameters]["option_set"]["phasing_kmer_length"]
     if phasing_kmer_length == "NA":
         filelist = expand(output_dict["data"] / "%s/%s/raw/{fileprefix}%s" % (datatype_format_dict[config["gap_closing_datatype"]],
                                                                               config["gap_closing_datatype"],

@@ -100,7 +100,7 @@
             "get_coverage_from_hifiasm_graph": 1
             "get_read_bed_from_hifiasm_graph": 1
             "busco5_download": 1
-            "busco5": 30
+            "busco5": 50
             "compress_busco5": 1
             "busco5_intersect_haplotypes": 1
             "busco5_intersect_stages": 1

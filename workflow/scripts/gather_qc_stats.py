@@ -88,7 +88,7 @@ final_df = pd.DataFrame([[stage, parameters] for stage, parameters in zip([args.
 print(merqury_qv_df, merqury_completeness_df)
 print(df_dict)
 print("CCCCCC")
-print(merqury_completeness_df[["assembly_solid_kmers", "read_solid_kmers", "completeness"]].loc[args.haplotype_list])
+print(merqury_completeness_df[["assembly_solid_kmers", "read_solid_kmers", "completeness"]])
 print([df_dict[haplotype]["quast"][quast_columns] for haplotype in args.haplotype_list])
 print("AAAAAAAAA")
 final_df = pd.concat([final_df,

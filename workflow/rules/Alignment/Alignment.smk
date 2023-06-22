@@ -1,3 +1,4 @@
+localrules: generate_prescaffolding_agp
 
 rule bwa_map: #
     input:
@@ -107,7 +108,7 @@ rule bam_merge_files:
         mem=parameters["memory_mb"]["samtools_sort"]
     threads: parameters["threads"]["samtools_sort"]
     shell:
-        " samtools merge -@ {params.sort_threads} --reference  -o {output.bam} {input.bams} 1>{log.std} 2>&1"
+        " samtools merge -@ {params.sort_threads} -o {output.bam} {input.bams} 1>{log.std} 2>&1"
 
 rule rmdup:
     input:
@@ -164,40 +165,84 @@ rule generate_site_positions: #
         " OUTPUT_PREFIX=${{OUTPUT_PREFIX%_{params.restriction_seq}.txt}}; "
         " ./workflow/external_tools/juicer/misc/generate_site_positions.py {params.restriction_seq} ${{OUTPUT_PREFIX}} {input.fasta} > {log.sites} 2>&1; "
 
-"""
-rule juicer_tools_qc:
+rule generate_prescaffolding_agp:
     input:
-        bam=rules.rmdup.output.bam,
-        restriction_site_file=rules.generate_site_positions.output.restriction_site_file if config["hic_enzyme_set"] not in config["no_motif_enzyme_sets"] else []
+        reference_fai="{prefix}.fasta.fai",
     output:
-        #inter30=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.inter_{mapq}.txt",
-        inter=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.inter_{mapq}.txt",
-        #merged30=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.merged_{mapq}.txt"),
-        merged=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.merged_{mapq}.txt",
-    params:
-        restriction_site_file=rules.generate_site_positions.output.restriction_site_file if config["hic_enzyme_set"] not in config["no_motif_enzyme_sets"] else "none"
+        pre_agp="{prefix}.pre.agp"
     log:
-        samtools=output_dict["log"] / "juicer_tools_qc.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.samtools.log",
-        awk=output_dict["log"] / "juicer_tools_qc.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.awk.log",
-        juicer_tools=output_dict["log"] / "juicer_tools_qc.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.juicer_tools.log",
-        #samtools30=output_dict["log"] / "juicer_tools_qc.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.samtools30.log",
-        #awk30=output_dict["log"] / "juicer_tools_qc.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.awk30.log",
-        #juicer_tools30=output_dict["log"] / "juicer_tools_qc.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.juicer_tools30.log",
-        cluster_log=output_dict["cluster_log"] / "juicer_tools_qc.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "juicer_tools_qc.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.cluster.err"
+        std="{prefix}.generatepre_scaffolding_agp.log",
+        cluster_log="{prefix}.generate_prescaffolding_agp.cluster.log",
+        cluster_err="{prefix}.generate_prescaffolding_agp.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.benchmark.txt"
+        "{prefix}.generate_prescaffolding_agp.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        cpus=parameters["threads"]["juicer_tools_qc"] ,
-        time=parameters["time"]["juicer_tools_qc"],
-        mem=parameters["memory_mb"]["juicer_tools_qc"]
-    threads: parameters["threads"]["juicer_tools_qc"]
-    shell: # juicer_tools appends to {output.inter} instead of rewritting. Added cmd to empty file
-        " samtools view -@ {threads} -F 1024 -O sam {input.bam}  2>{log.samtools} | "
-        " awk -v mapq={wildcards.mapq} -f workflow/external_tools/juicer/scripts/common/sam_to_pre.awk > {output.merged} 2>{log.awk}; "
-        " > {output.inter}; "
-        " workflow/external_tools/juicer/scripts/common/juicer_tools statistics --threads {threads} {params.restriction_site_file} "
-        " {output.inter} {output.merged} none > {log.juicer_tools} 2>&1; "
-"""
+        cpus=parameters["threads"]["generate_prescaffolding_agp"] ,
+        time=parameters["time"]["generate_prescaffolding_agp"],
+        mem=parameters["memory_mb"]["generate_prescaffolding_agp"]
+    threads: parameters["threads"]["generate_prescaffolding_agp"]
+
+    shell:
+        " ./workflow/scripts/generate_agp_from_fai.py -i {input.reference_fai} -o {output.pre_agp} > {log.std} 2>&1;"
+
+rule yahs_juicer_pre_prescaffolding: #
+    input:
+        reference_fai=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.fai",
+        bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
+        bai=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam.bai",
+        agp=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.pre.agp"
+    output:
+        links_bed=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bed",
+        liftover_agp=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.liftover.agp",
+        assembly=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.assembly",
+        assembly_agp=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.assembly.agp",
+        log=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.yahs.juicer_pre.log",
+    log:
+        #std=output_dict["log"]  / "yahs_juicer_pre.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.log",
+        mv=output_dict["log"]  / "yahs_juicer_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.mv.log",
+        cluster_log=output_dict["cluster_log"] / "yahs_juicer_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "yahs_juicer_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "yahs_juicer_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["yahs_juicer_pre"] ,
+        time=parameters["time"]["yahs_juicer_pre"],
+        mem=parameters["memory_mb"]["yahs_juicer_pre"]
+    threads: parameters["threads"]["yahs_juicer_pre"]
+    shell:
+        " OUTPUT_PREFIX={output.links_bed}; "
+        " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.bed}}; "
+        " juicer pre -a -o ${{OUTPUT_PREFIX}} {input.bam} {input.agp} {input.reference_fai} > {output.log} 2>&1;"
+        " mv ${{OUTPUT_PREFIX}}.txt {output.links_bed} > {log.mv} 2>&1; "
+
+rule juicer_tools_pre_prescaffolding: #
+    input:
+        yahs_juicer_pre_log=rules.yahs_juicer_pre_prescaffolding.output.log,
+        yahs_juicer_pre_bed=rules.yahs_juicer_pre_prescaffolding.output.links_bed
+    output:
+        hic=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.hic",
+    log:
+        juicer=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.juicer.log",
+        cat=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.cat.log",
+        grep=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.grep.log",
+        awk=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.awk.log",
+        cluster_log=output_dict["cluster_log"] / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["juicer_tools_pre"] ,
+        time=parameters["time"]["juicer_tools_pre"],
+        mem=parameters["memory_mb"]["juicer_tools_pre"]
+    threads: parameters["threads"]["juicer_tools_pre"]
+
+    shell: # juicer_tools elder than 1.9.9 seems to be incompartible with yahs
+        " java -jar -Xmx{resources.mem}m workflow/external_tools/juicer/juicer_tools.1.9.9_jcuda.0.8.jar pre " #--threads {threads}  
+        " {input.yahs_juicer_pre_bed} {output.hic} <(cat {input.yahs_juicer_pre_log} 2>{log.cat} | "
+        " grep PRE_C_SIZE 2>{log.grep} | awk '{{print $2\" \"$3}}' 2>{log.awk}) > {log.juicer} 2>&1; "

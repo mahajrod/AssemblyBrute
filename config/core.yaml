@@ -1355,8 +1355,8 @@
             "kat_gcp":   600000
             "meryl":     500000
             "hifiasm":   500000
-            "minimap2_index": 20000
-            "minimap2":       40000
+            "minimap2_index": 40000
+            "minimap2":       70000
             "nanoqc": 80000
             "gfa2fasta": 20000
             "busco5": 50000

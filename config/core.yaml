@@ -1178,6 +1178,7 @@
             "minimap2":       30000
             "gfa2fasta": 20000
             "cutadapt": 30000
+            "purge_dups": 40000
         "threads":
             "hifiasm": 80
             "meryl": 70
@@ -1361,6 +1362,7 @@
             "gfa2fasta": 20000
             "busco5": 50000
             "cutadapt": 50000
+            "purge_dups": 50000
         "time":
             "install_from_pip": "01:00:00"
             "create_fastq_links": "00:05:00"
@@ -1535,6 +1537,7 @@
             "gfa2fasta": 30000
             "busco5": 100000
             "cutadapt": 50000
+            "purge_dups": 70000
         "time":
             "jellyfish": "48:00:00"
             "hifiasm": "200:00:00"

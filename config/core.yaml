@@ -1177,7 +1177,7 @@
             "meryl":     300000
             "minimap2_index": 20000
             "minimap2":       30000
-            "gfa2fasta": 20000
+            "gfa2fasta": 30000
             "cutadapt": 30000
             "purge_dups": 40000
             "meryl_assembly": 50000
@@ -1361,7 +1361,7 @@
             "minimap2_index": 40000
             "minimap2":       70000
             "nanoqc": 80000
-            "gfa2fasta": 20000
+            "gfa2fasta": 40000
             "busco5": 50000
             "cutadapt": 50000
             "purge_dups": 50000
@@ -1537,7 +1537,7 @@
             "minimap2_index": 30000
             "minimap2":       70000
             "nanoqc": 80000
-            "gfa2fasta": 30000
+            "gfa2fasta": 60000
             "busco5": 100000
             "cutadapt": 50000
             "purge_dups": 70000

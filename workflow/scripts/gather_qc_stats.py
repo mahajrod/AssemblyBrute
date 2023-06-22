@@ -85,16 +85,11 @@ final_df = pd.DataFrame([[stage, parameters] for stage, parameters in zip([args.
                                                                           [args.parameters] * len(args.haplotype_list))],
                         index=pd.Index([haplotype for haplotype in args.haplotype_list], name="haplotype"),
                         columns=["stage", "parameters"])
-print(merqury_qv_df, merqury_completeness_df)
-print(df_dict)
-print("CCCCCC")
-print(merqury_completeness_df[["assembly_solid_kmers", "read_solid_kmers", "completeness"]])
-print([df_dict[haplotype]["quast"][quast_columns] for haplotype in args.haplotype_list])
-print("AAAAAAAAA")
+
 final_df = pd.concat([final_df,
                       pd.concat([df_dict[haplotype]["quast"][quast_columns] for haplotype in args.haplotype_list]),
                       merqury_qv_df.loc[args.haplotype_list],
-                      merqury_completeness_df[["assembly_solid_kmers", "read_solid_kmers", "completeness"]].loc[args.haplotype_list],
+                      merqury_completeness_df[["assembly_solid_kmers", "read_solid_kmers", "completeness"]].loc[args.haplotype_list] if not merqury_completeness_df.empty else pd.DataFrame(),
                       *[pd.concat([df_dict[haplotype]["busco5"][busco_db] for haplotype in args.haplotype_list]) for busco_db in args.busco_database_list]
                       ],
                      axis=1)

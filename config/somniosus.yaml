@@ -173,6 +173,9 @@
 "custom_preprocessing_stages": []
 "custom_qc_stages": []
 "custom_assembly_stages": []
+
+"skip_read_qc": False
+"skip_filter_reads": False
 "skip_busco": False
 "skip_gcp": False
 "skip_fcs": False

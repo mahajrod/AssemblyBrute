@@ -46,7 +46,7 @@
   - "mavr>=0.97"
   - "jellyfish>=2"
   - "krater>=2.7.9"
-  - "mace>=1.1.10"
+  - "mace>=1.1.11"
   - "biopython"
   - "pyfastaq"
   - "seqtk"

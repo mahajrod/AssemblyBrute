@@ -42,7 +42,7 @@
   - "smudgeplot"
   - "pairtools"
   - "parallel"
-  - "routoolpa>=0.100"
+  - "routoolpa>=0.103"
   - "mavr>=0.97"
   - "jellyfish>=2"
   - "krater>=2.7.9"

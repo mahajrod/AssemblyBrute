@@ -89,7 +89,7 @@ rule create_coverage_table:
 
     shell:
         " PREFIX={output.stat_file};"
-        " PREFIX=${{PREFIX%.win{wildcards.window}.step{wildcards.step}.stat}}; "
+        " PREFIX=${{PREFIX%.stat}}; "
         " get_windows_stats_mosdepth_per_base_file.py -i {input.per_base} -w {wildcards.window} -s {wildcards.step} "
         " -o ${{PREFIX}} 2>{log.std}; "
         #" cp ${{PREFIX}}.win{params.bin_size}.step{params.step_size}.stat ${{PREFIX}}.stat > {log.cp} 2>&1;"

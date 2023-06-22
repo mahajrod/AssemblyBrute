@@ -126,3 +126,37 @@ rule extract_se_reads_by_unique_hap_kmers:
     shell:
          " meryl-lookup -exclude -sequence {input.se_read} "
          " -mers {input.rest_hap_db_dirs} -output {output.hap_se_read} > {log.std} 2>&1;"
+
+rule extract_se_reads_from_fasta_by_unique_hap_kmers: #TODO: merge with extract_se_reads_by_unique_hap_kmers:
+    input:
+        rest_hap_db_dirs=lambda wildcards: expand(out_dir_path / ("%s/%s/kmer/%s.%s.{haplotype}.%s.unique" % (wildcards.stage,
+                                                                                                              wildcards.parameters,
+                                                                                                              config["genome_prefix"],
+                                                                                                              wildcards.stage,
+                                                                                                              wildcards.assembly_kmer_length)),
+                                                 haplotype=set(stage_dict[wildcards.stage]["parameters"][wildcards.parameters]["haplotype_list"]) - {wildcards.haplotype},
+                                                 allow_missing=True),
+        se_read=lambda wildcards: output_dict["data"]  / ("fasta/{0}/{1}/{2}{3}".format(wildcards.datatype,
+                                                                                        "filtered" if wildcards.datatype in config["filtered_data"] else "raw",
+                                                                                        wildcards.fileprefix,
+                                                                                        config["fasta_extension"])),
+    output:
+        hap_se_read=out_dir_path / "{stage}/{parameters}/fasta/{haplotype, [^./]+}/{assembly_kmer_length, [^./]+}/{datatype, [^/]+}/{fileprefix, [^/]+}.fasta.gz",
+    log:
+        std=output_dict["log"] / "extract_se_reads_from_fasta_by_unique_hap_kmers.{datatype}.{stage}.{parameters}.{fileprefix}.{assembly_kmer_length}.{haplotype}.log",
+        #hap2=output_dict["log"] / "extract_reads_by_unique_hap_kmers.{stage}.{parameters}.{fileprefix}.{genome_prefix}.AK{assembly_kmer_length}.hap2.log",
+        cluster_log=output_dict["cluster_log"] / "extract_se_reads_from_fasta_by_unique_hap_kmers.{datatype}.{stage}.{parameters}.{fileprefix}.{assembly_kmer_length}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "extract_se_reads_from_fasta_by_unique_hap_kmers.{datatype}.{stage}.{parameters}.{fileprefix}.{assembly_kmer_length}.{haplotype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"] / "extract_se_reads_from_fasta_by_unique_hap_kmers.{datatype}.{stage}.{parameters}.{fileprefix}.{assembly_kmer_length}.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["extract_reads_by_unique_hap_kmers"],
+        time=parameters["time"]["extract_reads_by_unique_hap_kmers"],
+        mem=parameters["memory_mb"]["extract_reads_by_unique_hap_kmers"],
+    threads:
+        parameters["threads"]["extract_reads_by_unique_hap_kmers"]
+    shell:
+         " meryl-lookup -exclude -sequence {input.se_read} "
+         " -mers {input.rest_hap_db_dirs} -output {output.hap_se_read} > {log.std} 2>&1;"

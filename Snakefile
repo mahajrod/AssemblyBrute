@@ -116,7 +116,7 @@ datatype_format_dict = {}
 datatype_extension_dict = {}
 for d_type in set(data_types):
     if (d_type in fastq_based_data_type_set) and (d_type in fasta_based_data_type_set):
-        if (len(input_fasta_filedict[d_type]) > 0) and (len(input_fastq_filedict[d_type]) > 0):
+        if (len(input_fasta_filedict[d_type]) > 0) and (len(input_filedict[d_type]) > 0):
             raise  ValueError("Error!!! Datatype {0} has input files in both fastq ({1}) and fasta ({2}) formats!".format(d_type,
                                                                                                                           " ".join(input_filedict[d_type]),
                                                                                                                           " ".join(input_fasta_filedict[d_type])))
@@ -270,7 +270,7 @@ if "check_draft" in config["stage_list"]:
     results_list += [ ] # TODO: implement
 
 
-if "read_qc" in config["stage_list"]:
+if ("read_qc" in config["stage_list"]) and (not config["skip_read_qc"]):
     results_list += [*[expand(output_dict["qc"] / "fastqc/{datatype}/{stage}/{fileprefix}_fastqc.zip",
                                datatype=[dat_type, ],
                                stage=["raw", ],
@@ -330,7 +330,25 @@ if "draft_qc" in config["stage_list"]:
                                 haplotype=stage_dict["draft_qc"]["parameters"][parameters_label]["haplotype_list"],
                                 parameters=[parameters_label]) for parameters_label in parameters_list],
                          ]
+    #TODO: remove after debugging
+    """
+    results_list += [ *[expand(out_dir_path / "{stage}/{parameters}/kmer/{genome_prefix}.{stage}.{haplotype}.{assembly_kmer_length}",
+                               stage=["draft_qc"],
+                              parameters=[parameters_label],
+                              genome_prefix=[config["genome_prefix"], ],
+                              haplotype=stage_dict["draft_qc"]["parameters"][parameters_label]["haplotype_list"],
+                              assembly_kmer_length=[31]) for parameters_label in parameters_list],
+                      *[expand(out_dir_path / "{stage}/{parameters}/fasta/{haplotype}/{assembly_kmer_length}/{datatype}/{fileprefix}.fasta.gz",
+                                stage=["draft_qc"],
+                              parameters=[parameters_label],
+                                datatype=[config["gap_closing_datatype"]],
+                                fileprefix=input_file_prefix_dict[config["gap_closing_datatype"]] if datatype_format_dict[config["gap_closing_datatype"]] == "fastq" else input_fasta_file_prefix_dict[config["gap_closing_datatype"]],
+                              genome_prefix=[config["genome_prefix"], ],
+                              haplotype=stage_dict["draft_qc"]["parameters"][parameters_label]["haplotype_list"],
+                              assembly_kmer_length=[31]) for parameters_label in parameters_list],
 
+                      ]
+    """
     if "gap_closing" in config["stage_list"]:
         prev_stage = "draft_qc"
 
@@ -385,7 +403,7 @@ if "draft_qc" in config["stage_list"]:
                                     parameters=[parameters_label]) for parameters_label in parameters_list],
                          ]
 
-if "filter_reads" in config["stage_list"]:
+if ("filter_reads" in config["stage_list"]) and (not config["skip_filter_reads"]):
     #print(genome_size_estimation_data_type_set)
     results_list += [expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),
                             fileprefix=input_file_prefix_dict["hifi"]) if "hifi" in fastq_based_data_type_set else [],

@@ -735,42 +735,36 @@
                      "phasing_kmer_length": "NA"
             "samba":
                 "default":
+                    "phasing_kmer_length": 31
                     "hifi":
-                        "use_corrected_reads": True
                         "matching_len": 3500
                         "datatype": "asm"
                     "nanopore":
-                        "use_corrected_reads": True
                         "matching_len": 3500
                         "datatype": "ont"
                     "clr":
-                        "use_corrected_reads": True
                         "matching_len": 3500
                         "datatype": "pbclr"
-                "raw_reads":
+                "phased_reads":
+                    "phasing_kmer_length": 31
                     "hifi":
-                        "use_corrected_reads": False
                         "matching_len": 3500
                         "datatype": "asm"
                     "nanopore":
-                        "use_corrected_reads": False
                         "matching_len": 3500
                         "datatype": "ont"
                     "clr":
-                        "use_corrected_reads": False
                         "matching_len": 3500
                         "datatype": "pbclr"
-                "corrected_reads":
+                "unphased_reads":
+                    "phasing_kmer_length": "NA"
                     "hifi":
-                        "use_corrected_reads": True
                         "matching_len": 3500
                         "datatype": "asm"
                     "nanopore":
-                        "use_corrected_reads": True
                         "matching_len": 3500
                         "datatype": "ont"
                     "clr":
-                        "use_corrected_reads": True
                         "matching_len": 3500
                         "datatype": "pbclr"
     "micro": # < 15 Mbp, yeasts and bacteria
@@ -1056,7 +1050,7 @@
                 "default":
                     "hifi":
                         "use_corrected_reads": True
-                        "matching_len": 3500
+                        "matching_len": 2500
                     "nanopore":
                         "use_corrected_reads": True
                         "matching_len": 2500

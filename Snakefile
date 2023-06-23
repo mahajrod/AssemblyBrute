@@ -384,7 +384,7 @@ if "draft_qc" in config["stage_list"]:
                                   parameters=[parameters_label],
                                   genome_prefix=[config["genome_prefix"], ],
                                   haplotype=stage_dict["gap_closing"]["parameters"][parameters_label]["haplotype_list"],
-                                  phasing_kmer_length=[stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]])
+                                  phasing_kmer_length=[stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["phasing_kmer_length"]])
                            for parameters_label in parameters_list]
                          ]
 

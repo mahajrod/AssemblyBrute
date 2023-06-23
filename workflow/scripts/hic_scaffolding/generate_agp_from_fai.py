@@ -18,7 +18,7 @@ parser.add_argument("-o", "--output", action="store", dest="output", default=sys
 
 args = parser.parse_args()
 
-fai_df = pd.read_csv(args.fai_file, sep="\t", header=False, names=["scaffold", "length", 'offset',
+fai_df = pd.read_csv(args.fai_file, sep="\t", header=None, names=["scaffold", "length", 'offset',
                                                                    "linebases", "linewidth"])
 fai_df["scaffold_start"] = 1
 fai_df["scaffold_end"] = fai_df["length"]

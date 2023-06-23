@@ -105,7 +105,7 @@
         - "default"
     "samba":
         - "phased_reads"
-        - "unphased_reads"
+        #- "unphased_reads"
 
 "other_tool_option_sets":
     "cutadapt":                 "default"   # Allowed: default

@@ -185,7 +185,7 @@ rule generate_prescaffolding_agp:
     threads: parameters["threads"]["generate_prescaffolding_agp"]
 
     shell:
-        " ./workflow/scripts/generate_agp_from_fai.py -i {input.reference_fai} -o {output.pre_agp} > {log.std} 2>&1;"
+        " ./workflow/scripts/hic_scaffolding/generate_agp_from_fai.py -i {input.reference_fai} -o {output.pre_agp} > {log.std} 2>&1;"
 
 rule yahs_juicer_pre_prescaffolding: #
     input:

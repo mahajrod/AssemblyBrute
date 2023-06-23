@@ -969,6 +969,8 @@ include: "workflow/rules/Alignment/Index.smk"
 
 if ("hic_scaffolding" in config["stage_list"]) or ("curation" in config["stage_list"]) or ("gap_closing" in config["stage_list"]):
     include: "workflow/rules/Alignment/Alignment.smk"
+
+if ("hic_scaffolding" in config["stage_list"]) or ("curation" in config["stage_list"]):
     include: "workflow/rules/Alignment/Pretext.smk"
     include: "workflow/rules/HiC/Salsa2.smk"
     include: "workflow/rules/HiC/YAHS.smk"

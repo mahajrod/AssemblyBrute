@@ -1086,6 +1086,7 @@
             "minimap2_index": 10000
             "minimap2":       20000
             "meryl_assembly": 40000
+            "bwa_map": 50000
         "time":
             "jellyfish": "08:00:00"
             "hifiasm": "12:00:00"
@@ -1181,6 +1182,7 @@
             "cutadapt": 30000
             "purge_dups": 40000
             "meryl_assembly": 50000
+            "bwa_map": 60000
         "threads":
             "hifiasm": 80
             "meryl": 70
@@ -1366,6 +1368,7 @@
             "cutadapt": 50000
             "purge_dups": 50000
             "meryl_assembly": 50000
+            "bwa_map": 70000
         "time":
             "install_from_pip": "01:00:00"
             "create_fastq_links": "00:05:00"
@@ -1542,6 +1545,7 @@
             "cutadapt": 50000
             "purge_dups": 70000
             "meryl_assembly": 100000
+            "bwa_map": 100000
         "time":
             "jellyfish": "48:00:00"
             "hifiasm": "200:00:00"

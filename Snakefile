@@ -968,7 +968,11 @@ include: "workflow/rules/HiC/ReadPhasing.smk"
 include: "workflow/rules/Alignment/Index.smk"
 
 if ("hic_scaffolding" in config["stage_list"]) or ("curation" in config["stage_list"]) or ("gap_closing" in config["stage_list"]):
-    include: "workflow/rules/Alignment/Alignment.smk"
+    if config["other_tool_option_sets"]["mapping_pipeline"] == "arima":
+        include: "workflow/rules/Alignment/Arima.smk"
+    if config["other_tool_option_sets"]["mapping_pipeline"] == "arima":
+        include: "workflow/rules/Alignment/BWAOnly.smk"
+    include: "workflow/rules/Alignment/PostAlignment.smk"
 
 if ("hic_scaffolding" in config["stage_list"]) or ("curation" in config["stage_list"]):
     include: "workflow/rules/Alignment/Pretext.smk"

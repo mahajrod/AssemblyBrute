@@ -3,7 +3,9 @@ rule bwa_index:
     input:
         fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
     output:
-        index=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.bwt"
+        index=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.bwt",
+    params:
+        bwa_tool=config["bwa_tool"]
     log:
         std=output_dict["log"]  / "bwa_index.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.log",
         cluster_log=output_dict["cluster_log"] / "bwa_index.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.log",
@@ -19,7 +21,7 @@ rule bwa_index:
     threads: parameters["threads"]["bwa_index"]
 
     shell:
-        " bwa index -a bwtsw {input.fasta} 1>{log.std} 2>&1;"
+        " {params.bwa_tool} index -a bwtsw {input.fasta} 1>{log.std} 2>&1;"
 
 rule ref_faidx:
     input:
@@ -66,25 +68,23 @@ rule ref_dict:
     shell:
         " picard CreateSequenceDictionary R={input.fasta} O={output.dict} > {log.std} 2>&1;"
 
-"""
 rule index_bam:
     input:
-        bam="{bam_path,.*}"
+        bam="{bam_prefix}.bam"
     output:
-        "{bam_path,.*}.bai"
+        bai="{bam_prefix}.bam.bai"
     log:
-        std=output_dict["log"]  / "ref_dict.{assembly_stage}.{assembler}.{haplotype}.log",
-        cluster_log=output_dict["cluster_log"] / "ref_dict.{assembly_stage}.{assembler}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "ref_dict.{assembly_stage}.{assembler}.{haplotype}.cluster.err"
+        std="{bam_prefix}.index_bam.log",
+        cluster_log="{bam_prefix}.index_bam.cluster.log",
+        cluster_err="{bam_prefix}.index_bam.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "ref_dict.{assembler}.{haplotype}.benchmark.txt"
+        "{bam_prefix}.index_bam.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        cpus=parameters["threads"]["ref_dict"] ,
-        time=parameters["time"]["ref_dict"],
-        mem=parameters["memory_mb"]["ref_dict"]
-    threads: parameters["threads"]["ref_dict"]
+        cpus=parameters["threads"]["samtools_index"] ,
+        time=parameters["time"]["samtools_index"],
+        mem=parameters["memory_mb"]["samtools_index"]
+    threads: parameters["threads"]["samtools_index"]
     shell:
-        "samtools index -@ {threads} {input} > {log.std} 2>&1"
-"""
+        " samtools index -@ {threads} {input} > {log.std} 2>&1; "

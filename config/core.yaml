@@ -119,6 +119,10 @@
             "bwa_map": 50
             "two_read_bam_combiner": 1
             "samtools_sort": 4
+            "samtools_index": 1
+            "samtools_collate": 4
+            "samtools_fixmate": 2
+            "samtools_markdup": 4
             "ref_faidx": 1
             "ref_dict": 1
             "rmdup": 4
@@ -202,9 +206,13 @@
             "get_purge_stat_haplotype_comparison": 1000
             "create_links": 100
             "bwa_index": 10000
-            "bwa_map": 30000
+            "bwa_map": 50000
             "two_read_bam_combiner": 25000
             "samtools_sort": 30000
+            "samtools_collate": 10000
+            "samtools_fixmate": 5000
+            "samtools_markdup": 10000
+            "samtools_index": 30000
             "ref_faidx": 3000
             "ref_dict": 3000
             "rmdup": 15000
@@ -293,6 +301,7 @@
             "bwa_map": "12:00:00"
             "two_read_bam_combiner": "5:00:00"
             "samtools_sort": "8:00:00"
+            "samtools_index": "08:00:00"
             "ref_faidx": "02:00:00"
             "ref_dict": "02:00:00"
             "rmdup": "24:00:00"
@@ -570,6 +579,10 @@
                     "self":
                         "index_size": "4G"
                         "alignment_scheme": "asm5"     # -x
+            "mapping_pipeline":
+                "bwa_only": []
+                "arima": []
+                "juicer": []
             "curation":
                 "default":
                     "coverage":
@@ -807,6 +820,7 @@
             "hifiasm": 20000 # needs adjustment, very approximate value
             "minimap2_index": 3000
             "minimap2": 3000
+            "bwa_map": 5000
         "time":
             "jellyfish": "01:00:00"
             "hifiasm": "02:00:00"
@@ -900,6 +914,7 @@
             "hifiasm": 50000
             "minimap2_index": 10000
             "minimap2": 10000
+            "bwa_map": 10000
         "time":
             "jellyfish": "02:00:00"
             "hifiasm": "04:00:00"
@@ -993,6 +1008,7 @@
             "hifiasm": 80000
             "minimap2_index": 10000
             "minimap2": 10000
+            "bwa_map": 15000
             "smudgeplot_hetkmers": 250000
         "time":
             "jellyfish": "04:00:00"
@@ -1086,7 +1102,7 @@
             "minimap2_index": 10000
             "minimap2":       20000
             "meryl_assembly": 40000
-            "bwa_map": 50000
+            "bwa_map": 70000
         "time":
             "jellyfish": "08:00:00"
             "hifiasm": "12:00:00"
@@ -1182,7 +1198,7 @@
             "cutadapt": 30000
             "purge_dups": 40000
             "meryl_assembly": 50000
-            "bwa_map": 60000
+            "bwa_map": 80000
         "threads":
             "hifiasm": 80
             "meryl": 70
@@ -1368,7 +1384,7 @@
             "cutadapt": 50000
             "purge_dups": 50000
             "meryl_assembly": 50000
-            "bwa_map": 70000
+            "bwa_map": 100000
         "time":
             "install_from_pip": "01:00:00"
             "create_fastq_links": "00:05:00"

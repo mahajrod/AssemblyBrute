@@ -19,7 +19,7 @@ parser.add_argument("-o", "--output", action="store", dest="output", default=sys
 args = parser.parse_args()
 
 fai_df = pd.read_csv(args.fai_file, sep="\t", header=None, names=["scaffold", "length"],
-                     usecols=[0, 1]).sort_values(by=["length", "scaffold"])
+                     usecols=[0, 1]).sort_values(by=["length", "scaffold"], ascending=(False, True))
 fai_df["scaffold_start"] = 1
 fai_df["scaffold_end"] = fai_df["length"]
 fai_df["component_number"] = 1

@@ -205,7 +205,7 @@
             "merge_pri_hapdups_with_alt": 1000
             "get_purge_stat_haplotype_comparison": 1000
             "create_links": 100
-            "bwa_index": 10000
+            "bwa_index": 30000
             "bwa_map": 50000
             "two_read_bam_combiner": 25000
             "samtools_sort": 30000
@@ -1009,6 +1009,7 @@
             "minimap2_index": 10000
             "minimap2": 10000
             "bwa_map": 15000
+            "bwa_index": 15000
             "smudgeplot_hetkmers": 250000
         "time":
             "jellyfish": "04:00:00"
@@ -1103,6 +1104,7 @@
             "minimap2":       20000
             "meryl_assembly": 40000
             "bwa_map": 70000
+            "bwa_index": 30000
         "time":
             "jellyfish": "08:00:00"
             "hifiasm": "12:00:00"
@@ -1199,6 +1201,7 @@
             "purge_dups": 40000
             "meryl_assembly": 50000
             "bwa_map": 80000
+            "bwa_index": 50000
         "threads":
             "hifiasm": 80
             "meryl": 70
@@ -1385,6 +1388,7 @@
             "purge_dups": 50000
             "meryl_assembly": 50000
             "bwa_map": 100000
+            "bwa_index": 80000
         "time":
             "install_from_pip": "01:00:00"
             "create_fastq_links": "00:05:00"
@@ -1562,6 +1566,7 @@
             "purge_dups": 70000
             "meryl_assembly": 100000
             "bwa_map": 100000
+            "bwa_index": 100000
         "time":
             "jellyfish": "48:00:00"
             "hifiasm": "200:00:00"

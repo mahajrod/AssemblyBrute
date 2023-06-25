@@ -87,7 +87,7 @@ rule juicer: #
                                                                                   wildcards.prev_stage_parameters,
                                                                                   wildcards.genome_prefix,
                                                                                   wildcards.haplotype),
-        index=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}.fasta.bwt".format(stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["prev_stage"],
+        index=lambda wildcards: out_dir_path / "{0}/{1}/{2}.{0}.{3}.fasta.ann".format(stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["prev_stage"],
                                                                                       wildcards.prev_stage_parameters,
                                                                                       wildcards.genome_prefix,
                                                                                       wildcards.haplotype),

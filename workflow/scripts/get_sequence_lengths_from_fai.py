@@ -14,6 +14,6 @@ parser.add_argument("-o", "--output", action="store", dest="output", default=sys
 args = parser.parse_args()
 
 len_df = pd.read_csv(args.input, sep="\t", header=None, names=["scaffold", "length"],
-                     index_col="scaffold", usecols=[0, 1]).sort_values(by=["length", "scaffold"])
+                     index_col="scaffold", usecols=[0, 1]).sort_values(by=["length", "scaffold"], ascending=(False, True))
 
 len_df.to_csv(args.output, sep="\t", header=False, index=True)

@@ -121,6 +121,7 @@
         "upper_threshold": 135
 
 "ploidy": 2
+"bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
 "genome_prefix": "genome"
 "busco_lineage_list":
     - "mammalia_odb10" #

@@ -64,16 +64,16 @@
     "hic_scaffolding":
         "default":
             #- "salsa2" # Allowed: "salsa2", "yahs", "3d-dna"
-            #- "yahs"
-            - "threeddna"
+            - "yahs"
+            #- "threeddna"
     "curation":
         "default":
             - "curation"
 
 "coretool_option_sets":
     "hifiasm":
-         - "l0primary"
-         #- "l1primary"
+         #- "l0primary"
+         - "l1primary"
          #- "l2primary"
          #- "l3primary"
          #- "l1primary_no_hic"
@@ -83,7 +83,7 @@
         - "default"
     "salsa2":
         - "phased_reads"
-        - "unphased_reads"
+        #- "unphased_reads"
     "yahs":
         - "phased_reads"
         #- "unphased_reads"

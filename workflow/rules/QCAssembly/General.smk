@@ -1,6 +1,6 @@
 rule get_seq_len:
     input:
-        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
+        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.fai",
     output:
         #dir=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/",
         len_file=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
@@ -21,7 +21,7 @@ rule get_seq_len:
     threads:
         parameters["threads"]["get_seq_len"]
     shell:
-         " get_sequence_lengths.py -i {input.fasta} -o {output.len_file} 1>{log.std} 2>&1;" #{params.MAVR_dir}/scripts/sequence/
+         " workflow/scripts/get_sequence_lengths_from_fai.py -i {input.fasta} -o {output.len_file} 1>{log.std} 2>&1;" #{params.MAVR_dir}/scripts/sequence/
          #" OMP_NUM_THREADS={threads} merqury.sh {input.meryl_db_dir} "
          #" {input.primary_assembly} {input.alternative_assembly} {params.out_prefix}  1>{log.std} 2>&1 || true;"
 

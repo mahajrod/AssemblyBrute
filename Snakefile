@@ -970,7 +970,7 @@ include: "workflow/rules/Alignment/Index.smk"
 if ("hic_scaffolding" in config["stage_list"]) or ("curation" in config["stage_list"]) or ("gap_closing" in config["stage_list"]):
     if config["other_tool_option_sets"]["mapping_pipeline"] == "arima":
         include: "workflow/rules/Alignment/Arima.smk"
-    if config["other_tool_option_sets"]["mapping_pipeline"] == "arima":
+    elif config["other_tool_option_sets"]["mapping_pipeline"] == "bwa_only":
         include: "workflow/rules/Alignment/BWAOnly.smk"
     include: "workflow/rules/Alignment/PostAlignment.smk"
 

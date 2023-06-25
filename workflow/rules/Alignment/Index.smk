@@ -3,7 +3,7 @@ rule bwa_index:
     input:
         fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
     output:
-        index=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.ann",
+        index=out_dir_path / ("{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta%s" % (".bwt" if config["bwa_tool"] == "bwa" else ".bwt.2bit.64")),
     params:
         bwa_tool=config["bwa_tool"],
     log:

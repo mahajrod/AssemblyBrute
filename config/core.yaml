@@ -1008,8 +1008,8 @@
             "hifiasm": 80000
             "minimap2_index": 10000
             "minimap2": 10000
-            "bwa_map": 15000
-            "bwa_index": 15000
+            "bwa_map": 50000
+            "bwa_index": 30000
             "smudgeplot_hetkmers": 250000
         "time":
             "jellyfish": "04:00:00"
@@ -1103,8 +1103,8 @@
             "minimap2_index": 10000
             "minimap2":       20000
             "meryl_assembly": 40000
-            "bwa_map": 70000
-            "bwa_index": 30000
+            "bwa_map": 80000
+            "bwa_index": 50000
         "time":
             "jellyfish": "08:00:00"
             "hifiasm": "12:00:00"
@@ -1200,7 +1200,7 @@
             "cutadapt": 30000
             "purge_dups": 40000
             "meryl_assembly": 50000
-            "bwa_map": 80000
+            "bwa_map": 100000
             "busco5": 150000
             "bwa_index": 100000
         "threads":
@@ -1388,7 +1388,7 @@
             "cutadapt": 50000
             "purge_dups": 50000
             "meryl_assembly": 50000
-            "bwa_map": 100000
+            "bwa_map": 160000
             "bwa_index": 160000
         "time":
             "install_from_pip": "01:00:00"

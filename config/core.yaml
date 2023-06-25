@@ -803,7 +803,7 @@
             "merge_pri_hapdups_with_alt": 1
             "create_links": 1
             "bwa_index": 1
-            "bwa_map": 8
+            "bwa_map": 32
             "two_read_bam_combiner": 1
             "samtools_sort": 4
             "ref_faidx": 1

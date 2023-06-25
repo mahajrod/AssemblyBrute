@@ -1201,7 +1201,8 @@
             "purge_dups": 40000
             "meryl_assembly": 50000
             "bwa_map": 80000
-            "bwa_index": 50000
+            "busco5": 100000
+            "bwa_index": 100000
         "threads":
             "hifiasm": 80
             "meryl": 70
@@ -1383,12 +1384,12 @@
             "minimap2":       70000
             "nanoqc": 80000
             "gfa2fasta": 40000
-            "busco5": 50000
+            "busco5": 100000
             "cutadapt": 50000
             "purge_dups": 50000
             "meryl_assembly": 50000
             "bwa_map": 100000
-            "bwa_index": 80000
+            "bwa_index": 160000
         "time":
             "install_from_pip": "01:00:00"
             "create_fastq_links": "00:05:00"
@@ -1561,7 +1562,7 @@
             "minimap2":       70000
             "nanoqc": 80000
             "gfa2fasta": 60000
-            "busco5": 100000
+            "busco5": 120000
             "cutadapt": 50000
             "purge_dups": 70000
             "meryl_assembly": 100000

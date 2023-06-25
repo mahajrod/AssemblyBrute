@@ -52,3 +52,4 @@
   - "seqtk"
   - "blast"
   - "cooler"
+  - "bwa-mem2"

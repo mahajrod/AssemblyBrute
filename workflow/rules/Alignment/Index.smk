@@ -5,7 +5,7 @@ rule bwa_index:
     output:
         index=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.bwt",
     params:
-        bwa_tool=config["bwa_tool"]
+        bwa_tool=config["bwa_tool"],
     log:
         std=output_dict["log"]  / "bwa_index.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.log",
         cluster_log=output_dict["cluster_log"] / "bwa_index.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.log",
@@ -21,7 +21,7 @@ rule bwa_index:
     threads: parameters["threads"]["bwa_index"]
 
     shell:
-        " {params.bwa_tool} index -a bwtsw {input.fasta} 1>{log.std} 2>&1;"
+        " {params.bwa_tool} index {input.fasta} 1>{log.std} 2>&1;"
 
 rule ref_faidx:
     input:

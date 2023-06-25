@@ -1201,7 +1201,7 @@
             "purge_dups": 40000
             "meryl_assembly": 50000
             "bwa_map": 80000
-            "busco5": 100000
+            "busco5": 150000
             "bwa_index": 100000
         "threads":
             "hifiasm": 80
@@ -1384,7 +1384,7 @@
             "minimap2":       70000
             "nanoqc": 80000
             "gfa2fasta": 40000
-            "busco5": 100000
+            "busco5": 200000
             "cutadapt": 50000
             "purge_dups": 50000
             "meryl_assembly": 50000
@@ -1562,12 +1562,12 @@
             "minimap2":       70000
             "nanoqc": 80000
             "gfa2fasta": 60000
-            "busco5": 120000
+            "busco5": 250000
             "cutadapt": 50000
             "purge_dups": 70000
             "meryl_assembly": 100000
             "bwa_map": 100000
-            "bwa_index": 100000
+            "bwa_index": 200000
         "time":
             "jellyfish": "48:00:00"
             "hifiasm": "200:00:00"

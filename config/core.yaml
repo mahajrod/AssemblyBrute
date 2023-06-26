@@ -168,6 +168,7 @@
             "trf": 30,
             "create_windows": 1
             "create_bedgraph_track": 1
+            "maskfasta": 2
             #"fcs_gx": 50 # set via allowed_databases variable
 
         "memory_mb":
@@ -261,6 +262,7 @@
             "trf": 30000
             "create_windows": 1000
             "create_bedgraph_track": 3000
+            "maskfasta": 15000
             #"fcs_gx": 512000 # set via allowed_databases variable
         "time": #TODO: adjust
             "install_from_pip": "01:00:00"
@@ -352,6 +354,7 @@
             "trf": "24:00:00"
             "create_windows": "01:00:00"
             "create_bedgraph_track": "02:00:00"
+            "maskfasta": "03:00:00"
             #"fcs_gx": "03:00:00" # set via allowed_databases variable
         "tool_options":
             "cutadapt":

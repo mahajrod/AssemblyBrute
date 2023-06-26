@@ -1,4 +1,4 @@
-
+print(parameters["tool_options"]["trf"])
 rule trf: #
     input:
         fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.fasta"
@@ -6,7 +6,6 @@ rule trf: #
         bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.trf.simple.bed",
         merged_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.trf.track.bed",
     params:
-        #lambda wildcards: parse_option("window_size", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -w ")
         matching_weight=parse_option("matching_weight", parameters["tool_options"]["trf"][config["other_tool_option_sets"]["trf"]], " -m "),
         mismatching_penalty=parse_option("mismatching_penalty", parameters["tool_options"]["trf"][config["other_tool_option_sets"]["trf"]], " -s "),
         indel_penalty=parse_option("indel_penalty", parameters["tool_options"]["trf"][config["other_tool_option_sets"]["trf"]], " -l "),

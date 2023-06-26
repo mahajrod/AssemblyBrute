@@ -39,4 +39,4 @@ rule trf: #
         " tandem_repeat_masking.py -t {threads} {params.matching_weight} {params.mismatching_penalty} "
         " {params.indel_penalty} {params.match_probability} {params.indel_probability} {params.min_alignment_score} "
         " {params.max_period} {params.max_repeat_length} -i ${{INPUT_FASTA}} -o ${{OUTPUT_PREFIX}} > {log.trf} 2>&1; "
-        " sort -k1,1V -k2,2n -k3,3n {output.bed} > {log.sort} | bedtools merge -i stdin > {output.merged_bed} 2>{log.merge}; "
+        " sort -k1,1V -k2,2n -k3,3n {output.bed} 2>{log.sort} | bedtools merge -i stdin > {output.merged_bed} 2>{log.merge}; "

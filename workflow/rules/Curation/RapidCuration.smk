@@ -74,7 +74,7 @@ rule select_long_scaffolds: #
 
 rule create_windows: #
     input:
-        len=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.len",
+        len=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.len",
     output:
         bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.win{window}.step{step}.windows.bed",
     log:
@@ -97,8 +97,8 @@ rule create_windows: #
 
 rule create_bedgraph_track: #
     input:
-        track_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type}.track.bed",
-        windows_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.win{window}.step{step}.windows.bed",
+        track_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{track_type}.track.bed",
+        windows_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.win{window}.step{step}.windows.bed",
     output:
         bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph"
     log:

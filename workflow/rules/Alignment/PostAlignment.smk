@@ -109,3 +109,27 @@ rule juicer_tools_pre_prescaffolding: #
         " java -jar -Xmx{resources.mem}m workflow/external_tools/juicer/juicer_tools.1.9.9_jcuda.0.8.jar pre " #--threads {threads}  
         " {input.yahs_juicer_pre_bed} {output.hic} <(cat {input.yahs_juicer_pre_log} 2>{log.cat} | "
         " grep PRE_C_SIZE 2>{log.grep} | awk '{{print $2\" \"$3}}' 2>{log.awk}) > {log.juicer} 2>&1; "
+
+rule bam2bed:
+    input:
+        bam=rules.rmdup.output.bam
+    output:
+        #bed=out_dir_path  / ("{assembly_stage}/{assembler}/{haplotype}/alignment/%s.{assembly_stage}.{assembler}.{haplotype}.bwa.filtered.rmdup.bed"  % config["genome_name"]),
+        bed=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bed"
+    log:
+        convert=output_dict["log"] / "bam2bed.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.convert.log",
+        sort=output_dict["log"] / "bam2bed.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.sort.log",
+        cluster_log=output_dict["cluster_log"] / "bam2bed.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "bam2bed.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "bam2bed.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["bam2bed"] ,
+        time=parameters["time"]["bam2bed"],
+        mem=parameters["memory_mb"]["bam2bed"]
+    threads: parameters["threads"]["bam2bed"]
+
+    shell:
+        " bamToBed -i {input.bam} 2>{log.convert} | sort -S{resources.mem}M -k 4 > {output.bed} 2>{log.sort}"

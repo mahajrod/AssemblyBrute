@@ -165,7 +165,7 @@
             "samba": 20
             "select_long_scaffolds": 1
             "generate_prescaffolding_agp": 1
-            "trf": 30,
+            "trf": 30
             "create_windows": 1
             "create_bedgraph_track": 1
             "maskfasta": 2

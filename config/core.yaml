@@ -29,6 +29,9 @@
     "ucsc":
         "yaml": "workflow/envs/conda.ucsc.yaml"
         "name": "ucsc"
+    "deepvariant":
+        "yaml": "workflow/envs/conda.deepvariant.yaml"
+        "name": "deepvariant"
 
 #----
 #---- Directory structure config ----
@@ -1196,6 +1199,10 @@
             "meryl":     300000
             "minimap2_index": 20000
             "minimap2":       30000
+            "samtools_sort": 30000
+            "samtools_collate": 30000
+            "samtools_fixmate": 20000
+            "samtools_markdup": 30000
             "gfa2fasta": 30000
             "cutadapt": 30000
             "purge_dups": 40000

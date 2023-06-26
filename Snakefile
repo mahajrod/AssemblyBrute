@@ -980,6 +980,8 @@ if ("hic_scaffolding" in config["stage_list"]) or ("curation" in config["stage_l
 
 if ("hic_scaffolding" in config["stage_list"]) or ("curation" in config["stage_list"]):
     include: "workflow/rules/Alignment/Pretext.smk"
+
+if "hic_scaffolding" in config["stage_list"]:
     #include: "workflow/rules/HiC/Salsa2.smk"
     include: "workflow/rules/HiC/YAHS.smk"
     include: "workflow/rules/HiC/3DDNA.smk"

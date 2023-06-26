@@ -1575,6 +1575,10 @@
             "meryl_assembly": 100000
             "bwa_map": 100000
             "bwa_index": 200000
+            "samtools_sort": 40000
+            "samtools_collate": 40000
+            "samtools_fixmate": 30000
+            "samtools_markdup": 30000
         "time":
             "jellyfish": "48:00:00"
             "hifiasm": "200:00:00"

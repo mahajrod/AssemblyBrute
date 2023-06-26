@@ -121,7 +121,7 @@
             "bwa_index": 1
             "bwa_map": 50
             "two_read_bam_combiner": 1
-            "samtools_sort": 4
+            "samtools_sort": 8
             "samtools_index": 1
             "samtools_collate": 4
             "samtools_fixmate": 2
@@ -244,7 +244,7 @@
             "create_coverage_table": 4000
             "create_higlass_track": 20000
             "yahs_juicer_pre": 10000
-            "juicer_tools_pre": 30000 # TODO: adjust
+            "juicer_tools_pre": 40000 # TODO: adjust
             "juicer": 50000
             "generate_site_positions": 10000
             "juicer_tools_qc": 10000
@@ -307,7 +307,7 @@
             "samtools_index": "08:00:00"
             "ref_faidx": "02:00:00"
             "ref_dict": "02:00:00"
-            "rmdup": "24:00:00"
+            "rmdup": "48:00:00"
             "bam2bed": "5:00:00"
             "pretextmap": "8:00:00"
             "pretextsnapshot": "04:00:00"
@@ -1210,6 +1210,7 @@
             "bwa_map": 100000
             "busco5": 150000
             "bwa_index": 100000
+            "juicer_tools_pre": 60000
         "threads":
             "hifiasm": 80
             "meryl": 70
@@ -1220,6 +1221,7 @@
             "minimap2_index": "02:00:00"
             "minimap2": "20:00:00"
             "busco5": "60:00:00"
+            "rmdup": "72:00:00"
         "tool_options":
             "jellyfish":
                 "default":
@@ -1397,6 +1399,7 @@
             "meryl_assembly": 50000
             "bwa_map": 160000
             "bwa_index": 160000
+            "juicer_tools_pre": 80000
         "time":
             "install_from_pip": "01:00:00"
             "create_fastq_links": "00:05:00"
@@ -1579,6 +1582,7 @@
             "samtools_collate": 40000
             "samtools_fixmate": 30000
             "samtools_markdup": 30000
+            "juicer_tools_pre": 100000
         "time":
             "jellyfish": "48:00:00"
             "hifiasm": "200:00:00"

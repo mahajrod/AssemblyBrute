@@ -1,4 +1,4 @@
-print(parameters["tool_options"]["trf"])
+
 rule trf: #
     input:
         fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.fasta"
@@ -15,9 +15,9 @@ rule trf: #
         max_period=parse_option("max_period", parameters["tool_options"]["trf"], " -e "),
         max_repeat_length=parse_option("max_repeat_length", parameters["tool_options"]["trf"], " -g "),
     log:
-        trf=output_dict["log"]  / "trf.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.trf.log",
-        sort=output_dict["log"]  / "trf.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.sort.log",
-        merge=output_dict["log"]  / "trf.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.merge.log",
+        trf=(output_dict["log"]  / "trf.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.trf.log").resolve(),
+        sort=(output_dict["log"]  / "trf.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.sort.log").resolve(),
+        merge=(output_dict["log"]  / "trf.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.merge.log").resolve(),
         cluster_log=output_dict["cluster_log"] / "trf.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "trf.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:

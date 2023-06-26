@@ -3,9 +3,9 @@ rule windowmasker: #
     input:
         fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.fasta"
     output:
-        counts=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.wm.counts",
-        interval=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.wm.intervals",
-        bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.repeat.bed",
+        counts=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.windowmasker.counts",
+        interval=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.windowmasker.intervals",
+        bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.windowmasker.track.bed",
     log:
         stage1=output_dict["log"]  / "windowmasker.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.stage1.log",
         stage2=output_dict["log"]  / "windowmasker.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.stage2.log",
@@ -26,7 +26,7 @@ rule windowmasker: #
         " windowmasker -ustat {output.counts} -in {input.fasta} -out {output.interval} -dust true > {log.stage2} 2>&1;"
         " workflow/scripts/repeats/convert_windowmasker_output_to_bed.py -i {output.interval} -o {output.bed} > {log.conversion} 2>&1;"
 
-
+"""
 rule create_repeat_bins: #
     input:
         fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.fasta.fai",
@@ -80,3 +80,5 @@ rule create_repeat_bins: #
         " sed 's/\./0/g' {output.repeat_binned_bdgraph} 2>{log.sed2} | sort -k1,1 -k2,2n  > {output.repeat_binned_no_dot_bedgraph} 2> {log.sort4}; "
         #" bedGraphToBigWig $$self{outdir}/density_nodot.bed $$self{outdir}/sorted.genome $$self{hgname}_repeat_density.bw"
         #ucsc-bedgraphtobigwig
+
+"""

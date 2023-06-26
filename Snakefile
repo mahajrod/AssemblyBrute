@@ -881,16 +881,20 @@ if "curation" in config["stage_list"]:
 
     parameters_list = list(stage_dict["curation"]["parameters"].keys())
     #print(stage_dict["curation"]["parameters"])
-    results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.repeat.binned.bedgraph",
+    results_list += [*[[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],
+                            track_type=[track_type],
+                            window=[stage_dict["curation"]["parameters"][parameters_label][track_type][window_settings]["window"]],
+                            step=[stage_dict["curation"]["parameters"][parameters_label][track_type][window_settings]["step"]],
                             haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                            parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
-                     *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.gap.bedgraph",
-                            genome_prefix=[config["genome_prefix"], ],
-                            assembly_stage=["curation", ],
-                            haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                            parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
+                            parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label][track_type] ]for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ("gap", "windowmasker", "trf") ],
+
+                     #*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.gap.bedgraph",
+                     #       genome_prefix=[config["genome_prefix"], ],
+                     #       assembly_stage=["curation", ],
+                     #       haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
+                     #       parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
 
                      *[[expand(out_dir_path / "curation/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.png",
                             window=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"][window_step_set]["window"],
@@ -983,10 +987,11 @@ if ("hic_scaffolding" in config["stage_list"]) or ("curation" in config["stage_l
 if "curation" in config["stage_list"]:
     include: "workflow/rules/Curation/RapidCuration.smk"
     include: "workflow/rules/Curation/GapTrack.smk"
-    include: "workflow/rules/Curation/RepeatTrack.smk"
+    include: "workflow/rules/Curation/WindowmaskerTrack.smk"
     include: "workflow/rules/Curation/CoverageTrack.smk"
     include: "workflow/rules/Curation/TelomereTrack.smk"
     include: "workflow/rules/Curation/HiGlassTrack.smk"
+    include: "workflow/rules/Curation/TRFTrack.smk"
 
 if "gap_closing" in config["stage_list"]:
     include: "workflow/rules/Finalization/GapClosing.smk"

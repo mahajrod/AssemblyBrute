@@ -1,6 +1,6 @@
 import pandas as pd
 
-localrules: create_curation_input_links, select_long_scaffolds
+localrules: create_curation_input_links, select_long_scaffolds, create_windows
 
 def get_hic_bed_file(wildcards):
     #print(stage_dict["curation"]["prev_stage"]
@@ -72,4 +72,53 @@ rule select_long_scaffolds: #
         whitelist_sr.to_csv(output.whitelist, header=False, index=False)
         whitelist_sr.to_csv(output.orderlist, header=False, index=False)
 
+rule create_windows: #
+    input:
+        len=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.len",
+    output:
+        bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.win{window}.step{step}.windows.bed",
+    log:
+        makewin=output_dict["log"]  / "create_windows.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.win{window}.step{step}.makewin.log",
+        cluster_log=output_dict["cluster_log"] / "create_windows.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.win{window}.step{step}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_windows.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.win{window}.step{step}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "create_windows{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.win{window}.step{step}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["create_windows"],
+        time=parameters["time"]["create_windows"],
+        mem=parameters["memory_mb"]["create_windows"],
+        create_windows=1,
+    threads: parameters["threads"]["create_windows"]
 
+    shell:
+        " bedtools makewindows -g {input.len} -w {wildcards.window} -s {wildcards.step} > {output.bed} 2>{log.makewin}; "
+
+rule create_bedgraph_track: #
+    input:
+        track_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type}.track.bed",
+        windows_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.win{window}.step{step}.windows.bed",
+    output:
+        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph"
+    log:
+        intersect=output_dict["log"]  / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.intersect.log",
+        awk=output_dict["log"]  / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.awk.log",
+        map=output_dict["log"]  / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.map.log",
+        cluster_log=output_dict["cluster_log"] / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["create_bedgraph_track"],
+        time=parameters["time"]["create_bedgraph_track"],
+        mem=parameters["memory_mb"]["create_bedgraph_track"],
+        create_windows=1,
+    threads: parameters["threads"]["create_bedgraph_track"]
+
+    shell:
+        " bedtools intersect -wao -a {input.windows_bed}  -b {input.track_bed}  2>{log.intersect} | "
+        " awk '{{print $1\"\\t\"$2\"\\t\"$3\"\\t\"$NF}}' 2>{log.awk} | "
+        " bedtools map -c 4 -o sum -a {input.windows_bed} -b stdin > {output.bedgraph} 2>{log.map} "

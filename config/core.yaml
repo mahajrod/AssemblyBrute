@@ -616,7 +616,39 @@
                         "w10k.s1k":
                             "window": 10000
                             "step":   1000
-                    "repeats":
+                    "trf":
+                        "w1000k.s1000k":
+                            "window": 1000000
+                            "step":   1000000
+                        "w1000k.s100k":
+                            "window": 1000000
+                            "step":   100000
+                        "w100k.s100k":
+                            "window": 100000
+                            "step":   100000
+                        "w100k.s10k":
+                            "window": 100000
+                            "step":   10000
+                        "w10k.s10k":
+                            "window": 10000
+                            "step":   10000
+                    "windowmasker":
+                        "w1000k.s1000k":
+                            "window": 1000000
+                            "step":   1000000
+                        "w1000k.s100k":
+                            "window": 1000000
+                            "step":   100000
+                        "w100k.s100k":
+                            "window": 100000
+                            "step":   100000
+                        "w100k.s10k":
+                            "window": 100000
+                            "step":   10000
+                        "w10k.s10k":
+                            "window": 10000
+                            "step":   10000
+                    "gap":
                         "w1000k.s1000k":
                             "window": 1000000
                             "step":   1000000

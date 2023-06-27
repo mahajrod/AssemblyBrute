@@ -121,7 +121,9 @@ rule create_bedgraph_track: #
     shell:
         " bedtools intersect -wao -a {input.windows_bed}  -b {input.track_bed}  2>{log.intersect} | "
         " awk '{{print $1\"\\t\"$2\"\\t\"$3\"\\t\"$NF}}' 2>{log.awk} | "
-        " bedtools map -c 4 -o sum -a {input.windows_bed} -b stdin > {output.bedgraph} 2>{log.map} "
+        " workflow/scripts/sum_bed.py -c 3 > {output.bedgraph} 2>{log.map} "
+        #" bedtools map -c 4 -o sum -a {input.windows_bed} -b stdin > {output.bedgraph} 2>{log.map} "
+        #./workflow/scripts/sum_bed.py -c 3
 
 rule draw_track: #
     input:

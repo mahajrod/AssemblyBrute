@@ -129,7 +129,7 @@ rule minimap2_purge_dups_reads:
         " minimap2 {params.alignment_scheme} {params.index_size} -t {threads}  {input.reference} "
         " {input.fastq} 2>{log.std} |  gzip -c - > {output.paf} "
 
-rule get_purge_dups_read_stat: #TODO: adjust -d -m -u options for calcuts
+rule get_purge_dups_read_stat:
     input:
         paf=lambda wildcards: expand(rules.minimap2_purge_dups_reads.output.paf,
                    fileprefix=input_file_prefix_dict[stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"]],

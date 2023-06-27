@@ -3,8 +3,11 @@ if "purge_dups" in config["stage_list"]:
 
 rule minimap2_cov: # TODO: add nanopore support
     input:
-        fastq=lambda wildcards: expand(output_dict["data"] / ("fastq/%s/filtered/{fileprefix}%s" % (wildcards.datatype, config["fastq_extension"])),
-                     fileprefix=input_file_prefix_dict[wildcards.datatype],
+        fastq=lambda wildcards: expand(output_dict["data"] / ("%s/%s/%s/{fileprefix}%s" % (datatype_format_dict[wildcards.datatype],
+                                                                                           wildcards.datatype,
+                                                                                           "filtered" if wildcards.datatype in config["filtered_data"] else "raw",
+                                                                                           config[datatype_format_dict[wildcards.datatype] + "_extension"])),
+                     fileprefix=input_file_prefix_dict[wildcards.datatype] if datatype_format_dict[wildcards.datatype] == "fastq" else input_fasta_file_prefix_dict[wildcards.datatype],
                      allow_missing=True),
         reference=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.fasta"
     output:

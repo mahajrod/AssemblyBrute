@@ -5,7 +5,7 @@ rule bwa_index:
     output:
         index=out_dir_path / ("{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta%s" % (".bwt" if config["bwa_tool"] == "bwa" else ".bwt.2bit.64")),
     params:
-        bwa_tool=config["bwa_tool"],
+        bwa_tool=config["bwa_tool"] if config["other_tool_option_sets"]["mapping_pipeline"] != "arima" else "bwa",
     log:
         std=output_dict["log"]  / "bwa_index.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.log",
         cluster_log=output_dict["cluster_log"] / "bwa_index.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.log",

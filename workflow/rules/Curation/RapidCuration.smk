@@ -100,7 +100,7 @@ rule create_bedgraph_track: #
         track_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{track_type}.track.bed",
         windows_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.win{window}.step{step}.windows.bed",
     output:
-        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type, ^[./]+}.win{window}.step{step}.track.bedgraph"
+        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.bedgraph"
     log:
         intersect=output_dict["log"]  / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.intersect.log",
         awk=output_dict["log"]  / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.awk.log",

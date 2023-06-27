@@ -1280,7 +1280,7 @@
             "bwa_map": 100000
             "busco5": 150000
             "bwa_index": 100000
-            "juicer_tools_pre": 60000
+            "juicer_tools_pre": 100000
         "threads":
             "hifiasm": 80
             "meryl": 70
@@ -1469,7 +1469,7 @@
             "meryl_assembly": 50000
             "bwa_map": 160000
             "bwa_index": 160000
-            "juicer_tools_pre": 80000
+            "juicer_tools_pre": 150000
         "time":
             "install_from_pip": "01:00:00"
             "create_fastq_links": "00:05:00"
@@ -1652,7 +1652,7 @@
             "samtools_collate": 40000
             "samtools_fixmate": 30000
             "samtools_markdup": 30000
-            "juicer_tools_pre": 100000
+            "juicer_tools_pre": 300000
         "time":
             "jellyfish": "48:00:00"
             "hifiasm": "200:00:00"

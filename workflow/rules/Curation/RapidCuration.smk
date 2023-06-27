@@ -130,7 +130,7 @@ rule draw_track: #
         orderlist=rules.select_long_scaffolds.output.orderlist,
         len_file=rules.create_curation_input_links.output.len,
     output:
-        png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type, ^[./]+}.win{window}.step{step}.png"
+        png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.png"
     log:
         draw=output_dict["log"]  / "draw_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.draw.log",
         cluster_log=output_dict["cluster_log"] / "draw_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.log",

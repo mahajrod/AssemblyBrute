@@ -881,7 +881,7 @@ if "curation" in config["stage_list"]:
 
     parameters_list = list(stage_dict["curation"]["parameters"].keys())
     #print(stage_dict["curation"]["parameters"])
-    results_list += [*[[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.png",
+    results_list += [*[[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.png",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],
                             track_type=[track_type],
@@ -896,7 +896,7 @@ if "curation" in config["stage_list"]:
                      #       haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                      #       parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
 
-                     *[[expand(out_dir_path / "curation/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.png",
+                     *[[expand(out_dir_path / "curation/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.coverage.win{window}.step{step}.png",
                             window=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"][window_step_set]["window"],
                             step=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"][window_step_set]["step"],
                             genome_prefix=[config["genome_prefix"], ],

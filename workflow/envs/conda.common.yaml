@@ -55,4 +55,4 @@
   - "bwa-mem2"
   - "trf"
   - "last"
-  - "bbmap"
+  - "fastx_toolkit"

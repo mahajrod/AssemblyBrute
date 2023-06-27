@@ -105,7 +105,8 @@ rule draw_coverage_heatmap:
         len_file=rules.create_curation_input_links.output.len,
         all_stat_file=rules.create_coverage_table.output.all_stat_file
     output:
-        png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.png"
+        png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.png",
+        split_png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.split_thresholds.png"
     #params:
     #    bin_size=lambda wildcards: stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["option_set"]["bin_size"],
     #    step_size=lambda wildcards: stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["option_set"]["bin_size"]
@@ -129,3 +130,7 @@ rule draw_coverage_heatmap:
         " draw_coverage.py -i {input.stat_file} -a {input.whitelist}  -w {wildcards.window} -s {wildcards.step} "
         " -z {input.orderlist}  -n {input.len_file} -m `tail -n 1 {input.all_stat_file} | cut -f 6` --stranded_end  "
         " --hide_track_label  --coverage_column_name_list median --rounded -o ${{PREFIX}} > {log.std} 2>&1; "
+        " draw_coverage.py -i {input.stat_file} -a {input.whitelist}  -w {wildcards.window} -s {wildcards.step} "
+        " -z {input.orderlist}  -n {input.len_file} -m `tail -n 1 {input.all_stat_file} | cut -f 6` --stranded_end  "
+        " --hide_track_label  --split_coverage_thresholds --coverage_column_name_list median --rounded "
+        "-o ${{PREFIX}}.split_thresholds >> {log.std} 2>&1; "

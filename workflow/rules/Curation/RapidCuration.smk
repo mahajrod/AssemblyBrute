@@ -125,7 +125,7 @@ rule create_bedgraph_track: #
 
 rule draw_track: #
     input:
-        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph",
+        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph",
         whitelist=rules.select_long_scaffolds.output.whitelist,
         orderlist=rules.select_long_scaffolds.output.orderlist,
         len_file=rules.create_curation_input_links.output.len,

@@ -122,3 +122,33 @@ rule create_bedgraph_track: #
         " bedtools intersect -wao -a {input.windows_bed}  -b {input.track_bed}  2>{log.intersect} | "
         " awk '{{print $1\"\\t\"$2\"\\t\"$3\"\\t\"$NF}}' 2>{log.awk} | "
         " bedtools map -c 4 -o sum -a {input.windows_bed} -b stdin > {output.bedgraph} 2>{log.map} "
+
+rule draw_track: #
+    input:
+        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph",
+        whitelist=rules.select_long_scaffolds.output.whitelist,
+        orderlist=rules.select_long_scaffolds.output.orderlist,
+        len_file=rules.create_curation_input_links.output.len,
+    output:
+        png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.png"
+    log:
+        draw=output_dict["log"]  / "draw_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.draw.log",
+        cluster_log=output_dict["cluster_log"] / "draw_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "draw_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "draw_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["draw_track"],
+        time=parameters["time"]["draw_track"],
+        mem=parameters["memory_mb"]["draw_track"],
+    threads: parameters["threads"]["draw_track"]
+
+    shell:
+        " PREFIX={output.png}; "
+        " PREFIX=${{PREFIX%.png}}; "
+        " draw_variant_window_densities.py -i {input.bedgraph} -t bedgraph -o ${{PREFIX}} -l {wildcards.track_type} "
+        " -w {wildcards.window} -s {wildcards.step} --density_multiplier 1 "
+        " -a {input.whitelist} -n {input.len_file} -z {input.orderlist} --density_thresholds 0.0,0.1,0.4,0.7 "
+        " --hide_track_label --rounded --subplots_adjust_left 0.15 > {log.draw} 2>&1; "

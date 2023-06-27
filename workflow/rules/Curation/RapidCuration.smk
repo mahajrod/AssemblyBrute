@@ -125,10 +125,11 @@ rule create_bedgraph_track: #
 
 rule draw_track: #
     input:
-        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type, ^[./]+}.win{window}.step{step}.track.bedgraph",
-        whitelist=rules.select_long_scaffolds.output.whitelist,
-        orderlist=rules.select_long_scaffolds.output.orderlist,
-        len_file=rules.create_curation_input_links.output.len,
+        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph",
+        whitelist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.whitelist",
+        orderlist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.orderlist",
+        len_file=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.len" % (stage_dict["curation"]["prev_stage"],
+                                                                                                    stage_dict["curation"]["prev_stage"])),
     output:
         png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type, ^[./]+}.win{window}.step{step}.png"
     log:

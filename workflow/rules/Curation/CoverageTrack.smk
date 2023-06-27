@@ -1,6 +1,7 @@
 if "purge_dups" in config["stage_list"]:
     ruleorder: minimap2_cov > minimap2_purge_dups_reads
 
+ruleorder: draw_coverage_heatmap > draw_track
 rule minimap2_cov: # TODO: add nanopore support
     input:
         fastq=lambda wildcards: expand(output_dict["data"] / ("%s/%s/%s/{fileprefix}%s" % (datatype_format_dict[wildcards.datatype],

@@ -120,7 +120,7 @@
     "gcp":                      "default"   # Allowed: default
     "kat":                      "default"   # Allowed: default
     "juicer_tools_qc":          "default"   # Allowed: default
-    "mapping_pipeline":         "bwa_only"  # Allowed: arima, bwa_only, juicer
+    "mapping_pipeline":         "arima"  # Allowed: arima, bwa_only, juicer
     "trf":                      "default"
 
 "tool_manually_adjusted_features":
@@ -130,7 +130,7 @@
         "upper_threshold": null
 
 "ploidy": 2
-"bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
+"bwa_tool": "bwa" # Allowed: bwa, bwa-mem2
 "genome_prefix": "genome"
 "busco_lineage_list":
     - "mammalia_odb10" #

@@ -105,8 +105,8 @@ rule draw_coverage_heatmap:
         len_file=rules.create_curation_input_links.output.len,
         all_stat_file=rules.create_coverage_table.output.all_stat_file
     output:
-        png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.png",
-        split_png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.split_thresholds.png"
+        png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, ^[./]+}/input/{genome_prefix}.input.{haplotype}.{datatype, ^[./]+}.coverage.win{window, [0-1]+}.step{step, [0-1]+}.png",
+        split_png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, ^[./]+}/input/{genome_prefix}.input.{haplotype}.{datatype, ^[./]+}.coverage.win{window, [0-1]+}.step{step, [0-1]+}.split_thresholds.png"
     #params:
     #    bin_size=lambda wildcards: stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["option_set"]["bin_size"],
     #    step_size=lambda wildcards: stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["option_set"]["bin_size"]

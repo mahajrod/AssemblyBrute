@@ -191,6 +191,7 @@
 "skip_both_pretext": False
 "skip_nanoqc": False
 "skip_nanoplot": False
+"skip_wga": False
 #"adaptor_scan": True
 #"fcs_gx_scan": True
 # Allowed modes:

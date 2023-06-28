@@ -1087,6 +1087,7 @@
             "bwa_map": 50000
             "bwa_index": 30000
             "smudgeplot_hetkmers": 250000
+            "rmdup": 30000
         "time":
             "jellyfish": "04:00:00"
             "hifiasm": "08:00:00"
@@ -1181,6 +1182,7 @@
             "meryl_assembly": 40000
             "bwa_map": 80000
             "bwa_index": 50000
+            "rmdup": 100000
         "time":
             "jellyfish": "08:00:00"
             "hifiasm": "12:00:00"
@@ -1284,6 +1286,7 @@
             "busco5": 150000
             "bwa_index": 100000
             "juicer_tools_pre": 100000
+            "rmdup": 150000
         "threads":
             "hifiasm": 80
             "meryl": 70
@@ -1473,6 +1476,7 @@
             "bwa_map": 160000
             "bwa_index": 160000
             "juicer_tools_pre": 150000
+            "rmdup": 200000
         "time":
             "install_from_pip": "01:00:00"
             "create_fastq_links": "00:05:00"
@@ -1656,6 +1660,7 @@
             "samtools_fixmate": 30000
             "samtools_markdup": 30000
             "juicer_tools_pre": 300000
+            "rmdup": 300000
         "time":
             "jellyfish": "48:00:00"
             "hifiasm": "200:00:00"

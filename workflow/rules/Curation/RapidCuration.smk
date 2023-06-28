@@ -154,4 +154,4 @@ rule draw_track: #
         " draw_variant_window_densities.py -i {input.bedgraph} -t bedgraph -o ${{PREFIX}} -l {wildcards.track_type} "
         " -w {wildcards.window} -s {wildcards.step} --density_multiplier 1 "
         " -a {input.whitelist} -n {input.len_file} -z {input.orderlist} --density_thresholds 0.0,0.1,0.4,0.7 "
-        " --hide_track_label --rounded --subplots_adjust_left 0.15 > {log.draw} 2>&1; "
+        " --hide_track_label --rounded --subplots_adjust_left 0.15 --feature_name {wildcards.track_type} > {log.draw} 2>&1; "

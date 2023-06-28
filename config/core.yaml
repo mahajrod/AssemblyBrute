@@ -170,6 +170,8 @@
             "create_bedgraph_track": 1
             "maskfasta": 2
             "draw_track": 1
+            "last_index": 10
+            "last_alignment": 30
             #"fcs_gx": 50 # set via allowed_databases variable
 
         "memory_mb":
@@ -265,6 +267,8 @@
             "create_bedgraph_track": 3000
             "maskfasta": 15000
             "draw_track": 30000
+            "last_index": 10000
+            "last_alignment_per_thread": 5000
             #"fcs_gx": 512000 # set via allowed_databases variable
         "time": #TODO: adjust
             "install_from_pip": "01:00:00"
@@ -358,6 +362,7 @@
             "create_bedgraph_track": "02:00:00"
             "maskfasta": "03:00:00"
             "draw_track": "04:00:00"
+            "last_alignment": "12:00:00"
             #"fcs_gx": "03:00:00" # set via allowed_databases variable
         "tool_options":
             "cutadapt":
@@ -855,7 +860,7 @@
                     "indel_probability": 10
                     "min_alignment_score":  50
                     "max_period": 2000
-                    "max_repeat_length": 6
+                    "max_repeat_length": 100
     "micro": # < 15 Mbp, yeasts and bacteria
         "threads":
             "create_fastq_links": 1
@@ -1287,6 +1292,7 @@
             "bwa_index": 100000
             "juicer_tools_pre": 250000
             "rmdup": 150000
+            "last_index": 10000
         "threads":
             "hifiasm": 80
             "meryl": 70
@@ -1477,6 +1483,7 @@
             "bwa_index": 160000
             "juicer_tools_pre": 300000
             "rmdup": 200000
+            "last_index": 25000
         "time":
             "install_from_pip": "01:00:00"
             "create_fastq_links": "00:05:00"
@@ -1558,6 +1565,7 @@
             "create_links_for_input_assembly": "00:05:00"
             "samba": "10:00:00" # TODO: adjust
             "hifiasm": "150:00:00"
+            "last_alignment": "24:00:00"
         "tool_options":
             "jellyfish":
                 "default":
@@ -1661,6 +1669,7 @@
             "samtools_markdup": 30000
             "juicer_tools_pre": 400000
             "rmdup": 300000
+            "last_index": 60000
         "time":
             "jellyfish": "48:00:00"
             "hifiasm": "200:00:00"
@@ -1745,6 +1754,7 @@
             "draw_coverage_heatmap": "02:00:00"
             "create_links_for_input_assembly": "00:05:00"
             "samba": "10:00:00" # TODO: adjust
+            "last_alignment": "48:00:00"
         "tool_options":
             "jellyfish":
                 "default":

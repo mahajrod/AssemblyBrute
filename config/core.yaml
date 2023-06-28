@@ -362,6 +362,7 @@
             "create_bedgraph_track": "02:00:00"
             "maskfasta": "03:00:00"
             "draw_track": "04:00:00"
+            "last_index": "08:00:00"
             "last_alignment": "12:00:00"
             #"fcs_gx": "03:00:00" # set via allowed_databases variable
         "tool_options":

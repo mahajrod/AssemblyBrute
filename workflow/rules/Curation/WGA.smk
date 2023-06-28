@@ -60,6 +60,6 @@ rule last_alignment: #
         " MAF=${{MAF%.gz}}; "
         " TAB={output.tab}; "
         " TAB=${{TAB%.gz}}; "
-        " lastal  -P {threads} -R11 -f MAF  ${{INDEX_PREFIX}} {input.fasta}  > {log.lastall} | "
+        " lastal  -P {threads} -R11 -f MAF  ${{INDEX_PREFIX}} {input.fasta}  2>{log.lastall} | "
         " tee ${{MAF}} 2>{log.tee} | maf-convert tab > ${{TAB}} 2>{log.convert}; "
         " pigz -p {threads} ${{MAF}} ${{TAB}} > {log.pigz} 2>&1; "

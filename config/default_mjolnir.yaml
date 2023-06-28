@@ -188,7 +188,7 @@
 "skip_fcs_adaptor": False
 "skip_kraken": False
 "skip_prescaf_pretext": False
-"skip_postscaf_pretext": False
+"skip_postscaf_pretext": True
 "skip_both_pretext": False
 "skip_nanoqc": False
 "skip_nanoplot": False

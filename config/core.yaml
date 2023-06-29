@@ -32,6 +32,9 @@
     "deepvariant":
         "yaml": "workflow/envs/conda.deepvariant.yaml"
         "name": "deepvariant"
+    "chromodoter":
+        "yaml": "workflow/envs/conda.chromodoter.yaml"
+        "name": "chromodoter"
 
 #----
 #---- Directory structure config ----

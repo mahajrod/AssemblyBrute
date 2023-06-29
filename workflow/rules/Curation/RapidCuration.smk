@@ -1,6 +1,6 @@
 import pandas as pd
 
-localrules: create_curation_input_links, select_long_scaffolds, create_windows
+localrules: create_curation_input_links, select_long_scaffolds
 
 def get_hic_bed_file(wildcards):
     #print(stage_dict["curation"]["prev_stage"]

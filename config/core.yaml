@@ -227,7 +227,7 @@
             "ref_faidx": 3000
             "ref_dict": 3000
             "rmdup": 15000
-            "bam2bed": 30000 # TODO: adjust depending on the genome size
+            "bam2bed": 70000
             "pretextmap": 10000
             "pretextsnapshot": 5000
             "salsa2": 50000 # TODO: adjust
@@ -1019,11 +1019,13 @@
             "minimap2_index": 10000
             "minimap2": 10000
             "bwa_map": 10000
+            "bam2bed": 10000
         "time":
             "jellyfish": "02:00:00"
             "hifiasm": "04:00:00"
             "minimap2_index": "00:20:00"
             "minimap2": "04:00:00"
+            "bam2bed": "02:00:00"
         "tool_options":
             "jellyfish":
                 "default":
@@ -1116,11 +1118,13 @@
             "bwa_index": 30000
             "smudgeplot_hetkmers": 250000
             "rmdup": 30000
+            "bam2bed": "20000"
         "time":
             "jellyfish": "04:00:00"
             "hifiasm": "08:00:00"
             "minimap2_index": "00:30:00"
             "minimap2": "10:00:00"
+            "bam2bed": "03:00:00"
         "tool_options":
             "jellyfish":
                 "default":
@@ -1211,11 +1215,13 @@
             "bwa_map": 80000
             "bwa_index": 50000
             "rmdup": 100000
+            "bam2bed": "70000"
         "time":
             "jellyfish": "08:00:00"
             "hifiasm": "12:00:00"
             "minimap2_index": "01:00:00"
             "minimap2": "10:00:00"
+            "bam2bed": "06:00:00"
         "tool_options":
             "jellyfish":
                 "default":
@@ -1317,6 +1323,7 @@
             "rmdup": 150000
             "last_index": 10000
             "create_gc_track": 10000
+            "bam2bed": 100000
         "threads":
             "hifiasm": 80
             "meryl": 70
@@ -1328,6 +1335,7 @@
             "minimap2": "20:00:00"
             "busco5": "60:00:00"
             "rmdup": "72:00:00"
+            "bam2bed": "09:00:00"
         "tool_options":
             "jellyfish":
                 "default":
@@ -1509,6 +1517,7 @@
             "rmdup": 200000
             "last_index": 25000
             "create_gc_track": 20000
+            "bam2bed": 150000
         "time":
             "install_from_pip": "01:00:00"
             "create_fastq_links": "00:05:00"
@@ -1556,7 +1565,7 @@
             "ref_faidx": "02:00:00"
             "ref_dict": "02:00:00"
             "rmdup": "120:00:00"
-            "bam2bed": "5:00:00"
+            "bam2bed": "12:00:00"
             "pretextmap": "8:00:00"
             "pretextsnapshot": "04:00:00"
             "salsa2": "24:00:00"
@@ -1696,6 +1705,7 @@
             "rmdup": 300000
             "last_index": 60000
             "create_gc_track": 50000
+            "bam2bed": 200000
         "time":
             "jellyfish": "48:00:00"
             "hifiasm": "200:00:00"
@@ -1747,7 +1757,7 @@
             "ref_faidx": "02:00:00"
             "ref_dict": "02:00:00"
             "rmdup": "120:00:00"
-            "bam2bed": "5:00:00"
+            "bam2bed": "24:00:00"
             "pretextmap": "8:00:00"
             "pretextsnapshot": "04:00:00"
             "salsa2": "24:00:00"

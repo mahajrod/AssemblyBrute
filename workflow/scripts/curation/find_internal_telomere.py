@@ -23,7 +23,7 @@ args = parser.parse_args()
 fai_df = pd.read_csv(args.fai_file, sep="\t", header=None, names=["scaffold", "length"],
                      usecols=[0, 1], index_col="scaffold").sort_values(by=["length", "scaffold"], ascending=(False, True))
 
-telomere_df = pd.read_csv(args.finput, sep="\t", header=None, names=["scaffold", "start", "end", "score"],
+telomere_df = pd.read_csv(args.input, sep="\t", header=None, names=["scaffold", "start", "end", "score"],
                           usecols=[0, 1, 2, 3], index_col="scaffold")
 telomere_df["length"] = fai_df["length"]
 

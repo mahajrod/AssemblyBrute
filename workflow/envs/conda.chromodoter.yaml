@@ -12,4 +12,4 @@
   - "pandas"
   - "matplotlib"
   - "venn"
-  - "chromodoter>=0.1"
+  - "chromodoter>=0.2"

@@ -20,7 +20,7 @@ rule create_curation_input_links: #
                                                                                                    stage_dict["curation"]["prev_stage"])),
         fai=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta.fai" % (stage_dict["curation"]["prev_stage"],
                                                                                                        stage_dict["curation"]["prev_stage"])),
-        bed=get_hic_bed_file
+        bed=get_hic_bed_file if not config["skip_higlass"] else []
     output:
         fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.fasta",
         len=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.len",

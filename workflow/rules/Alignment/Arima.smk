@@ -35,7 +35,7 @@ rule bwa_map: #
     threads: parameters["threads"]["bwa_map"]
     shell:
         " {params.bwa_tool} mem -SP5M -t {threads} -R  \'@RG\\tID:{params.id}\\tPU:x\\tSM:{params.id}\\tPL:illumina\\tLB:x\' "
-        " {input.reference} <(zcat {input.fastq} | fastx_trimmer -f 8 2>{log.bbduk}) 2>{log.map} |"
+        " {input.reference} <(zcat {input.fastq} | fastx_trimmer -f 8 2>{log.fastx}) 2>{log.map} |"
         " filter_five_end.pl 2>{log.filter} | samtools view -Sb - > {output.bam} 2>{log.sort} "
 
 rule bam_merge_pairs:

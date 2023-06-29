@@ -63,3 +63,36 @@ rule last_alignment: #
         " lastal  -P {threads} -R11 -f MAF  ${{INDEX_PREFIX}} {input.fasta}  2>{log.lastall} | "
         " tee ${{MAF}} 2>{log.tee} | maf-convert tab > ${{TAB}} 2>{log.convert}; "
         " pigz -p {threads} ${{MAF}} ${{TAB}} > {log.pigz} 2>&1; "
+
+rule draw_alignment: #
+    input:
+        tab=rules.last_alignment.output.tab,#out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/input/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.tab.gz",
+        target_whitelist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/input/{genome_prefix}.input.{target_haplotype}.whitelist",
+        target_orderlist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/input/{genome_prefix}.input.{target_haplotype}.orderlist",
+        query_whitelist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/input/{genome_prefix}.input.{query_haplotype}.whitelist",
+        query_orderlist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/input/{genome_prefix}.input.{query_haplotype}.orderlist",
+    output:
+        png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/input/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.png",
+        svg=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/input/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.svg",
+    params:
+        per_thread_mem=parameters["memory_mb"]["last_alignment_per_thread"],
+    log:
+        dotplot=output_dict["log"]  / "draw_alignment.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.dotplot.log",
+        cluster_log=output_dict["cluster_log"] / "draw_alignment.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "draw_alignment.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "draw_alignment.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["draw_alignment"],
+        time=parameters["time"]["draw_alignment"],
+        mem=parameters["memory_mb"]["draw_alignment"]
+    threads: parameters["threads"]["draw_alignment"]
+    shell:
+        " OUTPUT_PREFIX={output.png}; "
+        " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.png}}; "
+        " dotplot_from_last_tab.py -i {input.tab} -w {input.target_whitelist} -x {input.query_whitelist} "
+        " -u {input.target_orderlist} -z {input.query_orderlist} "
+        " -l {wildcards.target_haplotype} -r {wildcards.query_haplotype} -e png,svg --axes_label_distance 7"
+        " --bottom_offset 0.15 --top_offset 0.15 -o ${{OUTPUT_PREFIX}} > {log.dotplot} 2>&1; "

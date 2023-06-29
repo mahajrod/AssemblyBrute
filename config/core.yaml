@@ -1221,7 +1221,8 @@
             "bwa_map": 80000
             "bwa_index": 50000
             "rmdup": 100000
-            "bam2bed": "70000"
+            "bam2bed": 70000
+            "trf": 50000
         "time":
             "jellyfish": "08:00:00"
             "hifiasm": "12:00:00"
@@ -1330,6 +1331,7 @@
             "last_index": 10000
             "create_gc_track": 10000
             "bam2bed": 100000
+            "trf": 80000
         "threads":
             "hifiasm": 80
             "meryl": 70
@@ -1524,6 +1526,7 @@
             "last_index": 25000
             "create_gc_track": 20000
             "bam2bed": 150000
+            "trf": 100000
         "time":
             "install_from_pip": "01:00:00"
             "create_fastq_links": "00:05:00"
@@ -1712,6 +1715,7 @@
             "last_index": 60000
             "create_gc_track": 50000
             "bam2bed": 200000
+            "trf": 120000
         "time":
             "jellyfish": "48:00:00"
             "hifiasm": "200:00:00"

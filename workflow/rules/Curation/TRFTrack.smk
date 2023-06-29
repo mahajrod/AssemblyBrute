@@ -34,7 +34,7 @@ rule trf: #
     shell:
         " WORK_DIR=`dirname {output.bed}`; "
         " INPUT_FASTA=`basename  {input.fasta}`; "
-        " OUTPUT_PREFIX=`basename {output.bed}`; "
+        " OUTPUT_PREFIX=`basename {output.simple_bed}`; "
         " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.simple.bed}};"
         " cd ${{WORK_DIR}}; "
         " tandem_repeat_masking.py -t {threads} {params.matching_weight} {params.mismatching_penalty} "

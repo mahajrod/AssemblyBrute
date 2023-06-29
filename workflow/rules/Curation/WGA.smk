@@ -94,5 +94,5 @@ rule draw_alignment: #
         " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.png}}; "
         " dotplot_from_last_tab.py -i {input.tab} -w {input.target_whitelist} -x {input.query_whitelist} "
         " -u {input.target_orderlist} -z {input.query_orderlist} "
-        " -l {wildcards.target_haplotype} -r {wildcards.query_haplotype} -e png,svg --axes_label_distance 5 "
-        " --bottom_offset 0.1 --left_offset 0.15 --top_offset 0.85 -o ${{OUTPUT_PREFIX}} > {log.dotplot} 2>&1; "
+        " -l {wildcards.target_haplotype} -r {wildcards.query_haplotype} -e png,svg --axes_label_distance 6 "
+        " --bottom_offset 0.1 --left_offset 0.15 --top_offset 0.9 -o ${{OUTPUT_PREFIX}} > {log.dotplot} 2>&1; "

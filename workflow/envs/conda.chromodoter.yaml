@@ -1,0 +1,15 @@
+#---- Bioconda config ----
+"name": "chromodoter"
+"channels":
+  - "mahajrod"
+  - "bioconda"
+  - "conda-forge"
+  - "anaconda"
+"dependencies":
+  - "python>=3.8"
+  - "scipy"
+  - "numpy"
+  - "pandas"
+  - "matplotlib"
+  - "venn"
+  - "chromodoter>=0.1"

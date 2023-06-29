@@ -83,7 +83,7 @@ rule draw_alignment: #
     benchmark:
         output_dict["benchmark"]  / "draw_alignment.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["chromodoter"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["chromodoter"]["yaml"])
     resources:
         cpus=parameters["threads"]["draw_alignment"],
         time=parameters["time"]["draw_alignment"],
@@ -95,4 +95,4 @@ rule draw_alignment: #
         " dotplot_from_last_tab.py -i {input.tab} -w {input.target_whitelist} -x {input.query_whitelist} "
         " -u {input.target_orderlist} -z {input.query_orderlist} "
         " -l {wildcards.target_haplotype} -r {wildcards.query_haplotype} -e png,svg --axes_label_distance 7"
-        " --bottom_offset 0.15 --top_offset 0.15 -o ${{OUTPUT_PREFIX}} > {log.dotplot} 2>&1; "
+        " --bottom_offset 0.15 --top_offset 0.9 -o ${{OUTPUT_PREFIX}} > {log.dotplot} 2>&1; "

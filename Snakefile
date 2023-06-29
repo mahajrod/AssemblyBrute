@@ -882,10 +882,11 @@ if "curation" in config["stage_list"]:
     parameters_list = list(stage_dict["curation"]["parameters"].keys())
 
     if not config["skip_wga"]:
-        results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{target_haplotype}/input/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.png",
+        results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{target_haplotype}/input/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.png",
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["curation", ],
                                 parameters=[parameters_label],
+                                min_target_len=parameters["tool_options"]["wga"]["min_target_len"],
                                 query_haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                                 target_haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                                 ) for parameters_label in stage_dict["curation"]["parameters"]]]

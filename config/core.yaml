@@ -177,6 +177,7 @@
             "last_alignment": 30
             "draw_alignment": 1
             "create_gc_track": 1
+            "filter_last_alignment_by_len": 4
             #"fcs_gx": 50 # set via allowed_databases variable
 
         "memory_mb":
@@ -276,6 +277,7 @@
             "last_alignment_per_thread": 5000
             "create_gc_track": 5000
             "draw_alignment": 30000
+            "filter_last_alignment_by_len": 10000
             #"fcs_gx": 512000 # set via allowed_databases variable
         "time": #TODO: adjust
             "install_from_pip": "01:00:00"
@@ -373,6 +375,7 @@
             "last_alignment": "12:00:00"
             "create_gc_track": "04:00:00"
             "draw_alignment": "04:00:00"
+            "filter_last_alignment_by_len": "04:00:00"
             #"fcs_gx": "03:00:00" # set via allowed_databases variable
         "tool_options":
             "cutadapt":
@@ -890,6 +893,12 @@
                     "min_alignment_score":  50
                     "max_period": 2000
                     "max_repeat_length": 100
+            "wga":
+                "default":
+                    "min_target_len":
+                        - 0
+                        - 1000
+                        - 10000
     "micro": # < 15 Mbp, yeasts and bacteria
         "threads":
             "create_fastq_links": 1

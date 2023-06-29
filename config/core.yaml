@@ -270,7 +270,7 @@
             "generate_prescaffolding_agp": 300
             "trf": 30000
             "create_windows": 1000
-            "create_bedgraph_track": 3000
+            "create_bedgraph_track": 20000
             "maskfasta": 15000
             "draw_track": 30000
             "last_index": 10000

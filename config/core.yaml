@@ -194,7 +194,7 @@
             "get_coverage_from_hifiasm_graph": 2000
             "get_read_bed_from_hifiasm_graph": 2000
             "busco5_download": 1000
-            "busco5": 20000
+            "busco5": 50000
             "compress_busco5": 1000
             "handle_busco5_output": 100
             "busco5_intersect_haplotypes": 100
@@ -1317,7 +1317,7 @@
             "purge_dups": 40000
             "meryl_assembly": 50000
             "bwa_map": 100000
-            "busco5": 150000
+            "busco5": 250000
             "bwa_index": 100000
             "juicer_tools_pre": 250000
             "rmdup": 150000
@@ -1507,7 +1507,7 @@
             "minimap2":       70000
             "nanoqc": 80000
             "gfa2fasta": 40000
-            "busco5": 200000
+            "busco5": 400000
             "cutadapt": 50000
             "purge_dups": 50000
             "meryl_assembly": 50000
@@ -1691,7 +1691,7 @@
             "minimap2":       70000
             "nanoqc": 80000
             "gfa2fasta": 60000
-            "busco5": 250000
+            "busco5": 500000
             "cutadapt": 50000
             "purge_dups": 70000
             "meryl_assembly": 100000

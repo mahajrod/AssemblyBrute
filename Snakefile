@@ -898,7 +898,7 @@ if "curation" in config["stage_list"]:
                             window=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type][window_settings]["window"]],
                             step=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type][window_settings]["step"]],
                             haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                            parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ("gap", "windowmasker", "trf") ],
+                            parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ("gap", "windowmasker", "trf", "gc") ],
 
                      #*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.gap.bedgraph",
                      #       genome_prefix=[config["genome_prefix"], ],

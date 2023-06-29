@@ -3,8 +3,7 @@ __author__ = 'mahajrod'
 import sys
 import argparse
 import pandas as pd
-from RouToolPa.Parsers.Sequence import CollectionSequence
-from RouToolPa.GeneralRoutines import FileRoutines
+import numpy as np
 
 parser = argparse.ArgumentParser()
 
@@ -26,6 +25,8 @@ fai_df = pd.read_csv(args.fai_file, sep="\t", header=None, names=["scaffold", "l
 telomere_df = pd.read_csv(args.input, sep="\t", header=None, names=["scaffold", "start", "end", "score"],
                           usecols=[0, 1, 2, 3], index_col="scaffold")
 telomere_df["length"] = fai_df["length"]
+
+telomere_df["min_end_distance"] = np.minimum(telomere_df["length"] - telomere_df["start"], telomere_df["end"])
 
 print(telomere_df)
 

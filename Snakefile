@@ -1005,6 +1005,7 @@ if "curation" in config["stage_list"]:
     include: "workflow/rules/Curation/HiGlassTrack.smk"
     include: "workflow/rules/Curation/TRFTrack.smk"
     include: "workflow/rules/Curation/Masking.smk"
+    include: "workflow/rules/Curation/GCTrack.smk"
     include: "workflow/rules/Curation/WGA.smk"
 
 if "gap_closing" in config["stage_list"]:

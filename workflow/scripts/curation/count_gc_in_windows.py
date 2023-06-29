@@ -39,7 +39,7 @@ with FileRoutines.metaopen(args.output, "w") as out_fd:
                                                        (fasta_collection.records[scaffold][start:end].count("G") +
                                                         fasta_collection.records[scaffold][start:end].count("C") +
                                                         fasta_collection.records[scaffold][start:end].count("g") +
-                                                        fasta_collection.records[scaffold][start:end].count("c")) / args.window_size))
+                                                        fasta_collection.records[scaffold][start:end].count("c"))))
 
 
 

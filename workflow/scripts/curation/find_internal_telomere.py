@@ -28,6 +28,6 @@ telomere_df["length"] = fai_df["length"]
 
 telomere_df["min_end_distance"] = np.minimum(telomere_df["length"] - telomere_df["start"], telomere_df["end"])
 
-warning_df = telomere_df[telomere_df["min_end_distance"] >= args.min_distance][["scaffold", "start", "end", "score"]]
+warning_df = telomere_df[telomere_df["min_end_distance"] >= args.min_distance][["start", "end", "score"]]
 
 print(warning_df)

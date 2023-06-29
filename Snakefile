@@ -925,13 +925,14 @@ if "curation" in config["stage_list"]:
                             haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                             parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
                      ]
-    for parameters_label in parameters_list:
-        if stage_dict["curation"]["parameters"][parameters_label]["prev_stage"] == "hic_scaffolding": # TODO: add handling for a case when "hic_scaffolding" is not a stage before the "curation"
-            results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.higlass.mcool",
-                            genome_prefix=[config["genome_prefix"], ],
-                            assembly_stage=["curation", ],
-                            haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                            parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
+    if not config["skip_higlass"]:
+        for parameters_label in parameters_list:
+            if stage_dict["curation"]["parameters"][parameters_label]["prev_stage"] == "hic_scaffolding": # TODO: add handling for a case when "hic_scaffolding" is not a stage before the "curation"
+                results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.higlass.mcool",
+                                genome_prefix=[config["genome_prefix"], ],
+                                assembly_stage=["curation", ],
+                                haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
+                                parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
                      ]
 
 #----

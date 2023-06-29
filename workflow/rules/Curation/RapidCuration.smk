@@ -43,8 +43,13 @@ rule create_curation_input_links: #
     shell:
         " ln -sf `realpath -s {input.fasta}` {output.fasta} > {log.ln} 2>&1; "
         " ln -sf `realpath -s {input.fai}` {output.fai} >> {log.ln} 2>&1; "
-        " ln -sf `realpath -s {input.bed}` {output.bed} >> {log.ln} 2>&1; "
         " ln -sf `realpath -s {input.len}` {output.len} >> {log.ln} 2>&1; "
+        " if [ -z '{input.bed}' ];"
+        " then "
+        "   echo 'Skipping bed file...'; "
+        " else"
+        "   ln -sf `realpath -s {input.bed}` {output.bed} >> {log.ln} 2>&1; "
+        " fi; "
 
 rule select_long_scaffolds: #
     input:

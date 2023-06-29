@@ -25,6 +25,6 @@ rule maskfasta: #
     threads: parameters["threads"]["maskfasta"]
     shell:
         " cat {input.trf_bed} {input.windowmasker_bed} 2>{log.cat} | "
-        " sort -k1,1V -k2,2n -k3,3n > {log.sort} | "
+        " sort -k1,1V -k2,2n -k3,3n 2>{log.sort} | "
         " bedtools merge -i stdin > {output.merged_bed} 2>{log.merge}; "
         " bedtools maskfasta -soft -fi {input.fasta} -bed {output.merged_bed} -fo {output.masked_fasta} > {log.maskfasta} 2>&1; "

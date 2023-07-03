@@ -88,7 +88,11 @@ rule juicer_tools_pre_prescaffolding: #
         yahs_juicer_pre_bed=rules.yahs_juicer_pre_prescaffolding.output.links_bed
     output:
         hic=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.hic",
+    params:
+        resolution_list=" ".join(parameters["tool_options"]["juicer_tools_pre"]["resolution_list"])
     log:
+        grep0=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.grep0.log",
+        sed0=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.sed0.log",
         juicer=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.juicer.log",
         cat=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.cat.log",
         grep=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.grep.log",
@@ -106,7 +110,16 @@ rule juicer_tools_pre_prescaffolding: #
     threads: parameters["threads"]["juicer_tools_pre"]
 
     shell: # juicer_tools elder than 1.9.9 seems to be incompartible with yahs
-        " java -jar -Xmx{resources.mem}m workflow/external_tools/juicer/juicer_tools.1.9.9_jcuda.0.8.jar pre " #--threads {threads}  
+        " RESOLUTION_LIST=({params.resolution_list}); "
+        " RESOLUTION_LIST_LEN=${{#res[@]}}; "
+        " SCALE=`grep 'scale factor:' {input.yahs_juicer_pre_log} 2>{log.grep0} | sed 's/.*scale factor: //' 2>{log.sed0}`; "
+        " RESOLUTION_OPTION_LIST=$(( RESOLUTION_LIST[0]/SCALE )); "
+        " for (( i=1; i<$RESOLUTION_LIST_LEN; i++ )); "
+        "   do"
+        "   RESOLUTION_OPTION_LIST=$RESOLUTION_OPTION_LIST\",\"$(( RESOLUTION_LIST[$i]/SCALE ));"
+        "   done;"
+        " java -jar -Xmx{resources.mem}m workflow/external_tools/juicer/juicer_tools.1.9.9_jcuda.0.8.jar pre "
+        " -r ${{RESOLUTION_OPTION_LIST}} " #--threads {threads}  
         " {input.yahs_juicer_pre_bed} {output.hic} <(cat {input.yahs_juicer_pre_log} 2>{log.cat} | "
         " grep PRE_C_SIZE 2>{log.grep} | awk '{{print $2\" \"$3}}' 2>{log.awk}) > {log.juicer} 2>&1; "
 

@@ -178,6 +178,7 @@
             "draw_alignment": 1
             "create_gc_track": 1
             "filter_last_alignment_by_len": 4
+            "get_telomere_warning": 1
             #"fcs_gx": 50 # set via allowed_databases variable
 
         "memory_mb":
@@ -278,6 +279,7 @@
             "create_gc_track": 5000
             "draw_alignment": 30000
             "filter_last_alignment_by_len": 10000
+            "get_telomere_warning": 3000
             #"fcs_gx": 512000 # set via allowed_databases variable
         "time": #TODO: adjust
             "install_from_pip": "01:00:00"
@@ -376,6 +378,7 @@
             "create_gc_track": "04:00:00"
             "draw_alignment": "04:00:00"
             "filter_last_alignment_by_len": "04:00:00"
+            "get_telomere_warning": "03:00:00"
             #"fcs_gx": "03:00:00" # set via allowed_databases variable
         "tool_options":
             "cutadapt":
@@ -791,6 +794,19 @@
                      "min_mapping_quality": 10
                      "phasing_kmer_length": "NA"
                      "use_phased_reads": False
+            "juicer_tools_pre":
+                "default":
+                    "resolution_list":
+                        - 2500000
+                        - 1000000
+                        - 500000
+                        - 250000
+                        - 100000
+                        - 50000
+                        - 25000
+                        - 10000
+                        - 5000
+                        - 1000
             "juicer_tools_qc":
                 "default":
                     "mapping_quality":

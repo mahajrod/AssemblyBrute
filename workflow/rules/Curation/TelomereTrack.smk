@@ -130,8 +130,8 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         "       CANNONICAL_TEL_KMER=`head -n 1 {input.cannonicaL_top_kmer}`; "
         "       singularity run {params.container} -t {wildcards.genome_prefix}_cannonical "
         "       -s ${{CANNONICAL_TEL_KMER}} > {log.cannonical} 2>&1 || true ; "
-        "       cp ${{DESTDIR}}/{wildcards.genome_prefix}_cannonical_telomere.bedgraph {output.cannonical_telo_track} > {log.cp_cannonical} 2>&1; "
-        "       cp ${{DESTDIR}}/{wildcards.genome_prefix}_cannonical_telomere.bed {output.cannonical_telo_bed} >> {log.cp_cannonical} 2>&1; "
+        "       sort -k1,1V -k2,2n -k3,3n ${{DESTDIR}}/{wildcards.genome_prefix}_cannonical_telomere.bedgraph > {output.cannonical_telo_track} 2>{log.cp_cannonical}; "
+        "       sort -k1,1V -k2,2n -k3,3n  ${{DESTDIR}}/{wildcards.genome_prefix}_cannonical_telomere.bed > {output.cannonical_telo_bed} 2>>{log.cp_cannonical}; "
         "       cp ${{DESTDIR}}/ref.telomere {output.cannonical_telo} >> {log.cp_cannonical} 2>&1; "
         "       cp ${{DESTDIR}}/ref.windows {output.cannonical_telo_win} >> {log.cp_cannonical} 2>&1; "
         "       rm -r ${{DESTDIR}}/* > {log.rm_cannonical} 2>&1; "
@@ -149,8 +149,8 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         "       -s ${{NON_CANNONICAL_TEL_KMER}}> {log.non_cannonical} 2>&1 || true; "
         "       if [ -s '${{DESTDIR}}/ref.telomere' ]; "
         "       then"
-        "           cp ${{DESTDIR}}/{wildcards.genome_prefix}_non_cannonical_telomere.bedgraph {output.non_cannonical_telo_track} > {log.cp_non_cannonical} 2>&1; "
-        "           cp ${{DESTDIR}}/{wildcards.genome_prefix}_non_cannonical_telomere.bed {output.non_cannonical_telo_bed} >> {log.cp_non_cannonical} 2>&1; "
+        "           sort -k1,1V -k2,2n -k3,3n ${{DESTDIR}}/{wildcards.genome_prefix}_non_cannonical_telomere.bedgraph > {output.non_cannonical_telo_track} 2>{log.cp_non_cannonical}; "
+        "           sort -k1,1V -k2,2n -k3,3n ${{DESTDIR}}/{wildcards.genome_prefix}_non_cannonical_telomere.bed > {output.non_cannonical_telo_bed} 2>>{log.cp_non_cannonical}; "
         "           cp ${{DESTDIR}}/ref.telomere {output.non_cannonical_telo} >> {log.cp_non_cannonical} 2>&1; "
         "           cp ${{DESTDIR}}/ref.windows {output.non_cannonical_telo_win} >> {log.cp_non_cannonical} 2>&1; "
         "       else"
@@ -167,3 +167,44 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         "       touch {output.non_cannonical_telo_win} >>  {log.touch_non_cannonical}  2>&1; "
         " fi; "
         " rm -r ${{WORKDIR}} > {log.rm} 2>&1; "
+
+rule get_telomere_warning:
+    input:
+        cannonical_telo_track=rules.telo_container.output.cannonical_telo_track, #out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.cannonical.telomere.bedgraph",
+        non_cannonical_telo_track=rules.telo_container.output.non_cannonical_telo_track, # out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.non_cannonical.telomere.bedgraph",
+        fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.fasta.fai",
+    output:
+        cannonical_telo_warning_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.cannonical.telomere.warning.bedgraph",
+        non_cannonical_telo_warning_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.non_cannonical.telomere.warning.bedgraph",
+    log:
+        cannonical=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cannonical.log",
+        non_cannonical=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.non_cannonical.log",
+        cannonical_touch=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cannonical.touch.log",
+        non_cannonical_touch=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.non_cannonical.touch.log",
+        cluster_log=output_dict["cluster_log"] / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["get_telomere_warning"] ,
+        time=parameters["time"]["get_telomere_warning"],
+        mem=parameters["memory_mb"]["get_telomere_warning"]
+    threads: parameters["threads"]["get_telomere_warning"]
+
+    shell:
+        " if [ -s {input.cannonical_telo_track} ]; "
+        " then "
+        "       workflow/scripts/curation/find_internal_telomere.py  -i {input.cannonical_telo_track}  "
+        "                   -f {input.fai} > {output.cannonical_telo_warning_track} 2>{log.cannonical}; "
+        " else"
+        "       touch {output.cannonical_telo_warning_track} > {log.cannonical_touch} 2>&1; "
+        " fi;"
+        " if [ -s {input.non_cannonical_telo_track} ]; "
+        " then "
+        "       workflow/scripts/curation/find_internal_telomere.py  -i {input.non_cannonical_telo_track}  "
+        "                   -f {input.fai} > {output.non_cannonical_telo_warning_track} 2>{log.non_cannonical}; "
+        " else"
+        "       touch {output.non_cannonical_telo_warning_track} > {log.non_cannonical_touch} 2>&1; "
+        " fi; "

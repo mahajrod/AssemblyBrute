@@ -1148,7 +1148,7 @@
             "bwa_index": 30000
             "smudgeplot_hetkmers": 250000
             "rmdup": 30000
-            "bam2bed": "20000"
+            "bam2bed": 20000
         "time":
             "jellyfish": "04:00:00"
             "hifiasm": "08:00:00"

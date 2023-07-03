@@ -36,4 +36,5 @@ rule create_higlass_track: #
         "                                          else {{ print substr($4,1,length($4)-2),$6,$1,$2,\"8\",$12,$7,$8,\"16\",$5,$11}} }}' 2>{log.awk} | "
         " tr '\\-+' '01' 2>{log.tr} | sort --parallel={threads} -S{resources.mem}M -k3,3d -k7,7d > {output.higlass_bed} 2>{log.sort2}; "
         " cooler cload pairs -0 -c1 3 -p1 4 -c2 7 -p2 8 {output.genome_higlass}:1000 {output.higlass_bed} {output.higlass_cool} 2>{log.cload}; "
-        " cooler zoomify -o {output.higlass_mcool} {output.higlass_cool} 2>{log.zoomify}; "
+        " cooler zoomify --resolutions 10000,20000,40000,60000,80000,100000,120000,150000,200000,300000,400000,500000,1000000,2500000 "
+        " -o {output.higlass_mcool} {output.higlass_cool} 2>{log.zoomify}; "

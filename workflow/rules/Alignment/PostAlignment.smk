@@ -89,7 +89,7 @@ rule juicer_tools_pre_prescaffolding: #
     output:
         hic=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.hic",
     params:
-        resolution_list=" ".join(parameters["tool_options"]["juicer_tools_pre"]["resolution_list"])
+        resolution_list=" ".join(map(str,parameters["tool_options"]["juicer_tools_pre"]["resolution_list"]))
     log:
         grep0=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.grep0.log",
         sed0=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.sed0.log",

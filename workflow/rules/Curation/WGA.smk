@@ -51,7 +51,7 @@ rule last_alignment: #
     resources:
         cpus=parameters["threads"]["last_alignment"],
         time=parameters["time"]["last_alignment"],
-        mem=parameters["memory_mb"]["last_alignment_per_thread"] * parameters["threads"]["last_alignment"]
+        mem=parameters["memory_mb"]["last_alignment"]
     threads: parameters["threads"]["last_alignment"]
     shell:
         " INDEX_PREFIX={input.database}; "

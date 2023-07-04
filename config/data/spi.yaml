@@ -121,6 +121,7 @@
     "mapping_pipeline":         "bwa_only"  # Allowed: arima, bwa_only, juicer
     "trf":                      "default"
     "wga":                      "default"
+    "select_long_scaffolds":    "default"
 
 "tool_manually_adjusted_features":
     "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions

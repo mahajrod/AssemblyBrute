@@ -208,6 +208,9 @@
                             - 21
                             #- 31
                             #- 41 #very RAM hungry option
+            "select_long_scaffolds":
+                "default":
+                    "max_scaffolds": 200
             "smudgeplot":
                 "default":
                     "hifi":

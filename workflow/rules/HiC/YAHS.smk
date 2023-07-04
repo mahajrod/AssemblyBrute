@@ -60,11 +60,11 @@ rule yahs_juicer_pre: #
         bin=rules.yahs.output.bin,
         agp=rules.yahs.output.agp
     output:
-        links_bed=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.bed",
-        liftover_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.liftover.agp",
-        assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.assembly",
-        assembly_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.assembly.agp",
-        log=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.log",
+        links_bed=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.bed",
+        liftover_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.liftover.agp",
+        assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.assembly",
+        assembly_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.assembly.agp",
+        log=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.log",
     log:
         #std=output_dict["log"]  / "yahs_juicer_pre.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.log",
         mv=output_dict["log"]  / "yahs_juicer_pre.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.mv.log",
@@ -91,8 +91,12 @@ rule juicer_tools_pre: #
         yahs_juicer_pre_log=rules.yahs_juicer_pre.output.log,
         yahs_juicer_pre_bed=rules.yahs_juicer_pre.output.links_bed
     output:
-        hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic",
+        hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.hic",
+    params:
+        resolution_list=" ".join(map(str,parameters["tool_options"]["juicer_tools_pre"]["resolution_list"]))
     log:
+        grep0=output_dict["log"]  / "juicer_tools_pre.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.grep0.log",
+        sed0=output_dict["log"]  / "juicer_tools_pre.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.sed0.log",
         juicer=output_dict["log"]  / "juicer_tools_pre.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.juicer.log",
         cat=output_dict["log"]  / "juicer_tools_pre.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cat.log",
         grep=output_dict["log"]  / "juicer_tools_pre.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.grep.log",
@@ -110,6 +114,19 @@ rule juicer_tools_pre: #
     threads: parameters["threads"]["juicer_tools_pre"]
 
     shell: # juicer_tools elder than 1.9.9 seems to be incompartible with yahs
-        " java -jar -Xmx{resources.mem}m workflow/external_tools/juicer/juicer_tools.1.9.9_jcuda.0.8.jar pre " #--threads {threads}  
+        " RESOLUTION_LIST=({params.resolution_list}); "
+        " RESOLUTION_LIST_LEN=${{#RESOLUTION_LIST[@]}}; "
+        " SCALE=`grep 'scale factor:' {input.yahs_juicer_pre_log} 2>{log.grep0} | sed 's/.*scale factor: //' 2>{log.sed0}`; "
+        " RESOLUTION_OPTION_LIST=$(( RESOLUTION_LIST[0]/SCALE )); "
+        " for (( i=1; i<$RESOLUTION_LIST_LEN; i++ )); "
+        "   do"
+        "   RESOLUTION_OPTION_LIST=$RESOLUTION_OPTION_LIST\",\"$(( RESOLUTION_LIST[$i]/SCALE ));"
+        "   done;"
+        " java -jar -Xmx{resources.mem}m workflow/external_tools/juicer/juicer_tools.1.9.9_jcuda.0.8.jar pre "
+        " -r ${{RESOLUTION_OPTION_LIST}} " #--threads {threads}  
         " {input.yahs_juicer_pre_bed} {output.hic} <(cat {input.yahs_juicer_pre_log} 2>{log.cat} | "
         " grep PRE_C_SIZE 2>{log.grep} | awk '{{print $2\" \"$3}}' 2>{log.awk}) > {log.juicer} 2>&1; "
+        #
+        #" java -jar -Xmx{resources.mem}m workflow/external_tools/juicer/juicer_tools.1.9.9_jcuda.0.8.jar pre " #--threads {threads}
+        #" {input.yahs_juicer_pre_bed} {output.hic} <(cat {input.yahs_juicer_pre_log} 2>{log.cat} | "
+        #" grep PRE_C_SIZE 2>{log.grep} | awk '{{print $2\" \"$3}}' 2>{log.awk}) > {log.juicer} 2>&1; "

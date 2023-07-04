@@ -111,7 +111,7 @@ rule juicer_tools_pre_prescaffolding: #
 
     shell: # juicer_tools elder than 1.9.9 seems to be incompartible with yahs
         " RESOLUTION_LIST=({params.resolution_list}); "
-        " RESOLUTION_LIST_LEN=${{#res[@]}}; "
+        " RESOLUTION_LIST_LEN=${{#RESOLUTION_LIST[@]}}; "
         " SCALE=`grep 'scale factor:' {input.yahs_juicer_pre_log} 2>{log.grep0} | sed 's/.*scale factor: //' 2>{log.sed0}`; "
         " RESOLUTION_OPTION_LIST=$(( RESOLUTION_LIST[0]/SCALE )); "
         " for (( i=1; i<$RESOLUTION_LIST_LEN; i++ )); "

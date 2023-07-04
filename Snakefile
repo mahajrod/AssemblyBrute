@@ -8,29 +8,28 @@ from collections.abc import Mapping
 from copy import deepcopy
 from pathlib import Path, PosixPath
 
-#---- Read main_config ----
+import pandas as pd
+
+#---- Read config files ----
+#-------- Read core config file --------
 with open(config["main_config_file"], "r") as core_yaml_fd:
     config.update(yaml.safe_load(core_yaml_fd))
+#---------------------------------------
+#-------- Read resources config files --------
+for resource, res_datatype in zip(["threads", "memory_mb", "time"], [int, int, str]):
+    resource_df = pd.read_csv(config["resources"][resource], sep="\t", header=0, dtype=res_datatype)
+    for config_label in resource_df.columns:
+        config["parameters"][config_label][resource] = resource_df[config_label].to_dict(OrderedDict)
+
+print(config)
+#---------------------------------------------
+
+#---------------------------
 
 #---- Include sections for functions ----
 include: "workflow/functions/option_parsing.py"
 include: "workflow/functions/general_parsing.py"
-
-#---- Temp code to allow usage of conda envs on pacbio server ----
-#shell("conda config  --add envs_dirs /projects/codon_0000/apps/miniconda3/envs/")
-#shell("which python")
-#shell("echo 'PATH variable:'")
-#shell("echo ${{PATH}}")
-#shell("echo 'PYTHONPATH variable:'")
-#shell("echo ${{PYTHONPATH}}")
-#---------
-import pandas as pd
-
-#logging.basicConfig(format='%(asctime)s %(message)s', datefmt='%d/%m/%Y %I:%M:%S %p')
-
-#---- Functions ----
-#Moved to workflow/functions/general_parsing.py
-#----
+#----------------------------------------
 
 
 #-- Initialization of path variables from config file --
@@ -886,7 +885,7 @@ if "curation" in config["stage_list"]:
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["curation", ],
                                 parameters=[parameters_label],
-                                min_target_len=parameters["tool_options"]["wga"]["min_target_len"],
+                                min_target_len=parameters["tool_options"]["wga"][ "min_target_len"],
                                 query_haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                                 target_haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                                 ) for parameters_label in stage_dict["curation"]["parameters"]]]

@@ -1168,6 +1168,83 @@
                     "clr":
                         "use_corrected_reads": True
                         "matching_len": 10000
+    "titan": # > 15000 Mbp, big plant,
+        "tool_options":
+            "jellyfish":
+                "default":
+                    "hifi":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "160G"
+                    "illumina":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "160G"
+            "meryl":
+                "default":
+                    "hifi":
+                        "kmer_length":
+                            - 21
+                            #- 31  #very RAM hungry option
+                            #- 41  #very RAM hungry option
+                    "illumina":
+                        "kmer_length":
+                            - 21
+                            #- 31  #very RAM hungry option
+                    "hic":
+                        "kmer_length":
+                            - 21
+                    "nanopore":
+                        "kmer_length":
+                            - 21
+            "quast":
+                "default":
+                    "large_genome": True
+            "minimap2":
+                "default":
+                    "hifi":
+                        "index_size": "30G"
+                        "alignment_scheme": "map-hifi" # -x
+                    "clr":
+                        "index_size": 60G"
+                        "alignment_scheme": "map-pb"   # -x
+                    "nanopore":
+                        "index_size": "30G"
+                        "alignment_scheme": "map-ont"  # -x
+                    "self":
+                        "index_size": "30G"
+                        "alignment_scheme": "asm5"     # -x
+            "samba":
+                "default":
+                    "hifi":
+                        "use_corrected_reads": True
+                        "matching_len": 10000
+                    "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 10000
+                    "clr":
+                        "use_corrected_reads": True
+                        "matching_len": 10000
+                "raw_reads":
+                    "hifi":
+                        "use_corrected_reads": False
+                        "matching_len": 10000
+                    "nanopore":
+                        "use_corrected_reads": False
+                        "matching_len": 10000
+                    "clr":
+                        "use_corrected_reads": False
+                        "matching_len": 10000
+                "corrected_reads":
+                    "hifi":
+                        "use_corrected_reads": True
+                        "matching_len": 10000
+                    "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 10000
+                    "clr":
+                        "use_corrected_reads": True
+                        "matching_len": 10000
 
 "kmer_counter_list":
     #- "jellyfish"

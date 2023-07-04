@@ -21,7 +21,7 @@ for resource, res_datatype in zip(["threads", "memory_mb", "time"], [int, int, s
     for config_label in resource_df.columns:
         config["parameters"][config_label][resource] = resource_df[config_label].to_dict(OrderedDict)
 
-print(config["parameters"])
+#print(config["parameters"])
 #---------------------------------------------
 
 #---------------------------

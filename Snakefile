@@ -476,13 +476,13 @@ if "smudgeplot" in config["stage_list"]:
                               kmer_length=parameters["tool_options"][kmer_tool][dat_type]["kmer_length"],
                               ) for kmer_tool in config["kmer_counter_list"] ]  for dat_type in genome_size_estimation_data_type_set]
                     ]
-if "kat" in config["stage_list"]:
-    results_list += [expand(output_dict["kmer"] / "{datatype}/{stage}/kat/{datatype}.{stage}.{kmer_length}.jellyfish.kat.gcp.mx.png",
-                     datatype=[dat_type,],
-                     stage=["filtered",],
-                     kmer_length=parameters["tool_options"]["kat"][dat_type]["kmer_length"],
-                     )  for dat_type in set(parameters["tool_options"]["kat"]) & set(data_types)
-                    ]
+#if "kat" in config["stage_list"]:
+#    results_list += [expand(output_dict["kmer"] / "{datatype}/{stage}/kat/{datatype}.{stage}.{kmer_length}.jellyfish.kat.gcp.mx.png",
+#                     datatype=[dat_type,],
+#                     stage=["filtered",],
+#                     kmer_length=parameters["tool_options"]["kat"][dat_type]["kmer_length"],
+#                     )  for dat_type in set(parameters["tool_options"]["kat"]) & set(data_types)
+#                    ]
 if ("gcp" in config["stage_list"]) and (not config["skip_gcp"]):
     results_list += [expand(output_dict["kmer"] / "{datatype}/{stage}/gcp/{datatype}.{stage}.{kmer_length}.L{min_coverage}.heatmap.png",
                      datatype=[dat_type,],
@@ -960,7 +960,7 @@ include: "workflow/rules/QCFiltering/NanoPlot.smk"
 include: "workflow/rules/Kmer/Jellyfish.smk"
 include: "workflow/rules/Kmer/Meryl.smk"
 include: "workflow/rules/Kmer/Smudgeplot.smk"
-include: "workflow/rules/Kmer/KAT.smk"
+#include: "workflow/rules/Kmer/KAT.smk"
 include: "workflow/rules/Kmer/GCplot.smk"
 include: "workflow/rules/Kmer/Genomescope.smk"
 

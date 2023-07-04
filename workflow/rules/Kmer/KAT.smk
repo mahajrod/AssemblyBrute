@@ -1,3 +1,4 @@
+#DEPRECATED. Will be removed soon
 rule kat_gcp:
     input:
         jf=output_dict["kmer"] / "{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.jellyfish.jf"

@@ -17,11 +17,11 @@ with open(config["main_config_file"], "r") as core_yaml_fd:
 #---------------------------------------
 #-------- Read resources config files --------
 for resource, res_datatype in zip(["threads", "memory_mb", "time"], [int, int, str]):
-    resource_df = pd.read_csv(config["resources"][resource], sep="\t", header=0, dtype=res_datatype)
+    resource_df = pd.read_csv(config["resources"][resource], sep="\t", header=0, index_col=0)
     for config_label in resource_df.columns:
         config["parameters"][config_label][resource] = resource_df[config_label].to_dict(OrderedDict)
 
-print(config)
+print(config["parameters"])
 #---------------------------------------------
 
 #---------------------------

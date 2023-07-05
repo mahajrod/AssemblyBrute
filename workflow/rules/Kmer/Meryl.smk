@@ -7,7 +7,7 @@ rule meryl:
                                                                             wildcards.fileprefix,
                                                                             config[datatype_format_dict[wildcards.datatype] + "_extension"])
     output:
-        db_dir=directory(output_dict["kmer"] / "{datatype}/{stage}/{datatype}.{stage}.{kmer_length, [^./]+}.meryl.{fileprefix, ^(?!.*histo).*$}") #, (?!^histo$)
+        db_dir=directory(output_dict["kmer"] / "{datatype}/{stage}/{datatype}.{stage}.{kmer_length, [^./]+}.meryl.{fileprefix}") #, (?!^histo$)
     log:
         std=output_dict["log"] / "meryl.{datatype}.{stage}.{fileprefix}.{kmer_length}.log",
         cluster_log=output_dict["cluster_log"] / "meryl.{datatype}.{stage}.{fileprefix}.{kmer_length}.cluster.log",
@@ -33,7 +33,7 @@ rule meryl_pe:
         forward_fastq=output_dict["data"] / ("fastq/{datatype}/{stage}/{pairprefix}_1%s" % config["fastq_extension"]),
         reverse_fastq=output_dict["data"] / ("fastq/{datatype}/{stage}/{pairprefix}_2%s" % config["fastq_extension"]),
     output:
-        db_dir=directory(output_dict["kmer"] / "{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.meryl.{pairprefix, ^(?!.*histo).*$}}") # , (?!^histo$)
+        db_dir=directory(output_dict["kmer"] / "{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.meryl.{pairprefix}") # , (?!^histo$)
     log:
         std=output_dict["log"] / "meryl.{datatype}.{stage}.{pairprefix}.{kmer_length}.log",
         cluster_log=output_dict["cluster_log"] / "meryl.{datatype}.{stage}.{pairprefix}.{kmer_length}.cluster.log",

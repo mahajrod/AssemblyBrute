@@ -58,7 +58,7 @@ rule select_long_scaffolds: #
         whitelist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.whitelist",
         orderlist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.orderlist"
     params:
-        max_scaffolds=200
+        max_scaffolds=parameters["tool_options"]["select_long_scaffolds"]["max_scaffolds"]
     log:
         ln=output_dict["log"]  / "select_long_scaffolds.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.ln.log",
         cluster_log=output_dict["cluster_log"] / "select_long_scaffolds.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.log",

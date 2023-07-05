@@ -25,7 +25,7 @@ args = parser.parse_args()
 quality_symbol = chr(args.quality + args.encoding_shift)
 
 quality_string_length = 10**7
-max_quality_string = quality_symbol * quality_string_length
+quality_string = quality_symbol * quality_string_length
 
 with FileRoutines.metaopen(args.input, "r") as in_fd, FileRoutines.metaopen(args.output, "r") as out_fd:
     for line in in_fd:
@@ -34,7 +34,7 @@ with FileRoutines.metaopen(args.input, "r") as in_fd, FileRoutines.metaopen(args
             continue
         line_list = line.split("\t")
         read_length = len(line_list[9])
-        line_list[10] = quality_symbol[:read_length] if read_length < quality_string_length else quality_symbol * read_length
+        line_list[10] = quality_string[:read_length] if read_length < quality_string_length else quality_symbol * read_length
         out_fd.write("\t".join(line_list))
 
 

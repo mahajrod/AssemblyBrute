@@ -57,6 +57,8 @@ rule select_long_scaffolds: #
     output:
         whitelist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.whitelist",
         orderlist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.orderlist"
+    params:
+        max_scaffolds=200
     log:
         ln=output_dict["log"]  / "select_long_scaffolds.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.ln.log",
         cluster_log=output_dict["cluster_log"] / "select_long_scaffolds.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.log",
@@ -74,6 +76,8 @@ rule select_long_scaffolds: #
         length_df = pd.read_csv(input.len, sep='\t', header=None, index_col=0, names=["scaffold", "length"])
         threshold = length_df["length"].iloc[0] / 50
         whitelist_sr = pd.Series(length_df[length_df["length"] >= threshold].index)
+        if len(whitelist_sr) > params.max_scaffolds:
+            whitelist_sr = whitelist_sr.iloc[:params.max_scaffolds]
         whitelist_sr.to_csv(output.whitelist, header=False, index=False)
         whitelist_sr.to_csv(output.orderlist, header=False, index=False)
 

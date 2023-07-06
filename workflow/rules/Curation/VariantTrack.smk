@@ -15,6 +15,7 @@ rule add_basequalities_to_bam: #adds basequalities to bam generated from fasta (
         view1=output_dict["log"]  / "add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{genome_prefix}.{datatype}.view1.log",
         add=output_dict["log"]  / "add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{genome_prefix}.{datatype}.add.log",
         view2=output_dict["log"]  / "add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{genome_prefix}.{datatype}.view2.log",
+        index=output_dict["log"]  / "add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{genome_prefix}.{datatype}.index.log",
         ln=output_dict["log"]  / "add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{genome_prefix}.{datatype}.ln.log",
         cluster_log=output_dict["cluster_log"] / "add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{genome_prefix}.{datatype}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{genome_prefix}.{datatype}.cluster.err"
@@ -34,6 +35,7 @@ rule add_basequalities_to_bam: #adds basequalities to bam generated from fasta (
         "       samtools view -@ 4 -h {input.bam} 2>{log.view1} | "
         "       workflow/scripts/curation/add_basequalities_to_bam.py 2>{log.add} |  "
         "       samtools view -b -@ 4 > {output.bam} 2>{log.view2}; "
+        "       samtools index {output.bam} 2>{log.index}; "
         "   else "
         "       cd `dirname {input.bam}`; "
         "       ln -sf `basename {input.bam}` `basename {output.bam}` 2>{log.ln}; "

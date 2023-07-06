@@ -40,11 +40,12 @@ rule minimap2_cov: # TODO: add nanopore support
         " minimap2 {params.alignment_scheme} {params.index_size} -a -t {params.minimap_threads}  {input.reference}  "
         " {input.fastq} 2>{log.minimap2} |  samtools sort -T ${{TMPDIR}} -@ {params.sort_threads} "
         " -m {params.per_thread_sort_mem}M -o {output.bam} 2>{log.sort};"
-        " samtools index -@ {threads} {output.bam} > {log.index} 2>&1 "
+        #" samtools index -@ {threads} {output.bam} > {log.index} 2>&1 "
 
 rule calculate_coverage:
     input:
-        bam=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.bam"
+        bam=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.bam",
+        bai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.bam.bai"
     output:
         per_base=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.per-base.bed.gz"
     log:

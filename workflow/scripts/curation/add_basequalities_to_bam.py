@@ -34,8 +34,9 @@ with FileRoutines.metaopen(args.input, "r", buffering=100000000) as in_fd, \
             out_fd.write(line)
             continue
         line_list = line.split("\t")
-        read_length = len(line_list[9])
-        line_list[10] = quality_string[:read_length] if read_length < quality_string_length else quality_symbol * read_length
+        if line_list[9] != "*":
+            read_length = len(line_list[9])
+            line_list[10] = quality_string[:read_length] if read_length < quality_string_length else quality_symbol * read_length
         out_fd.write("\t".join(line_list))
 
 

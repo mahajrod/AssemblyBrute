@@ -64,7 +64,7 @@ gather_stage_stats	1	1	1	1	1	1	1	1	1
 extract_coverage_from_purge_dups_file	1	1	1	1	1	1	1	1	1
 extract_stats_from_purge_dups_file	1	1	1	1	1	1	1	1	1
 extract_artefact_sequences	1	1	1	1	1	1	1	1	1
-create_curation_input_links	1	1	1	1	1	1	1	1	1
+create_curation_input_files	1	1	1	1	1	1	1	1	1
 create_gap_track	1	1	1	1	1	1	1	1	1
 telo_finder	1	1	1	1	1	1	1	1	1
 rapid_split	1	1	1	1	1	1	1	1	1

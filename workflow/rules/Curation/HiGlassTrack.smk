@@ -1,7 +1,7 @@
 rule create_higlass_track: #
     input:
         fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.fasta.fai",
-        bed=rules.create_curation_input_links.output.bed
+        bed=rules.create_curation_input_files.output.bed
     output:
         genome_higlass=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.higlass.genome",
         higlass_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.higlass.bed",

@@ -1,6 +1,6 @@
 import pandas as pd
 
-localrules: create_curation_input_links, select_long_scaffolds
+localrules: create_curation_input_files, select_long_scaffolds
 
 def get_hic_bed_file(wildcards):
     #print(stage_dict["curation"]["prev_stage"]
@@ -12,7 +12,7 @@ def get_hic_bed_file(wildcards):
                                                                                        phasing_kmer_length,
                                                                                        wildcards.genome_prefix)
 
-rule create_curation_input_file: #
+rule create_curation_input_files: #
     input:
         fasta=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta" % (stage_dict["curation"]["prev_stage"],
                                                                                                    stage_dict["curation"]["prev_stage"])),
@@ -27,18 +27,18 @@ rule create_curation_input_file: #
         fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.fasta.fai",
         bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.hic.bed" if not config["skip_higlass"] else [],
     log:
-        cp=output_dict["log"]  / "create_curation_input_links.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cp.log",
-        cluster_log=output_dict["cluster_log"] / "create_curation_input_links.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_curation_input_links.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+        cp=output_dict["log"]  / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cp.log",
+        cluster_log=output_dict["cluster_log"] / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "create_curation_input_links.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+        output_dict["benchmark"]  / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        cpus=parameters["threads"]["create_curation_input_links"],
-        time=parameters["time"]["create_curation_input_links"],
-        mem=parameters["memory_mb"]["create_curation_input_links"]
-    threads: parameters["threads"]["create_curation_input_links"]
+        cpus=parameters["threads"]["create_curation_input_files"],
+        time=parameters["time"]["create_curation_input_files"],
+        mem=parameters["memory_mb"]["create_curation_input_files"]
+    threads: parameters["threads"]["create_curation_input_files"]
 
     shell:
         " cp -f `realpath -s {input.fasta}` {output.fasta} > {log.cp} 2>&1; "
@@ -53,7 +53,7 @@ rule create_curation_input_file: #
 
 rule select_long_scaffolds: #
     input:
-        len=rules.create_curation_input_links.output.len
+        len=rules.create_curation_input_files.output.len
     output:
         whitelist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.whitelist",
         orderlist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.orderlist"

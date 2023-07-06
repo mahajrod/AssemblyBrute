@@ -100,6 +100,16 @@ snakemake --cores 60 --configfile config/default.yaml --printshellcmds --latency
 git pull; snakemake --cores 80  --configfile config/somniosus.yaml --printshellcmds --latency-wait 60   --config mode="assembly" assembly_mode="contig" "parameter_set"="giant"  "data_types"="hifi,hic" "tax_id"=191813  "use_existing_envs"=False "skip_busco"=True  "final_kmer_datatype"="hifi" "busco_lineage_list"='["vertebrata_odb10"]' "skip_gcp"=True  --use-conda --rerun-incomplete --res   fcs=1 fcs_adaptor=1 mem=800000 kmer_counter=1  telosif=1
 ```
 
+```commandline
+cd /maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/assembly/fish/spinachia_spinachia_2_finalization
+git pull; snakemake --cores 35  --configfile config/finalization.yaml --printshellcmds --latency-wait 60   --config mode="finalization" finalization_mode="curation" "parameter_set"="small"  "data_types"="hifi,hic" "use_existing_envs"=False "skip_fcs"=True "skip_fcs_adaptor"=True "skip_read_qc"=True "skip_filter_reads"=True  tax_id=206126 "busco_lineage_list"='["vertebrata_odb10", "actinopterygii_odb10"]' "skip_busco"=False "skip_higlass"=False   --use-conda --rerun-incomplete --res hifiasm=1  fcs=1 fcs_adaptor=1 telosif=1 mem=700000
+```
+
+```commandline
+git pull; snakemake --cores 35  --configfile config/data/syngnathus_typhle.yaml --printshellcmds --latency-wait 60   --config mode="assembly" assembly_mode="curation" "parameter_set"="small"  "data_types"="hifi,hic" "use_existing_envs"=False "skip_fcs"=False "skip_fcs_adaptor"=False  tax_id=161592 "busco_lineage_list"='["vertebrata_odb10"]' "skip_busco"=False "skip_higlass"=True   --use-conda --rerun-incomplete --res fcs=1 fcs_adaptor=1 telosif=1 mem=700000 
+
+```
+
 
 ```commandline
 #Stage by stage (recommended)

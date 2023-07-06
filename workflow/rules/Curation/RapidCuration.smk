@@ -12,7 +12,7 @@ def get_hic_bed_file(wildcards):
                                                                                        phasing_kmer_length,
                                                                                        wildcards.genome_prefix)
 
-rule create_curation_input_links: #
+rule create_curation_input_file: #
     input:
         fasta=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta" % (stage_dict["curation"]["prev_stage"],
                                                                                                    stage_dict["curation"]["prev_stage"])),
@@ -27,7 +27,7 @@ rule create_curation_input_links: #
         fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.fasta.fai",
         bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.hic.bed" if not config["skip_higlass"] else [],
     log:
-        ln=output_dict["log"]  / "create_curation_input_links.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.ln.log",
+        cp=output_dict["log"]  / "create_curation_input_links.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cp.log",
         cluster_log=output_dict["cluster_log"] / "create_curation_input_links.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "create_curation_input_links.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
@@ -41,14 +41,14 @@ rule create_curation_input_links: #
     threads: parameters["threads"]["create_curation_input_links"]
 
     shell:
-        " ln -sf `realpath -s {input.fasta}` {output.fasta} > {log.ln} 2>&1; "
-        " ln -sf `realpath -s {input.fai}` {output.fai} >> {log.ln} 2>&1; "
-        " ln -sf `realpath -s {input.len}` {output.len} >> {log.ln} 2>&1; "
+        " cp -f `realpath -s {input.fasta}` {output.fasta} > {log.cp} 2>&1; "
+        " cp -f `realpath -s {input.fai}` {output.fai} >> {log.cp} 2>&1; "
+        " cp -f `realpath -s {input.len}` {output.len} >> {log.cp} 2>&1; "
         " if [ -z '{input.bed}' ];"
         " then "
         "   echo 'Skipping bed file...'; "
         " else"
-        "   ln -sf `realpath -s {input.bed}` {output.bed} >> {log.ln} 2>&1; "
+        "   cp -f `realpath -s {input.bed}` {output.bed} >> {log.cp} 2>&1; "
         " fi; "
 
 rule select_long_scaffolds: #

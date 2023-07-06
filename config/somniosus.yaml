@@ -120,10 +120,11 @@
     "kat":                      "default"   # Allowed: default
     "juicer_tools_qc":          "default"   # Allowed: default
     "juicer_tools_pre":         "default"   # Allowed: default
-    "mapping_pipeline":         "arima"  # Allowed: arima, bwa_only, juicer
-    "trf":                      "default"
-    "wga":                      "default"
-    "select_long_scaffolds":    "default"
+    "mapping_pipeline":         "arima"     # Allowed: arima, bwa_only, juicer
+    "trf":                      "default"   # Allowed: default
+    "wga":                      "default"   # Allowed: default
+    "select_long_scaffolds":    "default"   # Allowed: default
+    "deepvariant":              "default"   # Allowed: default
 
 "tool_manually_adjusted_features":
     "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions

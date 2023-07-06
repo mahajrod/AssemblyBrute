@@ -924,6 +924,11 @@ if "curation" in config["stage_list"]:
                             assembly_stage=["curation", ],
                             haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                             parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
+                     *[expand(out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.vcf.gz",
+                            genome_prefix=[config["genome_prefix"], ],
+                            assembly_stage=["curation", ],
+                            haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
+                            parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]]
                      ]
     if not config["skip_higlass"]:
         for parameters_label in parameters_list:
@@ -1008,6 +1013,7 @@ if "curation" in config["stage_list"]:
     include: "workflow/rules/Curation/Masking.smk"
     include: "workflow/rules/Curation/GCTrack.smk"
     include: "workflow/rules/Curation/WGA.smk"
+    include: "workflow/rules/Curation/VariantTrack.smk"
 
 if "gap_closing" in config["stage_list"]:
     include: "workflow/rules/Finalization/GapClosing.smk"

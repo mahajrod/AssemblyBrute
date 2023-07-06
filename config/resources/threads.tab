@@ -96,3 +96,5 @@ draw_alignment	1	1	1	1	1	1	1	1	1
 create_gc_track	1	1	1	1	1	1	1	1	1
 filter_last_alignment_by_len	4	4	4	4	4	4	4	4	4
 get_telomere_warning	1	1	1	1	1	1	1	1	1
+add_basequalities_to_bam	6	6	6	6	6	6	6	6	6
+deepvariant	50	30	30	30	50	50	50	50	50

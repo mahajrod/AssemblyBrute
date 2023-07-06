@@ -29,9 +29,9 @@
     "ucsc":
         "yaml": "workflow/envs/conda.ucsc.yaml"
         "name": "ucsc"
-    "deepvariant":
-        "yaml": "workflow/envs/conda.deepvariant.yaml"
-        "name": "deepvariant"
+    #"deepvariant":
+    #    "yaml": "workflow/envs/conda.deepvariant.yaml"
+    #    "name": "deepvariant"
     "chromodoter":
         "yaml": "workflow/envs/conda.chromodoter.yaml"
         "name": "chromodoter"
@@ -620,6 +620,16 @@
                     "min_target_len":
                         - 1000
                         - 10000
+            "deepvariant":
+                "default":
+                    "illumina":
+                        "model": "WGS"
+                    "nanopore":
+                        "model": "ONT_R104"
+                    "clr":
+                        "model": "PACBIO"
+                    "hifi":
+                        "model": "PACBIO"
     "micro": # < 15 Mbp, yeasts and bacteria
         "tool_options":
             "jellyfish":

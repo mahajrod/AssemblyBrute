@@ -74,6 +74,8 @@ fastqc_data_type_set = fastq_based_data_type_set & set(config["fastqc_data_types
 long_read_data_type_set = set(data_types) & set(config["long_read_data"])
 genome_size_estimation_data_type_set = set(config["genome_size_estimation_data"]) & fastq_based_data_type_set & set(data_types)
 coverage_track_data_type_set = set(data_types) & set(config["coverage_track_data"])
+variant_calling_data_type_set = set(data_types) & set(config["variant_calling_data"])
+
 #logging.info("Verifying datatypes...")
 for d_type in data_types:
     if d_type not in config["allowed_data_types"]:
@@ -926,6 +928,7 @@ if "curation" in config["stage_list"]:
                             parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
                      *[expand(out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.vcf.gz",
                             genome_prefix=[config["genome_prefix"], ],
+                            datatype=variant_calling_data_type_set,
                             assembly_stage=["curation", ],
                             haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                             parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]]

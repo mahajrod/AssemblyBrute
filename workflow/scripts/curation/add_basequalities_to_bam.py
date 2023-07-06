@@ -27,7 +27,8 @@ quality_symbol = chr(args.quality + args.encoding_shift)
 quality_string_length = 10**7
 quality_string = quality_symbol * quality_string_length
 
-with FileRoutines.metaopen(args.input, "r") as in_fd, FileRoutines.metaopen(args.output, "r") as out_fd:
+with FileRoutines.metaopen(args.input, "r", buffering=100000000) as in_fd, \
+        FileRoutines.metaopen(args.output, "w", buffering=100000000) as out_fd:
     for line in in_fd:
         if line[0] == "@":
             out_fd.write(line)

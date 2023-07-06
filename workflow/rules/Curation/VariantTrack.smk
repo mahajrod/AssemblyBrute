@@ -51,7 +51,7 @@ rule deepvariant: #
         #paf=out_dir_path  / ("purge_dups/{assembler}/{haplotype}/%s.purge_dups.{assembler}.{haplotype}.minimap2.{fileprefix}.paf.gz" % config["genome_name"])
     params:
         sif=config["tool_containers"]["deepvariant"],
-        model=lambda wildcards: parameters["tool_option"]["deepvariant"][wildcards.datatype]["model"]
+        model=lambda wildcards: parameters["tool_options"]["deepvariant"][wildcards.datatype]["model"]
     log:
         deepvariant=output_dict["log"]  / "deepvariant.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{genome_prefix}.{datatype}.deepvariant.log",
         cluster_log=output_dict["cluster_log"] / "deepvariant.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{genome_prefix}.{datatype}.cluster.log",

@@ -37,9 +37,10 @@ rule add_basequalities_to_bam: #adds basequalities to bam generated from fasta (
         "       samtools view -b -@ 4 > {output.bam} 2>{log.view2}; "
         "       samtools index {output.bam} 2>{log.index}; "
         "   else "
+        "       LN_LOG=`realpath {log.ln}`; "
         "       cd `dirname {input.bam}`; "
-        "       ln -sf `basename {input.bam}` `basename {output.bam}` 2>{log.ln}; "
-        "       ln -sf `basename {input.bai}` `basename {output.bai}` 2>>{log.ln}; "
+        "       ln -sf `basename {input.bam}` `basename {output.bam}` 2>${{LN_LOG}}; "
+        "       ln -sf `basename {input.bai}` `basename {output.bai}` 2>>${{LN_LOG}}; "
         "   fi"
 
 rule deepvariant: #

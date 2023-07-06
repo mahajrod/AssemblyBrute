@@ -81,7 +81,7 @@ hap_file_dict = {label: filename for label, filename in zip(args.label_list, arg
 busco_table_dict = {label: BUSCOtable(in_file=hap_file_dict[label]) for label in hap_file_dict}
 
 number_of_buscos = len(busco_table_dict[args.label_list[0]].records[["OG"]].drop_duplicates().reset_index(level=1, drop=True))
-print(busco_table_dict)
+
 pd.Series(args.label_list).to_csv("{0}.busco.orderlist".format(args.output_prefix), sep="\t", index=False, header=False)
 
 
@@ -101,8 +101,6 @@ informative_busco_status_df = get_informative_buscos(busco_status_df)
 informative_len_df = prepare_len_df(informative_busco_status_df, output_prefix="{0}.informative".format(args.output_prefix))
 informative_count_track_merged_df = create_track_from_df(informative_busco_status_df, busco_color_dict,
                                                          output_prefix="{0}.informative".format(args.output_prefix))
-#print(informative_busco_status_df)
-#print(informative_len_df)
 
 offset = min(count_track_merged_df[count_track_merged_df["start"] == 0]["end"])
 

@@ -1,4 +1,6 @@
 import os
+import sys
+
 import yaml
 #import logging
 import shutil
@@ -21,7 +23,6 @@ for resource, res_datatype in zip(["threads", "memory_mb", "time"], [int, int, s
     for config_label in resource_df.columns:
         config["parameters"][config_label][resource] = resource_df[config_label].to_dict(OrderedDict)
 
-#print(config["parameters"])
 #---------------------------------------------
 
 #---------------------------
@@ -134,7 +135,6 @@ for d_type in set(config["paired_fastq_based_data"]) & fastq_based_data_type_set
    if (len(input_filedict[d_type]) % 2) != 0:
         raise ValueError("ERROR!!! {0} fastq files seems to be unpaired or misrecognized".format(d_type))
    for forward, reverse in zip(input_filedict[d_type][::2], input_filedict[d_type][1::2]):
-        #print(forward, reverse)
         if p_distance(str(forward), str(reverse), len(str(forward))) > 1:
             raise ValueError("ERROR!!! Forward and reverse read files differs by more than one symbol:\n\t{0}\n\t{1}".format(str(forward),
                                                                                                                              str(reverse)))
@@ -150,7 +150,7 @@ for d_type in set(config["paired_fastq_based_data"]) & fastq_based_data_type_set
         input_reverse_suffix_dict[d_type].add(reverse_suffix)
     if (len(input_forward_suffix_dict[d_type]) > 1) or (len(input_reverse_suffix_dict[d_type]) > 1):
         raise ValueError("ERROR!!! Multiple different suffixes in filenames of %s data!" % d_type)
-    #print(input_forward_suffix_dict, input_reverse_suffix_dict)
+
     input_forward_suffix_dict[d_type] = list(input_forward_suffix_dict[d_type])[0]
     input_reverse_suffix_dict[d_type] = list(input_reverse_suffix_dict[d_type])[0]
 
@@ -292,7 +292,6 @@ if ("read_qc" in config["stage_list"]) and (not config["skip_read_qc"]):
 
 if "draft_qc" in config["stage_list"]:
     draft_file_dict = get_input_assemblies(input_dir_path / "draft/fasta", config["ploidy"], config["assembly_fasta_extension"])
-    print(draft_file_dict)
     stage_dict["draft_qc"]["parameters"] = {}
 
     for qcer in config["stage_coretools"]["draft_qc"]["default"]:
@@ -366,8 +365,6 @@ if "draft_qc" in config["stage_list"]:
                     stage_dict["gap_closing"]["parameters"][parameters_label]["prev_stage"] = prev_stage
                     stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"] = deepcopy(parameters["tool_options"][gap_closer][option_set])
                     stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]
-                    #print(stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"])
-                    #print(config["ploidy"])
                     stage_dict["gap_closing"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
                     stage_dict["gap_closing"]["parameters"][parameters_label]["option_set_group"] = None
 
@@ -405,7 +402,6 @@ if "draft_qc" in config["stage_list"]:
                          ]
 
 if ("filter_reads" in config["stage_list"]) and (not config["skip_filter_reads"]):
-    #print(genome_size_estimation_data_type_set)
     results_list += [expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),
                             fileprefix=input_file_prefix_dict["hifi"]) if "hifi" in fastq_based_data_type_set else [],
                     expand(output_dict["qc"] / "fastqc/{datatype}/{stage}/{fileprefix}_fastqc.zip",
@@ -517,8 +513,7 @@ if "contig" in config["stage_list"] or "draft_qc" in config["stage_list"]:
             stage_dict["contig"]["parameters"][parameters_label]["option_set"] = deepcopy(parameters["tool_options"][assembler][option_set])
             if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] is None:
                stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]
-            #print(stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"])
-            #print(config["ploidy"])
+
             stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
             stage_dict["contig"]["parameters"][parameters_label]["option_set_group"] = option_set_group_assignment_dict[option_set] if option_set_group_assignment_dict is not None else none
 
@@ -583,7 +578,7 @@ if "contig" in config["stage_list"]:
                                 parameters=[parameters_label]) for parameters_label in parameters_list],
                          ]
     if (config["tax_id"] is None) or (not config["tax_id"]):
-        print("Tax id was not set, skipping contamination scan in FCS databases...")
+        sys.stderr.write("Tax id was not set, skipping contamination scan in FCS databases...\n")
     else:
         if config["database_set"]["fcs_adaptor"] and (not config["skip_fcs_adaptor"]):
             results_list += [
@@ -619,7 +614,7 @@ if "purge_dups" in config["stage_list"]:
                 stage_dict["purge_dups"]["parameters"][parameters_label]["purge_dupser"] = purge_dupser
                 stage_dict["purge_dups"]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][purge_dupser][option_set]
                 stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["purge_dups"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
-    #print(stage_dict["purge_dups"]["parameters"])
+
     parameters_list = list(stage_dict["purge_dups"]["parameters"].keys())
     results_list += [
                      *[expand(out_dir_path / "purge_dups/{parameters}/{genome_prefix}.purge_dups.{haplotype}.fasta",
@@ -702,7 +697,6 @@ if config["phasing_stage"] in config["stage_list"]:
                                     assembly_kmer_length=config["assembly_kmer_length"]
                                     ) if len(stage_dict[config["phasing_stage"]]["parameters"][parameters_label]["haplotype_list"]) > 1 else []) for parameters_label in list(stage_dict[config["phasing_stage"]]["parameters"].keys())],
                             ]
-#print(parameters["tool_options"]["juicer_tools_qc"])
 if "hic_scaffolding" in config["stage_list"]:
     prev_stage = stage_dict["hic_scaffolding"]["prev_stage"]
     hic_scaffolder_list = config["stage_coretools"]["hic_scaffolding"]["default"]
@@ -875,8 +869,6 @@ if "curation" in config["stage_list"]:
                 stage_dict["curation"]["parameters"][parameters_label]["curationeer"] = curation_tool
                 stage_dict["curation"]["parameters"][parameters_label]["prev_stage"] = prev_stage
                 stage_dict["curation"]["parameters"][parameters_label]["prev_parameters"] = prev_parameters
-                #print(curation_tool, option_set)
-                #print(stage_dict)
                 stage_dict["curation"]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][curation_tool][option_set] if curation_tool in parameters["tool_options"] else None
                 stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["curation"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
 
@@ -892,7 +884,6 @@ if "curation" in config["stage_list"]:
                                 target_haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                                 ) for parameters_label in stage_dict["curation"]["parameters"]]]
 
-    #print(stage_dict["curation"]["parameters"])
     results_list += [*[[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.png",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],

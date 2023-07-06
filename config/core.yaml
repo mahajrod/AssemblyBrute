@@ -1334,11 +1334,17 @@
     - "hifi"
     - "clr"
     - "nanopore"
-    -
+
 "gap_filling_data": # Data which might be used for filling gaps
     - "hifi"
     - "clr"
     - "nanopore"
+
+"variant_calling_data":
+    - "hifi"
+    - "illumina"
+    #- "clr"
+    #- "nanopore"
 
 "fastq_extension": ".fastq.gz"
 "fasta_extension": ".fasta.gz"

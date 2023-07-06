@@ -48,6 +48,7 @@
 
 "tool_containers":
     "rapid_telomere":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/rapid-curation/rapid_hic_software/runTelo.sif"
+    "deepvariant":     "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0.sif"
 
 "stage_coretools":     #TODO: add bionano
     "filtering":

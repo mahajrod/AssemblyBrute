@@ -77,8 +77,8 @@ rule deepvariant: #
         " singularity run -B /usr/lib/locale/:/usr/lib/locale/  ${{SIF}} /opt/deepvariant/bin/run_deepvariant "
         " --model_type={params.model} --ref=`basename {input.reference}` --reads=`basename {input.bam}` "
         " --output_vcf=`basename {output.vcf}` --output_gvcf=`basename {output.gvcf}` "
-        " --call_variants_extra_args='config_string=\"device_count {{key: \'cpu\' value: {threads}}} intra_op_parallelism_threads:{threads} inter_op_parallelism_threads:{threads}\"' "
         " --intermediate_results_dir ./deepvariant --num_shards={threads} > ${{LOG}} 2>&1; "
+        #" --call_variants_extra_args='config_string=\"device_count {{key: \'cpu\' value: {threads}}} intra_op_parallelism_threads:{threads} inter_op_parallelism_threads:{threads}\"' "
 
 """
 rule deepvariant_filter: #

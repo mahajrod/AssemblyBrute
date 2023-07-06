@@ -4,11 +4,11 @@ if "purge_dups" in config["stage_list"]:
 rule add_basequalities_to_bam: #adds basequalities to bam generated from fasta (for deepvariant)
     input:
         bam=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.bam",
-        bai=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.bai",
+        bai=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.bam.bai",
         #reference=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.fasta"
     output:
         bam=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.with_qual.bam",
-        bai=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.with_qual.bai",
+        bai=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.with_qual.bam.bai",
     params:
         dataformat=lambda wildcards: datatype_format_dict[wildcards.datatype]
     log:

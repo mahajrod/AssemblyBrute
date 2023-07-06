@@ -78,4 +78,4 @@ rule deepvariant: #
         " --model_type={params.model} --ref=`basename {input.reference}` --reads=`basename {input.bam}` "
         " --output_vcf=`basename {output.vcf}` --output_gvcf=`basename {output.gvcf}` "
         " --call_variants_extra_args='config_string=\"device_count {{key: \'cpu\' value: {threads}}} intra_op_parallelism_threads:{threads} inter_op_parallelism_threads:{threads}\"' "
-        " --intermediate_results_dir ./deepvariant --num_shards={threads}  2>${{LOG}}; "
+        " --intermediate_results_dir ./deepvariant --num_shards={threads} > ${{LOG}} 2>&1; "

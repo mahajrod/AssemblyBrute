@@ -99,3 +99,4 @@ get_telomere_warning	1	1	1	1	1	1	1	1	1
 add_basequalities_to_bam	6	6	6	6	6	6	6	6	6
 deepvariant	50	30	30	30	50	50	70	80	80
 deepvariant_filter	1	1	1	1	1	1	1	1	1
+preprocess_hic_fastq	20	20	20	20	20	20	20	20	20

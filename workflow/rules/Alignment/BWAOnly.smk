@@ -58,7 +58,6 @@ rule bwa_map: #
         " {input.reference} {input.forward_fastq} {input.reverse_fastq} 2>{log.map} | samtools view -Sb - > {output.bam} 2>{log.sort} "
 
 def aggregate_bam(wildcards):
-      checkpoint_output = checkpoints.preprocess_hic_fastq.output.dir
       return expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.bam",
                     assembly_stage=[wildcards.assembly_stage],
                     parameters=[wildcards.parameters],

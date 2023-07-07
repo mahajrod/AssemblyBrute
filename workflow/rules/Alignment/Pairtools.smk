@@ -1,41 +1,44 @@
 
-pairtools parse --min-mapq 40 --walks-policy 5unique --max-inter-align-gap 30 --nproc-in 8 --nproc-out 8 --chroms-path hg38.genome aligned.sam >
- parsed.pairsam
-
-pairtools sort --nproc 16 --tmpdir=/home/ubuntu/ebs/temp/ parsed.pairsam > sorted.pairsam # abs path for tmpdir is necessary
-pairtools dedup --nproc-in 8 --nproc-out 8 --mark-dups --output-stats stats.txt --output dedup.pairsam sorted.pairsam
-pairtools split --nproc-in 8 --nproc-out 8 --output-pairs mapped.pairs --output-sam unsorted.bam dedup.pairsam
-
-samtools sort -@16 -T /home/ubuntu/ebs/temp/temp.bam -o mapped.PT.bam unsorted.bam
-
-python3 ./Omni-C/get_qc.py -p stats.txt
 
 rule bwa_map: #
     input:
         index=rules.bwa_index.output.index,
         reference=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
-        fastq=lambda wildcards: output_dict["data"] / "fastq/hic/raw/{0}{1}".format(wildcards.fileprefix, config["fastq_extension"]) if wildcards.phasing_kmer_length == "NA" else \
-                                out_dir_path / "{0}/{1}/fastq/{2}/{3}/hic/{4}{5}".format(config["phasing_stage"], #wildcards.assembly_stage,
-                                                                                         detect_phasing_parameters(wildcards.parameters, config["phasing_stage"], stage_separator=".."), #wildcards.parameters,
-                                                                                         wildcards.haplotype,
-                                                                                         wildcards.phasing_kmer_length,
-                                                                                         wildcards.fileprefix,
-                                                                                         config["fastq_extension"]
-                                                                                         )
+
+        forward_fastq=lambda wildcards: output_dict["data"] / "fastq/hic/raw/{0}{1}{2}".format(wildcards.pairprefix,
+                                                                                               input_forward_suffix_dict["hic"] if wildcards.phasing_kmer_length == "NA" else "_1",
+                                                                                               config["fastq_extension"]) if wildcards.phasing_kmer_length == "NA" else \
+                                out_dir_path / "{0}/{1}/fastq/{2}/{3}/hic/{4}{5}{6}".format(config["phasing_stage"], #wildcards.assembly_stage,
+                                                                                            detect_phasing_parameters(wildcards.parameters, config["phasing_stage"], stage_separator=".."), #wildcards.parameters,
+                                                                                            wildcards.haplotype,
+                                                                                            wildcards.phasing_kmer_length,
+                                                                                            wildcards.pairprefix,
+                                                                                            input_forward_suffix_dict["hic"] if wildcards.phasing_kmer_length == "NA" else "_1",
+                                                                                            config["fastq_extension"]),
+        reverse_fastq=lambda wildcards: output_dict["data"] / "fastq/hic/raw/{0}{1}{2}".format(wildcards.pairprefix,
+                                                                                               input_reverse_suffix_dict["hic"] if wildcards.phasing_kmer_length == "NA" else "_2",
+                                                                                               config["fastq_extension"]) if wildcards.phasing_kmer_length == "NA" else \
+                                out_dir_path / "{0}/{1}/fastq/{2}/{3}/hic/{4}{5}{6}".format(config["phasing_stage"], #wildcards.assembly_stage,
+                                                                                            detect_phasing_parameters(wildcards.parameters, config["phasing_stage"], stage_separator=".."), #wildcards.parameters,
+                                                                                            wildcards.haplotype,
+                                                                                            wildcards.phasing_kmer_length,
+                                                                                            wildcards.pairprefix,
+                                                                                            input_reverse_suffix_dict["hic"] if wildcards.phasing_kmer_length == "NA" else "_2",
+                                                                                            config["fastq_extension"]),
     output:
-        bam=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam"
+        #bam=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam"
+        bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.bam"
     params:
         id="{0}_hic".format(config["genome_prefix"]),
-        bwa_tool=config["bwa_tool"] # This options is ignored as bwa-mem2 doesnt preserve the read order from fastq file
+        bwa_tool=config["bwa_tool"]
     log:
-        fastx=output_dict["log"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{fileprefix}.fastx.log",
-        map=output_dict["log"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{fileprefix}.map.log",
-        sort=output_dict["log"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{fileprefix}.sort.log",
-        filter=output_dict["log"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{fileprefix}.filter.log",
-        cluster_log=output_dict["cluster_log"] / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{fileprefix}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{fileprefix}.cluster.err"
+        map=output_dict["log"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{pairprefix}.map.log",
+        sort=output_dict["log"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{pairprefix}.sort.log",
+        #filter=output_dict["log"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{pairprefix}.filter.log",
+        cluster_log=output_dict["cluster_log"] / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{fileprefix}.benchmark.txt"
+        output_dict["benchmark"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{pairprefix}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -45,108 +48,132 @@ rule bwa_map: #
     threads: parameters["threads"]["bwa_map"]
     shell:
         " {params.bwa_tool} mem -SP5M -t {threads} -R  \'@RG\\tID:{params.id}\\tPU:x\\tSM:{params.id}\\tPL:illumina\\tLB:x\' "
-        " {input.reference} <(zcat {input.fastq} | fastx_trimmer -f 8 2>{log.fastx}) 2>{log.map} |"
-        " filter_five_end.pl 2>{log.filter} | samtools view -Sb - > {output.bam} 2>{log.sort} "
+        " {input.reference} {input.forward_fastq} {input.reverse_fastq} 2>{log.map} | samtools view -Sb - > {output.bam} 2>{log.sort} "
 
-rule bam_merge_pairs:
+rule pairtools_parse:
     input:
-        forward_bam=lambda wildcards: out_dir_path / ("{0}/{1}/{2}/alignment/{3}/{4}.{0}.{3}.{2}.{5}{6}.bwa.bam".format(wildcards.assembly_stage,
-                                                                                                                                  wildcards.parameters,
-                                                                                                                                  wildcards.haplotype,
-                                                                                                                                  wildcards.phasing_kmer_length,
-                                                                                                                                  wildcards.genome_prefix,
-                                                                                                                                  wildcards.pairprefix,
-                                                                                                                                  input_forward_suffix_dict["hic"] if wildcards.phasing_kmer_length == "NA" else "_1")),
-        reverse_bam=lambda wildcards: out_dir_path / ("{0}/{1}/{2}/alignment/{3}/{4}.{0}.{3}.{2}.{5}{6}.bwa.bam".format(wildcards.assembly_stage,
-                                                                                                                                  wildcards.parameters,
-                                                                                                                                  wildcards.haplotype,
-                                                                                                                                  wildcards.phasing_kmer_length,
-                                                                                                                                  wildcards.genome_prefix,
-                                                                                                                                  wildcards.pairprefix,
-                                                                                                                                  input_reverse_suffix_dict["hic"] if wildcards.phasing_kmer_length == "NA" else "_2")),
-        reference_fai=rules.ref_faidx.output.fai
+        bam=rules.bwa_map.output.bam,
+        len_file=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len"
     output:
-        bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.bam", # TODO: make_tem
+        pairsam_gz=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.pairsam.gz")
     params:
-        min_mapq=parameters["tool_options"]["two_read_bam_combiner"]["mapq"],
+        min_mapping_quality=lambda wildcards: parse_option("min_mapping_quality", parameters["tool_options"]["pairtools_parse"], " --min-mapq "),
+        max_interalign_gap=lambda wildcards: parse_option("max_interalign_gap", parameters["tool_options"]["pairtools_parse"], " --max-inter-align-gap ")
+    log:
+        std=output_dict["log"] / "pairtools_parse.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.log",
+        cluster_log=output_dict["cluster_log"] / "pairtools_parse.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "pairtools_parse.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "pairtools_parse.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["pairtools_parse"] ,
+        time=parameters["time"]["pairtools_parse"],
+        mem=parameters["memory_mb"]["pairtools_parse"]
+    threads: parameters["threads"]["pairtools_parse"]
+    shell:
+        " samtools view -h {input.bam} | "
+        " pairtools parse {params.min_mapping_quality} --walks-policy 5unique {params.max_interalign_gap} "
+        " --nproc-in {threads} --nproc-out {threads} --chroms-path {input.len_file} -o {output.pairsam_gz} > {log.std} 2>&1; "
+
+rule pairtools_sort:
+    input:
+        pairsam_gz=rules.pairtools_parse.output.pairsam_gz
+    output:
+        sorted_pairsam_gz=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.sorted.pairsam.gz")
+    log:
+        std=output_dict["log"] / "pairtools_sort.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.log",
+        cluster_log=output_dict["cluster_log"] / "pairtools_sort.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "pairtools_sort.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "pairtools_sort.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["pairtools_sort"] ,
+        time=parameters["time"]["pairtools_sort"],
+        mem=parameters["memory_mb"]["pairtools_sort"]
+    threads: parameters["threads"]["pairtools_sort"]
+    shell:
+        " TMP_DIR=`dirname {output.sorted_pairsam_gz}`/{wildcards.pairprefix}_tmp; "
+        " pairtools sort --nproc {threads} --memory {resources.mem}M --tmpdir=${{TMP_DIR}} "
+        " -o {output.sorted_pairsam_gz} {input.pairsam_gz}  > {log.std} 2>&1; "
+
+rule pairtools_merge:
+    input:
+        pairsam_gzs=expand(rules.pairtools_parse.output.pairsam_gz,
+                           pairprefix=input_pairprefix_dict["hic"],
+                           allow_missing=True)
+    output:
+        merged_pairsam_gz=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.merged.pairsam.gz")
+    log:
+        std=output_dict["log"] / "pairtools_merge.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.log",
+        cluster_log=output_dict["cluster_log"] / "pairtools_merge.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "pairtools_merge.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "pairtools_merge.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["pairtools_merge"] ,
+        time=parameters["time"]["pairtools_merge"],
+        mem=parameters["memory_mb"]["pairtools_merge"]
+    threads: parameters["threads"]["pairtools_merge"]
+    shell:
+        " TMP_DIR=`dirname {output.merged_pairsam_gz}`/merged_tmp; "
+        " pairtools merge --nproc {threads} --max-nmerge 16 --memory {resources.mem}M --tmpdir=${{TMP_DIR}} "
+        " -o {output.merged_pairsam_gz} {input.pairsam_gzs}  > {log.std} 2>&1; "
+
+rule pairtools_dedup:
+    input:
+        merged_pairsam_gz=rules.pairtools_merge.output.merged_pairsam_gz
+    output:
+        dedup_pairsam_gz=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.rmdup.pairsam.gz"),
+        dedup_pairsam_stats=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.rmdup.pairsam.stats"
+    log:
+        std=output_dict["log"] / "pairtools_dedup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.log",
+        cluster_log=output_dict["cluster_log"] / "pairtools_dedup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "pairtools_dedup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "pairtools_dedup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["pairtools_dedup"] ,
+        time=parameters["time"]["pairtools_dedup"],
+        mem=parameters["memory_mb"]["pairtools_dedup"]
+    threads: parameters["threads"]["pairtools_dedup"]
+    shell:
+        " pairtools dedup --nproc-in {threads} --nproc-out {threads} --mark-dups --output-stats {output.dedup_pairsam_stats} "
+        "--output {output.dedup_pairsam_gz} {input.merged_pairsam_gz} > {log.std} 2>&1; "
+
+rule pairtools_split:
+    input:
+        dedup_pairsam_gz=rules.pairtools_dedup.output.dedup_pairsam_gz
+    output:
+        sorted_dedup_bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
+        pairs=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pairs"
+    params:
         sort_threads=parameters["threads"]["samtools_sort"],
-        sort_memory=parameters["memory_mb"]["samtools_sort"],
-        #tmp_prefix=lambda wildcards: out_dir_path  / "{0}/{1}/{2}/alignment/{3}".format(wildcards.assembly_stage,
-        #                                                                                wildcards.parameters,
-        #                                                                                wildcards.haplotype,
-        #                                                                                wildcards.pairprefix)
+        sort_per_thread=parameters["memory_mb"]["samtools_sort"],
+        split_threads=parameters["threads"]["pairtools_split"]
     log:
-        merge=output_dict["log"] / "bam_merge_pairs.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.merge.log",
-        view=output_dict["log"] / "bam_merge_pairs.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.view.log",
-        sort=output_dict["log"] / "bam_merge_pairs.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.sort.log",
-        cluster_log=output_dict["cluster_log"] / "bam_merge_pairs.{assembly_stage}.{parameters}.{phasing_kmer_length}.{genome_prefix}.{haplotype}.{pairprefix}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "bam_merge_pairs.{assembly_stage}.{parameters}.{phasing_kmer_length}.{genome_prefix}.{haplotype}.{pairprefix}.cluster.err"
+        split=output_dict["log"] / "pairtools_split.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.split.log",
+        sort=output_dict["log"] / "pairtools_split.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.sort.log",
+        cluster_log=output_dict["cluster_log"] / "pairtools_split.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "pairtools_split.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "bam_merge_pairs.{assembly_stage}.{parameters}.{phasing_kmer_length}.{genome_prefix}.{haplotype}.{pairprefix}.benchmark.txt"
+        output_dict["benchmark"]  / "pairtools_split.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        cpus=parameters["threads"]["two_read_bam_combiner"] ,
-        time=parameters["time"]["two_read_bam_combiner"],
-        mem=parameters["memory_mb"]["two_read_bam_combiner"] + parameters["memory_mb"]["samtools_sort"] * parameters["threads"]["samtools_sort"]
-    threads: parameters["threads"]["two_read_bam_combiner"] + parameters["threads"]["samtools_sort"]
+        cpus=parameters["threads"]["pairtools_split"] + parameters["threads"]["samtools_sort"],
+        time=parameters["time"]["pairtools_split"],
+        mem=parameters["memory_mb"]["pairtools_split"] + parameters["memory_mb"]["samtools_sort"] * parameters["threads"]["samtools_sort"]
+    threads: parameters["threads"]["pairtools_split"]
     shell:
-        " TMP_PREFIX=`dirname {output.bam}`/{wildcards.pairprefix}; "
-        " two_read_bam_combiner.pl {input.forward_bam} {input.reverse_bam} samtools {params.min_mapq} 2>{log.merge} | "
-        " samtools view -bS -t {input.reference_fai} - 2>{log.view} | "
-        " samtools sort -T ${{TMP_PREFIX}} -m {params.sort_memory}M -@ {params.sort_threads} -o {output.bam} 2>{log.sort}"
-
-rule bam_merge_files:
-    input:
-        bams=expand(rules.bam_merge_pairs.output.bam, #out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.filtered.{pairprefix}.bam",
-                    allow_missing=True,
-                    pairprefix=input_pairprefix_dict["hic"]), #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        reference_fai=rules.ref_faidx.output.fai,
-        reference=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
-    output:
-        bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.bam" # TODO: make temp
-    params:
-        sort_threads=parameters["threads"]["samtools_sort"]
-    log:
-        std=output_dict["log"] / "bam_merge_files.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.log",
-        cluster_log=output_dict["cluster_log"] / "bam_merge_files.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "bam_merge_files.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.err"
-    benchmark:
-        output_dict["benchmark"]  / "bam_merge_files.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.benchmark.txt"
-    conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
-    resources:
-        cpus=parameters["threads"]["samtools_sort"] ,
-        time=parameters["time"]["samtools_sort"],
-        mem=parameters["memory_mb"]["samtools_sort"]
-    threads: parameters["threads"]["samtools_sort"]
-    shell:
-        " samtools merge -@ {params.sort_threads} -o {output.bam} {input.bams} 1>{log.std} 2>&1"
-
-rule rmdup:
-    input:
-        bam=rules.bam_merge_files.output.bam
-    output:
-        bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
-        #bai=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam.bai",
-        dup_stats=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.stats",
-        bam_stats=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam.stats",
-    log:
-        std=output_dict["log"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.log",
-        cluster_log=output_dict["cluster_log"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.err"
-    benchmark:
-        output_dict["benchmark"]  / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.benchmark.txt"
-    conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
-    resources:
-        cpus=parameters["threads"]["rmdup"] ,
-        time=parameters["time"]["rmdup"],
-        mem=parameters["memory_mb"]["rmdup"]
-    threads: parameters["threads"]["rmdup"]
-    shell:
-        " TMP_DIRECTORY=`dirname {input.bam}`/temp; "
-        " picard -Xmx{resources.mem}m MarkDuplicates -I {input} -O {output.bam} " 
-        " --REMOVE_DUPLICATES true -M {output.dup_stats}  --TMP_DIR ${{TMP_DIRECTORY}} >{log.std} 2>&1;"
-        #" samtools index {output.bam}; "
-        " get_stats.pl {output.bam} > {output.bam_stats}"
+        " TMP_PREFIX=`dirname {output.pairs}`/pairtools_samtools_sort_tmp; "
+        " pairtools split --nproc-in {params.split_threads} --nproc-out {params.split_threads} "
+        " --output-pairs {output.pairs} --output-sam - {input.dedup_pairsam_gz} 2>{log.split} | "
+        " samtools sort -@ {params.sort_threads} -m {params.sort_per_thread}M -T ${{TMP_PREFIX}} -o {output.sorted_dedup_bam} > {log.sort} 2>&1; "

@@ -103,29 +103,30 @@
         - "unphased_reads"
 
 "other_tool_option_sets":
-    "cutadapt":                 "default"   # Allowed: default
-    "porechop_abi":             "default"   # Allowed: default
-    "chopper":                  "default"   # Allowed: default
-    "fastqc":                   "default"   # Allowed: default
-    "mosdepth":                 "default"   # Allowed: default
-    "jellyfish":                "default"   # Allowed: default
-    "meryl":                    "default"   # Allowed: default
-    "smudgeplot":               "default"   # Allowed: default
-    "telo_finder":              "default"   # Allowed: default
-    "quast":                    "default"   # Allowed: default
-    "minimap2":                 "default"   # Allowed: default
-    "two_read_bam_combiner":    "default"   # Allowed: default
-    "pretextmap":               "default"   # Allowed: default
-    "pretextsnapshot":          "default"   # Allowed: default
-    "gcp":                      "default"   # Allowed: default
-    "kat":                      "default"   # Allowed: default
-    "juicer_tools_qc":          "default"   # Allowed: default
-    "juicer_tools_pre":         "default"   # Allowed: default
-    "mapping_pipeline":         "bwa_only"  # Allowed: arima, bwa_only, juicer
+    "cutadapt":                 "default"       # Allowed: default
+    "porechop_abi":             "default"       # Allowed: default
+    "chopper":                  "default"       # Allowed: default
+    "fastqc":                   "default"       # Allowed: default
+    "mosdepth":                 "default"       # Allowed: default
+    "jellyfish":                "default"       # Allowed: default
+    "meryl":                    "default"       # Allowed: default
+    "smudgeplot":               "default"       # Allowed: default
+    "telo_finder":              "default"       # Allowed: default
+    "quast":                    "default"       # Allowed: default
+    "minimap2":                 "default"       # Allowed: default
+    "two_read_bam_combiner":    "default"       # Allowed: default
+    "pretextmap":               "default"       # Allowed: default
+    "pretextsnapshot":          "default"       # Allowed: default
+    "gcp":                      "default"       # Allowed: default
+    "kat":                      "default"       # Allowed: default
+    "juicer_tools_qc":          "default"       # Allowed: default
+    "juicer_tools_pre":         "default"       # Allowed: default
+    "mapping_pipeline":         "pairtools"     # Allowed: arima, bwa_only, juicer, pairtools
     "trf":                      "default"
     "wga":                      "default"
     "select_long_scaffolds":    "default"
-    "deepvariant":              "default"   # Allowed: default
+    "deepvariant":              "default"       # Allowed: default
+    "pairtools_parse":          "default"       # Allowed: default
 
 "tool_manually_adjusted_features":
     "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions

@@ -328,6 +328,7 @@
                 "bwa_only": []
                 "arima": []
                 "juicer": []
+                "pairtools": []
             "curation":
                 "default":
                     "coverage":
@@ -518,6 +519,10 @@
                     "mapping_quality":
                         - 1
                         - 30
+            "pairtools_parse":
+                "default":
+                    "min_mapping_quality": 30
+                    "max_interalign_gap": 30
             "threeddna":
                 "restriction_seq":
                     "Arima": "GATC,GANTC"

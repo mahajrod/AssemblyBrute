@@ -1,8 +1,6 @@
 
 def aggregate_fastqc_reports(wildcards):
       if wildcards.datatype == "hic":
-
-          checkpoint_output = checkpoints.preprocess_hic_fastq.output.dir
           return expand(output_dict["qc"] / ("fastqc/%s/%s/{fileprefix}_fastqc.zip" % (wildcards.datatype,
                                                                                        wildcards.stage)),
                                  fileprefix=get_hic_chunk_fileprefix_list,

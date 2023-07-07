@@ -84,6 +84,12 @@
 "parameters":
     "default":
         "tool_options":
+            "preprocess_hic_fastq":
+                "default":
+                    "reads_per_chunk": 20000000
+                    "chunk_prefix": "hic.chunk_"
+                    "arima_trim": 7
+
             "cutadapt":
                 "default":
                     "hifi":

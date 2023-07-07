@@ -126,6 +126,7 @@
     "wga":                      "default"
     "select_long_scaffolds":    "default"
     "deepvariant":              "default"   # Allowed: default
+    "preprocess_hic_fastq":     "default"  # Allowed
 
 "tool_manually_adjusted_features":
     "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions

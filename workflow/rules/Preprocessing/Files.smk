@@ -65,11 +65,11 @@ checkpoint preprocess_hic_fastq:
          " split --filter 'pigz -p 30 > ${{FILE}}.gz' --additional-suffix=_2.fastq -l 80000000 - {params.chunk_prefix} > {log.split_reverse} 2>&1; "
 
 def get_hic_chunk_pairprefix_list():
-    checkpoint_output = checkpoints.preprocess_hic_fastq.output.dir
+    checkpoint_output = checkpoints.preprocess_hic_fastq.get().output.dir
     return glob_wildcards(checkpoint_output + "/{pairprefix}_1.fastq.gz").pairprefix
 
 def get_hic_chunk_fileprefix_list():
-    checkpoint_output = checkpoints.preprocess_hic_fastq.output.dir
+    checkpoint_output = checkpoints.preprocess_hic_fastq.get().output.dir
     return glob_wildcards(checkpoint_output + "/{fileprefix}.fastq.gz").fileprefix
 
 rule create_fasta_links:

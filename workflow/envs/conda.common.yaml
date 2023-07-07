@@ -24,7 +24,7 @@
   - "samtools>=1.10"
   - "mosdepth>=0.3.1"
   - "numpy<1.24" # NumPy v 1.24 and higher is incompatible with pairtools
-  - "scipy>=1.10"
+  - "scipy=1.05"
   - "pandas>=1.2"
   - "matplotlib"
   - "bedtools>=2.26"

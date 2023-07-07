@@ -16,7 +16,7 @@ rule bwa_map: #
         bam=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam"
     params:
         id="{0}_hic".format(config["genome_prefix"]),
-        bwa_tool=config["bwa_tool"] # This options is ignored as bwa-mem2 doesnt preserve the read order from fastq file
+        bwa_tool=config["bwa_tool"]
     log:
         fastx=output_dict["log"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{fileprefix}.fastx.log",
         map=output_dict["log"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{fileprefix}.map.log",

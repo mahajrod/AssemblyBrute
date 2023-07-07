@@ -13,24 +13,24 @@ rule bwa_map: #
         #                                                                                 config["fastq_extension"]
         #                                                                                 ),
         forward_fastq=lambda wildcards: output_dict["data"] / "fastq/hic/raw/{0}{1}{2}".format(wildcards.pairprefix,
-                                                                                               input_forward_suffix_dict["hic"] if wildcards.phasing_kmer_length == "NA" else "_1",
+                                                                                               "_1",
                                                                                                config["fastq_extension"]) if wildcards.phasing_kmer_length == "NA" else \
                                 out_dir_path / "{0}/{1}/fastq/{2}/{3}/hic/{4}{5}{6}".format(config["phasing_stage"], #wildcards.assembly_stage,
                                                                                             detect_phasing_parameters(wildcards.parameters, config["phasing_stage"], stage_separator=".."), #wildcards.parameters,
                                                                                             wildcards.haplotype,
                                                                                             wildcards.phasing_kmer_length,
                                                                                             wildcards.pairprefix,
-                                                                                            input_forward_suffix_dict["hic"] if wildcards.phasing_kmer_length == "NA" else "_1",
+                                                                                            "_1",
                                                                                             config["fastq_extension"]),
         reverse_fastq=lambda wildcards: output_dict["data"] / "fastq/hic/raw/{0}{1}{2}".format(wildcards.pairprefix,
-                                                                                               input_reverse_suffix_dict["hic"] if wildcards.phasing_kmer_length == "NA" else "_2",
+                                                                                               "_2",
                                                                                                config["fastq_extension"]) if wildcards.phasing_kmer_length == "NA" else \
                                 out_dir_path / "{0}/{1}/fastq/{2}/{3}/hic/{4}{5}{6}".format(config["phasing_stage"], #wildcards.assembly_stage,
                                                                                             detect_phasing_parameters(wildcards.parameters, config["phasing_stage"], stage_separator=".."), #wildcards.parameters,
                                                                                             wildcards.haplotype,
                                                                                             wildcards.phasing_kmer_length,
                                                                                             wildcards.pairprefix,
-                                                                                            input_reverse_suffix_dict["hic"] if wildcards.phasing_kmer_length == "NA" else "_2",
+                                                                                            "_2",
                                                                                             config["fastq_extension"]),
     output:
         #bam=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam"
@@ -57,11 +57,21 @@ rule bwa_map: #
         " {params.bwa_tool} mem -SP5M -t {threads} -R  \'@RG\\tID:{params.id}\\tPU:x\\tSM:{params.id}\\tPL:illumina\\tLB:x\' "
         " {input.reference} {input.forward_fastq} {input.reverse_fastq} 2>{log.map} | samtools view -Sb - > {output.bam} 2>{log.sort} "
 
+def aggregate_bam(wildcards):
+      checkpoint_output = checkpoints.preprocess_hic_fastq.output.dir
+      return expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.bam",
+                    assembly_stage=[wildcards.assembly_stage],
+                    parameters=[wildcards.parameters],
+                    haplotype=[wildcards.haplotype],
+                    phasing_kmer_length=[wildcards.phasing_kmer_length],
+                    paiprefix=get_hic_chunk_pairprefix_list)
+
 rule bam_merge_files:
     input:
-        bams=expand(rules.bwa_map.output.bam, #out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.filtered.{pairprefix}.bam",
-                    allow_missing=True,
-                    pairprefix=input_pairprefix_dict["hic"]), #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        bams=aggregate_bam,
+        #bams=expand(rules.bwa_map.output.bam, #out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.filtered.{pairprefix}.bam",
+        #            allow_missing=True,
+        #            pairprefix=input_pairprefix_dict["hic"]), #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         reference_fai=rules.ref_faidx.output.fai,
         reference=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
     output:

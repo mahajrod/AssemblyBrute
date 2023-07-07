@@ -46,11 +46,11 @@ rule cutadapt_illumina:
     input:
         forward_fastq=lambda wildcards: output_dict["data"] / ("fastq/{0}/raw/{1}{2}{3}".format(wildcards.datatype,
                                                                                                 wildcards.pairprefix,
-                                                                                                input_forward_suffix_dict[wildcards.datatype],
+                                                                                                "_1" if wildcards.datatype == "hic" else input_forward_suffix_dict[wildcards.datatype],
                                                                                                 config["fastq_extension"])),
         reverse_fastq=lambda wildcards: output_dict["data"] / ("fastq/{0}/raw/{1}{2}{3}".format(wildcards.datatype,
                                                                                                 wildcards.pairprefix,
-                                                                                                input_reverse_suffix_dict[wildcards.datatype],
+                                                                                                "_2" if wildcards.datatype == "hic" else input_reverse_suffix_dict[wildcards.datatype],
                                                                                                 config["fastq_extension"])),
     output:
         forward_fastq=output_dict["data"] / ("fastq/{datatype, hic|illumina}/filtered/{pairprefix}_1%s" % config["fastq_extension"]),
@@ -70,12 +70,12 @@ rule cutadapt_illumina:
         forward_five_prime_adapters= lambda wildcards: (" -g " + " -g ".join(parameters["tool_options"]["cutadapt"][wildcards.datatype]["forward_five_prime_adapter_list"])) if "forward_five_prime_adapter_list" in parameters["tool_options"]["cutadapt"][wildcards.datatype] else "",
         reverse_five_prime_adapters= lambda wildcards: (" -G " + " -G ".join(parameters["tool_options"]["cutadapt"][wildcards.datatype]["reverse_five_prime_adapter_list"])) if "reverse_five_prime_adapter_list" in parameters["tool_options"]["cutadapt"][wildcards.datatype] else "",
     log:
-        std=output_dict["log"] / "cutadapt_pacbio.{datatype}.{pairprefix}.log",
+        std=output_dict["log"] / "cutadapt_illumina.{datatype}.{pairprefix}.log",
         #stats=log_dir_path / "{library_id}/no_cut.cutadapt.stats.log",
-        cluster_log=output_dict["cluster_log"] / "cutadapt_pacbio.{datatype}.{pairprefix}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "cutadapt_pacbio.{datatype}.{pairprefix}.cluster.log"
+        cluster_log=output_dict["cluster_log"] / "cutadapt_illumina.{datatype}.{pairprefix}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "cutadapt_illumina.{datatype}.{pairprefix}.cluster.log"
     benchmark:
-        output_dict["benchmark"] /  "cutadapt_pacbio.{datatype}.{pairprefix}.benchmark.txt"
+        output_dict["benchmark"] /  "cutadapt_illumina.{datatype}.{pairprefix}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

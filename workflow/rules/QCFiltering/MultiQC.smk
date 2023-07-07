@@ -1,11 +1,27 @@
 
+def aggregate_fastqc_reports(wildcards):
+      if wildcards.datatype == "hic":
+
+          checkpoint_output = checkpoints.preprocess_hic_fastq.output.dir
+          return expand(output_dict["qc"] / ("fastqc/%s/%s/{fileprefix}_fastqc.zip" % (wildcards.datatype,
+                                                                                       wildcards.stage)),
+                                 fileprefix=get_hic_chunk_fileprefix_list,
+                                 allow_missing=True)
+      else:
+          return expand(output_dict["qc"] / ("fastqc/%s/%s/{fileprefix}_fastqc.zip" % (wildcards.datatype,
+                                                                                       wildcards.stage)),
+                                 fileprefix=input_file_prefix_dict[wildcards.datatype],
+                                 allow_missing=True)
+
+
 rule multiqc:
     input:
         #output_dict["qc"] / "fastqc/{datatype}/{stage}/",
-        fastqc_reports=lambda wildcards: expand(output_dict["qc"] / ("fastqc/%s/%s/{fileprefix}_fastqc.zip" % (wildcards.datatype,
-                                                                                                               wildcards.stage)),
-                                 fileprefix=input_file_prefix_dict[wildcards.datatype],
-                                 allow_missing=True)
+        fastqc_reports=aggregate_fastqc_reports
+        #fastqc_reports=lambda wildcards: expand(output_dict["qc"] / ("fastqc/%s/%s/{fileprefix}_fastqc.zip" % (wildcards.datatype,
+        #                                                                                                       wildcards.stage)),
+        #                         fileprefix=input_file_prefix_dict[wildcards.datatype],
+        #                         allow_missing=True)
     output:
         dir=directory(output_dict["qc"] / "multiqc/{datatype}/{stage}/"),
         report=output_dict["qc"] / "multiqc/{datatype}/{stage}/multiqc.{datatype}.{stage}.report.html"

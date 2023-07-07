@@ -17,11 +17,11 @@ rule kraken2: #
                     allow_missing=True) if wildcards.datatype not in config["paired_fastq_based_data"] else [],
         forward_fastq=lambda wildcards: expand(output_dict["data"] / ("fastq/%s/filtered/{pairprefix}_1%s" % (wildcards.datatype,
                                                                                                               config["fastq_extension"])),
-                                               pairprefix=input_pairprefix_dict[wildcards.datatype],
+                                               pairprefix=get_hic_chunk_pairprefix_list() if wildcards.datatype == "hic" else input_pairprefix_dict[wildcards.datatype],
                                                allow_missing=True) if wildcards.datatype in config["paired_fastq_based_data"] else [],
         reverse_fastq=lambda wildcards: expand(output_dict["data"] / ("fastq/%s/filtered/{pairprefix}_2%s" % (wildcards.datatype,
                                                                                                               config["fastq_extension"])),
-                                               pairprefix=input_pairprefix_dict[wildcards.datatype],
+                                               pairprefix=get_hic_chunk_pairprefix_list() if wildcards.datatype == "hic" else input_pairprefix_dict[wildcards.datatype],
                                                allow_missing=True) if wildcards.datatype in config["paired_fastq_based_data"] else [],
         #reverse_fastq=lambda wildcards: output_dict["data"] / ("fastq/{datatype}/filtered/{pairprefix}_2%s" % config["fastq_extension"]) if wildcards.datatype in config["paired_fastq_based_data"] else [],
         db=lambda wildcards: config["allowed_databases"]["kraken2"][wildcards.database]["path"]

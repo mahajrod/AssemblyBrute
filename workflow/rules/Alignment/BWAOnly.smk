@@ -63,7 +63,7 @@ def aggregate_bam(wildcards):
                     parameters=[wildcards.parameters],
                     haplotype=[wildcards.haplotype],
                     phasing_kmer_length=[wildcards.phasing_kmer_length],
-                    paiprefix=get_hic_chunk_pairprefix_list)
+                    paiprefix=get_hic_chunk_pairprefix_list())
 
 rule bam_merge_files:
     input:

@@ -108,6 +108,8 @@ rule pairtools_merge:
                            allow_missing=True)
     output:
         merged_pairsam_gz=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.merged.pairsam.gz")
+    params:
+        memory=int(0.5 * parameters["memory_mb"]["pairtools_merge"])
     log:
         std=output_dict["log"] / "pairtools_merge.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.log",
         cluster_log=output_dict["cluster_log"] / "pairtools_merge.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.log",
@@ -124,7 +126,7 @@ rule pairtools_merge:
     shell:
         " TMP_DIR=`dirname {output.merged_pairsam_gz}`/merged_tmp; "
         " mkdir -p ${{TMP_DIR}}; "
-        " pairtools merge --nproc {threads} --max-nmerge 16 --memory {resources.mem}M --tmpdir=${{TMP_DIR}} "
+        " pairtools merge --nproc {threads} --max-nmerge 8 --memory {params.memory}M --tmpdir=${{TMP_DIR}} "
         " -o {output.merged_pairsam_gz} {input.pairsam_gzs}  > {log.std} 2>&1; "
 
 rule pairtools_dedup:

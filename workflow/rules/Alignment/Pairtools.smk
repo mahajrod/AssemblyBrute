@@ -97,6 +97,7 @@ rule pairtools_sort:
     threads: parameters["threads"]["pairtools_sort"]
     shell:
         " TMP_DIR=`dirname {output.sorted_pairsam_gz}`/{wildcards.pairprefix}_tmp; "
+        " mkdir -p ${{TMP_DIR}}; "
         " pairtools sort --nproc {threads} --memory {resources.mem}M --tmpdir=${{TMP_DIR}} "
         " -o {output.sorted_pairsam_gz} {input.pairsam_gz}  > {log.std} 2>&1; "
 

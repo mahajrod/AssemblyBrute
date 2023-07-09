@@ -122,6 +122,7 @@ rule pairtools_merge:
     threads: parameters["threads"]["pairtools_merge"]
     shell:
         " TMP_DIR=`dirname {output.merged_pairsam_gz}`/merged_tmp; "
+        " mkdir -p ${{TMP_DIR}}; "
         " pairtools merge --nproc {threads} --max-nmerge 16 --memory {resources.mem}M --tmpdir=${{TMP_DIR}} "
         " -o {output.merged_pairsam_gz} {input.pairsam_gzs}  > {log.std} 2>&1; "
 

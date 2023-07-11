@@ -899,14 +899,14 @@ if "curation" in config["stage_list"]:
                      #       haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                      #       parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
 
-                     *[[expand(out_dir_path / "curation/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.coverage.win{window}.step{step}.png",
+                     [[expand(out_dir_path / "curation/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.coverage.win{window}.step{step}.png",
                             window=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"][window_step_set]["window"],
                             step=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"][window_step_set]["step"],
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],
                             datatype=coverage_track_data_type_set,
                             haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                            parameters=[parameters_label]) for window_step_set in stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"]] for parameters_label in stage_dict["curation"]["parameters"]],
+                            parameters=[parameters_label]) for window_step_set in stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"]] for parameters_label in stage_dict["curation"]["parameters"]] if coverage_track_data_type_set else [],
                      *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.canonical.txt",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],
@@ -917,12 +917,12 @@ if "curation" in config["stage_list"]:
                             assembly_stage=["curation", ],
                             haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                             parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
-                     *[expand(out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.vcf.gz",
+                     [expand(out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.vcf.gz",
                             genome_prefix=[config["genome_prefix"], ],
                             datatype=variant_calling_data_type_set,
                             assembly_stage=["curation", ],
                             haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                            parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]]
+                            parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]] if variant_calling_data_type_set else [],
                      ]
     if not config["skip_higlass"]:
         for parameters_label in parameters_list:

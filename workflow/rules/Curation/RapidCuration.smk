@@ -20,12 +20,12 @@ rule create_curation_input_files: #
                                                                                                    stage_dict["curation"]["prev_stage"])),
         fai=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta.fai" % (stage_dict["curation"]["prev_stage"],
                                                                                                        stage_dict["curation"]["prev_stage"])),
-        bed=get_hic_bed_file if not config["skip_higlass"] else []
+        #bed=get_hic_bed_file if not config["skip_higlass"] else []
     output:
         fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.fasta",
         len=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.len",
         fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.fasta.fai",
-        bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.hic.bed" if not config["skip_higlass"] else [],
+        #bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.hic.bed" if not config["skip_higlass"] else [],
     log:
         cp=output_dict["log"]  / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cp.log",
         cluster_log=output_dict["cluster_log"] / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.log",
@@ -44,12 +44,30 @@ rule create_curation_input_files: #
         " cp -f `realpath -s {input.fasta}` {output.fasta} > {log.cp} 2>&1; "
         " cp -f `realpath -s {input.fai}` {output.fai} >> {log.cp} 2>&1; "
         " cp -f `realpath -s {input.len}` {output.len} >> {log.cp} 2>&1; "
-        " if [ -z '{input.bed}' ];"
-        " then "
-        "   echo 'Skipping bed file...'; "
-        " else"
-        "   cp -f `realpath -s {input.bed}` {output.bed} >> {log.cp} 2>&1; "
-        " fi; "
+
+rule create_curation_bed_input_file: # Added as separated rule to allow turning on and off higlass track. DO NOT MERGE this rule with create_curation_input_files
+    input:
+        bed=get_hic_bed_file
+    output:
+        bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.hic.bed"
+    log:
+        cp=output_dict["log"]  / "create_bed_input_file.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cp.log",
+        cluster_log=output_dict["cluster_log"] / "create_bed_input_file.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_bed_input_file.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "create_bed_input_file.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["create_curation_input_files"],
+        time=parameters["time"]["create_curation_input_files"],
+        mem=parameters["memory_mb"]["create_curation_input_files"]
+    threads: parameters["threads"]["create_curation_input_files"]
+
+    shell:
+        " cp -f `realpath -s {input.bed}` {output.bed} > {log.cp} 2>&1; "
+
+
 
 rule select_long_scaffolds: #
     input:

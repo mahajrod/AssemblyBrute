@@ -98,6 +98,7 @@ snakemake --cores 60 --configfile config/default.yaml --printshellcmds --latency
 ```commandline
 #shark
 git pull; snakemake --cores 80  --configfile config/somniosus.yaml --printshellcmds --latency-wait 60   --config mode="assembly" assembly_mode="contig" "parameter_set"="giant"  "data_types"="hifi,hic" "tax_id"=191813  "use_existing_envs"=False "skip_busco"=True  "final_kmer_datatype"="hifi" "busco_lineage_list"='["vertebrata_odb10"]' "skip_gcp"=True  --use-conda --rerun-incomplete --res   fcs=1 fcs_adaptor=1 mem=800000 kmer_counter=1  telosif=1
+snakemake --profile /projects/mjolnir1/people/xsg178/analysis/yggdrasil/assembly/somniosus_microcephalus_male/profile/slurm/  --configfile config/somniosus_male.yaml --printshellcmds --latency-wait 60   --config mode="assembly" assembly_mode="purge_dups" "parameter_set"="large"  "data_types"="hifi,hic" "use_existing_envs"=False  "skip_gcp"=True tax_id=191813 "skip_busco"=True "busco_lineage_list"='["vertebrata_odb10"]' "skip_kraken"=True --use-conda --rerun-incomplete --cluster-cancel scancel  --res   fcs=1 fcs_adaptor=1 telosif=1 -R get_purge_dups_read_stat
 ```
 
 ```commandline

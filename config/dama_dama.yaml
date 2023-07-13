@@ -195,6 +195,7 @@
 "skip_nanoplot": False
 "skip_wga": False
 "skip_higlass": True
+"skip_variantcalling": True
 #"adaptor_scan": True
 #"fcs_gx_scan": True
 # Allowed modes:

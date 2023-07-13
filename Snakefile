@@ -928,7 +928,7 @@ if "curation" in config["stage_list"]:
                             datatype=variant_calling_data_type_set,
                             assembly_stage=["curation", ],
                             haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                            parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]] if variant_calling_data_type_set else [],
+                            parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]] if variant_calling_data_type_set and (not config["skip_variantcalling"]) else [],
                      ]
     if not config["skip_higlass"]:
         for parameters_label in parameters_list:

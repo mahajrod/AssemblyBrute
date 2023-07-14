@@ -1,3 +1,4 @@
+localrules: create_links_for_yahs_files
 
 rule yahs: #
     input:
@@ -130,3 +131,32 @@ rule juicer_tools_pre: #
         #" java -jar -Xmx{resources.mem}m workflow/external_tools/juicer/juicer_tools.1.9.9_jcuda.0.8.jar pre " #--threads {threads}
         #" {input.yahs_juicer_pre_bed} {output.hic} <(cat {input.yahs_juicer_pre_log} 2>{log.cat} | "
         #" grep PRE_C_SIZE 2>{log.grep} | awk '{{print $2\" \"$3}}' 2>{log.awk}) > {log.juicer} 2>&1; "
+
+
+rule create_links_for_yahs_files: #
+    input:
+        hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.hic",
+        liftover_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.liftover.agp",
+        assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.assembly",
+    output:
+        hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.hic",
+        liftover_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.liftover.agp",
+        assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.assembly",
+    log:
+        ln=output_dict["log"]  / "create_links_for_yahs_files.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.ln.log",
+        cluster_log=output_dict["cluster_log"] / "create_links_for_yahs_files.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_links_for_yahs_files.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "create_links_for_yahs_files.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["create_fastq_links"] ,
+        time=parameters["time"]["create_fastq_links"],
+        mem=parameters["memory_mb"]["create_fastq_links"]
+    threads: parameters["threads"]["create_fastq_links"]
+
+    shell:
+        " ln -sf {wildcards.haplotype}/scaffolding/`basename {input.hic}` {output.hic} > {log.ln} 2>&1; "
+        " ln -sf {wildcards.haplotype}/scaffolding/`basename {input.liftover_agp}` {output.liftover_agp} >> {log.ln} 2>&1; "
+        " ln -sf {wildcards.haplotype}/scaffolding/`basename {input.assembly}` {output.assembly} >> {log.ln} 2>&1; "

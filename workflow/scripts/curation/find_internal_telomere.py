@@ -14,6 +14,8 @@ parser.add_argument("-f", "--fai_file", action="store", dest="fai_file", require
                     help="Input .fai file. Required.")
 parser.add_argument("-d", "--min_distance", action="store", dest="min_distance", default=500000, type=int,
                     help="Minimal distance from end for warning. Default: 500'000")
+parser.add_argument("-s", "--score_threshold", action="store", dest="score_threshold", default=0.6, type=float,
+                    help="Minimum score (fraction of telomere sequences in window) to report window. Default: '0.6'")
 parser.add_argument("-o", "--output", action="store", dest="output", default=sys.stdout,
                     help="Output. Default: stdout")
 
@@ -28,7 +30,7 @@ telomere_df["length"] = fai_df["length"]
 
 telomere_df["min_end_distance"] = np.minimum(telomere_df["length"] - telomere_df["start"], telomere_df["end"])
 
-telomere_df[telomere_df["min_end_distance"] >= args.min_distance][["start", "end", "score"]].to_csv(args.output,
+telomere_df[(telomere_df["min_end_distance"] >= args.min_distance) and (telomere_df["score"] >= args.min_distance) ][["start", "end", "score"]].to_csv(args.output,
                                                                                                     sep="\t",
                                                                                                     index=True,
                                                                                                     header=False)

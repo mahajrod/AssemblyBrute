@@ -197,7 +197,7 @@
 "skip_wga": False
 "skip_higlass": True
 "skip_variantcalling": True
-"skip_hic_file": True
+"skip_hic_file": False
 #"adaptor_scan": True
 #"fcs_gx_scan": True
 # Allowed modes:

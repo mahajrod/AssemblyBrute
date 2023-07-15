@@ -377,13 +377,13 @@ if "draft_qc" in config["stage_list"]:
                          expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=["gap_closing"],),
-                         *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.hic",
+                         [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.hic",
                                   assembly_stage=["gap_closing"],
                                   parameters=[parameters_label],
                                   genome_prefix=[config["genome_prefix"], ],
                                   haplotype=stage_dict["gap_closing"]["parameters"][parameters_label]["haplotype_list"],
                                   phasing_kmer_length=[stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["phasing_kmer_length"]])
-                           for parameters_label in parameters_list]
+                           for parameters_label in parameters_list] if not config["skip_hic_file"] else []
                          ]
 
         if not config["skip_busco"]:
@@ -801,11 +801,11 @@ if "hic_scaffolding" in config["stage_list"]:
                            assembly_stage=["hic_scaffolding", ],
                            haplotype=stage_dict["hic_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
                            parameters=[parameters_label]) for parameters_label in stage_dict["hic_scaffolding"]["parameters"]],
-                     *[expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.hic",
+                    [expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.hic",
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=["hic_scaffolding", ],
                            haplotype=stage_dict["hic_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
-                           parameters=[parameters_label]) for parameters_label in stage_dict["hic_scaffolding"]["parameters"]],
+                           parameters=[parameters_label]) for parameters_label in stage_dict["hic_scaffolding"]["parameters"]] if not config["skip_hic_file"] else [],
                     expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=["hic_scaffolding"],),
@@ -813,12 +813,13 @@ if "hic_scaffolding" in config["stage_list"]:
 
     for parameters_label in parameters_list:
         if stage_dict["hic_scaffolding"]["parameters"][parameters_label]["hic_scaffolder"] == "yahs":
-            results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.hic",
-                                    genome_prefix=[config["genome_prefix"], ],
-                                    assembly_stage=["hic_scaffolding", ],
-                                    haplotype=stage_dict["hic_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
-                                    parameters=[parameters_label])
-                             ]
+            if not config["skip_hic_file"]:
+                results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.hic",
+                                        genome_prefix=[config["genome_prefix"], ],
+                                        assembly_stage=["hic_scaffolding", ],
+                                        haplotype=stage_dict["hic_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
+                                        parameters=[parameters_label])
+                                 ]
     #for parameters_label in parameters_list:
     #    if stage_dict["hic_scaffolding"]["parameters"][parameters_label]["hic_scaffolder"] == "threeddna":
     #        results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.merged_nodups.txt",

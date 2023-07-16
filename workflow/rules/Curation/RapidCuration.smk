@@ -92,7 +92,7 @@ rule select_long_scaffolds: #
     threads: parameters["threads"]["select_long_scaffolds"]
     run:
         length_df = pd.read_csv(input.len, sep='\t', header=None, index_col=0, names=["scaffold", "length"])
-        threshold = length_df["length"].iloc[0] / 50
+        threshold = min(length_df["length"].iloc[0] / 100, 1000000)
         whitelist_sr = pd.Series(length_df[length_df["length"] >= threshold].index)
         if len(whitelist_sr) > params.max_scaffolds:
             whitelist_sr = whitelist_sr.iloc[:params.max_scaffolds]

@@ -16,7 +16,7 @@ gc_count	10	10	10	10	10	10	10	10	10
 gc_plot	1	1	1	1	1	1	1	1	1
 meryl_assembly	5	5	5	5	5	5	5	5	5
 meryl_extract_unique_hap_kmers	10	10	10	10	10	10	10	10	10
-extract_reads_by_unique_hap_kmers	10	10	10	10	10	10	10	10	10
+extract_reads_by_unique_hap_kmers	10	10	10	20	30	30	30	30	30
 subset_extracted_kmers	1	1	1	1	1	1	1	1	1
 genomescope	1	1	1	1	1	1	1	1	1
 parse_genomescope_output	1	1	1	1	1	1	1	1	1

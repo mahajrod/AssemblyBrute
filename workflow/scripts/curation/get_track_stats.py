@@ -41,4 +41,4 @@ for threshold in args.threshold_list:
     threshold_list.append(stats_df.loc["all", "median"] * (1 - threshold))
 
 with open("{0}.thresholds".format(args.output_prefix), "w") as out_fd:
-    out_fd.write(",".join(sorted(threshold_list)))
+    out_fd.write(",".join(list(map(str, sorted(threshold_list)))))

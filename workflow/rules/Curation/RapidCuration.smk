@@ -230,7 +230,7 @@ rule draw_track: #
         "    MEDIAN=`tail -n +2 {input.all_stat} | cut -f 4`; "
         "    TITLE=\"{wildcards.track_type}(median ${{MEDIAN}})\"; "
         " fi; "
-        " draw_variant_window_densities.py -i {input.bedgraph} -t bedgraph -o ${{PREFIX}} -l ${{TITLE}} "
+        " draw_variant_window_densities.py -i {input.bedgraph} -t bedgraph -o ${{PREFIX}} -l \"${{TITLE}}\" "
         " -w {wildcards.window} -s {wildcards.step} --density_multiplier 1 "
         " -a {input.whitelist} -n {input.len_file} -z {input.orderlist} ${{THRESHOLDS}} "
         " --hide_track_label --rounded --subplots_adjust_left 0.15 --feature_name {wildcards.track_type} > {log.draw} 2>&1; "

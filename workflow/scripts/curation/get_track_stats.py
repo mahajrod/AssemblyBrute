@@ -37,8 +37,8 @@ stats_df.to_csv("{0}.stat".format(args.output_prefix), sep="\t", header=True, in
 
 threshold_list = [0.0]
 for threshold in args.threshold_list:
-    threshold_list.append(stats_df["all"]["median"] * (1 + threshold))
-    threshold_list.append(stats_df["all"]["median"] * (1 - threshold))
+    threshold_list.append(stats_df.loc["all", "median"] * (1 + threshold))
+    threshold_list.append(stats_df.loc["all", "median"] * (1 - threshold))
 
 with open("{0}.thresholds".format(args.output_prefix), "w") as out_fd:
     out_fd.write(",".join(sorted(threshold_list)))

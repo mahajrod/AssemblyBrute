@@ -199,7 +199,7 @@ rule draw_track: #
         thresholds=lambda wildcards: parse_option("absolute_thresholds",
                                                   parameters["tool_options"]["curation"][wildcards.track_type],
                                                   "--density_thresholds",
-                                                  expression=lambda s: ",".join(s)) if wildcards.threshold_type == "absolute" else pd.read_csv()
+                                                  expression=lambda s: ",".join(s))
     log:
         draw=output_dict["log"]  / "draw_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.draw.log",
         cluster_log=output_dict["cluster_log"] / "draw_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.cluster.log",

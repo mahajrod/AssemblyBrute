@@ -197,7 +197,7 @@ rule draw_track: #
         thresholds=lambda wildcards: parse_option("absolute_thresholds",
                                                   stage_dict["curation"]["parameters"][wildcards.parameters]["option_set"][wildcards.track_type],
                                                   "--density_thresholds",
-                                                  expression=lambda s: ",".join(s))
+                                                  expression=lambda s: ",".join(list(map(str, s))))
     log:
         draw=output_dict["log"]  / "draw_track.{parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.draw.log",
         cluster_log=output_dict["cluster_log"] / "draw_track.{parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.cluster.log",

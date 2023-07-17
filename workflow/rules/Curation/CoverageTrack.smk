@@ -1,3 +1,4 @@
+ruleorder: create_coverage_table > get_track_stats
 if "purge_dups" in config["stage_list"]:
     ruleorder: minimap2_cov > minimap2_purge_dups_reads
 

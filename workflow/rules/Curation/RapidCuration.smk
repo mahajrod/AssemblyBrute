@@ -190,7 +190,13 @@ rule draw_track: #
                                                                                                                                                wildcards.genome_prefix,
                                                                                                                                                wildcards.track_type,
                                                                                                                                                wildcards.window,
-                                                                                                                                               wildcards.step) if wildcards.threshold_type == 'relative' else []
+                                                                                                                                               wildcards.step) if wildcards.threshold_type == 'relative' else [],
+        all_stat=lambda wildcards: out_dir_path / "curation/{0}/{1}/input/{2}.input.{1}.{3}.win{4}.step{5}.track.stat".format(wildcards.parameters,
+                                                                                                                              wildcards.haplotype,
+                                                                                                                              wildcards.genome_prefix,
+                                                                                                                              wildcards.track_type,
+                                                                                                                              wildcards.window,
+                                                                                                                              wildcards.step) if wildcards.threshold_type == 'relative' else []
     output:
         png=out_dir_path / "curation/{parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.{threshold_type}.png"
     params:
@@ -218,10 +224,13 @@ rule draw_track: #
         " if [ '{wildcards.threshold_type}' == 'absolute' ]; "
         " then "
         "    THRESHOLDS='{params.thresholds}'; "
+        "    TITLE={wildcards.track_type}; "
         " else "
         "    THRESHOLDS=\" --density_thresholds `head -n 1 {input.relative_thresholds} | sed 's/\\n//'`\"; "
+        "    MEDIAN=`tail -n +2 {input.all_stat} | cut -f 4`; "
+        "    TITLE=\"{wildcards.track_type}(median ${{MEDIAN}})\"; "
         " fi; "
-        " draw_variant_window_densities.py -i {input.bedgraph} -t bedgraph -o ${{PREFIX}} -l {wildcards.track_type} "
+        " draw_variant_window_densities.py -i {input.bedgraph} -t bedgraph -o ${{PREFIX}} -l ${{TITLE}} "
         " -w {wildcards.window} -s {wildcards.step} --density_multiplier 1 "
         " -a {input.whitelist} -n {input.len_file} -z {input.orderlist} ${{THRESHOLDS}} "
         " --hide_track_label --rounded --subplots_adjust_left 0.15 --feature_name {wildcards.track_type} > {log.draw} 2>&1; "

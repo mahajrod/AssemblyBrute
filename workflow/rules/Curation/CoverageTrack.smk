@@ -45,16 +45,16 @@ rule minimap2_cov: # TODO: add nanopore support
 
 rule calculate_coverage:
     input:
-        bam=out_dir_path / "curation/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.bam",
-        bai=out_dir_path / "curation/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.bam.bai"
+        bam=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.bam",
+        bai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.bam.bai"
     output:
-        per_base=out_dir_path / "curation/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.per-base.bed.gz"
+        per_base=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.per-base.bed.gz"
     log:
-        std=output_dict["log"]  / "calculate_coverage.{parameters}.{genome_prefix}.{haplotype}.{datatype}.log",
-        cluster_log=output_dict["cluster_log"] / "calculate_coverage.{parameters}.{genome_prefix}.{haplotype}.{datatype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "calculate_coverage.{parameters}.{genome_prefix}.{haplotype}.{datatype}.cluster.err"
+        std=output_dict["log"]  / "calculate_coverage.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.log",
+        cluster_log=output_dict["cluster_log"] / "calculate_coverage.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "calculate_coverage.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "calculate_coverage.{parameters}.{genome_prefix}.{haplotype}.{datatype}.benchmark.txt"
+        output_dict["benchmark"]  / "calculate_coverage.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

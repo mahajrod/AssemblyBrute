@@ -891,7 +891,7 @@ if "curation" in config["stage_list"]:
                                 ) for parameters_label in stage_dict["curation"]["parameters"]]]
 
     results_list += [[[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
-                            threshold_type=["absolute, relative"],
+                            threshold_type=["absolute", "relative"],
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],
                             track_type=[track_type],
@@ -900,7 +900,7 @@ if "curation" in config["stage_list"]:
                             haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                             parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ("gap", "windowmasker", "trf", "gc") ],
                      [[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.stat",
-                            threshold_type=["absolute, relative"],
+                            threshold_type=["absolute", "relative"],
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],
                             track_type=[track_type],

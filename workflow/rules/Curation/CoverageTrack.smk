@@ -72,18 +72,18 @@ rule create_coverage_table:
     input:
         per_base=rules.calculate_coverage.output.per_base,
     output:
-        stat_file=out_dir_path / "curation/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.stat",
-        all_stat_file=out_dir_path / "curation/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.all.stat"
+        stat_file=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.stat",
+        all_stat_file=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.all.stat"
     #params:
     #    bin_size=lambda wildcards: stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["option_set"]["bin_size"],
     #    step_size=lambda wildcards: stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["option_set"]["bin_size"]
     log:
-        std=output_dict["log"]  / "create_coverage_table.{parameters}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.log",
+        std=output_dict["log"]  / "create_coverage_table.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.log",
         #cp=output_dict["log"]  / "create_coverage_table.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.cp.log",
-        cluster_log=output_dict["cluster_log"] / "create_coverage_table.{parameters}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_coverage_table.{parameters}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.cluster.err"
+        cluster_log=output_dict["cluster_log"] / "create_coverage_table.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_coverage_table.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "create_coverage_table.{parameters}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.benchmark.txt"
+        output_dict["benchmark"]  / "create_coverage_table.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

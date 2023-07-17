@@ -30,7 +30,7 @@ telomere_df["length"] = fai_df["length"]
 
 telomere_df["min_end_distance"] = np.minimum(telomere_df["length"] - telomere_df["start"], telomere_df["end"])
 
-telomere_df[(telomere_df["min_end_distance"] >= args.min_distance) and (telomere_df["score"] >= args.min_distance)][["start", "end", "score"]].to_csv(args.output,
+telomere_df[(telomere_df["min_end_distance"] >= args.min_distance) & (telomere_df["score"] >= args.min_distance)][["start", "end", "score"]].to_csv(args.output,
                                                                                                     sep="\t",
                                                                                                     index=True,
                                                                                                     header=False)

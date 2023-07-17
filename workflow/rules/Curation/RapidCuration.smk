@@ -67,8 +67,6 @@ rule create_curation_bed_input_file: # Added as separated rule to allow turning 
     shell:
         " cp -f `realpath -s {input.bed}` {output.bed} > {log.cp} 2>&1; "
 
-
-
 rule select_long_scaffolds: #
     input:
         len=rules.create_curation_input_files.output.len
@@ -152,6 +150,35 @@ rule create_bedgraph_track: #
         #" bedtools map -c 4 -o sum -a {input.windows_bed} -b stdin > {output.bedgraph} 2>{log.map} "
         #./workflow/scripts/sum_bed.py -c 3
 
+rule get_track_stats: #
+    input:
+        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph"
+    output:
+        per_scaffold_stat=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.per_scaffold.stat",
+        all_stat=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.stat",
+        thresholds=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.thresholds"
+    params:
+        normalization=lambda wildcards: parse_option_flag("normalize_by_len", parameters["tool_options"]["curation"][wildcards.track_type], "-n")
+    log:
+        std=output_dict["log"]  / "get_track_stats{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.std.log",
+        cluster_log=output_dict["cluster_log"] / "get_track_stats.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "get_track_stats.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "get_track_stats.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["get_track_stats"],
+        time=parameters["time"]["get_track_stats"],
+        mem=parameters["memory_mb"]["get_track_stats"],
+    threads: parameters["threads"]["get_track_stats"]
+
+    shell:
+        " OUTPUT_PREFIX={output.all_stat}; "
+        " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.stat}}; "
+        " workflow/scripts/curation/get_track_stats.py -i {input.bedgraph} {params.normalization}"
+        " -o ${{OUTPUT_PREFIX}}  > {log.std} 2>&1; "
+
 rule draw_track: #
     input:
         bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph",
@@ -159,14 +186,26 @@ rule draw_track: #
         orderlist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.orderlist",
         len_file=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.len" % (stage_dict["curation"]["prev_stage"],
                                                                                                     stage_dict["curation"]["prev_stage"])),
+        relative_thresholds=lambda wildcards: out_dir_path / "curation/{0}..{1}/{2}/input/{3}.input.{2}.{4}.win{5}.step{6}.track.thresholds".format(wildcards.prev_stage_parameters,
+                                                                                                                                                    wildcards.curation_parameters,
+                                                                                                                                                    wildcards.haplotype,
+                                                                                                                                                    wildcards.genome_prefix,
+                                                                                                                                                    wildcards.track_type,
+                                                                                                                                                    wildcards.window,
+                                                                                                                                                    wildcards.step) if wildcards.threshold_type == 'relative' else []
     output:
-        png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.png"
+        png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.{threshold_type}.png"
+    params:
+        thresholds=lambda wildcards: parse_option("absolute_thresholds",
+                                                  parameters["tool_options"]["curation"][wildcards.track_type],
+                                                  "--density_thresholds",
+                                                  expression=lambda s: ",".join(s)) if wildcards.threshold_type == "absolute" else pd.read_csv()
     log:
-        draw=output_dict["log"]  / "draw_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.draw.log",
-        cluster_log=output_dict["cluster_log"] / "draw_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "draw_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.err"
+        draw=output_dict["log"]  / "draw_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.draw.log",
+        cluster_log=output_dict["cluster_log"] / "draw_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "draw_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "draw_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.benchmark.txt"
+        output_dict["benchmark"]  / "draw_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -178,7 +217,13 @@ rule draw_track: #
     shell:
         " PREFIX={output.png}; "
         " PREFIX=${{PREFIX%.png}}; "
+        " if [ '{wildcards.threshold_type}' == 'absolute' ]; "
+        " then "
+        "    THRESHOLDS='{params.thresholds}'; "
+        " else "
+        "    THRESHOLDS=`head -n 1 {input.relative_thresholds} | sed 's/\n//'`; "
+        " fi; "
         " draw_variant_window_densities.py -i {input.bedgraph} -t bedgraph -o ${{PREFIX}} -l {wildcards.track_type} "
         " -w {wildcards.window} -s {wildcards.step} --density_multiplier 1 "
-        " -a {input.whitelist} -n {input.len_file} -z {input.orderlist} --density_thresholds 0.0,0.1,0.4,0.7 "
+        " -a {input.whitelist} -n {input.len_file} -z {input.orderlist} ${{THRESHOLDS}} "
         " --hide_track_label --rounded --subplots_adjust_left 0.15 --feature_name {wildcards.track_type} > {log.draw} 2>&1; "

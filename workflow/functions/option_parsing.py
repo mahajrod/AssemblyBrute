@@ -5,7 +5,7 @@ This file contains functions necessary for manipulations with options inside Sna
 """
 
 
-def parse_option(option, option_dict, option_prefix, default_value="default", none_value=None):
+def parse_option(option, option_dict, option_prefix, default_value="default", none_value=None, expression=None):
     if option not in option_dict:
         return ""
     if option_dict[option] is None:
@@ -15,7 +15,7 @@ def parse_option(option, option_dict, option_prefix, default_value="default", no
             " {0} {1}".format(option_prefix, none_value)
     if option_dict[option] == default_value:
         return ""
-    return " {0} {1}".format(option_prefix, option_dict[option])
+    return " {0} {1}".format(option_prefix, expression(option_dict[option]) if expression else option_dict[option])
 
 
 def parse_option_flag(option, option_dict, option_prefix):
@@ -64,6 +64,3 @@ def group_option_sets(option_set_dict, grouping_option_list):
             final_option_set_group_dict[option_set] = option_group_syn
 
     return final_dict, final_option_set_group_dict
-
-
-

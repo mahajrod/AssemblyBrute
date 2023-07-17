@@ -332,88 +332,145 @@
             "curation":
                 "default":
                     "coverage":
-                        "w1000k.s1000k":
-                            "window": 1000000
-                            "step":   1000000
-                        "w1000k.s100k":
-                            "window": 1000000
-                            "step":   100000
-                        "w100k.s100k":
-                            "window": 100000
-                            "step":   100000
-                        "w100k.s10k":
-                            "window": 100000
-                            "step":   10000
-                        "w10k.s10k":
-                            "window": 10000
-                            "step":   10000
+                        "options":
+                            "w1000k.s1000k":
+                                "window": 1000000
+                                "step":   1000000
+                            "w1000k.s100k":
+                                "window": 1000000
+                                "step":   100000
+                            "w100k.s100k":
+                                "window": 100000
+                                "step":   100000
+                            "w100k.s10k":
+                                "window": 100000
+                                "step":   10000
+                            "w10k.s10k":
+                                "window": 10000
+                                "step":   10000
                         #"w10k.s1k":
                         #    "window": 10000
                         #    "step":   1000
                     "trf":
-                        "w1000k.s1000k":
-                            "window": 1000000
-                            "step":   1000000
-                        "w1000k.s100k":
-                            "window": 1000000
-                            "step":   100000
-                        "w100k.s100k":
-                            "window": 100000
-                            "step":   100000
-                        "w100k.s10k":
-                            "window": 100000
-                            "step":   10000
-                        "w10k.s10k":
-                            "window": 10000
-                            "step":   10000
+                        "relative_thresholds": # median +- threshold * median
+                            - 0.05
+                            - 0.1
+                            - 0.25
+                            - 0.5
+                        "absolute_thresholds":
+                            - 0
+                            - 0.1
+                            - 0.3
+                            - 0.4
+                            - 0.5
+                            - 0.7
+                        "normalize_by_len": True
+                        "options":
+                            "w1000k.s1000k":
+                                "window": 1000000
+                                "step":   1000000
+                            "w1000k.s100k":
+                                "window": 1000000
+                                "step":   100000
+                            "w100k.s100k":
+                                "window": 100000
+                                "step":   100000
+                            "w100k.s10k":
+                                "window": 100000
+                                "step":   10000
+                            "w10k.s10k":
+                                "window": 10000
+                                "step":   10000
                     "windowmasker":
-                        "w1000k.s1000k":
-                            "window": 1000000
-                            "step":   1000000
-                        "w1000k.s100k":
-                            "window": 1000000
-                            "step":   100000
-                        "w100k.s100k":
-                            "window": 100000
-                            "step":   100000
-                        "w100k.s10k":
-                            "window": 100000
-                            "step":   10000
-                        "w10k.s10k":
-                            "window": 10000
-                            "step":   10000
+                        "relative_thresholds": # median +- threshold * median
+                            - 0.05
+                            - 0.1
+                            - 0.25
+                            - 0.5
+                        "absolute_thresholds":
+                            - 0
+                            - 0.1
+                            - 0.3
+                            - 0.4
+                            - 0.5
+                            - 0.7
+                        "normalize_by_len": True
+                        "options":
+                            "w1000k.s1000k":
+                                "window": 1000000
+                                "step":   1000000
+                            "w1000k.s100k":
+                                "window": 1000000
+                                "step":   100000
+                            "w100k.s100k":
+                                "window": 100000
+                                "step":   100000
+                            "w100k.s10k":
+                                "window": 100000
+                                "step":   10000
+                            "w10k.s10k":
+                                "window": 10000
+                                "step":   10000
                     "gap":
-                        "w1000k.s1000k":
-                            "window": 1000000
-                            "step":   1000000
-                        "w1000k.s100k":
-                            "window": 1000000
-                            "step":   100000
-                        "w100k.s100k":
-                            "window": 100000
-                            "step":   100000
-                        "w100k.s10k":
-                            "window": 100000
-                            "step":   10000
-                        "w10k.s10k":
-                            "window": 10000
-                            "step":   10000
+                        "normalize_by_len": True
+                        "relative_thresholds": # median +- threshold * median
+                            - 0.05
+                            - 0.1
+                            - 0.25
+                            - 0.5
+                        "absolute_thresholds":
+                            - 0
+                            - 0.1
+                            - 0.3
+                            - 0.4
+                            - 0.5
+                            - 0.7
+                        "options":
+                            "w1000k.s1000k":
+                                "window": 1000000
+                                "step":   1000000
+                            "w1000k.s100k":
+                                "window": 1000000
+                                "step":   100000
+                            "w100k.s100k":
+                                "window": 100000
+                                "step":   100000
+                            "w100k.s10k":
+                                "window": 100000
+                                "step":   10000
+                            "w10k.s10k":
+                                "window": 10000
+                                "step":   10000
                     "gc":
-                        "w1000k.s1000k":
-                            "window": 1000000
-                            "step":   1000000
-                        "w1000k.s100k":
-                            "window": 1000000
-                            "step":   100000
-                        "w100k.s100k":
-                            "window": 100000
-                            "step":   100000
-                        "w100k.s10k":
-                            "window": 100000
-                            "step":   10000
-                        "w10k.s10k":
-                            "window": 10000
-                            "step":   10000
+                        "relative_thresholds": # median +- threshold * median
+                            - 0.05
+                            - 0.1
+                            - 0.25
+                            - 0.5
+                        "absolute_thresholds":
+                            - 0
+                            - 0.1
+                            - 0.3
+                            - 0.4
+                            - 0.5
+                            - 0.7
+                        "normalize_by_len": True
+                        "options":
+                            "w1000k.s1000k":
+                                "window": 1000000
+                                "step":   1000000
+                            "w1000k.s100k":
+                                "window": 1000000
+                                "step":   100000
+                            "w100k.s100k":
+                                "window": 100000
+                                "step":   100000
+                            "w100k.s10k":
+                                "window": 100000
+                                "step":   10000
+                            "w10k.s10k":
+                                "window": 10000
+                                "step":   10000
                         #"w10k.s1k":
                         #    "window": 10000
                         #    "step":   1000

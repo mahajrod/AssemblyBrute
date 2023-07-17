@@ -219,7 +219,7 @@ rule draw_track: #
         " then "
         "    THRESHOLDS='{params.thresholds}'; "
         " else "
-        "    THRESHOLDS=`head -n 1 {input.relative_thresholds} | sed 's/\\n//'`; "
+        "    THRESHOLDS=\" --density_thresholds `head -n 1 {input.relative_thresholds} | sed 's/\\n//'`\"; "
         " fi; "
         " draw_variant_window_densities.py -i {input.bedgraph} -t bedgraph -o ${{PREFIX}} -l {wildcards.track_type} "
         " -w {wildcards.window} -s {wildcards.step} --density_multiplier 1 "

@@ -15,7 +15,7 @@ parser.add_argument("-f", "--fai_file", action="store", dest="fai_file", require
 parser.add_argument("-d", "--min_distance", action="store", dest="min_distance", default=300000, type=int,
                     help="Minimal distance from end for warning. Default: 500'000")
 parser.add_argument("-s", "--score_threshold", action="store", dest="score_threshold", default=0.5, type=float,
-                    help="Minimum score (fraction of telomere sequences in window) to report window. Default: '0.6'")
+                    help="Minimum score (fraction of telomere sequences in window) to report window. Default: '0.5'")
 parser.add_argument("-o", "--output", action="store", dest="output", default=sys.stdout,
                     help="Output. Default: stdout")
 

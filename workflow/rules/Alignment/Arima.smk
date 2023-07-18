@@ -16,7 +16,8 @@ rule bwa_map: #
         bam=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam"
     params:
         id="{0}_hic".format(config["genome_prefix"]),
-        bwa_tool=config["bwa_tool"] # This options is ignored as bwa-mem2 doesnt preserve the read order from fastq file
+        bwa_tool=config["bwa_tool"],
+        trim_cmd=" | fastx_trimmer -f 8" if not config["skip_filter_reads"] else ""
     log:
         fastx=output_dict["log"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{fileprefix}.fastx.log",
         map=output_dict["log"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{fileprefix}.map.log",
@@ -35,7 +36,7 @@ rule bwa_map: #
     threads: parameters["threads"]["bwa_map"]
     shell:
         " {params.bwa_tool} mem -SP5M -t {threads} -R  \'@RG\\tID:{params.id}\\tPU:x\\tSM:{params.id}\\tPL:illumina\\tLB:x\' "
-        " {input.reference} <(zcat {input.fastq} | fastx_trimmer -f 8 2>{log.fastx}) 2>{log.map} |"
+        " {input.reference} <(zcat {input.fastq} {params.trim_cmd} 2>{log.fastx}) 2>{log.map} |"
         " filter_five_end.pl 2>{log.filter} | samtools view -Sb - > {output.bam} 2>{log.sort} "
 
 rule bam_merge_pairs:

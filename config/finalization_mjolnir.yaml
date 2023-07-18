@@ -193,7 +193,7 @@
 "custom_finalization_stages": []
 
 "skip_read_qc": False
-"skip_filter_reads": False
+"skip_filter_reads": True
 "skip_busco": False
 "skip_gcp": False
 "skip_fcs": False

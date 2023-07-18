@@ -960,7 +960,7 @@ if "curation" in config["stage_list"]:
                                 assembly_stage=[stage_dict["curation"]["prev_stage"]],
                                 haplotype=stage_dict[prev_stage]["parameters"][stage_dict["curation"]["parameters"][current_parameter_label]["prev_parameters"]]["haplotype_list"],
                                 genome_prefix=[config["genome_prefix"], ],
-                                phasing_kmer_length=[stage_dict["curation"]["parameters"][current_parameter_label]["option_set"]["phasing_kmer_length"]],
+                                phasing_kmer_length=["31"],# [stage_dict["curation"]["parameters"][current_parameter_label]["option_set"]["phasing_kmer_length"]],
                                 parameters=[stage_dict["curation"]["parameters"][current_parameter_label]["prev_parameters"]],
                                 ) for current_parameter_label in stage_dict["curation"]["parameters"]]
 

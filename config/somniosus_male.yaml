@@ -198,6 +198,8 @@
 "skip_higlass": True
 "skip_variantcalling": True
 "skip_hic_file": False
+
+"create_hic_file_during_curation": False
 #"adaptor_scan": True
 #"fcs_gx_scan": True
 # Allowed modes:

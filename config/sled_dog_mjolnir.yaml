@@ -24,9 +24,9 @@
             "in_memory":    True
         "nt":
             "path":         "/projects/mjolnir1/data/databases/kraken2/nt/20230502/" # add path to nt database
-            "memory_mb":    500000
+            "memory_mb":    550000
             "threads":      30
-            "time":         "03:00:00"
+            "time":         "05:00:00"
             "in_memory":    True
     "fcs":
         "fcs_gx":

@@ -957,7 +957,7 @@ if "curation" in config["stage_list"]:
 
     if config["create_hic_file_during_curation"]:
         results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.hic",
-                                assembly_stage=[stage_dict["hic_scaffolding"]["prev_stage"]],
+                                assembly_stage=[stage_dict["curation"]["prev_stage"]],
                                 haplotype=stage_dict[prev_stage]["parameters"][stage_dict["curation"]["parameters"][current_parameter_label]["prev_parameters"]]["haplotype_list"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 phasing_kmer_length=[stage_dict["curation"]["parameters"][current_parameter_label]["option_set"]["phasing_kmer_length"]],

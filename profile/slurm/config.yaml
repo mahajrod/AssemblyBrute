@@ -1,4 +1,4 @@
-jobs: 200
+jobs: 100
 use-conda: false
 restart-times: 1
 cluster: "sbatch -t {resources.time} --mem={resources.mem} -c {resources.cpus} --parsable -o {log.cluster_log} -e {log.cluster_err}"

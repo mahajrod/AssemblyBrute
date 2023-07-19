@@ -1,5 +1,5 @@
 localrules: create_links_for_yahs_files
-ruleorder: create_links_for_yahs_files > juicer_tools_pre
+#ruleorder: create_links_for_yahs_files > juicer_tools_pre
 rule yahs: #
     input:
         #hic_qc=lambda wildcards: expand(out_dir_path / "{0}/{1}/{2}/alignment/{3}/{4}.{0}.{3}.{2}.rmdup.inter_{5}.txt".format(stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..yahs_" + wildcards.hic_scaffolding_parameters]["prev_stage"],
@@ -139,7 +139,7 @@ rule create_links_for_yahs_files: #
         liftover_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.liftover.agp",
         assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.assembly",
     output:
-        hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters, [^/]+}/{genome_prefix}.hic_scaffolding.{haplotype}.hic",
+        hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, [^/]+}.hic",
         liftover_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.liftover.agp",
         assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.assembly",
     log:

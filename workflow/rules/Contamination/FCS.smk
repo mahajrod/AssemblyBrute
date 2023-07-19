@@ -89,8 +89,9 @@ rule remove_fcs_contaminants: #
         "       --output {output.fasta} --contam-fasta-out {output.contaminant_fasta} > {log.std} 2>&1; "
         "       rm -rf  ${{TMPDIR}} ${{SINGULARITYENV_TMPDIR}} ${{SINGULARITYENV_SQLITE_TMPDIR}}; "
         " else "
-        "       cp {input.fasta} {output.fasta} > {log.cp} 2>&1;"
+        "       cp -f {input.fasta} {output.fasta} > {log.cp} 2>&1; "
         " fi; "
+
 
 rule fcs_adaptor: #
     priority: 2000

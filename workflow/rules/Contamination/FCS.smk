@@ -2,7 +2,7 @@
 rule fcs: #
     priority: 1000
     input:
-        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
+        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.fasta",
         db=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["path"],
         image=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["image_path"],
     output:
@@ -15,7 +15,7 @@ rule fcs: #
     log:
         std=output_dict["log"]  / "fcs.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{database}.log",
         cluster_log=output_dict["cluster_log"] / "fcs.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{database}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "fcs.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{database}.err"
+        cluster_err=output_dict["cluster_error"] / "fcs.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{database}.cluster.err"
     benchmark:
         output_dict["benchmark"]  / "fcs.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{database}.benchmark.txt"
     conda:
@@ -27,12 +27,12 @@ rule fcs: #
         fcs=lambda wildcards: 1 if wildcards.database == "fcs_gx" else 0
     threads: lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["threads"],
 
-    shell:
+    shell: # as report(summary) might be modified manually, original version is backuped with .original extension
         " OUTDIR=`dirname {output.taxonomy}`; "
         " OUTDIR=`realpath -s ${{OUTDIR}}`; "
-        " TMPDIR=${{OUTDIR}}'/tmp/'; "
-        " SINGULARITYENV_TMPDIR=${{OUTDIR}}'/singularity/'; "
-        " SINGULARITYENV_SQLITE_TMPDIR=${{OUTDIR}}'/singularity_sqlite/'; "
+        " TMPDIR=${{OUTDIR}}'/tmp_{wildcards.database}/'; "
+        " SINGULARITYENV_TMPDIR=${{OUTDIR}}'/singularity_{wildcards.database}/'; "
+        " SINGULARITYENV_SQLITE_TMPDIR=${{OUTDIR}}'/singularity_sqlite_{wildcards.database}/'; "
         " mkdir -p ${{TMPDIR}} ${{SINGULARITYENV_TMPDIR}} ${{SINGULARITYENV_SQLITE_TMPDIR}}; "
         " NUM_CORES={threads}; "
         " export FCS_DEFAULT_IMAGE={input.image}; "
@@ -40,60 +40,62 @@ rule fcs: #
         " workflow/external_tools/fcs-gx/fcs.py  screen genome --fasta {input.fasta} --out-dir `dirname {output.taxonomy}` --tax-id {params.tax_id} --gx-db {input.db} > {log.std} 2>&1; "
         " REPORT={output.taxonomy}; "
         " SUMMARY={output.summary}; "
+        " cp ${{REPORT%.{wildcards.database}.taxonomy}}.{params.tax_id}.{wildcards.database}_report.txt ${{SUMMARY}}.original; "
         " mv ${{REPORT%.{wildcards.database}.taxonomy}}.{params.tax_id}.{wildcards.database}_report.txt ${{SUMMARY}}; "
         " mv ${{SUMMARY%.{wildcards.database}.summary}}.{params.tax_id}.taxonomy.rpt ${{REPORT}}; "
-        " rm -rf  ${{TMPDIR}} ${{SINGULARITYENV_TMPDIR}} ${{SINGULARITYENV_SQLITE_TMPDIR}};"
-"""
-rule extract_fcs_contaminants: #
+        " rm -rf  ${{TMPDIR}} ${{SINGULARITYENV_TMPDIR}} ${{SINGULARITYENV_SQLITE_TMPDIR}}; "
+
+rule remove_fcs_contaminants: #
     priority: 1000
     input:
-        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
-        db=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["path"],
-        image=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["image_path"],
+        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.fasta",
+        image=lambda wildcards: config["allowed_databases"]["fcs"][config["final_fcs_db"]]["image_path"],
+        fcs_report=(out_dir_path / ("{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs/%s/{genome_prefix}.{assembly_stage}.{haplotype}.%s.summary" % (config["final_fcs_db"], config["final_fcs_db"]))) if not config["skip_fcs"] else []
     output:
-        report=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.{database}.taxonomy",
-        summary=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.{database}.summary"
-        #report=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.{tax_id}.taxonomy.txt",
-        #summary=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.{tax_id}.fcs_gx_report.txt"
+        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
+        contaminant_fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.contaminant.fasta"
     params:
-        tax_id=config["tax_id"]
+        skip="skip" if config["skip_fcs"] else "filter"
     log:
-        std=output_dict["log"]  / "fcs.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{database}.log",
-        cluster_log=output_dict["cluster_log"] / "fcs.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{database}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "fcs.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{database}.err"
+        std=output_dict["log"]  / "remove_fcs_contaminants.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.log",
+        cp=output_dict["log"]  / "remove_fcs_contaminants.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cp.log",
+        cluster_log=output_dict["cluster_log"] / "remove_fcs_contaminants.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "remove_fcs_contaminants.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "fcs.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{database}.benchmark.txt"
+        output_dict["benchmark"]  / "remove_fcs_contaminants.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
         config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
     resources:
-        cpus=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["threads"],
-        time=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["time"],
-        mem=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["memory_mb"],
-        fcs=lambda wildcards: 1 if wildcards.database == "fcs_gx" else 0
-    threads: lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["threads"],
+        cpus=parameters["threads"]["remove_fcs_contaminants"],
+        time=parameters["time"]["remove_fcs_contaminants"],
+        mem=parameters["memory_mb"]["remove_fcs_contaminants"],
+        fcs=1
+    threads: parameters["threads"]["remove_fcs_contaminants"],
 
     shell:
-        " OUTDIR=`dirname {output.report}`; "
-        " OUTDIR=`realpath -s ${{OUTDIR}}`; "
-        " TMPDIR=${{OUTDIR}}'/tmp/'; "
-        " SINGULARITYENV_TMPDIR=${{OUTDIR}}'/singularity/'; "
-        " SINGULARITYENV_SQLITE_TMPDIR=${{OUTDIR}}'/singularity_sqlite/'; "
-        " mkdir -p ${{TMPDIR}} ${{SINGULARITYENV_TMPDIR}} ${{SINGULARITYENV_SQLITE_TMPDIR}}; "
-        " NUM_CORES={threads}; "
-        " export FCS_DEFAULT_IMAGE={input.image}; "
-        " TMPDIR=${{TMPDIR}} SINGULARITYENV_TMPDIR=${{SINGULARITYENV_TMPDIR}} SINGULARITYENV_SQLITE_TMPDIR=${{SINGULARITYENV_SQLITE_TMPDIR}} "
-        " fcs.py  screen genome --fasta {input.fasta} --out-dir `dirname {output.report}` --tax-id {params.tax_id} --gx-db {input.db} > {log.std} 2>&1; "
-        " REPORT={output.report}; "
-        " SUMMARY={output.summary}; "
-        " mv ${{REPORT%.{wildcards.database}.taxonomy}}.{params.tax_id}.{wildcards.database}_report.txt ${{REPORT}}; "
-        " mv ${{SUMMARY%.{wildcards.database}.summary}}.{params.tax_id}.taxonomy.rpt ${{SUMMARY}}; "
-        " rm -r  ${{TMPDIR}} ${{SINGULARITYENV_TMPDIR}} ${{SINGULARITYENV_SQLITE_TMPDIR}};"
-"""
+        " if [ '{params.skip}' = 'filter' ]; "
+        " then "
+        "       OUTDIR=`dirname {output.fasta}`; "
+        "       OUTDIR=`realpath -s ${{OUTDIR}}`; "
+        "       TMPDIR=${{OUTDIR}}'/tmp/'; "
+        "       SINGULARITYENV_TMPDIR=${{OUTDIR}}'/singularity/'; "
+        "       SINGULARITYENV_SQLITE_TMPDIR=${{OUTDIR}}'/singularity_sqlite/'; "
+        "       mkdir -p ${{TMPDIR}} ${{SINGULARITYENV_TMPDIR}} ${{SINGULARITYENV_SQLITE_TMPDIR}}; "
+        "       NUM_CORES={threads}; "
+        "       export FCS_DEFAULT_IMAGE={input.image}; "
+        "       cat {input.fasta} | "
+        "       TMPDIR=${{TMPDIR}} SINGULARITYENV_TMPDIR=${{SINGULARITYENV_TMPDIR}} SINGULARITYENV_SQLITE_TMPDIR=${{SINGULARITYENV_SQLITE_TMPDIR}} "
+        "       workflow/external_tools/fcs-gx/fcs.py clean genome --action-report {input.fcs_report} "
+        "       --output {output.fasta} --contam-fasta-out {output.contaminant_fasta} > {log.std} 2>&1; "
+        "       rm -rf  ${{TMPDIR}} ${{SINGULARITYENV_TMPDIR}} ${{SINGULARITYENV_SQLITE_TMPDIR}}; "
+        " else "
+        "       cp {input.fasta} {output.fasta} > {log.cp} 2>&1;"
+        " fi; "
 
 rule fcs_adaptor: #
     priority: 2000
     input:
-        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
+        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.fasta",
         #db=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["path"],
         image=lambda wildcards: config["allowed_databases"]["fcs_adaptor"][wildcards.database]["image_path"],
     output:

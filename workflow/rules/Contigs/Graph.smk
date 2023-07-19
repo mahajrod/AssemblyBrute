@@ -1,14 +1,14 @@
 rule gfa2fasta:
     input:
-        gfa=output_dict["contig"] / "{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.gfa"
+        gfa="{gra_prefix}.gfa"
     output:
-        fasta=output_dict["contig"] / "{parameters}/{genome_prefix}.{assembly_stage}.{haplotype,[^.]+}.fasta"
+        fasta="{gra_prefix}.fasta"
     log:
-        std=output_dict["log"] / "gfa2fasta.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.log",
-        cluster_log=output_dict["cluster_log"] / "gfa2fasta.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "gfa2fasta.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.err"
+        std="{gra_prefix}.gfa2fasta.log",
+        cluster_log="{gra_prefix}.gfa2fasta.cluster.log",
+        cluster_err="{gra_prefix}.gfa2fasta.cluster.err"
     benchmark:
-        output_dict["benchmark"] / "gfa2fasta.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+        "{gra_prefix}.gfa2fasta.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -22,17 +22,16 @@ rule gfa2fasta:
 
 rule get_length_and_coverage_from_hifiasm_graph:
     input:
-        gfa=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.{assembly_stage}.{haplotype}.gfa"
+        gfa="{gra_prefix}.gfa"
     output:
-        cov=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.{assembly_stage}.{haplotype,[^.]+}.gfa.cov",
-        len_cov=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.{assembly_stage}.{haplotype,[^.]+}.gfa.lencov"
+        cov="{gra_prefix}.gfa.cov",
+        len_cov="{gra_prefix}.gfa.lencov"
     log:
-        std=output_dict["log"] / "gfa2fasta.{assembly_stage}.hifiasm_{contig_options}.{genome_prefix}.{haplotype}.log",
-        cut=output_dict["log"] / "gfa2fasta.{assembly_stage}.hifiasm_{contig_options}.{genome_prefix}.{haplotype}.cut.log",
-        cluster_log=output_dict["cluster_log"] / "gfa2fasta.{assembly_stage}.hifiasm_{contig_options}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "gfa2fasta.{assembly_stage}.hifiasm_{contig_options}.{genome_prefix}.{haplotype}.cluster.err"
+        std="{gra_prefix}.get_length_and_coverage_from_hifiasm_graph.log",
+        cluster_log="{gra_prefix}.get_length_and_coverage_from_hifiasm_graph.cluster.log",
+        cluster_err="{gra_prefix}.get_length_and_coverage_from_hifiasm_graph.cluster.err"
     benchmark:
-        output_dict["benchmark"] / "gfa2fasta.{assembly_stage}.hifiasm_{contig_options}.{genome_prefix}.{haplotype}.benchmark.txt"
+        "{gra_prefix}.get_length_and_coverage_from_hifiasm_graph.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -43,5 +42,5 @@ rule get_length_and_coverage_from_hifiasm_graph:
         parameters["threads"]["get_coverage_from_hifiasm_graph"]
     shell:
          " workflow/scripts/extract_length_and_coverage_from_hifiasm_gfa.bash {input.gfa} > {output.len_cov} 2>{log.std}; "
-         " cut -f 1,3 {output.len_cov} > {output.cov} 2>{log.cut};"
+         " cut -f 1,3 {output.len_cov} > {output.cov} 2>>{log.std};"
 

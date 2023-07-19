@@ -45,6 +45,7 @@
             "time":         "01:00:00"
             "in_memory":    True
             "taxonomy":     "eukaryota"
+"final_fcs_db": "fcs_gx" # this database will be used for the filtration of the contigs if skip_fcs is False
 
 "tool_containers":
     "rapid_telomere":  "/projects/mjolnir1/people/xsg178/soft/rapid-curation/rapid_hic_software/runTelo.sif"

@@ -1,4 +1,28 @@
+rule bwa_index:
+    input:
+        fasta="{fasta_prefix}.fasta"
+    output:
+        index="{fasta_prefix}.fasta%s" % (".bwt" if config["bwa_tool"] == "bwa" else ".bwt.2bit.64"), #  or (config["other_tool_option_sets"]["mapping_pipeline"] == "arima")
+    params:
+        bwa_tool=config["bwa_tool"] # if config["other_tool_option_sets"]["mapping_pipeline"] != "arima" else "bwa",
+    log:
+        std="{fasta_prefix}.bwa_index.log",
+        cluster_log="{fasta_prefix}.bwa_index.cluster.log",
+        cluster_err="{fasta_prefix}.bwa_index.cluster.err"
+    benchmark:
+        "{fasta_prefix}.bwa_index.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["bwa_index"] ,
+        time=parameters["time"]["bwa_index"],
+        mem=parameters["memory_mb"]["bwa_index"]
+    threads: parameters["threads"]["bwa_index"]
 
+    shell:
+        " {params.bwa_tool} index {input.fasta} 1>{log.std} 2>&1;"
+
+"""
 rule bwa_index:
     input:
         fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
@@ -22,6 +46,7 @@ rule bwa_index:
 
     shell:
         " {params.bwa_tool} index {input.fasta} 1>{log.std} 2>&1;"
+"""
 
 rule ref_faidx:
     input:
@@ -48,15 +73,15 @@ rule ref_faidx:
 
 rule ref_dict:
     input:
-        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
+        fasta="{fasta_prefix}.fasta"
     output:
-        dict=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.dict"
+        dict="{fasta_prefix}.dict"
     log:
-        std=output_dict["log"]  / "ref_dict.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.log",
-        cluster_log=output_dict["cluster_log"] / "ref_dict.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "ref_dict.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.err"
+        std="{fasta_prefix}.ref_dict.log",
+        cluster_log="{fasta_prefix}.ref_dict.cluster.log",
+        cluster_err="{fasta_prefix}.ref_dict.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "ref_dict.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}..benchmark.txt"
+        "{fasta_prefix}.ref_dict.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

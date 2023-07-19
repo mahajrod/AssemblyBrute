@@ -75,9 +75,9 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         primary_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.hap1.p_ctg.gfa",
         alternative_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.hap2.p_ctg.gfa",
         alt_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.a_ctg.gfa",
-        primary_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hap1.gfa",
-        alternative_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hap2.gfa",
-        alt_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.alt.gfa",
+        primary_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hap1.unfiltered.gfa",
+        alternative_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hap2.unfiltered.gfa",
+        alt_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.alt.unfiltered.gfa",
     params:
         purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge level"],
         ploidy=config["ploidy"],
@@ -148,8 +148,8 @@ rule hifiasm_hifi:
     output:
         primary_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.p_ctg.gfa",
         alt_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.a_ctg.gfa",
-        primary_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hap0.gfa",
-        alt_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.alt0.gfa",
+        primary_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hap0.unfiltered.gfa",
+        alt_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.alt0.unfiltered.gfa",
     params:
         purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge level"],
         ploidy=config["ploidy"],

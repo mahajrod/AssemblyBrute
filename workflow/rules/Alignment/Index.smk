@@ -25,16 +25,16 @@ rule bwa_index:
 
 rule ref_faidx:
     input:
-        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
+        fasta="{fasta_prefix}.fasta"
     output:
-        fai=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.fai",
+        fai="{fasta_prefix}.fasta.fai",
         #fai_alias=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.fai"
     log:
-        std=output_dict["log"]  / "ref_faidx.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.log",
-        cluster_log=output_dict["cluster_log"] / "ref_faidx.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "ref_faidx.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.err"
+        std="{fasta_prefix}.ref_faidx.log",
+        cluster_log="{fasta_prefix}.ref_faidx.cluster.log",
+        cluster_err="{fasta_prefix}.ref_faidx.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "ref_faidx.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+        "{fasta_prefix}.ref_faidx.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -44,7 +44,7 @@ rule ref_faidx:
     threads: parameters["threads"]["ref_faidx"]
 
     shell:
-        " samtools faidx -o {output.fai} {input.fasta} >{log.std} 2>&1;"
+        " samtools faidx -o {output.fai} {input.fasta} > {log.std} 2>&1;"
 
 rule ref_dict:
     input:

@@ -1,6 +1,7 @@
 import pandas as pd
 
 localrules: create_curation_input_files, select_long_scaffolds
+ruleorder: create_curation_input_files > ref_faidx
 
 def get_hic_bed_file(wildcards):
     #print(stage_dict["curation"]["prev_stage"]

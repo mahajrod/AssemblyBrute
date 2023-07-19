@@ -61,11 +61,11 @@ rule yahs_juicer_pre: #
         bin=rules.yahs.output.bin,
         agp=rules.yahs.output.agp
     output:
-        links_bed=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, [^./]+}.bed",
-        liftover_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, [^./]+}.liftover.agp",
-        assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, [^./]+}.assembly",
-        assembly_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, [^./]+}.assembly.agp",
-        log=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, [^./]+}.log",
+        links_bed=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^./]+}/scaffolding/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.bed",
+        liftover_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^./]+}/scaffolding/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.liftover.agp",
+        assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^./]+}/scaffolding/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.assembly",
+        assembly_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.assembly.agp",
+        log=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^./]+}/scaffolding/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.log",
     log:
         #std=output_dict["log"]  / "yahs_juicer_pre.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.log",
         mv=output_dict["log"]  / "yahs_juicer_pre.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.mv.log",

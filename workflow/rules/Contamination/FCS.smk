@@ -91,9 +91,8 @@ rule remove_fcs_contaminants: #
         "       rm -rf  ${{TMPDIR}} ${{SINGULARITYENV_TMPDIR}} ${{SINGULARITYENV_SQLITE_TMPDIR}}; "
         " else "
         "       cp -f {input.fasta} {output.fasta} > {log.cp} 2>&1; "
-        "       echo 'AAAAA'; "
+        "       touch {output.contaminant_fasta} >> {log.cp} 2>&1; "
         " fi; "
-        " echo 'BBBBBBB'; "
 
 
 rule fcs_adaptor: #

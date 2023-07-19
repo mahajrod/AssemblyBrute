@@ -3,6 +3,7 @@ rule bwa_index:
         fasta="{fasta_prefix}.fasta"
     output:
         index="{fasta_prefix}.fasta%s" % (".bwt" if config["bwa_tool"] == "bwa" else ".bwt.2bit.64"), #  or (config["other_tool_option_sets"]["mapping_pipeline"] == "arima")
+        index_ann="{fasta_prefix}.fasta.ann"
     params:
         bwa_tool=config["bwa_tool"] # if config["other_tool_option_sets"]["mapping_pipeline"] != "arima" else "bwa",
     log:

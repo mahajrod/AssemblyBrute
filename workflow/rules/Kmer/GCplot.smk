@@ -48,12 +48,12 @@ rule gc_plot:
     params:
         ploidy=config["ploidy"],
     log:
-        gc_count=output_dict["log"] / "gc_plot.{datatype}/{stage}/gcp/{datatype}.{stage}.{kmer_length}.L{min_coverage}.log",
-        meryl=output_dict["log"] / "gc_plot.{datatype}/{stage}/gcp/{datatype}.{stage}.{kmer_length}.L{min_coverage}.log",
-        cluster_log=output_dict["cluster_log"] / "gc_plot.{datatype}/{stage}/gcp/{datatype}.{stage}.{kmer_length}.L{min_coverage}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "gc_plot.{datatype}/{stage}/gcp/{datatype}.{stage}.{kmer_length}.L{min_coverage}.cluster.err"
+        gc_count=output_dict["log"] / "gc_plot.{datatype}.{stage}.{kmer_length}.L{min_coverage}.log",
+        meryl=output_dict["log"] / "gc_plot.{datatype}.{stage}.{stage}.{kmer_length}.L{min_coverage}.log",
+        cluster_log=output_dict["cluster_log"] / "gc_plot.{datatype}.{datatype}.{stage}.{kmer_length}.L{min_coverage}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "gc_plot.{datatype}.{datatype}.{stage}.{kmer_length}.L{min_coverage}.cluster.err"
     benchmark:
-        output_dict["benchmark"] / "gc_plot.{datatype}/{stage}/gcp/{datatype}.{stage}.{kmer_length}.L{min_coverage}.benchmark.txt"
+        output_dict["benchmark"] / "gc_plot.{datatype}.{stage}.{kmer_length}.L{min_coverage}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

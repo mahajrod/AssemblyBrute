@@ -140,8 +140,8 @@ rule create_links_for_yahs_files: #
         assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.assembly",
     output:
         hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, [^/]+}.hic",
-        liftover_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.liftover.agp",
-        assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.assembly",
+        liftover_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{genome_prefix}.hic_scaffolding.{haplotype}.liftover.agp",
+        assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{genome_prefix}.hic_scaffolding.{haplotype}.assembly",
     log:
         ln=output_dict["log"]  / "create_links_for_yahs_files.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.ln.log",
         cluster_log=output_dict["cluster_log"] / "create_links_for_yahs_files.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.log",

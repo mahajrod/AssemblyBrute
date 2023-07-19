@@ -1,3 +1,4 @@
+ruleorder: remove_fcs_contaminants > gfa2fasta
 
 rule fcs: #
     priority: 1000

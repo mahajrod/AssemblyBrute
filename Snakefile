@@ -750,52 +750,12 @@ if "hic_scaffolding" in config["stage_list"]:
                         ]
 
     results_list += [
-                     #*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{resolution}.map.{ext}",
-                     #       genome_prefix=[config["genome_prefix"], ],
-                     #       assembly_stage=[prev_stage,],
-                     #       haplotype=stage_dict[prev_stage]["parameters"][stage_dict["hic_scaffolding"]["parameters"][current_parameter_label]["prev_parameters"]]["haplotype_list"],
-                     #       phasing_kmer_length=[stage_dict["hic_scaffolding"]["parameters"][current_parameter_label]["option_set"]["phasing_kmer_length"]], #[stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["phasing_kmer_length"] for parameter_label in stage_dict["hic_scaffolding"]["parameters"]],
-                     #       parameters=[stage_dict["hic_scaffolding"]["parameters"][current_parameter_label]["prev_parameters"]],
-                     #       resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
-                     #       ext=parameters["tool_options"]["pretextsnapshot"]["format"])  for current_parameter_label in stage_dict["hic_scaffolding"]["parameters"]],
-                     #*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{resolution}.map.{ext}",
-                     #       genome_prefix=[config["genome_prefix"], ],
-                     #       assembly_stage=["hic_scaffolding",],
-                     #       haplotype=stage_dict["hic_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
-                     #       phasing_kmer_length=[stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["phasing_kmer_length"]], #[stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["phasing_kmer_length"]],
-                     #       parameters=[parameters_label],
-                     #       resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
-                     #       ext=parameters["tool_options"]["pretextsnapshot"]["format"]) for parameters_label in stage_dict["hic_scaffolding"]["parameters"]],
-                    #expand(out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam",
-                    #       phasing_kmer_length=[31],
-                    #       fileprefix=list(map(lambda s: s[:-1] + "_1", input_file_prefix_dict["hic"])) + list(map(lambda s: s[:-1] + "_2", input_file_prefix_dict["hic"])) ,
-                    #       genome_prefix=[config["genome_prefix"], ],
-                    #       assembly_stage=[config["phasing_stage"],],
-                    #       haplotype=haplotype_list,
-                    #       parameters=stage_dict[config["phasing_stage"]]["parameters"]
-                    #       ),
-                    #expand(out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam",
-                    #       phasing_kmer_length=["NA"],
-                    #       fileprefix=input_file_prefix_dict["hic"],
-                    #       genome_prefix=[config["genome_prefix"], ],
-                    #       assembly_stage=[config["phasing_stage"],],
-                    #       haplotype=haplotype_list,
-                    #       parameters=stage_dict[config["phasing_stage"]]["parameters"]
-                    #       ),
-                    #expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.bam",
-                    #       phasing_kmer_length=["NA", 31],
-                    #       pairprefix=input_pairprefix_dict["hic"],
-                    #       genome_prefix=[config["genome_prefix"], ],
-                    #       assembly_stage=[config["phasing_stage"],],
-                    #       haplotype=haplotype_list,
-                    #       parameters=stage_dict[config["phasing_stage"]]["parameters"]),
-                    #
-                    #expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
-                    #       phasing_kmer_length=["NA", 31],
-                    #       genome_prefix=[config["genome_prefix"], ],
-                    #       assembly_stage=[config["phasing_stage"],],
-                    #       haplotype=haplotype_list,
-                    #       parameters=stage_dict[config["phasing_stage"]]["parameters"]),
+                    [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam.stats",
+                            genome_prefix=[config["genome_prefix"], ],
+                            assembly_stage=[prev_stage,],
+                            haplotype=stage_dict[prev_stage]["parameters"][stage_dict["hic_scaffolding"]["parameters"][current_parameter_label]["prev_parameters"]]["haplotype_list"],
+                            phasing_kmer_length=[stage_dict["hic_scaffolding"]["parameters"][current_parameter_label]["option_set"]["phasing_kmer_length"]], #[stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["phasing_kmer_length"] for parameter_label in stage_dict["hic_scaffolding"]["parameters"]],
+                            parameters=[stage_dict["hic_scaffolding"]["parameters"][current_parameter_label]["prev_parameters"]],) for current_parameter_label in stage_dict["hic_scaffolding"]["parameters"]],
                     *[expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=["hic_scaffolding", ],
@@ -1010,6 +970,7 @@ if "purge_dups" in config["stage_list"]:
 include: "workflow/rules/HiC/ReadPhasing.smk"
 
 include: "workflow/rules/Alignment/Index.smk"
+include: "workflow/rules/Alignment/Stats.smk"
 
 if ("hic_scaffolding" in config["stage_list"]) or ("curation" in config["stage_list"]) or ("gap_closing" in config["stage_list"]):
     if config["other_tool_option_sets"]["mapping_pipeline"] == "arima":

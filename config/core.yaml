@@ -692,6 +692,9 @@
                         "model": "PACBIO"
                     "hifi":
                         "model": "PACBIO"
+            "samtools_stats":
+                "default":
+                    "max_insert_size": 10000000000  # 10^10,so high value was set for hic data
     "micro": # < 15 Mbp, yeasts and bacteria
         "tool_options":
             "jellyfish":

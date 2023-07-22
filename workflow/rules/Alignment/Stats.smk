@@ -5,6 +5,8 @@ rule bam_stats:
     output:
         stats="{bam_prefix}.bam.stats"
         #fai_alias=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.fai"
+    params:
+        max_insert_size=parameters["tool_options"]["samtools_stats"]["max_insert_size"]
     log:
         std="{bam_prefix}.bam.stats.log",
         cluster_log="{bam_prefix}.bam_stats.cluster.log",
@@ -20,5 +22,5 @@ rule bam_stats:
     threads: parameters["threads"]["bam_stats"]
 
     shell:
-        " samtools stats -@ {threads} --insert-size {}  {input.bam} > {output.stats} >{log.std} 2>&1;"
+        " samtools stats -@ {threads} --insert-size {params.max_insert_size}  {input.bam} > {output.stats} >{log.std} 2>&1;"
 

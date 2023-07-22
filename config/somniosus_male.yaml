@@ -91,7 +91,7 @@
         - "unphased_reads"
     "yahs":
         - "phased_reads"
-        #- "unphased_reads"
+        - "unphased_reads"
     "threeddna":
         - "phased_reads"
         #- "unphased_reads"

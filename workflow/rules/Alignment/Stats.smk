@@ -22,5 +22,5 @@ rule bam_stats:
     threads: parameters["threads"]["bam_stats"]
 
     shell:
-        " samtools stats -@ {threads} --insert-size {params.max_insert_size}  {input.bam} > {output.stats} >{log.std} 2>&1;"
+        " samtools stats -@ {threads} --insert-size {params.max_insert_size}  {input.bam} > {output.stats} 2>{log.std}; "
 

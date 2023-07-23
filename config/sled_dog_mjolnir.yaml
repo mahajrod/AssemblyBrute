@@ -77,7 +77,7 @@
     "hifiasm":
          #- "l0primary"
          - "l1primary"
-         #- "l2primary"
+         - "l2primary"
          #- "l3primary"
          #- "l0primary_no_hic"
          #- "l1primary_no_hic"

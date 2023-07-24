@@ -73,7 +73,7 @@ rule remove_fcs_contaminants: #
         fcs=1
     threads: parameters["threads"]["remove_fcs_contaminants"],
 
-    shell:
+    shell: # || true was added as workaround to handle singularity issue with removal of rootfs after cmd
         " if [ '{params.skip}' = 'filter' ]; "
         " then "
         "       OUTDIR=`dirname {output.fasta}`; "
@@ -87,7 +87,7 @@ rule remove_fcs_contaminants: #
         "       cat {input.fasta} | "
         "       TMPDIR=${{TMPDIR}} SINGULARITYENV_TMPDIR=${{SINGULARITYENV_TMPDIR}} SINGULARITYENV_SQLITE_TMPDIR=${{SINGULARITYENV_SQLITE_TMPDIR}} "
         "       workflow/external_tools/fcs-gx/fcs.py clean genome --action-report {input.fcs_report} "
-        "       --output {output.fasta} --contam-fasta-out {output.contaminant_fasta} > {log.std} 2>&1; "
+        "       --output {output.fasta} --contam-fasta-out {output.contaminant_fasta} > {log.std} 2>&1 || true; "
         "       rm -rf  ${{TMPDIR}} ${{SINGULARITYENV_TMPDIR}} ${{SINGULARITYENV_SQLITE_TMPDIR}}; "
         " else "
         "       cp -f {input.fasta} {output.fasta} > {log.cp} 2>&1; "

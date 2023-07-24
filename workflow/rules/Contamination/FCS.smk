@@ -25,7 +25,7 @@ rule fcs: #
         cpus=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["threads"],
         time=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["time"],
         mem=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["memory_mb"],
-        fcs=lambda wildcards: 1 if wildcards.database == "fcs_gx" else 0
+        fcs=1
     threads: lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["threads"],
 
     shell: # as report(summary) might be modified manually, original version is backuped with .original extension,# || true was added as workaround to handle singularity issue with removal of rootfs after cmd
@@ -38,7 +38,7 @@ rule fcs: #
         " NUM_CORES={threads}; "
         " export FCS_DEFAULT_IMAGE={input.image}; "
         " TMPDIR=${{TMPDIR}} SINGULARITYENV_TMPDIR=${{SINGULARITYENV_TMPDIR}} SINGULARITYENV_SQLITE_TMPDIR=${{SINGULARITYENV_SQLITE_TMPDIR}} "
-        " workflow/external_tools/fcs-gx/fcs.py  screen genome --fasta {input.fasta} --out-dir `dirname {output.taxonomy}` --tax-id {params.tax_id} --gx-db {input.db} > {log.std} 2>&1 || true; "
+        " workflow/external_tools/fcs-gx/fcs.py  screen genome --fasta {input.fasta} --out-dir `dirname {output.taxonomy}` --tax-id {params.tax_id} --gx-db {input.db} > {log.std} 2>&1 ; "
         " REPORT={output.taxonomy}; "
         " SUMMARY={output.summary}; "
         " cp ${{REPORT%.{wildcards.database}.taxonomy}}.{params.tax_id}.{wildcards.database}_report.txt ${{SUMMARY}}.original; "
@@ -87,7 +87,7 @@ rule remove_fcs_contaminants: #
         "       cat {input.fasta} | "
         "       TMPDIR=${{TMPDIR}} SINGULARITYENV_TMPDIR=${{SINGULARITYENV_TMPDIR}} SINGULARITYENV_SQLITE_TMPDIR=${{SINGULARITYENV_SQLITE_TMPDIR}} "
         "       workflow/external_tools/fcs-gx/fcs.py clean genome --action-report {input.fcs_report} "
-        "       --output {output.fasta} --contam-fasta-out {output.contaminant_fasta} > {log.std} 2>&1 || true; "
+        "       --output {output.fasta} --contam-fasta-out {output.contaminant_fasta} > {log.std} 2>&1; "
         "       rm -rf  ${{TMPDIR}} ${{SINGULARITYENV_TMPDIR}} ${{SINGULARITYENV_SQLITE_TMPDIR}}; "
         " else "
         "       cp -f {input.fasta} {output.fasta} > {log.cp} 2>&1; "
@@ -122,7 +122,7 @@ rule fcs_adaptor: #
         cpus=lambda wildcards: config["allowed_databases"]["fcs_adaptor"][wildcards.database]["threads"],
         time=lambda wildcards: config["allowed_databases"]["fcs_adaptor"][wildcards.database]["time"],
         mem=lambda wildcards: config["allowed_databases"]["fcs_adaptor"][wildcards.database]["memory_mb"],
-        fcs_adaptor=1
+        fcs=1
     threads: lambda wildcards: config["allowed_databases"]["fcs_adaptor"][wildcards.database]["threads"],
 
     shell:

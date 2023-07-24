@@ -111,7 +111,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         parameters["threads"]["hifiasm"]
     shell:
          " OUTPUT_PREFIX={output.primary_alias}; "
-         " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.hap1.gfa}}; "
+         " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.hap1.unfiltered.gfa}}; "
          " OUT_DIR=`dirname ${{OUTPUT_PREFIX}}`; "
          " ln -sf ../../../{input.ec_bin} ${{OUT_DIR}}; "
          " ln -sf ../../../{input.ovlp_reverse_bin} ${{OUT_DIR}}; "
@@ -181,7 +181,7 @@ rule hifiasm_hifi:
         parameters["threads"]["hifiasm"]
     shell:
          " OUTPUT_PREFIX={output.primary_alias}; "
-         " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.hap0.gfa}}; "
+         " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.hap0.unfiltered.gfa}}; "
          " OUT_DIR=`dirname ${{OUTPUT_PREFIX}}`; "
          " ln -sf ../../../{input.ec_bin} ${{OUT_DIR}}; "
          " ln -sf ../../../{input.ovlp_reverse_bin} ${{OUT_DIR}}; "

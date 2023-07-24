@@ -28,7 +28,7 @@ rule fcs: #
         fcs=lambda wildcards: 1 if wildcards.database == "fcs_gx" else 0
     threads: lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["threads"],
 
-    shell: # as report(summary) might be modified manually, original version is backuped with .original extension
+    shell: # as report(summary) might be modified manually, original version is backuped with .original extension,# || true was added as workaround to handle singularity issue with removal of rootfs after cmd
         " OUTDIR=`dirname {output.taxonomy}`; "
         " OUTDIR=`realpath -s ${{OUTDIR}}`; "
         " TMPDIR=${{OUTDIR}}'/tmp_{wildcards.database}/'; "
@@ -38,7 +38,7 @@ rule fcs: #
         " NUM_CORES={threads}; "
         " export FCS_DEFAULT_IMAGE={input.image}; "
         " TMPDIR=${{TMPDIR}} SINGULARITYENV_TMPDIR=${{SINGULARITYENV_TMPDIR}} SINGULARITYENV_SQLITE_TMPDIR=${{SINGULARITYENV_SQLITE_TMPDIR}} "
-        " workflow/external_tools/fcs-gx/fcs.py  screen genome --fasta {input.fasta} --out-dir `dirname {output.taxonomy}` --tax-id {params.tax_id} --gx-db {input.db} > {log.std} 2>&1; "
+        " workflow/external_tools/fcs-gx/fcs.py  screen genome --fasta {input.fasta} --out-dir `dirname {output.taxonomy}` --tax-id {params.tax_id} --gx-db {input.db} > {log.std} 2>&1 || true; "
         " REPORT={output.taxonomy}; "
         " SUMMARY={output.summary}; "
         " cp ${{REPORT%.{wildcards.database}.taxonomy}}.{params.tax_id}.{wildcards.database}_report.txt ${{SUMMARY}}.original; "

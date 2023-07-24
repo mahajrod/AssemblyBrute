@@ -1,7 +1,7 @@
 ruleorder: remove_fcs_contaminants > gfa2fasta
 
 rule fcs: #
-    priority: 1000
+    priority: 10000
     input:
         fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.fasta",
         db=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["path"],
@@ -47,7 +47,7 @@ rule fcs: #
         " rm -rf  ${{TMPDIR}} ${{SINGULARITYENV_TMPDIR}} ${{SINGULARITYENV_SQLITE_TMPDIR}}; "
 
 rule remove_fcs_contaminants: #
-    priority: 1000
+    priority: 5000
     input:
         fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.fasta",
         image=lambda wildcards: config["allowed_databases"]["fcs"][config["final_fcs_db"]]["image_path"],

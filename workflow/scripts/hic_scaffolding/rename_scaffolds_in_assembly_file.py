@@ -34,7 +34,7 @@ with FileRoutines.metaopen(args.assembly_file, "r") as in_fd, FileRoutines.metao
         if line[0] == ">":
             line_list = line[1:].strip().split()
             line_list[0] = syn_df.loc[line_list[0], "syn"]
-            out_fd(">{0}\n".format(" ".join(line_list)))
+            out_fd.write(">{0}\n".format(" ".join(line_list)))
         else:
             out_fd.write(line)
 

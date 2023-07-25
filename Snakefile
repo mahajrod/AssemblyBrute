@@ -820,7 +820,6 @@ if "hic_scaffolding" in config["stage_list"]:
                                 ),
                          ]
 
-#print(parameters["tool_options"]["curation"])
 if "curation" in config["stage_list"]:
     prev_stage = stage_dict["curation"]["prev_stage"]
     curation_tool_list = config["stage_coretools"]["curation"]["default"]
@@ -868,12 +867,6 @@ if "curation" in config["stage_list"]:
                             step=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["step"]],
                             haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                             parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ("gap", "windowmasker", "trf", "gc") ],
-
-                     #*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.gap.bedgraph",
-                     #       genome_prefix=[config["genome_prefix"], ],
-                     #       assembly_stage=["curation", ],
-                     #       haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                     #       parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
                      [[expand(out_dir_path / "curation/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.coverage.win{window}.step{step}.png",
                             window=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"]["options"][window_step_set]["window"],
                             step=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"]["options"][window_step_set]["step"],
@@ -914,7 +907,7 @@ if "curation" in config["stage_list"]:
                                 haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                                 parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],]
 
-    """
+
     if config["create_hic_file_during_curation"]:
         results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.hic",
                                 assembly_stage=[stage_dict["curation"]["prev_stage"]],
@@ -923,7 +916,7 @@ if "curation" in config["stage_list"]:
                                 phasing_kmer_length=["31"],# [stage_dict["curation"]["parameters"][current_parameter_label]["option_set"]["phasing_kmer_length"]],
                                 parameters=[stage_dict["curation"]["parameters"][current_parameter_label]["prev_parameters"]],
                                 ) for current_parameter_label in stage_dict["curation"]["parameters"]]
-    """
+
 #----
 
 #---- Final rule ----

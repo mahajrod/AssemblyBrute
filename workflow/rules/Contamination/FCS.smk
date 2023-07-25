@@ -104,8 +104,8 @@ rule fcs_adaptor: #
         #db=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["path"],
         image=lambda wildcards: config["allowed_databases"]["fcs_adaptor"][wildcards.database]["image_path"],
     output:
-        report=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.{database}.report",
-        report_jsonl=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.{database}.report.jsonl",
+        report=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.{database}.report",
+        report_jsonl=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.{database}.report.jsonl",
         #summary=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.{database}.summary"
         #report=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.{tax_id}.taxonomy.txt",
         #summary=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.{tax_id}.fcs_gx_report.txt"

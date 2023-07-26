@@ -125,9 +125,9 @@
 
 "tool_manually_adjusted_features":
     "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions
-        "lower_threshold": 5
-        "haploid_diploid_threshold": 45
-        "upper_threshold": 135
+        "lower_threshold": null #5
+        "haploid_diploid_threshold": null # 45
+        "upper_threshold": null #135
 
 "ploidy": 2
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2

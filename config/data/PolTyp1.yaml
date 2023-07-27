@@ -137,8 +137,8 @@
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
 
-"species_name": "species species"
-"tax_id": 321072 #Polyboroides typus # necessary for contamination scan via FCS
+"species_name": "Polyboroides typus"
+"tax_id": 321072 # # necessary for contamination scan via FCS
 
 "database_set":
     "kraken2":

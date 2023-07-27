@@ -98,6 +98,7 @@ count_track_merged_df = create_track_from_df(busco_status_df, busco_color_dict, 
 busco_len_df = prepare_len_df(busco_status_df, output_prefix="{0}".format(args.output_prefix))
 
 informative_busco_status_df = get_informative_buscos(busco_status_df)
+informative_busco_status_df.to_csv("{0}.busco.informative.tsv".format(args.output_prefix), sep="\t", header=True, index=True)
 informative_len_df = prepare_len_df(informative_busco_status_df, output_prefix="{0}.informative".format(args.output_prefix))
 informative_count_track_merged_df = create_track_from_df(informative_busco_status_df, busco_color_dict,
                                                          output_prefix="{0}.informative".format(args.output_prefix))

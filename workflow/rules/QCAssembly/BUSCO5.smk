@@ -138,17 +138,22 @@ def get_busco_table_for_all_assemblies_in_chain_per_haplotype(wildcards):
                                                allow_missing=True,)
     return  busco_table_list
 
+def get_number_of_stages_in_chain(wildcards):
+    return len(get_parameters_for_all_stages_in_chain(wildcards.parameters))
+
+
 rule busco5_intersect_stages:
     priority: 500
     input:
         busco_tables=get_busco_table_for_all_assemblies_in_chain_per_haplotype,
         #out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype,[^.]+}.busco5.{busco_lineage}.full_table.tsv",
     params:
-        stages=lambda wildcards: ",".join(get_parameters_for_all_stages_in_chain(wildcards.parameters))
+        stages=lambda wildcards: ",".join(get_parameters_for_all_stages_in_chain(wildcards.parameters)),
     output:
         busco_legend=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.legend",
         busco_orderlist=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.orderlist",
         busco_merged_tsv=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.merged.tsv",
+        busco_informative_tsv=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.informative.tsv",
         busco_len=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.len",
         busco_counts_bedgraph=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.counts.bedgraph",
         busco_counts_png=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.png",

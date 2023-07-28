@@ -1,4 +1,5 @@
 localrules: create_fastq_links, create_links_for_draft, create_fasta_links
+ruleorder: preprocess_hic_fastq > create_fastq_links
 rule create_fastq_links:
     priority: 1000
     input:
@@ -22,6 +23,38 @@ rule create_fastq_links:
         parameters["threads"]["create_fastq_links"]
     shell:
          " ln -sf {input} {output} 2>{log.std}"
+
+rule preprocess_hic_fastq:
+    priority: 2000
+    input:
+        input_dir_path.resolve() / ("hic/fastq/{fileprefix}%s" %  config["fastq_extension"])
+    output:
+        #directory(output_dict["data"] / "/fastq/{datatype}/raw"),
+        output_dict["data"] / ("fastq/hic/raw/{fileprefix, [^/]+}%s" % config["fastq_extension"])
+    params:
+        hic_type=config["hic_enzyme_set"],
+        skip_trimming='skip' if config["skip_filter_reads"] else 'trim'
+    log:
+        std=output_dict["log"] / "preprocess_hic_fastq.{fileprefix}.log",
+        cluster_log=output_dict["cluster_log"] / "preprocess_hic_fastq.{fileprefix}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "preprocess_hic_fastq.{fileprefix}.cluster.err",
+    benchmark:
+        output_dict["benchmark"] / "preprocess_hic_fastq.{fileprefix}.benchmark.txt",
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["preprocess_hic_fastq"],
+        time=parameters["time"]["preprocess_hic_fastq"],
+        mem=parameters["memory_mb"]["preprocess_hic_fastq"],
+    threads:
+        parameters["threads"]["preprocess_hic_fastq"]
+    shell:
+         " if [ '{params.hic_type}' = 'Arima' -a '{params.skip_trimming}' = 'trim' ]; "
+         " then "
+         "      zcat {input} | fastx_trimmer -f 8 > {output} 2>{log.std}; "
+         " else "
+         "      ln -sf {input} {output} 2>{log.std}; "
+         " fi; "
 
 rule create_fasta_links:
     priority: 1000

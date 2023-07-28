@@ -17,7 +17,7 @@ rule bwa_map: #
     params:
         id="{0}_hic".format(config["genome_prefix"]),
         bwa_tool=config["bwa_tool"],
-        trim_cmd=" | fastx_trimmer -f 8" if not config["skip_filter_reads"] else ""
+        trim_cmd="" #" | fastx_trimmer -f 8" if not config["skip_filter_reads"] else "" # trimming was moved to preprocessing
     log:
         fastx=output_dict["log"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{fileprefix}.fastx.log",
         map=output_dict["log"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{fileprefix}.map.log",

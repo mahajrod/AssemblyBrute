@@ -62,8 +62,6 @@ rule busco5: # Downloading of busco datasets is performed by a different rule to
          " tar cf - ${{BUSCO_DIR}} | pigz -p {threads} > {output.tar_gz} 2>{log.pigz} ;"
          " rm -r ${{BUSCO_DIR}}; "
 
-
-
 rule busco5_intersect_haplotypes: # Downloading of busco datasets is performed by a different rule to avoid conflict between different instances of busco5
     priority: 500
     input:
@@ -137,10 +135,6 @@ def get_busco_table_for_all_assemblies_in_chain_per_haplotype(wildcards):
                                                #haplotype=haplotype_list,
                                                allow_missing=True,)
     return  busco_table_list
-
-def get_number_of_stages_in_chain(wildcards):
-    return len(get_parameters_for_all_stages_in_chain(wildcards.parameters))
-
 
 rule busco5_intersect_stages:
     priority: 500

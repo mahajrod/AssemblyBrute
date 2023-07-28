@@ -51,7 +51,7 @@ rule preprocess_hic_fastq:
     shell:
          " if [ '{params.hic_type}' = 'Arima' -a '{params.skip_trimming}' = 'trim' ]; "
          " then "
-         "      zcat {input} | fastx_trimmer -f 8 | gzip -c > {output} 2>{log.std}; "
+         "      zcat {input} | fastx_trimmer -f 8 | pigz -p {threads} > {output} 2>{log.std}; "
          " else "
          "      ln -sf {input} {output} 2>{log.std}; "
          " fi; "

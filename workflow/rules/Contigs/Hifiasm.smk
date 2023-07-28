@@ -58,8 +58,8 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         hifi=expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),
                     fileprefix=input_file_prefix_dict["hifi"],
                     allow_missing=True),
-        hic_forward=input_filedict["hic"][::2] if "hic" in input_filedict else [],
-        hic_reverse=input_filedict["hic"][1::2] if "hic" in input_filedict else [],
+        hic_forward=list(map(lambda s: output_dict["data"] / "fastq/hic/raw/" / s.name, input_filedict["hic"][::2])) if "hic" in input_filedict else [],
+        hic_reverse=list(map(lambda s: output_dict["data"] / "fastq/hic/raw/" / s.name, input_filedict["hic"][1::2])) if "hic" in input_filedict else [],
         nanopore=input_filedict["nanopore"] if "nanopore" in input_filedict else [], # TODO: test this option
         ec_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ec.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
                                                                                                           wildcards.genome_prefix),

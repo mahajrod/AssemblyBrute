@@ -134,9 +134,11 @@ rule pairtools_dedup:
         merged_pairsam_gz=rules.pairtools_merge.output.merged_pairsam_gz
     output:
         dedup_pairsam_gz=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.rmdup.pairsam.gz"),
-        dedup_pairsam_stats=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.rmdup.pairsam.stats"
+        dedup_pairsam_stats=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.rmdup.pairsam.stats",
+        dedup_pairsam_summary=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.rmdup.pairsam.summary"
     log:
         std=output_dict["log"] / "pairtools_dedup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.log",
+        summary=output_dict["log"] / "pairtools_dedup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.summary.log",
         cluster_log=output_dict["cluster_log"] / "pairtools_dedup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "pairtools_dedup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.err"
     benchmark:
@@ -150,7 +152,8 @@ rule pairtools_dedup:
     threads: parameters["threads"]["pairtools_dedup"]
     shell:
         " pairtools dedup --nproc-in {threads} --nproc-out {threads} --mark-dups --output-stats {output.dedup_pairsam_stats} "
-        "--output {output.dedup_pairsam_gz} {input.merged_pairsam_gz} > {log.std} 2>&1; "
+        " --output {output.dedup_pairsam_gz} {input.merged_pairsam_gz} > {log.std} 2>&1; "
+        " workflow/external_tools/Omni-C/get_qc.py -p {output.dedup_pairsam_stats} > {output.dedup_pairsam_summary} 2>{log.summary}; "
 
 rule pairtools_split:
     input:

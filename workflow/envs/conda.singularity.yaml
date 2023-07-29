@@ -1,6 +1,6 @@
 #---- Bioconda config ----
 #TODO: check tools and versions
-"name": "yggbase"
+"name": "singularity"
 "channels":
   - "bioconda"
   - "conda-forge"

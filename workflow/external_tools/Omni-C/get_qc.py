@@ -28,7 +28,7 @@ table.append(["Unmapped Read Pairs", unmapped_reads, f"{percent_unmapped}%"])
 #Single sided mapped reads
 single_sided_mapped_reads = int(output_dict["total_single_sided_mapped"])
 percent_single_sided_mapped = round(single_sided_mapped_reads*100.0/total_reads,2)
-unmapped_reads = format(single_sided_mapped_reads,",d")
+single_sided_mapped_reads = format(single_sided_mapped_reads,",d")
 table.append(["Single Side Mapped Read Pairs", single_sided_mapped_reads, f"{percent_single_sided_mapped}%"])
 
 #Mapped reads

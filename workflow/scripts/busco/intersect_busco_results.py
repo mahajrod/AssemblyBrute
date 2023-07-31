@@ -13,7 +13,7 @@ def create_track_from_series(series,):
     if series.empty:
         count_df = pd.DataFrame(columns=["scaffold", "start", "end", "status"])
     else:
-        print(series)
+        #print(series)
         prev_element = series.iloc[0]
         count_list = []
         counter = 1

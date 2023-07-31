@@ -55,7 +55,7 @@ rule bam_merge_pairs:
                                                                                                                                   wildcards.genome_prefix,
                                                                                                                                   wildcards.pairprefix,
                                                                                                                                   input_reverse_suffix_dict["hic"] if wildcards.phasing_kmer_length == "NA" else "_2")),
-        reference_fai=rules.ref_faidx.output.fai
+        reference_fai=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.fai"
     output:
         bam=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.bam"), # TODO: make_tem
     params:

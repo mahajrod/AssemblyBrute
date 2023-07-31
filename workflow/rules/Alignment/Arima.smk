@@ -13,7 +13,7 @@ rule bwa_map: #
                                                                                          config["fastq_extension"]
                                                                                          )
     output:
-        bam=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam"
+        bam=temp(out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam")
     params:
         id="{0}_hic".format(config["genome_prefix"]),
         bwa_tool=config["bwa_tool"],
@@ -57,7 +57,7 @@ rule bam_merge_pairs:
                                                                                                                                   input_reverse_suffix_dict["hic"] if wildcards.phasing_kmer_length == "NA" else "_2")),
         reference_fai=rules.ref_faidx.output.fai
     output:
-        bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.bam", # TODO: make_tem
+        bam=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.bam"), # TODO: make_tem
     params:
         min_mapq=parameters["tool_options"]["two_read_bam_combiner"]["mapq"],
         sort_threads=parameters["threads"]["samtools_sort"],
@@ -89,10 +89,10 @@ rule bam_merge_pairs:
 
 rule bam_merge_files:
     input:
-        bams=expand(rules.bam_merge_pairs.output.bam, #out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.filtered.{pairprefix}.bam",
+        bams=expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype,}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.bam", #out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.filtered.{pairprefix}.bam",
                     allow_missing=True,
                     pairprefix=input_pairprefix_dict["hic"]), #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        reference_fai=rules.ref_faidx.output.fai,
+        reference_fai=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.fai",
         reference=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
     output:
         bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.bam" # TODO: make temp

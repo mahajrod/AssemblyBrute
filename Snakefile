@@ -750,7 +750,7 @@ if "hic_scaffolding" in config["stage_list"]:
                         ]
 
     results_list += [
-                    [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam.stats",
+                    [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam.general_stats",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=[prev_stage,],
                             haplotype=stage_dict[prev_stage]["parameters"][stage_dict["hic_scaffolding"]["parameters"][current_parameter_label]["prev_parameters"]]["haplotype_list"],

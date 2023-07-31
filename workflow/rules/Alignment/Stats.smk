@@ -3,7 +3,7 @@ rule bam_stats:
     input:
         bam="{bam_prefix}.bam"
     output:
-        stats="{bam_prefix}.bam.stats"
+        stats="{bam_prefix}.bam.general_stats"
         #fai_alias=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.fai"
     params:
         max_insert_size=parameters["tool_options"]["samtools_stats"]["max_insert_size"]

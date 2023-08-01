@@ -24,7 +24,7 @@
             "in_memory":    True
         "nt":
             "path":         "/projects/mjolnir1/data/databases/kraken2/nt/20230502/" # add path to nt database
-            "memory_mb":    600000
+            "memory_mb":    500000
             "threads":      30
             "time":         "03:00:00"
             "in_memory":    True
@@ -97,10 +97,10 @@
         - "unphased_reads"
     "yahs":
         - "phased_reads"
-        #- "unphased_reads"
-    "threeddna":
+        - "unphased_reads"
+    "3ddna":
         - "phased_reads"
-        #- "unphased_reads"
+        - "unphased_reads"
     "curation":
         - "default"
     "assembly_qc":
@@ -121,7 +121,6 @@
     "telo_finder":              "default"   # Allowed: default
     "quast":                    "default"   # Allowed: default
     "minimap2":                 "default"   # Allowed: default
-    #"curation":                 "default"   # Allowed: default
     "two_read_bam_combiner":    "default"   # Allowed: default
     "pretextmap":               "default"   # Allowed: default
     "pretextsnapshot":          "default"   # Allowed: default
@@ -129,7 +128,7 @@
     "kat":                      "default"   # Allowed: default
     "juicer_tools_qc":          "default"   # Allowed: default
     "juicer_tools_pre":         "default"   # Allowed: default
-    "mapping_pipeline":         "arima"     # Allowed: arima, bwa_only, juicer, pairtools
+    "mapping_pipeline":         "bwa_only"  # Allowed: arima, bwa_only, juicer
     "trf":                      "default"
     "wga":                      "default"
     "select_long_scaffolds":    "default"
@@ -162,10 +161,7 @@
     "fcs":
         - "fcs_gx"
 
-"filtered_data":
-    - "hifi"
-    - "illumina"
-    - "nanopore"
+"filtered_data": [] # this stage expects already filtered input data
 
 "final_kmer_counter": "meryl" # pipeline allows usage of different kmer counter tools, but only one genomesize assessment could be used
 "final_kmer_length": 21 # pipeline allows usage of different kmer length, but only one genomesize assessment could be used
@@ -173,16 +169,21 @@
 "final_kmer_datatype": "hifi"
 "assembly_kmer_length":
     - 31 # kmer length to be used for phasing hic reads using assembled and purge_dupsed contigs
-"phasing_stage": "purge_dups"
+"phasing_stage": "draft_qc"
 
 "contig_datatype": "hifi"
-"hic_enzyme_set": "Arima"
+"gap_closing_datatype": "hifi"
+"hic_enzyme_set": "OmniC"
 "custom_enzyme_set": null # None
 
-"starting_point": "draft" # Allowed: "draft"
-"data_types": "hifi,hic" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
+"starting_point": "draft" #
+"data_types": "hifi,hic"  # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
 
-"mode": "finalization"                # Allowed: "preprocessing", "qc", "assembly"
+#-------- Options specific for starting point 'draft' ----------------
+"phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads
+#---------------------------------------------------------------------
+
+"mode": "finalization"                      # Allowed: "preprocessing", "qc", "assembly", "finalization"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
 "assembly_mode": "full"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
@@ -191,6 +192,7 @@
 "custom_preprocessing_stages": []
 "custom_qc_stages": []
 "custom_assembly_stages": []
+"custom_finalization_stages": []
 
 "skip_read_qc": True
 "skip_filter_reads": True
@@ -198,7 +200,7 @@
 "skip_gcp": False
 "skip_fcs": True
 "skip_fcs_adaptor": True
-"skip_kraken": true
+"skip_kraken": True
 "skip_prescaf_pretext": False
 "skip_postscaf_pretext": True
 "skip_both_pretext": False
@@ -209,7 +211,7 @@
 "skip_variantcalling": True
 "skip_hic_file": False
 
-"create_hic_file_during_curation": False
+"create_hic_file_during_curation": True
 #"adaptor_scan": True
 #"fcs_gx_scan": True
 # Allowed modes:

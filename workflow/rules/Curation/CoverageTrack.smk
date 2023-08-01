@@ -49,6 +49,8 @@ rule calculate_coverage:
         bai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.bam.bai"
     output:
         per_base=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.per-base.bed.gz"
+    params:
+        min_mapq= lambda wildcards: parse_option("min_mapping_quality", parameters["tool_options"]["mosdepth"][wildcards.datatype], " -Q ", none_value=0),
     log:
         std=output_dict["log"]  / "calculate_coverage.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.log",
         cluster_log=output_dict["cluster_log"] / "calculate_coverage.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{datatype}.cluster.log",

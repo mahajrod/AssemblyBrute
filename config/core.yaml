@@ -139,13 +139,13 @@
             "mosdepth":
                 "default":
                     "illumina":
-                        "min_mapping_quality": 10
+                        "min_mapping_quality": 30
                     "nanopore":
                         "min_mapping_quality": 10
                     "clr":
-                        "min_mapping_quality": 10
+                        "min_mapping_quality": 20
                     "hifi":
-                        "min_mapping_quality": 10
+                        "min_mapping_quality": 30
                     "hic":
                         "min_mapping_quality": 10
             "jellyfish":
@@ -307,6 +307,25 @@
                 "default":
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "datatype": "hifi"
+                    #"illumina":
+                    #    "min_mapping_quality": 0
+                    #"nanopore":
+                    #    "min_mapping_quality": 0
+                    #"clr":
+                    #    "min_mapping_quality": 0
+                    #"hifi":
+                    #    "min_mapping_quality": 0
+                #"thresholds":
+                #    "cov_multiplicator": 4.5 # 4.5 *lambda
+                #    "datatype": "hifi"
+                    #"illumina":
+                    #    "min_mapping_quality": 30
+                    #"nanopore":
+                    #    "min_mapping_quality": 10
+                    #"clr":
+                    #    "min_mapping_quality": 20
+                    #"hifi":
+                    #    "min_mapping_quality": 30
             "quast":
                 "default":
                     "large_genome": True

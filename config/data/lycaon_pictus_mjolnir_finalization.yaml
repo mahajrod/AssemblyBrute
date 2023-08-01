@@ -67,13 +67,16 @@
         "default":
             #- "salsa2" # Allowed: "salsa2", "yahs", "3d-dna"
             - "yahs"
-            #- "threeddna"
+            - "threeddna"
     "curation":
         "default":
             - "curation"
     "draft_qc":
         "default":
             - "assembly_qc"
+    "gap_closing":
+        "default":
+            - "samba"
 
 "coretool_option_sets":
     "hifiasm":
@@ -142,14 +145,14 @@
 
 "ploidy": 2
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
-"genome_prefix": "genome"
+"genome_prefix": "LycPic1"
 "busco_lineage_list":
-    - "mammalia_odb10" #
+    - "carnivora_odb10" #
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
 
-"species_name": "species species"
-"tax_id": null # necessary for contamination scan via FCS
+"species_name": "lycaon pictus"
+"tax_id": 9622 # necessary for contamination scan via FCS
 
 "database_set":
     "kraken2":

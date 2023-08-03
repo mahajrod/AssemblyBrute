@@ -208,7 +208,7 @@
 "skip_nanoplot": False
 "skip_wga": False
 "skip_higlass": True
-"skip_variantcalling": True
+"skip_variantcalling": False
 "skip_hic_file": False
 
 "create_hic_file_during_curation": True

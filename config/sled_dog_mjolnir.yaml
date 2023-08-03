@@ -77,8 +77,8 @@
     "hifiasm":
          #- "l0primary"
          - "l1primary"
-         - "l2primary"
-         - "l3primary"
+         #- "l2primary"
+         #- "l3primary"
          #- "l0primary_no_hic"
          #- "l1primary_no_hic"
          #- "l2primary_no_hic"
@@ -89,20 +89,20 @@
         - "default"
     "salsa2":
         - "phased_reads"
-        - "unphased_reads"
+        #- "unphased_reads"
     "yahs":
         - "phased_reads"
-        - "unphased_reads"
+        #- "unphased_reads"
     "3ddna":
         - "phased_reads"
-        - "unphased_reads"
+        #- "unphased_reads"
     "curation":
         - "default"
     "assembly_qc":
         - "default"
     "samba":
         - "phased_reads"
-        - "unphased_reads"
+        #- "unphased_reads"
 
 "other_tool_option_sets":
     "cutadapt":                 "default"       # Allowed: default

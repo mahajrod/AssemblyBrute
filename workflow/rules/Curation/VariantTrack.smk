@@ -71,9 +71,7 @@ rule deepvariant: #
     threads: parameters["threads"]["deepvariant"]
 
     shell:
-        " TMP_DIR=`realpath {params.tmp_dir}`; "
-        " TMPDIR=${{TMP_DIR}}; "
-        " mkdir -p ${{TMP_DIR}}; "
+        " mkdir -p {params.tmp_dir}; "
         " WORKDIR=`dirname {output.vcf}`; "
         " SIF=`realpath {params.sif}`; "
         " LOG=`realpath {log.deepvariant}`; "
@@ -81,7 +79,7 @@ rule deepvariant: #
         " export SINGULARITYENV_TMPDIR=/mnt/tmp; "
         " export SINGULARITYENV_SQLITE_TMPDIR=/mnt/tmp; "
         " SINGULARITYENV_TMPDIR=/mnt/tmp SINGULARITYENV_SQLITE_TMPDIR=/mnt/tmp "
-        " singularity run -B /usr/lib/locale/:/usr/lib/locale/ -B ${{TMP_DIR}}:/mnt/tmp/  ${{SIF}} /opt/deepvariant/bin/run_deepvariant "
+        " singularity run -B /usr/lib/locale/:/usr/lib/locale/ -B `realpath {params.tmp_dir}`:/mnt/tmp/  ${{SIF}} /opt/deepvariant/bin/run_deepvariant "
         " --model_type={params.model} --ref=`basename {input.reference}` --reads=`basename {input.bam}` "
         " --output_vcf=`basename {output.vcf}` --output_gvcf=`basename {output.gvcf}` "
         " --intermediate_results_dir ./deepvariant --num_shards={threads} > ${{LOG}} 2>&1; "

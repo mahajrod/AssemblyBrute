@@ -77,7 +77,6 @@ rule deepvariant: #
         " SIF=`realpath {params.sif}`; "
         " LOG=`realpath {log.deepvariant}`; "
         " cd ${{WORKDIR}}; "
-        " export TMP_DIR=/mnt/tmp/; "
         " export SINGULARITYENV_TMPDIR=/mnt/tmp; "
         " export SINGULARITYENV_SQLITE_TMPDIR=/mnt/tmp; "
         " TMPDIR=${{TMPDIR}} SINGULARITYENV_TMPDIR=/mnt/tmp SINGULARITYENV_SQLITE_TMPDIR=/mnt/tmp "

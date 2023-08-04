@@ -54,7 +54,8 @@ rule deepvariant: #
         #paf=out_dir_path  / ("purge_dups/{assembler}/{haplotype}/%s.purge_dups.{assembler}.{haplotype}.minimap2.{fileprefix}.paf.gz" % config["genome_name"])
     params:
         sif=config["tool_containers"]["deepvariant"],
-        model=lambda wildcards: parameters["tool_options"]["deepvariant"][wildcards.datatype]["model"]
+        model=lambda wildcards: parameters["tool_options"]["deepvariant"][wildcards.datatype]["model"],
+        tmp_dir=config["alternative_tmp_dir"]
     log:
         deepvariant=output_dict["log"]  / "deepvariant.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{genome_prefix}.{datatype}.deepvariant.log",
         cluster_log=output_dict["cluster_log"] / "deepvariant.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{genome_prefix}.{datatype}.cluster.log",
@@ -70,10 +71,15 @@ rule deepvariant: #
     threads: parameters["threads"]["deepvariant"]
 
     shell:
+        " TMP_DIR=`realpath {params.tmp_dir}`; "
+        " TMPDIR=${{TMP_DIR}}; "
         " WORKDIR=`dirname {output.vcf}`; "
         " SIF=`realpath {params.sif}`; "
         " LOG=`realpath {log.deepvariant}`; "
         " cd ${{WORKDIR}}; "
+        " export SINGULARITYENV_TMPDIR=${{TMP_DIR}}; "
+        " export SINGULARITYENV_SQLITE_TMPDIR=${{TMP_DIR}}; "
+        " SINGULARITYENV_TMPDIR=${{TMP_DIR}} SINGULARITYENV_SQLITE_TMPDIR=${{TMP_DIR}} "
         " singularity run -B /usr/lib/locale/:/usr/lib/locale/  ${{SIF}} /opt/deepvariant/bin/run_deepvariant "
         " --model_type={params.model} --ref=`basename {input.reference}` --reads=`basename {input.bam}` "
         " --output_vcf=`basename {output.vcf}` --output_gvcf=`basename {output.gvcf}` "

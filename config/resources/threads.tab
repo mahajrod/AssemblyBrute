@@ -42,6 +42,7 @@ get_purge_stat_haplotype_comparison	1	1	1	1	1	1	1	1	1
 create_links	1	1	1	1	1	1	1	1	1
 bwa_index	1	1	1	1	1	1	1	1	1
 bwa_map	50	15	30	40	50	50	50	50	50
+bwa_map_arima	10	5	5	10	10	15	15	30	30
 two_read_bam_combiner	1	1	1	1	1	1	1	1	1
 samtools_sort	8	2	4	8	8	8	8	8	8
 samtools_index	1	1	1	1	1	1	1	1	1

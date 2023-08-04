@@ -30,7 +30,7 @@ rule bwa_map: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        cpus=parameters["threads"]["bwa_map"] ,
+        cpus=parameters["threads"]["bwa_map_arima"] ,
         time=parameters["time"]["bwa_map"],
         mem=parameters["memory_mb"]["bwa_map"]
     threads: parameters["threads"]["bwa_map"]

@@ -33,7 +33,7 @@ rule bwa_map: #
         cpus=parameters["threads"]["bwa_map_arima"] ,
         time=parameters["time"]["bwa_map"],
         mem=parameters["memory_mb"]["bwa_map"]
-    threads: parameters["threads"]["bwa_map"]
+    threads: parameters["threads"]["bwa_map_arima"]
     shell:
         " {params.bwa_tool} mem -SP5M -t {threads} -R  \'@RG\\tID:{params.id}\\tPU:x\\tSM:{params.id}\\tPL:illumina\\tLB:x\' "
         " {input.reference} <(zcat {input.fastq} {params.trim_cmd} 2>{log.fastx}) 2>{log.map} |"

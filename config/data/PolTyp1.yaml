@@ -117,7 +117,7 @@
     "kat":                      "default"   # Allowed: default
     "juicer_tools_qc":          "default"   # Allowed: default
     "juicer_tools_pre":         "default"   # Allowed: default
-    "mapping_pipeline":         "arima"  # Allowed: arima, bwa_only, pairtools.
+    "mapping_pipeline":         "pairtools"  # Allowed: arima, bwa_only, pairtools.
     "trf":                      "default"
     "wga":                      "default"
     "select_long_scaffolds":    "default"

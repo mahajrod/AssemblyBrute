@@ -104,6 +104,7 @@ pairtools_parse	8	8	8	8	8	8	8	8	8
 pairtools_sort	20	20	20	20	20	20	20	20	20
 pairtools_merge	20	20	20	20	20	20	20	20	20
 pairtools_dedup	20	20	20	20	20	20	20	20	20
+pairtools_index	1	1	1	1	1	1	1	1	1
 pairtools_split	8	8	8	8	8	8	8	8	8
 get_track_stats	1	1	1	1	1	1	1	1	1
 remove_fcs_contaminants	1	1	1	1	1	1	1	1	1

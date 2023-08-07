@@ -160,14 +160,16 @@ rule pairtools_split:
         dedup_pairsam_gz=rules.pairtools_dedup.output.dedup_pairsam_gz
     output:
         sorted_dedup_bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
-        pairs=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pairs"
+        pairs=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pairs.gz"
     params:
         sort_threads=parameters["threads"]["samtools_sort"],
         sort_per_thread=parameters["memory_mb"]["samtools_sort"],
-        split_threads=parameters["threads"]["pairtools_split"]
+        split_threads=parameters["threads"]["pairtools_split"],
+        sort_mem=parameters["memory_mb"]["samtools_sort"] * parameters["threads"]["samtools_sort"],
     log:
         split=output_dict["log"] / "pairtools_split.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.split.log",
         sort=output_dict["log"] / "pairtools_split.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.sort.log",
+        sort_pairs=output_dict["log"] / "pairtools_split.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.sort_pairs.log",
         cluster_log=output_dict["cluster_log"] / "pairtools_split.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "pairtools_split.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.err"
     benchmark:
@@ -180,7 +182,34 @@ rule pairtools_split:
         mem=parameters["memory_mb"]["pairtools_split"] + parameters["memory_mb"]["samtools_sort"] * parameters["threads"]["samtools_sort"]
     threads: parameters["threads"]["pairtools_split"]
     shell:
-        " TMP_PREFIX=`dirname {output.pairs}`/pairtools_samtools_sort_tmp; "
+        " TMP_DIR=`dirname {output.pairs}`; "
+        " TMP_PREFIX=${{TMP_DIR}}/pairtools_samtools_sort_tmp; "
+        " UNSORTED_PAIRS={output.pairs}; "
+        " UNSORTED_PAIRS=${{UNSORTED_PAIRS%.gz}}; "
         " pairtools split --nproc-in {params.split_threads} --nproc-out {params.split_threads} "
-        " --output-pairs {output.pairs} --output-sam - {input.dedup_pairsam_gz} 2>{log.split} | "
+        " --output-pairs ${{UNSORTED_PAIRS}} --output-sam - {input.dedup_pairsam_gz} 2>{log.split} | "
         " samtools sort -@ {params.sort_threads} -m {params.sort_per_thread}M -T ${{TMP_PREFIX}} -o {output.sorted_dedup_bam} > {log.sort} 2>&1; "
+        " pairtools sort --nproc-in {threads} --nproc-out {threads} --memory {params.sort_mem}M --tmpdir ${{TMP_DIR}} "
+        " -o {output.pairs} ${{UNSORTED_PAIRS}} > {log.sort_pairs} 2>&1 ; "
+
+rule pairtools_index_pairs:
+    input:
+        pairs=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pairs.gz"
+    output:
+        index=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pairs.gz.px2"
+        #sorted_dedup_bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
+    log:
+        std=output_dict["log"] / "pairtools_index_pairs.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.std.log",
+        cluster_log=output_dict["cluster_log"] / "pairtools_index_pairs.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "pairtools_index_pairs.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "pairtools_index_pairs.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["pairtools_index"],
+        time=parameters["time"]["pairtools_index"],
+        mem=parameters["memory_mb"]["pairtools_index"],
+    threads: parameters["threads"]["pairtools_index"]
+    shell:
+        " pairix -f -p pairs {input.pairs} > {log.std} 2>&1; "

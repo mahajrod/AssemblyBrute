@@ -1,10 +1,10 @@
 
 rule trf: #
     input:
-        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.fasta"
+        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta"
     output:
-        simple_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.trf.simple.bed",
-        bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.trf.track.bed",
+        simple_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.trf.simple.bed",
+        bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.trf.track.bed",
     params:
         matching_weight=parse_option("matching_weight", parameters["tool_options"]["trf"], " -m "),
         mismatching_penalty=parse_option("mismatching_penalty", parameters["tool_options"]["trf"], " -s "),
@@ -15,15 +15,15 @@ rule trf: #
         max_period=parse_option("max_period", parameters["tool_options"]["trf"], " -e "),
         max_repeat_length=parse_option("max_repeat_length", parameters["tool_options"]["trf"], " -g "),
     log:
-        trf=(output_dict["log"]  / "trf.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.trf.log").resolve(),
-        cut=(output_dict["log"]  / "trf.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cut.log").resolve(),
-        sort=(output_dict["log"]  / "trf.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.sort.log").resolve(),
-        grep=(output_dict["log"]  / "trf.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.grep.log").resolve(),
-        merge=(output_dict["log"]  / "trf.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.merge.log").resolve(),
-        cluster_log=output_dict["cluster_log"] / "trf.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "trf.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+        trf=(output_dict["log"]  / "trf.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.trf.log").resolve(),
+        cut=(output_dict["log"]  / "trf.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cut.log").resolve(),
+        sort=(output_dict["log"]  / "trf.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.sort.log").resolve(),
+        grep=(output_dict["log"]  / "trf.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.grep.log").resolve(),
+        merge=(output_dict["log"]  / "trf.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.merge.log").resolve(),
+        cluster_log=output_dict["cluster_log"] / "trf.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "trf.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "trf.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+        output_dict["benchmark"]  / "trf.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

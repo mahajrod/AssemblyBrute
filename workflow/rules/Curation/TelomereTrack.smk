@@ -1,34 +1,34 @@
 rule telo_finder:
     input:
-        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.fasta",
+        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta",
     output:
-        canonical=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.canonical.txt",
-        canonical_kmer=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.canonical.kmer",
-        canonical_top_kmer=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.canonical.top.kmer",
-        non_canonical=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.non_canonical.txt",
-        non_canonical_kmer=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.non_canonical.kmer",
-        non_canonical_top_kmer=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.non_canonical.top.kmer",
+        canonical=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.canonical.txt",
+        canonical_kmer=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.canonical.kmer",
+        canonical_top_kmer=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.canonical.top.kmer",
+        non_canonical=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.non_canonical.txt",
+        non_canonical_kmer=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.non_canonical.kmer",
+        non_canonical_top_kmer=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.non_canonical.top.kmer",
     params:
         size=parse_option("size", parameters["tool_options"]["telo_finder"],  "--size", default_value="default"),
         min_kmer=parse_option("min_kmer", parameters["tool_options"]["telo_finder"], "--klo", default_value="default"),
         max_kmer=parse_option("max_kmer", parameters["tool_options"]["telo_finder"], "--khi", default_value="default"),
         ends=parse_option("ends", parameters["tool_options"]["telo_finder"], "--ends", default_value="default")
     log:
-        std=output_dict["log"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.log",
-        cp=output_dict["log"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cp.log",
-        grep=output_dict["log"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.grep.log",
-        sed=output_dict["log"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.sed.log",
-        tee=output_dict["log"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.tee.log",
-        head=output_dict["log"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.head.log",
-        cp1=output_dict["log"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cp1.log",
-        grep1=output_dict["log"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.grep1.log",
-        sed1=output_dict["log"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.sed1.log",
-        tee1=output_dict["log"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.tee1.log",
-        head1=output_dict["log"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.head1.log",
-        cluster_log=output_dict["cluster_log"] / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+        std=output_dict["log"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.log",
+        cp=output_dict["log"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cp.log",
+        grep=output_dict["log"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.grep.log",
+        sed=output_dict["log"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.sed.log",
+        tee=output_dict["log"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.tee.log",
+        head=output_dict["log"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.head.log",
+        cp1=output_dict["log"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cp1.log",
+        grep1=output_dict["log"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.grep1.log",
+        sed1=output_dict["log"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.sed1.log",
+        tee1=output_dict["log"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.tee1.log",
+        head1=output_dict["log"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.head1.log",
+        cluster_log=output_dict["cluster_log"] / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+        output_dict["benchmark"]  / "telo_finder.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -76,37 +76,37 @@ rule telo_finder:
 
 rule telo_container: #TODO: add possibility to use custom telomere c
     input:
-        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.fasta",
+        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta",
         non_cannonicaL_top_kmer=rules.telo_finder.output.non_canonical_top_kmer,
         cannonicaL_top_kmer=rules.telo_finder.output.canonical_top_kmer
     output:
-        cannonical_telo_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.cannonical.telomere.bedgraph",
-        cannonical_telo_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.cannonical.telomere.bed",
-        cannonical_telo=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.cannonical.telomere",
-        cannonical_telo_win=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.cannonical.telomere.windows",
-        non_cannonical_telo_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.non_cannonical.telomere.bedgraph",
-        non_cannonical_telo_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.non_cannonical.telomere.bed",
-        non_cannonical_telo=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.non_cannonical.telomere",
-        non_cannonical_telo_win=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.non_cannonical.telomere.windows",
+        cannonical_telo_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical.telomere.bedgraph",
+        cannonical_telo_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical.telomere.bed",
+        cannonical_telo=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical.telomere",
+        cannonical_telo_win=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical.telomere.windows",
+        non_cannonical_telo_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.non_cannonical.telomere.bedgraph",
+        non_cannonical_telo_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.non_cannonical.telomere.bed",
+        non_cannonical_telo=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.non_cannonical.telomere",
+        non_cannonical_telo_win=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.non_cannonical.telomere.windows",
     params:
         container=config["tool_containers"]["rapid_telomere"]
     log:
-        std=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.log",
-        mkdir=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.mkdir.log",
-        cp=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cp.log",
-        cp_cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cp_cannonical.log",
-        cp_non_cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cp_non_cannonical.log",
-        touch_cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.touch_cannonical.log",
-        touch_non_cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.rm_non_cannonical.log",
-        rm_cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.rm_cannonical.log",
-        rm_non_cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.touch_non_cannonical.log",
-        rm=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.rm.log",
-        cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cannonical.log",
-        non_cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.non_cannonical.log",
-        cluster_log=output_dict["cluster_log"] / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+        std=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.log",
+        mkdir=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.mkdir.log",
+        cp=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cp.log",
+        cp_cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cp_cannonical.log",
+        cp_non_cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cp_non_cannonical.log",
+        touch_cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.touch_cannonical.log",
+        touch_non_cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.rm_non_cannonical.log",
+        rm_cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.rm_cannonical.log",
+        rm_non_cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.touch_non_cannonical.log",
+        rm=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.rm.log",
+        cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cannonical.log",
+        non_cannonical=output_dict["log"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.non_cannonical.log",
+        cluster_log=output_dict["cluster_log"] / "telo_container.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "telo_container.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+        output_dict["benchmark"]  / "telo_container.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
         config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
     resources:
@@ -172,19 +172,19 @@ rule get_telomere_warning:
     input:
         cannonical_telo_track=rules.telo_container.output.cannonical_telo_track, #out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.cannonical.telomere.bedgraph",
         non_cannonical_telo_track=rules.telo_container.output.non_cannonical_telo_track, # out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.non_cannonical.telomere.bedgraph",
-        fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.fasta.fai",
+        fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta.fai",
     output:
-        cannonical_telo_warning_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.cannonical.telomere.warning.bedgraph",
-        non_cannonical_telo_warning_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.non_cannonical.telomere.warning.bedgraph",
+        cannonical_telo_warning_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical.telomere.warning.bedgraph",
+        non_cannonical_telo_warning_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.non_cannonical.telomere.warning.bedgraph",
     log:
-        cannonical=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cannonical.log",
-        non_cannonical=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.non_cannonical.log",
-        cannonical_touch=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cannonical.touch.log",
-        non_cannonical_touch=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.non_cannonical.touch.log",
-        cluster_log=output_dict["cluster_log"] / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+        cannonical=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cannonical.log",
+        non_cannonical=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.non_cannonical.log",
+        cannonical_touch=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cannonical.touch.log",
+        non_cannonical_touch=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.non_cannonical.touch.log",
+        cluster_log=output_dict["cluster_log"] / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+        output_dict["benchmark"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

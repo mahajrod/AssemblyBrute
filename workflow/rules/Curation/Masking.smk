@@ -1,21 +1,21 @@
 
 rule maskfasta: #
     input:
-        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.fasta",
+        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta",
         trf_bed=rules.trf.output.bed,
         windowmasker_bed=rules.windowmasker.output.bed
     output:
-        masked_fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.softmasked.fasta",
-        merged_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.repeats.track.bed",
+        masked_fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.softmasked.fasta",
+        merged_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.repeats.track.bed",
     log:
-        cat=output_dict["log"]  / "maskfasta.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cat.log",
-        sort=output_dict["log"]  / "maskfasta.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.sort.log",
-        merge=output_dict["log"]  / "maskfasta.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.merge.log",
-        maskfasta=output_dict["log"]  / "maskfasta.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.maskfasta.log",
-        cluster_log=output_dict["cluster_log"] / "maskfasta.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "maskfasta.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+        cat=output_dict["log"]  / "maskfasta.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cat.log",
+        sort=output_dict["log"]  / "maskfasta.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.sort.log",
+        merge=output_dict["log"]  / "maskfasta.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.merge.log",
+        maskfasta=output_dict["log"]  / "maskfasta.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.maskfasta.log",
+        cluster_log=output_dict["cluster_log"] / "maskfasta.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "maskfasta.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "maskfasta.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+        output_dict["benchmark"]  / "maskfasta.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

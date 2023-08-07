@@ -2,15 +2,15 @@
 ruleorder: create_gc_track > create_bedgraph_track
 rule create_gc_track: #
     input:
-        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.fasta"
+        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta"
     output:
-        gap_bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.gc.win{window}.step{step}.track.bedgraph",
+        gap_bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.gc.win{window}.step{step}.track.bedgraph",
     log:
-        gc=output_dict["log"]  / "create_gc_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.win{window}.step{step}.gc.log",
-        cluster_log=output_dict["cluster_log"] / "create_gc_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.win{window}.step{step}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_gc_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.win{window}.step{step}.cluster.err"
+        gc=output_dict["log"]  / "create_gc_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.win{window}.step{step}.gc.log",
+        cluster_log=output_dict["cluster_log"] / "create_gc_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.win{window}.step{step}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_gc_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.win{window}.step{step}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "create_gc_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.win{window}.step{step}.benchmark.txt"
+        output_dict["benchmark"]  / "create_gc_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.win{window}.step{step}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

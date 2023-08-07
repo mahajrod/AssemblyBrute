@@ -54,6 +54,7 @@ rule yahs: #
         " {input.reference} {input.bam} > {log.yahs} 2>&1;"
         " ln -sf {wildcards.haplotype}/scaffolding/`basename {output.fasta}` {output.alias} > {log.ln} 2>&1"
 
+
 rule yahs_juicer_pre: #
     input:
         reference_fai=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta.fai" % (stage_dict["hic_scaffolding"]["prev_stage"],
@@ -160,3 +161,30 @@ rule create_links_for_yahs_files: #
         " ln -sf {wildcards.haplotype}/scaffolding/`basename {input.hic}` {output.hic} > {log.ln} 2>&1; "
         " ln -sf {wildcards.haplotype}/scaffolding/`basename {input.liftover_agp}` {output.liftover_agp} >> {log.ln} 2>&1; "
         " ln -sf {wildcards.haplotype}/scaffolding/`basename {input.assembly}` {output.assembly} >> {log.ln} 2>&1; "
+
+
+rule extract_yahs_contigs: #
+    input:
+        liftover_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.liftover.agp",
+        original_contigs=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta" % (stage_dict["hic_scaffolding"]["prev_stage"],
+                                                                                                              stage_dict["hic_scaffolding"]["prev_stage"])) ,
+        original_contigs_fai=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta.fai" % (stage_dict["hic_scaffolding"]["prev_stage"],
+                                                                                                                      stage_dict["hic_scaffolding"]["prev_stage"]))
+    output:
+        new_contigs_fasta=out_dir_path / "extract_yahs_contigs/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.new_contigs.fasta",
+    log:
+        std=output_dict["log"]  / "extract_yahs_contigs.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.std.log",
+        cluster_log=output_dict["cluster_log"] / "extract_yahs_contigs.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "extract_yahs_contigs.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "extract_yahs_contigs.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["extract_yahs_contigs"] ,
+        time=parameters["time"]["extract_yahs_contigs"],
+        mem=parameters["memory_mb"]["extract_yahs_contigs"]
+    threads: parameters["threads"]["extract_yahs_contigs"]
+
+    shell:
+        " agp_to_fasta -o {output.new_contigs_fasta} {input.liftover_agp} {input.original_contigs} > {log.std} 2>&1; "

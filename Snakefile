@@ -840,7 +840,7 @@ if "curation" in config["stage_list"]:
     parameters_list = list(stage_dict["curation"]["parameters"].keys())
 
     if not config["skip_wga"]:
-        results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{target_haplotype}/input/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.png",
+        results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.png",
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["curation", ],
                                 parameters=[parameters_label],
@@ -849,7 +849,7 @@ if "curation" in config["stage_list"]:
                                 target_haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                                 ) for parameters_label in stage_dict["curation"]["parameters"]]]
 
-    results_list += [[[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
+    results_list += [[[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
                             threshold_type=["absolute", "relative"],
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],
@@ -858,7 +858,8 @@ if "curation" in config["stage_list"]:
                             step=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["step"]],
                             haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                             parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ("gap", "windowmasker", "trf", "gc") ],
-                     [[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.stat",
+                     [[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.stat",
+                            seq_type=["scaffolds", "contigs"] if prev_stage == "hic_scaffolding" else ["scaffolds"],
                             threshold_type=["absolute", "relative"],
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],
@@ -867,7 +868,7 @@ if "curation" in config["stage_list"]:
                             step=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["step"]],
                             haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                             parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ("gap", "windowmasker", "trf", "gc") ],
-                     [[expand(out_dir_path / "curation/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.coverage.win{window}.step{step}.png",
+                     [[expand(out_dir_path / "curation/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.{datatype}.coverage.win{window}.step{step}.png",
                             window=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"]["options"][window_step_set]["window"],
                             step=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"]["options"][window_step_set]["step"],
                             genome_prefix=[config["genome_prefix"], ],
@@ -875,23 +876,25 @@ if "curation" in config["stage_list"]:
                             datatype=coverage_track_data_type_set,
                             haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                             parameters=[parameters_label]) for window_step_set in stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"]["options"]] for parameters_label in stage_dict["curation"]["parameters"]] if coverage_track_data_type_set else [],
-                     *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.canonical.txt",
+                     *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.canonical.txt",
+                            seq_type=["scaffolds", "contigs"]  if prev_stage == "hic_scaffolding" else ["scaffolds"],
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],
                             haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                             parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
-                     *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.cannonical.telomere.bedgraph",
+                     *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical.telomere.bedgraph",
+                            seq_type=["scaffolds", "contigs"] if prev_stage == "hic_scaffolding" else ["scaffolds"],
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],
                             haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                             parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
-                     *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.cannonical.telomere.warning.bedgraph",
+                     *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical.telomere.warning.bedgraph",
+                            seq_type=["scaffolds", "contigs"] if prev_stage == "hic_scaffolding" else ["scaffolds"],
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=["curation", ],
                             haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                             parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
-
-                     [expand(out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.vcf.gz",
+                     [expand(out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.{datatype}.vcf.gz",
                             genome_prefix=[config["genome_prefix"], ],
                             datatype=variant_calling_data_type_set,
                             assembly_stage=["curation", ],
@@ -901,7 +904,7 @@ if "curation" in config["stage_list"]:
     if not config["skip_higlass"]:
         for parameters_label in parameters_list:
             if stage_dict["curation"]["parameters"][parameters_label]["prev_stage"] == "hic_scaffolding": # TODO: add handling for a case when "hic_scaffolding" is not a stage before the "curation"
-                results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.higlass.mcool",
+                results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.higlass.mcool",
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["curation", ],
                                 haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],

@@ -13,7 +13,7 @@ def get_hic_bed_file(wildcards):
                                                                                        phasing_kmer_length,
                                                                                        wildcards.genome_prefix)
 
-rule create_curation_input_files: #
+rule create_curation_input_files_for_scaffolds: #
     input:
         fasta=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta" % (stage_dict["curation"]["prev_stage"],
                                                                                                    stage_dict["curation"]["prev_stage"])),
@@ -23,16 +23,49 @@ rule create_curation_input_files: #
                                                                                                        stage_dict["curation"]["prev_stage"])),
         #bed=get_hic_bed_file if not config["skip_higlass"] else []
     output:
-        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.fasta",
-        len=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.len",
-        fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.fasta.fai",
+        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.fasta",
+        len=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.len",
+        fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.fasta.fai",
         #bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.hic.bed" if not config["skip_higlass"] else [],
     log:
-        cp=output_dict["log"]  / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cp.log",
-        cluster_log=output_dict["cluster_log"] / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+        cp=output_dict["log"]  / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.cp.log",
+        cluster_log=output_dict["cluster_log"] / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+        output_dict["benchmark"]  / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["create_curation_input_files"],
+        time=parameters["time"]["create_curation_input_files"],
+        mem=parameters["memory_mb"]["create_curation_input_files"]
+    threads: parameters["threads"]["create_curation_input_files"]
+
+    shell:
+        " cp -f `realpath -s {input.fasta}` {output.fasta} > {log.cp} 2>&1; "
+        " cp -f `realpath -s {input.fai}` {output.fai} >> {log.cp} 2>&1; "
+        " cp -f `realpath -s {input.len}` {output.len} >> {log.cp} 2>&1; "
+
+rule create_curation_input_files_for_contigs: #
+    input:
+        fasta=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.new_contigs.fasta" % (stage_dict["curation"]["prev_stage"],
+                                                                                                   stage_dict["curation"]["prev_stage"])),
+        len=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.new_contigs.len" % (stage_dict["curation"]["prev_stage"],
+                                                                                                   stage_dict["curation"]["prev_stage"])),
+        fai=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.new_contigs.fasta.fai" % (stage_dict["curation"]["prev_stage"],
+                                                                                                       stage_dict["curation"]["prev_stage"])),
+        #bed=get_hic_bed_file if not config["skip_higlass"] else []
+    output:
+        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/contigs/{genome_prefix}.input.{haplotype}.fasta",
+        len=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/contigs/{genome_prefix}.input.{haplotype}.len",
+        fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/contigs/{genome_prefix}.input.{haplotype}.fasta.fai",
+        #bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.hic.bed" if not config["skip_higlass"] else [],
+    log:
+        cp=output_dict["log"]  / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.contigs.{genome_prefix}.{haplotype}.cp.log",
+        cluster_log=output_dict["cluster_log"] / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.contigs.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.contigs.{genome_prefix}.{haplotype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.contigs.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -50,13 +83,13 @@ rule create_curation_bed_input_file: # Added as separated rule to allow turning 
     input:
         bed=get_hic_bed_file
     output:
-        bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.hic.bed"
+        bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.hic.bed"
     log:
-        cp=output_dict["log"]  / "create_bed_input_file.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cp.log",
-        cluster_log=output_dict["cluster_log"] / "create_bed_input_file.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_bed_input_file.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+        cp=output_dict["log"]  / "create_bed_input_file.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cp.log",
+        cluster_log=output_dict["cluster_log"] / "create_bed_input_file.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_bed_input_file.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "create_bed_input_file.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+        output_dict["benchmark"]  / "create_bed_input_file.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -70,18 +103,18 @@ rule create_curation_bed_input_file: # Added as separated rule to allow turning 
 
 rule select_long_scaffolds: #
     input:
-        len=rules.create_curation_input_files.output.len
+        len=rules.create_curation_input_files_for_scaffolds.output.len
     output:
-        whitelist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.whitelist",
-        orderlist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.orderlist"
+        whitelist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.whitelist",
+        orderlist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.orderlist"
     params:
         max_scaffolds=parameters["tool_options"]["select_long_scaffolds"]["max_scaffolds"]
     log:
-        ln=output_dict["log"]  / "select_long_scaffolds.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.ln.log",
-        cluster_log=output_dict["cluster_log"] / "select_long_scaffolds.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "select_long_scaffolds.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+        ln=output_dict["log"]  / "select_long_scaffolds.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.ln.log",
+        cluster_log=output_dict["cluster_log"] / "select_long_scaffolds.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "select_long_scaffolds.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "select_long_scaffolds.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+        output_dict["benchmark"]  / "select_long_scaffolds.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.benchmark.txt"
     #conda:
     #    config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -100,15 +133,15 @@ rule select_long_scaffolds: #
 
 rule create_windows: #
     input:
-        len=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.len",
+        len=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.len",
     output:
-        bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.win{window}.step{step}.windows.bed",
+        bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.win{window}.step{step}.windows.bed",
     log:
-        makewin=output_dict["log"]  / "create_windows.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.win{window}.step{step}.makewin.log",
-        cluster_log=output_dict["cluster_log"] / "create_windows.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.win{window}.step{step}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_windows.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.win{window}.step{step}.cluster.err"
+        makewin=output_dict["log"]  / "create_windows.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.win{window}.step{step}.makewin.log",
+        cluster_log=output_dict["cluster_log"] / "create_windows.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.win{window}.step{step}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_windows.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.win{window}.step{step}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "create_windows{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.win{window}.step{step}.benchmark.txt"
+        output_dict["benchmark"]  / "create_windows{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.win{window}.step{step}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -123,18 +156,18 @@ rule create_windows: #
 
 rule create_bedgraph_track: #
     input:
-        track_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{track_type}.track.bed",
-        windows_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.win{window}.step{step}.windows.bed",
+        track_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type}.track.bed",
+        windows_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.win{window}.step{step}.windows.bed",
     output:
-        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.bedgraph"
+        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.bedgraph"
     log:
-        intersect=output_dict["log"]  / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.intersect.log",
-        awk=output_dict["log"]  / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.awk.log",
-        map=output_dict["log"]  / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.map.log",
-        cluster_log=output_dict["cluster_log"] / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.err"
+        intersect=output_dict["log"]  / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.intersect.log",
+        awk=output_dict["log"]  / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.awk.log",
+        map=output_dict["log"]  / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.map.log",
+        cluster_log=output_dict["cluster_log"] / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.benchmark.txt"
+        output_dict["benchmark"]  / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -153,19 +186,19 @@ rule create_bedgraph_track: #
 
 rule get_track_stats: #
     input:
-        bedgraph=out_dir_path / "curation/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph"
+        bedgraph=out_dir_path / "curation/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph"
     output:
-        per_scaffold_stat=out_dir_path / "curation/{parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.per_scaffold.stat",
-        all_stat=out_dir_path / "curation/{parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.stat",
-        thresholds=out_dir_path / "curation/{parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.thresholds"
+        per_scaffold_stat=out_dir_path / "curation/{parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.per_scaffold.stat",
+        all_stat=out_dir_path / "curation/{parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.stat",
+        thresholds=out_dir_path / "curation/{parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.thresholds"
     params:
         normalization=lambda wildcards: parse_option_flag("normalize_by_len", stage_dict["curation"]["parameters"][wildcards.parameters]["option_set"][wildcards.track_type], "-n")
     log:
-        std=output_dict["log"]  / "get_track_stats{parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.std.log",
-        cluster_log=output_dict["cluster_log"] / "get_track_stats.{parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "get_track_stats.{parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.err"
+        std=output_dict["log"]  / "get_track_stats{parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.std.log",
+        cluster_log=output_dict["cluster_log"] / "get_track_stats.{parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "get_track_stats.{parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "get_track_stats.{parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.benchmark.txt"
+        output_dict["benchmark"]  / "get_track_stats.{parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -182,24 +215,24 @@ rule get_track_stats: #
 
 rule draw_track: #
     input:
-        bedgraph=out_dir_path / "curation/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph",
-        whitelist=out_dir_path / "curation/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.whitelist",
-        orderlist=out_dir_path / "curation/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.orderlist",
-        len_file=out_dir_path / "curation/{parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.len",
-        relative_thresholds=lambda wildcards: out_dir_path / "curation/{0}/{1}/input/{2}.input.{1}.{3}.win{4}.step{5}.track.thresholds".format(wildcards.parameters,
+        bedgraph=out_dir_path / "curation/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph",
+        whitelist=out_dir_path / "curation/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.whitelist",
+        orderlist=out_dir_path / "curation/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.orderlist",
+        len_file=out_dir_path / "curation/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.len",
+        relative_thresholds=lambda wildcards: out_dir_path / "curation/{0}/{1}/scaffolds/{2}.input.{1}.{3}.win{4}.step{5}.track.thresholds".format(wildcards.parameters,
                                                                                                                                                wildcards.haplotype,
                                                                                                                                                wildcards.genome_prefix,
                                                                                                                                                wildcards.track_type,
                                                                                                                                                wildcards.window,
                                                                                                                                                wildcards.step) if wildcards.threshold_type == 'relative' else [],
-        all_stat=lambda wildcards: out_dir_path / "curation/{0}/{1}/input/{2}.input.{1}.{3}.win{4}.step{5}.track.stat".format(wildcards.parameters,
+        all_stat=lambda wildcards: out_dir_path / "curation/{0}/{1}/scaffolds/{2}.input.{1}.{3}.win{4}.step{5}.track.stat".format(wildcards.parameters,
                                                                                                                               wildcards.haplotype,
                                                                                                                               wildcards.genome_prefix,
                                                                                                                               wildcards.track_type,
                                                                                                                               wildcards.window,
                                                                                                                               wildcards.step) if wildcards.threshold_type == 'relative' else []
     output:
-        png=out_dir_path / "curation/{parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.{threshold_type}.png"
+        png=out_dir_path / "curation/{parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.{threshold_type}.png"
     params:
         thresholds=lambda wildcards: parse_option("absolute_thresholds",
                                                   stage_dict["curation"]["parameters"][wildcards.parameters]["option_set"][wildcards.track_type],

@@ -106,7 +106,7 @@ rule draw_coverage_heatmap:
         stat_file=rules.create_coverage_table.output.stat_file,
         whitelist=rules.select_long_scaffolds.output.whitelist,
         orderlist=rules.select_long_scaffolds.output.orderlist,
-        len_file=rules.create_curation_input_files.output.len,
+        len_file=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.len",
         all_stat_file=rules.create_coverage_table.output.all_stat_file
     output:
         png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^./]+}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype,  [^./]+}.coverage.win{window}.step{step}.png",

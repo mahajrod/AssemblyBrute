@@ -15,7 +15,7 @@ parser.add_argument("-l", "--liftover_agp", action="store", dest="liftover_agp",
                     help="Liftover agp file. Required")
 parser.add_argument("-g", "--transfer_agp",  action="store", dest="transfer_agp", default=None,
                     help="File to write transfer agp. Default: not set")
-parser.add_argument("-o", "output", action="store", dest="output", default=sys.stdout,
+parser.add_argument("-o", "--output", action="store", dest="output", default=sys.stdout,
                     help="File to write output chain file. Default: stdout")
 
 args = parser.parse_args()

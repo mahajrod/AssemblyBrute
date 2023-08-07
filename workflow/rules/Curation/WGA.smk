@@ -3,19 +3,19 @@ rule last_index: #
     input:
         masked_fasta=rules.maskfasta.output.masked_fasta
     output:
-        bck=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.YASS.R11.soft.bck",
-        prj=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.YASS.R11.soft.prj",
-        ssp=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.YASS.R11.soft.ssp",
-        tis=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.YASS.R11.soft.tis",
-        des=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.YASS.R11.soft.des",
-        sds=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.YASS.R11.soft.sds",
-        suf=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.YASS.R11.soft.suf",
+        bck=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.YASS.R11.soft.bck",
+        prj=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.YASS.R11.soft.prj",
+        ssp=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.YASS.R11.soft.ssp",
+        tis=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.YASS.R11.soft.tis",
+        des=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.YASS.R11.soft.des",
+        sds=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.YASS.R11.soft.sds",
+        suf=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.YASS.R11.soft.suf",
     log:
-        index=output_dict["log"]  / "last_index.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.index.log",
-        cluster_log=output_dict["cluster_log"] / "last_index.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "last_index.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+        index=output_dict["log"]  / "last_index.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.index.log",
+        cluster_log=output_dict["cluster_log"] / "last_index.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "last_index.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "last_index.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+        output_dict["benchmark"]  / "last_index.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -30,22 +30,22 @@ rule last_index: #
 
 rule last_alignment: #
     input:
-        database=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/input/{genome_prefix}.input.{target_haplotype}.YASS.R11.soft.bck",
-        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/input/{genome_prefix}.input.{query_haplotype}.softmasked.fasta",
+        database=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.{target_haplotype}.YASS.R11.soft.bck",
+        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/scaffolds/{genome_prefix}.input.{query_haplotype}.softmasked.fasta",
     output:
-        maf=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/input/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len0.maf.gz",
-        tab=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/input/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len0.tab.gz",
+        maf=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len0.maf.gz",
+        tab=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len0.tab.gz",
     params:
         per_thread_mem=parameters["memory_mb"]["last_alignment_per_thread"],
     log:
-        lastall=output_dict["log"]  / "last_alignment.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.lastall.log",
-        tee=output_dict["log"]  / "last_alignment.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.tee.log",
-        convert=output_dict["log"]  / "last_alignment.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.convert.log",
-        pigz=output_dict["log"]  / "last_alignment.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.pigz.log",
-        cluster_log=output_dict["cluster_log"] / "last_alignment.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "last_alignment.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.cluster.err"
+        lastall=output_dict["log"]  / "last_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.lastall.log",
+        tee=output_dict["log"]  / "last_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.tee.log",
+        convert=output_dict["log"]  / "last_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.convert.log",
+        pigz=output_dict["log"]  / "last_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.pigz.log",
+        cluster_log=output_dict["cluster_log"] / "last_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "last_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "last_alignment.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.benchmark.txt"
+        output_dict["benchmark"]  / "last_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -68,18 +68,18 @@ rule filter_last_alignment_by_target_hit_len: #
     input:
         tab=rules.last_alignment.output.tab,
     output:
-        tab=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/input/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.tab.gz",
+        tab=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.tab.gz",
     params:
         per_thread_mem=parameters["memory_mb"]["last_alignment_per_thread"],
     log:
-        zcat=output_dict["log"]  / "filter_last_alignment_by_len.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.zcat.log",
-        grep=output_dict["log"]  / "filter_last_alignment_by_len.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.grep.log",
-        awk=output_dict["log"]  / "filter_last_alignment_by_len.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.awk.log",
-        gzip=output_dict["log"]  / "filter_last_alignment_by_len.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.gzip.log",
-        cluster_log=output_dict["cluster_log"] / "filter_last_alignment_by_len.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "filter_last_alignment_by_len.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.cluster.err"
+        zcat=output_dict["log"]  / "filter_last_alignment_by_len.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.zcat.log",
+        grep=output_dict["log"]  / "filter_last_alignment_by_len.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.grep.log",
+        awk=output_dict["log"]  / "filter_last_alignment_by_len.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.awk.log",
+        gzip=output_dict["log"]  / "filter_last_alignment_by_len.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.gzip.log",
+        cluster_log=output_dict["cluster_log"] / "filter_last_alignment_by_len.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "filter_last_alignment_by_len.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "filter_last_alignment_by_len.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.benchmark.txt"
+        output_dict["benchmark"]  / "filter_last_alignment_by_len.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -95,22 +95,22 @@ rule filter_last_alignment_by_target_hit_len: #
 
 rule draw_alignment: #
     input:
-        tab=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/input/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.tab.gz",#out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/input/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.tab.gz",
-        target_whitelist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/input/{genome_prefix}.input.{target_haplotype}.whitelist",
-        target_orderlist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/input/{genome_prefix}.input.{target_haplotype}.orderlist",
-        query_whitelist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/input/{genome_prefix}.input.{query_haplotype}.whitelist",
-        query_orderlist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/input/{genome_prefix}.input.{query_haplotype}.orderlist",
+        tab=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.tab.gz",#out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/input/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.tab.gz",
+        target_whitelist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.{target_haplotype}.whitelist",
+        target_orderlist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.{target_haplotype}.orderlist",
+        query_whitelist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/scaffolds/{genome_prefix}.input.{query_haplotype}.whitelist",
+        query_orderlist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/scaffolds/{genome_prefix}.input.{query_haplotype}.orderlist",
     output:
-        png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/input/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.png",
-        svg=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/input/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.svg",
+        png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.png",
+        svg=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.svg",
     params:
         per_thread_mem=parameters["memory_mb"]["last_alignment_per_thread"],
     log:
-        dotplot=output_dict["log"]  / "draw_alignment.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.dotplot.log",
-        cluster_log=output_dict["cluster_log"] / "draw_alignment.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "draw_alignment.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.cluster.err"
+        dotplot=output_dict["log"]  / "draw_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.dotplot.log",
+        cluster_log=output_dict["cluster_log"] / "draw_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "draw_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "draw_alignment.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.benchmark.txt"
+        output_dict["benchmark"]  / "draw_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.benchmark.txt"
     conda:
         config["conda"]["chromodoter"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["chromodoter"]["yaml"])
     resources:

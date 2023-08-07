@@ -31,7 +31,7 @@ assembly_agp_df["contig"] = liftover_agp_df["contig"]
 assembly_agp_df["contig_start"] = liftover_agp_df["contig_start"]
 assembly_agp_df["contig_end"] = liftover_agp_df["contig_end"]
 
-assembly_length = assembly_agp_df["assembly_end"].loc[-1]
+assembly_length = assembly_agp_df["assembly_end"].iloc[-1]
 
 if args.transfer_agp:
     assembly_agp_df.to_csv(args.transfer_agp, sep="\t", header=False, index=False)

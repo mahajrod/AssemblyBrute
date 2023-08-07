@@ -1,0 +1,9 @@
+#---- Bioconda config ----
+
+#TODO: check tools and versions
+"name": "liftover"
+"channels":
+  - "bioconda"
+  - "anaconda"
+"dependencies":
+  - "ucsc-liftover"

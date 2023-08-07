@@ -171,7 +171,7 @@ rule extract_yahs_contigs: #
         original_contigs_fai=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta.fai" % (stage_dict["hic_scaffolding"]["prev_stage"],
                                                                                                                       stage_dict["hic_scaffolding"]["prev_stage"]))
     output:
-        new_contigs_fasta=out_dir_path / "extract_yahs_contigs/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.new_contigs.fasta",
+        new_contigs_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.new_contigs.fasta",
     log:
         std=output_dict["log"]  / "extract_yahs_contigs.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.std.log",
         cluster_log=output_dict["cluster_log"] / "extract_yahs_contigs.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.log",

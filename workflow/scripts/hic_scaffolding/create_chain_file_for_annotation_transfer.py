@@ -36,7 +36,7 @@ assembly_length = assembly_agp_df["assembly_end"].iloc[-1]
 if args.transfer_agp:
     assembly_agp_df.to_csv(args.transfer_agp, sep="\t", header=False, index=False)
 
-assembly_agp_df["score"] = assembly_length
+assembly_agp_df["score"] = assembly_agp_df["contig_end"]
 assembly_agp_df["chain"] = "chain"
 assembly_agp_df["assembly_strand"] = "+"
 chain_agp_df = assembly_agp_df[["chain", "score",

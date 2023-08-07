@@ -32,7 +32,7 @@ assembly_agp_df["contig_start"] = liftover_agp_df["contig_start"]
 assembly_agp_df["contig_end"] = liftover_agp_df["contig_end"]
 
 assembly_length = assembly_agp_df["assembly_end"].iloc[-1]
-
+assembly_agp_df["assembly_length"] = assembly_length
 if args.transfer_agp:
     assembly_agp_df.to_csv(args.transfer_agp, sep="\t", header=False, index=False)
 
@@ -40,7 +40,7 @@ assembly_agp_df["score"] = assembly_agp_df["contig_end"]
 assembly_agp_df["chain"] = "chain"
 assembly_agp_df["assembly_strand"] = "+"
 chain_agp_df = assembly_agp_df[["chain", "score",
-                                "assembly", "score", "assembly_strand", "assembly_start", "assembly_end",
+                                "assembly", "assembly_length", "assembly_strand", "assembly_start", "assembly_end",
                                 "contig", "contig_end", "contig_strand", "contig_start", "contig_end",
                                 "component_number"]]
 chain_agp_df["assembly_start"] = chain_agp_df["assembly_start"] - 1  # chain file is zero-based in python notation, agp file - is one-based

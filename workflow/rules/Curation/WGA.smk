@@ -1,7 +1,7 @@
 
 rule last_index: #
     input:
-        masked_fasta=rules.maskfasta.output.masked_fasta
+        masked_fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.softmasked.fasta"
     output:
         bck=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.YASS.R11.soft.bck",
         prj=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.YASS.R11.soft.prj",

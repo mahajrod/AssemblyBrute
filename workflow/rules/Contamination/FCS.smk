@@ -7,8 +7,8 @@ rule fcs: #
         db=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["path"],
         image=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["image_path"],
     output:
-        taxonomy=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.{database}.taxonomy",
-        summary=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.{database}.summary"
+        taxonomy=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype, [^.]+}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.{database}.taxonomy",
+        summary=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype, [^.]+}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.{database}.summary"
         #report=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.{tax_id}.taxonomy.txt",
         #summary=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.{tax_id}.fcs_gx_report.txt"
     params:
@@ -54,8 +54,8 @@ rule remove_fcs_contaminants: #
         image=lambda wildcards: config["allowed_databases"]["fcs"][config["final_fcs_db"]]["image_path"],
         fcs_report=(out_dir_path / ("{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs/%s/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.%s.summary" % (config["final_fcs_db"], config["final_fcs_db"]))) if not config["skip_fcs"] else []
     output:
-        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
-        contaminant_fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.contaminant.fasta"
+        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype, [^.]+}.fasta",
+        contaminant_fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype, [^.]+}.contaminant.fasta"
     params:
         skip="skip" if config["skip_fcs"] else "filter"
     log:

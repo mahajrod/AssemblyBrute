@@ -50,11 +50,12 @@ rule create_curation_input_files_for_scaffolds: #
 rule create_curation_input_files_for_contigs: #
     input:
         fasta=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.new_contigs.fasta" % (stage_dict["curation"]["prev_stage"],
-                                                                                                   stage_dict["curation"]["prev_stage"])),
+                                                                                                               stage_dict["curation"]["prev_stage"])),
         len=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.new_contigs.len" % (stage_dict["curation"]["prev_stage"],
-                                                                                                   stage_dict["curation"]["prev_stage"])),
+                                                                                                           stage_dict["curation"]["prev_stage"])),
         fai=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.new_contigs.fasta.fai" % (stage_dict["curation"]["prev_stage"],
-                                                                                                       stage_dict["curation"]["prev_stage"])),
+                                                                                                                 stage_dict["curation"]["prev_stage"])),
+
         #bed=get_hic_bed_file if not config["skip_higlass"] else []
     output:
         fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/contigs/{genome_prefix}.input.{haplotype}.fasta",

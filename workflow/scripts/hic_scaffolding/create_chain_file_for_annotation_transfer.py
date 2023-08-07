@@ -48,6 +48,6 @@ chain_agp_df["contig_start"] = chain_agp_df["contig_start"] - 1
 
 with FileRoutines.metaopen(args.output, "w") as out_fd:
     for row_tuple in chain_agp_df.itertuples():
-        out_fd.write("\t".join(row_tuple) + "\n{0}\n".format(row_tuple[8]))
+        out_fd.write("\t".join(map(str,row_tuple)) + "\n{0}\n".format(row_tuple[8]))
 
 

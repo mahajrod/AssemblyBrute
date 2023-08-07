@@ -20,10 +20,10 @@ parser.add_argument("-o", "--output", action="store", dest="output", default=sys
 
 args = parser.parse_args()
 
-assembly_agp_df = pd.read_csv(args.assembly_gap, header=None, sep="\t",
+assembly_agp_df = pd.read_csv(args.assembly_agp, header=None, sep="\t",
                               names=["assembly", "assembly_start", "assembly_end", "component_number", "component_type",
                                      "contig", "contig_start", "contig_end", "contig_strand"])
-liftover_agp_df = pd.read_csv(args.liftover_gap, header=None, sep="\t",
+liftover_agp_df = pd.read_csv(args.liftover_agp, header=None, sep="\t",
                               names=["contig", "contig_start", "contig_end", "component_number", "component_type",
                                      "scaffold", "scaffold_start", "scaffold_end", "strand"])
 

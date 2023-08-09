@@ -213,8 +213,8 @@ rule liftover_contig_bedgraph: #
     threads: parameters["threads"]["liftover_contig_bedgraph"]
 
     shell:
-        " ./workflow/scripts/curation/convert_contig_bed_to_assembly_bed.py -c {input.bedgraph} -t {input.transfer_agp} |"
-        " sort --parallel {threads} -S {params.sorting_mem}M -k1,1V -k2,2n -k3,3n > {output.bedgraph} > {log.std} 2>&1; "
+        " ./workflow/scripts/curation/convert_contig_bed_to_assembly_bed.py -c {input.bedgraph} -t {input.transfer_agp} | "
+        " sort --parallel {threads} -S {params.sorting_mem}M -k1,1V -k2,2n -k3,3n > {output.bedgraph} 2>{log.std}; "
 
 rule get_track_stats: #
     input:

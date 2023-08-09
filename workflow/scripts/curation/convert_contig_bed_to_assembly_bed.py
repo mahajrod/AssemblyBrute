@@ -20,7 +20,7 @@ args = parser.parse_args()
 
 transfer_agp_df = pd.read_csv(args.transfer_agp, header=None, sep="\t",
                               names=["assembly", "assembly_start", "assembly_end", "component_number", "component_type",
-                                     "contig", "contig_start", "contig_end", "contig_strand"])
+                                     "contig", "contig_start", "contig_end", "contig_strand"], index_col="contig")
 transfer_agp_df["assembly_start"] -= 1
 transfer_agp_df["contig_start"] -= 1
 
@@ -30,9 +30,9 @@ with FileRoutines.metaopen(args.contig_bed, "r") as in_fd, FileRoutines.metaopen
             out_fd.write(line)
         else:
             line_list = line.strip().split("\t")
-            shift = transfer_agp_df[transfer_agp_df["contig"] == line_list[0]]["assembly_start"].iloc[0]
-            strand = transfer_agp_df[transfer_agp_df["contig"] == line_list[0]]["contig_strand"].iloc[0]
-            contig_length = transfer_agp_df[transfer_agp_df["contig"] == line_list[0]]["contig_end"].iloc[0]
+            shift = transfer_agp_df.loc[line_list[0], "assembly_start"]                # transfer_agp_df[transfer_agp_df["contig"] == line_list[0]]["assembly_start"].iloc[0]
+            strand = transfer_agp_df.loc[line_list[0], "contig_strand"]                # transfer_agp_df[transfer_agp_df["contig"] == line_list[0]]["contig_strand"].iloc[0]
+            contig_length = transfer_agp_df.loc[line_list[0], "contig_length"]         # transfer_agp_df[transfer_agp_df["contig"] == line_list[0]]["contig_end"].iloc[0]
             line_list[0] = "assembly"
             if strand == "+":
                 line_list[1] = str(int(line_list[1]) + shift)

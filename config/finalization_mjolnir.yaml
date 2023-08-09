@@ -195,6 +195,9 @@
 "custom_qc_stages": []
 "custom_assembly_stages": []
 "custom_finalization_stages": []
+"curation_seq_type":
+    - "scaffolds"
+    - "contigs" # works only if precuration stage is hic_sscaffolding
 
 "skip_read_qc": False
 "skip_filter_reads": True

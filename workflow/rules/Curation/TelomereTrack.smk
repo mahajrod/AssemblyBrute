@@ -80,11 +80,11 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         non_cannonicaL_top_kmer=rules.telo_finder.output.non_canonical_top_kmer,
         cannonicaL_top_kmer=rules.telo_finder.output.canonical_top_kmer
     output:
-        cannonical_telo_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical.telomere.bedgraph",
+        cannonical_telo_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical_telomere.win1000.step200.track.bedgraph",
         cannonical_telo_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical.telomere.bed",
         cannonical_telo=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical.telomere",
         cannonical_telo_win=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical.telomere.windows",
-        non_cannonical_telo_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.non_cannonical.telomere.bedgraph",
+        non_cannonical_telo_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.non_cannonical_telomere.win1000.step200.track.bedgraph",
         non_cannonical_telo_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.non_cannonical.telomere.bed",
         non_cannonical_telo=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.non_cannonical.telomere",
         non_cannonical_telo_win=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.non_cannonical.telomere.windows",
@@ -174,8 +174,8 @@ rule get_telomere_warning:
         non_cannonical_telo_track=rules.telo_container.output.non_cannonical_telo_track, # out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.non_cannonical.telomere.bedgraph",
         fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta.fai",
     output:
-        cannonical_telo_warning_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical.telomere.warning.bedgraph",
-        non_cannonical_telo_warning_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.non_cannonical.telomere.warning.bedgraph",
+        cannonical_telo_warning_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical_telomere_warning.win1000.step200.track.bedgraph",
+        non_cannonical_telo_warning_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.non_cannonical_telomere_warning.win1000.step200.track.warning.bedgraph",
     log:
         cannonical=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cannonical.log",
         non_cannonical=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.non_cannonical.log",

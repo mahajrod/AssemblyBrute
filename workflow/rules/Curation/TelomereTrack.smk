@@ -1,3 +1,5 @@
+ruleorder: telo_container > create_bedgraph_track
+ruleorder: get_telomere_warning > create_bedgraph_track
 rule telo_finder:
     input:
         fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta",

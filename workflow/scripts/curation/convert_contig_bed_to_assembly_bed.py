@@ -30,6 +30,7 @@ with FileRoutines.metaopen(args.contig_bed, "r") as in_fd, FileRoutines.metaopen
             out_fd.write(line)
         else:
             line_list = line.strip().split("\t")
+            print(transfer_agp_df[transfer_agp_df["contig"] == line_list[0]])
             shift = transfer_agp_df[transfer_agp_df["contig"] == line_list[0]].loc[0, "assembly_start"]
             strand = transfer_agp_df[transfer_agp_df["contig"] == line_list[0]].loc[0, "assembly_strand"]
             contig_length = transfer_agp_df[transfer_agp_df["contig"] == line_list[0]].loc[0, "contig_end"]

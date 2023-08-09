@@ -5,6 +5,9 @@
         "yaml": "workflow/envs/conda.common.yaml"
         "name": "yggbase"
         "pip": "workflow/envs/pip.common.requirements"
+    "liftover":
+        "yaml": "workflow/envs/conda.liftover.yaml"
+        "name": "liftover"
     "salsa2":
         "yaml": "workflow/envs/conda.salsa2.yaml"
         "name": "salsa2"

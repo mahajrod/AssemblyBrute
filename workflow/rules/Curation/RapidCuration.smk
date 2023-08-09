@@ -55,12 +55,14 @@ rule create_curation_input_files_for_contigs: #
                                                                                                            stage_dict["curation"]["prev_stage"])),
         fai=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.new_contigs.fasta.fai" % (stage_dict["curation"]["prev_stage"],
                                                                                                                  stage_dict["curation"]["prev_stage"])),
-
+        transfer_agp=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.transfer.agp" % (stage_dict["curation"]["prev_stage"],
+                                                                                                                 stage_dict["curation"]["prev_stage"])),
         #bed=get_hic_bed_file if not config["skip_higlass"] else []
     output:
         fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/contigs/{genome_prefix}.input.{haplotype}.fasta",
         len=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/contigs/{genome_prefix}.input.{haplotype}.len",
         fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/contigs/{genome_prefix}.input.{haplotype}.fasta.fai",
+        transfer_agp=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/contigs/{genome_prefix}.input.{haplotype}.transfer.agp",
         #bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.hic.bed" if not config["skip_higlass"] else [],
     log:
         cp=output_dict["log"]  / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.contigs.{genome_prefix}.{haplotype}.cp.log",
@@ -80,6 +82,7 @@ rule create_curation_input_files_for_contigs: #
         " cp -f `realpath -s {input.fasta}` {output.fasta} > {log.cp} 2>&1; "
         " cp -f `realpath -s {input.fai}` {output.fai} >> {log.cp} 2>&1; "
         " cp -f `realpath -s {input.len}` {output.len} >> {log.cp} 2>&1; "
+        " cp -f `realpath -s {input.transfer_agp}` {output.transfer_agp} >> {log.cp} 2>&1; "
 
 rule create_curation_bed_input_file: # Added as separated rule to allow turning on and off higlass track. DO NOT MERGE this rule with create_curation_input_files
     input:
@@ -185,6 +188,31 @@ rule create_bedgraph_track: #
         " workflow/scripts/sum_bed.py -c 3 > {output.bedgraph} 2>{log.map} "
         #" bedtools map -c 4 -o sum -a {input.windows_bed} -b stdin > {output.bedgraph} 2>{log.map} "
         #./workflow/scripts/sum_bed.py -c 3
+
+rule liftover_contig_bedgraph: #
+    input:
+        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/contigs/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph",
+        transfer_agp=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/contigs/{genome_prefix}.input.{haplotype}.transfer.agp",
+    output:
+        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/contigs/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.assembly.bedgraph"
+    log:
+        std=output_dict["log"]  / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.contigs.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.std.log",
+        cluster_log=output_dict["cluster_log"] / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.contigs.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.contigs.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.contigs.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["create_bedgraph_track"],
+        time=parameters["time"]["create_bedgraph_track"],
+        mem=parameters["memory_mb"]["create_bedgraph_track"],
+        create_windows=1,
+    threads: parameters["threads"]["create_bedgraph_track"]
+
+    shell:
+        " ./workflow/scripts/curation/convert_contig_bed_to_assembly_bed.py -c {input.bedgraph} -t {input.transfer_agp}"
+        " -o {output.bedgraph} > {log.std} 2>&1; "
 
 rule get_track_stats: #
     input:

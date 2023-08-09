@@ -139,10 +139,12 @@ rule create_links_for_yahs_files: #
         hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.hic",
         liftover_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.liftover.agp",
         assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.assembly",
+        assembly_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.assembly.agp",
     output:
         hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, [^./]+}.hic",
         liftover_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, [^./]+}.liftover.agp",
         assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, [^./]+}.assembly",
+        assembly_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, [^./]+}.assembly.agp",
     log:
         ln=output_dict["log"]  / "create_links_for_yahs_files.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.ln.log",
         cluster_log=output_dict["cluster_log"] / "create_links_for_yahs_files.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.log",
@@ -161,7 +163,7 @@ rule create_links_for_yahs_files: #
         " ln -sf {wildcards.haplotype}/scaffolding/`basename {input.hic}` {output.hic} > {log.ln} 2>&1; "
         " ln -sf {wildcards.haplotype}/scaffolding/`basename {input.liftover_agp}` {output.liftover_agp} >> {log.ln} 2>&1; "
         " ln -sf {wildcards.haplotype}/scaffolding/`basename {input.assembly}` {output.assembly} >> {log.ln} 2>&1; "
-
+        " ln -sf {wildcards.haplotype}/scaffolding/`basename {input.assembly_agp}` {output.assembly_agp} >> {log.ln} 2>&1; "
 
 rule extract_yahs_contigs: #
     input:
@@ -188,3 +190,27 @@ rule extract_yahs_contigs: #
 
     shell:
         " agp_to_fasta -o {output.new_contigs_fasta} {input.liftover_agp} {input.original_contigs} > {log.std} 2>&1; "
+
+rule create_transfer_agp: #
+    input:
+        liftover_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.liftover.agp",
+        assembly_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.assembly.agp",
+    output:
+        transfer_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.transfer.agp"
+    log:
+        std=output_dict["log"]  / "extract_yahs_contigs.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.std.log",
+        cluster_log=output_dict["cluster_log"] / "extract_yahs_contigs.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "extract_yahs_contigs.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "extract_yahs_contigs.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["extract_yahs_contigs"] ,
+        time=parameters["time"]["extract_yahs_contigs"],
+        mem=parameters["memory_mb"]["extract_yahs_contigs"]
+    threads: parameters["threads"]["extract_yahs_contigs"]
+
+    shell:
+        " ./workflow/scripts/hic_scaffolding/create_transfer_agp.py "
+        " -a {input.assembly_agp} -l {input.liftover_agp} -o {output.transfer_agp} > {log.std} 2>&1; "

@@ -889,7 +889,7 @@ if "curation" in config["stage_list"]:
                                 assembly_stage=["curation", ],
                                 haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                                 parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
-                         *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical_telomere.win1000.step200.track.warning.bedgraph",
+                         *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical_telomere_warning.win1000.step200.track.bedgraph",
                                 seq_type=["scaffolds"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["curation", ],

@@ -904,7 +904,7 @@ if "curation" in config["stage_list"]:
                          ]
     if ("contigs" in config["curation_seq_type"]) and (prev_stage == "hic_scaffolding") :
         results_list += [[[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.{filetype}",
-                                file_type=["stat", "assembly.bedgraph"],
+                                filetype=["stat", "assembly.bedgraph"],
                                 seq_type=["contigs"],
                                 threshold_type=["absolute", "relative"],
                                 genome_prefix=[config["genome_prefix"], ],

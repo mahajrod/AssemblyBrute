@@ -195,6 +195,8 @@ rule liftover_contig_bedgraph: #
         transfer_agp=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/contigs/{genome_prefix}.input.{haplotype}.transfer.agp",
     output:
         bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/contigs/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.assembly.bedgraph"
+    params:
+        sorting_mem=parameters["memory_mb"]["liftover_contig_bedgraph"]
     log:
         std=output_dict["log"]  / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.contigs.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.std.log",
         cluster_log=output_dict["cluster_log"] / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.contigs.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.log",
@@ -204,15 +206,15 @@ rule liftover_contig_bedgraph: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        cpus=parameters["threads"]["create_bedgraph_track"],
-        time=parameters["time"]["create_bedgraph_track"],
-        mem=parameters["memory_mb"]["create_bedgraph_track"],
+        cpus=parameters["threads"]["liftover_contig_bedgraph"],
+        time=parameters["time"]["liftover_contig_bedgraph"],
+        mem=parameters["memory_mb"]["liftover_contig_bedgraph"] + 500,
         create_windows=1,
-    threads: parameters["threads"]["create_bedgraph_track"]
+    threads: parameters["threads"]["liftover_contig_bedgraph"]
 
     shell:
         " ./workflow/scripts/curation/convert_contig_bed_to_assembly_bed.py -c {input.bedgraph} -t {input.transfer_agp} |"
-        " sort -k1,1V -k2,2n -k3,3n > {output.bedgraph} > {log.std} 2>&1; "
+        " sort --parallel {threads} -S {params.sorting_mem}M -k1,1V -k2,2n -k3,3n > {output.bedgraph} > {log.std} 2>&1; "
 
 rule get_track_stats: #
     input:

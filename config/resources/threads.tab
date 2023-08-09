@@ -111,3 +111,4 @@ remove_fcs_contaminants	1	1	1	1	1	1	1	1	1
 bam_stats	4	4	4	4	4	4	4	4	4
 preprocess_hic_fastq	5	5	5	5	5	5	5	5	5
 extract_yahs_contigs	1	1	1	1	1	1	1	1	1
+liftover_contig_bedgraph	8	8	8	8	8	8	8	8	8

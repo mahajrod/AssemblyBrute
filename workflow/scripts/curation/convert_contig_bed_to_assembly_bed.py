@@ -24,7 +24,7 @@ transfer_agp_df = pd.read_csv(args.transfer_agp, header=None, sep="\t",
 transfer_agp_df["assembly_start"] -= 1
 transfer_agp_df["contig_start"] -= 1
 
-with FileRoutines.metaopen(args.contig_bed, "r") as in_fd, FileRoutines.metaopen(args.output, "r") as out_fd:
+with FileRoutines.metaopen(args.contig_bed, "r") as in_fd, FileRoutines.metaopen(args.output, "w") as out_fd:
     for line in in_fd:
         if line[0] == "#":
             out_fd.write(line)

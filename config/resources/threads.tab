@@ -98,7 +98,7 @@ create_gc_track	1	1	1	1	1	1	1	1	1
 filter_last_alignment_by_len	4	4	4	4	4	4	4	4	4
 get_telomere_warning	1	1	1	1	1	1	1	1	1
 add_basequalities_to_bam	6	6	6	6	6	6	6	6	6
-deepvariant	50	30	30	30	50	50	70	80	80
+deepvariant	30	30	20	30	30	40	70	80	80
 deepvariant_filter	1	1	1	1	1	1	1	1	1
 pairtools_parse	8	8	8	8	8	8	8	8	8
 pairtools_sort	20	20	20	20	20	20	20	20	20

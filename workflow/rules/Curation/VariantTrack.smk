@@ -74,7 +74,6 @@ rule deepvariant: #
     threads: parameters["threads"]["deepvariant"]
 
     shell:
-        " mkdir -p {params.tmp_dir}; "
         " WORKDIR=`dirname {output.vcf}`; "
         " SIF=`realpath {params.sif}`; "
         " LOG=`realpath {log.deepvariant}`; "

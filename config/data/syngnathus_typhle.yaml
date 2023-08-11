@@ -49,7 +49,9 @@
 
 "tool_containers":
     "rapid_telomere":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/rapid-curation/rapid_hic_software/runTelo.sif"
-    "deepvariant":     "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/deepvariant/deepvariant_1.5.0.sif"
+    "deepvariant":
+        "cpu":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/deepvariant/deepvariant_1.5.0.sif"
+        "gpu":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
 
 "stage_coretools":     #TODO: add bionano
     "filtering":
@@ -203,6 +205,14 @@
 "skip_hic_file": False
 
 "create_hic_file_during_curation": False
+#------------ Options specific for cluster ------------
+# This option have no effect if pipeline runs on local machine
+"queue":
+    "cpu": "cpuqueue"
+    "gpu": "gpuqueue" # set to null if your cluster doesn't have gpuqueue. Gpuqueue is used only for deepvariant yet
+"tool_queue":
+    "deepvariant": "gpu"  # Allowed: "gpu", "cpu". GPU queue will be used if it is set here AND if "queue": "gpu" is set , and if GPU imae of deepvariant is available
+#------------------------------------------------------
 #"adaptor_scan": True
 #"fcs_gx_scan": True
 # Allowed modes:

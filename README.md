@@ -111,7 +111,9 @@ git pull; snakemake --cores 35  --configfile config/data/syngnathus_typhle.yaml 
 
 ```
 
+sled_dog  git pull; snakemake --profile /projects/mjolnir1/people/xsg178/analysis/yggdrasil/assembly/lycaon_pictus/profile/slurm --configfile config/sled_dog_mjolnir.yaml --printshellcmds --latency-wait 60   --config mode="assembly" assembly_mode="curation" "parameter_set"="big"  "data_types"="hifi,hic" "use_existing_envs"=False  tax_id=9615  "busco_lineage_list"='["carnivora_odb10"]' skip_busco=False skip_higlass=True --cluster-cancel scancel   --use-conda --rerun-incomplete --res fcs=1 fcs_adaptor=1 telosif=1
 
+git pull; snakemake --cores 100  --configfile config/data/PolTyp1.yaml --printshellcmds --latency-wait 60   --config mode="assembly" "assembly_mode"="curation" finalization_mode="curation_only" skip_higlass=True --use-conda --rerun-incomplete --res fcs=1 fcs_adaptor=1 telosif=1 mem=700000
 ```commandline
 #Stage by stage (recommended)
 #qc and filtering

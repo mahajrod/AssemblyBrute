@@ -68,6 +68,7 @@ rule create_fastq_links_for_juicer:
     #conda:
     #    config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["create_fastq_links_for_juicer"] ,
         time=parameters["time"]["create_fastq_links_for_juicer"],
         mem=parameters["memory_mb"]["create_fastq_links_for_juicer"]
@@ -118,6 +119,7 @@ rule juicer: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["juicer"] ,
         time=parameters["time"]["juicer"],
         mem=parameters["memory_mb"]["juicer"]
@@ -178,6 +180,7 @@ rule threeddna: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["threeddna"] ,
         time=parameters["time"]["threeddna"],
         mem=parameters["memory_mb"]["threeddna"]

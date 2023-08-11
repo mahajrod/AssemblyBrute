@@ -16,6 +16,7 @@ rule create_fastq_links:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["create_fastq_links"],
         time=parameters["time"]["create_fastq_links"],
         mem=parameters["memory_mb"]["create_fastq_links"],
@@ -43,6 +44,7 @@ rule preprocess_hic_fastq:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["preprocess_hic_fastq"],
         time=parameters["time"]["preprocess_hic_fastq"],
         mem=parameters["memory_mb"]["preprocess_hic_fastq"],
@@ -72,6 +74,7 @@ rule create_fasta_links:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["create_fastq_links"],
         time=parameters["time"]["create_fastq_links"],
         mem=parameters["memory_mb"]["create_fastq_links"],
@@ -95,6 +98,7 @@ rule create_links_for_draft:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["create_links_for_draft"],
         time=parameters["time"]["create_links_for_draft"],
         mem=parameters["memory_mb"]["create_links_for_draft"]

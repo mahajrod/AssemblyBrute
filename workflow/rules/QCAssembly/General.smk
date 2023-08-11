@@ -15,6 +15,7 @@ rule get_seq_len:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["get_seq_len"],
         time=parameters["time"]["get_seq_len"],
         mem=parameters["memory_mb"]["get_seq_len"],

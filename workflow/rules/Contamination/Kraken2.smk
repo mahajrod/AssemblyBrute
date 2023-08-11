@@ -52,6 +52,7 @@ rule kraken2: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=lambda wildcards: config["allowed_databases"]["kraken2"][wildcards.database]["threads"] ,
         time=lambda wildcards: config["allowed_databases"]["kraken2"][wildcards.database]["time"] ,
         mem=lambda wildcards: config["allowed_databases"]["kraken2"][wildcards.database]["memory_mb"] ,

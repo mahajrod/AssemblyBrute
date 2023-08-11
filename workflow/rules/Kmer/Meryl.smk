@@ -17,6 +17,7 @@ rule meryl:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["meryl"],
         time=parameters["time"]["meryl"],
         mem=parameters["memory_mb"]["meryl"],
@@ -43,6 +44,7 @@ rule meryl_pe:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["meryl"],
         time=parameters["time"]["meryl"],
         mem=parameters["memory_mb"]["meryl"],
@@ -80,6 +82,7 @@ rule merge_meryl:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["meryl"],
         time=parameters["time"]["meryl"],
         mem=parameters["memory_mb"]["meryl"],
@@ -107,6 +110,7 @@ rule meryl_extract:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["meryl_extract"],
         time=parameters["time"]["meryl_extract"],
         mem=parameters["memory_mb"]["meryl_extract"],
@@ -139,6 +143,7 @@ rule subset_extracted_kmers:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["subset_extracted_kmers"],
         time=parameters["time"]["subset_extracted_kmers"],
         mem=parameters["memory_mb"]["subset_extracted_kmers"],

@@ -17,6 +17,7 @@ rule generate_site_positions: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["generate_site_positions"] ,
         time=parameters["time"]["generate_site_positions"],
         mem=parameters["memory_mb"]["generate_site_positions"]
@@ -42,6 +43,7 @@ rule generate_prescaffolding_agp:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["generate_prescaffolding_agp"] ,
         time=parameters["time"]["generate_prescaffolding_agp"],
         mem=parameters["memory_mb"]["generate_prescaffolding_agp"]
@@ -76,6 +78,7 @@ rule yahs_juicer_pre_prescaffolding: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["yahs_juicer_pre"] ,
         time=parameters["time"]["yahs_juicer_pre"],
         mem=parameters["memory_mb"]["yahs_juicer_pre"]
@@ -112,6 +115,7 @@ rule juicer_tools_pre_prescaffolding: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["juicer_tools_pre"] ,
         time=parameters["time"]["juicer_tools_pre"],
         mem=parameters["memory_mb"]["juicer_tools_pre"]
@@ -147,6 +151,7 @@ rule bam2bed:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["bam2bed"] ,
         time=parameters["time"]["bam2bed"],
         mem=parameters["memory_mb"]["bam2bed"]

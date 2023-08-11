@@ -19,6 +19,7 @@ rule kat_gcp:
     conda:
         config["conda"]["kat"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kat"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["kat_gcp"],
         time=parameters["time"]["kat_gcp"],
         mem=parameters["memory_mb"]["kat_gcp"],

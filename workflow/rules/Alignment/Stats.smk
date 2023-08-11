@@ -16,6 +16,7 @@ rule bam_stats:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["bam_stats"] ,
         time=parameters["time"]["bam_stats"],
         mem=parameters["memory_mb"]["bam_stats"]

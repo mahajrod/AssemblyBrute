@@ -15,6 +15,7 @@ rule smudgeplot_assess:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["smudgeplot_plot"],
         time=parameters["time"]["smudgeplot_plot"],
         mem=parameters["memory_mb"]["smudgeplot_plot"],
@@ -42,6 +43,7 @@ rule smudgeplot_hetkmers:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["smudgeplot_hetkmers"],
         time=parameters["time"]["smudgeplot_hetkmers"],
         mem=parameters["memory_mb"]["smudgeplot_hetkmers"],
@@ -78,6 +80,7 @@ rule smudgeplot_plot: # in some cases smudgeplot could fail in geneeration of im
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["smudgeplot_plot"],
         time=parameters["time"]["smudgeplot_plot"],
         mem=parameters["memory_mb"]["smudgeplot_plot"],
@@ -108,6 +111,7 @@ rule compress_kmer:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["compress_kmer"],
         time=parameters["time"]["compress_kmer"],
         mem=parameters["memory_mb"]["compress_kmer"],

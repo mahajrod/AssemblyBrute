@@ -23,6 +23,7 @@ rule fcs: #
     conda:
         config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["threads"],
         time=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["time"],
         mem=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["memory_mb"],
@@ -69,6 +70,7 @@ rule remove_fcs_contaminants: #
     conda:
         config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["remove_fcs_contaminants"],
         time=parameters["time"]["remove_fcs_contaminants"],
         mem=parameters["memory_mb"]["remove_fcs_contaminants"],
@@ -122,6 +124,7 @@ rule fcs_adaptor: #
     conda:
         config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=lambda wildcards: config["allowed_databases"]["fcs_adaptor"][wildcards.database]["threads"],
         time=lambda wildcards: config["allowed_databases"]["fcs_adaptor"][wildcards.database]["time"],
         mem=lambda wildcards: config["allowed_databases"]["fcs_adaptor"][wildcards.database]["memory_mb"],

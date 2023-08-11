@@ -16,6 +16,7 @@ rule install_from_pip:
     conda:
         lambda wildcards: config["conda"][wildcards.conda_env]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"][wildcards.conda_env]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["install_from_pip"] ,
         time=parameters["time"]["install_from_pip"],
         mem=parameters["memory_mb"]["install_from_pip"]

@@ -23,6 +23,7 @@ rule genomescope:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["genomescope"],
         time=parameters["time"]["genomescope"],
         mem=parameters["memory_mb"]["genomescope"],
@@ -50,6 +51,7 @@ rule parse_genomescope_output:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["parse_genomescope_output"],
         time=parameters["time"]["parse_genomescope_output"],
         mem=parameters["memory_mb"]["parse_genomescope_output"],

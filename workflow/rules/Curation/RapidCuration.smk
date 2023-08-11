@@ -37,6 +37,7 @@ rule create_curation_input_files_for_scaffolds: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["create_curation_input_files"],
         time=parameters["time"]["create_curation_input_files"],
         mem=parameters["memory_mb"]["create_curation_input_files"]
@@ -73,6 +74,7 @@ rule create_curation_input_files_for_contigs: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["create_curation_input_files"],
         time=parameters["time"]["create_curation_input_files"],
         mem=parameters["memory_mb"]["create_curation_input_files"]
@@ -98,6 +100,7 @@ rule create_curation_bed_input_file: # Added as separated rule to allow turning 
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["create_curation_input_files"],
         time=parameters["time"]["create_curation_input_files"],
         mem=parameters["memory_mb"]["create_curation_input_files"]
@@ -123,6 +126,7 @@ rule select_long_scaffolds: #
     #conda:
     #    config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["select_long_scaffolds"],
         time=parameters["time"]["select_long_scaffolds"],
         mem=parameters["memory_mb"]["select_long_scaffolds"]
@@ -150,6 +154,7 @@ rule create_windows: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["create_windows"],
         time=parameters["time"]["create_windows"],
         mem=parameters["memory_mb"]["create_windows"],
@@ -176,6 +181,7 @@ rule create_bedgraph_track: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["create_bedgraph_track"],
         time=parameters["time"]["create_bedgraph_track"],
         mem=parameters["memory_mb"]["create_bedgraph_track"],
@@ -206,6 +212,7 @@ rule liftover_contig_bedgraph: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["liftover_contig_bedgraph"],
         time=parameters["time"]["liftover_contig_bedgraph"],
         mem=parameters["memory_mb"]["liftover_contig_bedgraph"] + 500,
@@ -234,6 +241,7 @@ rule get_track_stats: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["get_track_stats"],
         time=parameters["time"]["get_track_stats"],
         mem=parameters["memory_mb"]["get_track_stats"],
@@ -279,6 +287,7 @@ rule draw_track: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["draw_track"],
         time=parameters["time"]["draw_track"],
         mem=parameters["memory_mb"]["draw_track"],

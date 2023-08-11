@@ -51,6 +51,7 @@ rule samba:
     conda:
         config["conda"]["masurca"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["masurca"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["samba"],
         time=parameters["time"]["samba"],
         mem=parameters["memory_mb"]["samba"],

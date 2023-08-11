@@ -32,6 +32,7 @@ rule create_primary_contig_link:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["create_links"] ,
         time=parameters["time"]["create_links"],
         mem=parameters["memory_mb"]["create_links"]
@@ -61,6 +62,7 @@ rule create_primary_contig_link_hap1:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["create_links"] ,
         time=parameters["time"]["create_links"],
         mem=parameters["memory_mb"]["create_links"]
@@ -91,6 +93,7 @@ rule create_primary_contig_link_hap0:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["create_links"] ,
         time=parameters["time"]["create_links"],
         mem=parameters["memory_mb"]["create_links"]
@@ -123,6 +126,7 @@ rule minimap2_purge_dups_reads:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["minimap2"] ,
         time=parameters["time"]["minimap2"],
         mem=parameters["memory_mb"]["minimap2"]
@@ -166,6 +170,7 @@ rule get_purge_dups_read_stat:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["get_purge_dups_read_stat"] ,
         time=parameters["time"]["get_purge_dups_read_stat"],
         mem=parameters["memory_mb"]["get_purge_dups_read_stat"]
@@ -199,6 +204,7 @@ rule minimap2_purge_dups_assembly:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["minimap2"] ,
         time=parameters["time"]["minimap2"],
         mem=parameters["memory_mb"]["minimap2"]
@@ -233,6 +239,7 @@ rule purge_dups: # TODO: find what options are used in ERGA for get_seqs
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["purge_dups"] ,
         time=parameters["time"]["purge_dups"],
         mem=parameters["memory_mb"]["purge_dups"]
@@ -267,6 +274,7 @@ rule merge_pri_hapdups_with_alt: # TODO: add handling of polyploid cases
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["merge_pri_hapdups_with_alt"] ,
         time=parameters["time"]["merge_pri_hapdups_with_alt"],
         mem=parameters["memory_mb"]["merge_pri_hapdups_with_alt"]
@@ -291,6 +299,7 @@ rule merge_pri_hapdups_with_alt_for_len_files: # TODO: add handling of polyploid
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["merge_pri_hapdups_with_alt"] ,
         time=parameters["time"]["merge_pri_hapdups_with_alt"],
         mem=parameters["memory_mb"]["merge_pri_hapdups_with_alt"]
@@ -321,6 +330,7 @@ rule extract_stats_from_purge_dups_file:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["extract_stats_from_purge_dups_file"] ,
         time=parameters["time"]["extract_stats_from_purge_dups_file"],
         mem=parameters["memory_mb"]["extract_stats_from_purge_dups_file"]
@@ -347,6 +357,7 @@ rule extract_artefact_sequences:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["extract_artefact_sequences"] ,
         time=parameters["time"]["extract_artefact_sequences"],
         mem=parameters["memory_mb"]["extract_artefact_sequences"]
@@ -376,6 +387,7 @@ rule minimap2_purge_dups_qc:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["minimap2"] ,
         time=parameters["time"]["minimap2"],
         mem=parameters["memory_mb"]["minimap2"]
@@ -419,6 +431,7 @@ rule get_purge_dups_read_stat_qc:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["get_purge_dups_read_stat"] ,
         time=parameters["time"]["get_purge_dups_read_stat"],
         mem=parameters["memory_mb"]["get_purge_dups_read_stat"]
@@ -466,6 +479,7 @@ rule get_purge_stat_haplotype_comparison:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["get_purge_stat_haplotype_comparison"] ,
         time=parameters["time"]["get_purge_stat_haplotype_comparison"],
         mem=parameters["memory_mb"]["get_purge_stat_haplotype_comparison"]

@@ -28,6 +28,7 @@ rule multiqc:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["multiqc"],
         time=parameters["time"]["multiqc"],
         mem=parameters["memory_mb"]["multiqc"],

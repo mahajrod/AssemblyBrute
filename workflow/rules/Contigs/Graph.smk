@@ -12,6 +12,7 @@ rule gfa2fasta:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["gfa2fasta"],
         time=parameters["time"]["gfa2fasta"],
         mem=parameters["memory_mb"]["gfa2fasta"],
@@ -35,6 +36,7 @@ rule get_length_and_coverage_from_hifiasm_graph:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["get_coverage_from_hifiasm_graph"],
         time=parameters["time"]["get_coverage_from_hifiasm_graph"],
         mem=parameters["memory_mb"]["get_coverage_from_hifiasm_graph"],

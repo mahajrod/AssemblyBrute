@@ -30,9 +30,10 @@ rule bwa_map: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["bwa_map_arima"] ,
         time=parameters["time"]["bwa_map"],
-        mem=parameters["memory_mb"]["bwa_map"]
+        mem=parameters["memory_mb"]["bwa_map"],
     threads: parameters["threads"]["bwa_map_arima"]
     shell:
         " {params.bwa_tool} mem -SP5M -t {threads} -R  \'@RG\\tID:{params.id}\\tPU:x\\tSM:{params.id}\\tPL:illumina\\tLB:x\' "
@@ -79,7 +80,8 @@ rule bam_merge_pairs:
     resources:
         cpus=parameters["threads"]["two_read_bam_combiner"] ,
         time=parameters["time"]["two_read_bam_combiner"],
-        mem=parameters["memory_mb"]["two_read_bam_combiner"] + parameters["memory_mb"]["samtools_sort"] * parameters["threads"]["samtools_sort"]
+        mem=parameters["memory_mb"]["two_read_bam_combiner"] + parameters["memory_mb"]["samtools_sort"] * parameters["threads"]["samtools_sort"],
+        queue=config["queue"]["cpu"]
     threads: parameters["threads"]["two_read_bam_combiner"] + parameters["threads"]["samtools_sort"]
     shell:
         " TMP_PREFIX=`dirname {output.bam}`/{wildcards.pairprefix}; "
@@ -107,6 +109,7 @@ rule bam_merge_files:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["samtools_sort"] ,
         time=parameters["time"]["samtools_sort"],
         mem=parameters["memory_mb"]["samtools_sort"]
@@ -131,6 +134,7 @@ rule rmdup:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["rmdup"] ,
         time=parameters["time"]["rmdup"],
         mem=parameters["memory_mb"]["rmdup"]

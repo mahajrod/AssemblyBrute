@@ -15,6 +15,7 @@ rule bwa_index:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["bwa_index"] ,
         time=parameters["time"]["bwa_index"],
         mem=parameters["memory_mb"]["bwa_index"]
@@ -40,6 +41,7 @@ rule bwa_index:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["bwa_index"] ,
         time=parameters["time"]["bwa_index"],
         mem=parameters["memory_mb"]["bwa_index"]
@@ -64,6 +66,7 @@ rule ref_faidx:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["ref_faidx"] ,
         time=parameters["time"]["ref_faidx"],
         mem=parameters["memory_mb"]["ref_faidx"]
@@ -86,6 +89,7 @@ rule ref_dict:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["ref_dict"] ,
         time=parameters["time"]["ref_dict"],
         mem=parameters["memory_mb"]["ref_dict"]
@@ -108,6 +112,7 @@ rule index_bam:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["samtools_index"] ,
         time=parameters["time"]["samtools_index"],
         mem=parameters["memory_mb"]["samtools_index"]

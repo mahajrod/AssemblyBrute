@@ -19,6 +19,7 @@ rule last_index: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["last_index"] ,
         time=parameters["time"]["last_index"],
         mem=parameters["memory_mb"]["last_index"]
@@ -49,6 +50,7 @@ rule last_alignment: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["last_alignment"],
         time=parameters["time"]["last_alignment"],
         mem=parameters["memory_mb"]["last_alignment"]
@@ -83,6 +85,7 @@ rule filter_last_alignment_by_target_hit_len: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["filter_last_alignment_by_len"],
         time=parameters["time"]["filter_last_alignment_by_len"],
         mem=parameters["memory_mb"]["filter_last_alignment_by_len"]
@@ -114,6 +117,7 @@ rule draw_alignment: #
     conda:
         config["conda"]["chromodoter"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["chromodoter"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["draw_alignment"],
         time=parameters["time"]["draw_alignment"],
         mem=parameters["memory_mb"]["draw_alignment"]

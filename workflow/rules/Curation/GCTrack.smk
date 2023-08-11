@@ -14,6 +14,7 @@ rule create_gc_track: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["create_gc_track"],
         time=parameters["time"]["create_gc_track"],
         mem=parameters["memory_mb"]["create_gc_track"]

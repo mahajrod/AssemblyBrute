@@ -26,6 +26,7 @@ rule jellyfish:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["jellyfish"],
         time=parameters["time"]["jellyfish"],
         mem=parameters["memory_mb"]["jellyfish"],

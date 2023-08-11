@@ -14,6 +14,7 @@ rule nanoqc:
     conda:
         config["conda"]["nanopore"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["nanopore"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["nanoqc"],
         time=parameters["time"]["nanoqc"],
         mem=parameters["memory_mb"]["nanoqc"],

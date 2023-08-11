@@ -17,6 +17,7 @@ rule windowmasker: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["windowmasker"] ,
         time=parameters["time"]["windowmasker"],
         mem=parameters["memory_mb"]["windowmasker"]
@@ -64,6 +65,7 @@ rule create_repeat_bins: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["create_repeat_bins"] ,
         time=parameters["time"]["create_repeat_bins"],
         mem=parameters["memory_mb"]["create_repeat_bins"]

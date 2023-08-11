@@ -33,6 +33,7 @@ rule gather_stats_per_stage_parameter:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["gather_stage_stats"],
         time=parameters["time"]["gather_stage_stats"],
         mem=parameters["memory_mb"]["gather_stage_stats"],
@@ -64,6 +65,7 @@ rule gather_stage_stats:
     #conda:
     #    config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["gather_stage_stats"],
         time=parameters["time"]["gather_stage_stats"],
         mem=parameters["memory_mb"]["gather_stage_stats"],

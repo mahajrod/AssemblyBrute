@@ -24,6 +24,7 @@ rule add_basequalities_to_bam: #adds basequalities to bam generated from fasta (
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["add_basequalities_to_bam"],
         time=parameters["time"]["add_basequalities_to_bam"],
         mem=parameters["memory_mb"]["add_basequalities_to_bam"]
@@ -53,9 +54,10 @@ rule deepvariant: #
         gvcf=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.g.vcf.gz",
         #paf=out_dir_path  / ("purge_dups/{assembler}/{haplotype}/%s.purge_dups.{assembler}.{haplotype}.minimap2.{fileprefix}.paf.gz" % config["genome_name"])
     params:
-        sif=config["tool_containers"]["deepvariant"],
+        sif=config["tool_containers"]["deepvariant"]["gpu"] if config["queue"]["gpu"] and config["queue"]["gpu"] and config["tool_containers"]["deepvariant"]["gpu"] else config["tool_containers"]["deepvariant"]["cpu"],
         model=lambda wildcards: parameters["tool_options"]["deepvariant"][wildcards.datatype]["model"],
-        tmp_dir=config["alternative_tmp_dir"]
+        gpu_options=" --nv " if config["queue"]["gpu"] and config["queue"]["gpu"] and config["tool_containers"]["deepvariant"]["gpu"] else " " # enables nVidia support
+        #tmp_dir=config["alternative_tmp_dir"],
     log:
         deepvariant=output_dict["log"]  / "deepvariant.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.deepvariant.log",
         cluster_log=output_dict["cluster_log"] / "deepvariant.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.cluster.log",
@@ -65,12 +67,24 @@ rule deepvariant: #
     conda:
         config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
     resources:
+        queue=config["queue"]["gpu"] if config["queue"]["gpu"] and config["queue"]["gpu"] and config["tool_containers"]["deepvariant"]["gpu"] else config["queue"]["cpu"],
         cpus=parameters["threads"]["deepvariant"],
         time=parameters["time"]["deepvariant"],
         mem=parameters["memory_mb"]["deepvariant"]
     threads: parameters["threads"]["deepvariant"]
 
     shell:
+        " mkdir -p {params.tmp_dir}; "
+        " WORKDIR=`dirname {output.vcf}`; "
+        " SIF=`realpath {params.sif}`; "
+        " LOG=`realpath {log.deepvariant}`; "
+        " cd ${{WORKDIR}}; "
+        " singularity run {params.gpu_options} -B /usr/lib/locale/:/usr/lib/locale/ ${{SIF}} /opt/deepvariant/bin/run_deepvariant "
+        " --model_type={params.model} --ref=`basename {input.reference}` --reads=`basename {input.bam}` "
+        " --output_vcf=`basename {output.vcf}` --output_gvcf=`basename {output.gvcf}` "
+        " --intermediate_results_dir ./deepvariant --num_shards={threads} > ${{LOG}} 2>&1; "
+
+"""
         " mkdir -p {params.tmp_dir}; "
         " TMPDIR=`realpath {params.tmp_dir}`;"
         " WORKDIR=`dirname {output.vcf}`; "
@@ -85,7 +99,7 @@ rule deepvariant: #
         " --output_vcf=`basename {output.vcf}` --output_gvcf=`basename {output.gvcf}` "
         " --intermediate_results_dir ./deepvariant --num_shards={threads} > ${{LOG}} 2>&1; "
         #" --call_variants_extra_args='config_string=\"device_count {{key: \'cpu\' value: {threads}}} intra_op_parallelism_threads:{threads} inter_op_parallelism_threads:{threads}\"' "
-
+"""
 """
 rule deepvariant_filter: #
     input:
@@ -101,6 +115,7 @@ rule deepvariant_filter: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["deepvariant_filter"],
         time=parameters["time"]["deepvariant_filter"],
         mem=parameters["memory_mb"]["deepvariant_filter"]

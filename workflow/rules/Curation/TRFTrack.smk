@@ -27,6 +27,7 @@ rule trf: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["trf"] ,
         time=parameters["time"]["trf"],
         mem=parameters["memory_mb"]["trf"]

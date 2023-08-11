@@ -18,6 +18,7 @@ rule quast:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
         cpus=parameters["threads"]["quast"],
         time=parameters["time"]["quast"],
         mem=parameters["memory_mb"]["quast"],

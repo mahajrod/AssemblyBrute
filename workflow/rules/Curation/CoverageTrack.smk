@@ -1,4 +1,5 @@
 ruleorder: get_track_stats > create_coverage_table
+ruleorder: create_bedgraph_from_coverage_table > create_bedgraph_track
 if "purge_dups" in config["stage_list"]:
     ruleorder: minimap2_cov > minimap2_purge_dups_reads
 
@@ -98,8 +99,32 @@ rule create_coverage_table:
         " PREFIX={output.stat_file};"
         " PREFIX=${{PREFIX%.stat}}; "
         " get_windows_stats_mosdepth_per_base_file.py -i {input.per_base} -w {wildcards.window} -s {wildcards.step} "
-        " -o ${{PREFIX}} 2>{log.std}; "
+        " -c bed -o ${{PREFIX}} 2>{log.std}; "
         #" cp ${{PREFIX}}.win{params.bin_size}.step{params.step_size}.stat ${{PREFIX}}.stat > {log.cp} 2>&1;"
+
+rule create_bedgraph_from_coverage_table:
+    input:
+        stat_file=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.stat"
+    output:
+        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type, [^./]+}/{genome_prefix}.input.{haplotype}.{datatype, [^./]+}_{cov_type, [^./]+}_coverage.win{window, [^./]+}.step{step, [^./]+}.track.bedgraph"
+    params:
+        coverage_col= lambda wildcards: 5 if wildcards.cov_type == "mean" else 6
+    log:
+        std=output_dict["log"]  / "create_bedgraph_from_coverage_table.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{datatype}.{cov_type}.{window}.{step}.log",
+        cluster_log=output_dict["cluster_log"] / "create_bedgraph_from_coverage_table.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{datatype}.{cov_type}.{window}.{step}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_bedgraph_from_coverage_table.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{datatype}.{cov_type}.{window}.{step}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "create_bedgraph_from_coverage_table.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{datatype}.{cov_type}.{window}.{step}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        cpus=parameters["threads"]["create_coverage_table"],
+        time=parameters["time"]["create_coverage_table"],
+        mem=parameters["memory_mb"]["create_coverage_table"]
+    threads: parameters["threads"]["create_coverage_table"]
+
+    shell:
+        " cut -f 0,1,2,{params.coverage_col} {input.stat_file} > {output.bedgraph} 2>{log.std}; "
 
 rule draw_coverage_heatmap:
     input:

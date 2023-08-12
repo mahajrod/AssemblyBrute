@@ -111,7 +111,7 @@ rule create_bedgraph_from_coverage_table:
     output:
         bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type, [^./]+}/{genome_prefix}.input.{haplotype}.{datatype, [^./]+}_{cov_type, [^./]+}_coverage.win{window, [^./]+}.step{step, [^./]+}.track.bedgraph"
     params:
-        coverage_col= lambda wildcards: 5 if wildcards.cov_type == "mean" else 6
+        coverage_col= lambda wildcards: 6 if wildcards.cov_type == "mean" else 7
     log:
         std=output_dict["log"]  / "create_bedgraph_from_coverage_table.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{datatype}.{cov_type}.{window}.{step}.log",
         cluster_log=output_dict["cluster_log"] / "create_bedgraph_from_coverage_table.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{datatype}.{cov_type}.{window}.{step}.cluster.log",
@@ -128,7 +128,7 @@ rule create_bedgraph_from_coverage_table:
     threads: parameters["threads"]["create_coverage_table"]
 
     shell:
-        " tail -n +2 {input.stat_file} | cut -f 0,1,2,{params.coverage_col}  > {output.bedgraph} 2>{log.std}; "
+        " tail -n +2 {input.stat_file} | cut -f 1,2,3,{params.coverage_col}  > {output.bedgraph} 2>{log.std}; "
 
 rule draw_coverage_heatmap:
     input:

@@ -128,7 +128,7 @@ rule create_bedgraph_from_coverage_table:
     threads: parameters["threads"]["create_coverage_table"]
 
     shell:
-        " cut -f 0,1,2,{params.coverage_col} {input.stat_file} > {output.bedgraph} 2>{log.std}; "
+        " tail -n +2 {input.stat_file} | cut -f 0,1,2,{params.coverage_col}  > {output.bedgraph} 2>{log.std}; "
 
 rule draw_coverage_heatmap:
     input:

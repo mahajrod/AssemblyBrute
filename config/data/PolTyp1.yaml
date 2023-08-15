@@ -51,7 +51,7 @@
     "rapid_telomere":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/rapid-curation/rapid_hic_software/runTelo.sif"
     "deepvariant":
         "cpu":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/deepvariant/deepvariant_1.5.0.sif"
-        "gpu":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
+        #"gpu":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
 
 'alternative_tmp_dir': None
 

@@ -30,7 +30,6 @@ telomere_df = pd.read_csv(args.input, sep="\t", header=None, names=["scaffold", 
 telomere_df["length"] = fai_df["length"]
 
 telomere_df["min_end_distance"] = np.minimum(telomere_df["length"] - telomere_df["start"], telomere_df["end"])
-print(telomere_df)
 telomere_df[(telomere_df["min_end_distance"] >= args.min_distance) & (telomere_df["score"] >= args.score_threshold)][["start", "end", "score"]].to_csv(args.output,
                                                                                                     sep="\t",
                                                                                                     index=True,

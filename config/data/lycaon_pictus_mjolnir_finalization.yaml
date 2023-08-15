@@ -51,7 +51,7 @@
     "rapid_telomere":       "/projects/mjolnir1/people/xsg178/soft/rapid-curation/rapid_hic_software/runTelo.sif"
     "deepvariant":
         "cpu": "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0.sif"
-        "gpu": null #"gpu": "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
+        "gpu": "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
 
 "alternative_tmp_dir":  "/maps/projects/mjolnir1/scratch/xsg178/tmp/"
 

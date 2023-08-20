@@ -23,15 +23,15 @@
             "time":         "06:00:00"
             "in_memory":    True
         "nt":
-            "path":         "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/db/kraken2/nt/20220915/" # add path to nt database
-            "memory_mb":    500000
+            "path":         "/projects/mjolnir1/data/databases/kraken2/nt/20230502/" # add path to nt database
+            "memory_mb":    550000
             "threads":      30
-            "time":         "03:00:00"
+            "time":         "05:00:00"
             "in_memory":    True
     "fcs":
         "fcs_gx":
-            "path":         "/scratch/yggdrasil/db/fcs/gxdb/" # add path to fcs_gx database
-            "image_path":   "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/FCS-GX/fcs-gx.sif"
+            "path":         "/projects/mjolnir1/people/xsg178/db/fcs/gxdb/" # add path to fcs_gx database
+            "image_path":   "/projects/mjolnir1/people/xsg178/soft/FCS-GX/fcs-gx.sif"
             "memory_mb":    512000 # Entire database must be in memory, it requires at least 490 Gbp
             "threads":      30
             "time":         "06:00:00"
@@ -39,19 +39,22 @@
     "fcs_adaptor":
         "adaptor":
             "path":         null # database is embedded in singularity image
-            "image_path":   "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/fcsadaptor/fcs-adaptor.sif"
+            "image_path":   "/projects/mjolnir1/people/xsg178/soft/fcsadaptor/fcs-adaptor.sif"
             "memory_mb":    20000 #
             "threads":      1
             "time":         "01:00:00"
             "in_memory":    True
             "taxonomy":     "eukaryota"
+
 "final_fcs_db": "fcs_gx" # this database will be used for the filtration of the contigs if skip_fcs is False
 
 "tool_containers":
-    "rapid_telomere":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/rapid-curation/rapid_hic_software/runTelo.sif"
+    "rapid_telomere":       "/projects/mjolnir1/people/xsg178/soft/rapid-curation/rapid_hic_software/runTelo.sif"
     "deepvariant":
-        "cpu":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/deepvariant/deepvariant_1.5.0.sif"
-        "gpu": null #"gpu":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
+        "cpu": "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0.sif"
+        "gpu": null #"gpu": "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
+
+"alternative_tmp_dir":  "/maps/projects/mjolnir1/scratch/xsg178/tmp/"
 
 "stage_coretools":     #TODO: add bionano
     "filtering":
@@ -94,9 +97,9 @@
     "yahs":
         - "phased_reads"
         #- "unphased_reads"
-    "threeddna":
+    "3ddna":
         - "phased_reads"
-       # - "unphased_reads"
+        #- "unphased_reads"
     "curation":
         - "default"
     "assembly_qc":
@@ -106,48 +109,48 @@
         #- "unphased_reads"
 
 "other_tool_option_sets":
-    "cutadapt":                 "default"   # Allowed: default
-    "porechop_abi":             "default"   # Allowed: default
-    "chopper":                  "default"   # Allowed: default
-    "fastqc":                   "default"   # Allowed: default
-    "mosdepth":                 "default"   # Allowed: default
-    "jellyfish":                "default"   # Allowed: default
-    "meryl":                    "default"   # Allowed: default
-    "smudgeplot":               "default"   # Allowed: default
-    "telo_finder":              "default"   # Allowed: default
-    "quast":                    "default"   # Allowed: default
-    "minimap2":                 "default"   # Allowed: default
-    "two_read_bam_combiner":    "default"   # Allowed: default
-    "pretextmap":               "default"   # Allowed: default
-    "pretextsnapshot":          "default"   # Allowed: default
-    "gcp":                      "default"   # Allowed: default
-    "kat":                      "default"   # Allowed: default
-    "juicer_tools_qc":          "default"   # Allowed: default
-    "juicer_tools_pre":         "default"   # Allowed: default
-    "mapping_pipeline":         "arima"     # Allowed: arima, bwa_only, juicer, pairtools, pairtools
+    "cutadapt":                 "default"       # Allowed: default
+    "porechop_abi":             "default"       # Allowed: default
+    "chopper":                  "default"       # Allowed: default
+    "fastqc":                   "default"       # Allowed: default
+    "mosdepth":                 "default"       # Allowed: default
+    "jellyfish":                "default"       # Allowed: default
+    "meryl":                    "default"       # Allowed: default
+    "smudgeplot":               "default"       # Allowed: default
+    "telo_finder":              "default"       # Allowed: default
+    "quast":                    "default"       # Allowed: default
+    "minimap2":                 "default"       # Allowed: default
+    "two_read_bam_combiner":    "default"       # Allowed: default
+    "pretextmap":               "default"       # Allowed: default
+    "pretextsnapshot":          "default"       # Allowed: default
+    "gcp":                      "default"       # Allowed: default
+    "kat":                      "default"       # Allowed: default
+    "juicer_tools_qc":          "default"       # Allowed: default
+    "juicer_tools_pre":         "default"       # Allowed: default
+    "mapping_pipeline":         "arima"     # Allowed: arima, bwa_only, juicer, pairtools
     "trf":                      "default"
     "wga":                      "default"
     "select_long_scaffolds":    "default"
-    "deepvariant":              "default"   # Allowed: default
-    "pairtools_parse":          "default"   # Allowed: default
+    "deepvariant":              "default"       # Allowed: default
+    "pairtools_parse":          "default"       # Allowed: default
     "samtools_stats":           "default"   # Allowed: default
 
 "tool_manually_adjusted_features":
     "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions
-        "lower_threshold":              null   # None
-        "haploid_diploid_threshold":    null  # None
-        "upper_threshold":              null  # None
+        "lower_threshold": null
+        "haploid_diploid_threshold": null
+        "upper_threshold": null
 
 "ploidy": 2
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
-"genome_prefix": "genome"
+"genome_prefix": "SledDog1"
 "busco_lineage_list":
-    - "mammalia_odb10" #
+    - "carnivora_odb10" #
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
 
-"species_name": "species species"
-"tax_id": null # necessary for contamination scan via FCS
+"species_name": "canis familiaris"
+"tax_id": 9615 # necessary for contamination scan via FCS
 
 "database_set":
     "kraken2":
@@ -162,7 +165,6 @@
     - "illumina"
     - "nanopore"
 
-
 "final_kmer_counter": "meryl" # pipeline allows usage of different kmer counter tools, but only one genomesize assessment could be used
 "final_kmer_length": 21 # pipeline allows usage of different kmer length, but only one genomesize assessment could be used
 
@@ -172,32 +174,32 @@
 "phasing_stage": "purge_dups"
 
 "contig_datatype": "hifi"
-"hic_enzyme_set": "Arima"
+"hic_enzyme_set": "OmniC"
 "custom_enzyme_set": null # None
 
-"starting_point": "fastq" # Allowed: "draft"
+"starting_point": "draft" # Allowed: "draft"
 "data_types": "hifi,hic" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
 
-"mode": "assembly"                # Allowed: "preprocessing", "qc", "assembly"
+"mode": "finalization"                # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
 "assembly_mode": "full"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
+"finalization_mode": "curation"
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []
 "custom_assembly_stages": []
-"custom_finalization_stages": []
 "curation_seq_type":
     - "scaffolds"
-    - "contigs" # works only if precuration stage is hic_sscaffolding
+    #- "contigs" # works only if precuration stage is hic_sscaffolding
 
-"skip_read_qc": False
-"skip_filter_reads": False
+"skip_read_qc": True
+"skip_filter_reads": True
 "skip_busco": False
 "skip_gcp": False
-"skip_fcs": False
-"skip_fcs_adaptor": False
-"skip_kraken": False
+"skip_fcs": True
+"skip_fcs_adaptor": True
+"skip_kraken": True
 "skip_prescaf_pretext": False
 "skip_postscaf_pretext": True
 "skip_both_pretext": False

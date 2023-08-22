@@ -1,4 +1,4 @@
-
+"""
 rule last_index: #
     input:
         masked_fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.softmasked.fasta"
@@ -16,6 +16,37 @@ rule last_index: #
         cluster_err=output_dict["cluster_error"] / "last_index.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
         output_dict["benchmark"]  / "last_index.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        cpus=parameters["threads"]["last_index"] ,
+        time=parameters["time"]["last_index"],
+        mem=parameters["memory_mb"]["last_index"]
+    threads: parameters["threads"]["last_index"]
+    shell:
+        " OUTPUT_PREFIX={output.bck}; "
+        " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.bck}}; "
+        " lastdb  -P {threads} -c -u YASS -R11 ${{OUTPUT_PREFIX}} {input.masked_fasta} > {log.index} 2>&1; "
+"""
+
+rule last_index: #
+    input:
+        masked_fasta="{fasta_prefix}.softmasked.fasta"
+    output:
+        bck="{fasta_prefix}.YASS.R11.soft.bck",
+        prj="{fasta_prefix}.YASS.R11.soft.prj",
+        ssp="{fasta_prefix}.YASS.R11.soft.ssp",
+        tis="{fasta_prefix}.YASS.R11.soft.tis",
+        des="{fasta_prefix}.YASS.R11.soft.des",
+        sds="{fasta_prefix}.YASS.R11.soft.sds",
+        suf="{fasta_prefix}.YASS.R11.soft.suf",
+    log:
+        index="{fasta_prefix}.index.log",
+        cluster_log="{fasta_prefix}.cluster.log",
+        cluster_err="{fasta_prefix}.cluster.err"
+    benchmark:
+        "{fasta_prefix}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

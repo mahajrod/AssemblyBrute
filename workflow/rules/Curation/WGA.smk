@@ -260,7 +260,7 @@ rule draw_alignment: #
         svg=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.svg",
     params:
         per_thread_mem=parameters["memory_mb"]["last_alignment_per_thread"],
-        query_syn_file=" --query_syn_file {0}".format(str(select_query_synfile)) if select_query_synfile else ""
+        query_syn_file=lambda wildcards: " --query_syn_file {0}".format(str(select_query_synfile(wildcards))) if select_query_synfile(wildcards) else ""
     log:
         dotplot=output_dict["log"]  / "draw_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.dotplot.log",
         cluster_log=output_dict["cluster_log"] / "draw_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.cluster.log",

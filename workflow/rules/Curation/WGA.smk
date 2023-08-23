@@ -75,8 +75,8 @@ rule last_alignment: #
         database=select_database,#out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.{target_haplotype}.YASS.R11.soft.bck",
         fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/scaffolds/{genome_prefix}.input.{query_haplotype}.softmasked.fasta",
     output:
-        maf=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len0.maf.gz",
-        tab=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len0.tab.gz",
+        maf=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len0.maf.gz",
+        tab=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len0.tab.gz",
     params:
         per_thread_mem=parameters["memory_mb"]["last_alignment_per_thread"],
     log:
@@ -207,14 +207,14 @@ rule filter_last_alignment_by_target_hit_len: #
 
 rule draw_alignment: #
     input:
-        tab=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.tab.gz",#out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/input/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.tab.gz",
-        target_whitelist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.{target_haplotype}.whitelist",
-        target_orderlist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.{target_haplotype}.orderlist",
+        tab=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.tab.gz",#out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/input/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.tab.gz",
+        target_whitelist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/scaffolds/{genome_prefix}.input.{target_haplotype}.whitelist",
+        target_orderlist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/scaffolds/{genome_prefix}.input.{target_haplotype}.orderlist",
         query_whitelist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/scaffolds/{genome_prefix}.input.{query_haplotype}.whitelist",
         query_orderlist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/scaffolds/{genome_prefix}.input.{query_haplotype}.orderlist",
     output:
-        png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.png",
-        svg=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.svg",
+        png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.png",
+        svg=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.svg",
     params:
         per_thread_mem=parameters["memory_mb"]["last_alignment_per_thread"],
     log:

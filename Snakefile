@@ -855,7 +855,7 @@ if "curation" in config["stage_list"]:
 
     if "scaffolds" in  config["curation_seq_type"]:
         if not config["skip_wga"]:
-            results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.png",
+            results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{query_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.png",
                                     genome_prefix=[config["genome_prefix"], ],
                                     assembly_stage=["curation", ],
                                     parameters=[parameters_label],

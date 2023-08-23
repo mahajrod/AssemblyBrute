@@ -135,13 +135,11 @@ if "reference" in set(data_types):
     reference_genomes_list = [element.name for element in reference_input_dir.glob("*")]
     for genome in reference_genomes_list:
         input_reference_filedict[genome] = {}
-        input_reference_filedict[genome]["fasta"] = list((reference_input_dir / genome).glob("*.fasta"))[0]
-        input_reference_filedict[genome]["syn"] = list((reference_input_dir / genome).glob("*.syn"))[0]
-        input_reference_filedict[genome]["whitelist"] = list((reference_input_dir / genome).glob("*.whitelist"))[0]
-        input_reference_filedict[genome]["orderlist"] = list((reference_input_dir / genome).glob("*.orderlist"))[0]
-        if (len(input_reference_filedict[genome]["fasta"]) > 1) or (len(input_reference_filedict[genome]["syn"]) > 1) or (len(input_reference_filedict[genome]["whitelist"]) > 1) or (len(input_reference_filedict[genome]["orderlist"]) > 1):
-            raise ValueError("ERROR!!! There is more than one fasta/syn/orderlist/whitelist file for reference {0}".format(genome))
-
+        for filetype in "fasta", "syn", "whitelist", "orderlist":
+            input_reference_filedict[genome][filetype] = list((reference_input_dir / genome).glob("*.{0}".format(filetype)))
+            if len(input_reference_filedict[genome][filetype]) > 1:
+                raise ValueError("ERROR!!! There is more than one {0} file for reference {1}".format(filetype, genome))
+            input_reference_filedict[genome][filetype] = input_reference_filedict[genome][filetype][0]
 #------------------------------------------------------------------------------------------
 
 # check filenames of paired data

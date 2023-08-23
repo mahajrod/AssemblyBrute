@@ -1357,6 +1357,7 @@
     #- "bionano"
     - "hic"
     - "illumina"
+    - "reference"
     #- "lr"
 
 "fastqc_data_types":

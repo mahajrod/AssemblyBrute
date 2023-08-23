@@ -108,14 +108,10 @@ rule create_links_for_draft:
 
 rule create_links_for_reference:
     input:
-        fasta=lambda wildcards: input_dir_path.resolve() / "reference/{0}/{1}".format(wildcards.ref_name,
-                                                                                      input_reference_filedict[wildcards.ref_name]["fasta"]),
-        syn=lambda wildcards: input_dir_path.resolve() / "reference/{0}/{1}".format(wildcards.ref_name,
-                                                                                      input_reference_filedict[wildcards.ref_name]["syn"]),
-        whitelist=lambda wildcards: input_dir_path.resolve() / "reference/{0}/{1}".format(wildcards.ref_name,
-                                                                                      input_reference_filedict[wildcards.ref_name]["whitelist"]),
-        orderlist=lambda wildcards: input_dir_path.resolve() / "reference/{0}/{1}".format(wildcards.ref_name,
-                                                                                      input_reference_filedict[wildcards.ref_name]["orderlist"]),
+        fasta=lambda wildcards: input_reference_filedict[wildcards.ref_name]["fasta"].resolve(),
+        syn=lambda wildcards: input_reference_filedict[wildcards.ref_name]["syn"].resolve(),
+        whitelist=lambda wildcards: input_reference_filedict[wildcards.ref_name]["whitelist"].resolve(),
+        orderlist=lambda wildcards: input_reference_filedict[wildcards.ref_name]["orderlist"].resolve(),
     output:
         fasta=out_dir_path / "data/reference/{ref_name}/{ref_name}.softmasked.fasta",
         syn=out_dir_path / "data/reference/{ref_name}/{ref_name}.syn",

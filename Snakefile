@@ -98,6 +98,7 @@ input_filedict = {}
 input_file_prefix_dict = {}
 input_fasta_filedict = {}
 input_fasta_file_prefix_dict = {}
+input_reference_filedict = {}
 
 input_forward_suffix_dict = {}
 input_reverse_suffix_dict = {}
@@ -128,6 +129,17 @@ for d_type in set(data_types):
         elif len(input_filedict[d_type]) > 0:
              datatype_format_dict[d_type] = "fastq"
              datatype_extension_dict[d_type] = config["fastq_extension"]
+
+if "reference" in set(data_types):
+    reference_input_dir = input_dict[datatype]["dir"]
+    reference_genomes_list = [element.name for element in reference_input_dir.glob("*")]
+    for genome in reference_genomes_list:
+        input_reference_filedict[genome] = {}
+        input_reference_filedict[genome]["fasta"] = list((reference_input_dir / genome).glob("*.fasta"))[0]
+        input_reference_filedict[genome]["syn"] = list((reference_input_dir / genome).glob("*.syn"))[0]
+        input_reference_filedict[genome]["whitelist"] = list((reference_input_dir / genome).glob("*.whitelist"))[0]
+        input_reference_filedict[genome]["orderlist"] = list((reference_input_dir / genome).glob("*.orderlist"))[0]
+
 #------------------------------------------------------------------------------------------
 
 # check filenames of paired data

@@ -140,6 +140,7 @@ if "reference" in set(data_types):
             if len(input_reference_filedict[genome][filetype]) > 1:
                 raise ValueError("ERROR!!! There is more than one {0} file for reference {1}".format(filetype, genome))
             input_reference_filedict[genome][filetype] = input_reference_filedict[genome][filetype][0]
+    print(input_reference_filedict)
 #------------------------------------------------------------------------------------------
 
 # check filenames of paired data

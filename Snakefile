@@ -134,6 +134,8 @@ if "reference" in set(data_types):
     reference_input_dir = input_dict[datatype]["dir"]
     reference_genomes_list = [element.name for element in reference_input_dir.glob("*")]
     for genome in reference_genomes_list:
+        if (len(input_reference_filedict[genome]["fasta"]) > 1) or (len(input_reference_filedict[genome]["syn"]) > 1) or (len(input_reference_filedict[genome]["whitelist"]) > 1) or (len(input_reference_filedict[genome]["orderlist"]) > 1):
+            raise ValueError("ERROR!!! There is more than one fasta/syn/orderlist/whitelist file for reference {0}".format(genome))
         input_reference_filedict[genome] = {}
         input_reference_filedict[genome]["fasta"] = list((reference_input_dir / genome).glob("*.fasta"))[0]
         input_reference_filedict[genome]["syn"] = list((reference_input_dir / genome).glob("*.syn"))[0]
@@ -860,7 +862,7 @@ if "curation" in config["stage_list"]:
                                     parameters=[parameters_label],
                                     min_target_len=parameters["tool_options"]["wga"][ "min_target_len"],
                                     query_haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                    target_haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
+                                    target_haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"] + list(input_reference_filedict.keys()),
                                     ) for parameters_label in stage_dict["curation"]["parameters"]]]
         results_list += [[[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
                                 threshold_type=["absolute", "relative"],

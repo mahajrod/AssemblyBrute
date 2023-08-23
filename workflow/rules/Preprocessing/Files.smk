@@ -1,4 +1,4 @@
-localrules: create_fastq_links, create_links_for_draft, create_fasta_links
+localrules: create_fastq_links, create_links_for_draft, create_fasta_links, create_links_for_reference
 ruleorder: preprocess_hic_fastq > create_fastq_links
 rule create_fastq_links:
     priority: 1000
@@ -88,7 +88,6 @@ rule create_links_for_draft:
         lambda wildcards: input_dir_path.resolve() / "draft/fasta/{0}".format(draft_file_dict[wildcards.haplotype])
     output:
         out_dir_path / "draft_qc/{parameters}/{genome_prefix}.draft_qc.{haplotype}.fasta"
-        #paf=out_dir_path  / ("purge_dups/{assembler}/{haplotype}/%s.purge_dups.{assembler}.{haplotype}.minimap2.{fileprefix}.paf.gz" % config["genome_name"])
     log:
         ln=output_dict["log"]  / "create_links_for_draft.{genome_prefix}.{parameters}.draft_qc.{haplotype}.ln.log",
         cluster_log=output_dict["cluster_log"] / "create_links_for_draft.{genome_prefix}.{parameters}.draft_qc.{haplotype}.cluster.log",
@@ -106,3 +105,39 @@ rule create_links_for_draft:
 
     shell:
         " ln -sf {input} {output} 2>{log.ln}; "
+
+rule create_links_for_reference:
+    input:
+        fasta=lambda wildcards: input_dir_path.resolve() / "reference/{0}/{1}".format(wildcards.ref_name,
+                                                                                      input_reference_filedict[wildcards.ref_name]["fasta"]),
+        syn=lambda wildcards: input_dir_path.resolve() / "reference/{0}/{1}".format(wildcards.ref_name,
+                                                                                      input_reference_filedict[wildcards.ref_name]["syn"]),
+        whitelist=lambda wildcards: input_dir_path.resolve() / "reference/{0}/{1}".format(wildcards.ref_name,
+                                                                                      input_reference_filedict[wildcards.ref_name]["whitelist"]),
+        orderlist=lambda wildcards: input_dir_path.resolve() / "reference/{0}/{1}".format(wildcards.ref_name,
+                                                                                      input_reference_filedict[wildcards.ref_name]["orderlist"]),
+    output:
+        fasta=out_dir_path / "data/reference/{ref_name}/{ref_name}.softmasked.fasta",
+        syn=out_dir_path / "data/reference/{ref_name}/{ref_name}.syn",
+        whitelist=out_dir_path / "data/reference/{ref_name}/{ref_name}.whitelist",
+        orderlist=out_dir_path / "data/reference/{ref_name}/{ref_name}.orderlist",
+    log:
+        ln=output_dict["log"]  / "create_links_for_reference.{ref_name}.ln.log",
+        cluster_log=output_dict["cluster_log"] / "create_links_for_reference.{ref_name}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_links_for_reference.{ref_name}.err"
+    benchmark:
+        output_dict["benchmark"]  / "create_links_for_reference.{ref_name}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        cpus=parameters["threads"]["create_links_for_draft"],
+        time=parameters["time"]["create_links_for_draft"],
+        mem=parameters["memory_mb"]["create_links_for_draft"]
+    threads: parameters["threads"]["create_links_for_draft"]
+
+    shell:
+        " ln -sf {input.fasta} {output.fasta} 2>{log.ln}; "
+        " ln -sf {input.syn} {output.syn} 2>>{log.ln}; "
+        " ln -sf {input.whitelist} {output.whitelist} 2>>{log.ln}; "
+        " ln -sf {input.orderlist} {output.orderlist} 2>>{log.ln}; "

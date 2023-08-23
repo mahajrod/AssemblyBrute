@@ -60,9 +60,19 @@ rule last_index: #
         " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.bck}}; "
         " lastdb  -P {threads} -c -u YASS -R11 ${{OUTPUT_PREFIX}} {input.masked_fasta} > {log.index} 2>&1; "
 
+def select_database(wildcards):
+    if wildcards.target_haplotype in stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["haplotype_list"]:
+        return out_dir_path / "curation/{0}..{1}/{2}/scaffolds/{3}.input.{2}.YASS.R11.soft.bck".format(wildcards.prev_stage_parameters,
+                                                                                                       wildcards.curation_parameters,
+                                                                                                       wildcards.target_haplotype,
+                                                                                                       wildcards.genome_prefix)
+    elif wildcards.target_haplotype in input_reference_filedict:
+        return out_dir_path / "data/reference/{0}/{0}.YASS.R11.soft.bck".format(wildcards.target_haplotype)
+
+
 rule last_alignment: #
     input:
-        database=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.{target_haplotype}.YASS.R11.soft.bck",
+        database=select_database,#out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.{target_haplotype}.YASS.R11.soft.bck",
         fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/scaffolds/{genome_prefix}.input.{query_haplotype}.softmasked.fasta",
     output:
         maf=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len0.maf.gz",
@@ -96,7 +106,45 @@ rule last_alignment: #
         " lastal  -P {threads} -R11 -f MAF  ${{INDEX_PREFIX}} {input.fasta}  2>{log.lastall} | "
         " tee ${{MAF}} 2>{log.tee} | maf-convert tab > ${{TAB}} 2>{log.convert}; "
         " pigz -p {threads} ${{MAF}} ${{TAB}} > {log.pigz} 2>&1; "
-
+"""
+rule last_alignment_to_reference: #
+    input:
+        database=out_dir_path / "data/reference/{ref_name}/{ref_name}.YASS.R11.soft.bck",
+        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/scaffolds/{genome_prefix}.input.{query_haplotype}.softmasked.fasta",
+    output:
+        maf=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{ref_name}.YASS.R11.soft.min_len0.maf.gz",
+        tab=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{ref_name}.YASS.R11.soft.min_len0.tab.gz",
+    params:
+        per_thread_mem=parameters["memory_mb"]["last_alignment_per_thread"],
+    log:
+        lastall=output_dict["log"]  / "last_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{ref_name}.lastall.log",
+        tee=output_dict["log"]  / "last_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{ref_name}.tee.log",
+        convert=output_dict["log"]  / "last_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{ref_name}.convert.log",
+        pigz=output_dict["log"]  / "last_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{ref_name}.pigz.log",
+        cluster_log=output_dict["cluster_log"] / "last_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{ref_name}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "last_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{ref_name}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "last_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{ref_name}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        cpus=parameters["threads"]["last_alignment"],
+        time=parameters["time"]["last_alignment"],
+        mem=parameters["memory_mb"]["last_alignment"]
+    threads: parameters["threads"]["last_alignment"]
+    shell:
+        " INDEX_PREFIX={input.database}; "
+        " INDEX_PREFIX=${{INDEX_PREFIX%.bck}}; "
+        " MAF={output.maf}; "
+        " MAF=${{MAF%.gz}}; "
+        " TAB={output.tab}; "
+        " TAB=${{TAB%.gz}}; "
+        " lastal  -P {threads} -R11 -f MAF  ${{INDEX_PREFIX}} {input.fasta}  2>{log.lastall} | "
+        " tee ${{MAF}} 2>{log.tee} | maf-convert tab > ${{TAB}} 2>{log.convert}; "
+        " pigz -p {threads} ${{MAF}} ${{TAB}} > {log.pigz} 2>&1; "
+"""
+"""
 rule filter_last_alignment_by_target_hit_len: #
     input:
         tab=rules.last_alignment.output.tab,
@@ -113,6 +161,36 @@ rule filter_last_alignment_by_target_hit_len: #
         cluster_err=output_dict["cluster_error"] / "filter_last_alignment_by_len.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.cluster.err"
     benchmark:
         output_dict["benchmark"]  / "filter_last_alignment_by_len.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.min_len{min_target_len}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        cpus=parameters["threads"]["filter_last_alignment_by_len"],
+        time=parameters["time"]["filter_last_alignment_by_len"],
+        mem=parameters["memory_mb"]["filter_last_alignment_by_len"]
+    threads: parameters["threads"]["filter_last_alignment_by_len"]
+    shell:
+        " zcat {input.tab} 2>{log.zcat} | "
+        " grep -vP '^#' 2>{log.grep} | "
+        " awk -F'\t' '{{if ($4>={wildcards.min_target_len}) print $0}}' 2>{log.awk} | "
+        " gzip -c > {output.tab} 2>{log.gzip}; "
+"""
+rule filter_last_alignment_by_target_hit_len: #
+    input:
+        tab="{tab_file_prefix}.YASS.R11.soft.min_len0.tab.gz"
+    output:
+        tab="{tab_file_prefix}.YASS.R11.soft.min_len{min_target_len}.tab.gz",
+    params:
+        per_thread_mem=parameters["memory_mb"]["last_alignment_per_thread"],
+    log:
+        zcat="{tab_file_prefix}.min_len{min_target_len}.zcat.log",
+        grep="{tab_file_prefix}.min_len{min_target_len}.grep.log",
+        awk="{tab_file_prefix}.min_len{min_target_len}.awk.log",
+        gzip="{tab_file_prefix}.min_len{min_target_len}.gzip.log",
+        cluster_log="{tab_file_prefix}.min_len{min_target_len}.cluster.log",
+        cluster_err="{tab_file_prefix}.min_len{min_target_len}.cluster.err"
+    benchmark:
+        "{tab_file_prefix}.min_len{min_target_len}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

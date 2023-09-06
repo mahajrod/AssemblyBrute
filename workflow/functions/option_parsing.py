@@ -72,11 +72,11 @@ def group_option_sets(option_set_dict, grouping_option_list):
 def parse_node_list(rulename, grid_system="slurm"):
     black_list = set(config["nodes"]["blacklist"])
     white_list = set(config["nodes"]["whitelist"])
-    if rulename in config["tool_nodes"]:
-        if "blacklist" in config["tool_nodes"][rulename]:
-            black_list = set(config["tool_nodes"][rulename]["blacklist"]) if config["tool_nodes"][rulename]["blacklist"] else black_list
-        if "whitelist" in config["tool_nodes"][rulename]:
-            white_list = set(config["tool_nodes"][rulename]["whitelist"]) if config["tool_nodes"][rulename]["whitelist"] else white_list
+    if rulename in config["rule_nodes"]:
+        if "blacklist" in config["rule_nodes"][rulename]:
+            black_list = set(config["rule_nodes"][rulename]["blacklist"]) if config["rule_nodes"][rulename]["blacklist"] else black_list
+        if "whitelist" in config["rule_nodes"][rulename]:
+            white_list = set(config["rule_nodes"][rulename]["whitelist"]) if config["rule_nodes"][rulename]["whitelist"] else white_list
     if grid_system == "slurm":
         whitelist_option = " -w {0} ".format(",".join(white_list)) if white_list else " "
         blacklist_option = " --exclude {0} ".format(",".join(black_list)) if black_list else " "

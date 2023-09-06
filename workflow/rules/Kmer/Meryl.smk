@@ -18,6 +18,7 @@ rule meryl:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("meryl"),
         cpus=parameters["threads"]["meryl"],
         time=parameters["time"]["meryl"],
         mem=parameters["memory_mb"]["meryl"],
@@ -45,6 +46,7 @@ rule meryl_pe:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("meryl_pe"),
         cpus=parameters["threads"]["meryl"],
         time=parameters["time"]["meryl"],
         mem=parameters["memory_mb"]["meryl"],
@@ -83,6 +85,7 @@ rule merge_meryl:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("merge_meryl"),
         cpus=parameters["threads"]["meryl"],
         time=parameters["time"]["meryl"],
         mem=parameters["memory_mb"]["meryl"],
@@ -111,6 +114,7 @@ rule meryl_extract:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("meryl_extract"),
         cpus=parameters["threads"]["meryl_extract"],
         time=parameters["time"]["meryl_extract"],
         mem=parameters["memory_mb"]["meryl_extract"],
@@ -144,6 +148,7 @@ rule subset_extracted_kmers:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("subset_extracted_kmers"),
         cpus=parameters["threads"]["subset_extracted_kmers"],
         time=parameters["time"]["subset_extracted_kmers"],
         mem=parameters["memory_mb"]["subset_extracted_kmers"],

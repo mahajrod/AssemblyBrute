@@ -16,6 +16,7 @@ rule busco5_download:
         config["conda"]["busco"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("busco5_download"),
         cpus=parameters["threads"]["busco5_download"],
         time=parameters["time"]["busco5_download"],
         mem=parameters["memory_mb"]["busco5_download"],
@@ -47,6 +48,7 @@ rule busco5: # Downloading of busco datasets is performed by a different rule to
         config["conda"]["busco"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("busco5"),
         cpus=parameters["threads"]["busco5"],
         time=parameters["time"]["busco5"],
         mem=parameters["memory_mb"]["busco5"],
@@ -99,6 +101,7 @@ rule busco5_intersect_haplotypes: # Downloading of busco datasets is performed b
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("busco5_intersect_haplotypes"),
         cpus=parameters["threads"]["busco5_intersect_haplotypes"],
         time=parameters["time"]["busco5_intersect_haplotypes"],
         mem=parameters["memory_mb"]["busco5_intersect_haplotypes"],
@@ -173,6 +176,7 @@ rule busco5_intersect_stages:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         cpus=parameters["threads"]["busco5_intersect_stages"],
+        node_options=parse_node_list("busco5_intersect_stages"),
         time=parameters["time"]["busco5_intersect_stages"],
         mem=parameters["memory_mb"]["busco5_intersect_stages"],
     threads:
@@ -254,6 +258,8 @@ rule busco5_intersect_all: # Downloading of busco datasets is performed by a dif
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("busco5_intersect_all"),
         cpus=parameters["threads"]["busco5_intersect_all"],
         time=parameters["time"]["busco5_intersect_all"],
         mem=parameters["memory_mb"]["busco5_intersect_all"],

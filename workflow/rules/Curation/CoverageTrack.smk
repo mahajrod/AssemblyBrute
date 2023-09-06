@@ -33,6 +33,7 @@ rule minimap2_cov: # TODO: add nanopore support
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("minimap2_cov"),
         cpus=parameters["threads"]["minimap2"] + parameters["threads"]["samtools_sort"],
         time=parameters["time"]["minimap2"],
         mem=parameters["memory_mb"]["minimap2"] + (parameters["memory_mb"]["samtools_sort"] * parameters["threads"]["samtools_sort"])
@@ -63,6 +64,7 @@ rule calculate_coverage:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("calculate_coverage"),
         cpus=parameters["threads"]["mosdepth"],
         time=parameters["time"]["mosdepth"],
         mem=parameters["memory_mb"]["mosdepth"]
@@ -93,6 +95,7 @@ rule create_coverage_table:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("create_coverage_table"),
         cpus=parameters["threads"]["create_coverage_table"],
         time=parameters["time"]["create_coverage_table"],
         mem=parameters["memory_mb"]["create_coverage_table"]
@@ -122,6 +125,7 @@ rule create_bedgraph_from_coverage_table:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("create_bedgraph_from_coverage_table"),
         cpus=parameters["threads"]["create_coverage_table"],
         time=parameters["time"]["create_coverage_table"],
         mem=parameters["memory_mb"]["create_coverage_table"]
@@ -153,6 +157,7 @@ rule draw_coverage_heatmap:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("draw_coverage_heatmap"),
         cpus=parameters["threads"]["draw_coverage_heatmap"],
         time=parameters["time"]["draw_coverage_heatmap"],
         mem=parameters["memory_mb"]["draw_coverage_heatmap"]

@@ -67,3 +67,22 @@ def group_option_sets(option_set_dict, grouping_option_list):
             final_option_set_group_dict[option_set] = option_group_syn
 
     return final_dict, final_option_set_group_dict
+
+
+def parse_node_list(rulename, grid_system="slurm"):
+    black_list = set(config["nodes"]["blacklist"])
+    white_list = set(config["nodes"]["whitelist"])
+    if rulename in config["tool_nodes"]:
+        if "blacklist" in config["tool_nodes"][rulename]:
+            black_list = set(config["tool_nodes"][rulename]["blacklist"]) if config["tool_nodes"][rulename]["blacklist"] else black_list
+        if "whitelist" in config["tool_nodes"][rulename]:
+            white_list = set(config["tool_nodes"][rulename]["whitelist"]) if config["tool_nodes"][rulename]["whitelist"] else white_list
+    if grid_system == "slurm":
+        whitelist_option = " -w {0} ".format(",".join(white_list)) if white_list else " "
+        blacklist_option = " --exclude {0} ".format(",".join(black_list)) if black_list else " "
+
+        return whitelist_option + blacklist_option
+    else:
+        print("White and black node lists are implemented only for slurm. "
+              "Modify 'parse_node_list' function in 'workflow/functions/option_parsing_py' "
+              "if you need such functionality for other grid systems")

@@ -43,6 +43,7 @@ rule yahs: #
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("yahs"),
         cpus=parameters["threads"]["yahs"] ,
         time=parameters["time"]["yahs"],
         mem=parameters["memory_mb"]["yahs"]
@@ -79,6 +80,7 @@ rule yahs_juicer_pre: #
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("yahs_juicer_pre"),
         cpus=parameters["threads"]["yahs_juicer_pre"] ,
         time=parameters["time"]["yahs_juicer_pre"],
         mem=parameters["memory_mb"]["yahs_juicer_pre"]
@@ -113,6 +115,7 @@ rule juicer_tools_pre: #
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("juicer_tools_pre"),
         cpus=parameters["threads"]["juicer_tools_pre"] ,
         time=parameters["time"]["juicer_tools_pre"],
         mem=parameters["memory_mb"]["juicer_tools_pre"]
@@ -158,6 +161,7 @@ rule create_links_for_yahs_files: #
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("create_links_for_yahs_files"),
         cpus=parameters["threads"]["create_fastq_links"] ,
         time=parameters["time"]["create_fastq_links"],
         mem=parameters["memory_mb"]["create_fastq_links"]
@@ -188,6 +192,7 @@ rule extract_yahs_contigs: #
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("extract_yahs_contigs"),
         cpus=parameters["threads"]["extract_yahs_contigs"] ,
         time=parameters["time"]["extract_yahs_contigs"],
         mem=parameters["memory_mb"]["extract_yahs_contigs"]
@@ -212,6 +217,7 @@ rule create_transfer_agp: #
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("create_transfer_agp"),
         cpus=parameters["threads"]["extract_yahs_contigs"] ,
         time=parameters["time"]["extract_yahs_contigs"],
         mem=parameters["memory_mb"]["extract_yahs_contigs"]

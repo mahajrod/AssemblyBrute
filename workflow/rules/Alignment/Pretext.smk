@@ -21,6 +21,7 @@ rule pretextmap: # #Pretext-map probably doesn't support long file names!!!!!!!!
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("pretextmap"),
         cpus=parameters["threads"]["pretextmap"] ,
         time=parameters["time"]["pretextmap"],
         mem=parameters["memory_mb"]["pretextmap"]
@@ -52,6 +53,7 @@ rule pretextsnapshot: #Pretext-snapshot doesn't support long file names!!!!!!!!!
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("pretextsnapshot"),
         cpus=parameters["threads"]["pretextmap"] ,
         time=parameters["time"]["pretextmap"],
         mem=parameters["memory_mb"]["pretextmap"]

@@ -28,6 +28,7 @@ rule cutadapt:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("cutadapt"),
         cpus=parameters["threads"]["cutadapt"],
         time=parameters["time"]["cutadapt"],
         mem=parameters["memory_mb"]["cutadapt"],
@@ -81,6 +82,7 @@ rule cutadapt_illumina:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("cutadapt"),
         cpus=parameters["threads"]["cutadapt"],
         time=parameters["time"]["cutadapt"],
         mem=parameters["memory_mb"]["cutadapt"],

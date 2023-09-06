@@ -18,6 +18,7 @@ rule generate_site_positions: #
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("generate_site_positions"),
         cpus=parameters["threads"]["generate_site_positions"] ,
         time=parameters["time"]["generate_site_positions"],
         mem=parameters["memory_mb"]["generate_site_positions"]
@@ -44,6 +45,7 @@ rule generate_prescaffolding_agp:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("generate_prescaffolding_agp"),
         cpus=parameters["threads"]["generate_prescaffolding_agp"] ,
         time=parameters["time"]["generate_prescaffolding_agp"],
         mem=parameters["memory_mb"]["generate_prescaffolding_agp"]
@@ -79,6 +81,7 @@ rule yahs_juicer_pre_prescaffolding: #
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("yahs_juicer_pre_prescaffolding"),
         cpus=parameters["threads"]["yahs_juicer_pre"] ,
         time=parameters["time"]["yahs_juicer_pre"],
         mem=parameters["memory_mb"]["yahs_juicer_pre"]
@@ -116,6 +119,7 @@ rule juicer_tools_pre_prescaffolding: #
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("juicer_tools_pre_prescaffolding"),
         cpus=parameters["threads"]["juicer_tools_pre"] ,
         time=parameters["time"]["juicer_tools_pre"],
         mem=parameters["memory_mb"]["juicer_tools_pre"]
@@ -152,6 +156,7 @@ rule bam2bed:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("bam_to_bed"),
         cpus=parameters["threads"]["bam2bed"] ,
         time=parameters["time"]["bam2bed"],
         mem=parameters["memory_mb"]["bam2bed"]

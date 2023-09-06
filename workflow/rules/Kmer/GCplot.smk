@@ -23,6 +23,7 @@ rule gc_count:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("gc_count"),
         cpus=parameters["threads"]["gc_count"],
         time=parameters["time"]["gc_count"],
         mem=parameters["memory_mb"]["gc_count"] + 30000,
@@ -59,6 +60,7 @@ rule gc_plot:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("gc_plot"),
         cpus=parameters["threads"]["gc_plot"],
         time=parameters["time"]["gc_plot"],
         mem=parameters["memory_mb"]["gc_plot"],

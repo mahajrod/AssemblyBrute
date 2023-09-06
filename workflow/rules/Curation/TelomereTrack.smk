@@ -36,6 +36,7 @@ rule telo_finder:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("telo_finder"),
         cpus=parameters["threads"]["telo_finder"] ,
         time=parameters["time"]["telo_finder"],
         mem=parameters["memory_mb"]["telo_finder"]
@@ -115,6 +116,7 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("telo_container"),
         cpus=parameters["threads"]["telo_finder"] ,
         time=parameters["time"]["telo_finder"],
         mem=parameters["memory_mb"]["telo_finder"],
@@ -194,6 +196,7 @@ rule get_telomere_warning:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("get_telomere_warning"),
         cpus=parameters["threads"]["get_telomere_warning"] ,
         time=parameters["time"]["get_telomere_warning"],
         mem=parameters["memory_mb"]["get_telomere_warning"]

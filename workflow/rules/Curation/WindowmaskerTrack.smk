@@ -18,6 +18,7 @@ rule windowmasker: #
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("windowmasker"),
         cpus=parameters["threads"]["windowmasker"] ,
         time=parameters["time"]["windowmasker"],
         mem=parameters["memory_mb"]["windowmasker"]

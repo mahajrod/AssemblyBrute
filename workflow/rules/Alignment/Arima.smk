@@ -31,6 +31,7 @@ rule bwa_map: #
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("bwa_map"),
         cpus=parameters["threads"]["bwa_map_arima"] ,
         time=parameters["time"]["bwa_map"],
         mem=parameters["memory_mb"]["bwa_map"],
@@ -79,6 +80,7 @@ rule bam_merge_pairs:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         cpus=parameters["threads"]["two_read_bam_combiner"] ,
+        node_options=parse_node_list("bwa_merge_pairs"),
         time=parameters["time"]["two_read_bam_combiner"],
         mem=parameters["memory_mb"]["two_read_bam_combiner"] + parameters["memory_mb"]["samtools_sort"] * parameters["threads"]["samtools_sort"],
         queue=config["queue"]["cpu"]
@@ -110,9 +112,11 @@ rule bam_merge_files:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("bwa_merge_files"),
         cpus=parameters["threads"]["samtools_sort"] ,
         time=parameters["time"]["samtools_sort"],
-        mem=parameters["memory_mb"]["samtools_sort"]
+        mem=parameters["memory_mb"]["samtools_sort"],
+
     threads: parameters["threads"]["samtools_sort"]
     shell:
         " samtools merge -@ {params.sort_threads} -o {output.bam} {input.bams} 1>{log.std} 2>&1"
@@ -135,6 +139,7 @@ rule rmdup:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
+        node_options=parse_node_list("rmdup"),
         cpus=parameters["threads"]["rmdup"] ,
         time=parameters["time"]["rmdup"],
         mem=parameters["memory_mb"]["rmdup"]

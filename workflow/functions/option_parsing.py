@@ -79,7 +79,7 @@ def parse_node_list(rulename, grid_system="slurm"):
             white_list = set(config["rule_nodes"][rulename]["whitelist"]) if config["rule_nodes"][rulename]["whitelist"] else white_list
     if grid_system == "slurm":
         whitelist_option = " -w {0} ".format(",".join(white_list)) if white_list else " "
-        blacklist_option = " --exclude {0} ".format(",".join(black_list)) if black_list else " "
+        blacklist_option = " -x {0} ".format(",".join(black_list)) if black_list else " "
 
         return whitelist_option + blacklist_option
     else:

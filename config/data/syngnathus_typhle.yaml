@@ -213,14 +213,14 @@
 "tool_queue":
     "deepvariant": "gpu"  # Allowed: "gpu", "cpu". GPU queue will be used if it is set here AND if "queue": "gpu" is set , and if GPU imae of deepvariant is available
 "nodes":
-    "blacklist": null
-    "whitelist": null
+    "blacklist": []
+    "whitelist": []
 "tool_nodes":
     "deepvariant":
         "blacklist":
             - "mjolnircomp05fl"
             - "mjolnircomp06fl"
-        "whitelist": null
+        "whitelist": []
 #------------------------------------------------------
 #"adaptor_scan": True
 #"fcs_gx_scan": True

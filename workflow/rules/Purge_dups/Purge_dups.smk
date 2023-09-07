@@ -101,8 +101,8 @@ rule create_contig_links:
     threads: parameters["threads"]["create_links"]
 
     shell:
-        " ln -sf ../../../../{input.fasta} {output.fasta} 1>{log.ln1} 2>&1; "
-        " ln -sf ../../../../{input.len} {output.len} 1>{log.ln2} 2>&1"
+        " ln -sf ../../../../../{input.fasta} {output.fasta} 1>{log.ln1} 2>&1; "
+        " ln -sf ../../../../../{input.len} {output.len} 1>{log.ln2} 2>&1"
 
 rule minimap2_purge_dups_reads:
     input:

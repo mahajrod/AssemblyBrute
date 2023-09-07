@@ -1,17 +1,17 @@
 rule get_seq_len:
     input:
-        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.fai",
+        fasta="{fasta_prefix}.fasta.fai",
     output:
         #dir=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/",
-        len_file=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
+        len_file="{fasta_prefix}.len",
     #params:
     #    MAVR_dir=config["MAVR_path"]
     log:
-        std=output_dict["log"].resolve() / "get_seq_len.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.log",
-        cluster_log=(output_dict["cluster_log"]).resolve() / "get_seq_len.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=(output_dict["cluster_error"]).resolve() / "get_seq_len.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.err"
+        std="{fasta_prefix}.log",
+        cluster_log="{fasta_prefix}.cluster.log",
+        cluster_err="{fasta_prefix}.cluster.err"
     benchmark:
-        output_dict["benchmark"] / "get_seq_len.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+        "{fasta_prefix}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

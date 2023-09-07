@@ -115,18 +115,19 @@ rule create_curation_bed_input_file: # Added as separated rule to allow turning 
 
 rule select_long_scaffolds: #
     input:
-        len=rules.create_curation_input_files_for_scaffolds.output.len
+        #len=rules.create_curation_input_files_for_scaffolds.output.len
+        len=out_dir_path / "curation/{len_file_prefix}.len"
     output:
-        whitelist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.whitelist",
-        orderlist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.orderlist"
+        whitelist=out_dir_path / "curation/{len_file_prefix}.whitelist",
+        orderlist=out_dir_path / "curation/{len_file_prefix}.orderlist"
     params:
         max_scaffolds=parameters["tool_options"]["select_long_scaffolds"]["max_scaffolds"]
     log:
-        ln=output_dict["log"]  / "select_long_scaffolds.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.ln.log",
-        cluster_log=output_dict["cluster_log"] / "select_long_scaffolds.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "select_long_scaffolds.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.cluster.err"
+        ln=out_dir_path / "curation/{len_file_prefix}.ln.log",
+        cluster_log=out_dir_path / "curation/{len_file_prefix}.cluster.log",
+        cluster_err=out_dir_path / "curation/{len_file_prefix}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "select_long_scaffolds.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.benchmark.txt"
+        out_dir_path / "curation/{len_file_prefix}.benchmark.txt"
     #conda:
     #    config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

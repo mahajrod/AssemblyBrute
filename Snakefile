@@ -652,11 +652,12 @@ if "purge_dups" in config["stage_list"]:
                     expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=["purge_dups"],),
-                    *[expand(out_dir_path  / "purge_dups/{parameters}/{haplotype}/{genome_prefix}.dups.{artefact}.fasta",
+                    [[expand(out_dir_path  / "purge_dups/{parameters}/{purge_stage}/{haplotype}/{genome_prefix}.dups.{artefact}.fasta",
+                           purge_stage=["first_stage",] if haplotype == "hap0" else ["first_stage", "second_stage"],
                            genome_prefix=[config["genome_prefix"], ],
                            artefact=["junk", "repeat", "haplotig", "ovlp", "highcov"],
-                           haplotype=stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"],
-                           parameters=[parameters_label]) for parameters_label in parameters_list],
+                           haplotype=[haplotype],
+                           parameters=[parameters_label]) for haplotype in stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"]] for parameters_label in parameters_list],
                     ]
     if not config["skip_busco"]:
         results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
@@ -1018,8 +1019,11 @@ if "hifi" in data_types:
 
 include: "workflow/rules/Contigs/Graph.smk"
 include: "workflow/rules/Stats/General.smk"
+
 if "purge_dups" in config["stage_list"]:
     include: "workflow/rules/Purge_dups/Purge_dups.smk"
+    include: "workflow/rules/Purge_dups/Purge_dupsQC.smk"
+
 include: "workflow/rules/HiC/ReadPhasing.smk"
 
 include: "workflow/rules/Alignment/Index.smk"

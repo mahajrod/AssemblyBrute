@@ -1,5 +1,5 @@
 
-
+ruleorder: purge_dups > gfa2fasta
 localrules: create_contig_links, create_final_links_purge_dups, extract_stats_from_purge_dups_file #create_link_for_purged_fasta,
 
 #localrules: create_primary_contig_link_hap1, create_primary_contig_link_hap0, merge_pri_hapdups_with_alt, extract_stats_from_purge_dups_file #create_link_for_purged_fasta,

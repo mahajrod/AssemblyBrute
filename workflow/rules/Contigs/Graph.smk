@@ -1,14 +1,14 @@
 rule gfa2fasta:
     input:
-        gfa="{gra_prefix}.gfa"
+        gfa="{gfa_prefix}.gfa"
     output:
-        fasta="{gra_prefix}.fasta"
+        fasta="{gfa_prefix}.fasta"
     log:
-        std="{gra_prefix}.gfa2fasta.log",
-        cluster_log="{gra_prefix}.gfa2fasta.cluster.log",
-        cluster_err="{gra_prefix}.gfa2fasta.cluster.err"
+        std="{gfa_prefix}.gfa2fasta.log",
+        cluster_log="{gfa_prefix}.gfa2fasta.cluster.log",
+        cluster_err="{gfa_prefix}.gfa2fasta.cluster.err"
     benchmark:
-        "{gra_prefix}.gfa2fasta.benchmark.txt"
+        "{gfa_prefix}.gfa2fasta.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -24,16 +24,16 @@ rule gfa2fasta:
 
 rule get_length_and_coverage_from_hifiasm_graph:
     input:
-        gfa="{gra_prefix}.gfa"
+        gfa="{gfa_prefix}.gfa"
     output:
-        cov="{gra_prefix}.gfa.cov",
-        len_cov="{gra_prefix}.gfa.lencov"
+        cov="{gfa_prefix}.gfa.cov",
+        len_cov="{gfa_prefix}.gfa.lencov"
     log:
-        std="{gra_prefix}.get_length_and_coverage_from_hifiasm_graph.log",
-        cluster_log="{gra_prefix}.get_length_and_coverage_from_hifiasm_graph.cluster.log",
-        cluster_err="{gra_prefix}.get_length_and_coverage_from_hifiasm_graph.cluster.err"
+        std="{gfa_prefix}.get_length_and_coverage_from_hifiasm_graph.log",
+        cluster_log="{gfa_prefix}.get_length_and_coverage_from_hifiasm_graph.cluster.log",
+        cluster_err="{gfa_prefix}.get_length_and_coverage_from_hifiasm_graph.cluster.err"
     benchmark:
-        "{gra_prefix}.get_length_and_coverage_from_hifiasm_graph.benchmark.txt"
+        "{gfa_prefix}.get_length_and_coverage_from_hifiasm_graph.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

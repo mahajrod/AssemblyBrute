@@ -317,7 +317,7 @@ rule merge_pri_hapdups_with_alt_for_len_files: # TODO: add handling of polyploid
 
 rule crossmerge_hapdups_with_deduped_contigs: # TODO: add handling of polyploid cases
     input:
-        purged=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/first_stage/{haplotype}/{genome_prefix}.purge_dups.{haplotype}.purged.fasta",
+        purged=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/first_stage/{haplotype}/{genome_prefix}.input.{haplotype}.purged.fasta",
         hapdups=lambda wildcards: out_dir_path  / "purge_dups/{0}..{1}/first_stage/{2}/{3}.purge_dups.{2}.hap.fasta".format(wildcards.prev_stage_parameters,
                                                                                                                 wildcards.purge_dups_parameters,
                                                                                                                 list(set(stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["haplotype_list"]) - set([wildcards.haplotype]))[0],

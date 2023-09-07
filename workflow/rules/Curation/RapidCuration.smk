@@ -116,18 +116,18 @@ rule create_curation_bed_input_file: # Added as separated rule to allow turning 
 rule select_long_scaffolds: #
     input:
         #len=rules.create_curation_input_files_for_scaffolds.output.len
-        len="{len_file_prefix}.len"
+        len=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.len"
     output:
-        whitelist="{len_file_prefix}.whitelist",
-        orderlist="{len_file_prefix}.orderlist"
+        whitelist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.whitelist",
+        orderlist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.orderlist"
     params:
         max_scaffolds=parameters["tool_options"]["select_long_scaffolds"]["max_scaffolds"]
     log:
-        ln="{len_file_prefix}.ln.log",
-        cluster_log="{len_file_prefix}.cluster.log",
-        cluster_err="{len_file_prefix}.cluster.err"
+        ln=output_dict["log"]  / "select_long_scaffolds.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.ln.log",
+        cluster_log=output_dict["cluster_log"] / "select_long_scaffolds.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "select_long_scaffolds.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
-        "{len_file_prefix}.benchmark.txt"
+        output_dict["benchmark"]  / "select_long_scaffolds.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.benchmark.txt"
     #conda:
     #    config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

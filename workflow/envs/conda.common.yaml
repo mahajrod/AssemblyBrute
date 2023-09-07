@@ -8,7 +8,7 @@
   - "conda-forge"
   - "anaconda"
 "dependencies":
-  - "python=3.10"
+  - "python=3.8"
   - "fastqc>=0.11"
   - "multiqc"
   - "hifiasm"

@@ -215,7 +215,7 @@
 "nodes":
     "blacklist": []
     "whitelist": []
-"tool_nodes":
+"rule_nodes":
     "deepvariant":
         "blacklist":
             - "mjolnircomp05fl"

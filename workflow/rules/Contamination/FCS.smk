@@ -3,23 +3,23 @@ ruleorder: remove_fcs_contaminants > gfa2fasta
 rule fcs: #
     priority: 10000
     input:
-        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.fasta",
+        fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.unfiltered.fasta",
         db=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["path"],
         image=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["image_path"],
     output:
-        taxonomy=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype, [^.]+}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.{database}.taxonomy",
-        summary=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype, [^.]+}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.{database}.summary"
-        #report=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.{tax_id}.taxonomy.txt",
-        #summary=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.{tax_id}.fcs_gx_report.txt"
+        taxonomy=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype, [^.]+}/fcs/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.taxonomy",
+        summary=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype, [^.]+}/fcs/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.summary"
+        #report=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.contig.{haplotype}.{tax_id}.taxonomy.txt",
+        #summary=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.contig.{haplotype}.{tax_id}.fcs_gx_report.txt"
     params:
         tax_id=config["tax_id"]
     log:
-        std=output_dict["log"]  / "fcs.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{database}.log",
-        post=output_dict["log"]  / "fcs.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{database}.post.log",
-        cluster_log=output_dict["cluster_log"] / "fcs.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{database}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "fcs.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{database}.cluster.err"
+        std=output_dict["log"]  / "fcs.contig.{parameters}.{genome_prefix}.{haplotype}.{database}.log",
+        post=output_dict["log"]  / "fcs.contig.{parameters}.{genome_prefix}.{haplotype}.{database}.post.log",
+        cluster_log=output_dict["cluster_log"] / "fcs.contig.{parameters}.{genome_prefix}.{haplotype}.{database}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "fcs.contig.{parameters}.{genome_prefix}.{haplotype}.{database}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "fcs.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{database}.benchmark.txt"
+        output_dict["benchmark"]  / "fcs.contig.{parameters}.{genome_prefix}.{haplotype}.{database}.benchmark.txt"
     conda:
         config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
     resources:
@@ -52,22 +52,22 @@ rule fcs: #
 rule remove_fcs_contaminants: #
     priority: 5000
     input:
-        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.fasta",
+        fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.unfiltered.fasta",
         image=lambda wildcards: config["allowed_databases"]["fcs"][config["final_fcs_db"]]["image_path"],
-        fcs_report=(out_dir_path / ("{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs/%s/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.%s.summary" % (config["final_fcs_db"], config["final_fcs_db"]))) if not config["skip_fcs"] else []
+        fcs_report=(out_dir_path / ("contig/{parameters}/contamination_scan/{haplotype}/fcs/%s/{genome_prefix}.contig.{haplotype}.unfiltered.%s.summary" % (config["final_fcs_db"], config["final_fcs_db"]))) if not config["skip_fcs"] else []
     output:
-        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype, [^.]+}.fasta",
-        contaminant_fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype, [^.]+}.contaminant.fasta"
+        fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype, [^.]+}.fasta",
+        contaminant_fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype, [^.]+}.contaminant.fasta"
     params:
         skip="skip" if config["skip_fcs"] else "filter"
     log:
-        std=output_dict["log"]  / "remove_fcs_contaminants.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.log",
-        cp=output_dict["log"]  / "remove_fcs_contaminants.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cp.log",
-        rm=output_dict["log"]  / "remove_fcs_contaminants.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.rm.log",
-        cluster_log=output_dict["cluster_log"] / "remove_fcs_contaminants.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "remove_fcs_contaminants.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.err"
+        std=output_dict["log"]  / "remove_fcs_contaminants.contig.{parameters}.{genome_prefix}.{haplotype}.log",
+        cp=output_dict["log"]  / "remove_fcs_contaminants.contig.{parameters}.{genome_prefix}.{haplotype}.cp.log",
+        rm=output_dict["log"]  / "remove_fcs_contaminants.contig.{parameters}.{genome_prefix}.{haplotype}.rm.log",
+        cluster_log=output_dict["cluster_log"] / "remove_fcs_contaminants.contig.{parameters}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "remove_fcs_contaminants.contig.{parameters}.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "remove_fcs_contaminants.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+        output_dict["benchmark"]  / "remove_fcs_contaminants.contig.{parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
         config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
     resources:
@@ -104,25 +104,25 @@ rule remove_fcs_contaminants: #
 rule fcs_adaptor: #
     priority: 2000
     input:
-        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.fasta",
+        fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.unfiltered.fasta",
         #db=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["path"],
         image=lambda wildcards: config["allowed_databases"]["fcs_adaptor"][wildcards.database]["image_path"],
     output:
-        report=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.{database}.report",
-        report_jsonl=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.{database}.report.jsonl",
-        #summary=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.{database}.summary"
-        #report=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.{tax_id}.taxonomy.txt",
-        #summary=out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.{tax_id}.fcs_gx_report.txt"
+        report=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.report",
+        report_jsonl=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.report.jsonl",
+        #summary=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.contig.{haplotype}.{database}.summary"
+        #report=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.contig.{haplotype}.{tax_id}.taxonomy.txt",
+        #summary=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.contig.{haplotype}.{tax_id}.fcs_gx_report.txt"
     params:
         tax_id=config["tax_id"],
         taxonomy= lambda wildcards: " --euk " if config["allowed_databases"]["fcs_adaptor"][wildcards.database]["taxonomy"] == "eukaryota"  else " --prok "
     log:
-        std=output_dict["log"]  / "fcs_adaptor.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{database}.log",
-        post=output_dict["log"]  / "fcs_adaptor.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{database}.postlog",
-        cluster_log=output_dict["cluster_log"] / "fcs_adaptor.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{database}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "fcs_adaptor.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{database}.err"
+        std=output_dict["log"]  / "fcs_adaptor.contig.{parameters}.{genome_prefix}.{haplotype}.{database}.log",
+        post=output_dict["log"]  / "fcs_adaptor.contig.{parameters}.{genome_prefix}.{haplotype}.{database}.postlog",
+        cluster_log=output_dict["cluster_log"] / "fcs_adaptor.contig.{parameters}.{genome_prefix}.{haplotype}.{database}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "fcs_adaptor.contig.{parameters}.{genome_prefix}.{haplotype}.{database}.err"
     benchmark:
-        output_dict["benchmark"]  / "fcs_adaptor.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{database}.benchmark.txt"
+        output_dict["benchmark"]  / "fcs_adaptor.contig.{parameters}.{genome_prefix}.{haplotype}.{database}.benchmark.txt"
     conda:
         config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
     resources:

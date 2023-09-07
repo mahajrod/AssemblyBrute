@@ -4,6 +4,7 @@ localrules: create_curation_input_files_for_scaffolds, create_curation_input_fil
 ruleorder: create_curation_input_files_for_scaffolds  > ref_faidx
 ruleorder: create_curation_input_files_for_contigs  > ref_faidx
 ruleorder: create_curation_input_files_for_scaffolds > get_seq_len
+ruleorder: create_curation_input_files_for_contigs > get_seq_len
 
 def get_hic_bed_file(wildcards):
     #print(stage_dict["curation"]["prev_stage"]

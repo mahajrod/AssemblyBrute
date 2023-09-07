@@ -222,7 +222,7 @@ rule filter_last_alignment_by_target_hit_len: #
 
 def select_query_whitelist(wildcards):
     if wildcards.query_haplotype in stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["haplotype_list"]:
-        return out_dir_path / "curation/{0}..{1}/{2}/scaffolds/{3}.input.{2}.softmasked.whitelist".format(wildcards.prev_stage_parameters,
+        return out_dir_path / "curation/{0}..{1}/{2}/scaffolds/{3}.input.{2}.whitelist".format(wildcards.prev_stage_parameters,
                                                                                                        wildcards.curation_parameters,
                                                                                                        wildcards.query_haplotype,
                                                                                                        wildcards.genome_prefix)
@@ -233,7 +233,7 @@ def select_query_whitelist(wildcards):
 
 def select_query_orderlist(wildcards):
     if wildcards.query_haplotype in stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["haplotype_list"]:
-        return out_dir_path / "curation/{0}..{1}/{2}/scaffolds/{3}.input.{2}.softmasked.orderlist".format(wildcards.prev_stage_parameters,
+        return out_dir_path / "curation/{0}..{1}/{2}/scaffolds/{3}.input.{2}.orderlist".format(wildcards.prev_stage_parameters,
                                                                                                        wildcards.curation_parameters,
                                                                                                        wildcards.query_haplotype,
                                                                                                        wildcards.genome_prefix)

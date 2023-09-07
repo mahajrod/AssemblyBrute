@@ -375,7 +375,7 @@ rule create_final_links_purge_dups:
     threads: parameters["threads"]["create_links"]
 
     shell:
-        " ln -sf second_stage/{wildcards.haplotype}/{wildcards.genome_prefix}.input.{wildcards.haplotype}.purged.fasta {output.purged_alias} >{log.ln} 2>&1; "
+        " ln -sf second_stage/{wildcards.haplotype}/{wildcards.genome_prefix}.input.{wildcards.haplotype}.purged.fasta {output.purged_alias} > {log.ln} 2>&1; "
 
 
 

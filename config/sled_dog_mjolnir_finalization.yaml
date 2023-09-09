@@ -208,6 +208,7 @@
 "skip_fcs": True
 "skip_fcs_adaptor": True
 "skip_kraken": True
+"skip_phasing": False
 "skip_prescaf_pretext": False
 "skip_postscaf_pretext": True
 "skip_both_pretext": False

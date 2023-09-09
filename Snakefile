@@ -686,7 +686,7 @@ if "purge_dups" in config["stage_list"]:
                                 ),
                          ]
 
-if config["phasing_stage"] in config["stage_list"]:
+if (config["phasing_stage"] in config["stage_list"]) and (not config["skip_phasing"]):
 
     for datatype in set(data_types) & set(config["read_phasing_data"]):
         if datatype in config["paired_fastq_based_data"]:

@@ -3,6 +3,7 @@
 #--------------------------
 
 #-------Options to adjust for every genome---------
+"ploidy": 2
 "genome_prefix": "SteAfr"
 "busco_lineage_list":
     - "arachnida_odb10" #
@@ -11,7 +12,11 @@
 
 "species_name": "Stegodyphus africanus"
 "tax_id": 407818 # necessary for contamination scan via FCS
+"parameter_set": "big" # Choice of genome-size based set of parameters
 
+"starting_point": "fastq" # Allowed: "draft"
+"data_types": "hifi,hic" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
+"use_existing_envs": False # works only if --use-conda flag was set in snakemake command
 #---------------------------------------------------
 
 #------------------Pipeline modes------------------
@@ -180,11 +185,8 @@
         "haploid_diploid_threshold": null
         "upper_threshold": null
 
-"ploidy": 2
+
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
-
-
-
 
 "database_set":
     "kraken2":
@@ -210,10 +212,6 @@
 "contig_datatype": "hifi"
 "hic_enzyme_set": "Arima"
 "custom_enzyme_set": null # None
-
-"starting_point": "fastq" # Allowed: "draft"
-"data_types": "hifi,hic" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
-
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []
@@ -257,8 +255,5 @@
 #           "purge_dups"               : purging of haplotype duplicates from draft assembly
 #           "hic_scaffolding"          : "purge_dups" + HiC-scaffolding
 
-
 # TODO:  add modes:  "create_map_bionano", "bionano_scaffolding"
 
-"parameter_set": "default" # Choice of genome-size based set of parameters
-"use_existing_envs": False # works only if --use-conda flag was set in snakemake command

@@ -66,6 +66,11 @@ def find_fastas(fasta_dir, fasta_extension=".fasta.gz"):
     return sorted(list(fasta_dir_path.glob("*{0}".format(fasta_extension))))
 
 
+def find_bams(bam_dir, bam_extension=".bam"):
+    bam_dir_path = bam_dir if isinstance(bam_dir, PosixPath) else Path(bam_dir)
+    return sorted(list(bam_dir_path.glob("*{0}".format(bam_extension))))
+
+
 def copy_absent_entries(input_dictionary, output_dictionary):
     for entry in input_dictionary:
         if entry not in output_dictionary:

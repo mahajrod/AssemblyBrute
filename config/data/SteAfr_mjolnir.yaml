@@ -12,7 +12,7 @@
 
 "species_name": "Stegodyphus africanus"
 "tax_id": 407818 # necessary for contamination scan via FCS
-"parameter_set": "big" # Choice of genome-size based set of parameters
+"parameter_set": "large" # Choice of genome-size based set of parameters
 
 "starting_point": "fastq" # Allowed: "draft"
 "data_types": "hifi,hic" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others

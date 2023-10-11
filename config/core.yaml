@@ -87,6 +87,9 @@
 "parameters":
     "default":
         "tool_options":
+            "mitohifi":
+                "default":
+                    "min_mapping_quality": 20
             "cutadapt":
                 "default":
                     "hifi":
@@ -250,46 +253,55 @@
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  True
                     "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
                 "l0primary":
                     "purge level": 0 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  True
                     "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
                 "l1primary":
                     "purge level": 1 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  True
                     "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
                 "l2primary":
                     "purge level": 2 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  True
                     "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
                 "l3primary":
                     "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  True
                     "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
                 "l0primary_no_hic":
                     "purge level": 0 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  False
                     "assembly_ploidy": 1
+                    "ul-cut": 5000
                 "l1primary_no_hic":
                     "purge level": 1 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  False
                     "assembly_ploidy": 1
+                    "ul-cut": 5000
                 "l2primary_no_hic":
                     "purge level": 2 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  False
                     "assembly_ploidy": 1
+                    "ul-cut": 5000
                 "l3primary_no_hic":
                     "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  False
                     "assembly_ploidy": 1
+                    "ul-cut": 5000
                 "repeat_enhanced_l1":
                     "purge level": 1 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
@@ -297,6 +309,7 @@
                     "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
                     "D": 10
                     "N": 200
+                    "ul-cut": 5000
                     #"ignore_bin": True
                 "repeat_enhanced_l2":
                     "purge level": 2 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
@@ -305,6 +318,7 @@
                     "ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
                     "D": 10
                     "N": 200
+                    "ul-cut": 5000
                     #"ignore_bin": True
             "purge_dups":
                 "default":
@@ -1543,6 +1557,7 @@
             - "length_of_adapters"              # -z
             - "max-kocc"                        # --max-kocc
             - "hg-size"                         # --hg-size
+            - "ul-cut"                          # --ul-cut
         "options_affecting_hic_phasing":
             - "seed"            # --seed
             - "s-base"          # --s-base

@@ -52,6 +52,7 @@
     "deepvariant":
         "cpu":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/deepvariant/deepvariant_1.5.0.sif"
         "gpu": null #"gpu":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
+    "mitohifi": "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/mitohifi/mitohifi_master.sif"
 
 "stage_coretools":     #TODO: add bionano
     "filtering":
@@ -109,6 +110,7 @@
         #- "unphased_reads"
 
 "other_tool_option_sets":
+    "mitohifi":                 "default"   # Allowed: default
     "cutadapt":                 "default"   # Allowed: default
     "porechop_abi":             "default"   # Allowed: default
     "chopper":                  "default"   # Allowed: default
@@ -150,6 +152,8 @@
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
 
+"kingdom": "animal" # required for MitoHiFi. Allowed: animal,plant,fungi
+"mitochondrial_genetic_code": 2 #  NCBI genetic code (2 = vertebrate by default) to use for annotation of mtDNA
 "species_name": "species species"
 "tax_id": null # necessary for contamination scan via FCS
 

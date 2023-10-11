@@ -5,6 +5,9 @@ rule hifiasm_correct:
         hifi=expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),
                     fileprefix=input_file_prefix_dict["hifi"],
                     allow_missing=True),
+        nanopore=expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
+                        fileprefix=input_file_prefix_dict["nanopore"],
+                        allow_missing=True) if "nanopore" in input_filedict else []
     output:
         ec_bin=output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.ec.bin",
         ec_fasta=output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.ec.fasta.gz",
@@ -21,6 +24,10 @@ rule hifiasm_correct:
         kmer_length=lambda wildcards: parse_option("kmer_len", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -k "),
         D=lambda wildcards: parse_option("D", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -D "), #" -D {0} ".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["D"]) if "D" in parameters["tool_options"]["hifiasm"][wildcards.contig_options] else "",
         N=lambda wildcards: parse_option("N", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -N "), #" -N {0} ".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["N"]) if "N" in parameters["tool_options"]["hifiasm"][wildcards.contig_options] else "",
+        nanopore=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
+                                                      fileprefix=input_file_prefix_dict["nanopore"],
+                                                      allow_missing=True)))) if "nanopore" in input_filedict else "",
+        ul_cut=lambda wildcards: parse_option("ul-cut", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " --ul-cut ")
     log:
         std=output_dict["log"] / "hifiasm_correct.{correction_options}.{genome_prefix}.log",
         pigz=output_dict["log"] / "hifiasm_correct.{correction_options}.{genome_prefix}.pigz.log",
@@ -47,7 +54,7 @@ rule hifiasm_correct:
          " UNCOMPRESSED_FASTA=${{UNCOMPRESSED_FASTA%sta.gz}}; "
          " hifiasm -t {threads} -e --write-ec {params.window_size} {params.bloom_filter_bits} "
          " {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size}"
-         " {params.kmer_length} {params.D} {params.N} "
+         " {params.kmer_length} {params.D} {params.N} {params.nanopore} {params.ul_cut} "
          " -o ${{OUTPUT_PREFIX}} {input.hifi}  1>{log.std} 2>&1;"
          " pigz -p {threads} ${{UNCOMPRESSED_FASTA}} > {log.pigz} 2>&1 ; "
          " mv ${{UNCOMPRESSED_FASTA}}.gz {output.ec_fasta} > {log.mv} 2>&1; "
@@ -60,9 +67,11 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         hifi=expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),
                     fileprefix=input_file_prefix_dict["hifi"],
                     allow_missing=True),
+        nanopore=expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
+                        fileprefix=input_file_prefix_dict["nanopore"],
+                        allow_missing=True) if "nanopore" in input_filedict else [],
         hic_forward=list(map(lambda s: output_dict["data"] / "fastq/hic/raw/" / s.name, input_filedict["hic"][::2])) if "hic" in input_filedict else [],
         hic_reverse=list(map(lambda s: output_dict["data"] / "fastq/hic/raw/" / s.name, input_filedict["hic"][1::2])) if "hic" in input_filedict else [],
-        nanopore=input_filedict["nanopore"] if "nanopore" in input_filedict else [], # TODO: test this option
         ec_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ec.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
                                                                                                           wildcards.genome_prefix),
         ovlp_reverse_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ovlp.reverse.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
@@ -96,7 +105,10 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         ignore_bin=lambda wildcards: " -i " if ("ignore_bin" in parameters["tool_options"]["hifiasm"][wildcards.contig_options]) and parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ignore_bin"] else "",
         hic_forward=(" --h1 " + ",".join(map(str, list(map(lambda s: output_dict["data"] / "fastq/hic/raw/" / s.name, input_filedict["hic"][::2]))))) if "hic" in input_filedict else "", #in case of multiple hic libraries files in the list MUST be COMMA-separated
         hic_reverse=(" --h2 " + ",".join(map(str, list(map(lambda s: output_dict["data"] / "fastq/hic/raw/" / s.name, input_filedict["hic"][1::2]))))) if "hic" in input_filedict else "",
-        nanopore=(" --ul " + ",".join(map(str, input_filedict["nanopore"]))) if "nanopore" in input_filedict else "",
+        nanopore=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
+                                                      fileprefix=input_file_prefix_dict["nanopore"],
+                                                      allow_missing=True)))) if "nanopore" in input_filedict else "",
+        ul_cut=lambda wildcards: parse_option("ul-cut", assembler_option_set_group_dict["hifiasm"][wildcards.contig_options], " --ul-cut ")
     log:
         std=output_dict["log"] / "hifiasm.{contig_options}.{genome_prefix}.log",
         cluster_log=output_dict["cluster_log"] / "hifiasm.{contig_options}.{genome_prefix}.cluster.log",
@@ -125,7 +137,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
          " {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size}"
          " {params.kmer_length} {params.D} {params.N} {params.ignore_bin} --primary -t {threads} -l {params.purge_level}  -o ${{OUTPUT_PREFIX}} "
          " --n-hap {params.ploidy} --purge-max ${{COV_UPPER_BOUNDARY}} "
-         " {params.hic_forward} {params.hic_reverse} {params.nanopore} "
+         " {params.hic_forward} {params.hic_reverse} {params.nanopore} {params.ul_cut}"
          " {input.hifi}  1>{log.std} 2>&1;"         
          " ln -sf `basename {output.primary_contig_graph}` {output.primary_alias};"
          " ln -sf `basename {output.alternative_contig_graph}` {output.alternative_alias};"
@@ -138,7 +150,9 @@ rule hifiasm_hifi:
         hifi=expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),
                     fileprefix=input_file_prefix_dict["hifi"],
                     allow_missing=True),
-        nanopore=input_filedict["nanopore"] if "nanopore" in input_filedict else [], # TODO: test this option
+        nanopore=expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
+                        fileprefix=input_file_prefix_dict["nanopore"],
+                        allow_missing=True) if "nanopore" in input_filedict else [],
         ec_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ec.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
                                                                                                           wildcards.genome_prefix),
         ovlp_reverse_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ovlp.reverse.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
@@ -168,7 +182,10 @@ rule hifiasm_hifi:
         D=lambda wildcards: parse_option("D", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -D "), #" -D {0} ".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["D"]) if "D" in parameters["tool_options"]["hifiasm"][wildcards.contig_options] else "",
         N=lambda wildcards: parse_option("N", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -N "),
         ignore_bin=lambda wildcards: " -i " if ("ignore_bin" in parameters["tool_options"]["hifiasm"][wildcards.contig_options]) and parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ignore_bin"] else "",
-        nanopore=(" --ul " + ",".join(map(str, input_filedict["nanopore"]))) if "nanopore" in input_filedict else "",
+        nanopore=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
+                                                      fileprefix=input_file_prefix_dict["nanopore"],
+                                                      allow_missing=True)))) if "nanopore" in input_filedict else "",
+        ul_cut=lambda wildcards: parse_option("ul-cut", assembler_option_set_group_dict["hifiasm"][wildcards.contig_options], " --ul-cut ")
     log:
         std=output_dict["log"] / "hifiasm.{contig_options}.{genome_prefix}.log",
         cluster_log=output_dict["cluster_log"] / "hifiasm.{contig_options}.{genome_prefix}.cluster.log",
@@ -194,8 +211,9 @@ rule hifiasm_hifi:
          " ln -sf ../../../{input.ovlp_source_bin} ${{OUT_DIR}}; "
          " COV_UPPER_BOUNDARY=`awk 'NR==2 {{printf \"%.0f\", {params.cov_multiplicator} * $2}}' {input.genomescope_report}`; "
          " hifiasm {params.window_size} {params.bloom_filter_bits} "
-         " {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size}"
-         " {params.kmer_length} {params.D} {params.N} {params.ignore_bin} --primary -t {threads} -l {params.purge_level}  -o ${{OUTPUT_PREFIX}} "
+         " {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size} "
+         " {params.kmer_length} {params.D} {params.N} {params.ignore_bin} {params.nanopore} {params.ul_cut}"
+         " --primary -t {threads} -l {params.purge_level}  -o ${{OUTPUT_PREFIX}} "
          " --n-hap {params.ploidy} --purge-max ${{COV_UPPER_BOUNDARY}} {params.nanopore} "
          " {input.hifi}  1>{log.std} 2>&1;"
          " ln -sf `basename {output.primary_contig_graph}` {output.primary_alias};"

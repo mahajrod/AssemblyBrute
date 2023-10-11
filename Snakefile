@@ -140,6 +140,11 @@ if "reference" in set(data_types):
             if len(input_reference_filedict[genome][filetype]) > 1:
                 raise ValueError("ERROR!!! There is more than one {0} file for reference {1}".format(filetype, genome))
             input_reference_filedict[genome][filetype] = input_reference_filedict[genome][filetype][0]
+        for filetype in "mtdna.fasta", "mtdna.gb":
+            input_reference_filedict[genome][filetype] = list((reference_input_dir / genome / "mtdna").glob("*.{0}".format(filetype)))
+            if len(input_reference_filedict[genome][filetype]) > 1:
+                raise ValueError("ERROR!!! There is more than one {0} file for reference {1}".format(filetype, genome))
+            input_reference_filedict[genome][filetype] = input_reference_filedict[genome][filetype][0]
     #print(input_reference_filedict)
 #------------------------------------------------------------------------------------------
 
@@ -852,7 +857,6 @@ if "curation" in config["stage_list"]:
                 stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["curation"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
 
     parameters_list = list(stage_dict["curation"]["parameters"].keys())
-
 
     if "scaffolds" in  config["curation_seq_type"]:
         if not config["skip_wga"]:

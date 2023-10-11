@@ -108,7 +108,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         nanopore=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
                                                       fileprefix=input_file_prefix_dict["nanopore"],
                                                       allow_missing=True)))) if "nanopore" in input_filedict else "",
-        ul_cut=lambda wildcards: parse_option("ul-cut", assembler_option_set_group_dict["hifiasm"][wildcards.contig_options], " --ul-cut ")
+        ul_cut=lambda wildcards: parse_option("ul-cut", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --ul-cut ")
     log:
         std=output_dict["log"] / "hifiasm.{contig_options}.{genome_prefix}.log",
         cluster_log=output_dict["cluster_log"] / "hifiasm.{contig_options}.{genome_prefix}.cluster.log",
@@ -185,7 +185,7 @@ rule hifiasm_hifi:
         nanopore=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
                                                       fileprefix=input_file_prefix_dict["nanopore"],
                                                       allow_missing=True)))) if "nanopore" in input_filedict else "",
-        ul_cut=lambda wildcards: parse_option("ul-cut", assembler_option_set_group_dict["hifiasm"][wildcards.contig_options], " --ul-cut ")
+        ul_cut=lambda wildcards: parse_option("ul-cut", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --ul-cut ")
     log:
         std=output_dict["log"] / "hifiasm.{contig_options}.{genome_prefix}.log",
         cluster_log=output_dict["cluster_log"] / "hifiasm.{contig_options}.{genome_prefix}.cluster.log",

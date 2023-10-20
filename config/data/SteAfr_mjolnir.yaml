@@ -28,7 +28,7 @@
 #---------------Select Stages to skip --------------
 "skip_read_qc": False
 "skip_filter_reads": False
-"skip_busco": False
+"skip_busco": True
 "skip_gcp": False
 "skip_fcs": False
 "skip_fcs_adaptor": False
@@ -123,7 +123,7 @@
 "coretool_option_sets":
     "hifiasm":
          #- "l0primary"
-         - "l1primary"
+         #- "l1primary"
          #- "l2primary"
          - "l3primary"
          #- "l0primary_no_hic"

@@ -20,6 +20,7 @@ If you wish to run it using conda via snakemake, then you will need:
 |:---------:|:-------:|:---------------:|:-------------------:|:--:|:------:|:----------:|:------:|:---------------:|:--------:|:-----------:|:--:|
 | hifi + hic | v | v | v | v | v | v | v | v | v |  | v |
 | hifi + hic (no phasing) | v | v | v | v | v | v | v | v | v | v |
+| hifi + nanopore + hic | v | v | v | v | v | v | v | v | v |  | v |
 | hifi | v | v | v | v | v | v | NA | NA |  |  | v |
 | clr | v | v | v |  |  |  | NA | NA |  |  | |
 | nanopore | v | v | v |  |  |  | NA | NA |  |  |  |

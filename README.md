@@ -40,7 +40,7 @@ If you wish to run it using conda via snakemake, then you will need:
 |   hifiasm   |      hifi + hic       |   v    |
 |   hifiasm   |         hifi          |   v    | 
 |   hifiasm   | hifi + nanopore + hic |   v    | 
-|   hifiasm   |    hifi + nanopore    |   ?    | 
+|   hifiasm   |    hifi + nanopore    |   v    | 
 |   hicanu    |       nanopore        |        |
 |    flye2    |       nanopore        |        | 
 |     IPA     |       nanopore        |        | 

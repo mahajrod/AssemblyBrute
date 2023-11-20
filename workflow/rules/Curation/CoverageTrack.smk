@@ -79,8 +79,8 @@ rule create_coverage_table:
     input:
         per_base=rules.calculate_coverage.output.per_base,
     output:
-        stat_file=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.stat",
-        all_stat_file=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.all.stat"
+        stat_file=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.win{window, [0-9]+}.step{step, [0-9]+}.stat",
+        all_stat_file=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.win{window, [0-9]+}.step{step, [0-9]+}.all.stat"
     #params:
     #    bin_size=lambda wildcards: stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["option_set"]["bin_size"],
     #    step_size=lambda wildcards: stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["option_set"]["bin_size"]
@@ -112,7 +112,7 @@ rule create_bedgraph_from_coverage_table:
     input:
         stat_file=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.stat"
     output:
-        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type, [^./]+}/{genome_prefix}.input.{haplotype}.{datatype, [^./]+}_{cov_type, [^./]+}_coverage.win{window, [^./]+}.step{step, [^./]+}.track.bedgraph"
+        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type, [^./]+}/{genome_prefix}.input.{haplotype}.{datatype, [^./]+}_{cov_type, [^./]+}_coverage.win{window, [0-9]+}.step{step, [0-9]+}.track.bedgraph"
     params:
         coverage_col= lambda wildcards: 6 if wildcards.cov_type == "mean" else 7
     log:
@@ -142,8 +142,8 @@ rule draw_coverage_heatmap:
         len_file=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.len",
         all_stat_file=rules.create_coverage_table.output.all_stat_file
     output:
-        png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^./]+}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype,  [^./]+}.coverage.win{window}.step{step}.png",
-        split_png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^./]+}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype, [^./]+}.coverage.win{window}.step{step}.split_thresholds.png"
+        png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^./]+}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype,  [^./]+}.coverage.win{window, [0-9]+}.step{step, [0-9]+}.png",
+        split_png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^./]+}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype, [^./]+}.coverage.win{window, [0-9]+}.step{step, [0-9]+}.split_thresholds.png"
     #params:
     #    bin_size=lambda wildcards: stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["option_set"]["bin_size"],
     #    step_size=lambda wildcards: stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["option_set"]["bin_size"]

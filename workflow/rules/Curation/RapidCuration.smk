@@ -207,10 +207,10 @@ rule create_bedgraph_track: #
 rule scale_create_bedgraph_track: #
     input:
         bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph",
-        yahs_juicer_pre_log=out_dir_path / "hic_scaffolding/hic_scaffolding/{haplotype, [^./]+}/scaffolding/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.log"
+        yahs_juicer_pre_log=out_dir_path / "hic_scaffolding/hic_scaffolding/{haplotype}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.log"
 
     output:
-        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.scaled.track.bedgraph"
+        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type}.win{window, [0-9]+}.step{step, [0-9]+}.scaled.track.bedgraph"
     log:
         std=output_dict["log"]  / "scale_create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.std.log",
         grep=output_dict["log"]  / "scale_create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.grep.log",

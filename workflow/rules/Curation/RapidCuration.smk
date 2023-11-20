@@ -151,7 +151,7 @@ rule create_windows: #
     input:
         len=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.len",
     output:
-        bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.win{window}.step{step}.windows.bed",
+        bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.win{window, [0-9]+}.step{step, [0-9]+}.windows.bed",
     log:
         makewin=output_dict["log"]  / "create_windows.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.win{window}.step{step}.makewin.log",
         cluster_log=output_dict["cluster_log"] / "create_windows.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.win{window}.step{step}.cluster.log",
@@ -177,7 +177,7 @@ rule create_bedgraph_track: #
         track_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type}.track.bed",
         windows_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.win{window}.step{step}.windows.bed",
     output:
-        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.bedgraph"
+        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window, [0-9]+}.step{step, [0-9]+}.track.bedgraph"
     log:
         intersect=output_dict["log"]  / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.intersect.log",
         awk=output_dict["log"]  / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.awk.log",

@@ -204,6 +204,35 @@ rule create_bedgraph_track: #
         #" bedtools map -c 4 -o sum -a {input.windows_bed} -b stdin > {output.bedgraph} 2>{log.map} "
         #./workflow/scripts/sum_bed.py -c 3
 
+rule scale_create_bedgraph_track: #
+    input:
+        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph",
+        yahs_juicer_pre_log=out_dir_path / "hic_scaffolding/hic_scaffolding/{haplotype, [^./]+}/scaffolding/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.log"
+
+    output:
+        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.scaled.track.bedgraph"
+    log:
+        std=output_dict["log"]  / "scale_create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.std.log",
+        grep=output_dict["log"]  / "scale_create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.grep.log",
+        sed=output_dict["log"]  / "scale_create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.sed.log",
+        cluster_log=output_dict["cluster_log"] / "scale_create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "scale_create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "scale_create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("scale_create_bedgraph_track"),
+        cpus=parameters["threads"]["scale_create_bedgraph_track"],
+        time=parameters["time"]["scale_create_bedgraph_track"],
+        mem=parameters["memory_mb"]["scale_create_bedgraph_track"],
+    threads: parameters["threads"]["scale_create_bedgraph_track"]
+
+    shell:
+        " SCALE=`grep 'scale factor:' {input.yahs_juicer_pre_log} 2>{log.grep} | sed 's/.*scale factor: //' 2>{log.sed}`; "
+        " awk -v scale=${{SCALE}} '{{ print $1,$2/scale,$3/scale,$4 }}' {input.bedgraph} > {output.bedgraph} 2>{log.std}; "
+
 rule liftover_contig_bedgraph: #
     input:
         bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/contigs/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph",

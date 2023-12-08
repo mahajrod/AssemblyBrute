@@ -103,6 +103,8 @@
         #- "unphased_reads"
     "curation":
         - "default"
+    "assembly_qc":
+        - "default"
     "samba":
         - "phased_reads"
 

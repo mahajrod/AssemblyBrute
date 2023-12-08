@@ -838,7 +838,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                 parameters=parameters_list
                                 ),
                          ]
-
+print(stage_dict)
 if "curation" in config["stage_list"]:
     prev_stage = stage_dict["curation"]["prev_stage"]
     curation_tool_list = config["stage_coretools"]["curation"]["default"]

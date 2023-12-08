@@ -74,6 +74,9 @@
     "curation":
         "default":
             - "curation"
+    "draft_qc":
+        "default":
+            - "assembly_qc"
     "gap_closing":
         "default":
             - "samba"

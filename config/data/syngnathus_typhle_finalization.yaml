@@ -188,7 +188,7 @@
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
 "assembly_mode": "full"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
-"finalization_mode": "gap_closing"
+"finalization_mode": "curation"
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []

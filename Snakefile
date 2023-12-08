@@ -537,7 +537,7 @@ if "contig" in config["stage_list"] or "draft_qc" in config["stage_list"]:
 
             #for option_supergroup in ["options_affecting_error_correction"]:
             #    stage_dict["contig"]["parameters"][parameters_label][option_supergroup] = option_cluster_reverse_dict[assembler][option_supergroup][option_set]
-print (stage_dict)
+#print (stage_dict)
 if "contig" in config["stage_list"]:
     parameters_list = list(stage_dict["contig"]["parameters"].keys())
     #if "hifiasm" in assembler_list:
@@ -838,7 +838,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                 parameters=parameters_list
                                 ),
                          ]
-print(stage_dict)
+#print(stage_dict)
 """
 
 if "gap_closing" in config["stage_list"]: # TODO: modify it and all initiation of stage_dict entries to make it normal!!!!

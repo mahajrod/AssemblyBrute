@@ -847,7 +847,7 @@ if "gap_closing" in config["stage_list"]: # TODO: modify it and all initiation o
     stage_dict[stage]["parameters"] = {}
     for tool in tool_list:
         for option_set in config["coretool_option_sets"][tool]:
-            for prev_parameters in stage_dict[prev_stage]["parameters"]:
+            for prev_parameters in ["default"]:
                 parameters_label = "{0}_{1}".format(tool, option_set)
                 stage_dict[stage]["parameters"][parameters_label] = {}
                 stage_dict[stage]["parameters"][parameters_label]["included"] = True

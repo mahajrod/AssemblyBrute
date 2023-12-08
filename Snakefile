@@ -851,7 +851,7 @@ if "gap_closing" in config["stage_list"]: # TODO: modify it and all initiation o
                 parameters_label = "{0}_{1}".format(tool, option_set)
                 stage_dict[stage]["parameters"][parameters_label] = {}
                 stage_dict[stage]["parameters"][parameters_label]["included"] = True
-                stage_dict[stage]["parameters"][parameters_label]["gap_closer"] = curation_tool
+                stage_dict[stage]["parameters"][parameters_label]["gap_closer"] = tool
                 stage_dict[stage]["parameters"][parameters_label]["prev_stage"] = prev_stage
                 stage_dict[stage]["parameters"][parameters_label]["prev_parameters"] = prev_parameters
                 stage_dict[stage]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][tool][option_set] if tool in parameters["tool_options"] else None

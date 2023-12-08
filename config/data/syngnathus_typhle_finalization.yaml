@@ -100,9 +100,8 @@
         #- "unphased_reads"
     "curation":
         - "default"
-
     "samba":
-        - "default"
+        - "phased_reads"
 
 "other_tool_option_sets":
     "cutadapt":                 "default"   # Allowed: default
@@ -168,11 +167,12 @@
 "phasing_stage": "draft_qc"
 
 "contig_datatype": "hifi"
+"gap_closing_datatype": "hifi"
 "hic_enzyme_set": "Arima"
 "custom_enzyme_set": null # None
 "custom_enzyme_set_is_no_motif": False
 
-"starting_point": "fastq" # Allowed: "draft"
+"starting_point": "draft" # Allowed: "draft"
 "data_types": "hifi,hic" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
 
 #-------- Options specific for starting point 'draft' ----------------
@@ -183,7 +183,7 @@
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
 "assembly_mode": "full"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
-"finalization_mode": "curation"
+"finalization_mode": "gap_closing"
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []

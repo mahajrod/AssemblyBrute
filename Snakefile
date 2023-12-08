@@ -839,6 +839,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                 ),
                          ]
 print(stage_dict)
+"""
 
 if "gap_closing" in config["stage_list"]: # TODO: modify it and all initiation of stage_dict entries to make it normal!!!!
     stage = "gap_closing"
@@ -856,7 +857,7 @@ if "gap_closing" in config["stage_list"]: # TODO: modify it and all initiation o
                 stage_dict[stage]["parameters"][parameters_label]["prev_parameters"] = prev_parameters
                 stage_dict[stage]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][tool][option_set] if tool in parameters["tool_options"] else None
                 stage_dict[stage]["parameters"][parameters_label]["haplotype_list"] = haplotype_list
-
+"""
 if "curation" in config["stage_list"]:
     prev_stage = stage_dict["curation"]["prev_stage"]
     curation_tool_list = config["stage_coretools"]["curation"]["default"]

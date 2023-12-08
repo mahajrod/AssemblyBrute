@@ -855,7 +855,7 @@ if "gap_closing" in config["stage_list"]: # TODO: modify it and all initiation o
                 stage_dict[stage]["parameters"][parameters_label]["prev_stage"] = prev_stage
                 stage_dict[stage]["parameters"][parameters_label]["prev_parameters"] = prev_parameters
                 stage_dict[stage]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][tool][option_set] if tool in parameters["tool_options"] else None
-                stage_dict[stage]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict[stage]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
+                stage_dict[stage]["parameters"][parameters_label]["haplotype_list"] = haplotype_list
 
 if "curation" in config["stage_list"]:
     prev_stage = stage_dict["curation"]["prev_stage"]

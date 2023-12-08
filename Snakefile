@@ -846,6 +846,7 @@ if "curation" in config["stage_list"]:
 
     for curation_tool in curation_tool_list:
         for option_set in config["coretool_option_sets"][curation_tool]:
+            print(prev_stage)
             for prev_parameters in stage_dict[prev_stage]["parameters"]:
                 parameters_label = "{0}..{1}_{2}".format(prev_parameters, curation_tool, option_set)
                 stage_dict["curation"]["parameters"][parameters_label] = {}

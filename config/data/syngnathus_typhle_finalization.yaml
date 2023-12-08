@@ -74,6 +74,9 @@
     "curation":
         "default":
             - "curation"
+    "gap_closing":
+        "default":
+            - "samba"
 
 "coretool_option_sets":
     "hifiasm":

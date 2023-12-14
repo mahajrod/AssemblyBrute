@@ -128,7 +128,7 @@
                         "headcrop" : 30        # --headcrop      Trim N nucleotides from the start of a read [default: 0]
                         "maxlength": null      # --maxlength     Sets a maximum read length [default: 2147483647]
                         "minlength": 500       # --minlength     Sets a minimum read length [default: 1]
-                        "quality"  : 3         # --quality       Sets a minimum Phred average quality score [default: 0]
+                        "quality"  : 10         # --quality       Sets a minimum Phred average quality score [default: 0]
                         "tailcrop" : 30        # --tailcrop      Trim N nucleotides from the end of a read [default: 0]
             "fastqc":
                 "default":

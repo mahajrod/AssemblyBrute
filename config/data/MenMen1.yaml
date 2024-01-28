@@ -177,10 +177,10 @@
 "phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads
 #---------------------------------------------------------------------
 
-"mode": "qc"                # Allowed: "preprocessing", "qc", "assembly"
+"mode": "assembly"                # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
-"assembly_mode": "full"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
+"assembly_mode": "purge_dups"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []

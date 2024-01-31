@@ -90,6 +90,20 @@
             "mitohifi":
                 "default":
                     "min_mapping_quality": 20
+            "trimmomatic":
+                "default":
+                    "illumina":
+                        "min_read_length": 50
+                        "sliding_window_size": 8
+                        "sliding_window_quality": 20
+                        "illumina_clip": "2:30:10:1"
+                        "adapter_file": "resources/trimmomatic/adapters/TruSeq2-PE.fa"
+                    "hic":
+                        "min_read_length": 50
+                        "sliding_window_size": 8
+                        "sliding_window_quality": 20
+                        "illumina_clip": "2:30:10:1"
+                        "adapter_file": "resources/trimmomatic/adapters/TruSeq2-PE.fa"
             "cutadapt":
                 "default":
                     "hifi":

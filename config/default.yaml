@@ -169,6 +169,7 @@
     - "hifi"
     - "illumina"
     - "nanopore"
+    - "hic"
 
 "final_kmer_counter": "meryl" # pipeline allows usage of different kmer counter tools, but only one genomesize assessment could be used
 "final_kmer_length": 21 # pipeline allows usage of different kmer length, but only one genomesize assessment could be used

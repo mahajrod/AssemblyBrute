@@ -1,4 +1,4 @@
-ruleorder: cutadapt_illumina > cutadapt > porechop_abi
+
 rule cutadapt:
     input:
         fastq=output_dict["data"] / ("fastq/hifi/raw/{fileprefix}%s" % config["fastq_extension"])
@@ -44,6 +44,7 @@ rule cutadapt:
          "  -o {output.fastq} {input.fastq} > {output.stats} 2>{log.std}; "
 
 #if "illumina" in data_types:
+"""
 rule cutadapt_illumina:
     input:
         forward_fastq=lambda wildcards: output_dict["data"] / ("fastq/{0}/raw/{1}{2}{3}".format(wildcards.datatype,
@@ -97,3 +98,4 @@ rule cutadapt_illumina:
          " {params.check_read_rc} {params.discard_trimmed} "
          " -o {output.forward_fastq} -p {output.reverse_fastq} "
          " {input.forward_fastq} {input.reverse_fastq} > {output.stats} 2>{log.std}; "
+"""

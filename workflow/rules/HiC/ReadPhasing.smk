@@ -1,3 +1,4 @@
+ruleorder: extract_pe_reads_by_unique_hap_kmers > extract_se_reads_by_unique_hap_kmers
 rule meryl_assembly:
     input:
         fasta=out_dir_path / "{stage}/{parameters}/{genome_prefix}.{stage}.{haplotype}.fasta"

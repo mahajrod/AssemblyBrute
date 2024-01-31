@@ -68,13 +68,13 @@ rule extract_pe_reads_by_unique_hap_kmers:
         forward_read=lambda wildcards: output_dict["data"]  / ("fastq/{0}/{1}/{2}{3}{4}".format(wildcards.datatype,
                                                                                                 "filtered" if wildcards.datatype in config["filtered_data"] else "raw",
                                                                                                 wildcards.pairprefix,
-                                                                                                input_forward_suffix_dict[wildcards.datatype],
+                                                                                                "_1" if wildcards.datatype in config["filtered_data"] else input_forward_suffix_dict[wildcards.datatype],
                                                                                                 config["fastq_extension"])),
 
         reverse_read=lambda wildcards: output_dict["data"]  / ("fastq/{0}/{1}/{2}{3}{4}".format(wildcards.datatype,
                                                                                                 "filtered" if wildcards.datatype in config["filtered_data"] else "raw",
                                                                                                 wildcards.pairprefix,
-                                                                                                input_reverse_suffix_dict[wildcards.datatype],
+                                                                                                "_2" if wildcards.datatype in config["filtered_data"] else input_reverse_suffix_dict[wildcards.datatype],
                                                                                                 config["fastq_extension"])),
     output:
         forward_hap_read=out_dir_path / "{stage}/{parameters}/fastq/{haplotype, [^.]+}/{assembly_kmer_length, [^./]+}/{datatype, [^/]+}/{pairprefix, [^/]+}_1.fastq.gz", # TODO: change to forward_suffix

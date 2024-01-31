@@ -1051,7 +1051,7 @@ include: "workflow/rules/Preprocessing/Files.smk"
 include: "workflow/rules/QCFiltering/FastQC.smk"
 include: "workflow/rules/QCFiltering/MultiQC.smk"
 include: "workflow/rules/QCFiltering/Cutadapt.smk"
-
+include: "workflow/rules/QCFiltering/Trimmomatic.smk"
 
 #if "nanopore" in data_types:
 include: "workflow/rules/QCFiltering/Nanopore.smk"

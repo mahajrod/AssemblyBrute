@@ -114,3 +114,4 @@ extract_yahs_contigs	1	1	1	1	1	1	1	1	1
 liftover_contig_bedgraph	8	8	8	8	8	8	8	8	8
 mitohifi	30	20	20	30	30	50	50	50	50
 scale_create_bedgraph_track	1	1	1	1	1	1	1	1	1
+trimmomatic_pe	8	4	8	8	8	16	16	16	16

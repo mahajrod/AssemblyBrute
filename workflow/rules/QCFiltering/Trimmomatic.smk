@@ -41,7 +41,7 @@ rule trimmomatic_pe:
         parameters["threads"]["trimmomatic_pe"]
     shell:
          "trimmomatic PE -threads {threads} -phred33 {input.forward_fastq} {input.reverse_fastq} "
-         " {output.forward_fastq} {output.forward_se_fastq} {output.reverse_fastq} {output.reverse_se_fastq}"
-         "ILLUMINACLIP:{params.adapter_file}:{params.illumina_clip} "
-         "SLIDINGWINDOW:{params.sliding_window_size}:{params.sliding_window_quality} "
-         "MINLEN:{params.min_read_length} > {output.stats} 2>{log.std}; "
+         " {output.forward_fastq} {output.forward_se_fastq} {output.reverse_fastq} {output.reverse_se_fastq} "
+         " ILLUMINACLIP:{params.adapter_file}:{params.illumina_clip} "
+         " SLIDINGWINDOW:{params.sliding_window_size}:{params.sliding_window_quality} "
+         " MINLEN:{params.min_read_length} > {output.stats} 2>{log.std}; "

@@ -600,7 +600,7 @@ if "contig" in config["stage_list"]:
     else:
         if config["database_set"]["fcs_adaptor"] and (not config["skip_fcs_adaptor"]):
             results_list += [
-                            *[expand(out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.{database}.report",
+                            *[expand(out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.lenfiltered.{database}.report",
                                    genome_prefix=[config["genome_prefix"], ],
                                    assembly_stage=["contig"],
                                    haplotype=stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"],
@@ -608,7 +608,7 @@ if "contig" in config["stage_list"]:
                                    database=config["database_set"]["fcs_adaptor"]) for parameters_label in parameters_list],
                             ]
         if config["database_set"]["fcs"] and (not config["skip_fcs"]):
-            results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.{database}.taxonomy",
+            results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.lenfiltered.{database}.taxonomy",
                                     genome_prefix=[config["genome_prefix"], ],
                                     assembly_stage=["contig"],
                                     haplotype=stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] + (["alt" if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else "alt0"] if stage_dict["contig"]["parameters"][parameters_label]["assembler"] == "hifiasm" else []), # TODO: modify "alt" when assemblers other than hifiasm will be added

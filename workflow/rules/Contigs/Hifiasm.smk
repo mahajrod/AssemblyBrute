@@ -251,7 +251,7 @@ rule get_lowcoverage_contig_ids:
          " then "
          "   > {output.low_cov_ids}; "
          " else "
-         "   awk '{{if ($2 < {params.min_coverage}) print $1}}' > {output.low_cov_ids} 2>{log.std}; "
+         "   awk '{{if ($2 < {params.min_coverage}) print $1}}' {input.cov} > {output.low_cov_ids} 2>{log.std}; "
          " fi; "
 
 rule filter_contigs_by_coverage:

@@ -1,4 +1,6 @@
 #ruleorder: hifiasm_hic > hifiasm_hifi
+localrules: get_lowcoverage_contig_ids
+
 rule hifiasm_correct:
     priority: 2000
     input:
@@ -220,3 +222,61 @@ rule hifiasm_hifi:
          " {input.hifi}  1>{log.std} 2>&1;"
          " ln -sf `basename {output.primary_contig_graph}` {output.primary_alias};"
          " ln -sf `basename {output.alt_contig_graph}` {output.alt_alias};"
+
+rule get_lowcoverage_contig_ids:
+    input:
+        cov=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.{haplotype}.unfiltered.gfa.cov"
+    output:
+        low_cov_ids=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.{haplotype}.unfiltered.gfa.lowcov.ids",
+    log:
+        std=output_dict["log"] / "get_lowcoverage_contig_ids.{contig_options}.{genome_prefix}.{haplotype}.log",
+        cluster_log=output_dict["cluster_log"] / "get_lowcoverage_contig_ids.{contig_options}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "get_lowcoverage_contig_ids.{contig_options}.{genome_prefix}.{haplotype}.cluster.err",
+    params:
+        min_coverage=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["min_contig_coverage"]
+    benchmark:
+        output_dict["benchmark"] / "get_lowcoverage_contig_ids.{contig_options}.{genome_prefix}.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("get_lowcoverage_contig_ids"),
+        cpus=parameters["threads"]["get_lowcoverage_contig_ids"],
+        time=parameters["time"]["get_lowcoverage_contig_ids"],
+        mem=parameters["memory_mb"]["get_lowcoverage_contig_ids"],
+    threads:
+        parameters["threads"]["get_lowcoverage_contig_ids"]
+    shell:
+         " if [ '{wildcards.haplotype}' == 'alt' ];"
+         " then "
+         "   > {output.low_cov_ids}; "
+         " else "
+         "   awk '{{if ($2 < {params.min_coverage}) print $1}}' > {output.low_cov_ids} 2>{log.std}; "
+         " fi; "
+
+rule filter_contigs_by_coverage:
+    input:
+        low_cov_ids=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.{haplotype}.unfiltered.gfa.lowcov.ids",
+        unfiltered_fasta=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.{haplotype}.unfiltered.fasta"
+    output:
+        filtered_fasta=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.{haplotype}.lenfiltered.fasta",
+    log:
+        std=output_dict["log"] / "filter_contigs_by_coverage.{contig_options}.{genome_prefix}.{haplotype}.log",
+        cluster_log=output_dict["cluster_log"] / "filter_contigs_by_coverage.{contig_options}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "filter_contigs_by_coverage.{contig_options}.{genome_prefix}.{haplotype}.cluster.err",
+    benchmark:
+        output_dict["benchmark"] / "filter_contigs_by_coverage.{contig_options}.{genome_prefix}.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("filter_contigs_by_coverage"),
+        cpus=parameters["threads"]["filter_contigs_by_coverage"],
+        time=parameters["time"]["filter_contigs_by_coverage"],
+        mem=parameters["memory_mb"]["filter_contigs_by_coverage"],
+    threads:
+        parameters["threads"]["filter_contigs_by_coverage"]
+    shell:
+         " extract_sequences_by_ids.py -i {input.unfiltered_fasta} -d {input.low_cov_ids} -r "
+         " -o {output.filtered_fasta} > {log.std} 2>&1; "
+

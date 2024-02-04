@@ -316,10 +316,48 @@ rule merge_pri_hapdups_with_alt_for_len_files: # TODO: add handling of polyploid
         " cat {input.alt_len} {input.pri_hapdups_len} > {output.alt_plus_pri_len} 2>{log.std}"
 """
 
+rule filter_removed_contigs: # TODO: find what options are used in ERGA for get_seqs
+    input:
+        stat=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype, [^.]+}/{genome_prefix}.dups.stat",
+        #junk_ids=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype, [^.]+}/{genome_prefix}.dups.junk.ids",
+        #ovlp_ids=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype, [^.]+}/{genome_prefix}.dups.ovlp.ids",
+        #highcov_ids=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype, [^.]+}/{genome_prefix}.dups.highcov.ids",
+        hapdups=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype, [^.]+}/{genome_prefix}.input.{haplotype}.hap.fasta",
+    output:
+        interhaplotype_transfer_id_blacklist=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype, [^.]+}/{genome_prefix}.dups.transfer_blacklist.ids",
+        filtered_hapdups=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype, [^.]+}/{genome_prefix}.input.{haplotype}.hap.for_transfer.fasta",
+    params:
+        blacklist=lambda wildcards: stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["interhaplotype_transfer_blacklist"]
+    log:
+        extract=output_dict["log"]  / "purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.purge_dups.{haplotype}.{purge_stage}.extract.log",
+        cluster_log=output_dict["cluster_log"] / "purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.purge_dups.{haplotype}.{purge_stage}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.purge_dups.{haplotype}.{purge_stage}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.purge_dups.{haplotype}.{purge_stage}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("purge_dups"),
+        cpus=parameters["threads"]["purge_dups"] ,
+        time=parameters["time"]["purge_dups"],
+        mem=parameters["memory_mb"]["purge_dups"]
+    threads: parameters["threads"]["purge_dups"]
+
+    shell:
+        " STAT={input.stat}; "
+        " > {output.interhaplotype_transfer_id_blacklist};"
+        " for ENTRY in {params.blacklist};"
+        "   do "
+        "   cat ${{STAT%.stat}}.${{ENTRY}}.ids >> {output.interhaplotype_transfer_id_blacklist}; "
+        "   done; "
+        " extract_sequences_by_ids.py -i {input.hapdups} -o {output.filtered_hapdups} "
+        " -d {output.interhaplotype_transfer_id_blacklist} -r  -p parse > {log.extract} 2>&1; "
+
 rule crossmerge_hapdups_with_deduped_contigs: # TODO: add handling of polyploid cases
     input:
         purged=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/first_stage/{haplotype}/{genome_prefix}.input.{haplotype}.purged.fasta",
-        hapdups=lambda wildcards: out_dir_path  / "purge_dups/{0}..{1}/first_stage/{2}/{3}.input.{2}.hap.fasta".format(wildcards.prev_stage_parameters,
+        hapdups=lambda wildcards: out_dir_path  / "purge_dups/{0}..{1}/first_stage/{2}/{3}.input.{2}.hap.for_transfer.fasta".format(wildcards.prev_stage_parameters,
                                                                                                                 wildcards.purge_dups_parameters,
                                                                                                                 list(set(stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["haplotype_list"]) - set([wildcards.haplotype]))[0],
                                                                                                                 wildcards.genome_prefix)

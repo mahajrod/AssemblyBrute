@@ -86,6 +86,7 @@
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
          - "repeat_enhanced_l3"
+         - "repeat_super_enhanced_l3"
     "purge_dups":
         - "default"
     "salsa2":

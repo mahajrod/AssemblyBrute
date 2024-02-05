@@ -47,6 +47,6 @@ rule get_length_and_coverage_from_hifiasm_graph:
         parameters["threads"]["get_coverage_from_hifiasm_graph"]
     shell:
          " workflow/scripts/extract_length_and_coverage_from_hifiasm_gfa.bash {input.gfa} > {output.len_cov} 2>{log.std}; "
-         " cut -f 1,3 {output.len_cov} > {output.cov} 2>>{log.std};"
+         " cut -f 1,3 {output.len_cov} > {output.cov} 2>>{log.std}; "
 
 

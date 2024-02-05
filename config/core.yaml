@@ -268,63 +268,63 @@
                     "use_hic":  True
                     "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
                     "ul-cut": 5000
-                    "min_contig_coverage": 5
+                    "min_contig_coverage": 3
                 "l0primary":
                     "purge level": 0 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  True
                     "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
                     "ul-cut": 5000
-                    "min_contig_coverage": 5
+                    "min_contig_coverage": 3
                 "l1primary":
                     "purge level": 1 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  True
                     "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
                     "ul-cut": 5000
-                    "min_contig_coverage": 5
+                    "min_contig_coverage": 3
                 "l2primary":
                     "purge level": 2 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  True
                     "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
                     "ul-cut": 5000
-                    "min_contig_coverage": 5
+                    "min_contig_coverage": 3
                 "l3primary":
                     "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  True
                     "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
                     "ul-cut": 5000
-                    "min_contig_coverage": 5
+                    "min_contig_coverage": 3
                 "l0primary_no_hic":
                     "purge level": 0 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  False
                     "assembly_ploidy": 1
                     "ul-cut": 5000
-                    "min_contig_coverage": 5
+                    "min_contig_coverage": 3
                 "l1primary_no_hic":
                     "purge level": 1 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  False
                     "assembly_ploidy": 1
                     "ul-cut": 5000
-                    "min_contig_coverage": 5
+                    "min_contig_coverage": 3
                 "l2primary_no_hic":
                     "purge level": 2 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  False
                     "assembly_ploidy": 1
                     "ul-cut": 5000
-                    "min_contig_coverage": 5
+                    "min_contig_coverage": 3
                 "l3primary_no_hic":
                     "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  False
                     "assembly_ploidy": 1
                     "ul-cut": 5000
-                    "min_contig_coverage": 5
+                    "min_contig_coverage": 3
                 "repeat_enhanced_l1":
                     "purge level": 1 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
@@ -333,7 +333,7 @@
                     "D": 10
                     "N": 200
                     "ul-cut": 5000
-                    "min_contig_coverage": 5
+                    "min_contig_coverage": 3
                     #"ignore_bin": True
                 "repeat_enhanced_l2":
                     "purge level": 2 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
@@ -343,7 +343,7 @@
                     "D": 10
                     "N": 200
                     "ul-cut": 5000
-                    "min_contig_coverage": 5
+                    "min_contig_coverage": 3
                     #"ignore_bin": True
                 "repeat_enhanced_l3":
                     "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
@@ -353,7 +353,7 @@
                     "D": 10
                     "N": 200
                     "ul-cut": 5000
-                    "min_contig_coverage": 5
+                    "min_contig_coverage": 3
                 "repeat_super_enhanced_l3":
                     "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
@@ -362,7 +362,7 @@
                     "D": 20
                     "N": 400
                     "ul-cut": 5000
-                    "min_contig_coverage": 5
+                    "min_contig_coverage": 3
             "purge_dups":
                 "default":
                     "cov_multiplicator": 4.5 # 4.5 *lambda

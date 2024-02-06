@@ -297,6 +297,13 @@
                     "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
                     "ul-cut": 5000
                     "min_contig_coverage": 2
+                "l3primary_no_cov_filter":
+                    "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  True
+                    "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
                 "l0primary_no_hic":
                     "purge level": 0 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda

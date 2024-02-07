@@ -79,7 +79,7 @@
 "coretool_option_sets":
     "hifiasm":
          #- "l0primary"
-         - "l1primary"
+         - "l1primary_no_cov_filter"
          #- "l2primary"
          - "l3primary"
          - "l3primary_no_cov_filter"

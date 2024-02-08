@@ -17,7 +17,7 @@
   - "yahs"
   - "quast"
   - "gfatools"
-  - "cutadapt=3.4"
+  - "cutadapt=4.6"
   - "libopenblas"
   - "bwa=0.7.17"
   - "picard>=2.5"

@@ -133,10 +133,13 @@ for d_type in set(data_types):
 if "reference" in set(data_types):
     reference_input_dir = input_dict[datatype]["dir"]
     reference_genomes_list = [element.name for element in reference_input_dir.glob("*")]
+    print(reference_input_dir)
+    print(reference_genomes_list)
     for genome in reference_genomes_list:
         input_reference_filedict[genome] = {}
         for filetype in "fasta", "syn", "whitelist", "orderlist":
             input_reference_filedict[genome][filetype] = list((reference_input_dir / genome).glob("*.{0}".format(filetype)))
+            print(input_reference_filedict[genome][filetype])
             if len(input_reference_filedict[genome][filetype]) > 1:
                 raise ValueError("ERROR!!! There is more than one {0} file for reference {1}".format(filetype, genome))
             input_reference_filedict[genome][filetype] = input_reference_filedict[genome][filetype][0]

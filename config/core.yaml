@@ -38,6 +38,9 @@
     "chromodoter":
         "yaml": "workflow/envs/conda.chromodoter.yaml"
         "name": "chromodoter"
+    "ragtag":
+        "yaml": "workflow/envs/conda.ragtag.yaml"
+        "name": "ragtag"
 
 "resources":
     "threads":      "config/resources/threads.tab"
@@ -87,6 +90,8 @@
 "parameters":
     "default":
         "tool_options":
+            "ragtag":
+                "default": {}
             "mitohifi":
                 "default":
                     "min_mapping_quality": 20

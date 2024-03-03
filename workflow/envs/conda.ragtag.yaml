@@ -1,0 +1,9 @@
+#---- Bioconda config for salsa2 ----
+
+"name": "ragtag"
+"channels":
+  - "bioconda"
+  - "conda-forge"
+  - "anaconda"
+"dependencies":
+  - "ragtag"

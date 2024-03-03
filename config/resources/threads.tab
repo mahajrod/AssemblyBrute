@@ -117,3 +117,4 @@ scale_create_bedgraph_track	1	1	1	1	1	1	1	1	1
 trimmomatic_pe	8	4	8	8	8	16	16	16	16
 get_lowcoverage_contig_ids	1	1	1	1	1	1	1	1	1
 filter_contigs_by_coverage	1	1	1	1	1	1	1	1	1
+ragtag	20	5	5	10	20	20	30	30	30

@@ -309,6 +309,10 @@ if ("read_qc" in config["stage_list"]) and (not config["skip_read_qc"]):
                                stage=["raw", ],
                                fileprefix=input_file_prefix_dict[dat_type],) for dat_type in long_read_data_type_set],
                      ]
+    if "hic" in data_types:
+        results_list += [expand(output_dict["qc"] / "tadbit/hic/raw/{genome_prefix}.tadbit.stats",
+            genome_prefix=[config["genome_prefix"]])]
+
 
 
 if "draft_qc" in config["stage_list"]:
@@ -1064,6 +1068,7 @@ include: "workflow/rules/QCFiltering/MultiQC.smk"
 include: "workflow/rules/QCFiltering/Cutadapt.smk"
 include: "workflow/rules/QCFiltering/Trimmomatic.smk"
 
+include: "workflow/rules/QCFiltering/TADbit.smk"
 #if "nanopore" in data_types:
 include: "workflow/rules/QCFiltering/Nanopore.smk"
 include: "workflow/rules/QCFiltering/NanoQC.smk"
@@ -1128,6 +1133,7 @@ if "curation" in config["stage_list"]:
     include: "workflow/rules/Curation/WGA.smk"
     include: "workflow/rules/Curation/VariantTrack.smk"
     include: "workflow/rules/Curation/RagTag.smk"
+
 
 if "gap_closing" in config["stage_list"]:
     include: "workflow/rules/Finalization/GapClosing.smk"

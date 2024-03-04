@@ -90,6 +90,10 @@
 "parameters":
     "default":
         "tool_options":
+            "tadbit":
+                "default":
+                    "hic":
+                        "read_number": 1000000
             "ragtag":
                 "default": {}
             "mitohifi":
@@ -1634,3 +1638,10 @@
 
 "no_motif_enzyme_sets":
     - "OmniC"
+
+"hic_enzyme_dict":
+    "Arima":
+        - "DpnII"
+        - "HinfI"
+        - "DdeI"
+        - "MseI"

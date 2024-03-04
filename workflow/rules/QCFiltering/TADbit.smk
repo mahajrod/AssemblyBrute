@@ -39,7 +39,7 @@ rule tadbit:
         " -e {params.enzyme_list} -p ${{OUTPUT_PREFIX}}.forward > {log.forward_tadbit} 2>&1; "
         " workflow/scripts/hic_qc/count_ligation_site_metrics.py  -s 'reverse_' -n {params.read_number} -f {input.reverse_fastq} "
         " -e {params.enzyme_list} -p ${{OUTPUT_PREFIX}}.reverse > {log.reverse_tadbit} 2>&1; "
-        " paste ${{OUTPUT_PREFIX}}.forward.stats <(cut -f 3 ${{OUTPUT_PREFIX}}.reverse.stats) > ${{OUTPUT_PREFIX}} 2>{log.combine}; "
+        " paste ${{OUTPUT_PREFIX}}.forward.stats <(cut -f 3 ${{OUTPUT_PREFIX}}.reverse.stats) > ${{OUTPUT_PREFIX}}.stats 2>{log.combine}; "
 
 rule merge_tadbit_stats:
     input:

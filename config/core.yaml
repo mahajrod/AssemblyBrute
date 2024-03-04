@@ -44,6 +44,9 @@
     "tadbit":
         "yaml": "workflow/envs/conda.tadbit.yaml"
         "name": "tadbit"
+    "pacbio":
+        "yaml": "workflow/envs/conda.pacbio.yaml"
+        "name": "pacbio"
 
 "resources":
     "threads":      "config/resources/threads.tab"

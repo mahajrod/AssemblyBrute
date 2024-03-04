@@ -3,6 +3,8 @@
 TADbit based code. It contains slightly modified quality_plot function from TADbit.
 It was modified to produce machine-readable file with stats including percentage of diggested sites.
 Also, a generation of a figure in multiple formats was added as option.
+
+All TADbit dependencies of quality_plot function were copied into this script to avoid issues with scipy which happens on some systems.
 """
 
 import re

@@ -44,7 +44,7 @@
   - "pairtools"
   - "parallel"
   - "routoolpa>=0.106"
-  - "mavr>=0.98"
+  - "mavr>=0.110"
   - "jellyfish>=2"
   - "krater>=2.7.9"
   - "mace>=1.1.12"

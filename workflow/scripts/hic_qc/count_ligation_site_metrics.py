@@ -20,10 +20,10 @@ from subprocess import Popen, PIPE
 from collections import OrderedDict
 from multiprocessing import cpu_count
 
-from numpy                                import nanstd, nanmean, linspace, nansum
+from numpy import nanstd, nanmean, linspace, nansum
 import matplotlib.pyplot as plt
 
-from pytadbit.utils.file_handling         import magic_open
+from pytadbit.utils.file_handling import magic_open
 from pytadbit.mapping.restriction_enzymes import RESTRICTION_ENZYMES, iupac2regex
 from pytadbit.mapping.restriction_enzymes import religateds, repaired
 

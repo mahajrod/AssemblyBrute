@@ -33,8 +33,8 @@ rule tadbit:
     threads:
         parameters["threads"]["tadbit"]
     shell:
-        " OUTPUT_PREFIX={output.stats};"
-        " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.stats}}"
+        " OUTPUT_PREFIX={output.stats}; "
+        " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.stats}}; "
         " count_ligation_site_metrics.py  -s 'forward_' -n {params.read_number} -f {input.forward_fastq} "
         " -e {params.enzyme_list} -p ${{OUTPUT_PREFIX}}.forward > {log.forward_tadbit} 2>&1; "
         " count_ligation_site_metrics.py  -s 'reverse_' -n {params.read_number} -f {input.reverse_fastq} "

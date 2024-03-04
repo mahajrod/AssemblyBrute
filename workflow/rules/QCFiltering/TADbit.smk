@@ -23,7 +23,7 @@ rule tadbit:
     benchmark:
         output_dict["benchmark"] / "tadbit.raw.{pairprefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["tadbit"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["tadbit"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("tadbit"),

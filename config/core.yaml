@@ -41,6 +41,9 @@
     "ragtag":
         "yaml": "workflow/envs/conda.ragtag.yaml"
         "name": "ragtag"
+    "tadbit":
+        "yaml": "workflow/envs/conda.tadbit.yaml"
+        "name": "tadbit"
 
 "resources":
     "threads":      "config/resources/threads.tab"

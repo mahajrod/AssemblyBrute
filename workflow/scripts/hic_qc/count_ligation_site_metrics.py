@@ -5,15 +5,22 @@ It was modified to produce machine-readable file with stats including percentage
 Also, a generation of a figure in multiple formats was added as option.
 """
 
+import re
+import os
+import bz2
+import gzip
+import zipfile
+import tarfile
 import argparse
 
-from warnings                             import catch_warnings, simplefilter
-from itertools                            import zip_longest
-import re
+from io import open, TextIOWrapper, BufferedReader
+from warnings import catch_warnings, simplefilter
+from itertools import zip_longest
+from subprocess import Popen, PIPE
+from collections import OrderedDict
+from multiprocessing import cpu_count
 
-from collections                          import OrderedDict
 from numpy                                import nanstd, nanmean, linspace, nansum
-
 import matplotlib.pyplot as plt
 
 from pytadbit.utils.file_handling         import magic_open
@@ -24,6 +31,89 @@ try:
     basestring
 except NameError:
     basestring = str
+
+
+def which(program):
+    """
+    stackoverflow: http://stackoverflow.com/questions/377017/test-if-executable-exists-in-python
+    """
+    def is_exe(fpath):
+        return os.path.isfile(fpath) and os.access(fpath, os.X_OK)
+
+    fpath, _ = os.path.split(program)
+    if fpath:
+        if is_exe(program):
+            return program
+    else:
+        for path in os.environ["PATH"].split(os.pathsep):
+            path = path.strip('"')
+            exe_file = os.path.join(path, program)
+            if is_exe(exe_file):
+                return exe_file
+    return None
+
+
+def magic_open(filename, verbose=False, cpus=None):
+    """
+    To read uncompressed zip gzip bzip2 or tar.xx files
+
+    :param filename: either a path to a file, or a file handler
+
+    :returns: opened file ready to be iterated
+    """
+    textchars = bytearray({7,8,9,10,12,13,27} | set(range(0x20, 0x100)) - {0x7f})
+    is_binary_string = lambda bytes: bool(bytes.translate(None, textchars))
+
+    if isinstance(filename, basestring) or isinstance(filename, basestring):
+        fhandler = open(filename, 'rb')
+        inputpath = True
+        if tarfile.is_tarfile(filename):
+            print('tar')
+            thandler = tarfile.open(filename)
+            if len(thandler.members) != 1:
+                raise NotImplementedError(
+                    'Not exactly one file in this tar archieve.')
+            return magic_open(thandler.extractfile(thandler.getnames()[0]))
+    else:
+        fhandler = filename
+        filename = fhandler.name
+        inputpath = False
+        start_of_file = ''
+    if filename.endswith('.dsrc'):
+        dsrc_binary = which('dsrc')
+        if not dsrc_binary:
+            raise Exception('\n\nERROR: DSRC binary not found, install it from:'
+                            '\nhttps://github.com/lrog/dsrc/releases')
+        proc = Popen([dsrc_binary, 'd', '-t%d' % (cpus or cpu_count()),
+                      '-s', filename], stdout=PIPE, universal_newlines=True)
+        return proc.stdout
+    if inputpath:
+        start_of_file = fhandler.read(1024)
+        fhandler.seek(0)
+        if is_binary_string(start_of_file):
+            if start_of_file.startswith(b'\x50\x4b\x03\x04'):
+                if verbose:
+                    print('zip')
+                zhandler = TextIOWrapper(zipfile.ZipFile(fhandler))
+                if len(zhandler.NameToInfo) != 1:
+                    raise NotImplementedError(
+                        'Not exactly one file in this zip archieve.')
+                return TextIOWrapper(BufferedReader(zhandler.open(list(zhandler.NameToInfo.keys())[0])))
+            if is_binary_string(start_of_file) and start_of_file.startswith(b'\x42\x5a\x68'):
+                if verbose:
+                    print('bz2')
+                fhandler.close()
+                return TextIOWrapper(BufferedReader(bz2.BZ2File(filename)))
+            if is_binary_string(start_of_file) and start_of_file.startswith(b'\x1f\x8b\x08'):
+                if verbose:
+                    print('gz')
+                return TextIOWrapper(BufferedReader(gzip.GzipFile(fileobj=fhandler)))
+        else:
+            if verbose:
+                print('text')
+            fhandler.close()
+            fhandler = open(filename, 'r')
+    return fhandler
 
 
 def make_patch_spines_invisible(ax):

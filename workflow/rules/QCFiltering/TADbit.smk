@@ -12,7 +12,7 @@ rule tadbit:
         #stats=merged_raw_fastqc_dir_path / "{library_id}/{library_id}.raw.fast{}qc.stats"
     params:
         enzyme_list=",".join(config["hic_enzyme_dict"][config["hic_enzyme_set"]] if config["custom_enzyme_set"] is None else config["custom_enzyme_set"]),
-        read_number=parameters["tool_options"]["tadbit"]["read_number"]
+        read_number=parameters["tool_options"]["tadbit"]["hic"]["read_number"]
     log:
         forward_tadbit=output_dict["log"]/ "tadbit.raw.{pairprefix}.forward.log",
         reverse_tadbit=output_dict["log"]/ "tadbit.raw.{pairprefix}.reverse.log",

@@ -58,7 +58,7 @@ rule telo_finder:
         " SCRIPT=`realpath -s workflow/external_tools/rapid_curation/telo_finder.py `; "
         " FASTA=`realpath -s {input.fasta}`;"
         " cd ${{WORKDIR}}; "
-        " ${{SCRIPT}} {params.size} {params.max_kmer} {params.max_kmer} "
+        " ${{SCRIPT}} {params.size} {params.min_kmer} {params.max_kmer} "
         " {params.ends} ${{FASTA}} > ${{STD_LOG}} 2>&1; "
         " cp canonical.txt `basename {output.canonical}` > ${{CP_LOG}} 2>&1; "
         " if [ -s `basename {output.canonical}` ]; "

@@ -75,5 +75,5 @@ rule merge_tadbit_stats:
         "   PAIR_PREFIX=`basename ${{STAT_FILE}}`; "
         "   PAIR_PREFIX=${{PAIR_PREFIX%.stats}}; "
         "   tail -n +2 ${{STAT_FILE}} | "
-        "   awk -v PAIR_PREFIX=${{PAIR_PREFIX}} '{{print {wildcards.genome_prefix}\"\t\"PAIR_PREFIX\"\t\"$0}}' >> {output.stats} 2>>{log.tail}; "
+        "   awk -v PAIR_PREFIX=${{PAIR_PREFIX}} '{{print \"{wildcards.genome_prefix}\t\"PAIR_PREFIX\"\t\"$0}}' >> {output.stats} 2>>{log.tail}; "
         "   done "

@@ -69,8 +69,10 @@ rule merge_tadbit_stats:
         parameters["threads"]["merge_tadbit_stats"]
     shell:
         " > {log.tail}; "
-        " head -n 1 {params.header_file} > {output.stats} 2>{log.head}; "
+        " head -n 1 {params.header_file} | sed 's/^#/#pairprefix\t/' > {output.stats} 2>{log.head}; "
         " for STAT_FILE in {input.stats};"
         "   do "
-        "   tail -n +2 ${{STAT_FILE}} >> {output.stats} 2>>{log.tail}; "
+        "   PAIRPREFIX=`basename ${{STAT_FILE}}`; "
+        "   PAIRPREFIX=${{PAIRPREFIX%.stats}}; "
+        "   tail -n +2 ${{STAT_FILE}} | awk -v PAIRPREFIX=${{PAIRPREFIX}} '{{print PAIRPREFIX\"\t\"$0}}' >> {output.stats} 2>>{log.tail}; "
         "   done "

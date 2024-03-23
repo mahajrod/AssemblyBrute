@@ -8,7 +8,7 @@ rule tadbit:
         reverse_fastq=output_dict["data"] / ("fastq/hic/raw/{pairprefix}%s%s" % (input_reverse_suffix_dict["hic"], 
                                                                                      config["fastq_extension"])),
     output:
-        stats=output_dict["qc"] / "tadbit/hic/raw/{pairprefix}.stats" ,
+        stats=output_dict["qc"] / "tadbit/hic/raw/{pairprefix}.tadbit_stats" ,
         #stats=merged_raw_fastqc_dir_path / "{library_id}/{library_id}.raw.fast{}qc.stats"
     params:
         enzyme_list=",".join(config["hic_enzyme_dict"][config["hic_enzyme_set"]] if config["custom_enzyme_set"] is None else config["custom_enzyme_set"]),

@@ -47,20 +47,21 @@ rule tadbit:
 
 rule merge_tadbit_stats:
     input:
-        stats=expand(output_dict["qc"] / "tadbit/hic/raw/{pairprefix}.stats", pairprefix=input_pairprefix_dict["hic"])
+        stats=lambda wildcards: expand(output_dict["qc"] / "tadbit/%s/raw/{pairprefix}.stats" % wildcards.datatype,
+                                       pairprefix=input_pairprefix_dict[wildcards.datatype])
     output:
-        stats=output_dict["qc"] / "tadbit/hic/raw/{genome_prefix}.tadbit.stats" ,
+        stats=output_dict["qc"] / "tadbit/{datatype, hic}/raw/{genome_prefix}.tadbit.stats" ,
         #stats=merged_raw_fastqc_dir_path / "{library_id}/{library_id}.raw.fast{}qc.stats"
     params:
-        header_file=expand(output_dict["qc"] / "tadbit/hic/raw/{pairprefix}.stats", pairprefix=input_pairprefix_dict["hic"])[0]
+        header_file=expand(output_dict["qc"] / "tadbit/{datatype}/raw/{pairprefix}.stats", pairprefix=input_pairprefix_dict["hic"])[0]
     log:
-        head=output_dict["log"]/ "merge_tadbit_stats.raw.{genome_prefix}.head.log",
-        tail=output_dict["log"]/ "merge_tadbit_stats.raw.{genome_prefix}.tail.log",
+        head=output_dict["log"]/ "merge_tadbit_stats.raw.{datatype}.{genome_prefix}.head.log",
+        tail=output_dict["log"]/ "merge_tadbit_stats.raw.{datatype}.{genome_prefix}.tail.log",
         #stats=log_dir_path / "{library_id}/fastqc_merged_raw.stats.log",
-        cluster_log=output_dict["cluster_log"] / "tadbit.raw.{genome_prefix}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "tadbit.raw.{genome_prefix}.cluster.err"
+        cluster_log=output_dict["cluster_log"] / "tadbit.raw.{datatype}.{genome_prefix}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "tadbit.raw.{datatype}.{genome_prefix}.cluster.err"
     benchmark:
-        output_dict["benchmark"] / "tadbit.raw.{genome_prefix}.benchmark.txt"
+        output_dict["benchmark"] / "tadbit.raw.{datatype}.{genome_prefix}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

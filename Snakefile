@@ -310,6 +310,7 @@ if ("read_qc" in config["stage_list"]) and (not config["skip_read_qc"]):
                                fileprefix=input_file_prefix_dict[dat_type],) for dat_type in long_read_data_type_set],
                      ]
     if "hic" in data_types:
+        print(data_types)
         results_list += [expand(output_dict["qc"] / "tadbit/hic/raw/{genome_prefix}.tadbit.stats",
             genome_prefix=[config["genome_prefix"]])]
 

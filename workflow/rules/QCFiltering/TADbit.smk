@@ -3,25 +3,29 @@ localrules: merge_tadbit_stats
 rule tadbit:
     input:
         #fastq_dir=rules.create_fastq_links.output,
-        forward_fastq=output_dict["data"] / ("fastq/hic/raw/{pairprefix}%s%s" % (input_forward_suffix_dict["hic"], 
-                                                                                     config["fastq_extension"])),
-        reverse_fastq=output_dict["data"] / ("fastq/hic/raw/{pairprefix}%s%s" % (input_reverse_suffix_dict["hic"], 
-                                                                                     config["fastq_extension"])),
+        forward_fastq=lambda wildcards: output_dict["data"] / ("fastq/{0}/raw/{1}{2}{3}".format(wildcards.datatype,
+                                                                                              wildcards.pairprefix,
+                                                                                              input_forward_suffix_dict[wildcards.datatype],
+                                                                                              config["fastq_extension"])),
+        reverse_fastq=lambda wildcards: output_dict["data"] / ("fastq/{0}/raw/{1}{2}{3}".format(wildcards.datatype,
+                                                                                              wildcards.pairprefix,
+                                                                                              input_reverse_suffix_dict[wildcards.datatype],
+                                                                                              config["fastq_extension"])),
     output:
-        stats=output_dict["qc"] / "tadbit/hic/raw/{pairprefix}.tadbit_stats" ,
+        stats=output_dict["qc"] / "tadbit/{datatype, hic}/raw/{pairprefix}.stats" ,
         #stats=merged_raw_fastqc_dir_path / "{library_id}/{library_id}.raw.fast{}qc.stats"
     params:
         enzyme_list=",".join(config["hic_enzyme_dict"][config["hic_enzyme_set"]] if config["custom_enzyme_set"] is None else config["custom_enzyme_set"]),
         read_number=parameters["tool_options"]["tadbit"]["hic"]["read_number"]
     log:
-        forward_tadbit=output_dict["log"]/ "tadbit.raw.{pairprefix}.forward.log",
-        reverse_tadbit=output_dict["log"]/ "tadbit.raw.{pairprefix}.reverse.log",
-        combine=output_dict["log"]/ "tadbit.raw.{pairprefix}.combine.log",
+        forward_tadbit=output_dict["log"]/ "tadbit.raw.{datatype}.{pairprefix}.forward.log",
+        reverse_tadbit=output_dict["log"]/ "tadbit.raw.{datatype}.{pairprefix}.reverse.log",
+        combine=output_dict["log"]/ "tadbit.raw.{datatype}.{pairprefix}.combine.log",
         #stats=log_dir_path / "{library_id}/fastqc_merged_raw.stats.log",
-        cluster_log=output_dict["cluster_log"] / "tadbit.raw.{pairprefix}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "tadbit.raw.{pairprefix}.cluster.err"
+        cluster_log=output_dict["cluster_log"] / "tadbit.raw.{datatype}.{pairprefix}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "tadbit.raw.{datatype}.{pairprefix}.cluster.err"
     benchmark:
-        output_dict["benchmark"] / "tadbit.raw.{pairprefix}.benchmark.txt"
+        output_dict["benchmark"] / "tadbit.raw.{datatype}.{pairprefix}.benchmark.txt"
     conda:
         config["conda"]["tadbit"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["tadbit"]["yaml"])
     resources:

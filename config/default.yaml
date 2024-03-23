@@ -174,6 +174,7 @@
     - "illumina"
     - "nanopore"
     - "hic"
+    - "ccs"
 
 "final_kmer_counter": "meryl" # pipeline allows usage of different kmer counter tools, but only one genomesize assessment could be used
 "final_kmer_length": 21 # pipeline allows usage of different kmer length, but only one genomesize assessment could be used
@@ -188,7 +189,7 @@
 "custom_enzyme_set": null # None
 
 "starting_point": "fastq" # Allowed: "draft"
-"data_types": "hifi,hic" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
+"data_types": "hifi,hic" # Allowed: hifi, hic, lqccs, nanopore, reference  #TODO: add bionano and lr and others
 
 "mode": "assembly"                # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"
@@ -200,7 +201,7 @@
 "custom_assembly_stages": []
 "curation_seq_type":
     - "scaffolds"
-    - "contigs" # works only if precuration stage is hic_sscaffolding
+    - "contigs" # works only if precuration stage is hic_scaffolding
 
 "skip_read_qc": False
 "skip_filter_reads": False

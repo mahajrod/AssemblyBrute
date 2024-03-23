@@ -63,15 +63,31 @@ rule hifiasm_correct:
          " ln -sf ../../../../../{output.ec_fasta} {output.alias_ec_fasta} > {log.ln} 2>&1; "
          " sleep 60; "
 
+def get_ultralong_read_files(input_file_prefix_dict, option_set):
+    #option_set = stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set"]
+    read_filelist = []
+    for ultralong_read_type in option_set["ultra_long_reads"]:
+        if ultralong_read_type in input_file_prefix_dict:
+            read_filelist += expand(output_dict["data"] / ("fastq/%s/filtered/{fileprefix}%s" % (ultralong_read_type,
+                                                                                              config["fastq_extension"])),
+                                    fileprefix=input_file_prefix_dict[ultralong_read_type])
+    return read_filelist
+
+
 rule hifiasm_hic: # TODO: add support for polyploid assemblies
     priority: 1000
     input:
         hifi=expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),
                     fileprefix=input_file_prefix_dict["hifi"],
                     allow_missing=True),
-        nanopore=expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
-                        fileprefix=input_file_prefix_dict["nanopore"],
-                        allow_missing=True) if "nanopore" in input_filedict else [],
+        ultralong_reads=lambda wildcards: get_ultralong_read_files(input_file_prefix_dict,
+                                                                   stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set"]),
+        #nanopore=expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
+        #                fileprefix=input_file_prefix_dict["nanopore"],
+        #                allow_missing=True) if "nanopore" in input_filedict else [],
+        #lqccs=expand(output_dict["data"] / ("fastq/lqccs/filtered/{fileprefix}%s" % config["fastq_extension"]),
+        #                fileprefix=input_file_prefix_dict["lqccs"],
+        #                allow_missing=True) if "lqccs" in input_filedict else [],
         #hic_forward=list(map(lambda s: output_dict["data"] / "fastq/hic/raw/" / s.name, input_filedict["hic"][::2])) if "hic" in input_filedict else [],
         #hic_reverse=list(map(lambda s: output_dict["data"] / "fastq/hic/raw/" / s.name, input_filedict["hic"][1::2])) if "hic" in input_filedict else [],
         hic_forward=expand(output_dict["data"] / ("fastq/hic/filtered/{pairprefix}_1%s" % config["fastq_extension"]), pairprefix=input_pairprefix_dict["hic"]),
@@ -109,9 +125,19 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         ignore_bin=lambda wildcards: " -i " if ("ignore_bin" in parameters["tool_options"]["hifiasm"][wildcards.contig_options]) and parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ignore_bin"] else "",
         hic_forward=(" --h1 " + ",".join(map(str, expand(output_dict["data"] / ("fastq/hic/filtered/{pairprefix}_1%s" % config["fastq_extension"]), pairprefix=input_pairprefix_dict["hic"]) ))) if "hic" in input_filedict else "", #in case of multiple hic libraries files in the list MUST be COMMA-separated
         hic_reverse=(" --h2 " + ",".join(map(str, expand(output_dict["data"] / ("fastq/hic/filtered/{pairprefix}_2%s" % config["fastq_extension"]), pairprefix=input_pairprefix_dict["hic"]) ))) if "hic" in input_filedict else "",
-        nanopore=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
-                                                      fileprefix=input_file_prefix_dict["nanopore"],
-                                                      allow_missing=True)))) if "nanopore" in input_filedict else "",
+        ultralong_reads=lambda wildcards: (" --ul " + ",".join(map(str,
+                                                                   get_ultralong_read_files(input_file_prefix_dict,
+                                                                                            stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set"])
+                                                                   )
+                                                              )
+                                           ) if get_ultralong_read_files(input_file_prefix_dict,
+                                                                         stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set"]) else "",
+        #nanopore=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
+        #                                              fileprefix=input_file_prefix_dict["nanopore"],
+        #                                              allow_missing=True)))) if "nanopore" in input_filedict else "",
+        #lqccs=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/lqccs/filtered/{fileprefix}%s" % config["fastq_extension"]),
+        #                                              fileprefix=input_file_prefix_dict["nanopore"],
+        #                                              allow_missing=True)))) if "nanopore" in input_filedict else "",
         ul_cut=lambda wildcards: parse_option("ul-cut", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --ul-cut ")
     log:
         std=output_dict["log"] / "hifiasm.{contig_options}.{genome_prefix}.log",
@@ -141,7 +167,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
          " {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size}"
          " {params.kmer_length} {params.D} {params.N} {params.ignore_bin} --primary -t {threads} -l {params.purge_level}  -o ${{OUTPUT_PREFIX}} "
          " --n-hap {params.ploidy} --purge-max ${{COV_UPPER_BOUNDARY}} "
-         " {params.hic_forward} {params.hic_reverse} {params.nanopore} {params.ul_cut}"
+         " {params.hic_forward} {params.hic_reverse} {params.ultralong_reads} {params.ul_cut}"
          " {input.hifi}  1>{log.std} 2>&1;"         
          " ln -sf `basename {output.primary_contig_graph}` {output.primary_alias};"
          " ln -sf `basename {output.alternative_contig_graph}` {output.alternative_alias};"
@@ -154,9 +180,14 @@ rule hifiasm_hifi:
         hifi=expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),
                     fileprefix=input_file_prefix_dict["hifi"],
                     allow_missing=True),
-        nanopore=expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
-                        fileprefix=input_file_prefix_dict["nanopore"],
-                        allow_missing=True) if "nanopore" in input_filedict else [],
+        #nanopore=expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
+        #                fileprefix=input_file_prefix_dict["nanopore"],
+        #                allow_missing=True) if "nanopore" in input_filedict else [],
+        #lqccs=expand(output_dict["data"] / ("fastq/lqccs/filtered/{fileprefix}%s" % config["fastq_extension"]),
+        #                fileprefix=input_file_prefix_dict["lqccs"],
+        #                allow_missing=True) if "lqccs" in input_filedict else [],
+        ultralong_reads=lambda wildcards: get_ultralong_read_files(input_file_prefix_dict,
+                                                                   stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set"]),
         ec_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ec.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
                                                                                                           wildcards.genome_prefix),
         ovlp_reverse_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ovlp.reverse.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
@@ -186,9 +217,16 @@ rule hifiasm_hifi:
         D=lambda wildcards: parse_option("D", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -D "), #" -D {0} ".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["D"]) if "D" in parameters["tool_options"]["hifiasm"][wildcards.contig_options] else "",
         N=lambda wildcards: parse_option("N", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -N "),
         ignore_bin=lambda wildcards: " -i " if ("ignore_bin" in parameters["tool_options"]["hifiasm"][wildcards.contig_options]) and parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ignore_bin"] else "",
-        nanopore=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
-                                                      fileprefix=input_file_prefix_dict["nanopore"],
-                                                      allow_missing=True)))) if "nanopore" in input_filedict else "",
+        #nanopore=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
+        #                                              fileprefix=input_file_prefix_dict["nanopore"],
+        #                                              allow_missing=True)))) if "nanopore" in input_filedict else "",
+        ultralong_reads=lambda wildcards: (" --ul " + ",".join(map(str,
+                                                                   get_ultralong_read_files(input_file_prefix_dict,
+                                                                                            stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set"])
+                                                                   )
+                                                              )
+                                           ) if get_ultralong_read_files(input_file_prefix_dict,
+                                                                         stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set"]) else "",
         ul_cut=lambda wildcards: parse_option("ul-cut", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --ul-cut ")
     log:
         std=output_dict["log"] / "hifiasm.{contig_options}.{genome_prefix}.log",
@@ -218,7 +256,7 @@ rule hifiasm_hifi:
          " {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size} "
          " {params.kmer_length} {params.D} {params.N} {params.ignore_bin} {params.nanopore} {params.ul_cut}"
          " --primary -t {threads} -l {params.purge_level}  -o ${{OUTPUT_PREFIX}} "
-         " --n-hap {params.ploidy} --purge-max ${{COV_UPPER_BOUNDARY}} {params.nanopore} "
+         " --n-hap {params.ploidy} --purge-max ${{COV_UPPER_BOUNDARY}} {params.ultralong_reads} "
          " {input.hifi}  1>{log.std} 2>&1;"
          " ln -sf `basename {output.primary_contig_graph}` {output.primary_alias};"
          " ln -sf `basename {output.alt_contig_graph}` {output.alt_alias};"

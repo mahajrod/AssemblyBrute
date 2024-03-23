@@ -52,8 +52,8 @@ rule merge_tadbit_stats:
     output:
         stats=output_dict["qc"] / "tadbit/{datatype, hic}/raw/{genome_prefix}.tadbit.stats" ,
         #stats=merged_raw_fastqc_dir_path / "{library_id}/{library_id}.raw.fast{}qc.stats"
-    params:
-        header_file=expand(output_dict["qc"] / "tadbit/{datatype}/raw/{pairprefix}.stats", pairprefix=input_pairprefix_dict["hic"])[0]
+    #params:
+    #    header_file=expand(output_dict["qc"] / "tadbit/{datatype}/raw/{pairprefix}.stats", pairprefix=input_pairprefix_dict["hic"])[0]
     log:
         head=output_dict["log"]/ "merge_tadbit_stats.raw.{datatype}.{genome_prefix}.head.log",
         tail=output_dict["log"]/ "merge_tadbit_stats.raw.{datatype}.{genome_prefix}.tail.log",
@@ -74,7 +74,8 @@ rule merge_tadbit_stats:
         parameters["threads"]["merge_tadbit_stats"]
     shell:
         " > {log.tail}; "
-        " head -n 1 {params.header_file} | sed 's/^#/#genome_prefix\tpair_prefix\t/' > {output.stats} 2>{log.head}; "
+        " INPUT_FILES_ARR=({input.stats}); "
+        " head -n 1 ${{ARR[0]}} | sed 's/^#/#genome_prefix\tpair_prefix\t/' > {output.stats} 2>{log.head}; "
         " for STAT_FILE in {input.stats};"
         "   do "
         "   PAIR_PREFIX=`basename ${{STAT_FILE}}`; "

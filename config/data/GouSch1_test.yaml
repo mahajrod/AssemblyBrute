@@ -150,7 +150,7 @@
 
 "ploidy": 2
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2. ARIMA pipeline always uses bwa as bwa-mem2 breaks read order( i.e. read order in bam file is different from read order in fastq file). DO NOT use bwa-mem2 in arima mapping pipeline
-"genome_prefix": "CinExc1"
+"genome_prefix": "GouSch1"
 "busco_lineage_list":
     - "aves_odb10" #
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
@@ -158,8 +158,8 @@
 
 "kingdom": "animal" # required for MitoHiFi. Allowed: animal,plant,fungi
 "mitochondrial_genetic_code": 2 #  NCBI genetic code (2 = vertebrate by default) to use for annotation of mtDNA
-"species_name": "cinclodes excelsior"
-"tax_id": 279547 # necessary for contamination scan via FCS
+"species_name": "goura scheepmakeri"
+"tax_id": 915434 # necessary for contamination scan via FCS
 
 "database_set":
     "kraken2":

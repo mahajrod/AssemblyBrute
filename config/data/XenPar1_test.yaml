@@ -152,7 +152,7 @@
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2. ARIMA pipeline always uses bwa as bwa-mem2 breaks read order( i.e. read order in bam file is different from read order in fastq file). DO NOT use bwa-mem2 in arima mapping pipeline
 "genome_prefix": "XenPar1"
 "busco_lineage_list":
-    - "mammalia_odb10" #
+    - "aves_odb10" #
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
 

@@ -133,6 +133,18 @@
                             - "ATCTCTCTCTTTTCCTCCTCCTCCGTTGTTGTTGTTGAGAGAGAT" # SMRT bell adapter rev com
                             - "AAAAAAAAAAAAAAAAAATTAACGGAGGAGGAGGA"           # C2 primer, required for MagBead loading, but is not necessary for diffusion loading
                         "reverse_anywhere_adapter_list": []
+                    "lqccs":
+                        "min_length": 1000
+                        "error_rate": 0.1 # --error-rate / -e
+                        "min_adapter_length": 35 # --overlap / -O
+                        "adapter_match_times": 3 # -n / --times
+                        "check_read_rc": True # --rc
+                        "discard_trimmed": True # --discard-trimmed / --discard
+                        "forward_anywhere_adapter_list": # -b, multiple times
+                            - "ATCTCTCTCAACAACAACAACGGAGGAGGAGGAAAAGAGAGAGAT" # SMRT bell adapter
+                            - "ATCTCTCTCTTTTCCTCCTCCTCCGTTGTTGTTGTTGAGAGAGAT" # SMRT bell adapter rev com
+                            - "AAAAAAAAAAAAAAAAAATTAACGGAGGAGGAGGA"           # C2 primer, required for MagBead loading, but is not necessary for diffusion loading
+                        "reverse_anywhere_adapter_list": []
                     "illumina":
                         "min_read_length": 50
                         "forward_three_prime_adapter_list":
@@ -167,6 +179,8 @@
                         "kmer_length": 7
                     "hifi":
                         "kmer_length": 7
+                    "lqccs":
+                        "kmer_length": 7
                     "hic":
                         "kmer_length": 7
                     "clr":
@@ -181,6 +195,8 @@
                         "min_mapping_quality": 20
                     "hifi":
                         "min_mapping_quality": 30
+                    "lqccs":
+                        "min_mapping_quality": 10
                     "hic":
                         "min_mapping_quality": 10
             "jellyfish":
@@ -213,6 +229,13 @@
                         "min_coverage": 1
                         "max_coverage": 100000000
                         "increment": 1
+                    "lqccs":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "20G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
                     "hic":
                         "kmer_length":
                             - 21
@@ -228,6 +251,9 @@
                             #- 31
                             #- 41 #very RAM hungry option
                     "clr":
+                        "kmer_length":
+                            - 21
+                    "lqccs":
                         "kmer_length":
                             - 21
                     "illumina":
@@ -254,6 +280,11 @@
                         "upper_boundary":
                             - 1500
                     "clr":
+                        "lower_boundary":
+                            - 10
+                        "upper_boundary":
+                            - 1500
+                    "lqccs":
                         "lower_boundary":
                             - 10
                         "upper_boundary":
@@ -473,6 +504,9 @@
                         "index_size": "4G"
                         "alignment_scheme": "map-hifi" # -x
                     "clr":
+                        "index_size": "4G"
+                        "alignment_scheme": "map-pb"   # -x
+                    "lqccs":
                         "index_size": "4G"
                         "alignment_scheme": "map-pb"   # -x
                     "nanopore":

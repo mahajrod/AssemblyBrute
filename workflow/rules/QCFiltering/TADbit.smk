@@ -48,7 +48,7 @@ rule tadbit:
 
 rule merge_tadbit_stats:
     input:
-        stats=lambda wildcards: expand(output_dict["qc"] / "tadbit/%s/raw/{pairprefix}.data.stats" % wildcards.datatype,
+        stats=lambda wildcards: expand(output_dict["qc"] / ("tadbit/%s/raw/{pairprefix}.data.stats" % wildcards.datatype),
                                        pairprefix=input_pairprefix_dict[wildcards.datatype])
     output:
         stats=output_dict["qc"] / "tadbit/{datatype, hic}/raw/{genome_prefix}.tadbit.stats" ,

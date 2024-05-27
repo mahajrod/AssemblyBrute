@@ -13,7 +13,7 @@ rule tadbit:
                                                                                               input_reverse_suffix_dict[wildcards.datatype],
                                                                                               config["fastq_extension"])),
     output:
-        stats=output_dict["qc"] / "tadbit/{datatype, hic}/raw/{pairprefix}.stats" ,
+        stats=output_dict["qc"] / "tadbit/{datatype, hic}/raw/{pairprefix}.data.stats" ,
         #stats=merged_raw_fastqc_dir_path / "{library_id}/{library_id}.raw.fast{}qc.stats"
     params:
         enzyme_list=",".join(config["hic_enzyme_dict"][config["hic_enzyme_set"]] if config["custom_enzyme_set"] is None else config["custom_enzyme_set"]),
@@ -48,7 +48,7 @@ rule tadbit:
 
 rule merge_tadbit_stats:
     input:
-        stats=lambda wildcards: expand(output_dict["qc"] / "tadbit/%s/raw/{pairprefix}.stats" % wildcards.datatype,
+        stats=lambda wildcards: expand(output_dict["qc"] / "tadbit/%s/raw/{pairprefix}.data.stats" % wildcards.datatype,
                                        pairprefix=input_pairprefix_dict[wildcards.datatype])
     output:
         stats=output_dict["qc"] / "tadbit/{datatype, hic}/raw/{genome_prefix}.tadbit.stats" ,

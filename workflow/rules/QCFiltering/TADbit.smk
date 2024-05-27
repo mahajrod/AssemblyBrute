@@ -1,4 +1,5 @@
 localrules: merge_tadbit_stats
+ruleorder: merge_tadbit_stats > tadbit
 
 rule tadbit:
     input:

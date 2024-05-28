@@ -52,7 +52,8 @@
     "deepvariant":
         "cpu":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/deepvariant/deepvariant_1.5.0.sif"
         "gpu": null #"gpu":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
-    "mitohifi": "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/mitohifi/mitohifi_master.sif"
+
+'alternative_tmp_dir': None
 
 "stage_coretools":     #TODO: add bionano
     "filtering":
@@ -70,13 +71,10 @@
         "default":
             #- "salsa2" # Allowed: "salsa2", "yahs", "3d-dna"
             - "yahs"
-            - "threeddna"
+            #- "threeddna"
     "curation":
         "default":
             - "curation"
-    "draft_qc":
-        "default":
-            - "assembly_qc"
 
 "coretool_option_sets":
     "hifiasm":
@@ -84,19 +82,14 @@
          #- "l1primary"
          #- "l2primary"
          - "l3primary"
-         #- "l0primary_no_hic"
          #- "l1primary_no_hic"
-         #- "l2primary_no_hic"
-         #- "l3primary_no_hic"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
-         #- "repeat_enhanced_l3"
-         #- "repeat_super_enhanced_l3"
     "purge_dups":
         - "default"
     "salsa2":
         - "phased_reads"
-        - "unphased_reads"
+        #- "unphased_reads"
     "yahs":
         - "phased_reads"
         #- "unphased_reads"
@@ -105,14 +98,8 @@
         #- "unphased_reads"
     "curation":
         - "default"
-    "assembly_qc":
-        - "default"
-    "samba":
-        - "phased_reads"
-        #- "unphased_reads"
 
 "other_tool_option_sets":
-    "mitohifi":                 "default"   # Allowed: default
     "cutadapt":                 "default"   # Allowed: default
     "porechop_abi":             "default"   # Allowed: default
     "chopper":                  "default"   # Allowed: default
@@ -132,7 +119,7 @@
     "kat":                      "default"   # Allowed: default
     "juicer_tools_qc":          "default"   # Allowed: default
     "juicer_tools_pre":         "default"   # Allowed: default
-    "mapping_pipeline":         "bwa_only"  # Allowed: arima, bwa_only, juicer, pairtools
+    "mapping_pipeline":         "arima"  # Allowed: arima, bwa_only, pairtools.
     "trf":                      "default"
     "wga":                      "default"
     "select_long_scaffolds":    "default"
@@ -144,20 +131,18 @@
 
 "tool_manually_adjusted_features":
     "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions
-        "lower_threshold": null
-        "haploid_diploid_threshold": null
-        "upper_threshold": null
+        "lower_threshold": null #5
+        "haploid_diploid_threshold": null # 45
+        "upper_threshold": null #135
 
 "ploidy": 2
-"bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2. ARIMA pipeline always uses bwa as bwa-mem2 breaks read order( i.e. read order in bam file is different from read order in fastq file). DO NOT use bwa-mem2 in arima mapping pipeline
+"bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
 "genome_prefix": "CinExc1"
 "busco_lineage_list":
     - "aves_odb10" #
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
 
-"kingdom": "animal" # required for MitoHiFi. Allowed: animal,plant,fungi
-"mitochondrial_genetic_code": 2 #  NCBI genetic code (2 = vertebrate by default) to use for annotation of mtDNA
 "species_name": "cinclodes excelsior"
 "tax_id": 279547 # necessary for contamination scan via FCS
 
@@ -173,10 +158,8 @@
     - "hifi"
     - "illumina"
     - "nanopore"
-    - "hic"
-    - "ccs"
 
-"final_kmer_counter": "meryl" # pipeline allows usage of different kmer counter tools, but only one genomesize assessment could be used
+"final_kmer_counter": "meryl" # pipeline allows usage of different kmer counter external_tools, but only one genomesize assessment could be used
 "final_kmer_length": 21 # pipeline allows usage of different kmer length, but only one genomesize assessment could be used
 
 "final_kmer_datatype": "hifi"
@@ -187,21 +170,26 @@
 "contig_datatype": "hifi"
 "hic_enzyme_set": "Arima"
 "custom_enzyme_set": null # None
+"custom_enzyme_set_is_no_motif": False
 
 "starting_point": "fastq" # Allowed: "draft"
-"data_types": "hifi,hic" # Allowed: hifi, hic, lqccs, nanopore, reference  #TODO: add bionano and lr and others
+"data_types": "hifi,hic" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
+
+#-------- Options specific for starting point 'draft' ----------------
+"phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads
+#---------------------------------------------------------------------
 
 "mode": "assembly"                # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
-"assembly_mode": "hic_scaffolding"           # Allowed: "default", "full", "hic_scaffolding", "purge_dups", "contig"; custom modes could be set in config file
+"assembly_mode": "hic_scaffolding"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []
 "custom_assembly_stages": []
 "curation_seq_type":
     - "scaffolds"
-    - "contigs" # works only if precuration stage is hic_scaffolding
+    - "contigs" # works only if precuration stage is hic_sscaffolding
 
 "skip_read_qc": False
 "skip_filter_reads": False
@@ -257,5 +245,5 @@
 
 # TODO:  add modes:  "create_map_bionano", "bionano_scaffolding"
 
-"parameter_set": "default" # Choice of genome-size based set of parameters
+"parameter_set": "normal" # Choice of genome-size based set of parameters
 "use_existing_envs": False # works only if --use-conda flag was set in snakemake command

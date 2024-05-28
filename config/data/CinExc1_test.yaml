@@ -179,7 +179,7 @@
 "final_kmer_counter": "meryl" # pipeline allows usage of different kmer counter tools, but only one genomesize assessment could be used
 "final_kmer_length": 21 # pipeline allows usage of different kmer length, but only one genomesize assessment could be used
 
-"final_kmer_datatype": "hifi,hic"
+"final_kmer_datatype": "hifi"
 "assembly_kmer_length":
     - 31 # kmer length to be used for phasing hic reads using assembled and purge_dupsed contigs
 "phasing_stage": "purge_dups"
@@ -189,7 +189,7 @@
 "custom_enzyme_set": null # None
 
 "starting_point": "fastq" # Allowed: "draft"
-"data_types": "hifi" # Allowed: hifi, hic, lqccs, nanopore, reference  #TODO: add bionano and lr and others
+"data_types": "hifi,hic" # Allowed: hifi, hic, lqccs, nanopore, reference  #TODO: add bionano and lr and others
 
 "mode": "assembly"                # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"

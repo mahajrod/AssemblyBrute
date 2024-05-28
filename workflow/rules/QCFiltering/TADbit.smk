@@ -76,7 +76,7 @@ rule merge_tadbit_stats:
     shell:
         " > {log.tail}; "
         " INPUT_FILES_ARR=({input.stats}); "
-        " head -n 1 ${{ARR[0]}} | sed 's/^#/#genome_prefix\tpair_prefix\t/' > {output.stats} 2>{log.head}; "
+        " head -n 1 ${{INPUT_FILES_ARR[0]}} | sed 's/^#/#genome_prefix\tpair_prefix\t/' > {output.stats} 2>{log.head}; "
         " for STAT_FILE in {input.stats};"
         "   do "
         "   PAIR_PREFIX=`basename ${{STAT_FILE}}`; "

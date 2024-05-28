@@ -83,11 +83,11 @@
          #- "l0primary"
          #- "l1primary"
          #- "l2primary"
-         #- "l3primary"
+         - "l3primary"
          #- "l0primary_no_hic"
          #- "l1primary_no_hic"
          #- "l2primary_no_hic"
-         - "l3primary_no_hic"
+         #- "l3primary_no_hic"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
          #- "repeat_enhanced_l3"
@@ -179,7 +179,7 @@
 "final_kmer_counter": "meryl" # pipeline allows usage of different kmer counter tools, but only one genomesize assessment could be used
 "final_kmer_length": 21 # pipeline allows usage of different kmer length, but only one genomesize assessment could be used
 
-"final_kmer_datatype": "hifi"
+"final_kmer_datatype": "hifi,hic"
 "assembly_kmer_length":
     - 31 # kmer length to be used for phasing hic reads using assembled and purge_dupsed contigs
 "phasing_stage": "purge_dups"
@@ -194,7 +194,7 @@
 "mode": "assembly"                # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
-"assembly_mode": "full"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
+"assembly_mode": "hic_scaffolding"           # Allowed: "default", "full", "hic_scaffolding", "purge_dups", "contig"; custom modes could be set in config file
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []
@@ -205,7 +205,7 @@
 
 "skip_read_qc": False
 "skip_filter_reads": False
-"skip_busco": False
+"skip_busco": True
 "skip_gcp": False
 "skip_fcs": False
 "skip_fcs_adaptor": False

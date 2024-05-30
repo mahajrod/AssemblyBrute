@@ -141,7 +141,7 @@
         "upper_threshold": null
 
 "ploidy": 2
-"bwa_tool": "bwa" # Allowed: bwa, bwa-mem2
+"bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
 "genome_prefix": "SomMic2"
 "busco_lineage_list":
     - "vertebrata_odb10" #

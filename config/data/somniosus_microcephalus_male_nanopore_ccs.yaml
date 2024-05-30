@@ -248,4 +248,4 @@
 # TODO:  add modes:  "create_map_bionano", "bionano_scaffolding"
 
 "parameter_set": "large" # Choice of genome-size based set of parameters
-"use_existing_envs": False # works only if --use-conda flag was set in snakemake command
+"use_existing_envs": True # works only if --use-conda flag was set in snakemake command

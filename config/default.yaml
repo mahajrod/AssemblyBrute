@@ -154,7 +154,8 @@
 "busco_lineage_list":
     - "mammalia_odb10" #
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
-#                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
+#                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10,
+#                           embryophyta_odb10,viridiplantae_odb10, chlorophyta_odb10
 
 "kingdom": "animal" # required for MitoHiFi. Allowed: animal,plant,fungi
 "mitochondrial_genetic_code": 2 #  NCBI genetic code (2 = vertebrate by default) to use for annotation of mtDNA

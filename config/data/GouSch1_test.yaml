@@ -149,7 +149,7 @@
         "upper_threshold": null
 
 "ploidy": 2
-"bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2. ARIMA pipeline always uses bwa as bwa-mem2 breaks read order( i.e. read order in bam file is different from read order in fastq file). DO NOT use bwa-mem2 in arima mapping pipeline
+"bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2.
 "genome_prefix": "GouSch1"
 "busco_lineage_list":
     - "aves_odb10" #

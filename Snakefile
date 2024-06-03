@@ -444,7 +444,7 @@ if ("filter_reads" in config["stage_list"]) and (not config["skip_filter_reads"]
                            kmer_length=parameters["tool_options"][kmer_tool][dat_type]["kmer_length"],
                            ) for kmer_tool in config["kmer_counter_list"] ]  for dat_type in genome_size_estimation_data_type_set],
                     ]
-
+    print(set(config["paired_fastq_based_data"]) & fastq_based_data_type_set)
     results_list += [expand(output_dict["qc"] / "fastqc/{datatype}/{stage}/{fileprefix}_fastqc.zip",
                             datatype=["hic", ],
                             stage=["filtered", ],

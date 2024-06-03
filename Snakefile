@@ -448,7 +448,7 @@ if ("filter_reads" in config["stage_list"]) and (not config["skip_filter_reads"]
     results_list += [expand(output_dict["qc"] / "fastqc/{datatype}/{stage}/{fileprefix}_fastqc.zip",
                             datatype=["hic", ],
                             stage=["filtered", ],
-                            fileprefix=[pairprefix + suffix + config["fastq_extension"] for suffix in ("_1", "_2") for pairprefix in input_pairprefix_dict[datatype]],
+                            fileprefix=[pairprefix + suffix for suffix in ("_1", "_2") for pairprefix in input_pairprefix_dict[datatype]],
                             ) for dat_type in set(config["paired_fastq_based_data"]) & fastq_based_data_type_set ]
 
     if not config["skip_nanoqc"]:

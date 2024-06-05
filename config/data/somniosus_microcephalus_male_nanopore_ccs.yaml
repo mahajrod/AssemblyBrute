@@ -78,6 +78,9 @@
     "hifiasm":
          #- "l0primary"
          - "l1primary"
+         - "l1primary_no_ul"
+         - "l1primary_ul_nano"
+         -  "l1primary_ul_lqccs"
          #- "l2primary"
          #- "l3primary"
          #- "l0primary_no_hic"

@@ -131,6 +131,7 @@
     "samtools_stats":           "default"   # Allowed: default
     "trimmomatic":              "default"   # Allowed: default
     "tadbit":                   "default"   # Allowed: default
+    "krater_from_histo":        "default"   # Allowed: default
 
 "tool_manually_adjusted_features":
     "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions

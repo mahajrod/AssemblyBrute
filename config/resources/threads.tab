@@ -120,3 +120,4 @@ filter_contigs_by_coverage	1	1	1	1	1	1	1	1	1
 ragtag	20	5	5	10	20	20	30	30	30
 tadbit	1	1	1	1	1	1	1	1	1
 merge_tadbit_stats	1	1	1	1	1	1	1	1	1
+krater_from_histo	1	1	1	1	1	1	1	1	1

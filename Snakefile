@@ -436,9 +436,10 @@ if ("filter_reads" in config["stage_list"]) and (not config["skip_filter_reads"]
                     expand(output_dict["qc"] / "multiqc/{datatype}/{stage}/multiqc.{datatype}.{stage}.report.html",
                            datatype=["hifi"],
                            stage=["filtered",]) if "hifi" in fastq_based_data_type_set else [],
-                    *[[expand(output_dict["kmer"] / "{datatype}/{stage}/genomescope/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.genomescope.parameters",
+                    *[[expand(output_dict["kmer"] / "{datatype}/{stage}/{analysis_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{analysis_tool}.parameters",
                            datatype=[dat_type,],
                            genome_prefix=[config["genome_prefix"], ],
+                           analysis_tool=["genomescope", "krater"],
                            stage=["filtered",],
                            kmer_tool=[kmer_tool,],
                            kmer_length=parameters["tool_options"][kmer_tool][dat_type]["kmer_length"],
@@ -1087,6 +1088,7 @@ include: "workflow/rules/Kmer/Smudgeplot.smk"
 #include: "workflow/rules/Kmer/KAT.smk"
 include: "workflow/rules/Kmer/GCplot.smk"
 include: "workflow/rules/Kmer/Genomescope.smk"
+include: "workflow/rules/Kmer/Krater.smk"
 
 include: "workflow/rules/QCAssembly/BUSCO5.smk"
 include: "workflow/rules/QCAssembly/Merqury.smk"

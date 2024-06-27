@@ -10,6 +10,7 @@
 "dependencies":
   - "python=3.8"
   - "fastqc>=0.11"
+  - "blas=*=*mkl"
   - "multiqc"
   - "hifiasm"
   - "minimap2"
@@ -25,7 +26,7 @@
   - "samtools>=1.10"
   - "mosdepth>=0.3.1"
   - "numpy<1.24" # NumPy v 1.24 and higher is incompatible with pairtools
-  - "scipy"
+  - "scipy=1.08"
   - "pandas>=1.2"
   - "matplotlib"
   - "bedtools>=2.26"

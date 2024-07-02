@@ -26,10 +26,12 @@ rule hifiasm_correct:
         kmer_length=lambda wildcards: parse_option("kmer_len", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -k "),
         D=lambda wildcards: parse_option("D", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -D "), #" -D {0} ".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["D"]) if "D" in parameters["tool_options"]["hifiasm"][wildcards.contig_options] else "",
         N=lambda wildcards: parse_option("N", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -N "), #" -N {0} ".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["N"]) if "N" in parameters["tool_options"]["hifiasm"][wildcards.contig_options] else "",
-        nanopore=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
-                                                      fileprefix=input_file_prefix_dict["nanopore"],
-                                                      allow_missing=True)))) if "nanopore" in input_filedict else "",
-        ul_cut=lambda wildcards: parse_option("ul-cut", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " --ul-cut ")
+        #nanopore=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
+        #                                              fileprefix=input_file_prefix_dict["nanopore"],
+        #                                              allow_missing=True)))) if "nanopore" in input_filedict else "",
+        #ultralong_reads=lambda wildcards: get_ultralong_read_files(input_file_prefix_dict,
+        #                                                           stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set"]),
+        #ul_cut=lambda wildcards: parse_option("ul-cut", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " --ul-cut ")
     log:
         std=output_dict["log"] / "hifiasm_correct.{correction_options}.{genome_prefix}.log",
         pigz=output_dict["log"] / "hifiasm_correct.{correction_options}.{genome_prefix}.pigz.log",
@@ -56,7 +58,7 @@ rule hifiasm_correct:
          " UNCOMPRESSED_FASTA=${{UNCOMPRESSED_FASTA%sta.gz}}; "
          " hifiasm -t {threads} -e --write-ec {params.window_size} {params.bloom_filter_bits} "
          " {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size}"
-         " {params.kmer_length} {params.D} {params.N} {params.nanopore} {params.ul_cut} "
+         " {params.kmer_length} {params.D} {params.N} "
          " -o ${{OUTPUT_PREFIX}} {input.hifi}  1>{log.std} 2>&1;"
          " pigz -p {threads} ${{UNCOMPRESSED_FASTA}} > {log.pigz} 2>&1 ; "
          " mv ${{UNCOMPRESSED_FASTA}}.gz {output.ec_fasta} > {log.mv} 2>&1; "
@@ -69,7 +71,7 @@ def get_ultralong_read_files(input_file_prefix_dict, option_set):
     for ultralong_read_type in option_set["ultra_long_reads"]:
         if ultralong_read_type in input_file_prefix_dict:
             read_filelist += expand(output_dict["data"] / ("fastq/%s/filtered/{fileprefix}%s" % (ultralong_read_type,
-                                                                                              config["fastq_extension"])),
+                                                                                                 config["fastq_extension"])),
                                     fileprefix=input_file_prefix_dict[ultralong_read_type])
     return read_filelist
 

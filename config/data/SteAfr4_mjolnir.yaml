@@ -181,7 +181,7 @@
 "phasing_stage": "purge_dups"
 
 "contig_datatype": "hifi"
-"hic_enzyme_set": "OmniC"
+"hic_enzyme_set": "Arima"
 "custom_enzyme_set": null # None
 
 "starting_point": "fastq" # Allowed: "draft"

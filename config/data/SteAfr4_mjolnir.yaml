@@ -147,6 +147,7 @@
         "upper_threshold": null
 
 "ploidy": 2
+"bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
 "genome_prefix": "SteAfr"
 "busco_lineage_list":
     - "arachnida_odb10" #

@@ -20,7 +20,7 @@ extract_reads_by_unique_hap_kmers	10	10	10	20	30	30	30	30	30
 subset_extracted_kmers	1	1	1	1	1	1	1	1	1
 genomescope	1	1	1	1	1	1	1	1	1
 parse_genomescope_output	1	1	1	1	1	1	1	1	1
-hifiasm	50	50	50	50	50	80	80	80	80
+hifiasm	50	50	50	50	50	50	50	50	50
 gfa2fasta	1	1	1	1	1	1	1	1	1
 get_coverage_from_hifiasm_graph	1	1	1	1	1	1	1	1	1
 get_read_bed_from_hifiasm_graph	1	1	1	1	1	1	1	1	1

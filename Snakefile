@@ -18,8 +18,10 @@ with open(config["main_config_file"], "r") as core_yaml_fd:
     config.update(yaml.safe_load(core_yaml_fd))
 #---------------------------------------
 #-------- Read resources config files --------
+resources_dir_path = Path(config["resources_dir"])
 for resource, res_datatype in zip(["threads", "memory_mb", "time"], [int, int, str]):
-    resource_df = pd.read_csv(config["resources"][resource], sep="\t", header=0, index_col=0)
+    resource_df = pd.read_csv(resources_dir_path / f"{config['resource_profile']}/{resource}.tab",
+                              sep="\t", header=0, index_col=0)
     for config_label in resource_df.columns:
         config["parameters"][config_label][resource] = resource_df[config_label].to_dict(OrderedDict)
 

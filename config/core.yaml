@@ -48,10 +48,10 @@
         "yaml": "workflow/envs/conda.pacbio.yaml"
         "name": "pacbio"
 
-"resources":
-    "threads":      "config/resources/threads.tab"
-    "memory_mb":    "config/resources/memory_mb.tab"
-    "time":         "config/resources/time.tab"
+"resources_dir": "config/resources/"
+#"threads":      "config/resources/threads.tab"
+#"memory_mb":    "config/resources/memory_mb.tab"
+#"time":         "config/resources/time.tab"
 #----
 #---- Directory structure config ----
 

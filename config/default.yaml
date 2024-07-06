@@ -1,6 +1,10 @@
 #---- Main config file ----
 "main_config_file": "config/core.yaml"      # Path to main config file relative to Snakefile
 #--------------------------
+#---- Resource profile ----
+"resource_profile": "high"      # Should be present in resource directory
+#--------------------------
+
 
 "allowed_databases":
     "kraken2":

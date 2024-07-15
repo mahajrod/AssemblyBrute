@@ -535,6 +535,18 @@
                         - "junk"
                         - "ovlp"
                         - "highcov"
+                    "purging_blacklist": null
+                    "purging_whitelist": null
+                "keep_hicov":
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "datatype": "hifi"
+                    "interhaplotype_transferblacklist":
+                        - "junk"
+                        - "ovlp"
+                        - "highcov"
+                    "purging_blacklist":
+                        - "highcov"
+                    "purging_whitelist": null
                     #"illumina":
                     #    "min_mapping_quality": 0
                     #"nanopore":

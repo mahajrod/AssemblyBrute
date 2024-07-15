@@ -269,10 +269,10 @@ rule get_purged_seqs: #
     params:
         blacklist_option=lambda wildcards: parse_option("purging_blacklist",
                                                         stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"],
-                                                        option_prefix="-b"),
+                                                        option_prefix="-b", expression=lambda l: ",".join(l)),
         whitelist_option=lambda wildcards: parse_option("purging_whitelist",
                                                         stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"],
-                                                        option_prefix="-w"),
+                                                        option_prefix="-w", expression=lambda l: ",".join(l)),
         get_seq_prefix=lambda wildcards: "{0}.input.{1}".format(wildcards.genome_prefix, wildcards.haplotype)
     log:
         #purge_dups=output_dict["log"]  / "purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.purge_dups.{haplotype}.{purge_stage}.purge_dups.log",

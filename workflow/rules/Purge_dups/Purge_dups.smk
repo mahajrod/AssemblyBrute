@@ -1,5 +1,5 @@
 ruleorder: create_contig_links > get_seq_len
-ruleorder: create_links_if_skipping_purge_dups > create_final_links_purge_dups # rule to skip purge_dups when necessary
+#ruleorder: create_links_if_skipping_purge_dups > create_final_links_purge_dups # rule to skip purge_dups when necessary
 ruleorder: create_assembly_qc_if_skipping_purge_dups > # rule to skip assembly qc rules when skipping purge_dups
 #ruleorder: purge_dups > gfa2fasta
 #ruleorder: create_final_links_purge_dups > gfa2fasta

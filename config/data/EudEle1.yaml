@@ -70,8 +70,6 @@
     "purge_dups":
         "default":
             - "purge_dups"
-        "keep_hicov":
-            - "purge_dups"
     "hic_scaffolding":
         "default":
             #- "salsa2" # Allowed: "salsa2", "yahs", "3d-dna"

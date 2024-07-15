@@ -1,6 +1,6 @@
 ruleorder: create_contig_links > get_seq_len
 #ruleorder: create_links_if_skipping_purge_dups > create_final_links_purge_dups # rule to skip purge_dups when necessary
-ruleorder: create_assembly_qc_if_skipping_purge_dups > # rule to skip assembly qc rules when skipping purge_dups
+#ruleorder: create_assembly_qc_if_skipping_purge_dups > # rule to skip assembly qc rules when skipping purge_dups
 #ruleorder: purge_dups > gfa2fasta
 #ruleorder: create_final_links_purge_dups > gfa2fasta
 localrules: create_contig_links, create_final_links_purge_dups, extract_stats_from_purge_dups_file #create_link_for_purged_fasta,
@@ -259,7 +259,7 @@ rule get_purged_seqs: #
         #cutoffs=rules.get_purge_dups_read_stat.output.cutoffs,
         #pbbasecov=rules.get_purge_dups_read_stat.output.pbbasecov,
         #self_paf=rules.minimap2_purge_dups_assembly.output.paf,
-        raw_dups_bed=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype, [^.]+}/{genome_prefix}.dups.raw.bed",
+        raw_dups_bed=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype}/{genome_prefix}.dups.raw.bed",
         reference = out_dir_path / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype}/{genome_prefix}.input.{haplotype}.fasta"
     output:
         filtered_bed=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype, [^.]+}/{genome_prefix}.dups.filtered.bed",

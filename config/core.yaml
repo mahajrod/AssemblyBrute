@@ -540,7 +540,7 @@
                 "keep_hicov":
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "datatype": "hifi"
-                    "interhaplotype_transferblacklist":
+                    "interhaplotype_transfer_blacklist":
                         - "junk"
                         - "ovlp"
                         - "highcov"

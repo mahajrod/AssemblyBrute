@@ -294,7 +294,7 @@ rule get_purged_seqs: #
     threads: parameters["threads"]["purge_dups"]
 
     shell:
-        " workflow/scripts/purge_dups/filter_dups.bed.py -i {input.raw_dups_bed} "
+        " workflow/scripts/purge_dups/filter_dups_bed.py -i {input.raw_dups_bed} "
         " {params.blacklist_option} {params.whitelist_option} -o {output.filtered_bed} > {log.filter} 2>&1; "
         " OUT_DIR=`dirname {output.filtered_bed}`; "
         " PURGE_DUPS_BED=`realpath -s {output.filtered_bed}`; "

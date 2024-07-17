@@ -71,8 +71,8 @@
     "hic_scaffolding":
         "default":
             #- "salsa2" # Allowed: "salsa2", "yahs", "3d-dna"
-            #- "yahs"
-            - "threeddna"
+            - "yahs"
+            #- "threeddna"
     "curation":
         "default":
             - "curation"

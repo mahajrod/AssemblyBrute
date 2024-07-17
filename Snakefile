@@ -1116,10 +1116,13 @@ include: "workflow/rules/Alignment/Stats.smk"
 
 if ("hic_scaffolding" in config["stage_list"]) or ("curation" in config["stage_list"]) or ("gap_closing" in config["stage_list"]):
     if config["other_tool_option_sets"]["mapping_pipeline"] == "arima":
+        print("Mapping pipeline: Arima")
         include: "workflow/rules/Alignment/Arima.smk"
     elif config["other_tool_option_sets"]["mapping_pipeline"] == "bwa_only":
+        print("Mapping pipeline: BWA only")
         include: "workflow/rules/Alignment/BWAOnly.smk"
     elif config["other_tool_option_sets"]["mapping_pipeline"] == "pairtools":
+        print("Mapping pipeline: Pairtools")
         include: "workflow/rules/Alignment/Pairtools.smk"
     include: "workflow/rules/Alignment/PostAlignment.smk"
 

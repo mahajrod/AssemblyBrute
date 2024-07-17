@@ -101,8 +101,8 @@
         - "phased_reads"
         - "unphased_reads"
     "yahs":
-        #- "phased_reads"
-        - "unphased_reads"
+        - "phased_reads"
+        #- "unphased_reads"
     "threeddna":
         - "phased_reads"
         #- "unphased_reads"

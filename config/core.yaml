@@ -1668,7 +1668,7 @@
     - "illumina"
     - "hifi"
     #- "clr"
-    - "nanopore"
+    #- "nanopore" # TODO: add nanopore support
 
 "purge_dups_data": # Data which might be used for purging haplotypic duplications
     - "hifi"

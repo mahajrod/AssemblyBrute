@@ -133,7 +133,7 @@
     "kat":                      "default"   # Allowed: default
     "juicer_tools_qc":          "default"   # Allowed: default
     "juicer_tools_pre":         "default"   # Allowed: default
-    "mapping_pipeline":         "juicer"     # Allowed: arima, bwa_only, juicer, pairtools
+    "mapping_pipeline":         "arima"     # Allowed: arima, bwa_only, juicer, pairtools
     "trf":                      "default"   # Allowed: default
     "wga":                      "default"   # Allowed: default
     "select_long_scaffolds":    "default"   # Allowed: default
@@ -211,9 +211,9 @@
 "skip_fcs_adaptor": False
 "skip_kraken": True
 "skip_phasing": False
-"skip_prescaf_pretext": True
+"skip_prescaf_pretext": False
 "skip_postscaf_pretext": True
-"skip_both_pretext": True
+"skip_both_pretext": False
 "skip_nanoqc": False
 "skip_nanoplot": False
 "skip_wga": False

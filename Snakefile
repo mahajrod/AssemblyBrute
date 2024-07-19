@@ -134,7 +134,10 @@ for d_type in set(data_types):
 
 if "reference" in set(data_types):
     reference_input_dir = input_dict[datatype]["dir"]
-    reference_genomes_list = [element.name for element in reference_input_dir.glob("*")]
+    reference_genomes_list = []
+    for element in reference_input_dir.glob("*"):
+        if element.is_dir():
+            reference_genomes_list.append(element.name)
     print(reference_input_dir)
     print(reference_genomes_list)
     for genome in reference_genomes_list:

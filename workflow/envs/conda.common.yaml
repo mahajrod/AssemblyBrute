@@ -47,7 +47,7 @@
   - "routoolpa>=0.106"
   - "mavr>=0.111"
   - "jellyfish>=2"
-  - "krater>=2.7.9"
+  - "krater==2.7.11"
   - "mace>=1.1.12"
   - "biopython"
   - "pyfastaq"

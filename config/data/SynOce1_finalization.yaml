@@ -221,6 +221,7 @@
 "skip_higlass": True
 "skip_variantcalling": True
 "skip_hic_file": False
+"skip_krater": True
 
 "create_hic_file_during_curation": True
 #------------ Options specific for cluster ------------

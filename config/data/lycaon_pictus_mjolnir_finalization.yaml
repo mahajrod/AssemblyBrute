@@ -224,6 +224,7 @@
 "skip_higlass": True
 "skip_variantcalling": False
 "skip_hic_file": False
+"skip_krater": True
 
 "create_hic_file_during_curation": True
 

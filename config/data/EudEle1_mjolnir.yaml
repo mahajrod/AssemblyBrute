@@ -200,6 +200,7 @@
 "skip_filter_reads": False
 "skip_busco": False
 "skip_gcp": False
+"skip_krater": True
 "skip_fcs": False
 "skip_fcs_adaptor": False
 "skip_kraken": False

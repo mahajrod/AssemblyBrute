@@ -46,6 +46,7 @@
 "skip_higlass": True
 "skip_variantcalling": True
 "skip_hic_file": False
+"skip_krater": True
 #---------------------------------------------------
 
 "allowed_databases":

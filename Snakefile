@@ -444,7 +444,7 @@ if ("filter_reads" in config["stage_list"]) and (not config["skip_filter_reads"]
                     *[[expand(output_dict["kmer"] / "{datatype}/{stage}/{analysis_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{analysis_tool}.parameters",
                            datatype=[dat_type,],
                            genome_prefix=[config["genome_prefix"], ],
-                           analysis_tool=["genomescope", "krater"],
+                           analysis_tool=["genomescope"] + (["krater"] if not config["skip_krater"] else []),
                            stage=["filtered",],
                            kmer_tool=[kmer_tool,],
                            kmer_length=parameters["tool_options"][kmer_tool][dat_type]["kmer_length"],

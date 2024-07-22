@@ -221,9 +221,9 @@
 "skip_prescaf_pretext": False
 "skip_postscaf_pretext": True
 "skip_both_pretext": False
-"skip_nanoqc": False
-"skip_nanoplot": False
-"skip_wga": True
+"skip_nanoqc": True
+"skip_nanoplot": True
+"skip_wga": False
 "skip_higlass": True
 "skip_variantcalling": True
 "skip_hic_file": False

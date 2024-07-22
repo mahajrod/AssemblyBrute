@@ -81,6 +81,9 @@
     "draft_qc":
         "default":
             - "assembly_qc"
+    "gap_closing":
+        "default":
+            - "samba"
 
 "coretool_option_sets":
     "hifiasm":
@@ -192,8 +195,10 @@
 "phasing_stage": "purge_dups"
 
 "contig_datatype": "hifi"
+"gap_closing_datatype": "hifi"
 "hic_enzyme_set": "Arima"
 "custom_enzyme_set": null # None
+"custom_enzyme_set_is_no_motif": False
 
 "starting_point": "fastq" # Allowed: "draft"
 "data_types": "hifi,hic" # Allowed: hifi, hic, lqccs, nanopore, reference  #TODO: add bionano and lr and others
@@ -202,6 +207,7 @@
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
 "assembly_mode": "full"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
+"finalization_mode": "curation"
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []

@@ -47,6 +47,9 @@
     "pacbio":
         "yaml": "workflow/envs/conda.pacbio.yaml"
         "name": "pacbio"
+    "hic":
+        "yaml": "workflow/envs/conda.hic.yaml"
+        "name": "hic"
 
 "resources_dir": "config/resources/"
 #"threads":      "config/resources/threads.tab"

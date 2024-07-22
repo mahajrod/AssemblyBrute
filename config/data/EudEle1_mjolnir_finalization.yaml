@@ -2,7 +2,7 @@
 "main_config_file": "config/core.yaml"      # Path to main config file relative to Snakefile
 #--------------------------
 #---- Resource profile ----
-"resource_profile": "high"      # Should be present in resource directory
+"resource_profile": "low"      # Should be present in resource directory
 #--------------------------
 
 "allowed_databases":
@@ -26,23 +26,23 @@
             "time":         "06:00:00"
             "in_memory":    True
         "nt":
-            "path":         "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/db/kraken2/nt/20220915/" # add path to nt database
-            "memory_mb":    620000
+            "path":         "/projects/mjolnir1/data/databases/kraken2/nt/20230502/" # add path to nt database
+            "memory_mb":    600000
             "threads":      30
             "time":         "03:00:00"
             "in_memory":    True
     "fcs":
         "fcs_gx":
-            "path":         "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/db/gxdb/" # add path to fcs_gx database
-            "image_path":   "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/FCS-GX/fcs-gx.sif"
-            "memory_mb":    600000 # Entire database must be in memory, it requires at least 490 Gbp
+            "path":         "/projects/mjolnir1/people/xsg178/db/fcs/gxdb/" # add path to fcs_gx database
+            "image_path":   "/projects/mjolnir1/people/xsg178/soft/FCS-GX/fcs-gx.sif"
+            "memory_mb":    512000 # Entire database must be in memory, it requires at least 490 Gbp
             "threads":      30
             "time":         "06:00:00"
             "in_memory":    True
     "fcs_adaptor":
         "adaptor":
             "path":         null # database is embedded in singularity image
-            "image_path":   "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/fcsadaptor/fcs-adaptor.sif"
+            "image_path":   "/projects/mjolnir1/people/xsg178/soft/fcsadaptor/fcs-adaptor.sif"
             "memory_mb":    20000 #
             "threads":      1
             "time":         "01:00:00"
@@ -51,10 +51,10 @@
 "final_fcs_db": "fcs_gx" # this database will be used for the filtration of the contigs if skip_fcs is False
 
 "tool_containers":
-    "rapid_telomere":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/rapid-curation/rapid_hic_software/runTelo.sif"
+    "rapid_telomere":       "/projects/mjolnir1/people/xsg178/soft/rapid-curation/rapid_hic_software/runTelo.sif"
     "deepvariant":
-        "cpu":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/deepvariant/deepvariant_1.5.0.sif"
-        "gpu": null #"gpu":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
+        "cpu": "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0.sif"
+        "gpu": null # "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
 
 'alternative_tmp_dir': None
 
@@ -78,6 +78,12 @@
     "curation":
         "default":
             - "curation"
+    "draft_qc":
+        "default":
+            - "assembly_qc"
+    "gap_closing":
+        "default":
+            - "samba"
 
 "coretool_option_sets":
     "hifiasm":
@@ -102,6 +108,11 @@
         #- "unphased_reads"
     "curation":
         - "default"
+    "assembly_qc":
+        - "default"
+    "samba":
+        - "phased_reads"
+        #- "unphased_reads"
 
 "other_tool_option_sets":
     "cutadapt":                 "default"   # Allowed: default
@@ -173,21 +184,23 @@
 "phasing_stage": "purge_dups"
 
 "contig_datatype": "hifi"
+"gap_closing_datatype": "hifi"
 "hic_enzyme_set": "Arima"
 "custom_enzyme_set": null # None
 "custom_enzyme_set_is_no_motif": False
 
-"starting_point": "fastq" # Allowed: "draft"
+"starting_point": "draft" # Allowed: "draft"
 "data_types": "hifi,hic,reference" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
 
 #-------- Options specific for starting point 'draft' ----------------
 "phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads
 #---------------------------------------------------------------------
 
-"mode": "qc"                # Allowed: "preprocessing", "qc", "assembly"
+"mode": "finalization"                # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
 "assembly_mode": "full"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
+"finalization_mode": "curation"
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []
@@ -196,25 +209,26 @@
     - "scaffolds"
     - "contigs" # works only if precuration stage is hic_sscaffolding
 
-"skip_read_qc": False
-"skip_filter_reads": False
+"skip_read_qc": True
+"skip_filter_reads": True
 "skip_busco": False
-"skip_gcp": False
-"skip_fcs": False
-"skip_fcs_adaptor": False
-"skip_kraken": False
+"skip_gcp": True
+"skip_krater": True
+"skip_fcs": True
+"skip_fcs_adaptor": True
+"skip_kraken": True
 "skip_phasing": False
 "skip_prescaf_pretext": False
 "skip_postscaf_pretext": True
 "skip_both_pretext": False
 "skip_nanoqc": False
 "skip_nanoplot": False
-"skip_wga": False
+"skip_wga": True
 "skip_higlass": True
 "skip_variantcalling": True
 "skip_hic_file": False
 
-"create_hic_file_during_curation": False
+"create_hic_file_during_curation": True
 #------------ Options specific for cluster ------------
 # This option have no effect if pipeline runs on local machine
 "queue":
@@ -251,4 +265,4 @@
 # TODO:  add modes:  "create_map_bionano", "bionano_scaffolding"
 
 "parameter_set": "normal" # Choice of genome-size based set of parameters
-"use_existing_envs": False # works only if --use-conda flag was set in snakemake command
+"use_existing_envs": True # works only if --use-conda flag was set in snakemake command

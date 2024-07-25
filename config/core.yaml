@@ -1751,6 +1751,12 @@
             "draft": #TODO: implement
                 - "purge_dups"
                 - "hic_scaffolding"
+        "hic_scaffolding_only":
+            "fastq":
+                - "contig"
+                - "hic_scaffolding"
+            "draft": #TODO: implement
+                - "hic_scaffolding"
         "purge_dups":
             "fastq":
                 - "contig"

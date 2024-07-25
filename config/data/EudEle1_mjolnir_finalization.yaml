@@ -224,7 +224,7 @@
 "skip_higlass": True
 "skip_variantcalling": True
 "skip_hic_file": False
-
+"skip_kmer": False
 "create_hic_file_during_curation": True
 #------------ Options specific for cluster ------------
 # This option have no effect if pipeline runs on local machine

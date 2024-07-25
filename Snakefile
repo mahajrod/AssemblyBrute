@@ -277,6 +277,8 @@ with open(final_config_yaml, 'w') as final_config_fd, open(final_input_yaml, 'w'
 localrules: all
 #ruleorder: create_fastq_links > fastqc
 
+print(stage_dict)
+
 results_dict = {}
 
 haplotype_list = ["hap{0}".format(i) for i in range(1, config["ploidy"] + 1)] # TODO: obsolete: remove and fix issues

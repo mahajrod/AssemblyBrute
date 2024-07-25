@@ -324,6 +324,7 @@ if ("read_qc" in config["stage_list"]) and (not config["skip_read_qc"]):
 
 if "draft_qc" in config["stage_list"]:
     draft_file_dict = get_input_assemblies(input_dir_path / "draft/fasta", config["ploidy"], config["assembly_fasta_extension"])
+    print(draft_file_dict)
     stage_dict["draft_qc"]["parameters"] = {}
 
     for qcer in config["stage_coretools"]["draft_qc"]["default"]:

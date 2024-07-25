@@ -136,7 +136,7 @@ def get_input_assemblies(input_folder_path, ploidy, fasta_extention):
         raise ValueError("ERROR!!! Number of input fasta files ({0}) differs from ploidy ({1})!".format(len(fasta_filelist),
                                                                                                        ploidy))
     if ploidy == 1:
-        return {"hap0": fasta_filelist[0]}
+        return {"hap0": fasta_filelist[0].name}
     else:
         fasta_dict = {}
         for hap in range(1, ploidy+1):

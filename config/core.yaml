@@ -1751,7 +1751,6 @@
             "draft": #TODO: implement
                 - "purge_dups"
                 - "hic_scaffolding"
-
         "purge_dups":
             "fastq":
                 - "contig"

@@ -1810,4 +1810,5 @@
         - "HinfI"
         - "DdeI"
         - "MseI"
-    "OmniC": []
+    "OmniC": []       # OmniC using nonenzyme fragmentation
+    "unknown": []

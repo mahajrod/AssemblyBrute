@@ -1755,8 +1755,16 @@
             "fastq":
                 - "contig"
                 - "hic_scaffolding"
-            "draft": #TODO: implement
+            "draft":
                 - "hic_scaffolding"
+        "curation_no_purge_dups":
+            "fastq":
+                - "contig"
+                - "hic_scaffolding"
+                - "curation"
+            "draft":
+                - "hic_scaffolding"
+                - "curation"
         "purge_dups":
             "fastq":
                 - "contig"

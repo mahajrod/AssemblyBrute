@@ -179,7 +179,7 @@
 "final_kmer_datatype": "hifi"
 "assembly_kmer_length":
     - 31 # kmer length to be used for phasing hic reads using assembled and purge_dupsed contigs
-"phasing_stage": "purge_dups"
+"phasing_stage": "draft_qc"
 
 "contig_datatype": "hifi"
 "hic_enzyme_set": "unknown"

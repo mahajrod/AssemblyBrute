@@ -1121,6 +1121,8 @@ if "hifi" in data_types:
 include: "workflow/rules/Contigs/Graph.smk"
 include: "workflow/rules/Stats/General.smk"
 
+print(config["stage_list"])
+
 if "purge_dups" in config["stage_list"]:
     include: "workflow/rules/Purge_dups/Purge_dups.smk"
     include: "workflow/rules/Purge_dups/Purge_dupsQC.smk"
@@ -1153,7 +1155,6 @@ if "curation" in config["stage_list"]:
     include: "workflow/rules/Curation/RapidCuration.smk"
     include: "workflow/rules/Curation/GapTrack.smk"
     include: "workflow/rules/Curation/WindowmaskerTrack.smk"
-
     #include: "workflow/rules/Curation/CoverageTrack.smk"
     include: "workflow/rules/Curation/TelomereTrack.smk"
     include: "workflow/rules/Curation/HiGlassTrack.smk"

@@ -1153,6 +1153,7 @@ if "curation" in config["stage_list"]:
     include: "workflow/rules/Curation/RapidCuration.smk"
     include: "workflow/rules/Curation/GapTrack.smk"
     include: "workflow/rules/Curation/WindowmaskerTrack.smk"
+
     #include: "workflow/rules/Curation/CoverageTrack.smk"
     include: "workflow/rules/Curation/TelomereTrack.smk"
     include: "workflow/rules/Curation/HiGlassTrack.smk"
@@ -1160,7 +1161,7 @@ if "curation" in config["stage_list"]:
     include: "workflow/rules/Curation/Masking.smk"
     include: "workflow/rules/Curation/GCTrack.smk"
     include: "workflow/rules/Curation/WGA.smk"
-    include: "workflow/rules/Curation/VariantTrack.smk"
+    #include: "workflow/rules/Curation/VariantTrack.smk"
     include: "workflow/rules/Curation/RagTag.smk"
 
 

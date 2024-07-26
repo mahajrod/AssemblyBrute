@@ -903,7 +903,7 @@ if "curation" in config["stage_list"]:
                 stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["curation"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
 
     parameters_list = list(stage_dict["curation"]["parameters"].keys())
-    """
+
     if "scaffolds" in  config["curation_seq_type"]:
         if input_reference_filedict:
             results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/scaffolds/ragtag/{reference}/{genome_prefix}.{haplotype}.to.{reference}.fasta",
@@ -1073,7 +1073,7 @@ if "curation" in config["stage_list"]:
                                 phasing_kmer_length=["31"] ,# [stage_dict["curation"]["parameters"][current_parameter_label]["option_set"]["phasing_kmer_length"]],
                                 parameters=[stage_dict["curation"]["parameters"][current_parameter_label]["prev_parameters"]],
                                 ) for current_parameter_label in stage_dict["curation"]["parameters"]]
-    """
+
     with open("tmp.results_list", "w") as out_fd:
         for filename in results_list:
             out_fd.write(str(filename) + "\n")

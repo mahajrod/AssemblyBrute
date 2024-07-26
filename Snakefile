@@ -903,7 +903,7 @@ if "curation" in config["stage_list"]:
                 stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["curation"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
 
     parameters_list = list(stage_dict["curation"]["parameters"].keys())
-    pritn("BBBBBBBBBBBBb")
+    print("BBBBBBBBBBBBb")
     print(coverage_track_data_type_set)
     if "scaffolds" in  config["curation_seq_type"]:
         if input_reference_filedict:

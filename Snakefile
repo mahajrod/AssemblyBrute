@@ -1154,7 +1154,7 @@ if "curation" in config["stage_list"]:
     include: "workflow/rules/Curation/RapidCuration.smk"
     include: "workflow/rules/Curation/GapTrack.smk"
     include: "workflow/rules/Curation/WindowmaskerTrack.smk"
-    include: "workflow/rules/Curation/CoverageTrack.smk"
+    #include: "workflow/rules/Curation/CoverageTrack.smk"
     include: "workflow/rules/Curation/TelomereTrack.smk"
     include: "workflow/rules/Curation/HiGlassTrack.smk"
     include: "workflow/rules/Curation/TRFTrack.smk"

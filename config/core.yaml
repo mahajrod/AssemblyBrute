@@ -940,8 +940,8 @@
                     "match_probability": 80
                     "indel_probability": 10
                     "min_alignment_score":  50
-                    "max_period": 2000
-                    "max_repeat_length": 100
+                    "max_period": 4000
+                    "max_repeat_length": 1000
             "wga":
                 "default":
                     "min_target_len":

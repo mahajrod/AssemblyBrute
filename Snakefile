@@ -86,11 +86,14 @@ for d_type in data_types:
         raise ValueError("ERROR!!! Unknown data type: {0}".format(d_type))
 
 if config["final_kmer_datatype"] not in fastq_based_data_type_set:
-    if ("skip_kmer" in config) and (config["skip_kmer"]):
+    if config["mode"] in ["preprocessing", "qc"]:
         pass
     else:
-        raise ValueError("ERROR!!! final_kmer_datatype ({0}) is absent among input fastq-based datatypes({1})".format(config["final_kmer_datatype"],
-                                                                                                                  ",".join(fastq_based_data_type_set)))
+        if ("skip_kmer" in config) and (config["skip_kmer"]):
+            pass
+        else:
+            raise ValueError("ERROR!!! final_kmer_datatype ({0}) is absent among input fastq-based datatypes({1})".format(config["final_kmer_datatype"],
+                                                                                                                      ",".join(fastq_based_data_type_set)))
 
 #--------
 

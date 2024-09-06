@@ -79,6 +79,8 @@ genome_size_estimation_data_type_set = set(config["genome_size_estimation_data"]
 coverage_track_data_type_set = set(data_types) & set(config["coverage_track_data"])
 variant_calling_data_type_set = set(data_types) & set(config["variant_calling_data"])
 
+print(genome_size_estimation_data_type_set)
+
 #logging.info("Verifying datatypes...")
 for d_type in data_types:
     if d_type not in config["allowed_data_types"]:

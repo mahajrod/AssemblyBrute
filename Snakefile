@@ -454,14 +454,14 @@ if ("filter_reads" in config["stage_list"]) and (not config["skip_filter_reads"]
                            datatype=["hifi"],
                            stage=["filtered",]) if "hifi" in fastq_based_data_type_set else [],
 
-                    #*[[expand(output_dict["kmer"] / "{datatype}/{stage}/{analysis_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{analysis_tool}.parameters",
-                    #       datatype=[dat_type,],
-                    #       genome_prefix=[config["genome_prefix"], ],
-                    #       analysis_tool=["genomescope"] + (["krater"] if not config["skip_krater"] else []),
-                    #       stage=["filtered",],
-                    #       kmer_tool=[kmer_tool,],
-                    #       kmer_length=parameters["tool_options"][kmer_tool][dat_type]["kmer_length"],
-                    #       ) for kmer_tool in config["kmer_counter_list"] ]  for dat_type in genome_size_estimation_data_type_set],
+                    *[[expand(output_dict["kmer"] / "{datatype}/{stage}/{analysis_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{analysis_tool}.parameters",
+                           datatype=[dat_type,],
+                           genome_prefix=[config["genome_prefix"], ],
+                           analysis_tool=["genomescope"] + (["krater"] if not config["skip_krater"] else []),
+                           stage=["filtered",],
+                           kmer_tool=[kmer_tool,],
+                           kmer_length=parameters["tool_options"][kmer_tool][dat_type]["kmer_length"],
+                           ) for kmer_tool in config["kmer_counter_list"] ]  for dat_type in genome_size_estimation_data_type_set],
                     ]
     #print([pairprefix + suffix for suffix in ("_1", "_2") for pairprefix in input_pairprefix_dict[datatype]])
     #print(set(config["paired_fastq_based_data"]) & fastq_based_data_type_set)

@@ -322,10 +322,11 @@ if ("read_qc" in config["stage_list"]) and (not config["skip_read_qc"]):
                                stage=["raw", ],
                                fileprefix=input_file_prefix_dict[dat_type],) for dat_type in long_read_data_type_set],
                      ]
-    if ("hic" in data_types) and config["hic_enzyme_dict"][config["hic_enzyme_set"]] :
+    if ("hic" in data_types) and ((config["hic_enzyme_set"] == "custom") or config["hic_enzyme_dict"][config["hic_enzyme_set"]]):
         #print(data_types)
         results_list += [expand(output_dict["qc"] / "tadbit/hic/raw/{genome_prefix}.tadbit.stats",
             genome_prefix=[config["genome_prefix"]])]
+
 
 if "draft_qc" in config["stage_list"]:
     draft_file_dict = get_input_assemblies(input_dir_path / "draft/fasta", config["ploidy"], config["assembly_fasta_extension"])

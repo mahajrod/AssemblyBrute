@@ -1087,6 +1087,7 @@ if "curation" in config["stage_list"]:
 #----
 
 #---- Final rule ----
+pd.Series(results_list).to_csv(config["out_dir"] + "/requested_files.tab", sep="\t", header=False, index=False)
 rule all:
     input:
         results_list

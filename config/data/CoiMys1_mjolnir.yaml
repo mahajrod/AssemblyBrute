@@ -27,9 +27,9 @@
             "in_memory":    True
         "nt":
             "path":         "/projects/mjolnir1/data/databases/kraken2/nt/20230502/" # add path to nt database
-            "memory_mb":    600000
+            "memory_mb":    1024000
             "threads":      30
-            "time":         "03:00:00"
+            "time":         "24:00:00"
             "in_memory":    True
     "fcs":
         "fcs_gx":
@@ -179,7 +179,7 @@
 "custom_enzyme_set_is_no_motif": False
 
 "starting_point": "fastq" # Allowed: "draft"
-"data_types": "hifi,hic,illumina" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
+"data_types": "hifi,hic" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
 
 #-------- Options specific for starting point 'draft' ----------------
 "phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads

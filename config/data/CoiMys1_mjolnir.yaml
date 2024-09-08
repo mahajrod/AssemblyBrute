@@ -85,6 +85,8 @@
          - "l1primary"
          #- "l2primary"
          - "l3primary"
+         - "l3primary_dual_scaf"
+         - "l1primary_dual_scaf"
          #- "l1primary_no_hic"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"

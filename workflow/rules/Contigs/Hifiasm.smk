@@ -122,6 +122,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         max_kocc=lambda wildcards: parse_option("max-kocc", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --max-kocc "),
         hg_size=lambda wildcards: parse_option("hg-size", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --hg-size "),
         kmer_length=lambda wildcards: parse_option("kmer_len", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -k "),
+        dual_scaf=lambda wildcards: parse_option_flag("dual_scaf", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --dual-scaf "),
         D=lambda wildcards: parse_option("D", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -D "), #" -D {0} ".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["D"]) if "D" in parameters["tool_options"]["hifiasm"][wildcards.contig_options] else "",
         N=lambda wildcards: parse_option("N", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -N "),
         ignore_bin=lambda wildcards: " -i " if ("ignore_bin" in parameters["tool_options"]["hifiasm"][wildcards.contig_options]) and parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ignore_bin"] else "",
@@ -169,7 +170,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
          " {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size}"
          " {params.kmer_length} {params.D} {params.N} {params.ignore_bin} --primary -t {threads} -l {params.purge_level}  -o ${{OUTPUT_PREFIX}} "
          " --n-hap {params.ploidy} --purge-max ${{COV_UPPER_BOUNDARY}} "
-         " {params.hic_forward} {params.hic_reverse} {params.ultralong_reads} {params.ul_cut}"
+         " {params.hic_forward} {params.hic_reverse} {params.ultralong_reads} {params.ul_cut} {params.dual_scaf}"
          " {input.hifi}  1>{log.std} 2>&1;"         
          " ln -sf `basename {output.primary_contig_graph}` {output.primary_alias};"
          " ln -sf `basename {output.alternative_contig_graph}` {output.alternative_alias};"
@@ -218,6 +219,7 @@ rule hifiasm_hifi:
         kmer_length=lambda wildcards: parse_option("kmer_len", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -k "),
         D=lambda wildcards: parse_option("D", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -D "), #" -D {0} ".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["D"]) if "D" in parameters["tool_options"]["hifiasm"][wildcards.contig_options] else "",
         N=lambda wildcards: parse_option("N", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -N "),
+        dual_scaf=lambda wildcards: parse_option_flag("dual_scaf", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --dual-scaf "),
         ignore_bin=lambda wildcards: " -i " if ("ignore_bin" in parameters["tool_options"]["hifiasm"][wildcards.contig_options]) and parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ignore_bin"] else "",
         #nanopore=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
         #                                              fileprefix=input_file_prefix_dict["nanopore"],
@@ -256,9 +258,9 @@ rule hifiasm_hifi:
          " COV_UPPER_BOUNDARY=`awk 'NR==2 {{printf \"%.0f\", {params.cov_multiplicator} * $2}}' {input.genomescope_report}`; "
          " hifiasm {params.window_size} {params.bloom_filter_bits} "
          " {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size} "
-         " {params.kmer_length} {params.D} {params.N} {params.ignore_bin} {params.nanopore} {params.ul_cut}"
+         " {params.kmer_length} {params.D} {params.N} {params.ignore_bin} {params.ul_cut}"
          " --primary -t {threads} -l {params.purge_level}  -o ${{OUTPUT_PREFIX}} "
-         " --n-hap {params.ploidy} --purge-max ${{COV_UPPER_BOUNDARY}} {params.ultralong_reads} "
+         " --n-hap {params.ploidy} --purge-max ${{COV_UPPER_BOUNDARY}} {params.ultralong_reads} {params.dual_scaf}"
          " {input.hifi}  1>{log.std} 2>&1;"
          " ln -sf `basename {output.primary_contig_graph}` {output.primary_alias};"
          " ln -sf `basename {output.alt_contig_graph}` {output.alt_alias};"

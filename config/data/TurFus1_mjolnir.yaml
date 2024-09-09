@@ -151,7 +151,7 @@
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
 
 "species_name": "Turdus fuscater"
-"tax_id": 66406 # # necessary for contamination scan via FCS
+"tax_id": 311354 # # necessary for contamination scan via FCS
 
 "database_set":
     "kraken2":

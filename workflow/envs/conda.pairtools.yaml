@@ -1,0 +1,11 @@
+#---- Bioconda config ----
+
+"name": "pairtools"
+"channels":
+  - "bioconda"
+  - "conda-forge"
+  - "anaconda"
+"dependencies":
+  - "python=3.9"
+  - "pairtools"
+

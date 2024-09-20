@@ -68,7 +68,7 @@ rule pairtools_parse:
     benchmark:
         output_dict["benchmark"]  / "pairtools_parse.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("pairtools_parse"),
@@ -93,7 +93,7 @@ rule pairtools_sort:
     benchmark:
         output_dict["benchmark"]  / "pairtools_sort.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("pairtools_sort"),
@@ -123,7 +123,7 @@ rule pairtools_merge:
     benchmark:
         output_dict["benchmark"]  / "pairtools_merge.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("pairtools_merge"),
@@ -152,7 +152,7 @@ rule pairtools_dedup:
     benchmark:
         output_dict["benchmark"]  / "pairtools_dedup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("pairtools_dedup"),
@@ -185,7 +185,7 @@ rule pairtools_split:
     benchmark:
         output_dict["benchmark"]  / "pairtools_split.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("pairtools_split"),
@@ -217,7 +217,7 @@ rule pairtools_index_pairs:
     benchmark:
         output_dict["benchmark"]  / "pairtools_index_pairs.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("pairtools_index_pairs"),

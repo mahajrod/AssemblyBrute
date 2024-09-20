@@ -5,6 +5,9 @@
         "yaml": "workflow/envs/conda.common.yaml"
         "name": "yggbase"
         "pip": "workflow/envs/pip.common.requirements"
+    "pairtools":
+        "yaml": "workflow/envs/conda.pairtools.yaml"
+        "name": "pairtools"
     "liftover":
         "yaml": "workflow/envs/conda.liftover.yaml"
         "name": "liftover"

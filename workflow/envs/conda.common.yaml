@@ -25,7 +25,7 @@
   - "pretext-suite"
   - "samtools>=1.10"
   - "mosdepth>=0.3.1"
-  - "numpy<1.24" # NumPy v 1.24 and higher is incompatible with pairtools
+  - "numpy"
   - "scipy=1.08"
   - "pandas>=1.2"
   - "matplotlib"
@@ -42,7 +42,6 @@
   - "genomescope2"
   - "kraken2"
   - "smudgeplot"
-  - "pairtools"
   - "parallel"
   - "routoolpa>=0.111"
   - "mavr>=0.112"

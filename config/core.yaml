@@ -1778,7 +1778,7 @@
                 - "filter_reads"
                 #- "kat" # obsolete, use gcp instead as KAT requires jellyfish database.
                 - "gcp"
-                #- "smudgeplot" # smudgeplot requires a lot of memory to operate on mammalian size genomes (>700 Gbp of memory). Turn this analysis on only if you are sure you have enough memory. TODO: replace smudgeplot by external_tools consuming less memory.
+                - "smudgeplot" # smudgeplot requires a lot of memory to operate on mammalian size genomes (>700 Gbp of memory). Turn this analysis on only if you are sure you have enough memory. TODO: replace smudgeplot by external_tools consuming less memory.
             "draft":
                 - "read_qc"
                 - "filter_reads"

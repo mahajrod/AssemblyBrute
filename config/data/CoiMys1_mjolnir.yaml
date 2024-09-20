@@ -85,8 +85,8 @@
          - "l1primary"
          #- "l2primary"
          - "l3primary"
-         - "l3primary_dual_scaf"
-         - "l1primary_dual_scaf"
+         #- "l3primary_dual_scaf"
+         #- "l1primary_dual_scaf"
          #- "l1primary_no_hic"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
@@ -203,7 +203,7 @@
 "skip_filter_reads": False
 "skip_busco": False
 "skip_gcp": False
-"skip_krater": False
+"skip_krater": True
 "skip_fcs": False
 "skip_fcs_adaptor": False
 "skip_kraken": False
@@ -218,6 +218,7 @@
 "skip_variantcalling": True
 "skip_hic_file": False
 "skip_kmer": False
+
 
 "create_hic_file_during_curation": False
 #------------ Options specific for cluster ------------

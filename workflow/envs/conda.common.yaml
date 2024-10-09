@@ -23,7 +23,7 @@
   - "bwa=0.7.17"
   - "picard>=2.5"
   - "pretext-suite"
-  - "samtools<=1.20"
+  - "samtools<1.20"                #samtools 1.21 is bugged - samtools merge looses read group tags
   - "mosdepth>=0.3.1"
   - "numpy"
   - "scipy"

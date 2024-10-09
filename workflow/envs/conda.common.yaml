@@ -23,7 +23,7 @@
   - "bwa=0.7.17"
   - "picard>=2.5"
   - "pretext-suite"
-  - "samtools>=1.10"
+  - "samtools<=1.20"
   - "mosdepth>=0.3.1"
   - "numpy"
   - "scipy"

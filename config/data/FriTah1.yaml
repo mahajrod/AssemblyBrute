@@ -90,6 +90,7 @@
          #- "repeat_enhanced_l2"
     "purge_dups":
         - "default"
+        - "keep_hicov"
     "salsa2":
         - "phased_reads"
         #- "unphased_reads"

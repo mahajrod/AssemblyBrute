@@ -90,8 +90,8 @@ rule last_alignment: #
     output:
         maf=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len0.maf.gz",
         tab=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len0.tab.gz",
-    params:
-        per_thread_mem=parameters["memory_mb"]["last_alignment_per_thread"],
+    #params:
+    #    per_thread_mem=int(parameters["memory_mb"]["last_alignment"] / parameters["threads"]["last_alignment"]) #parameters["memory_mb"]["last_alignment_per_thread"],
     log:
         lastall=output_dict["log"]  / "last_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.lastall.log",
         tee=output_dict["log"]  / "last_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.tee.log",

@@ -199,7 +199,7 @@
 "mode": "assembly"                # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
-"assembly_mode": "hic_scaffolding"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
+"assembly_mode": "curation"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []
@@ -263,5 +263,5 @@
 
 # TODO:  add modes:  "create_map_bionano", "bionano_scaffolding"
 
-"parameter_set": "default" # Choice of genome-size based set of parameters
+"parameter_set": "normal" # Choice of genome-size based set of parameters
 "use_existing_envs": False # works only if --use-conda flag was set in snakemake command

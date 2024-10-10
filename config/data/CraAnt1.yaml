@@ -226,6 +226,7 @@
 "skip_variantcalling": True
 "skip_hic_file": False
 "skip_krater": True
+"skip_kmer": False
 
 "create_hic_file_during_curation": False
 #------------ Options specific for cluster ------------

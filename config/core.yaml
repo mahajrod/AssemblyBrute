@@ -1003,12 +1003,12 @@
             "trf":
                 "default":
                     "matching_weight": 2
-                    "mismatching_penalty": 3
-                    "indel_penalty": 5
+                    "mismatching_penalty": 7
+                    "indel_penalty": 7
                     "match_probability": 80
                     "indel_probability": 10
                     "min_alignment_score":  50
-                    "max_period": 4000
+                    "max_period": 2000
                     "max_repeat_length": 1000
             "wga":
                 "default":

@@ -92,7 +92,7 @@ create_bedgraph_track	1	1	1	1	1	1	1	1	1
 maskfasta	2	2	2	2	2	2	2	2	2
 draw_track	1	1	1	1	1	1	1	1	1
 last_index	10	10	10	10	10	10	10	10	10
-last_alignment	30	30	30	30	30	30	30	30	30
+last_alignment	20	20	20	20	20	20	20	20	20
 draw_alignment	1	1	1	1	1	1	1	1	1
 create_gc_track	1	1	1	1	1	1	1	1	1
 filter_last_alignment_by_len	4	4	4	4	4	4	4	4	4

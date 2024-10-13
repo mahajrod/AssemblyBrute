@@ -91,6 +91,7 @@
          #- "repeat_enhanced_l2"
     "purge_dups":
         - "default"
+        - "keep_hicov"
     "salsa2":
         - "phased_reads"
         - "unphased_reads"
@@ -205,7 +206,7 @@
 "skip_fcs_adaptor": False
 "skip_kraken": True
 "skip_phasing": False
-"skip_prescaf_pretext": True
+"skip_prescaf_pretext": False
 "skip_postscaf_pretext": True
 "skip_both_pretext": False
 "skip_nanoqc": False

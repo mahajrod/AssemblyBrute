@@ -927,7 +927,7 @@ if "curation" in config["stage_list"]:
                                     genome_prefix=[config["genome_prefix"], ],
                                     assembly_stage=["curation", ],
                                     parameters=[parameters_label],
-                                    min_target_len=parameters["tool_options"]["wga"][ "min_target_len"],
+                                    min_target_len=parameters["tool_options"]["wga"]["min_target_len"],
                                     query_haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"] + list(input_reference_filedict.keys()),
                                     target_haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                                     ) for parameters_label in stage_dict["curation"]["parameters"]]]

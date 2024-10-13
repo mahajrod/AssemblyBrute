@@ -26,8 +26,8 @@
             "time":         "06:00:00"
             "in_memory":    True
         "nt":
-            "path":         "/datasets/globe_databases/kraken2/kraken2_nt/20231129/" # add path to nt database
-            "memory_mb":    700000
+            "path":         "/projects/mjolnir1/people/xsg178/db/kraken/nt/05302024" # add path to nt database
+            "memory_mb":    1024000
             "threads":      30
             "time":         "03:00:00"
             "in_memory":    True

@@ -31,11 +31,11 @@ rule busco5: # Downloading of busco datasets is performed by a different rule to
         busco_lineage=rules.busco5_download.output.lineage_dir,
         assembly=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
     output:
-        tar_gz=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype,[^.]+}.busco5.{busco_lineage}.tar.gz",
-        summary=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype,[^.]+}.busco5.{busco_lineage}.summary",
-        summary_json=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype,[^.]+}.busco5.{busco_lineage}.summary.json",
-        busco_table=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype,[^.]+}.busco5.{busco_lineage}.full_table.tsv",
-        missing_busco_ids=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype,[^.]+}.busco5.{busco_lineage}.missing.ids",
+        tar_gz=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/busco5/{genome_prefix, [^/]+}.{assembly_stage, [^/]+}.{haplotype,[^.]+}.busco5.{busco_lineage}.tar.gz",
+        summary=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/busco5/{genome_prefix, [^/]+}.{assembly_stage, [^/]+}.{haplotype,[^.]+}.busco5.{busco_lineage}.summary",
+        summary_json=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/busco5/{genome_prefix, [^/]+}.{assembly_stage, [^/]+}.{haplotype,[^.]+}.busco5.{busco_lineage}.summary.json",
+        busco_table=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/busco5/{genome_prefix, [^/]+}.{assembly_stage, [^/]+}.{haplotype,[^.]+}.busco5.{busco_lineage}.full_table.tsv",
+        missing_busco_ids=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/busco5/{genome_prefix, [^/]+}.{assembly_stage, [^/]+}.{haplotype,[^.]+}.busco5.{busco_lineage}.missing.ids",
     log:
         std=output_dict["log"] / "busco5.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.log",
         pigz=output_dict["log"] / "busco5.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.pigz.log",

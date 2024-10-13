@@ -11,11 +11,11 @@ rule trimmomatic_pe:
                                                                                                 input_reverse_suffix_dict[wildcards.datatype],
                                                                                                 config["fastq_extension"])),
     output:
-        forward_fastq=output_dict["data"] / ("fastq/{datatype, hic|illumina}/filtered/{pairprefix}_1%s" % config["fastq_extension"]),
-        forward_se_fastq=output_dict["data"] / ("fastq/{datatype, hic|illumina}/filtered/{pairprefix}_1.se%s" % config["fastq_extension"]),
-        reverse_fastq=output_dict["data"] / ("fastq/{datatype, hic|illumina}/filtered/{pairprefix}_2%s" % config["fastq_extension"]),
-        reverse_se_fastq=output_dict["data"] / ("fastq/{datatype, hic|illumina}/filtered/{pairprefix}_2.se%s" % config["fastq_extension"]),
-        stats=output_dict["data"] / "fastq/{datatype, hic|illumina}/filtered/{pairprefix}.trimmomatic.stats"
+        forward_fastq=output_dict["data"] / ("fastq/{datatype, hic|illumina}/filtered/{pairprefix, [^/]+}_1%s" % config["fastq_extension"]),
+        forward_se_fastq=output_dict["data"] / ("fastq/{datatype, hic|illumina}/filtered/{pairprefix, [^/]+}_1.se%s" % config["fastq_extension"]),
+        reverse_fastq=output_dict["data"] / ("fastq/{datatype, hic|illumina}/filtered/{pairprefix, [^/]+}_2%s" % config["fastq_extension"]),
+        reverse_se_fastq=output_dict["data"] / ("fastq/{datatype, hic|illumina}/filtered/{pairprefix, [^/]+}_2.se%s" % config["fastq_extension"]),
+        stats=output_dict["data"] / "fastq/{datatype, hic|illumina}/filtered/{pairprefix, [^/]+}.trimmomatic.stats"
     params:
         min_read_length=lambda wildcards: parameters["tool_options"]["trimmomatic"][wildcards.datatype]["min_read_length"],
         sliding_window_size=lambda wildcards: parameters["tool_options"]["trimmomatic"][wildcards.datatype]["sliding_window_size"],

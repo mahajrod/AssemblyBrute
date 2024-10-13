@@ -3,8 +3,8 @@ rule cutadapt:
     input:
         fastq=output_dict["data"] / ("fastq/{datatype}/raw/{fileprefix}%s" % config["fastq_extension"])
     output:
-        fastq=output_dict["data"] / ("fastq/{datatype, hifi|lqccs|ccs}/filtered/{fileprefix}%s" % config["fastq_extension"]),
-        stats=output_dict["data"] / "fastq/{datatype, hifi|lqccs|ccs}/filtered/{fileprefix}.cutadapt.stats"
+        fastq=output_dict["data"] / ("fastq/{datatype, hifi|lqccs|ccs}/filtered/{fileprefix, [^/]+}%s" % config["fastq_extension"]),
+        stats=output_dict["data"] / "fastq/{datatype, hifi|lqccs|ccs}/filtered/{fileprefix, [^/]+}.cutadapt.stats"
     params:
         error_rate=lambda wildcards: "-e {0} ".format(parameters["tool_options"]["cutadapt"][wildcards.datatype]["error_rate"]) if "error_rate" in parameters["tool_options"]["cutadapt"][wildcards.datatype] else "",
         min_read_length=lambda wildcards: " -m {0} ".format(parameters["tool_options"]["cutadapt"][wildcards.datatype]["min_read_length"]) if "min_read_length" in parameters["tool_options"]["cutadapt"][wildcards.datatype] else "",

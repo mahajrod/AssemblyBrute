@@ -3,7 +3,7 @@ rule nanoplot:
     input:
         fastq=output_dict["data"] / ("fastq/{datatype}/{stage}/{fileprefix}%s" % config["fastq_extension"])
     output:
-        yield_png=output_dict["qc"] / "nanoplot/{datatype}/{stage}/{fileprefix}.Yield_By_Length.png"
+        yield_png=output_dict["qc"] / "nanoplot/{datatype, [^/]+}/{stage, [^/]+}/{fileprefix, [^/]+}.Yield_By_Length.png"
 
     log:
         std=output_dict["log"]/ "nanoplot.{datatype}.{stage}.{fileprefix}.log",

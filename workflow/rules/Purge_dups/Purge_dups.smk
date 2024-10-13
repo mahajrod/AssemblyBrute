@@ -143,12 +143,12 @@ rule get_purge_dups_read_stat:
                                                                                                                                    config["final_kmer_length"],
                                                                                                                                    config["final_kmer_counter"])
     output:
-        pbstat=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype, [^.]+}/PB.stat",
-        pbbasecov=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype, [^.]+}/PB.base.cov",
-        cutoffs=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype, [^.]+}/cutoffs",
-        len=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype, [^.]+}/PB.base.cov.len",
-        stat=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype, [^.]+}/PB.base.cov.stat",
-        bed=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype, [^.]+}/PB.base.cov.bed"
+        pbstat=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters, [^/]+}/{purge_stage}/{haplotype, [^.]+}/PB.stat",
+        pbbasecov=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters, [^/]+}/{purge_stage}/{haplotype, [^.]+}/PB.base.cov",
+        cutoffs=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters, [^/]+}/{purge_stage}/{haplotype, [^.]+}/cutoffs",
+        len=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters, [^/]+}/{purge_stage}/{haplotype, [^.]+}/PB.base.cov.len",
+        stat=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters, [^/]+}/{purge_stage}/{haplotype, [^.]+}/PB.base.cov.stat",
+        bed=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters, [^/]+}/{purge_stage}/{haplotype, [^.]+}/PB.base.cov.bed"
     params:
         cov_multiplicator=lambda wildcards: stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["cov_multiplicator"],
         calcuts_lower_threshold=lambda wildcards: parse_option("lower_threshold", config["tool_manually_adjusted_features"]["calcuts"], " -l "),

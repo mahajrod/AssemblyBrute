@@ -20,10 +20,10 @@ rule yahs: #
         reference_fai=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta.fai" % (stage_dict["hic_scaffolding"]["prev_stage"],
                                                                                                                stage_dict["hic_scaffolding"]["prev_stage"]))
     output:
-        fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}_scaffolds_final.fa",
-        bin=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.bin",
-        agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}_scaffolds_final.agp",
-        alias=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype, [^.]+}.fasta",
+        fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}_scaffolds_final.fa",
+        bin=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.bin",
+        agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}_scaffolds_final.agp",
+        alias=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, [^.]+}.fasta",
     params:
         #output_prefix=lambda wildcards: out_dir_path / "hic_scaffolding/{0}..yahs_{1}/{2}/scaffolding/{3}".format(wildcards.prev_stage_parameters,
         #                                                                                                     wildcards.hic_scaffolding_parameters,
@@ -98,7 +98,7 @@ rule juicer_tools_pre: #
         yahs_juicer_pre_log=rules.yahs_juicer_pre.output.log,
         yahs_juicer_pre_bed=rules.yahs_juicer_pre.output.links_bed
     output:
-        hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.hic",
+        hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.hic",
     params:
         resolution_list=" ".join(map(str,parameters["tool_options"]["juicer_tools_pre"]["resolution_list"]))
     log:
@@ -182,7 +182,7 @@ rule extract_yahs_contigs: #
         original_contigs_fai=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta.fai" % (stage_dict["hic_scaffolding"]["prev_stage"],
                                                                                                                       stage_dict["hic_scaffolding"]["prev_stage"]))
     output:
-        new_contigs_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.new_contigs.fasta",
+        new_contigs_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, [^/]+}.new_contigs.fasta",
     log:
         std=output_dict["log"]  / "extract_yahs_contigs.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.std.log",
         cluster_log=output_dict["cluster_log"] / "extract_yahs_contigs.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.log",
@@ -207,7 +207,7 @@ rule create_transfer_agp: #
         liftover_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.liftover.agp",
         assembly_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.assembly.agp",
     output:
-        transfer_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.transfer.agp"
+        transfer_agp=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..yahs_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, [^/]+}.transfer.agp"
     log:
         std=output_dict["log"]  / "create_transfer_agp.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.std.log",
         cluster_log=output_dict["cluster_log"] / "create_transfer_agp.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.log",

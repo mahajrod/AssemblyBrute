@@ -167,10 +167,10 @@ rule threeddna: #
         fastq_extensions=config["fastq_extension"]
     output:
         draft_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.input.{haplotype}.fasta",
-        rawchrom_hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.input.{haplotype}.rawchrom.hic",
-        rawchrom_assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.input.{haplotype}.rawchrom.assembly",
-        hic_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.input.{haplotype}_HiC.fasta",
-        alias_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype, [^.]+}.fasta",
+        rawchrom_hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.input.{haplotype}.rawchrom.hic",
+        rawchrom_assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.input.{haplotype}.rawchrom.assembly",
+        hic_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.input.{haplotype}_HiC.fasta",
+        alias_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters, [^/]+}/{genome_prefix}.hic_scaffolding.{haplotype, [^.]+}.fasta",
 
     log:
         threeddna=output_dict["log"]  / "threeddna.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.threeddna.log",

@@ -206,7 +206,7 @@
 "skip_fcs_adaptor": False
 "skip_kraken": True
 "skip_phasing": False
-"skip_prescaf_pretext": False
+"skip_prescaf_pretext": True
 "skip_postscaf_pretext": True
 "skip_both_pretext": False
 "skip_nanoqc": False

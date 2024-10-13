@@ -34,7 +34,7 @@ handle_busco5_output	1	1	1	1	1	1	1	1	1
 quast	4	4	4	4	4	4	4	4	4
 merqury	20	20	20	20	20	30	40	40	40
 minimap2_index	10	10	10	10	10	10	10	10	10
-minimap2	40	10	30	30	50	60	60	60	60
+minimap2	40	10	30	30	50	50	50	60	60
 get_purge_dups_read_stat	5	5	5	5	5	5	5	5	5
 purge_dups	5	5	5	5	5	5	5	5	5
 merge_pri_hapdups_with_alt	1	1	1	1	1	1	1	1	1

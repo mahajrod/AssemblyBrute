@@ -141,7 +141,7 @@ rule juicer: #
         "     RESTRICTION_SITE_OPTION=\" -y `realpath -s {input.restriction_site_file}` \"; "
         " fi; "
         " ${{SCRIPT}} -t {threads} -T {threads} -D ${{JUICER_DIR}} -g {wildcards.genome_prefix} -s {params.restriction_seq} "
-        " -z ${{FASTA}} ${{RESTRICTION_SITE_OPTION}} --assembly -d ${{OUTPUT_DIR}} > {log.juicer} 2>&1; "
+        " -z ${{FASTA}} ${{RESTRICTION_SITE_OPTION}} -S early --assembly -d ${{OUTPUT_DIR}} > {log.juicer} 2>&1; "
         " mv ${{OUTPUT_DIR}}/aligned/merged_nodups.txt {output.merged_no_dups}; "
         " mv ${{OUTPUT_DIR}}/aligned/merged_dedup.bam {output.merged_dedup_bam}; " 
         " mv ${{OUTPUT_DIR}}/aligned/inter_30.txt {output.merged_inter_30}; "

@@ -90,6 +90,7 @@
          #- "repeat_enhanced_l2"
     "purge_dups":
         - "default"
+        - "keep_hicov"
     "salsa2":
         - "phased_reads"
         #- "unphased_reads"
@@ -148,6 +149,8 @@
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
 
+"kingdom": "animal" # required for MitoHiFi. Allowed: animal,plant,fungi
+"mitochondrial_genetic_code": 2 #  NCBI genetic code (2 = vertebrate by default) to use for annotation of mtDNA
 "species_name": "Neogale vison"
 "tax_id": 452646 # # necessary for contamination scan via FCS
 
@@ -162,6 +165,9 @@
 "filtered_data":
     - "hifi"
     - "illumina"
+    - "nanopore"
+    - "hic"
+    - "ccs"
 
 "final_kmer_counter": "meryl" # pipeline allows usage of different kmer counter external_tools, but only one genomesize assessment could be used
 "final_kmer_length": 21 # pipeline allows usage of different kmer length, but only one genomesize assessment could be used
@@ -186,7 +192,7 @@
 "mode": "assembly"                # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
-"assembly_mode": "purge_dups"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
+"assembly_mode": "curation"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []
@@ -213,6 +219,7 @@
 "skip_variantcalling": True
 "skip_hic_file": False
 "skip_krater": True
+"skip_kmer": False
 
 "create_hic_file_during_curation": False
 #------------ Options specific for cluster ------------

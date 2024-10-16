@@ -195,7 +195,7 @@ rule filter_last_alignment_by_target_hit_len: #
     input:
         tab="{tab_file_prefix}.YASS.R11.soft.min_len0.tab.gz"
     output:
-        tab="{tab_file_prefix}.YASS.R11.soft.min_len{min_target_len, [^0][0-9]+}.tab.gz",
+        tab="{tab_file_prefix}.YASS.R11.soft.min_len{min_target_len, [^0][0123456789]+}.tab.gz",
     params:
         per_thread_mem=parameters["memory_mb"]["last_alignment_per_thread"],
     log:

@@ -3,8 +3,8 @@ rule trf: #
     input:
         fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta"
     output:
-        simple_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.trf.simple.bed",
-        bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.trf.track.bed",
+        simple_bed=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.trf.simple.bed",
+        bed=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.trf.track.bed",
     params:
         matching_weight=parse_option("matching_weight", parameters["tool_options"]["trf"], " -m "),
         mismatching_penalty=parse_option("mismatching_penalty", parameters["tool_options"]["trf"], " -s "),

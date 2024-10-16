@@ -3,9 +3,9 @@ rule windowmasker: #
     input:
         fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta"
     output:
-        counts=out_dir_path / "curation/{prev_stage_parameters, [^./]+}..{curation_parameters, [^./]+}/{haplotype, [^.]+}/{seq_type, [^./]+}/{genome_prefix, [^./]+}.input.{haplotype}.windowmasker.counts",
-        interval=out_dir_path / "curation/{prev_stage_parameters, [^./]+}..{curation_parameters, [^./]+}/{haplotype, [^.]+}/{seq_type, [^./]+}/{genome_prefix, [^./]+}.input.{haplotype}.windowmasker.intervals",
-        bed=out_dir_path / "curation/{prev_stage_parameters, [^./]+}..{curation_parameters, [^./]+}/{haplotype, [^.]+}/{seq_type, [^./]+}/{genome_prefix, [^./]+}.input.{haplotype}.windowmasker.track.bed",
+        counts=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.windowmasker.counts",
+        interval=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.windowmasker.intervals",
+        bed=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.windowmasker.track.bed",
     log:
         stage1=output_dict["log"]  / "windowmasker.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.stage1.log",
         stage2=output_dict["log"]  / "windowmasker.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.stage2.log",

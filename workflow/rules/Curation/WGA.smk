@@ -1,3 +1,5 @@
+ruleorder: last_alignment > filter_last_alignment_by_target_hit_len
+
 """
 rule last_index: #
     input:

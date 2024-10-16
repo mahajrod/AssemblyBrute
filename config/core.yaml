@@ -1892,5 +1892,7 @@
         - "HinfI"
         - "DdeI"
         - "MseI"
+    "DpnII":
+        - "DpnII"
     "OmniC": []       # OmniC using nonenzyme fragmentation
     "unknown": []

@@ -90,8 +90,8 @@ rule last_alignment: #
         database=select_database,#out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.{target_haplotype}.YASS.R11.soft.bck",
         fasta=select_query
     output:
-        maf=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len0.maf.gz",
-        tab=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len0.tab.gz",
+        maf=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}}/{target_haplotype, [^/]+}}/scaffolds/{genome_prefix, [^/]+}}.input.wga.{query_haplotype, [^/]+}}.to.{target_haplotype}.YASS.R11.soft.min_len0.maf.gz",
+        tab=out_dir_path / "curation/{prev_stage_parameters, [^/]+}}..{curation_parameters, [^/]+}}/{target_haplotype, [^/]+}}/scaffolds/{genome_prefix, [^/]+}}.input.wga.{query_haplotype, [^/]+}}.to.{target_haplotype}.YASS.R11.soft.min_len0.tab.gz",
     #params:
     #    per_thread_mem=int(parameters["memory_mb"]["last_alignment"] / parameters["threads"]["last_alignment"]) #parameters["memory_mb"]["last_alignment_per_thread"],
     log:
@@ -195,7 +195,7 @@ rule filter_last_alignment_by_target_hit_len: #
     input:
         tab="{tab_file_prefix}.YASS.R11.soft.min_len0.tab.gz"
     output:
-        tab="{tab_file_prefix}.YASS.R11.soft.min_len{min_target_len}.tab.gz",
+        tab="{tab_file_prefix}.YASS.R11.soft.min_len{min_target_len, [^0]}.tab.gz",
     params:
         per_thread_mem=parameters["memory_mb"]["last_alignment_per_thread"],
     log:

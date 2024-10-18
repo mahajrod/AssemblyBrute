@@ -1084,15 +1084,15 @@ if "curation" in config["stage_list"]:
                                 ) for current_parameter_label in stage_dict["curation"]["parameters"]]
 
     if prev_stage == "hic_scaffolding":
-        results_list += [expand(hic=out_dir_path / "curation_files/{parameters}/{haplotype}/{genome_prefix}.hic_scaffolding.{haplotype}.hic",
+        results_list += [[expand(hic=out_dir_path / "curation_files/{parameters}/{haplotype}/{genome_prefix}.hic_scaffolding.{haplotype}.hic",
                                 parameters=[stage_dict["curation"]["parameters"][current_parameter_label]["prev_parameters"]],
                                 haplotype=stage_dict[prev_stage]["parameters"][stage_dict["curation"]["parameters"][current_parameter_label]["prev_parameters"]]["haplotype_list"],
                                 genome_prefix=[config["genome_prefix"], ],
-                                ),
-                        expand(hic=out_dir_path / "curation_files/{parameters}/{haplotype}/scaffolds",
+                                ) for current_parameter_label in stage_dict["curation"]["parameters"]],
+                        [expand(hic=out_dir_path / "curation_files/{parameters}/{haplotype}/scaffolds",
                                 parameters=[stage_dict["curation"]["parameters"][current_parameter_label]["prev_parameters"]],
                                 haplotype=stage_dict[prev_stage]["parameters"][stage_dict["curation"]["parameters"][current_parameter_label]["prev_parameters"]]["haplotype_list"],
-                                ),
+                                ) for current_parameter_label in stage_dict["curation"]["parameters"]],
                          ]
 
     with open("tmp.results_list", "w") as out_fd:

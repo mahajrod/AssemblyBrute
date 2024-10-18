@@ -53,5 +53,5 @@ rule gather_curation_tracks: #
 
     shell:
         " mkdir -p {output.contig_dir} {output.scaffolds_dir} > {log.mkdir} 2>&1 ; "
-        " cp {input.contig_dir}/*.png {input.contig_dir}/*.svg {input.contig_dir}/*.bedgraph {output.contig_dir} > {log.cp} 2>&1; "
+        " cp {input.contig_dir}/*.bedgraph {output.contig_dir} > {log.cp} 2>&1; "
         " cp {input.scaffolds_dir}/*.png {input.scaffolds_dir}/*.svg {input.scaffolds_dir}/*.bedgraph {input.scaffolds_dir}/*.tab.gz {output.scaffolds_dir} >> {log.cp} 2>&1; "

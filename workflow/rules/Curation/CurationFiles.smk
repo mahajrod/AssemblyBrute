@@ -8,7 +8,7 @@ rule gather_curation_files: #
         hic=out_dir_path / "curation_files/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{genome_prefix}.hic_scaffolding.{haplotype}.hic",
         assembly=out_dir_path / "curation_files/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{genome_prefix}.hic_scaffolding.{haplotype}.assembly",
     log:
-        cp=output_dict["log"]  / "gather_curation_files.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.seqtk.log",
+        cp=output_dict["log"]  / "gather_curation_files.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cp.log",
         cluster_log=output_dict["cluster_log"] / "gather_curation_files.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "gather_curation_files.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
@@ -35,7 +35,8 @@ rule gather_curation_tracks: #
         contig_dir=directory(out_dir_path / "curation_files/{prev_stage_parameters}..{curation_parameters}/{haplotype}/contigs/"),
         scaffolds_dir=directory(out_dir_path / "curation_files/{prev_stage_parameters}..{curation_parameters}/{haplotype}/scaffolds/"),
     log:
-        cp=output_dict["log"]  / "gather_curation_tracks.{prev_stage_parameters}..{curation_parameters}.{haplotype}.seqtk.log",
+        cp=output_dict["log"]  / "gather_curation_tracks.{prev_stage_parameters}..{curation_parameters}.{haplotype}.cp.log",
+        mkdir=output_dict["log"]  / "gather_curation_tracks.{prev_stage_parameters}..{curation_parameters}.{haplotype}.mkdir.log",
         cluster_log=output_dict["cluster_log"] / "gather_curation_tracks.{prev_stage_parameters}..{curation_parameters}.{haplotype}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "gather_curation_tracks.{prev_stage_parameters}..{curation_parameters}.{haplotype}.cluster.err"
     benchmark:
@@ -51,5 +52,6 @@ rule gather_curation_tracks: #
     threads: parameters["threads"]["gather_curation_files"]
 
     shell:
+        " mkdir -p {output.contig_dir} {output.scaffolds_dir} > {log.mkdir} 2>&1 ; "
         " cp {input.contig_dir}/*.png {input.contig_dir}/*.svg {input.contig_dir}/*.bedgraph {output.contig_dir} > {log.cp} 2>&1; "
         " cp {input.scaffolds_dir}/*.png {input.scaffolds_dir}/*.svg {input.scaffolds_dir}/*.bedgraph {input.scaffolds_dir}/*.tab.gz {output.scaffolds_dir} >> {log.cp} 2>&1; "

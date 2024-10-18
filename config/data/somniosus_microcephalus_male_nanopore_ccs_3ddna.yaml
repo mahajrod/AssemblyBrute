@@ -101,6 +101,10 @@
     "threeddna":
         #- "phased_reads"
         - "unphased_reads"
+        #- "phased_reads_editor_repcov_5"
+        - "unphased_reads_editor_repcov_5"
+        #- "phased_reads_editor_repcov_10"
+        - "unphased_reads_editor_repcov_10"
     "curation":
         - "default"
     "assembly_qc":

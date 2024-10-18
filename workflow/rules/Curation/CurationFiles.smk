@@ -29,8 +29,8 @@ rule gather_curation_files: #
 
 rule gather_curation_tracks: #
     input:
-        contig_dir=directory(out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/contigs/"),
-        scaffolds_dir=directory(out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/scaffolds/"),
+        contig_dir=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/contigs/",
+        scaffolds_dir=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/scaffolds/",
     output:
         contig_dir=directory(out_dir_path / "curation_files/{prev_stage_parameters}..{curation_parameters}/{haplotype}/contigs/"),
         scaffolds_dir=directory(out_dir_path / "curation_files/{prev_stage_parameters}..{curation_parameters}/{haplotype}/scaffolds/"),

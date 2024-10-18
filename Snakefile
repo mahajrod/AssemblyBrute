@@ -1083,6 +1083,18 @@ if "curation" in config["stage_list"]:
                                 parameters=[stage_dict["curation"]["parameters"][current_parameter_label]["prev_parameters"]],
                                 ) for current_parameter_label in stage_dict["curation"]["parameters"]]
 
+    if prev_stage == "hic_scaffolding":
+        results_list += [expand(hic=out_dir_path / "curation_files/{parameters}/{haplotype}/{genome_prefix}.hic_scaffolding.{haplotype}.hic",
+                                parameters=[stage_dict["curation"]["parameters"][current_parameter_label]["prev_parameters"]],
+                                haplotype=stage_dict[prev_stage]["parameters"][stage_dict["curation"]["parameters"][current_parameter_label]["prev_parameters"]]["haplotype_list"],
+                                genome_prefix=[config["genome_prefix"], ],
+                                ),
+                        expand(hic=out_dir_path / "curation_files/{parameters}/{haplotype}/scaffolds",
+                                parameters=[stage_dict["curation"]["parameters"][current_parameter_label]["prev_parameters"]],
+                                haplotype=stage_dict[prev_stage]["parameters"][stage_dict["curation"]["parameters"][current_parameter_label]["prev_parameters"]]["haplotype_list"],
+                                ),
+                         ]
+
     with open("tmp.results_list", "w") as out_fd:
         for filename in results_list:
             out_fd.write(str(filename) + "\n")
@@ -1176,3 +1188,5 @@ if "curation" in config["stage_list"]:
 
 if "gap_closing" in config["stage_list"]:
     include: "workflow/rules/Finalization/GapClosing.smk"
+
+include: "workflow/rules/Curation/CurationFiles.smk"

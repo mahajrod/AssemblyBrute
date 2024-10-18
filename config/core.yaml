@@ -53,6 +53,9 @@
     "hic":
         "yaml": "workflow/envs/conda.hic.yaml"
         "name": "hic"
+    "kmc":
+        "yaml": "workflow/envs/conda.kmc.yaml"
+        "name": "kmc"
 
 "resources_dir": "config/resources/"
 #"threads":      "config/resources/threads.tab"

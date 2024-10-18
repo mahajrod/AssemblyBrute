@@ -172,6 +172,10 @@ rule threeddna: #
         fastq_extensions=config["fastq_extension"],
         editor_repeat_coverage=lambda wildcards: parse_option("editor_repeat_coverage",
                                                               stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["option_set"], " --editor-repeat-coverage "),
+        min_contig_length=lambda wildcards: parse_option("min_contig_len",
+                                                         stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["option_set"], " --input "),
+        min_mapping_quality=lambda wildcards: parse_option("min_mapping_quality",
+                                                           stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["option_set"], " --mapq "),
     output:
         draft_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.input.{haplotype}.fasta",
         rawchrom_hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.input.{haplotype}.rawchrom.hic",
@@ -206,7 +210,7 @@ rule threeddna: #
         " > ${{LN_LOG}}; "
         " ln -s ${{INPUT_FASTA}} {output.draft_fasta} >> ${{LN_LOG}} 2>&1; "
         " cd ${{OUTPUT_DIR}}; "
-        " ${{SCRIPT}} {params.editor_repeat_coverage} `basename {output.draft_fasta}` `basename {input.merged_nodups}` > ${{THREEDDNA_LOG}} 2>&1; "
+        " ${{SCRIPT}} {params.editor_repeat_coverage} {params.min_contig_length} {params.min_mapping_quality} `basename {output.draft_fasta}` `basename {input.merged_nodups}` > ${{THREEDDNA_LOG}} 2>&1; "
         " ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}_HiC.fasta "
         " ../../`basename {output.alias_fasta}` >> ${{LN_LOG}} 2>&1;"
         " ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}.rawchrom.hic "

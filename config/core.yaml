@@ -931,20 +931,47 @@
                     "Csp6I_MseI": "TTATAA,GTATAC,GTATAA,TTATAC"
                     #"OmniC": null
                 "default":
-                     "min_contig_len": 10000
+                     "min_contig_len": None
                      "min_mapping_quality": 10
                      "phasing_kmer_length": "NA"
                      "use_phased_reads": False
+                     "editor_repeat_coverage": None
                 "phased_reads":
-                     "min_contig_len": 10000
+                     "min_contig_len": None
                      "min_mapping_quality": 10
                      "phasing_kmer_length": 31
                      "use_phased_reads": True
+                     "editor_repeat_coverage": None
                 "unphased_reads":
-                     "min_contig_len": 10000
+                     "min_contig_len": None
                      "min_mapping_quality": 10
                      "phasing_kmer_length": "NA"
                      "use_phased_reads": False
+                     "editor_repeat_coverage": None
+                "phased_reads_editor_repcov_5":
+                     "min_contig_len": None
+                     "min_mapping_quality": 10
+                     "phasing_kmer_length": 31
+                     "use_phased_reads": True
+                     "editor_repeat_coverage": 5
+                "unphased_reads_editor_repcov_5":
+                     "min_contig_len": None
+                     "min_mapping_quality": 10
+                     "phasing_kmer_length": "NA"
+                     "use_phased_reads": False
+                     "editor_repeat_coverage": 5
+                "phased_reads_editor_repcov_10":
+                     "min_contig_len": None
+                     "min_mapping_quality": 10
+                     "phasing_kmer_length": 31
+                     "use_phased_reads": True
+                     "editor_repeat_coverage": 10
+                "unphased_reads_editor_repcov_10":
+                     "min_contig_len": None
+                     "min_mapping_quality": 10
+                     "phasing_kmer_length": "NA"
+                     "use_phased_reads": False
+                     "editor_repeat_coverage": 10
             "salsa2":
                 "restriction_seq":
                     "Arima": "GATC,GANTC"

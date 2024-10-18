@@ -874,8 +874,8 @@ if "hic_scaffolding" in config["stage_list"]:
                                 ),
                          ]
 
-    for parameter_label in stage_dict["hic_scaffolding"]["parameters"]:
-        print(stage_dict["hic_scaffolding"]["parameters"][parameters_label])
+    #for parameter_label in stage_dict["hic_scaffolding"]["parameters"]:
+    #    print(stage_dict["hic_scaffolding"]["parameters"][parameters_label]['option_set'])
 
 #print(stage_dict)
 """

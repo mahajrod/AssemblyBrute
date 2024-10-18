@@ -1084,8 +1084,6 @@ if "curation" in config["stage_list"]:
                                 ) for current_parameter_label in stage_dict["curation"]["parameters"]]
 
     if prev_stage == "hic_scaffolding":
-        print(stage_dict["curation"]["parameters"])
-        print(stage_dict["curation"]["parameters"][current_parameter_label]["prev_parameters"])
         results_list += [[expand(hic=out_dir_path / "curation_files/{parameters}/{haplotype}/{genome_prefix}.hic_scaffolding.{haplotype}.hic",
                                  parameters=[stage_dict["curation"]["parameters"][parameter_label]["prev_parameters"]],
                                  haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],

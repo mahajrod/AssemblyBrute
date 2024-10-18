@@ -1085,12 +1085,12 @@ if "curation" in config["stage_list"]:
 
     if prev_stage == "hic_scaffolding":
         results_list += [[expand(hic=out_dir_path / "curation_files/{parameters}/{haplotype}/{genome_prefix}.hic_scaffolding.{haplotype}.hic",
-                                 parameters=[stage_dict["curation"]["parameters"][parameter_label]["prev_parameters"]],
+                                 parameters=[parameters_label],
                                  haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                                  genome_prefix=[config["genome_prefix"], ],
                                  ) for parameter_label in stage_dict["curation"]["parameters"]],
                         [expand(hic=out_dir_path / "curation_files/{parameters}/{haplotype}/scaffolds",
-                                parameters=[stage_dict["curation"]["parameters"][parameter_label]["prev_parameters"]],
+                                parameters=[parameter_label],
                                 haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                                 ) for parameter_label in stage_dict["curation"]["parameters"]],
                          ]

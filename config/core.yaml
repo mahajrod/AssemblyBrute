@@ -965,7 +965,7 @@
                      "min_mapping_quality": null
                      "phasing_kmer_length": 31
                      "use_phased_reads": True
-                     "editor_repeat_coverage": null
+                     "editor_repeat_coverage": 10
                 "unphased_reads_editor_repcov_10":
                      "min_contig_len": null
                      "min_mapping_quality": null

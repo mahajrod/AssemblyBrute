@@ -1086,7 +1086,7 @@ if "curation" in config["stage_list"]:
                                 phasing_kmer_length=["31"] ,# [stage_dict["curation"]["parameters"][current_parameter_label]["option_set"]["phasing_kmer_length"]],
                                 parameters=[stage_dict["curation"]["parameters"][current_parameter_label]["prev_parameters"]],
                                 ) for current_parameter_label in stage_dict["curation"]["parameters"]]
-
+    """
     if prev_stage == "hic_scaffolding":
         #for parameter_label in stage_dict["curation"]["parameters"]:
         #    print(stage_dict["curation"]["parameters"][parameters_label])
@@ -1101,7 +1101,7 @@ if "curation" in config["stage_list"]:
                                 haplotype=stage_dict["curation"]["parameters"][parameter_label]["haplotype_list"],
                                 ) for parameter_label in stage_dict["curation"]["parameters"]],
                          ]
-
+    """
     with open("tmp.results_list", "w") as out_fd:
         for filename in results_list:
             out_fd.write(str(filename) + "\n")

@@ -74,7 +74,7 @@
         "default":
             #- "salsa2" # Allowed: "salsa2", "yahs", "3d-dna"
             - "yahs"
-            #- "threeddna"
+            - "threeddna"
     "curation":
         "default":
             - "curation"
@@ -96,10 +96,10 @@
         #- "unphased_reads"
     "yahs":
         - "phased_reads"
-        #- "unphased_reads"
+        - "unphased_reads"
     "threeddna":
         - "phased_reads"
-        #- "unphased_reads"
+        - "unphased_reads"
     "curation":
         - "default"
 

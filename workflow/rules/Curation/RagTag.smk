@@ -5,9 +5,9 @@ rule ragtag: #
         fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.fasta",
         reference_fasta=out_dir_path / "data/reference/{reference}/{reference}.softmasked.fasta"
     output:
-        ragtag_fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/ragtag/{reference}/{genome_prefix}.{haplotype}.to.{reference}.fasta",
-        ragtag_agp=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/ragtag/{reference}/{genome_prefix}.{haplotype}.to.{reference}.agp",
-        ragtag_stats=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/ragtag/{reference}/{genome_prefix}.{haplotype}.to.{reference}.stats",
+        ragtag_fasta=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/scaffolds/ragtag/{reference, [^/]+}/{genome_prefix, [^/]+}.{haplotype}.to.{reference}.fasta",
+        ragtag_agp=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/scaffolds/ragtag/{reference, [^/]+}/{genome_prefix, [^/]+}.{haplotype}.to.{reference}.agp",
+        ragtag_stats=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/scaffolds/ragtag/{reference, [^/]+}/{genome_prefix, [^/]+}.{haplotype}.to.{reference}.stats",
     log:
         ragtag=output_dict["log"]  / "create_gap_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{reference}.ragtag.log",
         ln=output_dict["log"]  / "create_gap_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{reference}.ln.log",

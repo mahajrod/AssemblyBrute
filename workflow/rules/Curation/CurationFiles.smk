@@ -5,8 +5,8 @@ rule gather_curation_files: #
         hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.hic",
         assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.assembly",
     output:
-        hic=out_dir_path / "curation_files/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{genome_prefix}.hic_scaffolding.{haplotype}.hic",
-        assembly=out_dir_path / "curation_files/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{genome_prefix}.hic_scaffolding.{haplotype}.assembly",
+        hic=out_dir_path / "curation_files/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.hic",
+        assembly=out_dir_path / "curation_files/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.assembly",
     log:
         cp=output_dict["log"]  / "gather_curation_files.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cp.log",
         cluster_log=output_dict["cluster_log"] / "gather_curation_files.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.log",
@@ -32,8 +32,8 @@ rule gather_curation_tracks: #
         contig_dir=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/contigs/",
         scaffolds_dir=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/scaffolds/",
     output:
-        contig_dir=directory(out_dir_path / "curation_files/{prev_stage_parameters}..{curation_parameters}/{haplotype}/contigs/"),
-        scaffolds_dir=directory(out_dir_path / "curation_files/{prev_stage_parameters}..{curation_parameters}/{haplotype}/scaffolds/"),
+        contig_dir=directory(out_dir_path / "curation_files/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/contigs/"),
+        scaffolds_dir=directory(out_dir_path / "curation_files/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/scaffolds/"),
     log:
         cp=output_dict["log"]  / "gather_curation_tracks.{prev_stage_parameters}..{curation_parameters}.{haplotype}.cp.log",
         mkdir=output_dict["log"]  / "gather_curation_tracks.{prev_stage_parameters}..{curation_parameters}.{haplotype}.mkdir.log",

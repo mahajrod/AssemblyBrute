@@ -4,7 +4,7 @@ rule create_gc_track: #
     input:
         fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta"
     output:
-        gap_bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.gc.win{window, [0-9]+}.step{step, [0-9]+}.track.bedgraph",
+        gap_bedgraph=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.gc.win{window, [0-9]+}.step{step, [0-9]+}.track.bedgraph",
     log:
         gc=output_dict["log"]  / "create_gc_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.win{window}.step{step}.gc.log",
         cluster_log=output_dict["cluster_log"] / "create_gc_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.win{window}.step{step}.cluster.log",

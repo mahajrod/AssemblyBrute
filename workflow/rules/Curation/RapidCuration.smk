@@ -26,9 +26,9 @@ rule create_curation_input_files_for_scaffolds: #
                                                                                                        stage_dict["curation"]["prev_stage"])),
         #bed=get_hic_bed_file if not config["skip_higlass"] else []
     output:
-        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.fasta",
-        len=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.len",
-        fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.fasta.fai",
+        fasta=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/scaffolds/{genome_prefix, [^/]+}.input.{haplotype}.fasta",
+        len=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/scaffolds/{genome_prefix, [^/]+}.input.{haplotype}.len",
+        fai=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/scaffolds/{genome_prefix, [^/]+}.input.{haplotype}.fasta.fai",
         #bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.hic.bed" if not config["skip_higlass"] else [],
     log:
         cp=output_dict["log"]  / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.cp.log",
@@ -63,10 +63,10 @@ rule create_curation_input_files_for_contigs: #
                                                                                                                  stage_dict["curation"]["prev_stage"])),
         #bed=get_hic_bed_file if not config["skip_higlass"] else []
     output:
-        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/contigs/{genome_prefix}.input.{haplotype}.fasta",
-        len=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/contigs/{genome_prefix}.input.{haplotype}.len",
-        fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/contigs/{genome_prefix}.input.{haplotype}.fasta.fai",
-        transfer_agp=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/contigs/{genome_prefix}.input.{haplotype}.transfer.agp",
+        fasta=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/contigs/{genome_prefix, [^/]+}.input.{haplotype}.fasta",
+        len=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/contigs/{genome_prefix, [^/]+}.input.{haplotype}.len",
+        fai=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/contigs/{genome_prefix, [^/]+}.input.{haplotype}.fasta.fai",
+        transfer_agp=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/contigs/{genome_prefix, [^/]+}.input.{haplotype}.transfer.agp",
         #bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.hic.bed" if not config["skip_higlass"] else [],
     log:
         cp=output_dict["log"]  / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.contigs.{genome_prefix}.{haplotype}.cp.log",
@@ -94,7 +94,7 @@ rule create_curation_bed_input_file: # Added as separated rule to allow turning 
     input:
         bed=get_hic_bed_file
     output:
-        bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.hic.bed"
+        bed=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.hic.bed"
     log:
         cp=output_dict["log"]  / "create_bed_input_file.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cp.log",
         cluster_log=output_dict["cluster_log"] / "create_bed_input_file.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cluster.log",
@@ -119,8 +119,8 @@ rule select_long_scaffolds: #
         #len=rules.create_curation_input_files_for_scaffolds.output.len
         len=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.len"
     output:
-        whitelist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.whitelist",
-        orderlist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.orderlist"
+        whitelist=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/scaffolds/{genome_prefix, [^/]+}.input.{haplotype}.whitelist",
+        orderlist=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/scaffolds/{genome_prefix, [^/]+}.input.{haplotype}.orderlist"
     params:
         max_scaffolds=parameters["tool_options"]["select_long_scaffolds"]["max_scaffolds"]
     log:

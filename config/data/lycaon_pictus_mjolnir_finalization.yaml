@@ -225,6 +225,7 @@
 "skip_variantcalling": False
 "skip_hic_file": False
 "skip_krater": True
+"skip_ragtag": False
 
 "create_hic_file_during_curation": True
 

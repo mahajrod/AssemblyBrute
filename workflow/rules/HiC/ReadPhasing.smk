@@ -3,7 +3,7 @@ rule meryl_assembly:
     input:
         fasta=out_dir_path / "{stage}/{parameters}/{genome_prefix}.{stage}.{haplotype}.fasta"
     output:
-        db_dir=directory(out_dir_path / "{stage}/{parameters}/kmer/{genome_prefix}.{stage}.{haplotype}.{assembly_kmer_length}")
+        db_dir=directory(out_dir_path / "{stage}/{parameters}/kmer/{genome_prefix}.{stage}.{haplotype, [^.]+}.{assembly_kmer_length, [^.]+}")
     log:
         std=output_dict["log"] / "meryl_assembly.{genome_prefix}.{stage}.{parameters}.{haplotype}.{assembly_kmer_length}.log",
         cluster_log=output_dict["cluster_log"] / "meryl_assembly.{genome_prefix}.{stage}.{parameters}.{haplotype}.{assembly_kmer_length}.cluster.log",

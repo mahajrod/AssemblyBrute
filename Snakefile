@@ -918,6 +918,11 @@ if "curation" in config["stage_list"]:
     parameters_list = list(stage_dict["curation"]["parameters"].keys())
 
     if "scaffolds" in  config["curation_seq_type"]:
+        results_list += [[expand(out_dir_path / "curation_files/{parameters}/{haplotype}/scaffolds",
+                                         parameters=[parameter_label],
+                                         haplotype=stage_dict["curation"]["parameters"][parameter_label]["haplotype_list"],
+                                        ) for parameter_label in stage_dict["curation"]["parameters"]],
+                                 ]
         if input_reference_filedict:
             if not config["skip_ragtag"]:
                 results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/scaffolds/ragtag/{reference}/{genome_prefix}.{haplotype}.to.{reference}.fasta",
@@ -927,10 +932,6 @@ if "curation" in config["stage_list"]:
                                         reference=list(input_reference_filedict.keys()),
                                         haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                                         ) for parameters_label in stage_dict["curation"]["parameters"]],
-                                 [expand(out_dir_path / "curation_files/{parameters}/{haplotype}/scaffolds",
-                                         parameters=[parameter_label],
-                                         haplotype=stage_dict["curation"]["parameters"][parameter_label]["haplotype_list"],
-                                        ) for parameter_label in stage_dict["curation"]["parameters"]],
                                  ]
         if not config["skip_wga"]:
             results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.png",

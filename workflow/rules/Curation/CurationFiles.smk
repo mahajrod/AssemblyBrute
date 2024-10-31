@@ -1,4 +1,4 @@
-localrules: gather_curation_files, gather_curation_tracks
+localrules: gather_curation_files, gather_curation_contig_tracks, gather_curation_scaffold_tracks
 
 rule gather_curation_files: #
     input:

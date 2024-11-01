@@ -918,11 +918,12 @@ if "curation" in config["stage_list"]:
     parameters_list = list(stage_dict["curation"]["parameters"].keys())
 
     if "scaffolds" in  config["curation_seq_type"]:
-        results_list += [[expand(out_dir_path / "curation_files/{parameters}/{haplotype}/scaffolds",
-                                         parameters=[parameter_label],
-                                         haplotype=stage_dict["curation"]["parameters"][parameter_label]["haplotype_list"],
-                                        ) for parameter_label in stage_dict["curation"]["parameters"]],
-                                 ]
+        if not config["skip_gathering"]:
+            results_list += [[expand(out_dir_path / "curation_files/{parameters}/{haplotype}/scaffolds",
+                                             parameters=[parameter_label],
+                                             haplotype=stage_dict["curation"]["parameters"][parameter_label]["haplotype_list"],
+                                            ) for parameter_label in stage_dict["curation"]["parameters"]],
+                                     ]
         if input_reference_filedict:
             if not config["skip_ragtag"]:
                 results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/scaffolds/ragtag/{reference}/{genome_prefix}.{haplotype}.to.{reference}.fasta",
@@ -1094,7 +1095,7 @@ if "curation" in config["stage_list"]:
                                 parameters=[stage_dict["curation"]["parameters"][current_parameter_label]["prev_parameters"]],
                                 ) for current_parameter_label in stage_dict["curation"]["parameters"]]
 
-    if prev_stage == "hic_scaffolding":
+    if (prev_stage == "hic_scaffolding") and (not config["skip_gathering"]):
         #for parameter_label in stage_dict["curation"]["parameters"]:
         #    print(stage_dict["curation"]["parameters"][parameters_label])
         #    print(stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"])

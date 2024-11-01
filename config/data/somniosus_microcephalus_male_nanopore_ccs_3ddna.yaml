@@ -222,6 +222,7 @@
 "skip_krater": True
 "skip_kmer": False
 "skip_ragtag": False
+"skip_gathering": True
 
 "create_hic_file_during_curation": False
 #------------ Options specific for cluster ------------

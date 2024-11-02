@@ -219,6 +219,7 @@
 "skip_hic_file": False
 "skip_kmer": False
 "skip_ragtag": True
+"skip_gathering": False
 
 "create_hic_file_during_curation": False
 #------------ Options specific for cluster ------------

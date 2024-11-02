@@ -988,6 +988,7 @@ if "curation" in config["stage_list"]:
                                 parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]] if variant_calling_data_type_set and (not config["skip_variantcalling"]) else [],
                          ]
         if coverage_track_data_type_set:
+            print(coverage_track_data_type_set)
             results_list += [[[expand(out_dir_path / "curation/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.{datatype}.coverage.win{window}.step{step}.png",
                                 window=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"]["options"][window_step_set]["window"],
                                 step=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"]["options"][window_step_set]["step"],
@@ -1114,7 +1115,7 @@ if "curation" in config["stage_list"]:
         for filename in results_list:
             out_fd.write(str(filename) + "\n")
 #----
-print(coverage_track_data_type_set)
+
 
 #---- Final rule ----
 pd.Series(results_list).to_csv(config["out_dir"] + "/requested_files.tab", sep="\t", header=False, index=False)

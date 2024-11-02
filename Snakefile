@@ -916,8 +916,9 @@ if "curation" in config["stage_list"]:
                 stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["curation"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
 
     parameters_list = list(stage_dict["curation"]["parameters"].keys())
-
+    print("OOOOOOOO")
     if "scaffolds" in  config["curation_seq_type"]:
+        print("JJJJJJJJJ")
         if not config["skip_gathering"]:
             results_list += [[expand(out_dir_path / "curation_files/{parameters}/{haplotype}/scaffolds",
                                              parameters=[parameter_label],

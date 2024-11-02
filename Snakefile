@@ -1114,6 +1114,7 @@ if "curation" in config["stage_list"]:
         for filename in results_list:
             out_fd.write(str(filename) + "\n")
 #----
+print(coverage_track_data_type_set)
 
 #---- Final rule ----
 pd.Series(results_list).to_csv(config["out_dir"] + "/requested_files.tab", sep="\t", header=False, index=False)

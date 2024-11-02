@@ -141,7 +141,7 @@ for d_type in set(data_types):
              datatype_extension_dict[d_type] = config["fastq_extension"]
 
 if "reference" in set(data_types):
-    reference_input_dir = input_dict[datatype]["dir"]
+    reference_input_dir = input_dict["reference"]["dir"]
     reference_genomes_list = []
     for element in reference_input_dir.glob("*"):
         if element.is_dir():

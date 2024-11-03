@@ -916,9 +916,7 @@ if "curation" in config["stage_list"]:
                 stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["curation"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
 
     parameters_list = list(stage_dict["curation"]["parameters"].keys())
-    print("OOOOOOOO")
     if "scaffolds" in  config["curation_seq_type"]:
-        print("JJJJJJJJJ")
         if not config["skip_gathering"]:
             results_list += [[expand(out_dir_path / "curation_files/{parameters}/{haplotype}/scaffolds",
                                              parameters=[parameter_label],
@@ -988,7 +986,6 @@ if "curation" in config["stage_list"]:
                                 haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                                 parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]] if variant_calling_data_type_set and (not config["skip_variantcalling"]) else [],
                          ]
-        print(coverage_track_data_type_set)
         if coverage_track_data_type_set:
 
             results_list += [[[expand(out_dir_path / "curation/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.{datatype}.coverage.win{window}.step{step}.png",

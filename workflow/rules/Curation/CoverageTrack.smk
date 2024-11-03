@@ -90,8 +90,8 @@ rule bwa_cov: # TODO: add nanopore support
         node_options=parse_node_list("bwa_cov"),
         cpus=parameters["threads"]["bwa_map"] + parameters["threads"]["samtools_sort"] + parameters["threads"]["samtools_fixmate"] + parameters["threads"]["samtools_markdup"],
         time=parameters["time"]["bwa_map"],
-        mem=parameters["memory_mb"]["bwa_map"] + parameters["memory_mb"]["samtools_sort"] + parameters["memory_mb"]["samtools_fixmate"] + parameters["memory_mb"]["samtools_markdup"],
-    threads: parameters["threads"]["bwa_map"] + parameters["memory_mb"]["samtools_sort_per_thread"]*parameters["threads"]["samtools_sort"] + parameters["threads"]["samtools_fixmate"] + parameters["threads"]["samtools_markdup"]
+        mem=parameters["memory_mb"]["bwa_map"] + parameters["memory_mb"]["samtools_sort_per_thread"]*parameters["memory_mb"]["samtools_sort"] + parameters["memory_mb"]["samtools_fixmate"] + parameters["memory_mb"]["samtools_markdup"],
+    threads: parameters["threads"]["bwa_map"] + parameters["threads"]["samtools_sort"] + parameters["threads"]["samtools_fixmate"] + parameters["threads"]["samtools_markdup"]
 
     shell:
         " TMP_PREFIX=`dirname {output.bam}`/tmpbam; "

@@ -63,7 +63,7 @@ rule bwa_cov: # TODO: add nanopore support
         reference=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta",
         reference_index=out_dir_path  / ("curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta%s" % ".bwt" if config["bwa_tool"] == "bwa" else ".bwt.2bit.64"),
     output:
-        bam=out_dir_path  / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{seq_type, illumina}/{genome_prefix, [^/]+}.input.{haplotype}.{datatype, [^/]+}.bam"
+        bam=out_dir_path  / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.{datatype,  illumina}.bam"
         #paf=out_dir_path  / ("purge_dups/{assembler}/{haplotype}/%s.purge_dups.{assembler}.{haplotype}.minimap2.{fileprefix}.paf.gz" % config["genome_name"])
     params:
         bwa_tool=config["bwa_tool"],

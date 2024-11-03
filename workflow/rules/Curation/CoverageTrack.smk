@@ -45,7 +45,7 @@ rule minimap2_cov: # TODO: add nanopore support
         " {input.fastq} 2>{log.minimap2} |  samtools sort -T ${{TMPDIR}} -@ {params.sort_threads} "
         " -m {params.per_thread_sort_mem}M -o {output.bam} 2>{log.sort};"
         #" samtools index -@ {threads} {output.bam} > {log.index} 2>&1 "
-
+print(datatype_format_dict)
 print(config[datatype_format_dict["illumina"] + "_extension"])
 rule bwa_cov: # TODO: add nanopore support
     input:

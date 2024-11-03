@@ -72,7 +72,7 @@ rule bwa_cov: # TODO: add nanopore support
         sort_threads=parameters["threads"]["samtools_sort"],
         fixmate_threads=parameters["threads"]["samtools_fixmate"],
         markdup_threads=parameters["threads"]["samtools_markdup"],
-        per_thread_sort_mem=parameters["memory_mb"]["samtools_sort"],
+        per_thread_sort_mem=parameters["memory_mb"]["samtools_sort_per_thread"],
         genome_prefix=config["genome_prefix"]
     log:
         bwa=output_dict["log"]  / "minimap2_cov.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.bwa.log",
@@ -91,14 +91,14 @@ rule bwa_cov: # TODO: add nanopore support
         cpus=parameters["threads"]["bwa_map"] + parameters["threads"]["samtools_sort"] + parameters["threads"]["samtools_fixmate"] + parameters["threads"]["samtools_markdup"],
         time=parameters["time"]["bwa_map"],
         mem=parameters["memory_mb"]["bwa_map"] + parameters["memory_mb"]["samtools_sort"] + parameters["memory_mb"]["samtools_fixmate"] + parameters["memory_mb"]["samtools_markdup"],
-    threads: parameters["threads"]["bwa_map"] + parameters["threads"]["samtools_sort"] + parameters["threads"]["samtools_fixmate"] + parameters["threads"]["samtools_markdup"]
+    threads: parameters["threads"]["bwa_map"] + parameters["memory_mb"]["samtools_sort_per_thread"]*parameters["threads"]["samtools_sort"] + parameters["threads"]["samtools_fixmate"] + parameters["threads"]["samtools_markdup"]
 
     shell:
         " TMP_PREFIX=`dirname {output.bam}`/tmpbam; "
         " {params.bwa_tool} mem  -t {params.bwa_threads} {input.reference} <(gunzip -c {input.forward_fastqs}) <(gunzip -c {input.reverse_fastqs}) "
         " -R  \'@RG\\tID:{params.genome_prefix}\\tPU:x\\tSM:{params.genome_prefix}\\tPL:Illumina\\tLB:x\' 2>{log.bwa} | "
         " samtools fixmate -@ {params.fixmate_threads} -m - -  2>{log.fixmate} | "
-        " samtools sort -T {{TMP_PREFIX}} -@ {params.sort_threads} -m {params.per_thread_sort_mem} 2>{log.sort} | "
+        " samtools sort -T {{TMP_PREFIX}} -@ {params.sort_threads} -m {params.per_thread_sort_mem}M 2>{log.sort} | "
         " samtools markdup -@ {params.markdup_threads} - {output.bam} 2>{log.markdup}"
 
 rule calculate_coverage:

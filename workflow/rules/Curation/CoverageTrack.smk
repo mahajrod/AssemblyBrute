@@ -45,20 +45,22 @@ rule minimap2_cov: # TODO: add nanopore support
         " {input.fastq} 2>{log.minimap2} |  samtools sort -T ${{TMPDIR}} -@ {params.sort_threads} "
         " -m {params.per_thread_sort_mem}M -o {output.bam} 2>{log.sort};"
         #" samtools index -@ {threads} {output.bam} > {log.index} 2>&1 "
-#print(datatype_format_dict)
-#print(config[datatype_format_dict["illumina"] + "_extension"])
-rule bwa_cov: # TODO: add nanopore support
+
+
+rule bwa_cov:
     input:
-        forward_fastqs=lambda wildcards: expand(output_dict["data"] / ("%s/%s/%s/{pairprefix}_1%s" % (datatype_format_dict[wildcards.datatype],
-                                                                                           wildcards.datatype,
-                                                                                           "filtered" if wildcards.datatype in config["filtered_data"] else "raw",
-                                                                                           datatype_extension_dict[wildcards.datatype])),
+        forward_fastqs=lambda wildcards: expand(output_dict["data"] / ("%s/%s/%s/{pairprefix}%s%s" % (datatype_format_dict[wildcards.datatype],
+                                                                                                      wildcards.datatype,
+                                                                                                      "filtered" if wildcards.datatype in config["filtered_data"] else "raw",
+                                                                                                      "_1" if wildcards.datatype in config["filtered_data"] else "1",
+                                                                                                      datatype_extension_dict[wildcards.datatype])),
                      pairprefix=input_pairprefix_dict[wildcards.datatype],
                      allow_missing=True),
-        reverse_fastqs=lambda wildcards: expand(output_dict["data"] / ("%s/%s/%s/{pairprefix}_2%s" % (datatype_format_dict[wildcards.datatype],
-                                                                                           wildcards.datatype,
-                                                                                           "filtered" if wildcards.datatype in config["filtered_data"] else "raw",
-                                                                                           datatype_extension_dict[wildcards.datatype])),
+        reverse_fastqs=lambda wildcards: expand(output_dict["data"] / ("%s/%s/%s/{pairprefix}%s%s" % (datatype_format_dict[wildcards.datatype],
+                                                                                                      wildcards.datatype,
+                                                                                                      "filtered" if wildcards.datatype in config["filtered_data"] else "raw",
+                                                                                                      "_2" if wildcards.datatype in config["filtered_data"] else "2",
+                                                                                                      datatype_extension_dict[wildcards.datatype])),
                      pairprefix=input_pairprefix_dict[wildcards.datatype],
                      allow_missing=True),
         reference=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta",

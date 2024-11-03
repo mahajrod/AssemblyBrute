@@ -127,6 +127,8 @@ for d_type in fasta_based_data_type_set:
 #---- detect datatypes and check if datatype has files in both fasta and fastq formats ----
 datatype_format_dict = {}
 datatype_extension_dict = {}
+print(fastq_based_data_type_set)
+print(fasta_based_data_type_set)
 for d_type in set(data_types):
     print(d_type)
     if (d_type in fastq_based_data_type_set) and (d_type in fasta_based_data_type_set):

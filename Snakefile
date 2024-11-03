@@ -140,6 +140,9 @@ for d_type in set(data_types):
         elif len(input_filedict[d_type]) > 0:
              datatype_format_dict[d_type] = "fastq"
              datatype_extension_dict[d_type] = config["fastq_extension"]
+print(datatype_format_dict)
+print(datatype_extension_dict)
+
 
 if "reference" in set(data_types):
     reference_input_dir = input_dict["reference"]["dir"]

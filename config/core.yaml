@@ -1758,7 +1758,7 @@
     - "lqccs"
     #- "hic"
     #- "lr"
-    #- "illumina"
+    - "illumina"
 
 "paired_fastq_based_data":
     - "hic"

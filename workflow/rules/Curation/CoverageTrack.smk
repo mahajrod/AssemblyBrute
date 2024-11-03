@@ -46,7 +46,7 @@ rule minimap2_cov: # TODO: add nanopore support
         " -m {params.per_thread_sort_mem}M -o {output.bam} 2>{log.sort};"
         #" samtools index -@ {threads} {output.bam} > {log.index} 2>&1 "
 
-print(config[datatype_format_dict[wildcards.datatype] + "_extension"])
+print(config[datatype_format_dict["illumina"] + "_extension"])
 rule bwa_cov: # TODO: add nanopore support
     input:
         forward_fastqs=lambda wildcards: expand(output_dict["data"] / ("%s/%s/%s/{pairprefix}_1%s" % (datatype_format_dict[wildcards.datatype],

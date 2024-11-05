@@ -27,7 +27,7 @@ rule miniprot:
     benchmark:
         output_dict["benchmark"]  / "miniprot.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["microchromosomes"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["microchromosomes"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("miniprot_microchromosomes"),

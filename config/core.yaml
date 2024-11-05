@@ -56,6 +56,9 @@
     "kmc":
         "yaml": "workflow/envs/conda.kmc.yaml"
         "name": "kmc"
+    "microchromosomes":
+        "yaml": "workflow/envs/conda.microchromosomes.yaml"
+        "name": "microchromosomes"
 
 "resources_dir": "config/resources/"
 #"threads":      "config/resources/threads.tab"

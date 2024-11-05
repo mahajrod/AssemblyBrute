@@ -65,6 +65,8 @@
 #---- Directory structure config ----
 
 #---- Resources ----
+"microchromosome_prot_set": "resources/microchromosomes/MicroFinder_prot_set.v0.1.fa.gz"
+#-------------------
 #-------- References --------
 #-------- Variant filtration ---------
 #-------- Annotation --------

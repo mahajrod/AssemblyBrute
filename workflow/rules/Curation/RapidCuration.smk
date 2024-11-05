@@ -24,6 +24,11 @@ rule create_curation_input_files_for_scaffolds: #
                                                                                                    stage_dict["curation"]["prev_stage"])),
         fai=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta.fai" % (stage_dict["curation"]["prev_stage"],
                                                                                                        stage_dict["curation"]["prev_stage"])),
+        #assembly=lambda  wildcards: out_dir_path / ("{0}/{1}/{2}.{3}.{4}.assembly".format(stage_dict["curation"]["prev_stage"],
+        #                                                                                  wildcards.prev_stage_parameters,
+        #                                                                                  wildcards.genome_prefix,
+        #                                                                                  stage_dict["curation"]["prev_stage"]),
+        #                                                                                  wildcards.haplotype) if "hic_scaffolding" in wildcards.prev_stage_parameters else [],
         #bed=get_hic_bed_file if not config["skip_higlass"] else []
     output:
         fasta=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/scaffolds/{genome_prefix, [^/]+}.input.{haplotype}.fasta",

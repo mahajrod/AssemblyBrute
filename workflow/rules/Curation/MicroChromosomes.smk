@@ -56,7 +56,7 @@ rule place_microsomes_first:
     params:
         assembly_option= lambda wildcards: " -a " + str(out_dir_path / "hic_scaffolding/{0}/{1}.hic_scaffolding.{2}.assembly".format(wildcards.prev_stage_parameters,
                                                                                                                                      wildcards.genome_prefix,
-                                                                                                                                     wildcards.haplotype)) if "hic_scaffolding" in wildcards.prev_stage_parameters else ""
+                                                                                                                                     wildcards.haplotype)) if stage_dict["curation"]["prev_stage"] == "hic_scaffolding"  else ""
     log:
         log=output_dict["log"]  / "place_microsomes_first.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.max{max_length}.log",
         cluster_log=output_dict["cluster_log"] / "place_microsomes_first.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.max{max_length}.cluster.log",

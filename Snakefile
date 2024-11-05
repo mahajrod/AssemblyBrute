@@ -1228,3 +1228,4 @@ if "gap_closing" in config["stage_list"]:
     include: "workflow/rules/Finalization/GapClosing.smk"
 
 include: "workflow/rules/Curation/CurationFiles.smk"
+include: "workflow/rules/Curation/MicroChromosomes.smk"

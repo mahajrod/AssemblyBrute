@@ -1111,6 +1111,22 @@ if "curation" in config["stage_list"]:
                                 ) for parameter_label in stage_dict["curation"]["parameters"]],
                          ]
 
+    if ("bird_genome" in config) and config["bird_genome"]:
+        if "contigs" in config["curation_seq_type"]:
+            results_list += [[expand(out_dir_path / "curation/{parameters}/{haplotype}/contigs/{genome_prefix}.input.{haplotype}.order.tsv",
+                                     parameters=[parameter_label],
+                                     haplotype=stage_dict["curation"]["parameters"][parameter_label]["haplotype_list"],
+                                     genome_prefix=[config["genome_prefix"], ],
+                                    ) for parameter_label in stage_dict["curation"]["parameters"]],
+                             ]
+        if "scaffolds" in config["curation_seq_type"]:
+            results_list += [[expand(out_dir_path / "curation/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.order.tsv",
+                                     parameters=[parameter_label],
+                                     haplotype=stage_dict["curation"]["parameters"][parameter_label]["haplotype_list"],
+                                     genome_prefix=[config["genome_prefix"], ],
+                                    ) for parameter_label in stage_dict["curation"]["parameters"]],
+                             ]
+
     with open("tmp.results_list", "w") as out_fd:
         for filename in results_list:
             out_fd.write(str(filename) + "\n")

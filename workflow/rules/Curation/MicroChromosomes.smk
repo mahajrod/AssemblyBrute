@@ -64,7 +64,7 @@ rule place_microsomes_first:
     benchmark:
         output_dict["benchmark"]  / "place_microsomes_first.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{max_length}.benchmark.txt"
     conda:
-        config["conda"]["microchromosomes"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["microchromosomes"]["yaml"])
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("place_microsomes_first"),

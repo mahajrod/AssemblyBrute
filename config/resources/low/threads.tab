@@ -122,4 +122,6 @@ tadbit	1	1	1	1	1	1	1	1	1
 merge_tadbit_stats	1	1	1	1	1	1	1	1	1
 krater_from_histo	1	1	1	1	1	1	1	1	1
 gather_curation_files	1	1	1	1	1	1	1	1	1
-miniprot_microchromosomes	10	10	10	10	10	10	10	10	10
+miniprot_microchromosomes	4	4	4	4	4	4	4	4	4
+filter_scaffold_list	1	1	1	1	1	1	1	1	1
+place_microsomes_first	1	1	1	1	1	1	1	1	1

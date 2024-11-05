@@ -116,6 +116,11 @@
                         "read_number": 1000000
             "ragtag":
                 "default": {}
+            "microsome_detection":
+                "default":
+                    "max_length":
+                        - 1000000
+                        - 10000000
             "mitohifi":
                 "default":
                     "min_mapping_quality": 20

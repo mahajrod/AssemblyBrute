@@ -1125,7 +1125,7 @@ if "curation" in config["stage_list"]:
         #                            ) for parameter_label in stage_dict["curation"]["parameters"]],
         #                     ]
         if "scaffolds" in config["curation_seq_type"]:
-            results_list += [[expand(out_dir_path / "curation/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.max{max_length}.candidates.microchromosomes.filtered.tsv",
+            results_list += [[expand(out_dir_path / "curation/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.max{max_length}.candidates.microchromosomes.filtered.tsv",
                                      parameters=[parameter_label],
                                      haplotype=stage_dict["curation"]["parameters"][parameter_label]["haplotype_list"],
                                      genome_prefix=[config["genome_prefix"],],

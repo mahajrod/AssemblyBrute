@@ -18,7 +18,7 @@ with open(config["main_config_file"], "r") as core_yaml_fd:
     config.update(yaml.safe_load(core_yaml_fd))
 #-------- Read 'skip' config file --------
 with open(config["skip_config_file"], "r") as skip_yaml_fd:
-    for key, value in yaml.safe_load(core_yaml_fd).items():
+    for key, value in yaml.safe_load(skip_yaml_fd).items():
         if key not in config:
             config[key] = value
 #---------------------------------------

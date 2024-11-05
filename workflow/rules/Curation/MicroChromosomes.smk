@@ -36,7 +36,7 @@ rule miniprot:
         mem=parameters["memory_mb"]["miniprot_microchromosomes"]
     threads: parameters["threads"]["miniprot_microchromosomes"]
     shell:
-        " miniprot -t {threads} --gff {input.fasta} {params.microchromosome_prot_set} > {output.miniprot_gff} 2>{log.miniprot} "
+        " miniprot -t {threads} --gff {input.fasta} {params.microchromosome_prot_set} > {output.miniprot_gff} 2>{log.miniprot}; "
         " awk '$3== \"mRNA\"' {output.miniprot_gff} 2>{log.awk} | grep -w \"Rank=1\" 2>{log.grep} | "
         " cut -f1,9 2>{log.cut} | tr \";\" \"\t\" 2>{log.tr} | cut -f1,4,5,6,7  2>{log.cut2} | "
         " sed 's/Identity=//g;s/Positive=//g' 2>{log.sed} | awk '$2 >= 0.7' 2>{log.awk2} |  cut -f1 2>{log.cut3} | "

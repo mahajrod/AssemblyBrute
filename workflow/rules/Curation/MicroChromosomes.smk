@@ -30,11 +30,11 @@ rule miniprot:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
-        node_options=parse_node_list("miniprot"),
-        cpus=parameters["threads"]["miniprot"],
-        time=parameters["time"]["miniprot"],
-        mem=parameters["memory_mb"]["miniprot"]
-    threads: parameters["threads"]["miniprot"]
+        node_options=parse_node_list("miniprot_microchromosomes"),
+        cpus=parameters["threads"]["miniprot_microchromosomes"],
+        time=parameters["time"]["miniprot_microchromosomes"],
+        mem=parameters["memory_mb"]["miniprot_microchromosomes"]
+    threads: parameters["threads"]["miniprot_microchromosomes"]
     shell:
         " miniprot -t {threads} --gff {input.fasta} {params.microchromosome_prot_set} > {output.miniprot_gff} 2>{log.miniprot} "
         " awk '$3== \"mRNA\"' {output.miniprot_gff} 2>{log.awk} | grep -w \"Rank=1\" 2>{log.grep} | "

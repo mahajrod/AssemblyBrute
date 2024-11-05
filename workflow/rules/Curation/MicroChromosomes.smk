@@ -50,8 +50,8 @@ rule place_microsomes_first:
                                                                                                                   wildcards.genome_prefix,
                                                                                                                   wildcards.haplotype)) if "hic_scaffolding" in wildcards.prev_stage_parameters else []
     output:
-        filtered_tsv=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype, [^/]+}.max{max_length, [^/]+}.candidates.microchromosomes.filtered.tsv",
-        reordered_fasta=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype, [^/]+}.max{max_length, [^/]+}.reordered.fasta",
+        filtered_tsv=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.max{max_length, [^/]+}.candidates.microchromosomes.filtered.tsv",
+        reordered_fasta=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.max{max_length, [^/]+}.reordered.fasta",
         #reordered_assembly=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.max{max_length}.reordered.assembly"
     params:
         assembly_option= lambda wildcards: " -a " + str(out_dir_path / "hic_scaffolding/{0}/{1}.hic_scaffolding.{2}.assembly".format(wildcards.prev_stage_parameters,

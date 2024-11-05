@@ -1,11 +1,10 @@
 
-
 rule miniprot:
     input:
         fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta"
     output:
         miniprot_gff=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.miniprot.gff",
-        order_tsv=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.order.tsv"
+        candidate_tsv=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.candidates.microchromosomes.tsv"
     params:
         microchromosome_prot_set=config["microchromosome_prot_set"]
     log:
@@ -41,3 +40,40 @@ rule miniprot:
         " cut -f1,9 2>{log.cut} | tr \";\" \"\\t\" 2>{log.tr} | cut -f1,4,5,6,7  2>{log.cut2} | "
         " sed 's/Identity=//g;s/Positive=//g' 2>{log.sed} | awk '$2 >= 0.7' 2>{log.awk2} |  cut -f1 2>{log.cut3} | "
         " sort 2>{log.sort} | uniq -c 2>{log.uniq} | sort -k1,1nr 2>{log.sort2} | awk '{{print $2 \"\\t\" $1}}' > {output.order_tsv} 2>{log.awk3} "
+
+rule place_microsomes_first:
+    input:
+        candidate_tsv=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.candidates.microchromosomes.tsv",
+        len_file=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.len",
+        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta",
+        assembly= lambda wildcards: (out_dir_path / "hic_scaffolding/{0}/{1}.hic_scaffolding.{2}.assembly".format(wildcards.prev_stage_parameters,
+                                                                                                                  wildcards.genome_prefix,
+                                                                                                                  wildcards.haplotype)) if "hic_scaffolding" in wildcards.prev_stage_parameters else []
+    output:
+        filtered_tsv=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype, [^/]+}.max{max_length, [^/]+}.candidates.microchromosomes.filtered.tsv",
+        reordered_fasta=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype, [^/]+}.max{max_length, [^/]+}.reordered.fasta",
+        #reordered_assembly=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.max{max_length}.reordered.assembly"
+    params:
+        assembly_option= lambda wildcards: " -a " + str(out_dir_path / "hic_scaffolding/{0}/{1}.hic_scaffolding.{2}.assembly".format(wildcards.prev_stage_parameters,
+                                                                                                                                     wildcards.genome_prefix,
+                                                                                                                                     wildcards.haplotype)) if "hic_scaffolding" in wildcards.prev_stage_parameters else ""
+    log:
+        log=output_dict["log"]  / "place_microsomes_first.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.max{max_length}.log",
+        cluster_log=output_dict["cluster_log"] / "place_microsomes_first.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.max{max_length}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "place_microsomes_first.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.max{max_length}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "place_microsomes_first.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{max_length}.benchmark.txt"
+    conda:
+        config["conda"]["microchromosomes"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["microchromosomes"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("place_microsomes_first"),
+        cpus=parameters["threads"]["place_microsomes_first"],
+        time=parameters["time"]["place_microsomes_first"],
+        mem=parameters["memory_mb"]["place_microsomes_first"]
+    threads: parameters["threads"]["place_microsomes_first"]
+    shell:
+        " OUTPUT_PREFIX={output.reordered_fasta}; "
+        " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.reordered.fasta}}; "
+        " workflow/scripts/curation/move_microchromosomes_first.py  -i {input.candidate_tsv}  {params.assembly_option} "
+        " -l {input.len_file} -f {input.fasta} -m {wildcards.max_length} -o ${{OUTPUT_PREFIX}} > {log.log} 2>&1; "

@@ -1117,18 +1117,19 @@ if "curation" in config["stage_list"]:
                          ]
 
     if ("bird_genome" in config) and config["bird_genome"]:
-        if "contigs" in config["curation_seq_type"]:
-            results_list += [[expand(out_dir_path / "curation/{parameters}/{haplotype}/contigs/{genome_prefix}.input.{haplotype}.order.tsv",
-                                     parameters=[parameter_label],
-                                     haplotype=stage_dict["curation"]["parameters"][parameter_label]["haplotype_list"],
-                                     genome_prefix=[config["genome_prefix"], ],
-                                    ) for parameter_label in stage_dict["curation"]["parameters"]],
-                             ]
+        #if "contigs" in config["curation_seq_type"]:
+        #    results_list += [[expand(out_dir_path / "curation/{parameters}/{haplotype}/contigs/{genome_prefix}.input.{haplotype}.order.tsv",
+        #                             parameters=[parameter_label],
+        #                             haplotype=stage_dict["curation"]["parameters"][parameter_label]["haplotype_list"],
+        #                             genome_prefix=[config["genome_prefix"], ],
+        #                            ) for parameter_label in stage_dict["curation"]["parameters"]],
+        #                     ]
         if "scaffolds" in config["curation_seq_type"]:
-            results_list += [[expand(out_dir_path / "curation/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.order.tsv",
+            results_list += [[expand(out_dir_path / "curation/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.max{max_length}.candidates.microchromosomes.filtered.tsv",
                                      parameters=[parameter_label],
                                      haplotype=stage_dict["curation"]["parameters"][parameter_label]["haplotype_list"],
-                                     genome_prefix=[config["genome_prefix"], ],
+                                     genome_prefix=[config["genome_prefix"],],
+                                     max_length=parameters["tool_options"]["microsome_detection"]["max_length"],
                                     ) for parameter_label in stage_dict["curation"]["parameters"]],
                              ]
 

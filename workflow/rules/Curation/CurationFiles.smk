@@ -4,6 +4,8 @@ rule gather_curation_files: #
     input:
         hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.hic",
         assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.assembly",
+        reordered_assemblies=expand(out_dir_path / "{prev_stage_parameters}..{curation_parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.max{max_length}.reordered.assembly",
+                                    max_length=parameters["tool_options"]["microsome_detection"]["max_length"]) if ("bird_genome" in config) and config["bird_genome"] else []
     output:
         hic=out_dir_path / "curation_files/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.hic",
         assembly=out_dir_path / "curation_files/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.assembly",
@@ -25,10 +27,12 @@ rule gather_curation_files: #
 
     shell:
         " cp {input.hic} `dirname {output.hic}` > {log.cp} 2>&1; "
-        " cp {input.assembly} `dirname {output.assembly}` >> {log.cp} 2>&1; "
+        " cp {input.assembly} {input.reordered_assemblies} `dirname {output.assembly}` >> {log.cp} 2>&1; "
+
 
 rule gather_curation_contig_tracks: #
     input:
+        #cannonical_telo_warning_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/contigs/%s.input.{haplotype}.cannonical_telomere_warning.win1000.step200.track.bedgraph" % config["genome_prefix"],
         contig_dir=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/contigs/",
     output:
         contig_dir=directory(out_dir_path / "curation_files/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/contigs/"),
@@ -55,6 +59,7 @@ rule gather_curation_contig_tracks: #
 
 rule gather_curation_scaffold_tracks: #
     input:
+        #cannonical_telo_warning_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/scaffolds/%s.input.{haplotype}.cannonical_telomere_warning.win1000.step200.track.bedgraph" % config["genome_prefix"],
         scaffolds_dir=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/scaffolds/",
     output:
         scaffolds_dir=directory(out_dir_path / "curation_files/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/scaffolds/"),

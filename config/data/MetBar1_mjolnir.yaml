@@ -155,6 +155,7 @@
 
 "species_name": "Metallura baroni"
 "tax_id": 66406 # # necessary for contamination scan via FCS
+"bird_genome": True
 
 "database_set":
     "kraken2":

@@ -153,6 +153,7 @@
 
 "species_name": "Polyboroides typus"
 "tax_id": 321072 # # necessary for contamination scan via FCS
+"bird_genome": True
 
 "database_set":
     "kraken2":

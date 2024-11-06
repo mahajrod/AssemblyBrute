@@ -153,6 +153,7 @@
 
 "species_name": "Fringillaria tahapisi"
 "tax_id": 504327 # # necessary for contamination scan via FCS
+"bird_genome": True
 
 "database_set":
     "kraken2":

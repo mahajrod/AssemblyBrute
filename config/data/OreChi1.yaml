@@ -153,6 +153,7 @@
 
 "species_name": "Oreotrochilus chimborazo"
 "tax_id": 304662   # # necessary for contamination scan via FCS
+"bird_genome": True
 
 "database_set":
     "kraken2":

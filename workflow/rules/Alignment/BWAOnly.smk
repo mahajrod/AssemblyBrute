@@ -99,7 +99,7 @@ rule rmdup:
         collate_threads=parameters["threads"]["samtools_collate"],
         fixmate_threads=parameters["threads"]["samtools_fixmate"],
         markdup_threads=parameters["threads"]["samtools_markdup"],
-        sort_per_thread=parameters["memory_mb"]["samtools_sort"]
+        sort_per_thread=parameters["memory_mb"]["samtools_sort_per_thread"]
     log:
         collate=output_dict["log"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.collate.log",
         fixmate=output_dict["log"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.fixmate.log",

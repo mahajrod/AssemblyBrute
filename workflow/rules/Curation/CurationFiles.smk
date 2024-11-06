@@ -5,7 +5,8 @@ rule gather_curation_files: #
         hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.hic",
         assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.assembly",
         reordered_assemblies=expand(out_dir_path / "{prev_stage_parameters}..{curation_parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.max{max_length}.reordered.assembly",
-                                    max_length=parameters["tool_options"]["microsome_detection"]["max_length"]) if ("bird_genome" in config) and config["bird_genome"] else []
+                                    max_length=parameters["tool_options"]["microsome_detection"]["max_length"],
+                                    allow_missing=True) if ("bird_genome" in config) and config["bird_genome"] else []
     output:
         hic=out_dir_path / "curation_files/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.hic",
         assembly=out_dir_path / "curation_files/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.assembly",

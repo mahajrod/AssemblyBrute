@@ -92,7 +92,7 @@
          #- "repeat_enhanced_l2"
     "purge_dups":
         - "default"
-        - "keep_hicov"
+        #- "keep_hicov"
     "salsa2":
         - "phased_reads"
         #- "unphased_reads"
@@ -153,6 +153,7 @@
 
 "species_name": "Eudromia elegans"
 "tax_id": 8805 # # necessary for contamination scan via FCS
+"bird_genome": True
 
 "database_set":
     "kraken2":

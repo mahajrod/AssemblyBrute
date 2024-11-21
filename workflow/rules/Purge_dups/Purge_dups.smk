@@ -442,6 +442,8 @@ rule create_final_links_purge_dups:
                                                                                                                 wildcards.genome_prefix),
     output:
         purged_alias=out_dir_path / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, [^/]+}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.fasta"
+    params:
+        data_folder=lambda wildcards: "first_stage" if wildcards.haplotype == "hap0" else "second_stage"
     log:
         ln=output_dict["log"]  / "create_contig_links.purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.{haplotype}.ln.log",
         cluster_log=output_dict["cluster_log"] / "create_contig_links.purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.{haplotype}.cluster.log",
@@ -459,7 +461,7 @@ rule create_final_links_purge_dups:
     threads: parameters["threads"]["create_links"]
 
     shell:
-        " ln -sf second_stage/{wildcards.haplotype}/{wildcards.genome_prefix}.input.{wildcards.haplotype}.purged.fasta {output.purged_alias} > {log.ln} 2>&1; "
+        " ln -sf {params.data_folder}/{wildcards.haplotype}/{wildcards.genome_prefix}.input.{wildcards.haplotype}.purged.fasta {output.purged_alias} > {log.ln} 2>&1; "
 
 rule extract_stats_from_purge_dups_file:
     input:

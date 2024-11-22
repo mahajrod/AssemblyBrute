@@ -1191,24 +1191,25 @@ include: "workflow/rules/HiC/ReadPhasing.smk"
 include: "workflow/rules/Alignment/Index.smk"
 include: "workflow/rules/Alignment/Stats.smk"
 
-if ("hic_scaffolding" in config["stage_list"]) or ("curation" in config["stage_list"]) or ("gap_closing" in config["stage_list"]):
-    if config["other_tool_option_sets"]["mapping_pipeline"] == "arima":
-        print("Mapping pipeline: Arima")
-        include: "workflow/rules/Alignment/Arima.smk"
-    elif config["other_tool_option_sets"]["mapping_pipeline"] == "bwa_only":
-        print("Mapping pipeline: BWA only")
-        include: "workflow/rules/Alignment/BWAOnly.smk"
-    elif config["other_tool_option_sets"]["mapping_pipeline"] == "pairtools":
-        print("Mapping pipeline: Pairtools")
-        include: "workflow/rules/Alignment/Pairtools.smk"
-    include: "workflow/rules/Alignment/PostAlignment.smk"
+if "hic" in data_types:
+    if ("hic_scaffolding" in config["stage_list"]) or ("curation" in config["stage_list"]) or ("gap_closing" in config["stage_list"]):
+        if config["other_tool_option_sets"]["mapping_pipeline"] == "arima":
+            print("Mapping pipeline: Arima")
+            include: "workflow/rules/Alignment/Arima.smk"
+        elif config["other_tool_option_sets"]["mapping_pipeline"] == "bwa_only":
+            print("Mapping pipeline: BWA only")
+            include: "workflow/rules/Alignment/BWAOnly.smk"
+        elif config["other_tool_option_sets"]["mapping_pipeline"] == "pairtools":
+            print("Mapping pipeline: Pairtools")
+            include: "workflow/rules/Alignment/Pairtools.smk"
+        include: "workflow/rules/Alignment/PostAlignment.smk"
 
-if ("hic_scaffolding" in config["stage_list"]) or ("curation" in config["stage_list"]):
-    include: "workflow/rules/Alignment/Pretext.smk"
+    if ("hic_scaffolding" in config["stage_list"]) or ("curation" in config["stage_list"]):
+        include: "workflow/rules/Alignment/Pretext.smk"
 
-if "hic_scaffolding" in config["stage_list"]:
-    include: "workflow/rules/HiC/YAHS.smk"
-    include: "workflow/rules/HiC/3DDNA.smk"
+    if "hic_scaffolding" in config["stage_list"]:
+        include: "workflow/rules/HiC/YAHS.smk"
+        include: "workflow/rules/HiC/3DDNA.smk"
 
 if "curation" in config["stage_list"]:
     include: "workflow/rules/Curation/RapidCuration.smk"
@@ -1216,13 +1217,14 @@ if "curation" in config["stage_list"]:
     include: "workflow/rules/Curation/WindowmaskerTrack.smk"
     include: "workflow/rules/Curation/CoverageTrack.smk"
     include: "workflow/rules/Curation/TelomereTrack.smk"
-    include: "workflow/rules/Curation/HiGlassTrack.smk"
     include: "workflow/rules/Curation/TRFTrack.smk"
     include: "workflow/rules/Curation/Masking.smk"
     include: "workflow/rules/Curation/GCTrack.smk"
     include: "workflow/rules/Curation/WGA.smk"
     include: "workflow/rules/Curation/VariantTrack.smk"
     include: "workflow/rules/Curation/RagTag.smk"
+    if "hic" in data_types:
+        include: "workflow/rules/Curation/HiGlassTrack.smk"
 
 
 if "gap_closing" in config["stage_list"]:

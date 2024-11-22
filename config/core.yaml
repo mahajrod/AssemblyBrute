@@ -1883,6 +1883,14 @@
             "fastq":
                 - "contig"
             "draft": []
+        "skip_hic_scaffolding":
+            "fastq":
+                - "contig"
+                - "purge_dups"
+                - "curation"
+            "draft":
+                - "purge_dups"
+                - "curation"
     "finalization":
         "gap_closing":
             "fastq":

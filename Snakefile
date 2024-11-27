@@ -314,18 +314,22 @@ if "check_draft" in config["stage_list"]:
 
 
 if ("read_qc" in config["stage_list"]) and (not config["skip_read_qc"]):
-    results_list += [*[expand(output_dict["qc"] / "fastqc/{datatype}/{stage}/{fileprefix}_fastqc.zip",
+    results_list += [[expand(output_dict["qc"] / "fastqc/{datatype}/{stage}/{fileprefix}_fastqc.zip",
                                datatype=[dat_type, ],
                                stage=["raw", ],
                                fileprefix=input_file_prefix_dict[dat_type],) for dat_type in fastqc_data_type_set ],
-                      expand(output_dict["qc"] / "multiqc/{datatype}/{stage}/multiqc.{datatype}.{stage}.report.html",
+                     expand(output_dict["qc"] / "multiqc/{datatype}/{stage}/multiqc.{datatype}.{stage}.report.html",
                              datatype=fastqc_data_type_set ,
                              stage=["raw",]),
-                      *[expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{fileprefix}.Yield_By_Length.png",
+                     #[expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{fileprefix}.Yield_By_Length.png",
+                     #          datatype=[dat_type, ],
+                     #          stage=["raw", ],
+                     #          fileprefix=input_file_prefix_dict[dat_type],) for dat_type in long_read_data_type_set],
+                     [expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{datatype}.{stage}.NanoStats.tsv",
                                datatype=[dat_type, ],
                                stage=["raw", ],
-                               fileprefix=input_file_prefix_dict[dat_type],) for dat_type in long_read_data_type_set],
-                    *[expand(output_dict["qc"] / "nanoqc/{datatype}/{stage}/{fileprefix}",
+                               ) for dat_type in long_read_data_type_set],
+                     [expand(output_dict["qc"] / "nanoqc/{datatype}/{stage}/{fileprefix}",
                                datatype=[dat_type, ],
                                stage=["raw", ],
                                fileprefix=input_file_prefix_dict[dat_type],) for dat_type in long_read_data_type_set],
@@ -490,14 +494,22 @@ if ("filter_reads" in config["stage_list"]) and (not config["skip_filter_reads"]
                                    fileprefix=input_file_prefix_dict["nanopore"],) if "nanopore" in long_read_data_type_set else [],
                         ]
     if not config["skip_nanoplot"]:
-        results_list += [*[expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{fileprefix}.Yield_By_Length.png",
+        results_list += [[expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{datatype}.{stage}.NanoStats.tsv",
                                datatype=[dat_type, ],
                                stage=["filtered", ],
-                               fileprefix=input_file_prefix_dict[dat_type],) for dat_type in long_read_data_type_set],
-                        expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{fileprefix}.Yield_By_Length.png",
-                                   datatype=["nanopore", ],
-                                   stage=["trimmed", ],
-                                   fileprefix=input_file_prefix_dict["nanopore"],) if "nanopore" in long_read_data_type_set else [],
+                               ) for dat_type in long_read_data_type_set],
+                        expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{datatype}.{stage}.NanoStats.tsv",
+                               datatype=["nanopore", ],
+                               stage=["trimmed", ],
+                               ) if "nanopore" in long_read_data_type_set else []
+                        #*[expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{fileprefix}.Yield_By_Length.png",
+                        #       datatype=[dat_type, ],
+                        #       stage=["filtered", ],
+                        #       fileprefix=input_file_prefix_dict[dat_type],) for dat_type in long_read_data_type_set],
+                        #expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{fileprefix}.Yield_By_Length.png",
+                        #           datatype=["nanopore", ],
+                        #           stage=["trimmed", ],
+                        #           fileprefix=input_file_prefix_dict["nanopore"],) if "nanopore" in long_read_data_type_set else [],
                         ]
 
     if config["database_set"]["kraken2"] and kraken_scan_data_type_set and (not config["skip_kraken"]):

@@ -29,7 +29,7 @@ rule nanoplot:
 rule gather_nanoplot_stats_per_stage:
     input:
         stats=lambda wildcards: expand(rules.nanoplot.output.stats,
-                                       fileprefix_list=input_file_prefix_dict[wildcards.datatype], allow_missing=True)
+                                       fileprefix=input_file_prefix_dict[wildcards.datatype], allow_missing=True)
     output:
         stage_stats=output_dict["qc"] / "nanoplot/{datatype, [^/]+}/{stage, [^/]+}/{datatype}.{stage}.NanoStats.tsv",
     params:

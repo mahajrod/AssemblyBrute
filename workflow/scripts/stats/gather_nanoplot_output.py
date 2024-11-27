@@ -13,6 +13,10 @@ parser.add_argument("-g", "--convert_to_gbp", action="store_true", dest="convert
                     help="Convert number of bases from bp to Gbp. Conflicts with -m/--convert_to_mbp. Default: False.")
 parser.add_argument("-m", "--convert_to_mbp", action="store_true", dest="convert_to_mbp", default=False,
                     help="Convert number of bases from bp to Mbp. Conflicts with -g/--convert_to_gbp. Default: False.")
+parser.add_argument("-s", "--stage", action="store", dest="stage", default="unknown_stage",
+                    help="Value to use for stage column in the output. Default: 'unknown_stage'")
+parser.add_argument("-d", "--datatype", action="store", dest="datatype", default="unknown_datatype",
+                    help="Value to use for datatype column in the output. Default: 'unknown_datatype'")
 parser.add_argument("-l", "--label_list", action="store", dest="label_list", type=lambda s: s.split(","),
                     help="Comma separated list of the labels corresponding to the input files. Order must be the same."
                          "Default: not set")
@@ -34,7 +38,6 @@ for filename in args.input:
                                index_col=0).transpose())
     df_list[-1].index.name = "reads"
 
-
 final_df = pd.concat(df_list)
 
 if args.convert_to_gbp and args.convert_to_mbp:
@@ -46,5 +49,12 @@ elif args.convert_to_gbp:
 elif args.convert_to_mbp:
     final_df["number_of_bases"] = final_df["number_of_bases"].astype(float) / 1000000
     final_df.rename(columns={"number_of_bases": "number_of_bases,Mbp"}, inplace=True)
+
+columns_list = list(final_df.columns)
+
+final_df["stage"] = args.stage
+final_df["datatype"] = args.datatype
+
+final_df = final_df[["stage", "datatype"] + columns_list]
 
 final_df.to_csv(args.output, header=True, index=True, sep="\t")

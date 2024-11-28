@@ -24,7 +24,7 @@ rule nanoplot:
     threads:
         parameters["threads"]["nanoplot"]
     shell:
-        " NanoPlot -f png svg -t {threads} --store --tsv_stats  -o `dirname {output}` -p {wildcards.fileprefix}. "
+        " NanoPlot -f png svg -t {threads} --store --tsv_stats  -o `dirname {output.stats}` -p {wildcards.fileprefix}. "
         " --plots kde dot  --dpi 300 --fastq {input.fastq} > {log.std} 2>&1; "
 
 rule gather_nanoplot_stats_per_stage:

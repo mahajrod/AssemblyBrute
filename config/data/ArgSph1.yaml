@@ -28,23 +28,23 @@
             "time":         "06:00:00"
             "in_memory":    True
         "nt":
-            "path":         "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/db/kraken2/nt/20220915/" # add path to nt database
+            "path":         "/projects/mjolnir1/people/xsg178/db/kraken/nt/05302024" # add path to nt database
             "memory_mb":    620000
             "threads":      30
             "time":         "03:00:00"
             "in_memory":    True
     "fcs":
         "fcs_gx":
-            "path":         "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/db/gxdb/" # add path to fcs_gx database
-            "image_path":   "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/FCS-GX/fcs-gx.sif"
-            "memory_mb":    600000 # Entire database must be in memory, it requires at least 490 Gbp
+            "path":         "/projects/mjolnir1/people/xsg178/db/fcs/gxdb/" # add path to fcs_gx database
+            "image_path":   "/projects/mjolnir1/people/xsg178/soft/FCS-GX/fcs-gx.sif"
+            "memory_mb":    512000 # Entire database must be in memory, it requires at least 490 Gbp
             "threads":      30
             "time":         "06:00:00"
             "in_memory":    True
     "fcs_adaptor":
         "adaptor":
             "path":         null # database is embedded in singularity image
-            "image_path":   "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/fcsadaptor/fcs-adaptor.sif"
+            "image_path":   "/projects/mjolnir1/people/xsg178/soft/fcsadaptor/fcs-adaptor.sif"
             "memory_mb":    20000 #
             "threads":      1
             "time":         "01:00:00"
@@ -53,10 +53,10 @@
 "final_fcs_db": "fcs_gx" # this database will be used for the filtration of the contigs if skip_fcs is False
 
 "tool_containers":
-    "rapid_telomere":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/rapid-curation/rapid_hic_software/runTelo.sif"
+    "rapid_telomere":       "/projects/mjolnir1/people/xsg178/soft/rapid-curation/rapid_hic_software/runTelo.sif"
     "deepvariant":
-        "cpu":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/deepvariant/deepvariant_1.5.0.sif"
-        "gpu": null #"gpu":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
+        "cpu": "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0.sif"
+        "gpu": null #"gpu": "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
 
 'alternative_tmp_dir': None
 
@@ -87,7 +87,7 @@
          - "l1primary"
          #- "l2primary"
          #- "l3primary"
-         #- "l1primary_no_hic"
+         - "l1primary_no_hic"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
     "purge_dups":
@@ -138,9 +138,9 @@
 
 "tool_manually_adjusted_features":
     "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions
-        "lower_threshold": null #5
-        "haploid_diploid_threshold": null # 45
-        "upper_threshold": null #135
+        "lower_threshold": null #
+        "haploid_diploid_threshold": null #
+        "upper_threshold": null #
 
 "ploidy": 2
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
@@ -255,4 +255,4 @@
 # TODO:  add modes:  "create_map_bionano", "bionano_scaffolding"
 
 "parameter_set": "normal" # Choice of genome-size based set of parameters
-"use_existing_envs": False # works only if --use-conda flag was set in snakemake command
+"use_existing_envs": True # works only if --use-conda flag was set in snakemake command

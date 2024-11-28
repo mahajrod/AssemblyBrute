@@ -1,3 +1,4 @@
+localrules: gather_nanoplot_stats_per_stage
 
 rule nanoplot:
     input:

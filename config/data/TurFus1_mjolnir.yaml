@@ -93,7 +93,7 @@
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
     "purge_dups":
-        - "default"
+        #- "default"
         - "keep_hicov"
     "salsa2":
         - "phased_reads"

@@ -141,7 +141,7 @@ def get_lambda_value(wildcards):
         raise ValueError("ERROR!!! Unimplemented (but planned) coverage estimator ({0}) for contig assembly hifiasm_{1} !".format(coverage_estimator,
                                                                                                                                   wildcards.contig_options))
     return lambda_value
-
+"""
 rule extract_lambda_value:
     input:
         coverage_estimator_report_filename=get_coverage_estimator_report_filename
@@ -210,7 +210,7 @@ rule extract_lambda_value:
                 raise ValueError(message)
 
         out_fd.write("%.2f\n" % lambda_value)
-"""
+
 
 rule hifiasm_hic: # TODO: add support for polyploid assemblies
     priority: 1000

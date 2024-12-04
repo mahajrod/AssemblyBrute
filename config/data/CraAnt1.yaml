@@ -159,7 +159,9 @@
         "genome_size": null
         "coverage": null
     "krater":
-        "use_second_peak": null
+        "use_second_peak": True # null
+        "low_limit": 4 # null
+        "high_limit": 100 # null
 
 "ploidy": 2
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2.

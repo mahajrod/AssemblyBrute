@@ -209,8 +209,8 @@ rule extract_lambda_value:
                                                                                                                                    wildcards.contig_options)
                 log_fd.write(message + "\n")
                 raise ValueError(message)
-        log_fd.write("Lambda:\t%.2f\n" % lambda_value)
-        out_fd.write("%.2f\n" % lambda_value)
+            log_fd.write("Lambda:\t%.2f\n" % lambda_value)
+            out_fd.write("%.2f\n" % lambda_value)
 
 
 rule hifiasm_hic: # TODO: add support for polyploid assemblies

@@ -97,6 +97,7 @@ def get_coverage_estimator_report_filename(wildcards):
                                                                                                                config["final_kmer_counter"]))
     return report_filename
 
+"""
 def get_lambda_value(wildcards):
     coverage_estimator = get_coverage_estimator(wildcards)
     if "hifiasm" in contig["tool_manually_adjusted_features"]:
@@ -209,7 +210,7 @@ rule extract_lambda_value:
                 raise ValueError(message)
 
         out_fd.write("%.2f\n" % lambda_value)
-
+"""
 
 rule hifiasm_hic: # TODO: add support for polyploid assemblies
     priority: 1000

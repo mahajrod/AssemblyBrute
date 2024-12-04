@@ -37,5 +37,6 @@ rule krater_from_histo:
          " draw_kmer_distribution_from_histo.py -i {input.histo} "
          " -a {wildcards.genome_prefix} -o ${{OUTPUT_PREFIX}} -w {params.low_limit} -g {params.high_limit} "
          " -m {wildcards.kmer_length} -d -n --dont_show_genome_size_on_plot > {log.std} 2>&1; "
+         " echo $? >> aaaaa.log;  "
          #" cp -f {output.summary} {output.summary_alias} >> {log.std} 2>&1  ; " # -m {params.max_coverage}
 

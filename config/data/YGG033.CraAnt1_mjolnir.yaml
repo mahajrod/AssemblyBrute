@@ -154,6 +154,13 @@
         "lower_threshold": null
         "haploid_diploid_threshold": null
         "upper_threshold": null
+    "hifiasm":
+        "genome_size": null
+        "coverage": null
+    "krater":
+        "use_second_peak": True # null
+        "low_limit": 4 # null
+        "high_limit": 100 # null
 
 "ploidy": 2
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2.

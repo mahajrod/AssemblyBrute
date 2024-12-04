@@ -1,5 +1,5 @@
 #ruleorder: hifiasm_hic > hifiasm_hifi
-localrules: get_lowcoverage_contig_ids
+localrules: get_lowcoverage_contig_ids, extract_lambda_value
 
 rule hifiasm_correct:
     priority: 2000
@@ -185,6 +185,7 @@ rule extract_lambda_value:
                                                                                                                        config["final_kmer_datatype"],
                                                                                                                        config["final_kmer_length"],
                                                                                                                        config["final_kmer_counter"]))
+            log_fd.write("Report file:\t%s\n" % report_filename)
             if coverage_estimator == "genomescope":
                 with open(report_filename, "r") as in_fd:
                     for line in in_fd:
@@ -208,7 +209,7 @@ rule extract_lambda_value:
                                                                                                                                    wildcards.contig_options)
                 log_fd.write(message + "\n")
                 raise ValueError(message)
-
+        log_fd.write("Lambda:\t%.2f\n" % lambda_value)
         out_fd.write("%.2f\n" % lambda_value)
 
 

@@ -5,12 +5,12 @@ rule krater_from_histo:
     output:
         summary=output_dict["kmer"] / "{datatype}/{stage}/krater/{datatype}.{stage}.{kmer_length}.{kmer_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.histo.stats",
         #summary_alias=output_dict["kmer"] / "{datatype}/{stage}/krater/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.krater.parameters",
-        local_maximums=output_dict["kmer"] / "{datatype}/{stage}/krater/{datatype}.{stage}.{kmer_length}.{kmer_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.local_maximums",
-        local_minimums=output_dict["kmer"] / "{datatype}/{stage}/krater/{datatype}.{stage}.{kmer_length}.{kmer_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.local_minimums",
-        logscale_png=output_dict["kmer"] / "{datatype}/{stage}/krater/{datatype}.{stage}.{kmer_length}.{kmer_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.logscale.png",
-        normal_scale_png=output_dict["kmer"] / "{datatype}/{stage}/krater/{datatype}.{stage}.{kmer_length}.{kmer_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.no_logscale.png",
-        both_png=output_dict["kmer"] / "{datatype}/{stage}/krater/{datatype}.{stage}.{kmer_length}.{kmer_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.png",
-        both_peaks_and_gaps_png=output_dict["kmer"] / "{datatype}/{stage}/krater/{datatype}.{stage}.{kmer_length}.{kmer_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.peaks_and_gaps.png"
+        #local_maximums=output_dict["kmer"] / "{datatype}/{stage}/krater/{datatype}.{stage}.{kmer_length}.{kmer_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.local_maximums",
+        #local_minimums=output_dict["kmer"] / "{datatype}/{stage}/krater/{datatype}.{stage}.{kmer_length}.{kmer_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.local_minimums",
+        #logscale_png=output_dict["kmer"] / "{datatype}/{stage}/krater/{datatype}.{stage}.{kmer_length}.{kmer_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.logscale.png",
+        #normal_scale_png=output_dict["kmer"] / "{datatype}/{stage}/krater/{datatype}.{stage}.{kmer_length}.{kmer_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.no_logscale.png",
+        #both_png=output_dict["kmer"] / "{datatype}/{stage}/krater/{datatype}.{stage}.{kmer_length}.{kmer_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.png",
+        #both_peaks_and_gaps_png=output_dict["kmer"] / "{datatype}/{stage}/krater/{datatype}.{stage}.{kmer_length}.{kmer_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.peaks_and_gaps.png"
     params:
         #max_coverage=lambda wildcards: parameters["tool_options"][wildcards.kmer_tool][wildcards.datatype]["max_coverage"],
         low_limit=10, # TODO: add as option in config

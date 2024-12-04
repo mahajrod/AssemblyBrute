@@ -9,7 +9,7 @@ from collections import OrderedDict
 from collections.abc import Mapping
 from copy import deepcopy
 from pathlib import Path, PosixPath
-
+from numbers import Number # Abstract class for numeric types
 import pandas as pd
 
 #---- Read config files ----

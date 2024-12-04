@@ -75,6 +75,141 @@ def get_ultralong_read_files(input_file_prefix_dict, option_set):
                                     fileprefix=input_file_prefix_dict[ultralong_read_type])
     return read_filelist
 
+def get_coverage_estimator(wildcards):
+    coverage_estimator = parameters["tool_options"]["hifiasm"][wildcards.contig_options]["coverage_estimator"]
+    if "hifiasm" in config["tool_manually_adjusted_features"]:
+        if "coverage_estimator" in config["tool_manually_adjusted_features"]["hifiasm"]:
+            if config["tool_manually_adjusted_features"]["hifiasm"]["coverage_estimator"] is not None:
+                coverage_estimator = config["tool_manually_adjusted_features"]["hifiasm"]["coverage_estimator"]
+
+    if coverage_estimator not in config["allowed_coverage_estimators"]:
+        raise ValueError("ERROR!!! Unrecognized coverage estimator ({0}) for contig assembly hifiasm_{1} !".format(coverage_estimator,
+                                                                                                                   wildcards.contig_options))
+    return coverage_estimator
+
+def get_coverage_estimator_report_filename(wildcards):
+    coverage_estimator = get_coverage_estimator(wildcards)
+    report_filename = output_dict["kmer"] / ("{0}/filtered/{1}/{2}.{3}.filtered.{4}.{5}.{1}.parameters".format(config["final_kmer_datatype"],
+                                                                                                               coverage_estimator,
+                                                                                                               wildcards.genome_prefix,
+                                                                                                               config["final_kmer_datatype"],
+                                                                                                               config["final_kmer_length"],
+                                                                                                               config["final_kmer_counter"]))
+    return report_filename
+
+def get_lambda_value(wildcards):
+    coverage_estimator = get_coverage_estimator(wildcards)
+    if "hifiasm" in contig["tool_manually_adjusted_features"]:
+        if "lambda" in contig["tool_manually_adjusted_features"]["hifiasm"]:
+            if contig["tool_manually_adjusted_features"]["hifiasm"]["lambda"] is not None:
+                if isinstance(contig["tool_manually_adjusted_features"]["hifiasm"]["lambda"], Number):
+                    lambda_value = contig["tool_manually_adjusted_features"]["hifiasm"]["lambda"]
+                    print("Using a preset lambda value ({0}) for contig assembly hifiasm_{1} ...".format(contig["tool_manually_adjusted_features"]["hifiasm"]["lambda"],
+                                                                                                         wildcards.contig_options))
+                    return lambda_value
+                else:
+                    raise ValueError("ERROR!!! Preset lambda value is not a number! Check value in contig['tool_manually_adjusted_features']['hifiasm']['lambda'] ...")
+
+    print("Using the {0} as a coverage estimator for contig assembly hifiasm_{1} ...".format(coverage_estimator,
+                                                                                           wildcards.contig_options))
+    report_filename = output_dict["kmer"] / ("{0}/filtered/{1}/{2}.{3}.filtered.{4}.{5}.{1}.parameters".format(config["final_kmer_datatype"],
+                                                                                                               coverage_estimator,
+                                                                                                               wildcards.genome_prefix,
+                                                                                                               config["final_kmer_datatype"],
+                                                                                                               config["final_kmer_length"],
+                                                                                                               config["final_kmer_counter"]))
+    if coverage_estimator == "genomescope":
+        with open(report_filename, "r") as in_fd:
+            for line in in_fd:
+                if "Lambda" in line:
+                    lambda_value = float(line.strip().split("\t")[1])
+                    break
+    elif coverage_estimator == "krater":
+        with open(report_filename, "r") as in_fd:
+            for line in in_fd:
+                if "Kmer multiplicity at first maximum" in line:
+                    lambda_value = float(line.strip().split("\t")[1])
+                    break
+        if "krater" in config["tool_manually_adjusted_features"]:
+            if not config["tool_manually_adjusted_features"]["krater"]["use_second_peak"]:
+                lambda_value = lambda_value / 2
+        else:
+            lambda_value = lambda_value / 2
+
+    else:
+        raise ValueError("ERROR!!! Unimplemented (but planned) coverage estimator ({0}) for contig assembly hifiasm_{1} !".format(coverage_estimator,
+                                                                                                                                  wildcards.contig_options))
+    return lambda_value
+
+rule extract_lambda_value:
+    input:
+        coverage_estimator_report_filename=get_coverage_estimator_report_filename
+    output:
+        lambda_file=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.lambda",
+    log:
+        std=output_dict["log"] / "extract_lambda_value.{contig_options}.{genome_prefix}.log",
+        cluster_log=output_dict["cluster_log"] / "extract_lambda_value.{contig_options}.{genome_prefix}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "extract_lambda_value.{contig_options}.{genome_prefix}.cluster.err"
+    benchmark:
+        output_dict["benchmark"] / "extract_lambda_value.{contig_options}.{genome_prefix}.benchmark.txt"
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("extract_lambda_value"),
+        cpus=parameters["threads"]["extract_lambda_value"],
+        time=parameters["time"]["extract_lambda_value"],
+        mem=parameters["memory_mb"]["extract_lambda_value"],
+    threads:
+        parameters["threads"]["extract_lambda_value"]
+    run:
+        with open(log.std, "w") as log_fd, open(output.lambda_file, "w") as out_fd:
+            coverage_estimator = get_coverage_estimator(wildcards)
+            if "hifiasm" in config["tool_manually_adjusted_features"]:
+                if "lambda" in config["tool_manually_adjusted_features"]["hifiasm"]:
+                    if config["tool_manually_adjusted_features"]["hifiasm"]["lambda"] is not None:
+                        if isinstance(config["tool_manually_adjusted_features"]["hifiasm"]["lambda"], Number):
+                            lambda_value = config["tool_manually_adjusted_features"]["hifiasm"]["lambda"]
+                            print("Using a preset lambda value ({0}) for contig assembly hifiasm_{1} ...".format(config["tool_manually_adjusted_features"]["hifiasm"]["lambda"],
+                                                                                                                 wildcards.contig_options))
+                            return lambda_value
+                        else:
+                            message = "ERROR!!! Preset lambda value is not a number! Check value in contig['tool_manually_adjusted_features']['hifiasm']['lambda'] ..."
+                            log_fd.write(message + "\n")
+                            raise ValueError(message)
+
+            log_fd.write("Using the {0} as a coverage estimator for contig assembly hifiasm_{1} ...\n".format(coverage_estimator,
+                                                                                                            wildcards.contig_options))
+            report_filename = output_dict["kmer"] / ("{0}/filtered/{1}/{2}.{3}.filtered.{4}.{5}.{1}.parameters".format(config["final_kmer_datatype"],
+                                                                                                                       coverage_estimator,
+                                                                                                                       wildcards.genome_prefix,
+                                                                                                                       config["final_kmer_datatype"],
+                                                                                                                       config["final_kmer_length"],
+                                                                                                                       config["final_kmer_counter"]))
+            if coverage_estimator == "genomescope":
+                with open(report_filename, "r") as in_fd:
+                    for line in in_fd:
+                        if "Lambda" in line:
+                            lambda_value = float(line.strip().split("\t")[1])
+                            break
+            elif coverage_estimator == "krater":
+                with open(report_filename, "r") as in_fd:
+                    for line in in_fd:
+                        if "Kmer multiplicity at first maximum" in line:
+                            lambda_value = float(line.strip().split("\t")[1])
+                            break
+                if "krater" in config["tool_manually_adjusted_features"]:
+                    if not config["tool_manually_adjusted_features"]["krater"]["use_second_peak"]:
+                        lambda_value = lambda_value / 2
+                else:
+                    lambda_value = lambda_value / 2
+
+            else:
+                message = "ERROR!!! Unimplemented (but planned) coverage estimator ({0}) for contig assembly hifiasm_{1} !".format(coverage_estimator,
+                                                                                                                                   wildcards.contig_options)
+                log_fd.write(message + "\n")
+                raise ValueError(message)
+
+        out_fd.write("%.2f\n" % lambda_value)
+
 
 rule hifiasm_hic: # TODO: add support for polyploid assemblies
     priority: 1000
@@ -100,10 +235,8 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
                                                                                                                               wildcards.genome_prefix),
         ovlp_source_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ovlp.source.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
                                                                                                                             wildcards.genome_prefix),
-        genomescope_report=output_dict["kmer"] / ("%s/filtered/genomescope/{genome_prefix}.%s.filtered.%s.%s.genomescope.parameters" % (config["final_kmer_datatype"],
-                                                                                                                                        config["final_kmer_datatype"],
-                                                                                                                                        config["final_kmer_length"],
-                                                                                                                                        config["final_kmer_counter"])),
+        #coverage_estimator_report_filename=get_coverage_estimator_report_filename
+        lambda_file=rules.extract_lambda_value.output.lambda_file
     output:
         primary_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap1.p_ctg.gfa",
         alternative_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap2.p_ctg.gfa",
@@ -114,6 +247,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
     params:
         purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge level"],
         ploidy=config["ploidy"],
+        lambda_value=get_lambda_value,
         cov_multiplicator=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["cov_multiplicator"],
         window_size=lambda wildcards: parse_option("window_size", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -w "),
         bloom_filter_bits=lambda wildcards: parse_option("bloom_filter_bits", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -f "),
@@ -165,7 +299,8 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
          " ln -sf ../../../{input.ec_bin} ${{OUT_DIR}}; "
          " ln -sf ../../../{input.ovlp_reverse_bin} ${{OUT_DIR}}; "
          " ln -sf ../../../{input.ovlp_source_bin} ${{OUT_DIR}}; "
-         " COV_UPPER_BOUNDARY=`awk 'NR==2 {{printf \"%.0f\", {params.cov_multiplicator} * $2}}' {input.genomescope_report}`; "
+         " LAMBDA=`head -n 1 {input.lambda_file}`; "
+         " COV_UPPER_BOUNDARY=`echo \"{params.cov_multiplicator}*${{LAMBDA}}\" | bc`; "
          " hifiasm {params.window_size} {params.bloom_filter_bits} "
          " {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size}"
          " {params.kmer_length} {params.D} {params.N} {params.ignore_bin} --primary -t {threads} -l {params.purge_level}  -o ${{OUTPUT_PREFIX}} "
@@ -176,6 +311,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
          " ln -sf `basename {output.alternative_contig_graph}` {output.alternative_alias};"
          " ln -sf `basename {output.alt_contig_graph}` {output.alt_alias}; "
          " sleep 60;"
+         #" COV_UPPER_BOUNDARY=`awk 'NR==2 {{printf \"%.0f\", {params.cov_multiplicator} * $2}}' {input.genomescope_report}`; "
 
 rule hifiasm_hifi:
     priority: 1000
@@ -197,10 +333,11 @@ rule hifiasm_hifi:
                                                                                                                               wildcards.genome_prefix),
         ovlp_source_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ovlp.source.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
                                                                                                                             wildcards.genome_prefix),
-        genomescope_report=output_dict["kmer"] / ("%s/filtered/genomescope/{genome_prefix}.%s.filtered.%s.%s.genomescope.parameters" % (config["final_kmer_datatype"],
-                                                                                                                                        config["final_kmer_datatype"],
-                                                                                                                                        config["final_kmer_length"],
-                                                                                                                                        config["final_kmer_counter"])),
+        lambda_file=rules.extract_lambda_value.output.lambda_file
+        #genomescope_report=output_dict["kmer"] / ("%s/filtered/genomescope/{genome_prefix}.%s.filtered.%s.%s.genomescope.parameters" % (config["final_kmer_datatype"],
+        #                                                                                                                                config["final_kmer_datatype"],
+        #                                                                                                                                config["final_kmer_length"],
+        #                                                                                                                                config["final_kmer_counter"])),
     output:
         primary_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.p_ctg.gfa",
         alt_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.a_ctg.gfa",
@@ -255,7 +392,8 @@ rule hifiasm_hifi:
          " ln -sf ../../../{input.ec_bin} ${{OUT_DIR}}; "
          " ln -sf ../../../{input.ovlp_reverse_bin} ${{OUT_DIR}}; "
          " ln -sf ../../../{input.ovlp_source_bin} ${{OUT_DIR}}; "
-         " COV_UPPER_BOUNDARY=`awk 'NR==2 {{printf \"%.0f\", {params.cov_multiplicator} * $2}}' {input.genomescope_report}`; "
+         " LAMBDA=`head -n 1 {input.lambda_file}`; "
+         " COV_UPPER_BOUNDARY=`echo \"{params.cov_multiplicator}*${{LAMBDA}}\" | bc`; "
          " hifiasm {params.window_size} {params.bloom_filter_bits} "
          " {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size} "
          " {params.kmer_length} {params.D} {params.N} {params.ignore_bin} {params.ul_cut}"
@@ -264,6 +402,8 @@ rule hifiasm_hifi:
          " {input.hifi}  1>{log.std} 2>&1;"
          " ln -sf `basename {output.primary_contig_graph}` {output.primary_alias};"
          " ln -sf `basename {output.alt_contig_graph}` {output.alt_alias};"
+
+         #" COV_UPPER_BOUNDARY=`awk 'NR==2 {{printf \"%.0f\", {params.cov_multiplicator} * $2}}' {input.genomescope_report}`; "
 
 rule get_lowcoverage_contig_ids:
     input:

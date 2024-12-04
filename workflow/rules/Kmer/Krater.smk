@@ -1,4 +1,4 @@
-print(config["tool_manually_adjusted_features"]["krater"])
+#print(config["tool_manually_adjusted_features"]["krater"])
 
 rule krater_from_histo:
     input:
@@ -16,7 +16,7 @@ rule krater_from_histo:
         #max_coverage=lambda wildcards: parameters["tool_options"][wildcards.kmer_tool][wildcards.datatype]["max_coverage"],
         low_limit=((config["tool_manually_adjusted_features"]["krater"]["low_limit"]) if config["tool_manually_adjusted_features"]["krater"]["low_limit"] else 10)  if "krater" in config["tool_manually_adjusted_features"] else 10, # TODO: add as option in config
         high_limit=((config["tool_manually_adjusted_features"]["krater"]["high_limit"]) if config["tool_manually_adjusted_features"]["krater"]["high_limit"] else 150)  if "krater" in config["tool_manually_adjusted_features"] else 150, # TODO: add as option in config
-        use_second_peak= (" --use_second_peak " if config["tool_manually_adjusted_features"]["krater"] else "")  if "krater" in config["tool_manually_adjusted_features"] else ""
+        use_second_peak= (" --use_second_peak " if config["tool_manually_adjusted_features"]["krater"]["use_second_peak"] else "")  if "krater" in config["tool_manually_adjusted_features"] else ""
     log:
         std=output_dict["log"] / "krater_from_histo.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.log",
         cluster_log=output_dict["cluster_log"] / "krater_from_histo.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.cluster.log",

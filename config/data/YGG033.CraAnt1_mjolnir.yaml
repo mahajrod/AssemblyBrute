@@ -155,8 +155,8 @@
         "haploid_diploid_threshold": null
         "upper_threshold": null
     "hifiasm":
-        "genome_size": null
-        "coverage": null
+        "coverage_estimator": "krater" # Allowed: null, genomescope, krater"
+        "lambda": null
     "krater":
         "use_second_peak": True # null
         "low_limit": 4 # null

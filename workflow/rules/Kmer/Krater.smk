@@ -1,3 +1,4 @@
+print(config["tool_manually_adjusted_features"]["krater"])
 
 rule krater_from_histo:
     input:
@@ -13,8 +14,8 @@ rule krater_from_histo:
         both_peaks_and_gaps_png=output_dict["kmer"] / "{datatype}/{stage}/krater/{datatype}.{stage}.{kmer_length}.{kmer_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.peaks_and_gaps.png"
     params:
         #max_coverage=lambda wildcards: parameters["tool_options"][wildcards.kmer_tool][wildcards.datatype]["max_coverage"],
-        low_limit=(config["tool_manually_adjusted_features"]["low_limit"] if config["tool_manually_adjusted_features"]["low_limit"] else 10)  if "krater" in config["tool_manually_adjusted_features"] else 10, # TODO: add as option in config
-        high_limit=(config["tool_manually_adjusted_features"]["high_limit"] if config["tool_manually_adjusted_features"]["high_limit"] else 150)  if "krater" in config["tool_manually_adjusted_features"] else 150, # TODO: add as option in config
+        low_limit=((config["tool_manually_adjusted_features"]["krater"]["low_limit"]) if config["tool_manually_adjusted_features"]["krater"]["low_limit"] else 10)  if "krater" in config["tool_manually_adjusted_features"] else 10, # TODO: add as option in config
+        high_limit=((config["tool_manually_adjusted_features"]["krater"]["high_limit"]) if config["tool_manually_adjusted_features"]["krater"]["high_limit"] else 150)  if "krater" in config["tool_manually_adjusted_features"] else 150, # TODO: add as option in config
         use_second_peak= (" --use_second_peak " if config["tool_manually_adjusted_features"]["krater"] else "")  if "krater" in config["tool_manually_adjusted_features"] else ""
     log:
         std=output_dict["log"] / "krater_from_histo.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.log",
@@ -35,7 +36,7 @@ rule krater_from_histo:
     shell:
          " OUTPUT_PREFIX={output.summary}; "
          " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.histo.stats}}; "
-         " draw_kmer_distribution_from_histo.py -i {input.histo} {params.use_second_peak}"
+         " draw_kmer_distribution_from_histo.py -i {input.histo} {params.use_second_peak} "
          " -a {wildcards.genome_prefix} -o ${{OUTPUT_PREFIX}} -w {params.low_limit} -g {params.high_limit} "
          " -m {wildcards.kmer_length} -d -n --dont_show_genome_size_on_plot > {log.std} 2>&1; "
          " cp -f {output.summary} {output.summary_alias} >> {log.std} 2>&1  ; " # -m {params.max_coverage}

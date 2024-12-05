@@ -302,7 +302,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
          " ln -sf ../../../{input.ovlp_source_bin} ${{OUT_DIR}}; "
          " LAMBDA=`head -n 1 {input.lambda_file}`; "
          " COV_UPPER_BOUNDARY=`echo \"{params.cov_multiplicator}*${{LAMBDA}}\" | bc`; "
-         " COV_UPPER_BOUNDARY= ${{COV_UPPER_BOUNDARY%.*}}; "
+         " COV_UPPER_BOUNDARY=${{COV_UPPER_BOUNDARY%.*}}; "
          " hifiasm {params.window_size} {params.bloom_filter_bits} "
          " {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size}"
          " {params.kmer_length} {params.D} {params.N} {params.ignore_bin} --primary -t {threads} -l {params.purge_level}  -o ${{OUTPUT_PREFIX}} "

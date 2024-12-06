@@ -150,6 +150,7 @@
 "genome_prefix": "ConBin1"
 "busco_lineage_list":
     - "aves_odb10" #
+    - "vertebrata_odb10"
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
 

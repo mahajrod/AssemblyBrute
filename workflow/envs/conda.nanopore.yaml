@@ -7,6 +7,7 @@
   - "conda-forge"
   - "anaconda"
 "dependencies":
+  - "numpy==1.23" # NanoQC uses np.bool8 which is depricated in newer versions
   - "nanoqc"
   - "chopper"
   - "filtlong"

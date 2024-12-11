@@ -17,7 +17,7 @@ parser.add_argument("-n", "--normalize", action="store_true", dest="normalize",
                     help="Normalize by length. Default: False")
 parser.add_argument("-t", "--threshold_list", action="store", dest="threshold_list", default=[0.05, 0.1, 0.25, 0.5],
                     type=lambda s: list(map(float, s.split(","))),
-                    help="Calculate thresholds (fraction of median relative to the median). Default: 0.5,0.1,0.25,0.5")
+                    help="Calculate thresholds (fraction of median relative to the median). Default: 0.05,0.1,0.25,0.5")
 
 args = parser.parse_args()
 

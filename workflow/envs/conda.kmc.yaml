@@ -1,0 +1,12 @@
+#---- Bioconda config ----
+
+#TODO: check tools and versions
+"name": "kmc"
+"channels":
+  - "bioconda"
+  - "conda-forge"
+  - "anaconda"
+"dependencies":
+  - "kmc"
+  - "kmc_smudge_pairs"
+

@@ -5,6 +5,9 @@
         "yaml": "workflow/envs/conda.common.yaml"
         "name": "yggbase"
         "pip": "workflow/envs/pip.common.requirements"
+    "pairtools":
+        "yaml": "workflow/envs/conda.pairtools.yaml"
+        "name": "pairtools"
     "liftover":
         "yaml": "workflow/envs/conda.liftover.yaml"
         "name": "liftover"
@@ -38,15 +41,35 @@
     "chromodoter":
         "yaml": "workflow/envs/conda.chromodoter.yaml"
         "name": "chromodoter"
+    "ragtag":
+        "yaml": "workflow/envs/conda.ragtag.yaml"
+        "name": "ragtag"
+    "tadbit":
+        "yaml": "workflow/envs/conda.tadbit.yaml"
+        "name": "tadbit"
+    "pacbio":
+        "yaml": "workflow/envs/conda.pacbio.yaml"
+        "name": "pacbio"
+    "hic":
+        "yaml": "workflow/envs/conda.hic.yaml"
+        "name": "hic"
+    "kmc":
+        "yaml": "workflow/envs/conda.kmc.yaml"
+        "name": "kmc"
+    "microchromosomes":
+        "yaml": "workflow/envs/conda.microchromosomes.yaml"
+        "name": "microchromosomes"
 
-"resources":
-    "threads":      "config/resources/threads.tab"
-    "memory_mb":    "config/resources/memory_mb.tab"
-    "time":         "config/resources/time.tab"
+"resources_dir": "config/resources/"
+#"threads":      "config/resources/threads.tab"
+#"memory_mb":    "config/resources/memory_mb.tab"
+#"time":         "config/resources/time.tab"
 #----
 #---- Directory structure config ----
 
 #---- Resources ----
+"microchromosome_prot_set": "resources/microchromosomes/MicroFinder_prot_set.v0.1.fa.gz"
+#-------------------
 #-------- References --------
 #-------- Variant filtration ---------
 #-------- Annotation --------
@@ -87,9 +110,56 @@
 "parameters":
     "default":
         "tool_options":
+            "tadbit":
+                "default":
+                    "hic":
+                        "read_number": 1000000
+            "ragtag":
+                "default": {}
+            "microsome_detection":
+                "default":
+                    "max_length":
+                        - 1000000
+                        - 10000000
+            "mitohifi":
+                "default":
+                    "min_mapping_quality": 20
+            "trimmomatic":
+                "default":
+                    "illumina":
+                        "min_read_length": 50
+                        "sliding_window_size": 8
+                        "sliding_window_quality": 20
+                        "illumina_clip": "2:30:10:1"
+                        "adapter_file": "resources/trimmomatic/adapters/TruSeq2-PE.fa"
+                    "hic":
+                        "min_read_length": 50
+                        "sliding_window_size": 8
+                        "sliding_window_quality": 20
+                        "illumina_clip": "2:30:10:1"
+                        "adapter_file": "resources/trimmomatic/adapters/TruSeq2-PE.fa"
+            "krater_from_histo":
+                "default":
+                    "hifi": []
+                    "lqccs": []
+                    "illumina": []
+                    "nanopore": []
+                    "hic": []
             "cutadapt":
                 "default":
                     "hifi":
+                        "min_length": 1000
+                        "error_rate": 0.1 # --error-rate / -e
+                        "min_adapter_length": 35 # --overlap / -O
+                        "adapter_match_times": 3 # -n / --times
+                        "check_read_rc": True # --rc
+                        "discard_trimmed": True # --discard-trimmed / --discard
+                        "forward_anywhere_adapter_list": # -b, multiple times
+                            - "ATCTCTCTCAACAACAACAACGGAGGAGGAGGAAAAGAGAGAGAT" # SMRT bell adapter
+                            - "ATCTCTCTCTTTTCCTCCTCCTCCGTTGTTGTTGTTGAGAGAGAT" # SMRT bell adapter rev com
+                            - "AAAAAAAAAAAAAAAAAATTAACGGAGGAGGAGGA"           # C2 primer, required for MagBead loading, but is not necessary for diffusion loading
+                        "reverse_anywhere_adapter_list": []
+                    "lqccs":
                         "min_length": 1000
                         "error_rate": 0.1 # --error-rate / -e
                         "min_adapter_length": 35 # --overlap / -O
@@ -125,7 +195,7 @@
                         "headcrop" : 30        # --headcrop      Trim N nucleotides from the start of a read [default: 0]
                         "maxlength": null      # --maxlength     Sets a maximum read length [default: 2147483647]
                         "minlength": 500       # --minlength     Sets a minimum read length [default: 1]
-                        "quality"  : 3         # --quality       Sets a minimum Phred average quality score [default: 0]
+                        "quality"  : 10         # --quality       Sets a minimum Phred average quality score [default: 0]
                         "tailcrop" : 30        # --tailcrop      Trim N nucleotides from the end of a read [default: 0]
             "fastqc":
                 "default":
@@ -134,6 +204,8 @@
                     "nanopore":
                         "kmer_length": 7
                     "hifi":
+                        "kmer_length": 7
+                    "lqccs":
                         "kmer_length": 7
                     "hic":
                         "kmer_length": 7
@@ -149,6 +221,8 @@
                         "min_mapping_quality": 20
                     "hifi":
                         "min_mapping_quality": 30
+                    "lqccs":
+                        "min_mapping_quality": 10
                     "hic":
                         "min_mapping_quality": 10
             "jellyfish":
@@ -181,6 +255,13 @@
                         "min_coverage": 1
                         "max_coverage": 100000000
                         "increment": 1
+                    "lqccs":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "20G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
                     "hic":
                         "kmer_length":
                             - 21
@@ -196,6 +277,9 @@
                             #- 31
                             #- 41 #very RAM hungry option
                     "clr":
+                        "kmer_length":
+                            - 21
+                    "lqccs":
                         "kmer_length":
                             - 21
                     "illumina":
@@ -226,6 +310,11 @@
                             - 10
                         "upper_boundary":
                             - 1500
+                    "lqccs":
+                        "lower_boundary":
+                            - 10
+                        "upper_boundary":
+                            - 1500
                     "nanopore":
                         "lower_boundary":
                             - 10
@@ -249,67 +338,324 @@
                     "purge level": 0 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  True
+                    "dual_scaf": False
                     "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads":
+                        - "nanopore"
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                 "l0primary":
                     "purge level": 0 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  True
+                    "dual_scaf": False
                     "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads":
+                        - "nanopore"
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                 "l1primary":
                     "purge level": 1 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  True
+                    "dual_scaf": False
                     "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads":
+                        - "nanopore"
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
+                "l1primary_dual_scaf":
+                    "purge level": 1 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  True
+                    "dual_scaf": True
+                    "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads":
+                        - "nanopore"
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
+                "l1primary_4p":
+                    "purge level": 1 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  True
+                    "dual_scaf": False
+                    "assembly_ploidy": 4 # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads":
+                        - "nanopore"
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
+                "l1primary_1p":
+                    "purge level": 1 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  True
+                    "dual_scaf": False
+                    "assembly_ploidy": 1 # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads":
+                        - "nanopore"
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
+                "l1primary_no_ul":
+                    "purge level": 1 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  True
+                    "dual_scaf": False
+                    "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads": []
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
+                "l1primary_ul_nano":
+                    "purge level": 1 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  True
+                    "dual_scaf": False
+                    "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads":
+                        - "nanopore"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
+                "l1primary_ul_lqccs":
+                    "purge level": 1 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  True
+                    "dual_scaf": False
+                    "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads":
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
+                "l1primary_min_cov_2":
+                    "purge level": 1 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  True
+                    "dual_scaf": False
+                    "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
+                    "min_contig_coverage": 2
+                    "ultra_long_reads":
+                        - "nanopore"
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                 "l2primary":
                     "purge level": 2 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  True
+                    "dual_scaf": False
                     "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads":
+                        - "nanopore"
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
+                "l3primary_dual_scaf":
+                    "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  True
+                    "dual_scaf": True
+                    "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads":
+                        - "nanopore"
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                 "l3primary":
                     "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  True
+                    "dual_scaf": False
                     "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads":
+                        - "nanopore"
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
+                "l3primary_min_cov_2":
+                    "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  True
+                    "dual_scaf": False
+                    "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
+                    "min_contig_coverage": 2
+                    "ultra_long_reads":
+                        - "nanopore"
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
+                "l3primary_no_ul":
+                    "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  True
+                    "dual_scaf": False
+                    "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads": []
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
+                "l3primary_ul_nano":
+                    "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  True
+                    "dual_scaf": False
+                    "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads":
+                        - "nanopore"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
+                "l3primary_ul_lqccs":
+                    "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  True
+                    "dual_scaf": False
+                    "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads":
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                 "l0primary_no_hic":
                     "purge level": 0 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  False
+                    "dual_scaf": False
                     "assembly_ploidy": 1
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads":
+                        - "nanopore"
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                 "l1primary_no_hic":
                     "purge level": 1 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  False
+                    "dual_scaf": False
                     "assembly_ploidy": 1
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads":
+                        - "nanopore"
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                 "l2primary_no_hic":
                     "purge level": 2 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  False
+                    "dual_scaf": False
                     "assembly_ploidy": 1
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads":
+                        - "nanopore"
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                 "l3primary_no_hic":
                     "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  False
+                    "dual_scaf": False
                     "assembly_ploidy": 1
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads":
+                        - "nanopore"
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                 "repeat_enhanced_l1":
                     "purge level": 1 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  True
+                    "dual_scaf": False
                     "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
                     "D": 10
                     "N": 200
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads":
+                        - "nanopore"
+                        - "lqccs"
                     #"ignore_bin": True
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                 "repeat_enhanced_l2":
                     "purge level": 2 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "use_hic":  True
-                    "ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "dual_scaf": False
+                    "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
                     "D": 10
                     "N": 200
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads":
+                        - "nanopore"
+                        - "lqccs"
                     #"ignore_bin": True
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
+                "repeat_enhanced_l3":
+                    "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  True
+                    "dual_scaf": False
+                    "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "D": 10
+                    "N": 200
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads":
+                        - "nanopore"
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
+                "repeat_super_enhanced_l3":
+                    "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic":  True
+                    "dual_scaf": False
+                    "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
+                    "D": 20
+                    "N": 400
+                    "ul-cut": 5000
+                    "min_contig_coverage": 1
+                    "ultra_long_reads":
+                        - "nanopore"
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
             "purge_dups":
                 "default":
                     "cov_multiplicator": 4.5 # 4.5 *lambda
                     "datatype": "hifi"
+                    "interhaplotype_transfer_blacklist":
+                        - "junk"
+                        - "ovlp"
+                        - "highcov"
+                    "purging_blacklist": null
+                    "purging_whitelist": null
+                "keep_hicov":
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "datatype": "hifi"
+                    "interhaplotype_transfer_blacklist":
+                        - "junk"
+                        - "ovlp"
+                        - "highcov"
+                    "purging_blacklist":
+                        - "highcov"
+                    "purging_whitelist": null
                     #"illumina":
                     #    "min_mapping_quality": 0
                     #"nanopore":
@@ -338,6 +684,9 @@
                         "index_size": "4G"
                         "alignment_scheme": "map-hifi" # -x
                     "clr":
+                        "index_size": "4G"
+                        "alignment_scheme": "map-pb"   # -x
+                    "lqccs":
                         "index_size": "4G"
                         "alignment_scheme": "map-pb"   # -x
                     "nanopore":
@@ -617,20 +966,47 @@
                     "Csp6I_MseI": "TTATAA,GTATAC,GTATAA,TTATAC"
                     #"OmniC": null
                 "default":
-                     "min_contig_len": 10000
-                     "min_mapping_quality": 10
+                     "min_contig_len": null
+                     "min_mapping_quality": null
                      "phasing_kmer_length": "NA"
                      "use_phased_reads": False
+                     "editor_repeat_coverage": null
                 "phased_reads":
-                     "min_contig_len": 10000
-                     "min_mapping_quality": 10
+                     "min_contig_len": null
+                     "min_mapping_quality": null
                      "phasing_kmer_length": 31
                      "use_phased_reads": True
+                     "editor_repeat_coverage": Nnull
                 "unphased_reads":
-                     "min_contig_len": 10000
-                     "min_mapping_quality": 10
+                     "min_contig_len": null
+                     "min_mapping_quality": null
                      "phasing_kmer_length": "NA"
                      "use_phased_reads": False
+                     "editor_repeat_coverage": null
+                "phased_reads_editor_repcov_5":
+                     "min_contig_len": null
+                     "min_mapping_quality": null
+                     "phasing_kmer_length": 31
+                     "use_phased_reads": True
+                     "editor_repeat_coverage": 5
+                "unphased_reads_editor_repcov_5":
+                     "min_contig_len": null
+                     "min_mapping_quality": null
+                     "phasing_kmer_length": "NA"
+                     "use_phased_reads": False
+                     "editor_repeat_coverage": 5
+                "phased_reads_editor_repcov_10":
+                     "min_contig_len": null
+                     "min_mapping_quality": null
+                     "phasing_kmer_length": 31
+                     "use_phased_reads": True
+                     "editor_repeat_coverage": 10
+                "unphased_reads_editor_repcov_10":
+                     "min_contig_len": null
+                     "min_mapping_quality": null
+                     "phasing_kmer_length": "NA"
+                     "use_phased_reads": False
+                     "editor_repeat_coverage": 10
             "salsa2":
                 "restriction_seq":
                     "Arima": "GATC,GANTC"
@@ -692,13 +1068,13 @@
             "trf":
                 "default":
                     "matching_weight": 2
-                    "mismatching_penalty": 3
-                    "indel_penalty": 5
+                    "mismatching_penalty": 7
+                    "indel_penalty": 7
                     "match_probability": 80
                     "indel_probability": 10
                     "min_alignment_score":  50
                     "max_period": 2000
-                    "max_repeat_length": 100
+                    "max_repeat_length": 1000
             "wga":
                 "default":
                     "min_target_len":
@@ -1358,6 +1734,7 @@
     - "hic"
     - "illumina"
     - "reference"
+    - "lqccs" # Low quality circular consensuses, i.e. nonHiFi
     #- "lr"
 
 "fastqc_data_types":
@@ -1367,12 +1744,15 @@
     #- "bionano"
     - "hic"
     - "illumina"
+    - "lqccs"
     #- "lr"
+
 
 "long_read_data":
     - "hifi"
     - "clr"
     - "nanopore"
+    - "lqccs"
 
 "genome_size_estimation_data":
     - "hifi"
@@ -1385,6 +1765,7 @@
     - "illumina"
     - "hic"
     - "nanopore"
+    - "lqccs"
 
 "read_phasing_data":
     - "hic"
@@ -1393,19 +1774,26 @@
 
 "fastq_based_data":
     - "hifi"
-    - "clr"
+    - "lqccs"
+    #- "clr"
     - "nanopore"
     - "hic"
     - "lr"
     - "illumina"
 
+"bam_based_data":
+    - "hifi"
+    #- "clr"
+    - "lqccs"
+
 "fasta_based_data": # Datatypes that might be in fasta format. For example corrected hifi or nanopore reads
     - "hifi"
     - "clr"
     - "nanopore"
+    - "lqccs"
     #- "hic"
     #- "lr"
-    #- "illumina"
+    - "illumina"
 
 "paired_fastq_based_data":
     - "hic"
@@ -1415,17 +1803,17 @@
 "coverage_track_data": # Data for which a coverage track will be generated during preparations for manual curation
     - "illumina"
     - "hifi"
-    - "clr"
-    - "nanopore"
+    #- "clr"
+    #- "nanopore" # TODO: add nanopore support
 
 "purge_dups_data": # Data which might be used for purging haplotypic duplications
     - "hifi"
-    - "clr"
+    #- "clr"
     - "nanopore"
 
 "gap_filling_data": # Data which might be used for filling gaps
     - "hifi"
-    - "clr"
+    #- "clr"
     - "nanopore"
 
 "variant_calling_data":
@@ -1436,6 +1824,7 @@
 
 "fastq_extension": ".fastq.gz"
 "fasta_extension": ".fasta.gz"
+"bam_extension": ".bam"
 "cmap_extension": ".cmap"
 "assembly_fasta_extension": ".fasta"
 
@@ -1495,7 +1884,20 @@
             "draft": #TODO: implement
                 - "purge_dups"
                 - "hic_scaffolding"
-
+        "hic_scaffolding_only":
+            "fastq":
+                - "contig"
+                - "hic_scaffolding"
+            "draft":
+                - "hic_scaffolding"
+        "curation_no_purge_dups":
+            "fastq":
+                - "contig"
+                - "hic_scaffolding"
+                - "curation"
+            "draft":
+                - "hic_scaffolding"
+                - "curation"
         "purge_dups":
             "fastq":
                 - "contig"
@@ -1506,6 +1908,14 @@
             "fastq":
                 - "contig"
             "draft": []
+        "skip_hic_scaffolding":
+            "fastq":
+                - "contig"
+                - "purge_dups"
+                - "curation"
+            "draft":
+                - "purge_dups"
+                - "curation"
     "finalization":
         "gap_closing":
             "fastq":
@@ -1537,6 +1947,7 @@
             - "length_of_adapters"              # -z
             - "max-kocc"                        # --max-kocc
             - "hg-size"                         # --hg-size
+            - "ul-cut"                          # --ul-cut
         "options_affecting_hic_phasing":
             - "seed"            # --seed
             - "s-base"          # --s-base
@@ -1547,3 +1958,18 @@
 
 "no_motif_enzyme_sets":
     - "OmniC"
+
+"hic_enzyme_dict":
+    "Arima":
+        - "DpnII"
+        - "HinfI"
+        - "DdeI"
+        - "MseI"
+    "DpnII":
+        - "DpnII"
+    "OmniC": []       # OmniC using nonenzyme fragmentation
+    "unknown": []
+
+"allowed_coverage_estimators":
+    - "genomescope"
+    - "krater"

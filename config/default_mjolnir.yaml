@@ -136,6 +136,8 @@
     "deepvariant":              "default"   # Allowed: default
     "pairtools_parse":          "default"   # Allowed: default
     "samtools_stats":           "default"   # Allowed: default
+    "trimmomatic":              "default"   # Allowed: default
+    "tadbit":                   "default"   # Allowed: default
 
 "tool_manually_adjusted_features":
     "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions
@@ -201,6 +203,7 @@
 "skip_fcs": False
 "skip_fcs_adaptor": False
 "skip_kraken": False
+"skip_phasing": False
 "skip_prescaf_pretext": False
 "skip_postscaf_pretext": True
 "skip_both_pretext": False

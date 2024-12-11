@@ -1,3 +1,5 @@
+ruleorder: last_alignment > filter_last_alignment_by_target_hit_len
+
 """
 rule last_index: #
     input:
@@ -88,10 +90,10 @@ rule last_alignment: #
         database=select_database,#out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.{target_haplotype}.YASS.R11.soft.bck",
         fasta=select_query
     output:
-        maf=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len0.maf.gz",
-        tab=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len0.tab.gz",
-    params:
-        per_thread_mem=parameters["memory_mb"]["last_alignment_per_thread"],
+        maf=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{target_haplotype, [^/]+}/scaffolds/{genome_prefix, [^/]+}.input.wga.{query_haplotype, [^/]+}.to.{target_haplotype}.YASS.R11.soft.min_len0.maf.gz",
+        tab=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{target_haplotype, [^/]+}/scaffolds/{genome_prefix, [^/]+}.input.wga.{query_haplotype, [^/]+}.to.{target_haplotype}.YASS.R11.soft.min_len0.tab.gz",
+    #params:
+    #    per_thread_mem=int(parameters["memory_mb"]["last_alignment"] / parameters["threads"]["last_alignment"]) #parameters["memory_mb"]["last_alignment_per_thread"],
     log:
         lastall=output_dict["log"]  / "last_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.lastall.log",
         tee=output_dict["log"]  / "last_alignment.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{query_haplotype}.to.{target_haplotype}.tee.log",
@@ -193,7 +195,7 @@ rule filter_last_alignment_by_target_hit_len: #
     input:
         tab="{tab_file_prefix}.YASS.R11.soft.min_len0.tab.gz"
     output:
-        tab="{tab_file_prefix}.YASS.R11.soft.min_len{min_target_len}.tab.gz",
+        tab="{tab_file_prefix}.YASS.R11.soft.min_len{min_target_len, [^0][0123456789]+}.tab.gz",
     params:
         per_thread_mem=parameters["memory_mb"]["last_alignment_per_thread"],
     log:
@@ -222,7 +224,7 @@ rule filter_last_alignment_by_target_hit_len: #
 
 def select_query_whitelist(wildcards):
     if wildcards.query_haplotype in stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["haplotype_list"]:
-        return out_dir_path / "curation/{0}..{1}/{2}/scaffolds/{3}.input.{2}.softmasked.whitelist".format(wildcards.prev_stage_parameters,
+        return out_dir_path / "curation/{0}..{1}/{2}/scaffolds/{3}.input.{2}.whitelist".format(wildcards.prev_stage_parameters,
                                                                                                        wildcards.curation_parameters,
                                                                                                        wildcards.query_haplotype,
                                                                                                        wildcards.genome_prefix)
@@ -233,7 +235,7 @@ def select_query_whitelist(wildcards):
 
 def select_query_orderlist(wildcards):
     if wildcards.query_haplotype in stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["haplotype_list"]:
-        return out_dir_path / "curation/{0}..{1}/{2}/scaffolds/{3}.input.{2}.softmasked.orderlist".format(wildcards.prev_stage_parameters,
+        return out_dir_path / "curation/{0}..{1}/{2}/scaffolds/{3}.input.{2}.orderlist".format(wildcards.prev_stage_parameters,
                                                                                                        wildcards.curation_parameters,
                                                                                                        wildcards.query_haplotype,
                                                                                                        wildcards.genome_prefix)

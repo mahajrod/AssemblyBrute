@@ -39,9 +39,8 @@ rule gc_count:
 rule gc_plot:
     input:
         counts=output_dict["kmer"] / "{datatype}/{stage}/gcp/{datatype}.{stage}.{kmer_length}.L{min_coverage}.counts",
-        genomescope_report=output_dict["kmer"] / ("%s/{stage}/genomescope/%s.%s.filtered.%s.%s.genomescope.parameters" % (config["final_kmer_datatype"],
+        genomescope_report=output_dict["kmer"] / ("{datatype}/{stage}/genomescope/%s.{datatype}.filtered.%s.%s.genomescope.parameters" % (
                                                                                                                           config["genome_prefix"],
-                                                                                                                          config["final_kmer_datatype"],
                                                                                                                           config["final_kmer_length"],
                                                                                                                           config["final_kmer_counter"])),
         pip="results/config/pip.common.requirements" # added to ensure that distinctipy package was installed

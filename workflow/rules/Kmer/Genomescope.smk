@@ -1,5 +1,29 @@
 localrules: parse_genomescope_output
 
+def get_starting_lambda(wildcards):
+    if "genomescope" in config["tool_manually_adjusted_features"]:
+        if "starting_lambda" in config["tool_manually_adjusted_features"]["genomescope"]:
+            if config["tool_manually_adjusted_features"]["genomescope"]["starting_lambda"] is not None:
+                return " --lambda {0}".format(config["tool_manually_adjusted_features"]["genomescope"]["starting_lambda"])
+            else:
+                return ""
+        else:
+            return ""
+    else:
+        return ""
+
+def get_start_shift(wildcards):
+    if "genomescope" in config["tool_manually_adjusted_features"]:
+        if "start_shift" in config["tool_manually_adjusted_features"]["genomescope"]:
+            if config["tool_manually_adjusted_features"]["genomescope"]["start_shift"] is not None:
+                return " --start_shift {0} ".format(config["tool_manually_adjusted_features"]["genomescope"]["start_shift"])
+            else:
+                return " --start_shift 2 "
+        else:
+            return " --start_shift 2 "
+    else:
+        return " --start_shift 2 "
+
 rule genomescope:
     input:
         histo=output_dict["kmer"] / "{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.histo"
@@ -13,7 +37,9 @@ rule genomescope:
         out_dir=lambda wildcards: output_dict["kmer"] / "{0}/{1}/genomescope/{0}.{1}.{2}.{3}".format(wildcards.datatype,
                                                                                                      wildcards.stage,
                                                                                                      wildcards.kmer_length,
-                                                                                                     wildcards.kmer_tool)
+                                                                                                     wildcards.kmer_tool),
+        start_shift=get_start_shift,
+        starting_lambda=get_starting_lambda
     log:
         std=output_dict["log"] / "genomescope.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.log",
         cluster_log=output_dict["cluster_log"] / "genomescope.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.cluster.log",
@@ -31,7 +57,7 @@ rule genomescope:
     threads:
         parameters["threads"]["genomescope"]
     shell:
-         " genomescope.R --start_shift 2 -i {input.histo} -p {params.ploidy} -k {wildcards.kmer_length}  "
+         " genomescope.R {params.start_shift} {params.starting_lambda} -i {input.histo} -p {params.ploidy} -k {wildcards.kmer_length}  "
          " -n {params.genome_name} --fitted_hist  --testing  -o {params.out_dir} > {log.std} 2>&1" # -m {params.max_coverage}
 
 

@@ -3,6 +3,8 @@ import pandas as pd
 localrules: create_curation_input_files_for_scaffolds, create_curation_input_files_for_contigs, select_long_scaffolds
 ruleorder: create_curation_input_files_for_scaffolds  > ref_faidx
 ruleorder: create_curation_input_files_for_contigs  > ref_faidx
+ruleorder: create_curation_input_files_for_scaffolds > get_seq_len
+ruleorder: create_curation_input_files_for_contigs > get_seq_len
 
 def get_hic_bed_file(wildcards):
     #print(stage_dict["curation"]["prev_stage"]
@@ -22,11 +24,16 @@ rule create_curation_input_files_for_scaffolds: #
                                                                                                    stage_dict["curation"]["prev_stage"])),
         fai=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta.fai" % (stage_dict["curation"]["prev_stage"],
                                                                                                        stage_dict["curation"]["prev_stage"])),
+        #assembly=lambda  wildcards: out_dir_path / ("{0}/{1}/{2}.{3}.{4}.assembly".format(stage_dict["curation"]["prev_stage"],
+        #                                                                                  wildcards.prev_stage_parameters,
+        #                                                                                  wildcards.genome_prefix,
+        #                                                                                  stage_dict["curation"]["prev_stage"]),
+        #                                                                                  wildcards.haplotype) if "hic_scaffolding" in wildcards.prev_stage_parameters else [],
         #bed=get_hic_bed_file if not config["skip_higlass"] else []
     output:
-        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.fasta",
-        len=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.len",
-        fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.fasta.fai",
+        fasta=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/scaffolds/{genome_prefix, [^/]+}.input.{haplotype}.fasta",
+        len=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/scaffolds/{genome_prefix, [^/]+}.input.{haplotype}.len",
+        fai=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/scaffolds/{genome_prefix, [^/]+}.input.{haplotype}.fasta.fai",
         #bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.hic.bed" if not config["skip_higlass"] else [],
     log:
         cp=output_dict["log"]  / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.scaffolds.{genome_prefix}.{haplotype}.cp.log",
@@ -61,10 +68,10 @@ rule create_curation_input_files_for_contigs: #
                                                                                                                  stage_dict["curation"]["prev_stage"])),
         #bed=get_hic_bed_file if not config["skip_higlass"] else []
     output:
-        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/contigs/{genome_prefix}.input.{haplotype}.fasta",
-        len=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/contigs/{genome_prefix}.input.{haplotype}.len",
-        fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/contigs/{genome_prefix}.input.{haplotype}.fasta.fai",
-        transfer_agp=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/contigs/{genome_prefix}.input.{haplotype}.transfer.agp",
+        fasta=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/contigs/{genome_prefix, [^/]+}.input.{haplotype}.fasta",
+        len=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/contigs/{genome_prefix, [^/]+}.input.{haplotype}.len",
+        fai=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/contigs/{genome_prefix, [^/]+}.input.{haplotype}.fasta.fai",
+        transfer_agp=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/contigs/{genome_prefix, [^/]+}.input.{haplotype}.transfer.agp",
         #bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.hic.bed" if not config["skip_higlass"] else [],
     log:
         cp=output_dict["log"]  / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.contigs.{genome_prefix}.{haplotype}.cp.log",
@@ -92,7 +99,7 @@ rule create_curation_bed_input_file: # Added as separated rule to allow turning 
     input:
         bed=get_hic_bed_file
     output:
-        bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.hic.bed"
+        bed=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.hic.bed"
     log:
         cp=output_dict["log"]  / "create_bed_input_file.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cp.log",
         cluster_log=output_dict["cluster_log"] / "create_bed_input_file.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cluster.log",
@@ -114,10 +121,11 @@ rule create_curation_bed_input_file: # Added as separated rule to allow turning 
 
 rule select_long_scaffolds: #
     input:
-        len=rules.create_curation_input_files_for_scaffolds.output.len
+        #len=rules.create_curation_input_files_for_scaffolds.output.len
+        len=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.len"
     output:
-        whitelist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.whitelist",
-        orderlist=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/scaffolds/{genome_prefix}.input.{haplotype}.orderlist"
+        whitelist=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/scaffolds/{genome_prefix, [^/]+}.input.{haplotype}.whitelist",
+        orderlist=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/scaffolds/{genome_prefix, [^/]+}.input.{haplotype}.orderlist"
     params:
         max_scaffolds=parameters["tool_options"]["select_long_scaffolds"]["max_scaffolds"]
     log:
@@ -148,7 +156,7 @@ rule create_windows: #
     input:
         len=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.len",
     output:
-        bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.win{window}.step{step}.windows.bed",
+        bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.win{window, [0-9]+}.step{step, [0-9]+}.windows.bed",
     log:
         makewin=output_dict["log"]  / "create_windows.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.win{window}.step{step}.makewin.log",
         cluster_log=output_dict["cluster_log"] / "create_windows.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.win{window}.step{step}.cluster.log",
@@ -174,7 +182,7 @@ rule create_bedgraph_track: #
         track_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type}.track.bed",
         windows_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.win{window}.step{step}.windows.bed",
     output:
-        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.bedgraph"
+        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window, [0-9]+}.step{step, [0-9]+}.track.bedgraph"
     log:
         intersect=output_dict["log"]  / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.intersect.log",
         awk=output_dict["log"]  / "create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.awk.log",
@@ -200,6 +208,35 @@ rule create_bedgraph_track: #
         " workflow/scripts/sum_bed.py -c 3 > {output.bedgraph} 2>{log.map} "
         #" bedtools map -c 4 -o sum -a {input.windows_bed} -b stdin > {output.bedgraph} 2>{log.map} "
         #./workflow/scripts/sum_bed.py -c 3
+
+rule scale_create_bedgraph_track: #
+    input:
+        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph",
+        yahs_juicer_pre_log=out_dir_path / "hic_scaffolding/{prev_stage_parameters}/{haplotype}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.log"
+
+    output:
+        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type}.win{window, [0-9]+}.step{step, [0-9]+}.scaled.track.bedgraph"
+    log:
+        std=output_dict["log"]  / "scale_create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.std.log",
+        grep=output_dict["log"]  / "scale_create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.grep.log",
+        sed=output_dict["log"]  / "scale_create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.sed.log",
+        cluster_log=output_dict["cluster_log"] / "scale_create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "scale_create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "scale_create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("scale_create_bedgraph_track"),
+        cpus=parameters["threads"]["scale_create_bedgraph_track"],
+        time=parameters["time"]["scale_create_bedgraph_track"],
+        mem=parameters["memory_mb"]["scale_create_bedgraph_track"],
+    threads: parameters["threads"]["scale_create_bedgraph_track"]
+
+    shell:
+        " SCALE=`grep 'scale factor:' {input.yahs_juicer_pre_log} 2>{log.grep} | sed 's/.*scale factor: //' 2>{log.sed}`; "
+        " awk -v scale=${{SCALE}} '{{ print $1,$2/scale,$3/scale,$4 }}' {input.bedgraph} > {output.bedgraph} 2>{log.std}; "
 
 rule liftover_contig_bedgraph: #
     input:

@@ -3,8 +3,8 @@ rule trf: #
     input:
         fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta"
     output:
-        simple_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.trf.simple.bed",
-        bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type}/{genome_prefix}.input.{haplotype}.trf.track.bed",
+        simple_bed=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.trf.simple.bed",
+        bed=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.trf.track.bed",
     params:
         matching_weight=parse_option("matching_weight", parameters["tool_options"]["trf"], " -m "),
         mismatching_penalty=parse_option("mismatching_penalty", parameters["tool_options"]["trf"], " -s "),
@@ -39,7 +39,7 @@ rule trf: #
         " OUTPUT_PREFIX=`basename {output.simple_bed}`; "
         " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.simple.bed}};"
         " cd ${{WORK_DIR}}; "
-        " tandem_repeat_masking.py -t {threads} {params.matching_weight} {params.mismatching_penalty} "
+        " tandem_repeat_masking.py --sleep 120 -t {threads} {params.matching_weight} {params.mismatching_penalty} "
         " {params.indel_penalty} {params.match_probability} {params.indel_probability} {params.min_alignment_score} "
         " {params.max_period} {params.max_repeat_length} -i ${{INPUT_FASTA}} -o ${{OUTPUT_PREFIX}} > {log.trf} 2>&1; "
         " cut -f1-3 `basename {output.simple_bed}` 2>{log.cut} | grep -vP '^#' 2>{log.grep} | sort -k1,1V -k2,2n -k3,3n  2>{log.sort} | "

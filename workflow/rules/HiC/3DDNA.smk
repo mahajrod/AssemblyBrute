@@ -58,7 +58,7 @@ rule create_fastq_links_for_juicer:
         reverse_fastqs=lambda wildcards: get_hic_reads_for_juicer(wildcards)[1],
 
     output:
-        fastq_dir=directory(out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/fastq")
+        fastq_dir=directory(out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/fastq")
     log:
         ln=output_dict["log"]  / "create_fastq_links_for_juicer.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{haplotype}.ln.log",
         cluster_log=output_dict["cluster_log"] / "create_fastq_links_for_juicer.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{haplotype}.cluster.log",
@@ -105,10 +105,10 @@ rule juicer: #
         restriction_seq=config["hic_enzyme_set"]  if config["hic_enzyme_set"] not in config["no_motif_enzyme_sets"] else "none",
         fastq_extensions=config["fastq_extension"]
     output:
-        merged_no_dups=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.merged_nodups.txt",
-        merged_dedup_bam=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.merged_dedup.bam",
-        merged_inter_30=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.inter_30.txt",
-        merged_inter=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.inter.txt",
+        merged_no_dups=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.merged_nodups.txt",
+        merged_dedup_bam=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.merged_dedup.bam",
+        merged_inter_30=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.inter_30.txt",
+        merged_inter=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.inter.txt",
     log:
         juicer=output_dict["log"]  / "juicer.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.juicer.log",
         mkdir=output_dict["log"]  / "juicer.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.mkdir.log",
@@ -134,9 +134,14 @@ rule juicer: #
         " SCRIPT=`realpath -s ./workflow/external_tools/juicer/scripts/juicer.sh`;"
         " JUICER_DIR=`realpath -s ./workflow/external_tools/juicer/`; "
         " FASTA=`realpath -s {input.fasta}`; "
-        " RESTRICTION_SITE_FILE=`realpath -s {input.restriction_site_file}`; "
+        " if [ \"{params.restriction_seq}\" == \"none\" ]; "
+        " then "
+        "     RESTRICTION_SITE_OPTION=''; "
+        " else "
+        "     RESTRICTION_SITE_OPTION=\" -y `realpath -s {input.restriction_site_file}` \"; "
+        " fi; "
         " ${{SCRIPT}} -t {threads} -T {threads} -D ${{JUICER_DIR}} -g {wildcards.genome_prefix} -s {params.restriction_seq} "
-        " -z ${{FASTA}} -y ${{RESTRICTION_SITE_FILE}} --assembly -d ${{OUTPUT_DIR}} > {log.juicer} 2>&1; "
+        " -z ${{FASTA}} ${{RESTRICTION_SITE_OPTION}} -S early --assembly -d ${{OUTPUT_DIR}} > {log.juicer} 2>&1; "
         " mv ${{OUTPUT_DIR}}/aligned/merged_nodups.txt {output.merged_no_dups}; "
         " mv ${{OUTPUT_DIR}}/aligned/merged_dedup.bam {output.merged_dedup_bam}; " 
         " mv ${{OUTPUT_DIR}}/aligned/inter_30.txt {output.merged_inter_30}; "
@@ -164,13 +169,20 @@ rule threeddna: #
         merged_nodups=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.merged_nodups.txt"
     params:
         restriction_seq=config["hic_enzyme_set"]  if config["hic_enzyme_set"] not in config["no_motif_enzyme_sets"] else "none",
-        fastq_extensions=config["fastq_extension"]
+        fastq_extensions=config["fastq_extension"],
+        editor_repeat_coverage=lambda wildcards: parse_option("editor_repeat_coverage",
+                                                              stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["option_set"], " --editor-repeat-coverage "),
+        min_contig_length=lambda wildcards: parse_option("min_contig_len",
+                                                         stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["option_set"], " --input "),
+        min_mapping_quality=lambda wildcards: parse_option("min_mapping_quality",
+                                                           stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["option_set"], " --mapq "),
     output:
-        draft_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.input.{haplotype}.fasta",
-        rawchrom_hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.input.{haplotype}.rawchrom.hic",
-        rawchrom_assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.input.{haplotype}.rawchrom.assembly",
-        hic_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}.input.{haplotype}_HiC.fasta",
-        alias_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype, [^.]+}.fasta",
+        draft_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.input.{haplotype}.fasta",
+        rawchrom_hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.input.{haplotype}.rawchrom.hic",
+        alias_rawchrom_hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.hic",
+        rawchrom_assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.input.{haplotype}.rawchrom.assembly",
+        hic_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.input.{haplotype}_HiC.fasta",
+        alias_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, [^.]+}.fasta",
 
     log:
         threeddna=output_dict["log"]  / "threeddna.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.threeddna.log",
@@ -198,6 +210,8 @@ rule threeddna: #
         " > ${{LN_LOG}}; "
         " ln -s ${{INPUT_FASTA}} {output.draft_fasta} >> ${{LN_LOG}} 2>&1; "
         " cd ${{OUTPUT_DIR}}; "
-        " ${{SCRIPT}} `basename {output.draft_fasta}` `basename {input.merged_nodups}` > ${{THREEDDNA_LOG}} 2>&1; "
+        " ${{SCRIPT}} {params.editor_repeat_coverage} {params.min_contig_length} {params.min_mapping_quality} `basename {output.draft_fasta}` `basename {input.merged_nodups}` > ${{THREEDDNA_LOG}} 2>&1; "
         " ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}_HiC.fasta "
-        " ../../`basename {output.alias_fasta}` >> ${{LN_LOG}} 2>&1"
+        " ../../`basename {output.alias_fasta}` >> ${{LN_LOG}} 2>&1;"
+        " ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}.rawchrom.hic "
+        " ../../`basename {output.alias_rawchrom_hic}` >> ${{LN_LOG}} 2>&1"

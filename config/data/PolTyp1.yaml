@@ -1,6 +1,11 @@
 #---- Main config file ----
 "main_config_file": "config/core.yaml"      # Path to main config file relative to Snakefile
 #--------------------------
+#---- Skip step config file ----
+"skip_config_file": "config/skip.yaml"      # Path to 'skip' config file relative to Snakefile
+#---- Resource profile ----
+"resource_profile": "high"      # Should be present in resource directory
+#--------------------------
 
 "allowed_databases":
     "kraken2":
@@ -24,15 +29,15 @@
             "in_memory":    True
         "nt":
             "path":         "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/db/kraken2/nt/20220915/" # add path to nt database
-            "memory_mb":    500000
+            "memory_mb":    620000
             "threads":      30
             "time":         "03:00:00"
             "in_memory":    True
     "fcs":
         "fcs_gx":
-            "path":         "/scratch/yggdrasil/db/fcs/gxdb/" # add path to fcs_gx database
+            "path":         "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/db/gxdb/" # add path to fcs_gx database
             "image_path":   "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/FCS-GX/fcs-gx.sif"
-            "memory_mb":    512000 # Entire database must be in memory, it requires at least 490 Gbp
+            "memory_mb":    600000 # Entire database must be in memory, it requires at least 490 Gbp
             "threads":      30
             "time":         "06:00:00"
             "in_memory":    True
@@ -79,14 +84,15 @@
 "coretool_option_sets":
     "hifiasm":
          #- "l0primary"
-         - "l1primary"
+         #- "l1primary"
          #- "l2primary"
          - "l3primary"
          #- "l1primary_no_hic"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
     "purge_dups":
-        - "default"
+        #- "default"
+        - "keep_hicov"
     "salsa2":
         - "phased_reads"
         #- "unphased_reads"
@@ -126,6 +132,10 @@
     "deepvariant":              "default"   # Allowed: default
     "pairtools_parse":          "default"   # Allowed: default
     "samtools_stats":           "default"   # Allowed: default
+    "trimmomatic":              "default"   # Allowed: default
+    "tadbit":                   "default"   # Allowed: default
+    "krater_from_histo":        "default"   # Allowed: default
+    "microsome_detection":      "default"   # Allowed: default
 
 "tool_manually_adjusted_features":
     "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions
@@ -143,6 +153,7 @@
 
 "species_name": "Polyboroides typus"
 "tax_id": 321072 # # necessary for contamination scan via FCS
+"bird_genome": True
 
 "database_set":
     "kraken2":
@@ -191,11 +202,12 @@
 
 "skip_read_qc": False
 "skip_filter_reads": False
-"skip_busco": False
+"skip_busco": True
 "skip_gcp": False
 "skip_fcs": False
 "skip_fcs_adaptor": False
 "skip_kraken": False
+"skip_phasing": False
 "skip_prescaf_pretext": False
 "skip_postscaf_pretext": True
 "skip_both_pretext": False
@@ -205,6 +217,9 @@
 "skip_higlass": True
 "skip_variantcalling": True
 "skip_hic_file": False
+"skip_krater": True
+"skip_kmer": False
+"skip_ragtag": False
 
 "create_hic_file_during_curation": False
 #------------ Options specific for cluster ------------

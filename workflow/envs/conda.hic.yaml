@@ -1,0 +1,9 @@
+#---- Bioconda config for dealing with hic data ----
+
+"name": "hic"
+"channels":
+  - "bioconda"
+  - "conda-forge"
+  - "anaconda"
+"dependencies":
+  - "hic2cool"

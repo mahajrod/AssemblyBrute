@@ -13,7 +13,7 @@ rule minimap2_cov: # TODO: add nanopore support
                      allow_missing=True),
         reference=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta"
     output:
-        bam=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.bam"
+        bam=out_dir_path  / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.{datatype, hifi}.bam"
         #paf=out_dir_path  / ("purge_dups/{assembler}/{haplotype}/%s.purge_dups.{assembler}.{haplotype}.minimap2.{fileprefix}.paf.gz" % config["genome_name"])
     params:
         index_size=lambda wildcards: parse_option("index_size", parameters["tool_options"]["minimap2"][wildcards.datatype], " -I "),
@@ -45,6 +45,63 @@ rule minimap2_cov: # TODO: add nanopore support
         " {input.fastq} 2>{log.minimap2} |  samtools sort -T ${{TMPDIR}} -@ {params.sort_threads} "
         " -m {params.per_thread_sort_mem}M -o {output.bam} 2>{log.sort};"
         #" samtools index -@ {threads} {output.bam} > {log.index} 2>&1 "
+
+
+rule bwa_cov:
+    input:
+        forward_fastqs=lambda wildcards: expand(output_dict["data"] / ("%s/%s/%s/{pairprefix}%s%s" % (datatype_format_dict[wildcards.datatype],
+                                                                                                      wildcards.datatype,
+                                                                                                      "filtered" if wildcards.datatype in config["filtered_data"] else "raw",
+                                                                                                      "_1" if wildcards.datatype in config["filtered_data"] else "1",
+                                                                                                      datatype_extension_dict[wildcards.datatype])),
+                     pairprefix=input_pairprefix_dict[wildcards.datatype],
+                     allow_missing=True),
+        reverse_fastqs=lambda wildcards: expand(output_dict["data"] / ("%s/%s/%s/{pairprefix}%s%s" % (datatype_format_dict[wildcards.datatype],
+                                                                                                      wildcards.datatype,
+                                                                                                      "filtered" if wildcards.datatype in config["filtered_data"] else "raw",
+                                                                                                      "_2" if wildcards.datatype in config["filtered_data"] else "2",
+                                                                                                      datatype_extension_dict[wildcards.datatype])),
+                     pairprefix=input_pairprefix_dict[wildcards.datatype],
+                     allow_missing=True),
+        reference=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta",
+        reference_index=out_dir_path  / ("curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta%s" % (".bwt" if config["bwa_tool"] == "bwa" else ".bwt.2bit.64")),
+    output:
+        bam=out_dir_path  / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.{datatype,  illumina}.bam"
+        #paf=out_dir_path  / ("purge_dups/{assembler}/{haplotype}/%s.purge_dups.{assembler}.{haplotype}.minimap2.{fileprefix}.paf.gz" % config["genome_name"])
+    params:
+        bwa_tool=config["bwa_tool"],
+        bwa_threads=parameters["threads"]["bwa_map"],
+        sort_threads=parameters["threads"]["samtools_sort"],
+        fixmate_threads=parameters["threads"]["samtools_fixmate"],
+        markdup_threads=parameters["threads"]["samtools_markdup"],
+        per_thread_sort_mem=parameters["memory_mb"]["samtools_sort_per_thread"],
+        genome_prefix=config["genome_prefix"]
+    log:
+        bwa=output_dict["log"]  / "minimap2_cov.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.bwa.log",
+        fixmate=output_dict["log"]  / "minimap2_cov.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.fixmate.log",
+        sort=output_dict["log"]  / "minimap2_cov.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.sort.log",
+        markdup=output_dict["log"]  / "minimap2_cov.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.markdup.log",
+        cluster_log=output_dict["cluster_log"] / "minimap2_cov.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "minimap2_cov.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "minimap2_cov.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("bwa_cov"),
+        cpus=parameters["threads"]["bwa_map"] + parameters["threads"]["samtools_sort"] + parameters["threads"]["samtools_fixmate"] + parameters["threads"]["samtools_markdup"],
+        time=parameters["time"]["bwa_map"],
+        mem=parameters["memory_mb"]["bwa_map"] + parameters["memory_mb"]["samtools_sort_per_thread"]*parameters["threads"]["samtools_sort"] + parameters["memory_mb"]["samtools_fixmate"] + parameters["memory_mb"]["samtools_markdup"],
+    threads: parameters["threads"]["bwa_map"] + parameters["threads"]["samtools_sort"] + parameters["threads"]["samtools_fixmate"] + parameters["threads"]["samtools_markdup"]
+
+    shell:
+        " TMP_PREFIX=`dirname {output.bam}`/tmpbam; "
+        " {params.bwa_tool} mem  -t {params.bwa_threads} {input.reference} <(gunzip -c {input.forward_fastqs}) <(gunzip -c {input.reverse_fastqs}) "
+        " -R  \'@RG\\tID:{params.genome_prefix}\\tPU:x\\tSM:{params.genome_prefix}\\tPL:Illumina\\tLB:x\' 2>{log.bwa} | "
+        " samtools fixmate -@ {params.fixmate_threads} -m - -  2>{log.fixmate} | "
+        " samtools sort -T {{TMP_PREFIX}} -@ {params.sort_threads} -m {params.per_thread_sort_mem}M 2>{log.sort} | "
+        " samtools markdup -@ {params.markdup_threads} - {output.bam} 2>{log.markdup}"
 
 rule calculate_coverage:
     input:
@@ -79,8 +136,8 @@ rule create_coverage_table:
     input:
         per_base=rules.calculate_coverage.output.per_base,
     output:
-        stat_file=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.stat",
-        all_stat_file=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.all.stat"
+        stat_file=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.win{window, [0-9]+}.step{step, [0-9]+}.stat",
+        all_stat_file=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.win{window, [0-9]+}.step{step, [0-9]+}.all.stat"
     #params:
     #    bin_size=lambda wildcards: stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["option_set"]["bin_size"],
     #    step_size=lambda wildcards: stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["option_set"]["bin_size"]
@@ -112,7 +169,7 @@ rule create_bedgraph_from_coverage_table:
     input:
         stat_file=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.win{window}.step{step}.stat"
     output:
-        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type, [^./]+}/{genome_prefix}.input.{haplotype}.{datatype, [^./]+}_{cov_type, [^./]+}_coverage.win{window, [^./]+}.step{step, [^./]+}.track.bedgraph"
+        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/{seq_type, [^./]+}/{genome_prefix}.input.{haplotype}.{datatype, [^./]+}_{cov_type, [^./]+}_coverage.win{window, [0-9]+}.step{step, [0-9]+}.track.bedgraph"
     params:
         coverage_col= lambda wildcards: 6 if wildcards.cov_type == "mean" else 7
     log:
@@ -142,8 +199,8 @@ rule draw_coverage_heatmap:
         len_file=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.len",
         all_stat_file=rules.create_coverage_table.output.all_stat_file
     output:
-        png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^./]+}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype,  [^./]+}.coverage.win{window}.step{step}.png",
-        split_png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^./]+}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype, [^./]+}.coverage.win{window}.step{step}.split_thresholds.png"
+        png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^./]+}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype,  [^./]+}.coverage.win{window, [0-9]+}.step{step, [0-9]+}.png",
+        split_png=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^./]+}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype, [^./]+}.coverage.win{window, [0-9]+}.step{step, [0-9]+}.split_thresholds.png"
     #params:
     #    bin_size=lambda wildcards: stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["option_set"]["bin_size"],
     #    step_size=lambda wildcards: stage_dict["curation"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.curation_parameters]["option_set"]["bin_size"]

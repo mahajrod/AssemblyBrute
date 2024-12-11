@@ -1,6 +1,11 @@
 #---- Main config file ----
 "main_config_file": "config/core.yaml"      # Path to main config file relative to Snakefile
 #--------------------------
+#---- Skip step config file ----
+"skip_config_file": "config/skip.yaml"      # Path to 'skip' config file relative to Snakefile
+#---- Resource profile ----
+"resource_profile": "high"      # Should be present in resource directory
+#--------------------------
 
 "allowed_databases":
     "kraken2":
@@ -135,6 +140,10 @@
     "deepvariant":              "default"   # Allowed: default
     "pairtools_parse":          "default"   # Allowed: default
     "samtools_stats":           "default"   # Allowed: default
+    "trimmomatic":              "default"   # Allowed: default
+    "tadbit":                   "default"   # Allowed: default
+    "krater_from_histo":        "default"   # Allowed: default
+    "microsome_detection":      "default"   # Allowed: default
 
 "tool_manually_adjusted_features":
     "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions
@@ -200,6 +209,7 @@
 "skip_fcs": False
 "skip_fcs_adaptor": False
 "skip_kraken": False
+"skip_phasing": False
 "skip_prescaf_pretext": False
 "skip_postscaf_pretext": True
 "skip_both_pretext": False
@@ -209,6 +219,8 @@
 "skip_higlass": True
 "skip_variantcalling": True
 "skip_hic_file": False
+"skip_krater": True
+"skip_ragtag": False
 
 "create_hic_file_during_curation": False
 #------------ Options specific for cluster ------------

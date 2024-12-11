@@ -1,6 +1,11 @@
 #---- Main config file ----
 "main_config_file": "config/core.yaml"      # Path to main config file relative to Snakefile
 #--------------------------
+#---- Skip step config file ----
+"skip_config_file": "config/skip.yaml"      # Path to 'skip' config file relative to Snakefile
+#---- Resource profile ----
+"resource_profile": "high"      # Should be present in resource directory
+#--------------------------
 
 "allowed_databases":
     "kraken2":
@@ -48,10 +53,11 @@
 "final_fcs_db": "fcs_gx" # this database will be used for the filtration of the contigs if skip_fcs is False
 
 "tool_containers":
-    "rapid_telomere":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/rapid-curation/rapid_hic_software/runTelo.sif"
+    "rapid_telomere":   "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/rapid-curation/rapid_hic_software/runTelo.sif"
     "deepvariant":
-        "cpu":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/deepvariant/deepvariant_1.5.0.sif"
-        "gpu": null #"gpu":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
+        "cpu":          "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/deepvariant/deepvariant_1.5.0.sif"
+        "gpu":          null #"gpu":  "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
+    "mitohifi":         "/maps/projects/codon_0000/people/svc-rapunzl-smrtanl/yggdrasil/soft/mitohifi/mitohifi_master.sif"
 
 "stage_coretools":     #TODO: add bionano
     "filtering":
@@ -79,7 +85,7 @@
          #- "l0primary"
          - "l1primary"
          #- "l2primary"
-         #- "l3primary"
+         - "l3primary"
          #- "l1primary_no_hic"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
@@ -124,18 +130,22 @@
     "deepvariant":              "default"   # Allowed: default
     "pairtools_parse":          "default"   # Allowed: default
     "samtools_stats":           "default"   # Allowed: default
+    "trimmomatic":              "default"   # Allowed: default
+    "tadbit":                   "default"   # Allowed: default
+    "krater_from_histo":        "default"   # Allowed: default
+    "microsome_detection":      "default"   # Allowed: default
 
 "tool_manually_adjusted_features":
     "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions
-        "lower_threshold": 3 # null #5
-        "haploid_diploid_threshold": 20 # null # 45
-        "upper_threshold": 175 # null #135
+        "lower_threshold": null # 5 # null #5
+        "haploid_diploid_threshold":  25 # 20 # null # 45
+        "upper_threshold":  null # 175 # null #135
 
 "ploidy": 2
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
 "genome_prefix": "genome"
 "busco_lineage_list":
-    - "mammalia_odb10" #
+    - "vertebrata_odb10" #
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
 
@@ -196,6 +206,7 @@
 "skip_kraken": False
 "skip_prescaf_pretext": False
 "skip_postscaf_pretext": True
+"skip_phasing": False
 "skip_both_pretext": False
 "skip_nanoqc": False
 "skip_nanoplot": False
@@ -203,6 +214,8 @@
 "skip_higlass": True
 "skip_variantcalling": True
 "skip_hic_file": False
+"skip_krater": True
+"skip_ragtag": False
 
 "create_hic_file_during_curation": False
 #------------ Options specific for cluster ------------
@@ -213,14 +226,14 @@
 "tool_queue":
     "deepvariant": "gpu"  # Allowed: "gpu", "cpu". GPU queue will be used if it is set here AND if "queue": "gpu" is set , and if GPU imae of deepvariant is available
 "nodes":
-    "blacklist": null
-    "whitelist": null
-"tool_nodes":
+    "blacklist": []
+    "whitelist": []
+"rule_nodes":
     "deepvariant":
         "blacklist":
             - "mjolnircomp05fl"
             - "mjolnircomp06fl"
-        "whitelist": null
+        "whitelist": []
 #------------------------------------------------------
 #"adaptor_scan": True
 #"fcs_gx_scan": True

@@ -1,0 +1,12 @@
+#---- Bioconda config ----
+
+#TODO: check tools and versions
+"name": "yggbase"
+"channels":
+  - "mahajrod"
+  - "bioconda"
+  - "conda-forge"
+  - "anaconda"
+"dependencies":
+  - "hifiasm"
+  - "gfatools"

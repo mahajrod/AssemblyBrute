@@ -26,6 +26,7 @@ rule hifiasm_correct:
         kmer_length=lambda wildcards: parse_option("kmer_len", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -k "),
         D=lambda wildcards: parse_option("D", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -D "), #" -D {0} ".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["D"]) if "D" in parameters["tool_options"]["hifiasm"][wildcards.contig_options] else "",
         N=lambda wildcards: parse_option("N", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -N "), #" -N {0} ".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["N"]) if "N" in parameters["tool_options"]["hifiasm"][wildcards.contig_options] else "",
+        telomere_motif=lambda wildcards: parse_option("telomere_motif", config, " --telo-m "),
         #nanopore=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
         #                                              fileprefix=input_file_prefix_dict["nanopore"],
         #                                              allow_missing=True)))) if "nanopore" in input_filedict else "",
@@ -58,7 +59,7 @@ rule hifiasm_correct:
          " UNCOMPRESSED_FASTA=${{UNCOMPRESSED_FASTA%sta.gz}}; "
          " hifiasm -t {threads} -e --write-ec {params.window_size} {params.bloom_filter_bits} "
          " {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size}"
-         " {params.kmer_length} {params.D} {params.N} "
+         " {params.kmer_length} {params.D} {params.N} {params.telomere_motif} "
          " -o ${{OUTPUT_PREFIX}} {input.hifi}  1>{log.std} 2>&1;"
          " pigz -p {threads} ${{UNCOMPRESSED_FASTA}} > {log.pigz} 2>&1 ; "
          " mv ${{UNCOMPRESSED_FASTA}}.gz {output.ec_fasta} > {log.mv} 2>&1; "
@@ -270,6 +271,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
                                                               )
                                            ) if get_ultralong_read_files(input_file_prefix_dict,
                                                                          stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set"]) else "",
+        telomere_motif= lambda wildcards: parse_option("telomere_motif",config," --telo-m "),
         #nanopore=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
         #                                              fileprefix=input_file_prefix_dict["nanopore"],
         #                                              allow_missing=True)))) if "nanopore" in input_filedict else "",
@@ -307,7 +309,8 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
          " {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size}"
          " {params.kmer_length} {params.D} {params.N} {params.ignore_bin} --primary -t {threads} -l {params.purge_level}  -o ${{OUTPUT_PREFIX}} "
          " --n-hap {params.ploidy} --purge-max ${{COV_UPPER_BOUNDARY}} "
-         " {params.hic_forward} {params.hic_reverse} {params.ultralong_reads} {params.ul_cut} {params.dual_scaf}"
+         " {params.hic_forward} {params.hic_reverse} {params.ultralong_reads} {params.ul_cut} {params.dual_scaf} "
+         " {params.telomere_motif} "
          " {input.hifi}  1>{log.std} 2>&1;"         
          " ln -sf `basename {output.primary_contig_graph}` {output.primary_alias};"
          " ln -sf `basename {output.alternative_contig_graph}` {output.alternative_alias};"
@@ -360,6 +363,7 @@ rule hifiasm_hifi:
         N=lambda wildcards: parse_option("N", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -N "),
         dual_scaf=lambda wildcards: parse_option_flag("dual_scaf", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --dual-scaf "),
         ignore_bin=lambda wildcards: " -i " if ("ignore_bin" in parameters["tool_options"]["hifiasm"][wildcards.contig_options]) and parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ignore_bin"] else "",
+        telomere_motif= lambda wildcards: parse_option("telomere_motif",config," --telo-m "),
         #nanopore=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
         #                                              fileprefix=input_file_prefix_dict["nanopore"],
         #                                              allow_missing=True)))) if "nanopore" in input_filedict else "",
@@ -401,7 +405,8 @@ rule hifiasm_hifi:
          " {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size} "
          " {params.kmer_length} {params.D} {params.N} {params.ignore_bin} {params.ul_cut}"
          " --primary -t {threads} -l {params.purge_level}  -o ${{OUTPUT_PREFIX}} "
-         " --n-hap {params.ploidy} --purge-max ${{COV_UPPER_BOUNDARY}} {params.ultralong_reads} {params.dual_scaf}"
+         " --n-hap {params.ploidy} --purge-max ${{COV_UPPER_BOUNDARY}} {params.ultralong_reads} {params.dual_scaf} "
+         " {params.telomere_motif} "
          " {input.hifi}  1>{log.std} 2>&1;"
          " ln -sf `basename {output.primary_contig_graph}` {output.primary_alias};"
          " ln -sf `basename {output.alt_contig_graph}` {output.alt_alias};"

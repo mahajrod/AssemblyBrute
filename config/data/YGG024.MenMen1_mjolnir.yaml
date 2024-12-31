@@ -155,6 +155,8 @@
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
 
+"telomere_motif": "CCCTAA"  # telomere motif at 5'-end; CCCTAA for human, place null if unknown
+
 "species_name": "Menidia menidia"
 "tax_id": 238744 # # necessary for contamination scan via FCS
 

@@ -42,7 +42,7 @@ rule hifiasm_correct:
     benchmark:
         output_dict["benchmark"] / "hifiasm_correct.{correction_options}.{genome_prefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["hifiasm"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["hifiasm"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("hifiasm_correct"),
@@ -284,7 +284,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
     benchmark:
         output_dict["benchmark"] / "hifiasm.{contig_options}.{genome_prefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["hifiasm"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["hifiasm"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("hifiasm_hic"),
@@ -378,7 +378,7 @@ rule hifiasm_hifi:
     benchmark:
         output_dict["benchmark"] / "hifiasm.{contig_options}.{genome_prefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["hifiasm"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["hifiasm"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("hifiasm_hifi"),

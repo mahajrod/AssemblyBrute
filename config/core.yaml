@@ -5,6 +5,9 @@
         "yaml": "workflow/envs/conda.common.yaml"
         "name": "yggbase"
         "pip": "workflow/envs/pip.common.requirements"
+    "hifiasm":
+        "yaml": "workflow/envs/conda.hifiasm.yaml"
+        "name": "hifiasm"
     "pairtools":
         "yaml": "workflow/envs/conda.pairtools.yaml"
         "name": "pairtools"

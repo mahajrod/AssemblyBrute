@@ -154,6 +154,7 @@
 
 "species_name": "Athene noctua"
 "tax_id": 126797  # # necessary for contamination scan via FCS
+"bird_genome": True
 
 "database_set":
     "kraken2":

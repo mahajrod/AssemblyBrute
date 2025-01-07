@@ -26,7 +26,7 @@ rule hifiasm_correct:
         kmer_length=lambda wildcards: parse_option("kmer_len", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -k "),
         D=lambda wildcards: parse_option("D", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -D "), #" -D {0} ".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["D"]) if "D" in parameters["tool_options"]["hifiasm"][wildcards.contig_options] else "",
         N=lambda wildcards: parse_option("N", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -N "), #" -N {0} ".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["N"]) if "N" in parameters["tool_options"]["hifiasm"][wildcards.contig_options] else "",
-        telomere_motif=lambda wildcards: parse_option("telomere_motif", config, " --telo-m "),
+        #telomere_motif=lambda wildcards: parse_option("telomere_motif", config, " --telo-m ")
         #nanopore=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
         #                                              fileprefix=input_file_prefix_dict["nanopore"],
         #                                              allow_missing=True)))) if "nanopore" in input_filedict else "",
@@ -271,7 +271,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
                                                               )
                                            ) if get_ultralong_read_files(input_file_prefix_dict,
                                                                          stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set"]) else "",
-        telomere_motif= lambda wildcards: parse_option("telomere_motif",config," --telo-m "),
+        telomere_motif= lambda wildcards: parse_option("telomere_motif", config, " --telo-m ") if parameters["tool_options"]["hifiasm"][wildcards.contig_options]["use_telomere"] else "",
         #nanopore=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
         #                                              fileprefix=input_file_prefix_dict["nanopore"],
         #                                              allow_missing=True)))) if "nanopore" in input_filedict else "",
@@ -363,7 +363,7 @@ rule hifiasm_hifi:
         N=lambda wildcards: parse_option("N", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -N "),
         dual_scaf=lambda wildcards: parse_option_flag("dual_scaf", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --dual-scaf "),
         ignore_bin=lambda wildcards: " -i " if ("ignore_bin" in parameters["tool_options"]["hifiasm"][wildcards.contig_options]) and parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ignore_bin"] else "",
-        telomere_motif= lambda wildcards: parse_option("telomere_motif",config," --telo-m "),
+        telomere_motif= lambda wildcards: parse_option("telomere_motif",config," --telo-m ")  if parameters["tool_options"]["hifiasm"][wildcards.contig_options]["use_telomere"] else "",
         #nanopore=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
         #                                              fileprefix=input_file_prefix_dict["nanopore"],
         #                                              allow_missing=True)))) if "nanopore" in input_filedict else "",

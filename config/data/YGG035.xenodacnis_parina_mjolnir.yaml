@@ -90,6 +90,7 @@
          #- "l3primary_dual_scaf"
          #- "l1primary_dual_scaf"
          - "l3primary_no_hic"
+         - "l3primary_no_hic_no_telo"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
     "purge_dups":
@@ -153,6 +154,8 @@
     - "vertebrata_odb10"
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
+
+"telomere_motif": "CCCTAA"  # telomere motif at 5'-end; CCCTAA for human, place null if unknown
 
 "species_name": "Xenodacnis parina"
 "tax_id": 62261 # # necessary for contamination scan via FCS

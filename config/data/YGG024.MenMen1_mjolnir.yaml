@@ -88,6 +88,8 @@
          #- "l2primary"
          - "l3primary"
          - "l1primary"
+         - "l3primary_no_telo"
+         - "l1primary_no_telo"
          #- "l1primary_no_hic"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"

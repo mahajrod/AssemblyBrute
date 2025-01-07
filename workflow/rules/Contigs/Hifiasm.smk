@@ -59,7 +59,7 @@ rule hifiasm_correct:
          " UNCOMPRESSED_FASTA=${{UNCOMPRESSED_FASTA%sta.gz}}; "
          " hifiasm -t {threads} -e --write-ec {params.window_size} {params.bloom_filter_bits} "
          " {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size}"
-         " {params.kmer_length} {params.D} {params.N} {params.telomere_motif} "
+         " {params.kmer_length} {params.D} {params.N} "
          " -o ${{OUTPUT_PREFIX}} {input.hifi}  1>{log.std} 2>&1;"
          " pigz -p {threads} ${{UNCOMPRESSED_FASTA}} > {log.pigz} 2>&1 ; "
          " mv ${{UNCOMPRESSED_FASTA}}.gz {output.ec_fasta} > {log.mv} 2>&1; "

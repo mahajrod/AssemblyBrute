@@ -39,7 +39,8 @@ rule telo_finder:
         node_options=parse_node_list("telo_finder"),
         cpus=parameters["threads"]["telo_finder"] ,
         time=parameters["time"]["telo_finder"],
-        mem=parameters["memory_mb"]["telo_finder"]
+        mem=parameters["memory_mb"]["telo_finder"],
+        telosif=1
     threads: parameters["threads"]["telo_finder"]
 
     shell:

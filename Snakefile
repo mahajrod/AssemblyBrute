@@ -947,7 +947,7 @@ if "ref_scaffolding" in config["stage_list"]:
                     stage_dict["ref_scaffolding"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["ref_scaffolding"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
 
     parameters_list = list(stage_dict["ref_scaffolding"]["parameters"].keys())
-
+    print(stage_dict["ref_scaffolding"])
     results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.ref_scaffolding.{haplotype}.fasta",
                              assembly_stage=["ref_scaffolding", ],
                              parameters=[parameters_label],

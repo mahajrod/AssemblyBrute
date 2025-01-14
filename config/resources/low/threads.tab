@@ -126,3 +126,4 @@ miniprot_microchromosomes	4	4	4	4	4	4	4	4	4
 filter_scaffold_list	1	1	1	1	1	1	1	1	1
 place_microsomes_first	1	1	1	1	1	1	1	1	1
 extract_lambda_value	1	1	1	1	1	1	1	1	1
+rename_ragtag_scaffolds	1	1	1	1	1	1	1	1	1

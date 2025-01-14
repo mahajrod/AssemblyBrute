@@ -953,7 +953,8 @@ if "ref_scaffolding" in config["stage_list"]:
                              parameters=[parameters_label],
                              genome_prefix=[config["genome_prefix"], ],
                              haplotype=stage_dict["ref_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
-                             ) for parameters_label in parameters_list],
+                             ) for parameters_label in parameters_list]]
+    """
                             [expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["ref_scaffolding"],
@@ -991,7 +992,7 @@ if "ref_scaffolding" in config["stage_list"]:
         parameters=parameters_list
            ),
     ]
-
+    """
 if "curation" in config["stage_list"]:
     prev_stage = stage_dict["curation"]["prev_stage"]
     curation_tool_list = config["stage_coretools"]["curation"]["default"]

@@ -8,9 +8,9 @@ rule ragtag: #
         alias_ragtag_fasta=out_dir_path / "ref_scaffolding/{prev_stage_parameters, [^/]}..ragtag_{ref_scaf_parameters, [^/]}_{reference, [^/]}/{genome_prefix, [^/]}.ref_scaffolding.{haplotype, [^/]}.fasta",
         alias_ragtag_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}_{reference}/{genome_prefix}.ref_scaffolding.{haplotype}.agp",
         alias_ragtag_stats=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}_{reference}/{genome_prefix}.ref_scaffolding.{haplotype}.stats",
-        ragtag_fasta=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}_{reference}/{haplotype, [^.]+}/{genome_prefix, [^/]}.ref_scaffolding.{haplotype, [^/]}.fasta",
-        ragtag_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}_{reference}/{haplotype, [^.]+}/{genome_prefix, [^/]}.ref_scaffolding.{haplotype, [^/]}.agp",
-        ragtag_stats=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}_{reference}/{haplotype, [^.]+}/{genome_prefix, [^/]}.ref_scaffolding.{haplotype, [^/]}.stats",
+        ragtag_fasta=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}_{reference}/{haplotype, [^.]+}/{genome_prefix, [^/]}.ref_scaffolding.{haplotype}.fasta",
+        ragtag_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}_{reference}/{haplotype, [^.]+}/{genome_prefix, [^/]}.ref_scaffolding.{haplotype}.agp",
+        ragtag_stats=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}_{reference}/{haplotype, [^.]+}/{genome_prefix, [^/]}.ref_scaffolding.{haplotype}.stats",
     log:
         ragtag=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}_{reference}/{haplotype}/ragtag.{genome_prefix}.ref_scaffolding.{haplotype}.ragtag.log",
         ln=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}_{reference}/{haplotype}/ragtag.{genome_prefix}.ref_scaffolding.{haplotype}.ragtag.ln.log",

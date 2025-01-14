@@ -1,6 +1,6 @@
 
 
-rule ragtag: #
+rule ragtag_curation: #
     input:
         fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.fasta",
         reference_fasta=out_dir_path / "data/reference/{reference}/{reference}.softmasked.fasta"

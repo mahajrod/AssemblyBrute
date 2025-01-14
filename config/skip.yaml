@@ -18,4 +18,4 @@
 "skip_krater": True
 "skip_kmer": False
 "skip_ragtag": False
-"skip_gathering": False
+"skip_gathering": True

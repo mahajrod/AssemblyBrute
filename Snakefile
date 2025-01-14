@@ -825,7 +825,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                   phasing_kmer_length=[stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["phasing_kmer_length"]], #[stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["phasing_kmer_length"]],
                                   parameters=[parameters_label],
                                   resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
-                                  ext=parameters["tool_options"]["pretextsnapshot"]["format"]) if "threeddna" not in parameter_label else [] for parameters_label in stage_dict["hic_scaffolding"]["parameters"]],
+                                  ext=parameters["tool_options"]["pretextsnapshot"]["format"]) if "threeddna" not in parameter_labels else [] for parameters_label in stage_dict["hic_scaffolding"]["parameters"]],
                         ]
 
 
@@ -924,6 +924,74 @@ if "gap_closing" in config["stage_list"]: # TODO: modify it and all initiation o
                 stage_dict[stage]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][tool][option_set] if tool in parameters["tool_options"] else None
                 stage_dict[stage]["parameters"][parameters_label]["haplotype_list"] = haplotype_list
 """
+
+if "ref_scaffolding" in config["stage_list"]:
+    prev_stage = stage_dict["ref_scaffolding"]["prev_stage"]
+    curation_tool_list = config["stage_coretools"]["ref_scaffolding"]["default"]
+    stage_dict["ref_scaffolding"]["parameters"] = {}
+
+    ref_scaffolding_tool_list = config["stage_coretools"]["ref_scaffolding"]["default"]
+    stage_dict["ref_scaffolding"]["parameters"] = {}
+    for ref_scaffolding_tool in ref_scaffolding_tool_list:
+        for option_set in config["coretool_option_sets"][ref_scaffolding_tool]:
+            print(prev_stage)
+            for prev_parameters in stage_dict[prev_stage]["parameters"]:
+                for reference in list(input_reference_filedict.keys()):
+                    parameters_label = "{0}..{1}_{2}!{3}".format(prev_parameters, ref_scaffolding_tool, option_set, reference)
+                    stage_dict["ref_scaffolding"]["parameters"][parameters_label] = {}
+                    stage_dict["ref_scaffolding"]["parameters"][parameters_label]["included"] = True
+                    stage_dict["ref_scaffolding"]["parameters"][parameters_label]["ref_scaffolder"] = ref_scaffolding_tool
+                    stage_dict["ref_scaffolding"]["parameters"][parameters_label]["prev_stage"] = prev_stage
+                    stage_dict["ref_scaffolding"]["parameters"][parameters_label]["prev_parameters"] = prev_parameters
+                    stage_dict["ref_scaffolding"]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][ref_scaffolding_tool][option_set] if ref_scaffolding_tool in parameters["tool_options"] else None
+                    stage_dict["ref_scaffolding"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["ref_scaffolding"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
+
+    parameters_list = list(stage_dict["ref_scaffolding"]["parameters"].keys())
+
+    results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.ref_scaffolding.{haplotype}.fasta",
+                             assembly_stage=["ref_scaffolding", ],
+                             parameters=[parameters_label],
+                             genome_prefix=[config["genome_prefix"], ],
+                             haplotype=stage_dict["ref_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
+                             ) for parameters_label in parameters_list],
+                            [expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
+                                genome_prefix=[config["genome_prefix"], ],
+                                assembly_stage=["ref_scaffolding"],
+                                haplotype=stage_dict["ref_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
+                                parameters=[parameters_label]) for parameters_label in parameters_list],
+                            expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
+                                genome_prefix=[config["genome_prefix"], ],
+                                assembly_stage=["ref_scaffolding"],),
+                            ]
+    if not config["skip_busco"]:
+        results_list += [*[
+            expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
+                busco_lineage=config["busco_lineage_list"],
+                genome_prefix=[config["genome_prefix"], ],
+                assembly_stage=["ref_scaffolding", ],
+                haplotype=stage_dict["ref_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
+                parameters=[parameters_label]) for parameters_label in parameters_list],
+    *[
+        expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.merged.tsv",
+            busco_lineage=config["busco_lineage_list"],
+            genome_prefix=[config["genome_prefix"], ],
+            assembly_stage=["ref_scaffolding"],
+            parameters=[parameters_label]) for parameters_label in parameters_list],
+    *[
+        expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.merged.tsv",
+            busco_lineage=config["busco_lineage_list"],
+            genome_prefix=[config["genome_prefix"], ],
+            assembly_stage=["ref_scaffolding"],
+            haplotype=stage_dict["ref_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
+            parameters=[parameters_label]) for parameters_label in parameters_list],
+    expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/all_intersection/{genome_prefix}.{busco_lineage}.busco.merged.tsv",
+        busco_lineage=config["busco_lineage_list"],
+        genome_prefix=[config["genome_prefix"], ],
+        assembly_stage=["ref_scaffolding"],
+        parameters=parameters_list
+           ),
+    ]
+
 if "curation" in config["stage_list"]:
     prev_stage = stage_dict["curation"]["prev_stage"]
     curation_tool_list = config["stage_coretools"]["curation"]["default"]
@@ -1250,6 +1318,9 @@ if "curation" in config["stage_list"]:
 
 if "gap_closing" in config["stage_list"]:
     include: "workflow/rules/Finalization/GapClosing.smk"
+
+if "ref_scaffolding" in config["stage_list"]:
+    include: "workflow/rules/RefScaffolding/RagTag.smk"
 
 include: "workflow/rules/Curation/CurationFiles.smk"
 include: "workflow/rules/Curation/MicroChromosomes.smk"

@@ -9,12 +9,12 @@ rule ragtag: #
         ragtag_agp=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/scaffolds/ragtag/{reference, [^/]+}/{genome_prefix, [^/]+}.{haplotype}.to.{reference}.agp",
         ragtag_stats=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/scaffolds/ragtag/{reference, [^/]+}/{genome_prefix, [^/]+}.{haplotype}.to.{reference}.stats",
     log:
-        ragtag=output_dict["log"]  / "create_gap_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{reference}.ragtag.log",
-        ln=output_dict["log"]  / "create_gap_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{reference}.ln.log",
-        cluster_log=output_dict["cluster_log"] / "create_gap_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{reference}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_gap_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{reference}.cluster.err"
+        ragtag=output_dict["log"]  / "ragtag.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{reference}.ragtag.log",
+        ln=output_dict["log"]  / "ragtag.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{reference}.ln.log",
+        cluster_log=output_dict["cluster_log"] / "ragtag.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{reference}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "ragtag.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{reference}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "create_gap_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{reference}.benchmark.txt"
+        output_dict["benchmark"]  / "ragtag.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.{reference}.benchmark.txt"
     conda:
         config["conda"]["ragtag"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["ragtag"]["yaml"])
     resources:

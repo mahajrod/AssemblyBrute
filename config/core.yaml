@@ -2058,6 +2058,14 @@
                 - "purge_dups"
                 - "ref_scaffolding"
                 - "curation"
+        "ref_scaffolding_skip_hic_scaffolding_no_curation":
+            "fastq":
+                - "contig"
+                - "purge_dups"
+                - "ref_scaffolding"
+            "draft":
+                - "purge_dups"
+                - "ref_scaffolding"
         "ref_scaffolding":
             "fastq":
                 - "contig"

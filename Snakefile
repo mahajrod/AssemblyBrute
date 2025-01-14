@@ -937,7 +937,7 @@ if "ref_scaffolding" in config["stage_list"]:
             #print(prev_stage)
             for prev_parameters in stage_dict[prev_stage]["parameters"]:
                 for reference in list(input_reference_filedict.keys()):
-                    parameters_label = "{0}..{1}_{2}...{3}".format(prev_parameters, ref_scaffolding_tool, option_set, reference)
+                    parameters_label = "{0}..{1}_{2}!{3}".format(prev_parameters, ref_scaffolding_tool, option_set, reference)
                     stage_dict["ref_scaffolding"]["parameters"][parameters_label] = {}
                     stage_dict["ref_scaffolding"]["parameters"][parameters_label]["included"] = True
                     stage_dict["ref_scaffolding"]["parameters"][parameters_label]["ref_scaffolder"] = ref_scaffolding_tool
@@ -953,14 +953,13 @@ if "ref_scaffolding" in config["stage_list"]:
                              parameters=[parameters_label],
                              genome_prefix=[config["genome_prefix"], ],
                              haplotype=stage_dict["ref_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
-                             ) for parameters_label in parameters_list]]
-    """
-                            [expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
+                             ) for parameters_label in parameters_list],
+                     [expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["ref_scaffolding"],
                                 haplotype=stage_dict["ref_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
                                 parameters=[parameters_label]) for parameters_label in parameters_list],
-                            expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
+                     expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["ref_scaffolding"],),
                             ]
@@ -992,7 +991,7 @@ if "ref_scaffolding" in config["stage_list"]:
         parameters=parameters_list
            ),
     ]
-    """
+
 if "curation" in config["stage_list"]:
     prev_stage = stage_dict["curation"]["prev_stage"]
     curation_tool_list = config["stage_coretools"]["curation"]["default"]

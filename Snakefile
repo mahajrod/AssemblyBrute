@@ -948,8 +948,8 @@ if "ref_scaffolding" in config["stage_list"]:
 
     parameters_list = list(stage_dict["ref_scaffolding"]["parameters"].keys())
     print(stage_dict["ref_scaffolding"])
-    results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.ref_scaffolding.{haplotype}.fasta",
-                             assembly_stage=["ref_scaffolding", ],
+    results_list += [[expand(out_dir_path / "ref_scaffolding/{parameters}/{genome_prefix}.ref_scaffolding.{haplotype}.fasta",#"{assembly_stage}/{parameters}/{genome_prefix}.ref_scaffolding.{haplotype}.fasta",
+                             #assembly_stage=["ref_scaffolding", ],
                              parameters=[parameters_label],
                              genome_prefix=[config["genome_prefix"], ],
                              haplotype=stage_dict["ref_scaffolding"]["parameters"][parameters_label]["haplotype_list"],

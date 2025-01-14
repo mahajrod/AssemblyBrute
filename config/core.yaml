@@ -83,7 +83,7 @@
 
 #----
 #---- Output directory and subdirectories ----
-"out_dir": "results"
+"out_dir": "results/"
 "tmp_dir": "results/tmp/"
 #--------- Subdirectories --------
 "first_level_subdir_list":

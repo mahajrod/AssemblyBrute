@@ -934,10 +934,10 @@ if "ref_scaffolding" in config["stage_list"]:
     stage_dict["ref_scaffolding"]["parameters"] = {}
     for ref_scaffolding_tool in ref_scaffolding_tool_list:
         for option_set in config["coretool_option_sets"][ref_scaffolding_tool]:
-            print(prev_stage)
+            #print(prev_stage)
             for prev_parameters in stage_dict[prev_stage]["parameters"]:
                 for reference in list(input_reference_filedict.keys()):
-                    parameters_label = "{0}..{1}_{2}!{3}".format(prev_parameters, ref_scaffolding_tool, option_set, reference)
+                    parameters_label = "{0}..{1}_{2}${3}".format(prev_parameters, ref_scaffolding_tool, option_set, reference)
                     stage_dict["ref_scaffolding"]["parameters"][parameters_label] = {}
                     stage_dict["ref_scaffolding"]["parameters"][parameters_label]["included"] = True
                     stage_dict["ref_scaffolding"]["parameters"][parameters_label]["ref_scaffolder"] = ref_scaffolding_tool

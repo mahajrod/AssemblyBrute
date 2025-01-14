@@ -1,10 +1,11 @@
 
 
 def get_reference_id_from_ref_scaffolding_parameters(parameters):
-    return parameters.split("!")[-1]
+    return parameters.split("...")[-1]
 
 def get_reference_fasta_path_from_ref_scaffolding_parameters(parameters):
     ref_id = get_reference_id_from_ref_scaffolding_parameters(parameters)
+    print(out_dir_path / ("data/reference/{0}/{0}.softmasked.fasta".format(ref_id)))
     return out_dir_path / ("data/reference/{0}/{0}.softmasked.fasta".format(ref_id))
 
 rule ragtag: #

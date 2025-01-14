@@ -1320,9 +1320,7 @@ if "curation" in config["stage_list"]:
 if "gap_closing" in config["stage_list"]:
     include: "workflow/rules/Finalization/GapClosing.smk"
 
-print(config["stage_list"])
 if "ref_scaffolding" in config["stage_list"]:
-    print("AAAAAAA")
     include: "workflow/rules/RefScaffolding/RagTag.smk"
 
 include: "workflow/rules/Curation/CurationFiles.smk"

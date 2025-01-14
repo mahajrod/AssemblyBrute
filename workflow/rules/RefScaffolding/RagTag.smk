@@ -6,9 +6,11 @@ def get_reference_id_from_ref_scaffolding_parameters(parameters):
 def get_reference_fasta_path_from_ref_scaffolding_parameters(parameters):
     ref_id = get_reference_id_from_ref_scaffolding_parameters(parameters)
     return out_dir_path / ("data/reference/{0}/{0}.softmasked.fasta".format(ref_id))
+
 rule ragtag: #
     input:
-        fasta=out_dir_path / ("{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta" % stage_dict["ref_scaffolding"]["prev_stage"]),
+        fasta=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta" %(stage_dict["ref_scaffolding"]["prev_stage"],
+                                                                                                  stage_dict["ref_scaffolding"]["prev_stage"])),
         reference_fasta=lambda wildcards: get_reference_fasta_path_from_ref_scaffolding_parameters(wildcards.ref_scaf_parameters) #out_dir_path / "data/reference/{reference}/{reference}.softmasked.fasta"
     output:
         #fasta_prefix = results / ref_scaffolding / hifiasm_l3primary_no_hic..purge_dups_keep_hicov..ragtag_default!bCatUst1.pri.v2 / TurFus1.ref_scaffolding.hap0

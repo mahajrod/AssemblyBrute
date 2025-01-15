@@ -8,5 +8,5 @@
   - "conda-forge"
   - "anaconda"
 "dependencies":
-  - "hifiasm"
+  - "hifiasm>=0.24"
   - "gfatools"

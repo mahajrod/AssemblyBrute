@@ -83,4 +83,4 @@ rule rename_ragtag_scaffolds:
         " awk '{{print $2\"_RagTag\tps\"$1 }}' {input.reference_syn} > {output.ragtag_syn} 2>{log.awk}; "
         " rename_sequence_ids.py -i {input.fasta} -o {output.final_fasta} -s {output.ragtag_syn} -k 0 -c 1 > {log.rename_fasta} 2>&1; "
         " ln -sf {wildcards.haplotype}/{wildcards.genome_prefix}.ref_scaffolding.{wildcards.haplotype}.stats {output.final_stats} > {log.ln} 2>&1; "
-        " replace_column_value_by_syn.py -i {input.agp} -o {output.final_agp} -s {output.ragtag_syn} > {log.rename_agp} 2>&1; " # -k 0 -c 1
+        " replace_column_value_by_syn.py -i {input.agp} -o {output.final_agp} -s {output.ragtag_syn} -c 0 > {log.rename_agp} 2>&1; " # -k 0 -c 1

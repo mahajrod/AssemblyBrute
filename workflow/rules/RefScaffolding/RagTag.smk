@@ -1,7 +1,7 @@
 
 
 #def get_reference_id_from_ref_scaffolding_parameters(parameters):
-#    return parameters.split("!")[-1]
+#    return parameters.split(",")[-1]
 
 #def get_reference_fasta_path_from_ref_scaffolding_parameters(parameters):
 #    ref_id = get_reference_id_from_ref_scaffolding_parameters(parameters)
@@ -15,23 +15,23 @@ rule ragtag: #
         reference_fasta=out_dir_path / "data/reference/{reference}/{reference}.softmasked.fasta",
         reference_syn=out_dir_path / "data/reference/{reference}/{reference}.syn",
     output:
-        #fasta_prefix = results / ref_scaffolding / hifiasm_l3primary_no_hic..purge_dups_keep_hicov..ragtag_default!bCatUst1.pri.v2 / TurFus1.ref_scaffolding.hap0
-        #alias_ragtag_fasta=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}/{genome_prefix}.ref_scaffolding.{haplotype}.fasta",
-        #alias_ragtag_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}/{genome_prefix}.ref_scaffolding.{haplotype}.agp",
-        #alias_ragtag_stats=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}/{genome_prefix}.ref_scaffolding.{haplotype}.stats",
-        ragtag_fasta=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.fasta",
-        ragtag_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.agp",
-        ragtag_stats=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.stats",
-        #ragtag_syn=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.syn",
+        #fasta_prefix = results / ref_scaffolding / hifiasm_l3primary_no_hic..purge_dups_keep_hicov..ragtag_default,bCatUst1.pri.v2 / TurFus1.ref_scaffolding.hap0
+        #alias_ragtag_fasta=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{genome_prefix}.ref_scaffolding.{haplotype}.fasta",
+        #alias_ragtag_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{genome_prefix}.ref_scaffolding.{haplotype}.agp",
+        #alias_ragtag_stats=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{genome_prefix}.ref_scaffolding.{haplotype}.stats",
+        ragtag_fasta=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.fasta",
+        ragtag_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.agp",
+        ragtag_stats=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.stats",
+        #ragtag_syn=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.syn",
 
     log:
-        ragtag=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}/{haplotype}/ragtag.{genome_prefix}.ref_scaffolding.{haplotype}.log",
-        ln=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}/{haplotype}/ragtag.{genome_prefix}.ref_scaffolding.{haplotype}.ln.log",
-        awk=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}/{haplotype}/ragtag.{genome_prefix}.ref_scaffolding.{haplotype}.awk.log",
-        cluster_log=output_dict["cluster_log"] / "ragtag.{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "ragtag.{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}.{genome_prefix}.{haplotype}.cluster.err"
+        ragtag=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{haplotype}/ragtag.{genome_prefix}.ref_scaffolding.{haplotype}.log",
+        ln=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{haplotype}/ragtag.{genome_prefix}.ref_scaffolding.{haplotype}.ln.log",
+        awk=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{haplotype}/ragtag.{genome_prefix}.ref_scaffolding.{haplotype}.awk.log",
+        cluster_log=output_dict["cluster_log"] / "ragtag.{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "ragtag.{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "ragtag.{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}.{genome_prefix}.{haplotype}.benchmark.txt"
+        output_dict["benchmark"]  / "ragtag.{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
         config["conda"]["ragtag"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["ragtag"]["yaml"])
     resources:
@@ -60,24 +60,23 @@ rule rename_ragtag_scaffolds:
         #reference_fasta=lambda wildcards: get_reference_fasta_path_from_ref_scaffolding_parameters(wildcards.ref_scaf_parameters) #out_dir_path / "data/reference/{reference}/{reference}.softmasked.fasta"
         reference_syn=out_dir_path / "data/reference/{reference}/{reference}.syn",
     output:
-        #fasta_prefix = results / ref_scaffolding / hifiasm_l3primary_no_hic..purge_dups_keep_hicov..ragtag_default!bCatUst1.pri.v2 / TurFus1.ref_scaffolding.hap0
-        final_fasta=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}/{genome_prefix}.ref_scaffolding.{haplotype}.fasta",
-        final_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}/{genome_prefix}.ref_scaffolding.{haplotype}.agp",
-        final_stats=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}/{genome_prefix}.ref_scaffolding.{haplotype}.stats",
-        #ragtag_fasta=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.fasta",
-        #ragtag_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.agp",
-        #ragtag_stats=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.stats",
-        ragtag_syn=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.syn",
-
+        #fasta_prefix = results / ref_scaffolding / hifiasm_l3primary_no_hic..purge_dups_keep_hicov..ragtag_default,bCatUst1.pri.v2 / TurFus1.ref_scaffolding.hap0
+        final_fasta=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{genome_prefix}.ref_scaffolding.{haplotype}.fasta",
+        final_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{genome_prefix}.ref_scaffolding.{haplotype}.agp",
+        final_stats=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{genome_prefix}.ref_scaffolding.{haplotype}.stats",
+        #ragtag_fasta=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.fasta",
+        #ragtag_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.agp",
+        #ragtag_stats=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.stats",
+        ragtag_syn=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.syn",
     log:
-        ln=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}/{haplotype}/rename_ragtag_scaffolds.{genome_prefix}.ref_scaffolding.{haplotype}.ln.log",
-        awk=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}/{haplotype}/rename_ragtag_scaffolds.{genome_prefix}.ref_scaffolding.{haplotype}.awk.log",
-        rename_fasta=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}/{haplotype}/rename_ragtag_scaffolds.{genome_prefix}.ref_scaffolding.{haplotype}.rename_fasta.log",
-        rename_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}/{haplotype}/rename_ragtag_scaffolds.{genome_prefix}.ref_scaffolding.{haplotype}.rename_agp.log",
-        cluster_log=output_dict["cluster_log"] / "rename_ragtag_scaffolds.{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "rename_ragtag_scaffolds{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}.{genome_prefix}.{haplotype}.cluster.err"
+        ln=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{haplotype}/rename_ragtag_scaffolds.{genome_prefix}.ref_scaffolding.{haplotype}.ln.log",
+        awk=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{haplotype}/rename_ragtag_scaffolds.{genome_prefix}.ref_scaffolding.{haplotype}.awk.log",
+        rename_fasta=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{haplotype}/rename_ragtag_scaffolds.{genome_prefix}.ref_scaffolding.{haplotype}.rename_fasta.log",
+        rename_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{haplotype}/rename_ragtag_scaffolds.{genome_prefix}.ref_scaffolding.{haplotype}.rename_agp.log",
+        cluster_log=output_dict["cluster_log"] / "rename_ragtag_scaffolds.{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "rename_ragtag_scaffolds{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "rename_ragtag_scaffolds.{prev_stage_parameters}..ragtag_{ref_scaf_parameters}!{reference}.{genome_prefix}.{haplotype}.benchmark.txt"
+        output_dict["benchmark"]  / "rename_ragtag_scaffolds.{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

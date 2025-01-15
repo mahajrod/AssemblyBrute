@@ -116,6 +116,7 @@
         - "min_aln_len_5k"
         - "min_aln_len_7.5k"
         - "min_aln_len_10k"
+
 "other_tool_option_sets":
     "cutadapt":                 "default"   # Allowed: default
     "porechop_abi":             "default"   # Allowed: default

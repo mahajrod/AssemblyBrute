@@ -14,6 +14,8 @@ rule ragtag: #
         ragtag_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.agp",
         ragtag_stats=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.stats",
         #ragtag_syn=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.syn",
+    params:
+        min_aln_len=lambda wildcards: parse_option("min_aln_len", parameters["tool_options"]["ragtag"][wildcards.ref_scaf_parameters], " -f "),
 
     log:
         ragtag=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference}/{haplotype}/ragtag.{genome_prefix}.ref_scaffolding.{haplotype}.log",
@@ -35,7 +37,7 @@ rule ragtag: #
 
     shell:
         " RAGTAG_DIR=`dirname {output.ragtag_fasta}`; "
-        " ragtag.py scaffold -t {threads} -o ${{RAGTAG_DIR}}  -w {input.reference_fasta} {input.fasta} > {log.ragtag} 2>&1; "
+        " ragtag.py scaffold -t {threads} -o ${{RAGTAG_DIR}} {params.min_aln_len} -w {input.reference_fasta} {input.fasta} > {log.ragtag} 2>&1; "
         " ln -sf ragtag.scaffold.fasta {output.ragtag_fasta} > {log.ln} 2>&1; "
         " ln -sf ragtag.scaffold.agp {output.ragtag_agp} >> {log.ln} 2>&1; "
         " ln -sf ragtag.scaffold.stats {output.ragtag_stats} >> {log.ln} 2>&1; "

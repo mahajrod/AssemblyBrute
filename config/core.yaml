@@ -119,6 +119,16 @@
                         "read_number": 1000000
             "ragtag":
                 "default": {}
+                "min_aln_len_2k":
+                    "min_aln_len": 2000
+                "min_aln_len_3k":
+                    "min_aln_len": 3000
+                "min_aln_len_5k":
+                    "min_aln_len": 5000
+                "min_aln_len_7.5k":
+                    "min_aln_len": 7500
+                "min_aln_len_10k":
+                    "min_aln_len": 10000
             "microsome_detection":
                 "default":
                     "max_length":

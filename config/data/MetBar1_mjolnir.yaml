@@ -80,6 +80,9 @@
     "curation":
         "default":
             - "curation"
+    "ref_scaffolding":
+        "default":
+            - "ragtag"
 
 "coretool_option_sets":
     "hifiasm":
@@ -105,6 +108,8 @@
         - "phased_reads"
         #- "unphased_reads"
     "curation":
+        - "default"
+    "ragtag":
         - "default"
 
 "other_tool_option_sets":
@@ -200,7 +205,7 @@
 "custom_enzyme_set_is_no_motif": False
 
 "starting_point": "fastq" # Allowed: "draft"
-"data_types": "hifi" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
+"data_types": "hifi,reference" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
 
 #-------- Options specific for starting point 'draft' ----------------
 "phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads
@@ -209,7 +214,7 @@
 "mode": "assembly"                # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
-"assembly_mode": "skip_hic_scaffolding"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
+"assembly_mode": "ref_scaffolding_skip_hic_scaffolding"            # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []
@@ -221,7 +226,7 @@
 "skip_read_qc": False
 "skip_filter_reads": False
 "skip_busco": False
-"skip_gcp": False
+"skip_gcp": True
 "skip_krater": True
 "skip_fcs": False
 "skip_fcs_adaptor": False
@@ -232,7 +237,7 @@
 "skip_both_pretext": False
 "skip_nanoqc": False
 "skip_nanoplot": False
-"skip_wga": False
+"skip_wga": True
 "skip_higlass": True
 "skip_variantcalling": True
 "skip_hic_file": False

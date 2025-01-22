@@ -14,7 +14,7 @@
   - "multiqc"
   - "minimap2"
   - "purge_dups"
-  - "yahs"
+  - "yahs>=1.2.2"
   - "quast"
   - "gfatools"
   - "cutadapt=4.6"

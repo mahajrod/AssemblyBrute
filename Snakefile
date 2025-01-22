@@ -453,6 +453,7 @@ if "draft_qc" in config["stage_list"]:
                          ]
 
 if ("filter_reads" in config["stage_list"]) and (not config["skip_filter_reads"]):
+    print("AAAAA")
     results_list += [expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),
                             fileprefix=input_file_prefix_dict["hifi"]) if "hifi" in fastq_based_data_type_set else [],
                     expand(output_dict["qc"] / "fastqc/{datatype}/{stage}/{fileprefix}_fastqc.zip",

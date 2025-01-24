@@ -501,7 +501,15 @@ if ("filter_reads" in config["stage_list"]) and (not config["skip_filter_reads"]
                         expand(output_dict["qc"] / "nanoqc/{datatype}/{stage}/{fileprefix}",
                                    datatype=["nanopore", ],
                                    stage=["trimmed", ],
-                                   fileprefix=input_file_prefix_dict["nanopore"],) if "nanopore" in long_read_data_type_set else [],
+                                   fileprefix=input_file_prefix_dict["nanopore", ],) if "nanopore" in long_read_data_type_set else [],
+                        expand(output_dict["qc"] / "nanoqc/{datatype}/{stage}/{fileprefix}",
+                            datatype=["duplex", ],
+                            stage=["trimmed", ],
+                            fileprefix=input_file_prefix_dict["duplex",],) if "duplex" in long_read_data_type_set else [],
+                        expand(output_dict["qc"] / "nanoqc/{datatype}/{stage}/{fileprefix}",
+                            datatype=["simplex", ],
+                            stage=["trimmed", ],
+                            fileprefix=input_file_prefix_dict["simplex",],) if "simplex" in long_read_data_type_set else [],
                         ]
     if not config["skip_nanoplot"]:
         results_list += [[expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{datatype}.{stage}.NanoStats.tsv",
@@ -511,15 +519,15 @@ if ("filter_reads" in config["stage_list"]) and (not config["skip_filter_reads"]
                         expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{datatype}.{stage}.NanoStats.tsv",
                                datatype=["nanopore", ],
                                stage=["trimmed", ],
-                               ) if "nanopore" in long_read_data_type_set else []
-                        #*[expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{fileprefix}.Yield_By_Length.png",
-                        #       datatype=[dat_type, ],
-                        #       stage=["filtered", ],
-                        #       fileprefix=input_file_prefix_dict[dat_type],) for dat_type in long_read_data_type_set],
-                        #expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{fileprefix}.Yield_By_Length.png",
-                        #           datatype=["nanopore", ],
-                        #           stage=["trimmed", ],
-                        #           fileprefix=input_file_prefix_dict["nanopore"],) if "nanopore" in long_read_data_type_set else [],
+                               ) if "nanopore" in long_read_data_type_set else [],
+                        expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{datatype}.{stage}.NanoStats.tsv",
+                             datatype=["duplex", ],
+                             stage=["trimmed", ],
+                                ) if "duplex" in long_read_data_type_set else [],
+                        expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{datatype}.{stage}.NanoStats.tsv",
+                             datatype=["simplex", ],
+                             stage=["trimmed", ],
+                                ) if "simplex" in long_read_data_type_set else [],
                         ]
 
     if config["database_set"]["kraken2"] and kraken_scan_data_type_set and (not config["skip_kraken"]):
@@ -1246,7 +1254,6 @@ include: "workflow/rules/QCFiltering/Cutadapt.smk"
 include: "workflow/rules/QCFiltering/Trimmomatic.smk"
 
 include: "workflow/rules/QCFiltering/TADbit.smk"
-#if "nanopore" in data_types:
 include: "workflow/rules/QCFiltering/Nanopore.smk"
 include: "workflow/rules/QCFiltering/NanoQC.smk"
 include: "workflow/rules/QCFiltering/NanoPlot.smk"
@@ -1254,7 +1261,6 @@ include: "workflow/rules/QCFiltering/NanoPlot.smk"
 include: "workflow/rules/Kmer/Jellyfish.smk"
 include: "workflow/rules/Kmer/Meryl.smk"
 include: "workflow/rules/Kmer/Smudgeplot.smk"
-#include: "workflow/rules/Kmer/KAT.smk"
 include: "workflow/rules/Kmer/GCplot.smk"
 include: "workflow/rules/Kmer/Genomescope.smk"
 include: "workflow/rules/Kmer/Krater.smk"

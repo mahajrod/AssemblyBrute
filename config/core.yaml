@@ -157,6 +157,8 @@
                     "lqccs": []
                     "illumina": []
                     "nanopore": []
+                    "simplex": []
+                    "duplex": []
                     "hic": []
             "cutadapt":
                 "default":
@@ -202,6 +204,14 @@
                         "ab_initio": True # --ab_initio
                         "guess_adaptor_ony": False # --guess_adapter_only
                         "verbosity": 2 # -v
+                    "duplex":
+                        "ab_initio": True # --ab_initio
+                        "guess_adaptor_ony": False # --guess_adapter_only
+                        "verbosity": 2 # -v
+                    "simplex":
+                        "ab_initio": True # --ab_initio
+                        "guess_adaptor_ony": False # --guess_adapter_only
+                        "verbosity": 2 # -v
             "chopper":
                 "default":
                     "nanopore":
@@ -210,11 +220,27 @@
                         "minlength": 500       # --minlength     Sets a minimum read length [default: 1]
                         "quality"  : 10         # --quality       Sets a minimum Phred average quality score [default: 0]
                         "tailcrop" : 30        # --tailcrop      Trim N nucleotides from the end of a read [default: 0]
+                    "duplex":
+                        "headcrop": 30        # --headcrop      Trim N nucleotides from the start of a read [default: 0]
+                        "maxlength": null      # --maxlength     Sets a maximum read length [default: 2147483647]
+                        "minlength": 500       # --minlength     Sets a minimum read length [default: 1]
+                        "quality": 10         # --quality       Sets a minimum Phred average quality score [default: 0]
+                        "tailcrop": 30        # --tailcrop      Trim N nucleotides from the end of a read [default: 0]
+                    "simplex":
+                        "headcrop": 30        # --headcrop      Trim N nucleotides from the start of a read [default: 0]
+                        "maxlength": null      # --maxlength     Sets a maximum read length [default: 2147483647]
+                        "minlength": 500       # --minlength     Sets a minimum read length [default: 1]
+                        "quality": 10         # --quality       Sets a minimum Phred average quality score [default: 0]
+                        "tailcrop": 30        # --tailcrop      Trim N nucleotides from the end of a read [default: 0]
             "fastqc":
                 "default":
                     "illumina":
                         "kmer_length": 7
                     "nanopore":
+                        "kmer_length": 7
+                    "duplex":
+                        "kmer_length": 7
+                    "simplex":
                         "kmer_length": 7
                     "hifi":
                         "kmer_length": 7
@@ -229,6 +255,10 @@
                     "illumina":
                         "min_mapping_quality": 30
                     "nanopore":
+                        "min_mapping_quality": 10
+                    "duplex":
+                        "min_mapping_quality": 10
+                    "simplex":
                         "min_mapping_quality": 10
                     "clr":
                         "min_mapping_quality": 20
@@ -248,6 +278,20 @@
                         "max_coverage": 100000000
                         "increment": 1
                     "nanopore":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "20G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "duplex":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "20G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "simplex":
                         "kmer_length":
                             - 21
                         "hash_size": "20G"
@@ -308,6 +352,16 @@
                             - 21
                             #- 31
                             #- 41 #very RAM hungry option
+                    "duplex":
+                        "kmer_length":
+                            - 21
+                            #- 31
+                            #- 41 #very RAM hungry option
+                    "simplex":
+                        "kmer_length":
+                            - 21
+                            #- 31
+                            #- 41 #very RAM hungry option
             "select_long_scaffolds":
                 "default":
                     "max_scaffolds": 200
@@ -329,6 +383,16 @@
                         "upper_boundary":
                             - 1500
                     "nanopore":
+                        "lower_boundary":
+                            - 10
+                        "upper_boundary":
+                            - 1500
+                    "duplex":
+                        "lower_boundary":
+                            - 10
+                        "upper_boundary":
+                            - 1500
+                    "simplex":
                         "lower_boundary":
                             - 10
                         "upper_boundary":
@@ -357,6 +421,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": True
@@ -370,6 +436,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": True
@@ -383,6 +451,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": False
@@ -396,6 +466,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": True
@@ -409,6 +481,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": False
@@ -422,6 +496,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": True
@@ -435,6 +511,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": True
@@ -448,6 +526,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": True
@@ -472,6 +552,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": True
                 "l1primary_ul_lqccs":
@@ -496,6 +578,8 @@
                     "min_contig_coverage": 2
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": True
@@ -509,6 +593,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": True
@@ -522,6 +608,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": False
@@ -535,6 +623,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": True
@@ -548,6 +638,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": True
@@ -561,6 +653,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": False
@@ -574,6 +668,8 @@
                     "min_contig_coverage": 2
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": True
@@ -598,6 +694,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": True
                 "l3primary_ul_lqccs":
@@ -622,6 +720,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": True
@@ -635,6 +735,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": False
@@ -648,6 +750,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": True
@@ -661,6 +765,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": False
@@ -674,6 +780,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": True
@@ -687,6 +795,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": False
@@ -700,6 +810,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": True
@@ -713,6 +825,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": False
@@ -728,6 +842,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     #"ignore_bin": True
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
@@ -744,6 +860,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     #"ignore_bin": True
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
@@ -760,6 +878,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": True
@@ -775,6 +895,8 @@
                     "min_contig_coverage": 1
                     "ultra_long_reads":
                         - "nanopore"
+                        - "simplex"
+                        - "duplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": True
@@ -832,6 +954,12 @@
                         "index_size": "4G"
                         "alignment_scheme": "map-pb"   # -x
                     "nanopore":
+                        "index_size": "4G"
+                        "alignment_scheme": "map-ont"  # -x
+                    "simplex":
+                        "index_size": "4G"
+                        "alignment_scheme": "map-ont"  # -x
+                    "duplex":
                         "index_size": "4G"
                         "alignment_scheme": "map-ont"  # -x
                     "self":
@@ -1037,6 +1165,26 @@
                             #- 71  #very RAM hungry option
                         "min_coverage":
                             - 3
+                    "duplex":
+                        "kmer_length":
+                            - 21
+                            #- 31
+                            #- 41  #very RAM hungry option
+                            #- 51  #very RAM hungry option
+                            #- 61  #very RAM hungry option
+                            #- 71  #very RAM hungry option
+                        "min_coverage":
+                            - 3
+                    "simplex":
+                        "kmer_length":
+                            - 21
+                            #- 31
+                            #- 41  #very RAM hungry option
+                            #- 51  #very RAM hungry option
+                            #- 61  #very RAM hungry option
+                            #- 71  #very RAM hungry option
+                        "min_coverage":
+                            - 3
             "kat":
                 "default":
                     "hifi":
@@ -1182,6 +1330,12 @@
                     "nanopore":
                         "matching_len": 3500
                         "datatype": "ont"
+                    "duplex":
+                        "matching_len": 3500
+                        "datatype": "ont"
+                    "simplex":
+                        "matching_len": 3500
+                        "datatype": "ont"
                     "clr":
                         "matching_len": 3500
                         "datatype": "pbclr"
@@ -1193,6 +1347,12 @@
                     "nanopore":
                         "matching_len": 3500
                         "datatype": "ont"
+                    "duplex":
+                        "matching_len": 3500
+                        "datatype": "ont"
+                    "simplex":
+                        "matching_len": 3500
+                        "datatype": "ont"
                     "clr":
                         "matching_len": 3500
                         "datatype": "pbclr"
@@ -1202,6 +1362,12 @@
                         "matching_len": 3500
                         "datatype": "asm"
                     "nanopore":
+                        "matching_len": 3500
+                        "datatype": "ont"
+                    "duplex":
+                        "matching_len": 3500
+                        "datatype": "ont"
+                    "simplex":
                         "matching_len": 3500
                         "datatype": "ont"
                     "clr":
@@ -1227,6 +1393,10 @@
                     "illumina":
                         "model": "WGS"
                     "nanopore":
+                        "model": "ONT_R104"
+                    "duplex":
+                        "model": "ONT_R104"
+                    "simplex":
                         "model": "ONT_R104"
                     "clr":
                         "model": "PACBIO"
@@ -1266,6 +1436,14 @@
                         "kmer_length":
                             - 21
                             - 31
+                    "duplex":
+                        "kmer_length":
+                            - 21
+                            - 31
+                    "simplex":
+                        "kmer_length":
+                            - 21
+                            - 31
             "quast":
                 "default":
                     "large_genome": False
@@ -1280,6 +1458,12 @@
                     "nanopore":
                         "index_size": "4G"
                         "alignment_scheme": "map-ont"  # -x
+                    "duplex":
+                        "index_size": "4G"
+                        "alignment_scheme": "map-ont"  # -x
+                    "simplex":
+                        "index_size": "4G"
+                        "alignment_scheme": "map-ont"  # -x
                     "self":
                         "index_size": "4G"
                         "alignment_scheme": "asm5"     # -x
@@ -1289,6 +1473,12 @@
                         "use_corrected_reads": True
                         "matching_len": 1000
                     "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 1000
+                    "duplex":
+                        "use_corrected_reads": True
+                        "matching_len": 1000
+                    "simplex":
                         "use_corrected_reads": True
                         "matching_len": 1000
                     "clr":
@@ -1301,6 +1491,12 @@
                     "nanopore":
                         "use_corrected_reads": False
                         "matching_len": 1000
+                    "duplex":
+                        "use_corrected_reads": False
+                        "matching_len": 1000
+                    "simplex":
+                        "use_corrected_reads": False
+                        "matching_len": 1000
                     "clr":
                         "use_corrected_reads": False
                         "matching_len": 1000
@@ -1309,6 +1505,12 @@
                         "use_corrected_reads": True
                         "matching_len": 1000
                     "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 1000
+                    "duplex":
+                        "use_corrected_reads": True
+                        "matching_len": 1000
+                    "simplex":
                         "use_corrected_reads": True
                         "matching_len": 1000
                     "clr":
@@ -1326,25 +1528,29 @@
                         "kmer_length":
                             - 21
                         "hash_size": "2G"
-            "meryl":
-                "default":
-                    "hifi":
-                        "kmer_length":
-                            - 21
-                            - 31
-                            #- 41  #very RAM hungry option
-                    "illumina":
-                        "kmer_length":
-                            - 21
-                            - 31
-                    "nanopore":
-                        "kmer_length":
-                            - 21
-                            - 31
-                    "hic":
-                        "kmer_length":
-                            - 21
-                            #- 41  #very RAM hungry option
+            #"meryl":
+            #    "default":
+            #        "hifi":
+            #            "kmer_length":
+            #                - 21
+            #                - 31
+            #                #- 41  #very RAM hungry option
+            #        "illumina":
+            #            "kmer_length":
+            #                - 21
+            #                - 31
+            #        "nanopore":
+            #            "kmer_length":
+            #                - 21
+            #                - 31
+            #        "nanopore":
+            #            "kmer_length":
+            #                - 21
+            #                - 31
+            #        "hic":
+            #            "kmer_length":
+            #                - 21
+            #                #- 41  #very RAM hungry option
             "quast":
                 "default":
                     "large_genome": False
@@ -1359,6 +1565,12 @@
                     "nanopore":
                         "index_size": "4G"
                         "alignment_scheme": "map-ont"  # -x
+                    "duplex":
+                        "index_size": "4G"
+                        "alignment_scheme": "map-ont"  # -x
+                    "simplex":
+                        "index_size": "4G"
+                        "alignment_scheme": "map-ont"  # -x
                     "self":
                         "index_size": "4G"
                         "alignment_scheme": "asm5"     # -x
@@ -1368,6 +1580,12 @@
                         "use_corrected_reads": True
                         "matching_len": 1500
                     "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 1500
+                    "duplex":
+                        "use_corrected_reads": True
+                        "matching_len": 1500
+                    "simplex":
                         "use_corrected_reads": True
                         "matching_len": 1500
                     "clr":
@@ -1380,6 +1598,12 @@
                     "nanopore":
                         "use_corrected_reads": False
                         "matching_len": 1500
+                    "duplex":
+                        "use_corrected_reads": False
+                        "matching_len": 1500
+                    "simplex":
+                        "use_corrected_reads": False
+                        "matching_len": 1500
                     "clr":
                         "use_corrected_reads": False
                         "matching_len": 1500
@@ -1388,6 +1612,12 @@
                         "use_corrected_reads": True
                         "matching_len": 1500
                     "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 1500
+                    "duplex":
+                        "use_corrected_reads": True
+                        "matching_len": 1500
+                    "simplex":
                         "use_corrected_reads": True
                         "matching_len": 1500
                     "clr":
@@ -1405,25 +1635,25 @@
                         "kmer_length":
                             - 21
                         "hash_size": "7G"
-            "meryl":
-                "default":
-                    "hifi":
-                        "kmer_length":
-                            - 21
-                            - 31
-                            #- 41  #very RAM hungry option
-                    "illumina":
-                        "kmer_length":
-                            - 21
-                            - 31
-                            #- 41  #very RAM hungry option
-                    "hic":
-                        "kmer_length":
-                            - 21
-                    "nanopore":
-                        "kmer_length":
-                            - 21
-                            - 31
+            #"meryl":
+            #    "default":
+            #        "hifi":
+            #            "kmer_length":
+            #                - 21
+            #                - 31
+            #                #- 41  #very RAM hungry option
+            #        "illumina":
+            #            "kmer_length":
+            #                - 21
+            #                - 31
+            #                #- 41  #very RAM hungry option
+            #        "hic":
+            #            "kmer_length":
+            #                - 21
+            #        "nanopore":
+            #            "kmer_length":
+            #                - 21
+            #                - 31
             "quast":
                 "default":
                     "large_genome": True
@@ -1438,6 +1668,12 @@
                     "nanopore":
                         "index_size": "4G"
                         "alignment_scheme": "map-ont"  # -x
+                    "duplex":
+                        "index_size": "4G"
+                        "alignment_scheme": "map-ont"  # -x
+                    "simplex":
+                        "index_size": "4G"
+                        "alignment_scheme": "map-ont"  # -x
                     "self":
                         "index_size": "4G"
                         "alignment_scheme": "asm5"     # -x
@@ -1447,6 +1683,12 @@
                         "use_corrected_reads": True
                         "matching_len": 2500
                     "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 2500
+                    "duplex":
+                        "use_corrected_reads": True
+                        "matching_len": 2500
+                    "simplex":
                         "use_corrected_reads": True
                         "matching_len": 2500
                     "clr":
@@ -1459,6 +1701,12 @@
                     "nanopore":
                         "use_corrected_reads": False
                         "matching_len": 2500
+                    "duplex":
+                        "use_corrected_reads": False
+                        "matching_len": 2500
+                    "simplex":
+                        "use_corrected_reads": False
+                        "matching_len": 2500
                     "clr":
                         "use_corrected_reads": False
                         "matching_len": 2500
@@ -1467,6 +1715,12 @@
                         "use_corrected_reads": True
                         "matching_len": 2500
                     "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 2500
+                    "duplex":
+                        "use_corrected_reads": True
+                        "matching_len": 2500
+                    "simplex":
                         "use_corrected_reads": True
                         "matching_len": 2500
                     "clr":
@@ -1484,25 +1738,25 @@
                         "kmer_length":
                             - 21
                         "hash_size": "20G"
-            "meryl":
-                "default":
-                    "hifi":
-                        "kmer_length":
-                            - 21
-                            #- 31
-                            #- 41  #very RAM hungry option
-                    "illumina":
-                        "kmer_length":
-                            - 21
-                            #- 31
-                            #- 41  #very RAM hungry option
-                    "hic":
-                        "kmer_length":
-                            - 21
-                    "nanopore":
-                        "kmer_length":
-                            - 21
-                            #- 31
+            #"meryl":
+            #    "default":
+            #        "hifi":
+            #            "kmer_length":
+            #                - 21
+            #                #- 31
+            #                #- 41  #very RAM hungry option
+            #        "illumina":
+            #            "kmer_length":
+            #                - 21
+            #                #- 31
+            #                #- 41  #very RAM hungry option
+            #        "hic":
+            #            "kmer_length":
+            #                - 21
+            #        "nanopore":
+            #            "kmer_length":
+            #                - 21
+            #                #- 31
             "quast":
                 "default":
                     "large_genome": True
@@ -1517,6 +1771,12 @@
                     "nanopore":
                         "index_size": "4G"
                         "alignment_scheme": "map-ont"  # -x
+                    "duplex":
+                        "index_size": "4G"
+                        "alignment_scheme": "map-ont"  # -x
+                    "simplex":
+                        "index_size": "4G"
+                        "alignment_scheme": "map-ont"  # -x
                     "self":
                         "index_size": "4G"
                         "alignment_scheme": "asm5"     # -x
@@ -1526,6 +1786,12 @@
                         "use_corrected_reads": True
                         "matching_len": 3500
                     "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 3500
+                    "duplex":
+                        "use_corrected_reads": True
+                        "matching_len": 3500
+                    "simplex":
                         "use_corrected_reads": True
                         "matching_len": 3500
                     "clr":
@@ -1538,6 +1804,12 @@
                     "nanopore":
                         "use_corrected_reads": False
                         "matching_len": 3500
+                    "duplex":
+                        "use_corrected_reads": False
+                        "matching_len": 3500
+                    "simplex":
+                        "use_corrected_reads": False
+                        "matching_len": 3500
                     "clr":
                         "use_corrected_reads": False
                         "matching_len": 3500
@@ -1546,6 +1818,12 @@
                         "use_corrected_reads": True
                         "matching_len": 3500
                     "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 3500
+                    "duplex":
+                        "use_corrected_reads": True
+                        "matching_len": 3500
+                    "simplex":
                         "use_corrected_reads": True
                         "matching_len": 3500
                     "clr":
@@ -1563,25 +1841,25 @@
                         "kmer_length":
                             - 21
                         "hash_size": "32G"
-            "meryl":
-                "default":
-                    "hifi":
-                        "kmer_length":
-                            - 21
-                            #- 31
-                            #- 41  #very RAM hungry option
-                    "illumina":
-                        "kmer_length":
-                            - 21
-                            #- 31
-                            #- 41  #very RAM hungry option
-                    "hic":
-                        "kmer_length":
-                            - 21
-                    "nanopore":
-                        "kmer_length":
-                            - 21
-                            #- 31
+            #"meryl":
+            #    "default":
+            #        "hifi":
+            #            "kmer_length":
+            #                - 21
+            #                #- 31
+            #                #- 41  #very RAM hungry option
+            #        "illumina":
+            #            "kmer_length":
+            #                - 21
+            #                #- 31
+            #                #- 41  #very RAM hungry option
+            #        "hic":
+            #            "kmer_length":
+            #                - 21
+            #        "nanopore":
+            #            "kmer_length":
+            #                - 21
+            #                #- 31
             "quast":
                 "default":
                     "large_genome": True
@@ -1596,6 +1874,12 @@
                     "nanopore":
                         "index_size": "10G"
                         "alignment_scheme": "map-ont"  # -x
+                    "duplex":
+                        "index_size": "10G"
+                        "alignment_scheme": "map-ont"  # -x
+                    "simplex":
+                        "index_size": "10G"
+                        "alignment_scheme": "map-ont"  # -x
                     "self":
                         "index_size": "10G"
                         "alignment_scheme": "asm5"     # -x
@@ -1605,6 +1889,12 @@
                         "use_corrected_reads": True
                         "matching_len": 5000
                     "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 5000
+                    "duplex":
+                        "use_corrected_reads": True
+                        "matching_len": 5000
+                    "simplex":
                         "use_corrected_reads": True
                         "matching_len": 5000
                     "clr":
@@ -1617,6 +1907,12 @@
                     "nanopore":
                         "use_corrected_reads": False
                         "matching_len": 5000
+                    "duplex":
+                        "use_corrected_reads": False
+                        "matching_len": 5000
+                    "simplex":
+                        "use_corrected_reads": False
+                        "matching_len": 5000
                     "clr":
                         "use_corrected_reads": False
                         "matching_len": 5000
@@ -1625,6 +1921,12 @@
                         "use_corrected_reads": True
                         "matching_len": 5000
                     "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 5000
+                    "duplex":
+                        "use_corrected_reads": True
+                        "matching_len": 5000
+                    "simplex":
                         "use_corrected_reads": True
                         "matching_len": 5000
                     "clr":
@@ -1642,25 +1944,25 @@
                         "kmer_length":
                             - 21
                         "hash_size": "64G"
-            "meryl":
-                "default":
-                    "hifi":
-                        "kmer_length":
-                            - 21
-                            #- 31
-                            #- 41  #very RAM hungry option
-                    "illumina":
-                        "kmer_length":
-                            - 21
-                            #- 31
-                            #- 41  #very RAM hungry option
-                    "hic":
-                        "kmer_length":
-                            - 21
-                    "nanopore":
-                        "kmer_length":
-                            - 21
-                            #- 31
+            #"meryl":
+            #    "default":
+            #        "hifi":
+            #            "kmer_length":
+            #                - 21
+            #                #- 31
+            #                #- 41  #very RAM hungry option
+            #        "illumina":
+            #            "kmer_length":
+            #                - 21
+            #                #- 31
+            #                #- 41  #very RAM hungry option
+            #        "hic":
+            #            "kmer_length":
+            #                - 21
+            #        "nanopore":
+            #            "kmer_length":
+            #                - 21
+            #                #- 31
             "quast":
                 "default":
                     "large_genome": True
@@ -1675,6 +1977,12 @@
                     "nanopore":
                         "index_size": "15G"
                         "alignment_scheme": "map-ont"  # -x
+                    "duplex":
+                        "index_size": "15G"
+                        "alignment_scheme": "map-ont"  # -x
+                    "simplex":
+                        "index_size": "15G"
+                        "alignment_scheme": "map-ont"  # -x
                     "self":
                         "index_size": "15G"
                         "alignment_scheme": "asm5"     # -x
@@ -1684,6 +1992,12 @@
                         "use_corrected_reads": True
                         "matching_len": 5000
                     "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 5000
+                    "duplex":
+                        "use_corrected_reads": True
+                        "matching_len": 5000
+                    "simplex":
                         "use_corrected_reads": True
                         "matching_len": 5000
                     "clr":
@@ -1696,6 +2010,12 @@
                     "nanopore":
                         "use_corrected_reads": False
                         "matching_len": 5000
+                    "duplex":
+                        "use_corrected_reads": False
+                        "matching_len": 5000
+                    "simplex":
+                        "use_corrected_reads": False
+                        "matching_len": 5000
                     "clr":
                         "use_corrected_reads": False
                         "matching_len": 5000
@@ -1704,6 +2024,12 @@
                         "use_corrected_reads": True
                         "matching_len": 5000
                     "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 5000
+                    "duplex":
+                        "use_corrected_reads": True
+                        "matching_len": 5000
+                    "simplex":
                         "use_corrected_reads": True
                         "matching_len": 5000
                     "clr":
@@ -1721,23 +2047,23 @@
                         "kmer_length":
                             - 21
                         "hash_size": "128G"
-            "meryl":
-                "default":
-                    "hifi":
-                        "kmer_length":
-                            - 21
-                            #- 31  #very RAM hungry option
-                            #- 41  #very RAM hungry option
-                    "illumina":
-                        "kmer_length":
-                            - 21
-                            #- 31  #very RAM hungry option
-                    "hic":
-                        "kmer_length":
-                            - 21
-                    "nanopore":
-                        "kmer_length":
-                            - 21
+            #"meryl":
+            #    "default":
+            #        "hifi":
+            #            "kmer_length":
+            #                - 21
+            #                #- 31  #very RAM hungry option
+            #                #- 41  #very RAM hungry option
+            #        "illumina":
+            #            "kmer_length":
+            #                - 21
+            #                #- 31  #very RAM hungry option
+            #        "hic":
+            #            "kmer_length":
+            #                - 21
+            #        "nanopore":
+            #            "kmer_length":
+            #                - 21
             "quast":
                 "default":
                     "large_genome": True
@@ -1752,6 +2078,12 @@
                     "nanopore":
                         "index_size": "30G"
                         "alignment_scheme": "map-ont"  # -x
+                    "duplex":
+                        "index_size": "30G"
+                        "alignment_scheme": "map-ont"  # -x
+                    "simplex":
+                        "index_size": "30G"
+                        "alignment_scheme": "map-ont"  # -x
                     "self":
                         "index_size": "30G"
                         "alignment_scheme": "asm5"     # -x
@@ -1761,6 +2093,12 @@
                         "use_corrected_reads": True
                         "matching_len": 10000
                     "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 10000
+                    "duplex":
+                        "use_corrected_reads": True
+                        "matching_len": 10000
+                    "simplex":
                         "use_corrected_reads": True
                         "matching_len": 10000
                     "clr":
@@ -1773,6 +2111,12 @@
                     "nanopore":
                         "use_corrected_reads": False
                         "matching_len": 10000
+                    "duplex":
+                        "use_corrected_reads": False
+                        "matching_len": 10000
+                    "simplex":
+                        "use_corrected_reads": False
+                        "matching_len": 10000
                     "clr":
                         "use_corrected_reads": False
                         "matching_len": 10000
@@ -1781,6 +2125,12 @@
                         "use_corrected_reads": True
                         "matching_len": 10000
                     "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 10000
+                    "duplex":
+                        "use_corrected_reads": True
+                        "matching_len": 10000
+                    "simplex":
                         "use_corrected_reads": True
                         "matching_len": 10000
                     "clr":
@@ -1798,23 +2148,23 @@
                         "kmer_length":
                             - 21
                         "hash_size": "160G"
-            "meryl":
-                "default":
-                    "hifi":
-                        "kmer_length":
-                            - 21
-                            #- 31  #very RAM hungry option
-                            #- 41  #very RAM hungry option
-                    "illumina":
-                        "kmer_length":
-                            - 21
-                            #- 31  #very RAM hungry option
-                    "hic":
-                        "kmer_length":
-                            - 21
-                    "nanopore":
-                        "kmer_length":
-                            - 21
+            #"meryl":
+            #    "default":
+            #        "hifi":
+            #            "kmer_length":
+            #                - 21
+            #                #- 31  #very RAM hungry option
+            #                #- 41  #very RAM hungry option
+            #        "illumina":
+            #            "kmer_length":
+            #                - 21
+            #                #- 31  #very RAM hungry option
+            #        "hic":
+            #            "kmer_length":
+            #                - 21
+            #        "nanopore":
+            #            "kmer_length":
+            #                - 21
             "quast":
                 "default":
                     "large_genome": True
@@ -1829,6 +2179,12 @@
                     "nanopore":
                         "index_size": "30G"
                         "alignment_scheme": "map-ont"  # -x
+                    "duplex":
+                        "index_size": "30G"
+                        "alignment_scheme": "map-ont"  # -x
+                    "simplex":
+                        "index_size": "30G"
+                        "alignment_scheme": "map-ont"  # -x
                     "self":
                         "index_size": "30G"
                         "alignment_scheme": "asm5"     # -x
@@ -1838,6 +2194,12 @@
                         "use_corrected_reads": True
                         "matching_len": 10000
                     "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 10000
+                    "duplex":
+                        "use_corrected_reads": True
+                        "matching_len": 10000
+                    "simplex":
                         "use_corrected_reads": True
                         "matching_len": 10000
                     "clr":
@@ -1850,6 +2212,12 @@
                     "nanopore":
                         "use_corrected_reads": False
                         "matching_len": 10000
+                    "duplex":
+                        "use_corrected_reads": False
+                        "matching_len": 10000
+                    "simplex":
+                        "use_corrected_reads": False
+                        "matching_len": 10000
                     "clr":
                         "use_corrected_reads": False
                         "matching_len": 10000
@@ -1858,6 +2226,12 @@
                         "use_corrected_reads": True
                         "matching_len": 10000
                     "nanopore":
+                        "use_corrected_reads": True
+                        "matching_len": 10000
+                    "duplex":
+                        "use_corrected_reads": True
+                        "matching_len": 10000
+                    "simplex":
                         "use_corrected_reads": True
                         "matching_len": 10000
                     "clr":
@@ -1872,6 +2246,8 @@
     - "hifi"
     #- "clr"
     - "nanopore"
+    - "duplex"
+    - "simplex"
     #- "bionano"
     - "hic"
     - "illumina"
@@ -1894,6 +2270,8 @@
     - "hifi"
     - "clr"
     - "nanopore"
+    - "duplex"
+    - "simplex"
     - "lqccs"
 
 "genome_size_estimation_data":
@@ -1907,6 +2285,8 @@
     - "illumina"
     - "hic"
     - "nanopore"
+    - "duplex"
+    - "simplex"
     - "lqccs"
 
 "read_phasing_data":
@@ -1919,6 +2299,8 @@
     - "lqccs"
     #- "clr"
     - "nanopore"
+    - "duplex"
+    - "simplex"
     - "hic"
     - "lr"
     - "illumina"
@@ -1927,11 +2309,16 @@
     - "hifi"
     #- "clr"
     - "lqccs"
+    - "nanopore"
+    - "duplex"
+    - "simplex"
 
 "fasta_based_data": # Datatypes that might be in fasta format. For example corrected hifi or nanopore reads
     - "hifi"
     - "clr"
     - "nanopore"
+    - "duplex"
+    - "simplex"
     - "lqccs"
     #- "hic"
     #- "lr"
@@ -1952,11 +2339,15 @@
     - "hifi"
     #- "clr"
     - "nanopore"
+    - "duplex"
+    - "simplex"
 
 "gap_filling_data": # Data which might be used for filling gaps
     - "hifi"
     #- "clr"
     - "nanopore"
+    - "duplex"
+    - "simplex"
 
 "variant_calling_data":
     - "hifi"

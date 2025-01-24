@@ -501,15 +501,15 @@ if ("filter_reads" in config["stage_list"]) and (not config["skip_filter_reads"]
                         expand(output_dict["qc"] / "nanoqc/{datatype}/{stage}/{fileprefix}",
                                    datatype=["nanopore", ],
                                    stage=["trimmed", ],
-                                   fileprefix=input_file_prefix_dict["nanopore", ],) if "nanopore" in long_read_data_type_set else [],
+                                   fileprefix=input_file_prefix_dict["nanopore"],) if "nanopore" in long_read_data_type_set else [],
                         expand(output_dict["qc"] / "nanoqc/{datatype}/{stage}/{fileprefix}",
                             datatype=["simplex", ],
                             stage=["trimmed", ],
-                            fileprefix=input_file_prefix_dict["simplex",],) if "simplex" in long_read_data_type_set else [],
+                            fileprefix=input_file_prefix_dict["simplex"],) if "simplex" in long_read_data_type_set else [],
                         expand(output_dict["qc"] / "nanoqc/{datatype}/{stage}/{fileprefix}",
                             datatype=["duplex", ],
                             stage=["trimmed", ],
-                            fileprefix=input_file_prefix_dict["duplex",],) if "duplex" in long_read_data_type_set else [],
+                            fileprefix=input_file_prefix_dict["duplex"],) if "duplex" in long_read_data_type_set else [],
 
                         ]
     if not config["skip_nanoplot"]:

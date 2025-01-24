@@ -491,7 +491,6 @@ if ("filter_reads" in config["stage_list"]) and (not config["skip_filter_reads"]
                             ) for dat_type in set(config["paired_fastq_based_data"]) & fastq_based_data_type_set ]
 
     if not config["skip_nanoqc"]:
-        print(input_file_prefix_dict)
         results_list += [
 
                         *[expand(output_dict["qc"] / "nanoqc/{datatype}/{stage}/{fileprefix}",

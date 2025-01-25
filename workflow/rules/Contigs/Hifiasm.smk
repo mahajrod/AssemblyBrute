@@ -241,6 +241,9 @@ def get_main_read_filelist(wildcards):
                                 fileprefix=input_file_prefix_dict[datatype],
                                 datatype=[datatype,],
                                 allow_missing=True)
+    print("AAAA")
+    print(wildcards)
+    print(read_filelist)
     return read_filelist
 
 rule hifiasm_hic: # TODO: add support for polyploid assemblies

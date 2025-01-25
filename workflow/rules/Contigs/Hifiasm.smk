@@ -7,7 +7,7 @@ def get_main_read_filelist_for_correction(wildcards):
         if datatype not in input_filedict:
             continue
         read_filelist += expand(output_dict["data"] / ("fastq/{datatype}/filtered/{fileprefix}%s" % config["fastq_extension"]),
-                                fileprefix=input_file_prefix_dict["nanopore"],
+                                fileprefix=input_file_prefix_dict[datatype],
                                 datatype=[datatype,],
                                 allow_missing=True)
     return read_filelist
@@ -238,7 +238,7 @@ def get_main_read_filelist(wildcards):
         if datatype not in input_filedict:
             continue
         read_filelist += expand(output_dict["data"] / ("fastq/{datatype}/filtered/{fileprefix}%s" % config["fastq_extension"]),
-                                fileprefix=input_file_prefix_dict["nanopore"],
+                                fileprefix=input_file_prefix_dict[datatype],
                                 datatype=[datatype,],
                                 allow_missing=True)
     return read_filelist

@@ -62,7 +62,7 @@ def get_meryl_dbs_for_merging(wildcards):
     for datatype in wildcards.datatype.split("_"):
         db_list += expand(output_dict["kmer"] / ("%s/%s/%s.%s.%s.meryl.{fileprefix}" % (datatype,
                                                                                               wildcards.stage,
-                                                                                              wildcards.datatype,
+                                                                                              datatype,
                                                                                               wildcards.stage,
                                                                                               wildcards.kmer_length,)),
             fileprefix=input_file_prefix_dict[datatype] if datatype_format_dict[datatype] == "fastq" else

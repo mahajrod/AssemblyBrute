@@ -115,8 +115,8 @@ def get_coverage_estimator_report_filename(wildcards):
                                                                                                                "_".join(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_reads"]), #config["final_kmer_datatype"],
                                                                                                                config["final_kmer_length"],
                                                                                                                config["final_kmer_counter"]))
-    print(report_filename)
-    print(coverage_estimator)
+    #print(report_filename)
+    #print(coverage_estimator)
     return report_filename
 
 """

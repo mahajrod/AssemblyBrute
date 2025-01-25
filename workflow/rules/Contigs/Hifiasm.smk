@@ -1,7 +1,7 @@
 #ruleorder: hifiasm_hic > hifiasm_hifi
 localrules: get_lowcoverage_contig_ids, extract_lambda_value
 
-def get_main_read_filelist(wildcards):
+def get_main_read_filelist_for_correction(wildcards):
     read_filelist = []
     for datatype in assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options']["main_reads"]:
         if datatype not in input_filedict:
@@ -15,7 +15,7 @@ def get_main_read_filelist(wildcards):
 rule hifiasm_correct:
     priority: 2000
     input:
-        main_reads=get_main_read_filelist,
+        main_reads=get_main_read_filelist_for_correction,
         #hifi=expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),
         #            fileprefix=input_file_prefix_dict["hifi"],
         #            allow_missing=True),
@@ -232,6 +232,16 @@ rule extract_lambda_value:
             log_fd.write("Lambda:\t%.2f\n" % lambda_value)
             out_fd.write("%.2f\n" % lambda_value)
 
+def get_main_read_filelist_for_correction(wildcards):
+    read_filelist = []
+    for datatype in parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_reads"]:
+        if datatype not in input_filedict:
+            continue
+        read_filelist += expand(output_dict["data"] / ("fastq/{datatype}/filtered/{fileprefix}%s" % config["fastq_extension"]),
+                                fileprefix=input_file_prefix_dict["nanopore"],
+                                datatype=[datatype,],
+                                allow_missing=True)
+    return read_filelist
 
 rule hifiasm_hic: # TODO: add support for polyploid assemblies
     priority: 1000

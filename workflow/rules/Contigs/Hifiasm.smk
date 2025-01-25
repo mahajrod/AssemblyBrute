@@ -116,6 +116,7 @@ def get_coverage_estimator_report_filename(wildcards):
                                                                                                                config["final_kmer_length"],
                                                                                                                config["final_kmer_counter"]))
     print(report_filename)
+    print(coverage_estimator)
     return report_filename
 
 """

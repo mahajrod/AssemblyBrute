@@ -201,7 +201,6 @@ for d_type in set(config["paired_fastq_based_data"]) & fastq_based_data_type_set
 if "bionano" in data_types: # TODO: modify when input for bionano will be clear
     input_filedict["bionano"] = find_cmap(input_dict["bionano"]["dir"], cmap_extension=config["cmap_extension"])
 
-
 #---- Initialize tool parameters ----
 #logging.info("Initializing tool parameters...")
 #check if custom restriction sites were provided:
@@ -342,7 +341,7 @@ if ("read_qc" in config["stage_list"]) and (not config["skip_read_qc"]):
 
 if "draft_qc" in config["stage_list"]:
     draft_file_dict = get_input_assemblies(input_dir_path / "draft/fasta", config["ploidy"], config["assembly_fasta_extension"])
-    print(draft_file_dict)
+    #print(draft_file_dict)
     stage_dict["draft_qc"]["parameters"] = {}
 
     for qcer in config["stage_coretools"]["draft_qc"]["default"]:
@@ -350,7 +349,7 @@ if "draft_qc" in config["stage_list"]:
             parameters_label="{0}_{1}".format(qcer, option_set)
             stage_dict["draft_qc"]["parameters"][parameters_label] = {}
             stage_dict["draft_qc"]["parameters"][parameters_label]["qcer"] = qcer
-            stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"] = {}
+            stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"] = deepcopy(parameters["tool_options"][qcer][option_set])
             stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]
             stage_dict["draft_qc"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
             stage_dict["draft_qc"]["parameters"][parameters_label]["option_set_group"] = None
@@ -418,6 +417,8 @@ if "draft_qc" in config["stage_list"]:
                     stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]
                     stage_dict["gap_closing"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
                     stage_dict["gap_closing"]["parameters"][parameters_label]["option_set_group"] = None
+                    if not stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["qc_reads"]:
+                        stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["qc_reads"] = stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["main_reads"]
 
         parameters_list = list(stage_dict["gap_closing"]["parameters"].keys())
         results_list += [*[expand(out_dir_path / "gap_closing/{parameters}/{genome_prefix}.gap_closing.{haplotype}.len",
@@ -602,7 +603,9 @@ if "contig" in config["stage_list"] or "draft_qc" in config["stage_list"]:
                stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]
 
             stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
-            stage_dict["contig"]["parameters"][parameters_label]["option_set_group"] = option_set_group_assignment_dict[option_set] if option_set_group_assignment_dict is not None else none
+            stage_dict["contig"]["parameters"][parameters_label]["option_set_group"] = option_set_group_assignment_dict[option_set] if option_set_group_assignment_dict is not None else None
+            if not stage_dict["contig"]["parameters"][parameters_label]["option_set"]["qc_reads"]:
+                stage_dict["contig"]["parameters"][parameters_label]["option_set"]["qc_reads"] = stage_dict["contig"]["parameters"][parameters_label]["option_set"]["main_reads"]
 
             #for option_supergroup in ["options_affecting_error_correction"]:
             #    stage_dict["contig"]["parameters"][parameters_label][option_supergroup] = option_cluster_reverse_dict[assembler][option_supergroup][option_set]

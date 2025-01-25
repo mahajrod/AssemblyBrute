@@ -109,10 +109,10 @@ def get_coverage_estimator(wildcards):
 
 def get_coverage_estimator_report_filename(wildcards):
     coverage_estimator = get_coverage_estimator(wildcards)
-    report_filename = output_dict["kmer"] / ("{0}/filtered/{1}/{2}.{3}.filtered.{4}.{5}.{1}.parameters".format(config["final_kmer_datatype"],
+    report_filename = output_dict["kmer"] / ("{0}/filtered/{1}/{2}.{3}.filtered.{4}.{5}.{1}.parameters".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_reads"].join("_"), #config["final_kmer_datatype"]
                                                                                                                coverage_estimator,
                                                                                                                wildcards.genome_prefix,
-                                                                                                               config["final_kmer_datatype"],
+                                                                                                               parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_reads"].join("_"), #config["final_kmer_datatype"],
                                                                                                                config["final_kmer_length"],
                                                                                                                config["final_kmer_counter"]))
     return report_filename
@@ -199,10 +199,10 @@ rule extract_lambda_value:
 
             log_fd.write("Using the {0} as a coverage estimator for contig assembly hifiasm_{1} ...\n".format(coverage_estimator,
                                                                                                             wildcards.contig_options))
-            report_filename = output_dict["kmer"] / ("{0}/filtered/{1}/{2}.{3}.filtered.{4}.{5}.{1}.parameters".format(config["final_kmer_datatype"],
+            report_filename = output_dict["kmer"] / ("{0}/filtered/{1}/{2}.{3}.filtered.{4}.{5}.{1}.parameters".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_reads"].join("_"), #config["final_kmer_datatype"],
                                                                                                                        coverage_estimator,
                                                                                                                        wildcards.genome_prefix,
-                                                                                                                       config["final_kmer_datatype"],
+                                                                                                                       parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_reads"].join("_"), #config["final_kmer_datatype"],
                                                                                                                        config["final_kmer_length"],
                                                                                                                        config["final_kmer_counter"]))
             log_fd.write("Report file:\t%s\n" % report_filename)
@@ -361,10 +361,6 @@ rule hifiasm_long_reads_only:
         ovlp_source_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ovlp.source.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
                                                                                                                             wildcards.genome_prefix),
         lambda_file=rules.extract_lambda_value.output.lambda_file
-        #genomescope_report=output_dict["kmer"] / ("%s/filtered/genomescope/{genome_prefix}.%s.filtered.%s.%s.genomescope.parameters" % (config["final_kmer_datatype"],
-        #                                                                                                                                config["final_kmer_datatype"],
-        #                                                                                                                                config["final_kmer_length"],
-        #                                                                                                                                config["final_kmer_counter"])),
     output:
         primary_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.p_ctg.gfa",
         alt_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.a_ctg.gfa",

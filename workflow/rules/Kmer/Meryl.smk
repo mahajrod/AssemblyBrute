@@ -57,19 +57,35 @@ rule meryl_pe:
          " meryl k={wildcards.kmer_length} threads={threads} memory={resources.mem}m count "
          " output {output.db_dir} {input} 1>{log.std} 2>&1;"
 
-rule merge_meryl:
-    input:
-        lambda wildcards:
-            expand(output_dict["kmer"] / ("%s/%s/%s.%s.%s.meryl.{fileprefix}" % (wildcards.datatype,
-                                                                                 wildcards.stage,
-                                                                                 wildcards.datatype,
-                                                                                 wildcards.stage,
-                                                                                 wildcards.kmer_length,)),
-                   fileprefix=input_file_prefix_dict[wildcards.datatype] if datatype_format_dict[wildcards.datatype] == "fastq" else input_fasta_file_prefix_dict[wildcards.datatype],
-                   allow_missing=True,)  if wildcards.datatype not in config["paired_fastq_based_data"] else \
+def get_meryl_dbs_for_merging(wildcards):
+    db_list = []
+    for datatype in wildcards.datatype.split("_"):
+        db_list += expand(output_dict["kmer"] / ("%s/%s/%s.%s.%s.meryl.{fileprefix}" % (datatype,
+                                                                                              wildcards.stage,
+                                                                                              wildcards.datatype,
+                                                                                              wildcards.stage,
+                                                                                              wildcards.kmer_length,)),
+            fileprefix=input_file_prefix_dict[datatype] if datatype_format_dict[datatype] == "fastq" else
+                       input_fasta_file_prefix_dict[datatype],allow_missing=True,) if datatype not in config["paired_fastq_based_data"] else \
             expand(rules.meryl_pe.output,
-                   pairprefix=input_pairprefix_dict[wildcards.datatype],
-                   allow_missing=True,)
+                pairprefix=input_pairprefix_dict[datatype],
+                allow_missing=True,)
+
+    return db_list
+
+rule merge_meryl:
+    input: get_meryl_dbs_for_merging
+        #lambda wildcards:
+        #    expand(output_dict["kmer"] / ("%s/%s/%s.%s.%s.meryl.{fileprefix}" % (wildcards.datatype,
+        #                                                                         wildcards.stage,
+        #                                                                         wildcards.datatype,
+        #                                                                         wildcards.stage,
+        #                                                                         wildcards.kmer_length,)),
+        #           fileprefix=input_file_prefix_dict[wildcards.datatype] if datatype_format_dict[wildcards.datatype] == "fastq" else input_fasta_file_prefix_dict[wildcards.datatype],
+        #           allow_missing=True,)  if wildcards.datatype not in config["paired_fastq_based_data"] else \
+        #    expand(rules.meryl_pe.output,
+        #           pairprefix=input_pairprefix_dict[wildcards.datatype],
+        #           allow_missing=True,)
     output:
         db_dir=directory(output_dict["kmer"] / "{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.meryl"),
         histo=output_dict["kmer"] / "{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.meryl.histo"

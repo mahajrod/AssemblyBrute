@@ -210,6 +210,7 @@ rule extract_lambda_value:
                 with open(report_filename, "r") as in_fd:
                     for line in in_fd:
                         if "Lambda" in line:
+                            print(line)
                             lambda_value = float(line.strip().split("\t")[1])
                             break
             elif coverage_estimator == "krater":

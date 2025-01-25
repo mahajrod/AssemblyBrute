@@ -115,6 +115,7 @@ def get_coverage_estimator_report_filename(wildcards):
                                                                                                                "_".join(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_reads"]), #config["final_kmer_datatype"],
                                                                                                                config["final_kmer_length"],
                                                                                                                config["final_kmer_counter"]))
+    print(report_filename)
     return report_filename
 
 """
@@ -241,9 +242,9 @@ def get_main_read_filelist(wildcards):
                                 fileprefix=input_file_prefix_dict[datatype],
                                 datatype=[datatype,],
                                 allow_missing=True)
-    print("AAAA")
-    print(wildcards)
-    print(read_filelist)
+    #print("AAAA")
+    #print(wildcards)
+    #print(read_filelist)
     return read_filelist
 
 rule hifiasm_hic: # TODO: add support for polyploid assemblies

@@ -413,7 +413,7 @@
             "hifiasm":
                 "default":
                     "purge level": 0 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
-                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "cov_multiplicator": 4.5 # 4.5 * lambda
                     "use_hic":  True
                     "dual_scaf": False
                     "assembly_ploidy": null # set None if assembly ploidy will be the same as species ploidy set via ploidy option
@@ -2482,7 +2482,9 @@
     - "hifi"
     - "illumina"
     #- "hic"
-    #- "nanopore"
+    - "nanopore"
+    - "simplex"
+    - "duplex"
 
 "kraken_scan_data":
     - "hifi"

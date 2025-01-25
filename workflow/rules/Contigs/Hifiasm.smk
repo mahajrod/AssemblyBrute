@@ -232,7 +232,7 @@ rule extract_lambda_value:
             log_fd.write("Lambda:\t%.2f\n" % lambda_value)
             out_fd.write("%.2f\n" % lambda_value)
 
-def get_main_read_filelist_for_correction(wildcards):
+def get_main_read_filelist(wildcards):
     read_filelist = []
     for datatype in parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_reads"]:
         if datatype not in input_filedict:

@@ -2,7 +2,7 @@
 #stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"]
 
 rule merqury: # TODO: add handling for cases of haploid and polyploid genomes
-    input:
+    input: # TODO: IMPORTANT: ADD handling of mixed datatypes
         meryl_db_dir=output_dict["kmer"] / "{0}/{1}/{0}.{1}.{2}.meryl".format(config["final_kmer_datatype"],
                                                                               "filtered" if config["final_kmer_datatype"] in config["filtered_data"] else "raw",
                                                                               config["final_kmer_length"],) ,

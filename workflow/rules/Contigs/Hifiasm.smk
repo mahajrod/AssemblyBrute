@@ -109,10 +109,10 @@ def get_coverage_estimator(wildcards):
 
 def get_coverage_estimator_report_filename(wildcards):
     coverage_estimator = get_coverage_estimator(wildcards)
-    report_filename = output_dict["kmer"] / ("{0}/filtered/{1}/{2}.{3}.filtered.{4}.{5}.{1}.parameters".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_reads"].join("_"), #config["final_kmer_datatype"]
+    report_filename = output_dict["kmer"] / ("{0}/filtered/{1}/{2}.{3}.filtered.{4}.{5}.{1}.parameters".format("_".join(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_reads"]), #config["final_kmer_datatype"]
                                                                                                                coverage_estimator,
                                                                                                                wildcards.genome_prefix,
-                                                                                                               parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_reads"].join("_"), #config["final_kmer_datatype"],
+                                                                                                               "_".join(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_reads"]), #config["final_kmer_datatype"],
                                                                                                                config["final_kmer_length"],
                                                                                                                config["final_kmer_counter"]))
     return report_filename
@@ -199,10 +199,10 @@ rule extract_lambda_value:
 
             log_fd.write("Using the {0} as a coverage estimator for contig assembly hifiasm_{1} ...\n".format(coverage_estimator,
                                                                                                             wildcards.contig_options))
-            report_filename = output_dict["kmer"] / ("{0}/filtered/{1}/{2}.{3}.filtered.{4}.{5}.{1}.parameters".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_reads"].join("_"), #config["final_kmer_datatype"],
+            report_filename = output_dict["kmer"] / ("{0}/filtered/{1}/{2}.{3}.filtered.{4}.{5}.{1}.parameters".format("_".join(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_reads"]), #config["final_kmer_datatype"],
                                                                                                                        coverage_estimator,
                                                                                                                        wildcards.genome_prefix,
-                                                                                                                       parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_reads"].join("_"), #config["final_kmer_datatype"],
+                                                                                                                       "_".join(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_reads"]), #config["final_kmer_datatype"],
                                                                                                                        config["final_kmer_length"],
                                                                                                                        config["final_kmer_counter"]))
             log_fd.write("Report file:\t%s\n" % report_filename)
@@ -210,7 +210,6 @@ rule extract_lambda_value:
                 with open(report_filename, "r") as in_fd:
                     for line in in_fd:
                         if "Lambda" in line:
-                            print(line)
                             lambda_value = float(line.strip().split("\t")[1])
                             break
             elif coverage_estimator == "krater":

@@ -756,8 +756,12 @@ if "purge_dups" in config["stage_list"]:
                                     parameters=[parameters_label]) for haplotype in stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"]],
                              expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/purge_dups/before.comparison.coverage.png",
                                  assembly_stage=["purge_dups"],
-                                 parameters=parameters_list
+                                 parameters=[parameters_label]
                                     ),
+                             [expand(out_dir_path /  "purge_dups/{parameters}/assembly_qc/purge_dups/{haplotype}/{haplotype}.before-after.comparison.coverage.png",
+                                    parameters=[parameters_label],
+                                    haplotype=[haplotype],
+                                    ) for haplotype in stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"]]
                              ]
 
     if not config["skip_busco"]:

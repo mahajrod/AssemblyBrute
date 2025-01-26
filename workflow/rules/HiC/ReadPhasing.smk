@@ -170,4 +170,4 @@ rule extract_se_reads_from_fasta_by_unique_hap_kmers: #TODO: merge with extract_
         parameters["threads"]["extract_reads_by_unique_hap_kmers"]
     shell:
          " meryl-lookup -exclude -sequence {input.se_read} "
-         " -mers {input.rest_hap_db_dirs} -output {output.hap_se_read} > {log.std} 2>&1;"
+         " -mers {input.rest_hap_db_dirs} -output {output.hap_se_read} > {log.std} 2>&1; "

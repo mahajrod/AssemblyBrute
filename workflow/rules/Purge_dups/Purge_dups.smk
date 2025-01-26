@@ -17,22 +17,25 @@ wildcard_constraints:
 rule create_assembly_links_if_skipping_purge_dups:
     input:
         #purged_alias=out_dir_path / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, [^/]+}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.fasta",
-        fasta=out_dir_path  / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/{genome_prefix}.{prev_stage}.{haplotype}.fasta",
-        len=out_dir_path  / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/{genome_prefix}.{prev_stage}.{haplotype}.len",
-        fai=out_dir_path  / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/{genome_prefix}.{prev_stage}.{haplotype}.fasta.fai",
+        fasta=lambda wildcards: out_dir_path  / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta" % (stage_dict["purge_dups"]["parameters"][wildcards.purge_dups_parameters]["prev_stage"],
+                                                                                                                      stage_dict["purge_dups"]["parameters"][wildcards.purge_dups_parameters]["prev_stage"])),
+        len=lambda wildcards: out_dir_path  / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.len" % (stage_dict["purge_dups"]["parameters"][wildcards.purge_dups_parameters]["prev_stage"],
+                                                                                                                      stage_dict["purge_dups"]["parameters"][wildcards.purge_dups_parameters]["prev_stage"])),
+        fai=lambda wildcards: out_dir_path  / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta.fai"% (stage_dict["purge_dups"]["parameters"][wildcards.purge_dups_parameters]["prev_stage"],
+                                                                                                                      stage_dict["purge_dups"]["parameters"][wildcards.purge_dups_parameters]["prev_stage"])),
     output:
-        len=out_dir_path / "purge_dups/{prev_stage, [^/]+}_{prev_stage_parameters, [^/]+}..purge_dups_{purge_dups_parameters, skipped}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.len",
-        fasta=out_dir_path / "purge_dups/{prev_stage, [^/]+}_{prev_stage_parameters, [^/]+}..purge_dups_{purge_dups_parameters, skipped}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.fasta",
-        fai=out_dir_path / "purge_dups/{prev_stage, [^/]+}_{prev_stage_parameters, [^/]+}..purge_dups_{purge_dups_parameters, skipped}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.fasta.fai"
+        len=out_dir_path / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, skipped}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.len",
+        fasta=out_dir_path / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, skipped}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.fasta",
+        fai=out_dir_path / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, skipped}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.fasta.fai"
     #wildcard_constraints:
     #    purge_dups_parameters="skipped.*"
     log:
-        mkdir=output_dict["log"]  / "create_assembly_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_{purge_dups_parameters}.{genome_prefix}.{haplotype}.mkdir.log",
-        ln=output_dict["log"]  / "create_assembly_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_{purge_dups_parameters}.{genome_prefix}.{haplotype}.ln.log",
-        cluster_log=output_dict["cluster_log"] / "create_assembly_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_{purge_dups_parameters}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_assembly_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_{purge_dups_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+        mkdir=output_dict["log"]  / "create_assembly_links_if_skipping_purge_dups.{prev_stage_parameters}..{purge_dups_parameters}.{genome_prefix}.{haplotype}.mkdir.log",
+        ln=output_dict["log"]  / "create_assembly_links_if_skipping_purge_dups.{prev_stage_parameters}..{purge_dups_parameters}.{genome_prefix}.{haplotype}.ln.log",
+        cluster_log=output_dict["cluster_log"] / "create_assembly_links_if_skipping_purge_dups.{prev_stage_parameters}..{purge_dups_parameters}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_assembly_links_if_skipping_purge_dups.{prev_stage_parameters}..{purge_dups_parameters}.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "create_assembly_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_{purge_dups_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+        output_dict["benchmark"]  / "create_assembly_links_if_skipping_purge_dups.{prev_stage_parameters}..{purge_dups_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

@@ -1207,9 +1207,18 @@
             "purge_dups":
                 "default":
                     "cov_multiplicator": 4.5 # 4.5 *lambda
-                    "main_datatypes": 
-                        - "hifi"
+                    "main_datatypes": []
                     "qc_datatypes": []
+                    "interhaplotype_transfer_blacklist":
+                        - "junk"
+                        - "ovlp"
+                        - "highcov"
+                    "purging_blacklist": null
+                    "purging_whitelist": null
+                "skipped":
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "main_datatypes": []
+                    "qc_datatypes": [ ]
                     "interhaplotype_transfer_blacklist":
                         - "junk"
                         - "ovlp"
@@ -1218,8 +1227,7 @@
                     "purging_whitelist": null
                 "keep_hicov":
                     "cov_multiplicator": 4.5 # 4.5 *lambda
-                    "main_datatypes": 
-                        - "hifi"
+                    "main_datatypes": []
                     "qc_datatypes": []
                     "interhaplotype_transfer_blacklist":
                         - "junk"

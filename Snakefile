@@ -714,6 +714,8 @@ if "purge_dups" in config["stage_list"]:
                 stage_dict["purge_dups"]["parameters"][parameters_label]["purge_dupser"] = purge_dupser
                 stage_dict["purge_dups"]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][purge_dupser][option_set]
                 stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["purge_dups"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
+                if not stage_dict["purge_dups"]["parameters"][parameters_label]["option_set"]["main_datatypes"]:
+                    stage_dict["purge_dups"]["parameters"][parameters_label]["option_set"]["main_datatypes"] = stage_dict[stage_dict["purge_dups"]["prev_stage"]]["parameters"][prev_parameters]["option_set"]["main_datatypes"]
                 if not stage_dict["purge_dups"]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
                     stage_dict["purge_dups"]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict["purge_dups"]["parameters"][parameters_label]["option_set"]["main_datatypes"]
 

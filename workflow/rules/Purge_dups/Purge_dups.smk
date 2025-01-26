@@ -104,7 +104,7 @@ rule create_quast_links_if_skipping_purge_dups:
         dir=lambda wildcards: out_dir_path / ("%s/{prev_stage_parameters}/assembly_qc/quast/{genome_prefix}.%s.{haplotype}" % (stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["prev_stage"],
                                                                                                                                stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["prev_stage"])),
     output:
-        dir = directory(out_dir_path / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, purge_dups_skipped.*}/assembly_qc/quast/{genome_prefix}.purge_dups{haplotype}"),
+        dir= directory(out_dir_path / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, purge_dups_skipped.*}/assembly_qc/quast/{genome_prefix}.purge_dups.{haplotype}"),
     log:
         mkdir=output_dict["log"]  / "create_quast_links_if_skipping_purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.{haplotype}.mkdir.log",
         ln=output_dict["log"]  / "create_quast_links_if_skipping_purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.{haplotype}.ln.log",

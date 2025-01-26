@@ -92,7 +92,7 @@ rule create_busco_links_if_skipping_purge_dups:
 
 rule create_quast_links_if_skipping_purge_dups:
     input:
-        dir=directory(out_dir_path / "{prev_stage}/{prev_stage}_{prev_stage_parameters}/assembly_qc/quast/{genome_prefix}.{prev_stage}.{haplotype}"),
+        dir=out_dir_path / "{prev_stage}/{prev_stage}_{prev_stage_parameters}/assembly_qc/quast/{genome_prefix}.{prev_stage}.{haplotype}",
     output:
         dir = directory(out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_{purge_dups_parameters, skipped.*}/assembly_qc/quast/{genome_prefix}.purge_dups{haplotype}"),
     log:

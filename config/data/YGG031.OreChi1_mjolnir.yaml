@@ -89,13 +89,13 @@
          - "l3primary"
          #- "l3primary_main_nanopore"
          #- "l3primary_main_nanopore_only"
-         - "l3primary_main_hifi_duplex"
+         #- "l3primary_main_hifi_duplex"
          #- "l1primary_no_hic"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
     "purge_dups":
         #- "default"
-        - "keep_hicov"
+        #- "keep_hicov"
         - "skipped"
     "salsa2":
         - "phased_reads"

@@ -21,7 +21,7 @@ rule create_assembly_links_if_skipping_purge_dups:
         fasta=out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_{purge_dups_parameters}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.fasta",
         fai=out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_{purge_dups_parameters}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.fasta.fai"
     wildcard_constraints:
-        purge_dups_parameters="skipped\.*"
+        purge_dups_parameters="skipped.*"
     log:
         mkdir=output_dict["log"]  / "create_assembly_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_{purge_dups_parameters}.{genome_prefix}.{haplotype}.mkdir.log",
         ln=output_dict["log"]  / "create_assembly_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_{purge_dups_parameters}.{genome_prefix}.{haplotype}.ln.log",

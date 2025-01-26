@@ -705,9 +705,13 @@ if "purge_dups" in config["stage_list"]:
     stage_dict["purge_dups"]["parameters"] = {}
 
     for purge_dupser in purge_dupser_list:
+        print(purge_dupser)
         for option_set in config["coretool_option_sets"][purge_dupser]:
+            print(option_set)
             for prev_parameters in stage_dict[prev_stage]["parameters"]:
+                print(prev_parameters)
                 parameters_label = "{0}..{1}_{2}".format(prev_parameters, purge_dupser, option_set)
+                print(parameters_label)
                 stage_dict["purge_dups"]["parameters"][parameters_label] = {}
                 stage_dict["purge_dups"]["parameters"][parameters_label]["included"] = True
                 stage_dict["purge_dups"]["parameters"][parameters_label]["prev_stage"] = prev_stage

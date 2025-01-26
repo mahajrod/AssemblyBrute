@@ -11,6 +11,9 @@ def get_meryl_db_for_merqury(wildcards):
             if datatype in config["filtered_data"]:
                 filtered_flag = True
 
+    print(output_dict["kmer"] / "{0}/{1}/{0}.{1}.{2}.meryl".format("_".join(kmer_datatype_list),
+                                                                    "filtered" if filtered_flag else "raw",
+                                                                     config["final_kmer_length"],))
     return output_dict["kmer"] / "{0}/{1}/{0}.{1}.{2}.meryl".format("_".join(kmer_datatype_list),
                                                                     "filtered" if filtered_flag else "raw",
                                                                      config["final_kmer_length"],)

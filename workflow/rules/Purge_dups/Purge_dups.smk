@@ -1,16 +1,8 @@
-ruleorder: create_contig_links > get_seq_len
-#ruleorder: create_links_if_skipping_purge_dups > create_final_links_purge_dups # rule to skip purge_dups when necessary
-#ruleorder: create_assembly_qc_if_skipping_purge_dups > # rule to skip assembly qc rules when skipping purge_dups
-#ruleorder: purge_dups > gfa2fasta
-#ruleorder: create_final_links_purge_dups > gfa2fasta
-localrules: create_contig_links, create_final_links_purge_dups, extract_stats_from_purge_dups_file #create_link_for_purged_fasta,
+#ruleorder: create_contig_links > get_seq_len
 
-#localrules: create_primary_contig_link_hap1, create_primary_contig_link_hap0, merge_pri_hapdups_with_alt, extract_stats_from_purge_dups_file #create_link_for_purged_fasta,
-#localrules: merge_pri_hapdups_with_alt_for_len_files # create_primary_contig_len_file_link,
-#ruleorder: create_primary_contig_link_hap1 > merge_pri_hapdups_with_alt
-#ruleorder: create_primary_contig_link_hap0 > merge_pri_hapdups_with_alt
+#localrules: create_contig_links, create_final_links_purge_dups, extract_stats_from_purge_dups_file #create_link_for_purged_fasta,
 
-ruleorder: create_assembly_links_if_skipping_purge_dups > create_final_links_purge_dups # skipp purge_dups
+#ruleorder: create_assembly_links_if_skipping_purge_dups > create_final_links_purge_dups # skipp purge_dups
 ruleorder: create_busco_links_if_skipping_purge_dups > busco5
 ruleorder: create_merqury_links_if_skipping_purge_dups > merqury
 ruleorder: create_quast_links_if_skipping_purge_dups > quast

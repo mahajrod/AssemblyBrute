@@ -2,7 +2,7 @@
 
 #localrules: create_contig_links, create_final_links_purge_dups, extract_stats_from_purge_dups_file #create_link_for_purged_fasta,
 
-#ruleorder: create_assembly_links_if_skipping_purge_dups > create_final_links_purge_dups # skipp purge_dups
+ruleorder: create_assembly_links_if_skipping_purge_dups > create_final_links_purge_dups # skipp purge_dups
 ruleorder: create_busco_links_if_skipping_purge_dups > busco5
 ruleorder: create_merqury_links_if_skipping_purge_dups > merqury
 ruleorder: create_quast_links_if_skipping_purge_dups > quast
@@ -173,7 +173,7 @@ rule create_contig_links:
     shell:
         " ln -sf ../../../../../{input.fasta} {output.fasta} 1>{log.ln1} 2>&1; "
         " ln -sf ../../../../../{input.len} {output.len} 1>{log.ln2} 2>&1"
-
+"""
 rule minimap2_purge_dups_reads:
     input:
         fastq=lambda wildcards: output_dict["data"] / "fastq/{0}/filtered/{1}{2}".format(wildcards.datatype, #stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"],
@@ -608,4 +608,3 @@ rule extract_artefact_sequences:
         " extract_sequences_by_ids.py -i {input.reference} -d {input.artefact_ids} "
         " -o {output.artefact_fasta} > {log.std} 2>&1 ; "
 
-"""

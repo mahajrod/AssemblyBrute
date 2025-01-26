@@ -98,8 +98,8 @@ rule draw_before_after_plot:
         before_pbstat=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/first_stage/{haplotype}/PB.stat",
         before_pbbasecov=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/first_stage/{haplotype}/PB.base.cov",
         before_cutoffs=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/first_stage/{haplotype}/cutoffs",
-        after_cutoffs=out_dir_path / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/assembly_qc/purge_dups/{haplotype, [^.]+}/cutoffs",
-        after_pbstat=out_dir_path / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/assembly_qc/purge_dups/{haplotype, [^.]+}/PB.stat",
+        after_cutoffs=out_dir_path / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/assembly_qc/purge_dups/{haplotype}/cutoffs",
+        after_pbstat=out_dir_path / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/assembly_qc/purge_dups/{haplotype}/PB.stat",
     output:
         coverage_plot=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/assembly_qc/purge_dups/{haplotype, [^.]+}/{haplotype}.before-after.comparison.coverage.png"
 

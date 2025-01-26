@@ -731,21 +731,21 @@ if "purge_dups" in config["stage_list"]:
                              assembly_stage=["purge_dups"],
                              haplotype=stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"],
                              parameters=[parameters_label]) for parameters_label in parameters_list],
-                    *[expand(out_dir_path /  "{assembly_stage}/{parameters}/assembly_qc/purge_dups/{haplotype}/PB.stat",
-                           genome_prefix=[config["genome_prefix"], ],
-                           assembly_stage=["purge_dups"],
-                           haplotype=stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"],
-                           parameters=[parameters_label]) for parameters_label in parameters_list],
-
-                    expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
-                           genome_prefix=[config["genome_prefix"], ],
-                           assembly_stage=["purge_dups"],),
-                    expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/purge_dups/after.comparison.coverage.png",
-                        assembly_stage=["purge_dups"],
-                        parameters=parameters_list
-                           ),
-
+                    #*[expand(out_dir_path /  "{assembly_stage}/{parameters}/assembly_qc/purge_dups/{haplotype}/PB.stat",
+                    #       genome_prefix=[config["genome_prefix"], ],
+                    #       assembly_stage=["purge_dups"],
+                    #       haplotype=stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"],
+                    #       parameters=[parameters_label]) for parameters_label in parameters_list],
+                    #expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
+                    #       genome_prefix=[config["genome_prefix"], ],
+                    #       assembly_stage=["purge_dups"],),
+                    #expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/purge_dups/after.comparison.coverage.png",
+                    #    assembly_stage=["purge_dups"],
+                    #    parameters=parameters_list
+                    #       ),
+                    #
                     ]
+    """
     for parameters_label in parameters_list:
         if "skipped" not in parameters_label:
             results_list += [[expand(out_dir_path / "purge_dups/{parameters}/{purge_stage}/{haplotype}/{genome_prefix}.dups.{artefact}.fasta",
@@ -759,6 +759,7 @@ if "purge_dups" in config["stage_list"]:
                                  parameters=parameters_list
                                     ),
                              ]
+    """
     if not config["skip_busco"]:
         results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
                                 busco_lineage=config["busco_lineage_list"],

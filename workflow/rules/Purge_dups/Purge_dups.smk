@@ -218,7 +218,7 @@ rule minimap2_purge_dups_reads:
         "  gzip -c - > {output.paf} 2>{log.gzip}; "
 
 rule get_purge_dups_read_stat:
-    input: # TODO: add datatype to the filename of paf
+    input:
         paf=lambda wildcards: [expand(rules.minimap2_purge_dups_reads.output.paf,
                    datatype=[datatype],
                    fileprefix=input_file_prefix_dict[stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"][datatype]],

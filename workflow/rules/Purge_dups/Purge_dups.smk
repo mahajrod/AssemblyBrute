@@ -217,13 +217,19 @@ rule minimap2_purge_dups_reads:
         " {input.fastq} 2>{log.std} | "
         "  gzip -c - > {output.paf} 2>{log.gzip}; "
 
+def get_paf_list(wildcards):
+    paf_list = []
+    for datatype in stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["main_datatypes"]:
+        paf_list += expand(rules.minimap2_purge_dups_reads.output.paf,
+                           datatype=[datatype],
+                           fileprefix=input_file_prefix_dict[datatype],
+                           genome_prefix=[config["genome_prefix"]],
+                           allow_missing=True)
+    return paf_list
+
 rule get_purge_dups_read_stat:
     input:
-        paf=lambda wildcards: [expand(rules.minimap2_purge_dups_reads.output.paf,
-                   datatype=[datatype],
-                   fileprefix=input_file_prefix_dict[datatype],
-                   genome_prefix=[config["genome_prefix"]],
-                   allow_missing=True) for datatype in stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["main_datatypes"]],
+        paf=get_paf_list,
         genomescope_report=output_dict["kmer"] / "{0}/filtered/genomescope/{1}.{0}.filtered.{2}.{3}.genomescope.parameters".format(config["final_kmer_datatype"],
                                                                                                                                    config["genome_prefix"],
                                                                                                                                    config["final_kmer_length"],

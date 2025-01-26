@@ -2,7 +2,7 @@
 
 #localrules: create_contig_links, create_final_links_purge_dups, extract_stats_from_purge_dups_file #create_link_for_purged_fasta,
 
-ruleorder: create_assembly_links_if_skipping_purge_dups > create_final_links_purge_dups # skipp purge_dups
+#ruleorder: create_assembly_links_if_skipping_purge_dups > create_final_links_purge_dups # skipp purge_dups
 ruleorder: create_assembly_links_if_skipping_purge_dups > ref_faidx
 ruleorder: create_assembly_links_if_skipping_purge_dups > get_seq_len
 

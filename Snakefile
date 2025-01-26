@@ -228,11 +228,11 @@ for key in list(config["parameters"].keys()): # remove unused sets of parameters
 parameters = config["parameters"][config["parameter_set"]] # short alias for used set of parameters
 
 for tool in parameters["tool_options"]: # sort datatypes in case of mixed datatypes to avoid ouble calculations
-    for option_set in parameters["tool_options"]["tool"]:
-        if "main_datatypes" in parameters["tool_options"]["tool"][option_set]:
-            parameters["tool_options"]["tool"][option_set]["main_datatypes"] = sorted(parameters["tool_options"]["tool"][option_set]["main_datatypes"])
-        if "qc_datatypes" in parameters["tool_options"]["tool"][option_set]:
-            parameters["tool_options"]["tool"][option_set]["qc_datatypes"] = sorted(parameters["tool_options"]["tool"][option_set]["qc_datatypes"])
+    for option_set in parameters["tool_options"][tool]:
+        if "main_datatypes" in parameters["tool_options"][tool][option_set]:
+            parameters["tool_options"][tool][option_set]["main_datatypes"] = sorted(parameters["tool_options"][tool][option_set]["main_datatypes"])
+        if "qc_datatypes" in parameters["tool_options"][tool][option_set]:
+            parameters["tool_options"][tool][option_set]["qc_datatypes"] = sorted(parameters["tool_options"][tool][option_set]["qc_datatypes"])
 
 
 for tool in config["other_tool_option_sets"]: # select active set of option for tools other than coretools

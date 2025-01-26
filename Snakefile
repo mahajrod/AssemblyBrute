@@ -745,7 +745,7 @@ if "purge_dups" in config["stage_list"]:
                     #       ),
                     #
                     ]
-    """
+
     for parameters_label in parameters_list:
         if "skipped" not in parameters_label:
             results_list += [[expand(out_dir_path / "purge_dups/{parameters}/{purge_stage}/{haplotype}/{genome_prefix}.dups.{artefact}.fasta",
@@ -759,7 +759,7 @@ if "purge_dups" in config["stage_list"]:
                                  parameters=parameters_list
                                     ),
                              ]
-    """
+
     if not config["skip_busco"]:
         results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
                                 busco_lineage=config["busco_lineage_list"],

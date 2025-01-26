@@ -3,7 +3,7 @@ localrules: get_lowcoverage_contig_ids, extract_lambda_value
 
 def get_main_read_filelist_for_correction(wildcards):
     read_filelist = []
-    for datatype in assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options']["main_reads"]:
+    for datatype in assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options']["main_datatypes"]:
         if datatype not in input_filedict:
             continue
         read_filelist += expand(output_dict["data"] / ("fastq/{datatype}/filtered/{fileprefix}%s" % config["fastq_extension"]),
@@ -109,10 +109,10 @@ def get_coverage_estimator(wildcards):
 
 def get_coverage_estimator_report_filename(wildcards):
     coverage_estimator = get_coverage_estimator(wildcards)
-    report_filename = output_dict["kmer"] / ("{0}/filtered/{1}/{2}.{3}.filtered.{4}.{5}.{1}.parameters".format("_".join(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_reads"]), #config["final_kmer_datatype"]
+    report_filename = output_dict["kmer"] / ("{0}/filtered/{1}/{2}.{3}.filtered.{4}.{5}.{1}.parameters".format("_".join(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_datatypes"]), #config["final_kmer_datatype"]
                                                                                                                coverage_estimator,
                                                                                                                wildcards.genome_prefix,
-                                                                                                               "_".join(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_reads"]), #config["final_kmer_datatype"],
+                                                                                                               "_".join(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_datatypes"]), #config["final_kmer_datatype"],
                                                                                                                config["final_kmer_length"],
                                                                                                                config["final_kmer_counter"]))
     #print(report_filename)
@@ -201,10 +201,10 @@ rule extract_lambda_value:
 
             log_fd.write("Using the {0} as a coverage estimator for contig assembly hifiasm_{1} ...\n".format(coverage_estimator,
                                                                                                             wildcards.contig_options))
-            report_filename = output_dict["kmer"] / ("{0}/filtered/{1}/{2}.{3}.filtered.{4}.{5}.{1}.parameters".format("_".join(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_reads"]), #config["final_kmer_datatype"],
+            report_filename = output_dict["kmer"] / ("{0}/filtered/{1}/{2}.{3}.filtered.{4}.{5}.{1}.parameters".format("_".join(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_datatypes"]), #config["final_kmer_datatype"],
                                                                                                                        coverage_estimator,
                                                                                                                        wildcards.genome_prefix,
-                                                                                                                       "_".join(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_reads"]), #config["final_kmer_datatype"],
+                                                                                                                       "_".join(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_datatypes"]), #config["final_kmer_datatype"],
                                                                                                                        config["final_kmer_length"],
                                                                                                                        config["final_kmer_counter"]))
             log_fd.write("Report file:\t%s\n" % report_filename)
@@ -236,7 +236,7 @@ rule extract_lambda_value:
 
 def get_main_read_filelist(wildcards):
     read_filelist = []
-    for datatype in parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_reads"]:
+    for datatype in parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_datatypes"]:
         if datatype not in input_filedict:
             continue
         read_filelist += expand(output_dict["data"] / ("fastq/{datatype}/filtered/{fileprefix}%s" % config["fastq_extension"]),

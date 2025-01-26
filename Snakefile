@@ -227,6 +227,14 @@ for key in list(config["parameters"].keys()): # remove unused sets of parameters
 
 parameters = config["parameters"][config["parameter_set"]] # short alias for used set of parameters
 
+for tool in parameters["tool_options"]: # sort datatypes in case of mixed datatypes to avoid ouble calculations
+    for option_set in parameters["tool_options"]["tool"]:
+        if "main_datatypes" in parameters["tool_options"]["tool"][option_set]:
+            parameters["tool_options"]["tool"][option_set]["main_datatypes"] = sorted(parameters["tool_options"]["tool"][option_set]["main_datatypes"])
+        if "qc_datatypes" in parameters["tool_options"]["tool"][option_set]:
+            parameters["tool_options"]["tool"][option_set]["qc_datatypes"] = sorted(parameters["tool_options"]["tool"][option_set]["qc_datatypes"])
+
+
 for tool in config["other_tool_option_sets"]: # select active set of option for tools other than coretools
     parameters["tool_options"][tool] = parameters["tool_options"][tool][config["other_tool_option_sets"][tool]]
 
@@ -417,8 +425,8 @@ if "draft_qc" in config["stage_list"]:
                     stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]
                     stage_dict["gap_closing"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
                     stage_dict["gap_closing"]["parameters"][parameters_label]["option_set_group"] = None
-                    if not stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["qc_reads"]:
-                        stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["qc_reads"] = stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["main_reads"]
+                    if not stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
+                        stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["main_datatypes"]
 
         parameters_list = list(stage_dict["gap_closing"]["parameters"].keys())
         results_list += [*[expand(out_dir_path / "gap_closing/{parameters}/{genome_prefix}.gap_closing.{haplotype}.len",
@@ -604,8 +612,8 @@ if "contig" in config["stage_list"] or "draft_qc" in config["stage_list"]:
 
             stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
             stage_dict["contig"]["parameters"][parameters_label]["option_set_group"] = option_set_group_assignment_dict[option_set] if option_set_group_assignment_dict is not None else None
-            if not stage_dict["contig"]["parameters"][parameters_label]["option_set"]["qc_reads"]:
-                stage_dict["contig"]["parameters"][parameters_label]["option_set"]["qc_reads"] = stage_dict["contig"]["parameters"][parameters_label]["option_set"]["main_reads"]
+            if not stage_dict["contig"]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
+                stage_dict["contig"]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict["contig"]["parameters"][parameters_label]["option_set"]["main_datatypes"]
 
             #for option_supergroup in ["options_affecting_error_correction"]:
             #    stage_dict["contig"]["parameters"][parameters_label][option_supergroup] = option_cluster_reverse_dict[assembler][option_supergroup][option_set]

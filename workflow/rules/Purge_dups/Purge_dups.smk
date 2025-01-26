@@ -9,19 +9,24 @@ localrules: create_contig_links, create_final_links_purge_dups, extract_stats_fr
 #localrules: merge_pri_hapdups_with_alt_for_len_files # create_primary_contig_len_file_link,
 #ruleorder: create_primary_contig_link_hap1 > merge_pri_hapdups_with_alt
 #ruleorder: create_primary_contig_link_hap0 > merge_pri_hapdups_with_alt
-"""
+
+ruleorder: create_assembly_links_if_skipping_purge_dups > create_final_links_purge_dups # skipp purge_dups
+ruleorder: create_busco_links_if_skipping_purge_dups > busco5
+ruleorder: create_merqury_links_if_skipping_purge_dups > merqury
+ruleorder: create_quast_links_if_skipping_purge_dups > quast
+localrules: create_assembly_links_if_skipping_purge_dups, create_busco_links_if_skipping_purge_dups, create_merqury_links_if_skipping_purge_dups, create_quast_links_if_skipping_purge_dups
+
 rule create_assembly_links_if_skipping_purge_dups:
     input:
-        fasta=out_dir_path  / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/{genome_prefix}.{prev_stage}.{haplotype, [^.]+}.fasta",
-        len=out_dir_path  / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/{genome_prefix}.{prev_stage}.{haplotype, [^.]+}.len",
-        fai=out_dir_path  / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/{genome_prefix}.{prev_stage}.{haplotype, [^.]+}.fasta.fai",
-
+        fasta=out_dir_path  / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/{genome_prefix}.{prev_stage}.{haplotype}.fasta",
+        len=out_dir_path  / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/{genome_prefix}.{prev_stage}.{haplotype}.len",
+        fai=out_dir_path  / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/{genome_prefix}.{prev_stage}.{haplotype}.fasta.fai",
     output:
-        fasta_alias=out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_skipped/{genome_prefix}.purge_dups.{haplotype, [^.]+}.fasta",
-        len_alias=out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_skipped/{genome_prefix}.purge_dups.{haplotype, [^.]+}.len",
-        fai_alias=out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_skipped/{genome_prefix}.purge_dups.{haplotype, [^.]+}.fasta.fai"
-        #assembly_qc_alias=directory(out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_skipped/assembly_qc/")
+        len=out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_skipped/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.len",
+        fasta=out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_skipped/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.fasta",
+        fai=out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_skipped/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.fasta.fai"
     log:
+        mkdir=output_dict["log"]  / "create_assembly_links_if_skipping_purge_dups.purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.{genome_prefix}.{haplotype}.mkdir.log",
         ln=output_dict["log"]  / "create_assembly_links_if_skipping_purge_dups.purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.{genome_prefix}.{haplotype}.ln.log",
         cluster_log=output_dict["cluster_log"] / "create_assembly_links_if_skipping_purge_dups.purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.{genome_prefix}.{haplotype}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "create_assembly_links_if_skipping_purge_dups.purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.{genome_prefix}.{haplotype}.cluster.err"
@@ -38,21 +43,33 @@ rule create_assembly_links_if_skipping_purge_dups:
     threads: parameters["threads"]["create_links"]
 
     shell:
-        " ln -sf {input.fasta} {output.fasta_alias} > {log.ln} 2>&1; "
-        " ln -sf {input.len} {output.len_alias} >> {log.ln} 2>&1; "
-        " ln -sf {input.fai} {output.fai_alias} >> {log.ln} 2>&1; "
+        " INPUT_DIR=`dirname {input.len}`;"
+        " OUT_DIR=`dirname {output.len}`; "
+        " mkdir -p ${{OUT_DIR}} > {log.mkdir} 2>&1; "
+        " ln -sf ../../../{input.fasta} {output.fasta} > {log.ln} 2>&1; "
+        " ln -sf ../../../{input.len} {output.len} > {log.ln} 2>&1; "
+        " ln -sf ../../../{input.fai} {output.fai} > {log.ln} 2>&1; "
 
-rule create_assembly_qc_if_skipping_purge_dups:
+rule create_busco_links_if_skipping_purge_dups:
     input:
-        assembly_qc=out_dir_path  / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/assembly_qc",
+        busco_tar_gz=out_dir_path / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/assembly_qc/busco5/{genome_prefix}.{prev_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
+        busco_summary=out_dir_path / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/assembly_qc/busco5/{genome_prefix}.{prev_stage}.{haplotype}.busco5.{busco_lineage}.summary",
+        busco_summary_json=out_dir_path / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/assembly_qc/busco5/{genome_prefix}.{prev_stage}.{haplotype}.busco5.{busco_lineage}.summary.json",
+        busco_table=out_dir_path / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/assembly_qc/busco5/{genome_prefix}.{prev_stage}.{haplotype}.busco5.{busco_lineage}.full_table.tsv",
+        busco_missing_busco_ids=out_dir_path / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/assembly_qc/busco5/{genome_prefix}.{prev_stage}.{haplotype}.busco5.{busco_lineage}.missing.ids",
     output:
-        assembly_qc=directory(out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_skipped/assembly_qc"),
+        busco_tar_gz=out_dir_path / "purge_dups/{prev_stage}..{prev_stage_parameters}..purge_dups_skipped/assembly_qc/busco5/{genome_prefix}.purge_dups.{haplotype}.busco5.{busco_lineage}.tar.gz",
+        busco_summary=out_dir_path / "purge_dups/{prev_stage}..{prev_stage_parameters}..purge_dups_skipped/assembly_qc/busco5/{genome_prefix}.purge_dups.{haplotype}.busco5.{busco_lineage}.summary",
+        busco_summary_json=out_dir_path / "purge_dups/{prev_stage}..{prev_stage_parameters}..purge_dups_skipped/assembly_qc/busco5/{genome_prefix}.purge_dups.{haplotype}.busco5.{busco_lineage}.summary.json",
+        busco_table=out_dir_path / "purge_dups/{prev_stage}..{prev_stage_parameters}..purge_dups_skipped/assembly_qc/busco5/{genome_prefix}.purge_dups.{haplotype}.busco5.{busco_lineage}.full_table.tsv",
+        busco_missing_busco_ids=out_dir_path / "purge_dups/{prev_stage}..{prev_stage_parameters}..purge_dups_skipped/assembly_qc/busco5/{genome_prefix}.purge_dups.{haplotype}.busco5.{busco_lineage}.missing.ids",
     log:
-        ln=output_dict["log"]  / "create_assembly_qc_if_skipping_purge_dups.purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.ln.log",
-        cluster_log=output_dict["cluster_log"] / "create_assembly_qc_if_skipping_purge_dups.purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_assembly_qc_if_skipping_purge_dups.purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.cluster.err"
+        mkdir=output_dict["log"]  / "create_busco_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.{genome_prefix}.{haplotype}.{busco_lineage}.mkdir.log",
+        ln=output_dict["log"]  / "create_busco_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.{genome_prefix}.{haplotype}.{busco_lineage}.ln.log",
+        cluster_log=output_dict["cluster_log"] / "create_busco_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.{genome_prefix}.{haplotype}.{busco_lineage}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_busco_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.{genome_prefix}.{haplotype}.{busco_lineage}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "create_assembly_qc_if_skipping_purge_dups.purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.benchmark.txt"
+        output_dict["benchmark"]  / "create_busco_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.{genome_prefix}.{haplotype}.{busco_lineage}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -64,8 +81,76 @@ rule create_assembly_qc_if_skipping_purge_dups:
     threads: parameters["threads"]["create_links"]
 
     shell:
-        " ln -sf {input.assembly_qc} {output.assembly_qc} > {log.ln} 2>&1; "
-"""
+        " INPUT_DIR=`dirname {input.busco_summary}`;"
+        " OUT_DIR=`dirname {output.busco_summary}`; "
+        " mkdir -p ${{OUT_DIR}} > {log.mkdir} 2>&1; "
+        " ln -sf ../../../../../{input.busco_tar_gz} {output.busco_tar_gz} > {log.ln} 2>&1; "
+        " ln -sf ../../../../../{input.busco_summary} {output.busco_summary} > {log.ln} 2>&1; "
+        " ln -sf ../../../../../{input.busco_summary_json} {output.busco_summary_json} > {log.ln} 2>&1; "
+        " ln -sf ../../../../../{input.busco_table} {output.busco_table} > {log.ln} 2>&1; "
+        " ln -sf ../../../../../{input.busco_missing_busco_ids} {output.busco_missing_busco_ids} > {log.ln} 2>&1; "
+
+rule create_quast_links_if_skipping_purge_dups:
+    input:
+        dir=directory(out_dir_path / "{prev_stage}/{prev_stage}_{prev_stage_parameters}/assembly_qc/quast/{genome_prefix}.{prev_stage}.{haplotype}"),
+    output:
+        dir = directory(out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_skipped/assembly_qc/quast/{genome_prefix}.purge_dups{haplotype}"),
+    log:
+        mkdir=output_dict["log"]  / "create_quast_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.{genome_prefix}.{haplotype}.mkdir.log",
+        ln=output_dict["log"]  / "create_quast_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.{genome_prefix}.{haplotype}.ln.log",
+        cluster_log=output_dict["cluster_log"] / "create_quast_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_quast_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.{genome_prefix}.{haplotype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "create_quast_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.{genome_prefix}.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("create_contig_links"),
+        cpus=parameters["threads"]["create_links"] ,
+        time=parameters["time"]["create_links"],
+        mem=parameters["memory_mb"]["create_links"]
+    threads: parameters["threads"]["create_links"]
+
+    shell:
+        " INPUT_DIR=`dirname {input.dir}`;"
+        " OUT_DIR=`dirname {output.dir}`; "
+        " mkdir -p ${{OUT_DIR}} > {log.mkdir} 2>&1; "
+        " ln -sf ../../../../../{input.dir} {output.dir} > {log.ln} 2>&1; "
+
+
+rule create_merqury_links_if_skipping_purge_dups:
+    input:
+        qv_file=out_dir_path / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/assembly_qc/merqury/{genome_prefix}.{prev_stage}.qv",
+        completeness_stats_file=out_dir_path / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/assembly_qc/merqury/{genome_prefix}.{prev_stage}.completeness.stats"
+    output:
+        qv_file=out_dir_path / "purge_dups/{prev_stage}..{prev_stage_parameters}..purge_dups_skipped/assembly_qc/merqury/{genome_prefix, [^/]+}.purge_dups.qv",
+        completeness_stats_file=out_dir_path / "purge_dups/{prev_stage}..{prev_stage_parameters}..purge_dups_skipped/assembly_qc/merqury/{genome_prefix, [^/]+}.purge_dups.completeness.stats",
+    log:
+        mkdir=output_dict["log"]  / "create_merqury_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.{genome_prefix}.mkdir.log",
+        ln=output_dict["log"]  / "create_merqury_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.{genome_prefix}.ln.log",
+        cluster_log=output_dict["cluster_log"] / "create_merqury_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.{genome_prefix}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_merqury_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.{genome_prefix}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "create_merqury_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_skipped.{genome_prefix}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("create_contig_links"),
+        cpus=parameters["threads"]["create_links"] ,
+        time=parameters["time"]["create_links"],
+        mem=parameters["memory_mb"]["create_links"]
+    threads: parameters["threads"]["create_links"]
+
+    shell:
+        " INPUT_DIR=`dirname {input.completeness_stats_file}`;"
+        " OUT_DIR=`dirname {output.completeness_stats_file}`; "
+        " mkdir -p ${{OUT_DIR}} > {log.mkdir} 2>&1; "
+        " ln -sf ../../../../../{input.qv_file} {output.qv_file} > {log.ln} 2>&1; "
+        " ln -sf ../../../../../{input.completeness_stats_file} {output.completeness_stats_file} > {log.ln} 2>&1; "
+
+
 rule create_contig_links:
     input:
         fasta=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta" % (stage_dict["purge_dups"]["prev_stage"],
@@ -101,7 +186,7 @@ rule minimap2_purge_dups_reads:
     input:
         fastq=lambda wildcards: output_dict["data"] / "fastq/{0}/filtered/{1}{2}".format(stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"],
                                                                                          wildcards.fileprefix,
-                                                                                         config["fastq_extension"]),
+                                                                                         config["fastq_extension"]) for ,
         reference=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype}/{genome_prefix}.input.{haplotype}.fasta"
     output:
         paf=out_dir_path  / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, [^/]+}/{purge_stage, [^/]+}/{haplotype, [^.]+}/{genome_prefix, [^/]+}.{haplotype}.{fileprefix, [^/]+}.paf.gz"

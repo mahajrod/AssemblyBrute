@@ -4,12 +4,12 @@ ruleorder: get_purge_dups_read_stat_qc > get_purge_dups_read_stat
 
 rule minimap2_purge_dups_qc:
     input:
-        fastq=lambda wildcards: output_dict["data"] / "fastq/{0}/filtered/{1}{2}".format(stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"],
+        fastq=lambda wildcards: output_dict["data"] / "fastq/{0}/filtered/{1}{2}".format(wildcards.datatype, #stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"],
                                                                                          wildcards.fileprefix,
                                                                                          config["fastq_extension"]),
         reference=out_dir_path / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{genome_prefix}.purge_dups.{haplotype}.fasta"
     output:
-        paf=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/assembly_qc/purge_dups/{haplotype, [^.]+}/{genome_prefix}.{haplotype}.{fileprefix}.paf.gz"
+        paf=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/assembly_qc/purge_dups/{haplotype, [^.]+}/{datatype, [^/]+}/{genome_prefix}.{haplotype}.{fileprefix}.paf.gz"
     params:
         index_size=lambda wildcards: parse_option("index_size", parameters["tool_options"]["minimap2"][stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"]], " -I "),
         alignment_scheme=lambda wildcards: parse_option("alignment_scheme", parameters["tool_options"]["minimap2"][stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"]], " -x "),
@@ -35,10 +35,11 @@ rule minimap2_purge_dups_qc:
 
 rule get_purge_dups_read_stat_qc:
     input:
-        paf=lambda wildcards: expand(rules.minimap2_purge_dups_qc.output.paf,
-                           genome_prefix=[config["genome_prefix"]],
-                           fileprefix=input_file_prefix_dict[stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"]],
-                           allow_missing=True),
+        paf=get_paf_list,
+        #paf=lambda wildcards: expand(rules.minimap2_purge_dups_qc.output.paf,
+        #                   genome_prefix=[config["genome_prefix"]],
+        #                   fileprefix=input_file_prefix_dict[stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"]],
+        #                   allow_missing=True),
         genomescope_report=output_dict["kmer"] / "{0}/filtered/genomescope/{1}.{0}.filtered.{2}.{3}.genomescope.parameters".format(config["final_kmer_datatype"],
                                                                                                                                    config["genome_prefix"],
                                                                                                                                    config["final_kmer_length"],

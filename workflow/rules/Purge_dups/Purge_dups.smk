@@ -191,8 +191,8 @@ rule minimap2_purge_dups_reads:
     output:
         paf=out_dir_path  / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, [^/]+}/{purge_stage, [^/]+}/{haplotype, [^./]+}/{datatype, [^/]+}/{genome_prefix, [^/]+}.{haplotype}.{fileprefix, [^/]+}.paf.gz"
     params:
-        index_size=lambda wildcards: parse_option("index_size", parameters["tool_options"]["minimap2"][stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"]], " -I "),
-        alignment_scheme=lambda wildcards: parse_option("alignment_scheme", parameters["tool_options"]["minimap2"][stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"]], " -x "),
+        index_size=lambda wildcards: parse_option("index_size", parameters["tool_options"]["minimap2"][wildcards.datatype], " -I "),
+        alignment_scheme=lambda wildcards: parse_option("alignment_scheme", parameters["tool_options"]["minimap2"][wildcards.datatype], " -x "),
         #min_mapq=lambda wildcards: stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"][stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"]]["min_mapping_quality"]
     log:
         std=output_dict["log"]  / "minimap2_purge_dups_reads.{prev_stage_parameters}.{purge_dups_parameters}.{haplotype}.{purge_stage}.{genome_prefix}.{datatype}.{fileprefix}.log",

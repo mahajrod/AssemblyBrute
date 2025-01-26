@@ -838,7 +838,7 @@ if "hic_scaffolding" in config["stage_list"]:
                     stage_dict["hic_scaffolding"]["parameters"].pop(parameters_label)
 
                 if not stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
-                    pass  # TODO: ADD!!!
+                    stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["qc_datatypes"]
 
     #for parameter_label in stage_dict["hic_scaffolding"]["parameters"].keys(): # remove ignore
     #    if not stage_dict["hic_scaffolding"]["parameters"][parameter_label]["included"]:

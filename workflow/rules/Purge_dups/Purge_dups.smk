@@ -101,7 +101,8 @@ rule create_busco_links_if_skipping_purge_dups:
 
 rule create_quast_links_if_skipping_purge_dups:
     input:
-        dir=out_dir_path / "{prev_stage}/{prev_stage}_{prev_stage_parameters}/assembly_qc/quast/{genome_prefix}.{prev_stage}.{haplotype}",
+        dir=lambda wildcards: out_dir_path / ("%s/{prev_stage_parameters}/assembly_qc/quast/{genome_prefix}.%s.{haplotype}" % (stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["prev_stage"],
+                                                                                                                               stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["prev_stage"])),
     output:
         dir = directory(out_dir_path / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, purge_dups_skipped.*}/assembly_qc/quast/{genome_prefix}.purge_dups{haplotype}"),
     log:
@@ -130,8 +131,10 @@ rule create_quast_links_if_skipping_purge_dups:
 
 rule create_merqury_links_if_skipping_purge_dups:
     input:
-        qv_file=out_dir_path / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/assembly_qc/merqury/{genome_prefix}.{prev_stage}.qv",
-        completeness_stats_file=out_dir_path / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/assembly_qc/merqury/{genome_prefix}.{prev_stage}.completeness.stats"
+        qv_file=lambda wildcards: out_dir_path / ("%s/{prev_stage_parameters}/assembly_qc/merqury/{genome_prefix}.%s.qv" % (stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["prev_stage"],
+                                                                                                                            stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["prev_stage"])),
+        completeness_stats_file=lambda wildcards: out_dir_path / ("%s/{prev_stage_parameters}/assembly_qc/merqury/{genome_prefix}.%s.completeness.stats" % (stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["prev_stage"],
+                                                                                                                                                            stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["prev_stage"]))
     output:
         qv_file=out_dir_path / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, purge_dups_skipped.*}/assembly_qc/merqury/{genome_prefix, [^/]+}.purge_dups.qv",
         completeness_stats_file=out_dir_path / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, purge_dups_skipped.*}/assembly_qc/merqury/{genome_prefix, [^/]+}.purge_dups.completeness.stats",

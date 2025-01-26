@@ -1502,16 +1502,19 @@
                     "Csp6I_MseI": "TTATAA,GTATAC,GTATAA,TTATAC"
                     "OmniC": null
                 "default":
+                     "qc_datatypes": []
                      "min_contig_len": 1000
                      "min_mapping_quality": 10
                      "phasing_kmer_length": "NA"
                      "use_phased_reads": False
                 "phased_reads":
+                     "qc_datatypes": []
                      "min_contig_len": 1000
                      "min_mapping_quality": 10
                      "phasing_kmer_length": 31
                      "use_phased_reads": True
                 "unphased_reads":
+                     "qc_datatypes": []
                      "min_contig_len": 1000
                      "min_mapping_quality": 10
                      "phasing_kmer_length": "NA"
@@ -1553,42 +1556,49 @@
                     "Csp6I_MseI": "TTATAA,GTATAC,GTATAA,TTATAC"
                     #"OmniC": null
                 "default":
+                     "qc_datatypes": []
                      "min_contig_len": null
                      "min_mapping_quality": null
                      "phasing_kmer_length": "NA"
                      "use_phased_reads": False
                      "editor_repeat_coverage": null
                 "phased_reads":
+                     "qc_datatypes": []
                      "min_contig_len": null
                      "min_mapping_quality": null
                      "phasing_kmer_length": 31
                      "use_phased_reads": True
                      "editor_repeat_coverage": Nnull
                 "unphased_reads":
+                     "qc_datatypes": []
                      "min_contig_len": null
                      "min_mapping_quality": null
                      "phasing_kmer_length": "NA"
                      "use_phased_reads": False
                      "editor_repeat_coverage": null
                 "phased_reads_editor_repcov_5":
+                     "qc_datatypes": []
                      "min_contig_len": null
                      "min_mapping_quality": null
                      "phasing_kmer_length": 31
                      "use_phased_reads": True
                      "editor_repeat_coverage": 5
                 "unphased_reads_editor_repcov_5":
+                     "qc_datatypes": []
                      "min_contig_len": null
                      "min_mapping_quality": null
                      "phasing_kmer_length": "NA"
                      "use_phased_reads": False
                      "editor_repeat_coverage": 5
                 "phased_reads_editor_repcov_10":
+                     "qc_datatypes": []
                      "min_contig_len": null
                      "min_mapping_quality": null
                      "phasing_kmer_length": 31
                      "use_phased_reads": True
                      "editor_repeat_coverage": 10
                 "unphased_reads_editor_repcov_10":
+                     "qc_datatypes": []
                      "min_contig_len": null
                      "min_mapping_quality": null
                      "phasing_kmer_length": "NA"
@@ -1609,12 +1619,15 @@
                     "Csp6I_MseI": "TTATAA,GTATAC,GTATAA,TTATAC"
                     "OmniC": null
                 "default":
+                     "qc_datatypes": []
                      "min_contig_len": 1000
                 "phased_reads":
+                     "qc_datatypes": []
                      "min_contig_len": 1000
                      "use_phased_reads": True
                      "phasing_kmer_length": 31
                 "unphased_reads":
+                     "qc_datatypes": []
                      "min_contig_len": 1000
                      "use_phased_reads": False
                      "phasing_kmer_length": "NA"

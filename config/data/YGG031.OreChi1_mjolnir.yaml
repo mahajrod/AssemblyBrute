@@ -90,6 +90,7 @@
          #- "l3primary_main_nanopore"
          #- "l3primary_main_nanopore_only"
          - "l3primary_main_hifi_duplex"
+         #- "l3primary_no_ul"
          #- "l1primary_no_hic"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"

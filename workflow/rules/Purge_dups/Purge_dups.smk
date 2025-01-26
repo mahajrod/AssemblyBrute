@@ -1,8 +1,8 @@
-#ruleorder: create_contig_links > get_seq_len
+ruleorder: create_contig_links > get_seq_len
 
-#localrules: create_contig_links, create_final_links_purge_dups, extract_stats_from_purge_dups_file #create_link_for_purged_fasta,
+localrules: create_contig_links, create_final_links_purge_dups, extract_stats_from_purge_dups_file #create_link_for_purged_fasta,
 
-#ruleorder: create_assembly_links_if_skipping_purge_dups > create_final_links_purge_dups # skipp purge_dups
+ruleorder: create_assembly_links_if_skipping_purge_dups > create_final_links_purge_dups # skipp purge_dups
 ruleorder: create_assembly_links_if_skipping_purge_dups > ref_faidx
 ruleorder: create_assembly_links_if_skipping_purge_dups > get_seq_len
 
@@ -162,7 +162,7 @@ rule create_merqury_links_if_skipping_purge_dups:
         " ln -sf ../../../../../{input.qv_file} {output.qv_file} > {log.ln} 2>&1; "
         " ln -sf ../../../../../{input.completeness_stats_file} {output.completeness_stats_file} > {log.ln} 2>&1; "
 
-"""
+
 rule create_contig_links:
     input:
         fasta=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta" % (stage_dict["purge_dups"]["prev_stage"],
@@ -572,4 +572,3 @@ rule extract_artefact_sequences:
         " extract_sequences_by_ids.py -i {input.reference} -d {input.artefact_ids} "
         " -o {output.artefact_fasta} > {log.std} 2>&1 ; "
 
-"""

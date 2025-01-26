@@ -1,6 +1,6 @@
 
-#ruleorder: minimap2_purge_dups_qc > minimap2_purge_dups_reads
-#ruleorder: get_purge_dups_read_stat_qc > get_purge_dups_read_stat
+ruleorder: minimap2_purge_dups_qc > minimap2_purge_dups_reads
+ruleorder: get_purge_dups_read_stat_qc > get_purge_dups_read_stat
 
 rule minimap2_purge_dups_qc:
     input:

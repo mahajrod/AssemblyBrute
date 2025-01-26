@@ -33,9 +33,19 @@ rule minimap2_purge_dups_qc:
         " minimap2 {params.alignment_scheme} {params.index_size} -t {threads}  {input.reference} "
         " {input.fastq} 2>{log.std} |  gzip -c - > {output.paf}; "
 
+def get_paf_list_for_qc(wildcards):
+    paf_list = []
+    for datatype in stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["main_datatypes"]:
+        paf_list += expand(rules.minimap2_purge_dups_qc.output.paf,
+                           datatype=[datatype],
+                           fileprefix=input_file_prefix_dict[datatype],
+                           genome_prefix=[config["genome_prefix"]],
+                           allow_missing=True)
+    return paf_list
+
 rule get_purge_dups_read_stat_qc:
     input:
-        paf=get_paf_list,
+        paf=get_paf_list_for_qc,
         #paf=lambda wildcards: expand(rules.minimap2_purge_dups_qc.output.paf,
         #                   genome_prefix=[config["genome_prefix"]],
         #                   fileprefix=input_file_prefix_dict[stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"]],

@@ -3,6 +3,9 @@
 #localrules: create_contig_links, create_final_links_purge_dups, extract_stats_from_purge_dups_file #create_link_for_purged_fasta,
 
 ruleorder: create_assembly_links_if_skipping_purge_dups > create_final_links_purge_dups # skipp purge_dups
+ruleorder: create_assembly_links_if_skipping_purge_dups > ref_faidx
+ruleorder: create_assembly_links_if_skipping_purge_dups > get_seq_len
+
 ruleorder: create_busco_links_if_skipping_purge_dups > busco5
 ruleorder: create_merqury_links_if_skipping_purge_dups > merqury
 ruleorder: create_quast_links_if_skipping_purge_dups > quast
@@ -17,11 +20,11 @@ rule create_assembly_links_if_skipping_purge_dups:
         len=out_dir_path  / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/{genome_prefix}.{prev_stage}.{haplotype}.len",
         fai=out_dir_path  / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/{genome_prefix}.{prev_stage}.{haplotype}.fasta.fai",
     output:
-        len=out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_{purge_dups_parameters}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.len",
-        fasta=out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_{purge_dups_parameters}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.fasta",
-        fai=out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_{purge_dups_parameters}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.fasta.fai"
-    wildcard_constraints:
-        purge_dups_parameters="skipped.*"
+        len=out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_{purge_dups_parameters, skipped}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.len",
+        fasta=out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_{purge_dups_parameters, skipped}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.fasta",
+        fai=out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_{purge_dups_parameters, skipped}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.fasta.fai"
+    #wildcard_constraints:
+    #    purge_dups_parameters="skipped.*"
     log:
         mkdir=output_dict["log"]  / "create_assembly_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_{purge_dups_parameters}.{genome_prefix}.{haplotype}.mkdir.log",
         ln=output_dict["log"]  / "create_assembly_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_{purge_dups_parameters}.{genome_prefix}.{haplotype}.ln.log",

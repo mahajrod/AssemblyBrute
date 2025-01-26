@@ -115,25 +115,25 @@
         "tool_options":
             "assembly_qc":
                 "default":
-                    "qc_reads":
+                    "qc_datatypes":
                         - "hifi"
                 "hifi":
-                    "qc_reads":
+                    "qc_datatypes":
                         - "hifi"
                 "duplex":
-                    "qc_reads":
+                    "qc_datatypes":
                         - "duplex"
                 "hifi_duplex":
-                    "qc_reads":
+                    "qc_datatypes":
                         - "hifi"
                         - "duplex"
                 "nanopore":
-                    "qc_reads":
+                    "qc_datatypes":
                         - "duplex"
                         - "simplex"
                         - "nanopore"
                 "simplex":
-                    "qc_reads":
+                    "qc_datatypes":
                         - "simplex"
             "tadbit":
                 "default":
@@ -442,9 +442,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": []
+                    "qc_datatypes": []
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -462,9 +462,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": []
+                    "qc_datatypes": []
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -482,9 +482,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": []
+                    "qc_datatypes": []
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -502,9 +502,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": []
+                    "qc_datatypes": []
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -522,9 +522,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                         - "duplex"
                     "ultra_long_reads":
@@ -542,9 +542,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -562,9 +562,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                         - "duplex"
                     "ultra_long_reads":
@@ -582,9 +582,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -602,9 +602,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -622,9 +622,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -642,9 +642,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads": []
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
@@ -658,9 +658,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -677,9 +677,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "lqccs"
@@ -694,9 +694,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 2
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -714,9 +714,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -734,9 +734,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -754,9 +754,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -774,9 +774,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -794,9 +794,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                         - "duplex"
                     "ultra_long_reads":
@@ -814,9 +814,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": True
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "simplex"
                         - "duplex"
                         - "nanopore"
@@ -832,9 +832,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": True
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                         - "simplex"
                         - "duplex"
@@ -851,9 +851,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -871,9 +871,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                         - "duplex"
                     "ultra_long_reads":
@@ -891,9 +891,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 2
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -911,9 +911,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads": []
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
@@ -927,9 +927,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -946,9 +946,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "lqccs"
@@ -963,9 +963,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -983,9 +983,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -1003,9 +1003,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -1023,9 +1023,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -1043,9 +1043,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -1063,9 +1063,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -1083,9 +1083,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -1103,9 +1103,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -1125,9 +1125,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -1148,9 +1148,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -1171,9 +1171,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -1193,9 +1193,9 @@
                     "ul-cut": 1000
                     "min_contig_coverage": 1
                     "ont_mode": False
-                    "qc_reads": [ ]
+                    "qc_datatypes": [ ]
                     "lambda": null
-                    "main_reads":
+                    "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
                         - "nanopore"
@@ -1207,8 +1207,9 @@
             "purge_dups":
                 "default":
                     "cov_multiplicator": 4.5 # 4.5 *lambda
-                    "datatype": "hifi"
-                    "qc_reads": []
+                    "main_datatypes": 
+                        - "hifi"
+                    "qc_datatypes": []
                     "interhaplotype_transfer_blacklist":
                         - "junk"
                         - "ovlp"
@@ -1217,8 +1218,9 @@
                     "purging_whitelist": null
                 "keep_hicov":
                     "cov_multiplicator": 4.5 # 4.5 *lambda
-                    "datatype": "hifi"
-                    "qc_reads": []
+                    "main_datatypes": 
+                        - "hifi"
+                    "qc_datatypes": []
                     "interhaplotype_transfer_blacklist":
                         - "junk"
                         - "ovlp"
@@ -1226,25 +1228,6 @@
                     "purging_blacklist":
                         - "highcov"
                     "purging_whitelist": null
-                    #"illumina":
-                    #    "min_mapping_quality": 0
-                    #"nanopore":
-                    #    "min_mapping_quality": 0
-                    #"clr":
-                    #    "min_mapping_quality": 0
-                    #"hifi":
-                    #    "min_mapping_quality": 0
-                #"thresholds":
-                #    "cov_multiplicator": 4.5 # 4.5 *lambda
-                #    "datatype": "hifi"
-                    #"illumina":
-                    #    "min_mapping_quality": 30
-                    #"nanopore":
-                    #    "min_mapping_quality": 10
-                    #"clr":
-                    #    "min_mapping_quality": 20
-                    #"hifi":
-                    #    "min_mapping_quality": 30
             "quast":
                 "default":
                     "large_genome": True
@@ -2846,7 +2829,7 @@
             - "max-kocc"                        # --max-kocc
             - "hg-size"                         # --hg-size
             - "ul-cut"                          # --ul-cut
-            - "main_reads"
+            - "main_datatypes"
             - "ont_mode"
         "options_affecting_hic_phasing":
             - "seed"            # --seed

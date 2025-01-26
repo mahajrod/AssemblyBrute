@@ -1339,7 +1339,7 @@ if "hic" in data_types:
         include: "workflow/rules/HiC/YAHS.smk"
         include: "workflow/rules/HiC/3DDNA.smk"
 
-"""
+
 if "curation" in config["stage_list"]:
     include: "workflow/rules/Curation/RapidCuration.smk"
     include: "workflow/rules/Curation/GapTrack.smk"
@@ -1364,4 +1364,3 @@ if "ref_scaffolding" in config["stage_list"]:
 
 include: "workflow/rules/Curation/CurationFiles.smk"
 include: "workflow/rules/Curation/MicroChromosomes.smk"
-"""

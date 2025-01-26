@@ -361,6 +361,9 @@ if "draft_qc" in config["stage_list"]:
             stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]
             stage_dict["draft_qc"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
             stage_dict["draft_qc"]["parameters"][parameters_label]["option_set_group"] = None
+            if not stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
+                pass # TODO: ADD!!!
+
 
     parameters_list = list(stage_dict["draft_qc"]["parameters"].keys())
 
@@ -712,6 +715,8 @@ if "purge_dups" in config["stage_list"]:
                 stage_dict["purge_dups"]["parameters"][parameters_label]["purge_dupser"] = purge_dupser
                 stage_dict["purge_dups"]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][purge_dupser][option_set]
                 stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["purge_dups"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
+                if not stage_dict["purge_dups"]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
+                    stage_dict["purge_dups"]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict["purge_dups"]["parameters"][parameters_label]["option_set"]["main_datatypes"]
 
     parameters_list = list(stage_dict["purge_dups"]["parameters"].keys())
     results_list += [
@@ -816,6 +821,9 @@ if "hic_scaffolding" in config["stage_list"]:
                 if (len(stage_dict["hic_scaffolding"]["parameters"][parameters_label]["haplotype_list"]) == 1) and (stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["use_phased_reads"]):
                     #stage_dict["hic_scaffolding"]["parameters"][parameters_label]["included"] = False
                     stage_dict["hic_scaffolding"]["parameters"].pop(parameters_label)
+
+                if not stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
+                    pass  # TODO: ADD!!!
 
     #for parameter_label in stage_dict["hic_scaffolding"]["parameters"].keys(): # remove ignore
     #    if not stage_dict["hic_scaffolding"]["parameters"][parameter_label]["included"]:
@@ -965,9 +973,11 @@ if "ref_scaffolding" in config["stage_list"]:
                     stage_dict["ref_scaffolding"]["parameters"][parameters_label]["prev_parameters"] = prev_parameters
                     stage_dict["ref_scaffolding"]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][ref_scaffolding_tool][option_set] if ref_scaffolding_tool in parameters["tool_options"] else None
                     stage_dict["ref_scaffolding"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["ref_scaffolding"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
+                    if not stage_dict["ref_scaffolding"]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
+                        pass  # TODO: ADD!!!
 
     parameters_list = list(stage_dict["ref_scaffolding"]["parameters"].keys())
-    print(stage_dict["ref_scaffolding"])
+    #print(stage_dict["ref_scaffolding"])
     results_list += [[expand(out_dir_path / "ref_scaffolding/{parameters}/{genome_prefix}.ref_scaffolding.{haplotype}.fasta",#"{assembly_stage}/{parameters}/{genome_prefix}.ref_scaffolding.{haplotype}.fasta",
                              #assembly_stage=["ref_scaffolding", ],
                              parameters=[parameters_label],

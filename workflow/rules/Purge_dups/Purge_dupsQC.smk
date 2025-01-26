@@ -54,9 +54,7 @@ rule get_purge_dups_read_stat_qc:
                                                                                                                                    config["genome_prefix"],
                                                                                                                                    config["final_kmer_length"],
                                                                                                                                    config["final_kmer_counter"]),
-        before_pbstat=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/first_stage/{haplotype}/PB.stat",
-        before_pbbasecov=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/first_stage/{haplotype}/PB.base.cov",
-        before_cutoffs=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/first_stage/{haplotype}/cutoffs"
+
     output:
         pbstat=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/assembly_qc/purge_dups/{haplotype, [^.]+}/PB.stat",
         pbbasecov=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/assembly_qc/purge_dups/{haplotype, [^.]+}/PB.base.cov",
@@ -74,7 +72,7 @@ rule get_purge_dups_read_stat_qc:
         cluster_log=output_dict["cluster_log"] / "get_purge_dups_read_stat_qc.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.{haplotype}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "get_purge_dups_read_stat_qc.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.{haplotype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "minimap2_purge_dups_read_stat_qc.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.{haplotype}.benchmark.txt"
+        output_dict["benchmark"]  / "get_purge_dups_read_stat_qc..{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.{haplotype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -93,10 +91,42 @@ rule get_purge_dups_read_stat_qc:
         " pbcstat -O ${{OUT_DIR}} {input.paf} 1>{log.pbstat} 2>&1; "
         " calcuts -d 1 {params.calcuts_lower_threshold} {params.calcuts_haploid_diploid_threshold}"
         " -u ${{COV_UPPER_BOUNDARY}} {output.pbstat} > {output.cutoffs} 2>{log.calcuts}; " #check parameters for calcuts
-        " workflow/scripts/purge_dups/draw_purge_dups_plot_all_haplotypes.py -b {input.before_pbstat},{output.pbstat} "
-        " -l before,after -c {input.before_cutoffs},{output.cutoffs} -e png,svg -o ${{COV_PLOT%.png}} > {log.png} 2>&1; "
 
-rule get_purge_stat_haplotype_comparison_before:
+
+rule draw_before_after_plot:
+    input:
+        before_pbstat=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/first_stage/{haplotype}/PB.stat",
+        before_pbbasecov=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/first_stage/{haplotype}/PB.base.cov",
+        before_cutoffs=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/first_stage/{haplotype}/cutoffs",
+        after_cutoffs=out_dir_path / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/assembly_qc/purge_dups/{haplotype, [^.]+}/cutoffs",
+        after_pbstat=out_dir_path / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/assembly_qc/purge_dups/{haplotype, [^.]+}/PB.stat",
+    output:
+        coverage_plot=out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/assembly_qc/purge_dups/{haplotype, [^.]+}/{haplotype}.before-after.comparison.coverage.png"
+
+    log:
+        pbstat=output_dict["log"] / "draw_before_after_plot.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.{haplotype}.pbstat.log",
+        png=output_dict["log"] / "draw_before_after_plot.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.{haplotype}.png.log",
+        calcuts=output_dict["log"]  / "gdraw_before_after_plot.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.{haplotype}.calcuts.log",
+        cluster_log=output_dict["cluster_log"] / "draw_before_after_plot.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "draw_before_after_plot.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.{haplotype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "draw_before_after_plot{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("get_purge_dups_read_stat"),
+        cpus=parameters["threads"]["get_purge_dups_read_stat"] ,
+        time=parameters["time"]["get_purge_dups_read_stat"],
+        mem=parameters["memory_mb"]["get_purge_dups_read_stat"]
+    threads: parameters["threads"]["get_purge_dups_read_stat"]
+
+    shell:
+        " workflow/scripts/purge_dups/draw_purge_dups_plot_all_haplotypes.py -b {input.before_pbstat},{input.after_pbstat} "
+        " -l before,after -c {input.before_cutoffs},{input.after_cutoffs} -e png,svg -o ${{COV_PLOT%.png}} > {log.png} 2>&1; "
+
+
+rule draw_before_plot:
     input:
         before_pbstat=lambda wildcards: expand(out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/first_stage/{haplotype}/PB.stat",
                                                haplotype=stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["haplotype_list"],
@@ -110,12 +140,11 @@ rule get_purge_stat_haplotype_comparison_before:
         #label_list=lambda wildcards: stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["haplotype_list"],
         label_string=lambda wildcards: ",".join(stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["haplotype_list"])
     log:
-        before=output_dict["log"] / "get_purge_stat_haplotype_comparison.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.before.log",
-        #calcuts=output_dict["log"]  / "get_purge_stat_haplotype_comparison.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.calcuts.log",
-        cluster_log=output_dict["cluster_log"] / "get_purge_stat_haplotype_comparison.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "get_purge_stat_haplotype_comparison.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.cluster.err"
+        before=output_dict["log"] / "draw_before_plot.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.before.log",
+        cluster_log=output_dict["cluster_log"] / "draw_before_plot.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "draw_before_plot.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "get_purge_stat_haplotype_comparison.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.benchmark.txt"
+        output_dict["benchmark"]  / "draw_before_plot.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -134,7 +163,7 @@ rule get_purge_stat_haplotype_comparison_before:
         " -e png,svg -o ${{BEFORE_COV_PLOT%.png}} > {log.before} 2>&1; "
 
 
-rule get_purge_stat_haplotype_comparison_after:
+rule draw_after_plot:
     input:
         after_pbstat=lambda wildcards: expand(out_dir_path /  "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/assembly_qc/purge_dups/{haplotype}/PB.stat",
                              haplotype=stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["haplotype_list"],
@@ -145,15 +174,13 @@ rule get_purge_stat_haplotype_comparison_after:
     output:
         after_coverage_plot=out_dir_path / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/assembly_qc/purge_dups/after.comparison.coverage.png"
     params:
-        #label_list=lambda wildcards: stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["haplotype_list"],
         label_string=lambda wildcards: ",".join(stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["haplotype_list"])
     log:
-        after=output_dict["log"] / "get_purge_stat_haplotype_comparison.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.after.log",
-        #calcuts=output_dict["log"]  / "get_purge_stat_haplotype_comparison.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.calcuts.log",
-        cluster_log=output_dict["cluster_log"] / "get_purge_stat_haplotype_comparison.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "get_purge_stat_haplotype_comparison.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.cluster.err"
+        after=output_dict["log"] / "draw_after_plot.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.after.log",
+        cluster_log=output_dict["cluster_log"] / "draw_after_plot.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "draw_after_plot.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "get_purge_stat_haplotype_comparison.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.benchmark.txt"
+        output_dict["benchmark"]  / "draw_after_plot.{prev_stage_parameters}.{purge_dups_parameters}.purge_dups.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

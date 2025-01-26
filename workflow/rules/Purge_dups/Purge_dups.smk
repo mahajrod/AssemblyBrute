@@ -185,7 +185,7 @@ rule create_contig_links:
     shell:
         " ln -sf ../../../../../{input.fasta} {output.fasta} 1>{log.ln1} 2>&1; "
         " ln -sf ../../../../../{input.len} {output.len} 1>{log.ln2} 2>&1"
-"""
+
 rule minimap2_purge_dups_reads:
     input:
         fastq=lambda wildcards: output_dict["data"] / "fastq/{0}/filtered/{1}{2}".format(wildcards.datatype, #stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"],
@@ -402,62 +402,6 @@ rule get_purged_seqs: #
         " for FILE in *.fa; do mv ${{FILE}} ${{FILE%fa}}fasta; done; "
 
 
-        #" ln -sf {wildcards.haplotype}/`basename {output.purged}` ../`basename {output.purged_alias}` > ${{LN_LOG}} 2>&1; "
-"""
-rule merge_pri_hapdups_with_alt: # TODO: add handling of polyploid cases
-    input:
-        alt_contig=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.hap2.fasta" % (stage_dict["purge_dups"]["prev_stage"],
-                                                                                                 stage_dict["purge_dups"]["prev_stage"])),
-        pri_hapdups=out_dir_path / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/hap1/{genome_prefix}.purge_dups.hap1.hap.fasta",
-    output:
-        alt_plus_pri_hapdup=out_dir_path / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/input/{genome_prefix}.purge_dups_input.hap2.fasta",
-
-    log:
-        std=output_dict["log"]  / "merge_pri_hapdups_with_alt.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.purge_dups.log",
-        cluster_log=output_dict["cluster_log"] / "merge_pri_hapdups_with_alt.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.purge_dups.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "merge_pri_hapdups_with_alt.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.purge_dups.cluster.err"
-    benchmark:
-        output_dict["benchmark"]  / "merge_pri_hapdups_with_alt.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.purge_dups.benchmark.txt"
-    conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
-    resources:
-        queue=config["queue"]["cpu"],
-        node_options=parse_node_list("merge_pri_hapdups_with_alt"),
-        cpus=parameters["threads"]["merge_pri_hapdups_with_alt"] ,
-        time=parameters["time"]["merge_pri_hapdups_with_alt"],
-        mem=parameters["memory_mb"]["merge_pri_hapdups_with_alt"]
-    threads: parameters["threads"]["merge_pri_hapdups_with_alt"]
-
-    shell:
-        " cat {input.alt_contig} {input.pri_hapdups} > {output.alt_plus_pri_hapdup} 2>{log.std}; "
-
-rule merge_pri_hapdups_with_alt_for_len_files: # TODO: add handling of polyploid cases
-    input:
-        alt_len=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.hap2.len" % (stage_dict["purge_dups"]["prev_stage"],
-                                                                                                 stage_dict["purge_dups"]["prev_stage"])),
-        pri_hapdups_len=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/hap1/{genome_prefix}.purge_dups.hap1.hap.len",
-    output:
-        alt_plus_pri_len=out_dir_path / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/input/{genome_prefix}.purge_dups_input.hap2.len",
-    log:
-        std=output_dict["log"]  / "merge_pri_hapdups_with_alt_for_len_files.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.purge_dups.log",
-        cluster_log=output_dict["cluster_log"] / "merge_pri_hapdups_with_alt_for_len_files.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.purge_dups.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "merge_pri_hapdups_with_alt_for_len_files.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.purge_dups.cluster.err"
-    benchmark:
-        output_dict["benchmark"]  / "merge_pri_hapdups_with_alt_for_len_files.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.purge_dups.benchmark.txt"
-    conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
-    resources:
-        queue=config["queue"]["cpu"],
-        node_options=parse_node_list("merge_pri_hapdups_with_alt_for_len_files"),
-        cpus=parameters["threads"]["merge_pri_hapdups_with_alt"] ,
-        time=parameters["time"]["merge_pri_hapdups_with_alt"],
-        mem=parameters["memory_mb"]["merge_pri_hapdups_with_alt"]
-    threads: parameters["threads"]["merge_pri_hapdups_with_alt"]
-
-    shell:
-        " cat {input.alt_len} {input.pri_hapdups_len} > {output.alt_plus_pri_len} 2>{log.std}"
-"""
-
 rule filter_removed_contigs: # TODO: find what options are used in ERGA for get_seqs
     input:
         stat=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype}/{genome_prefix}.dups.stat",
@@ -620,3 +564,4 @@ rule extract_artefact_sequences:
         " extract_sequences_by_ids.py -i {input.reference} -d {input.artefact_ids} "
         " -o {output.artefact_fasta} > {log.std} 2>&1 ; "
 
+"""

@@ -8,15 +8,20 @@ ruleorder: create_merqury_links_if_skipping_purge_dups > merqury
 ruleorder: create_quast_links_if_skipping_purge_dups > quast
 localrules: create_assembly_links_if_skipping_purge_dups, create_busco_links_if_skipping_purge_dups, create_merqury_links_if_skipping_purge_dups, create_quast_links_if_skipping_purge_dups
 
+wildcard_constraints:
+    haplotype="[^.]+"
+
 rule create_assembly_links_if_skipping_purge_dups:
     input:
         fasta=out_dir_path  / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/{genome_prefix}.{prev_stage}.{haplotype}.fasta",
         len=out_dir_path  / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/{genome_prefix}.{prev_stage}.{haplotype}.len",
         fai=out_dir_path  / "{prev_stage}/{prev_stage}..{prev_stage_parameters}/{genome_prefix}.{prev_stage}.{haplotype}.fasta.fai",
     output:
-        len=out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_{purge_dups_parameters, skipped.*}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.len",
-        fasta=out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_{purge_dups_parameters, skipped.*}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.fasta",
-        fai=out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_{purge_dups_parameters, skipped.*}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.fasta.fai"
+        len=out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_{purge_dups_parameters}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.len",
+        fasta=out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_{purge_dups_parameters}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.fasta",
+        fai=out_dir_path / "purge_dups/{prev_stage}_{prev_stage_parameters}..purge_dups_{purge_dups_parameters}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.fasta.fai"
+    wildcard_constraints:
+        purge_dups_parameters="skipped\.*"
     log:
         mkdir=output_dict["log"]  / "create_assembly_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_{purge_dups_parameters}.{genome_prefix}.{haplotype}.mkdir.log",
         ln=output_dict["log"]  / "create_assembly_links_if_skipping_purge_dups.{prev_stage}_{prev_stage_parameters}.purge_dups_{purge_dups_parameters}.{genome_prefix}.{haplotype}.ln.log",

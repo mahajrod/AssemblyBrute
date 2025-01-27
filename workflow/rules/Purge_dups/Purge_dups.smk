@@ -131,9 +131,10 @@ rule create_quast_links_if_skipping_purge_dups:
 def generate_sed_string_for_renaming_haplotype_prefixes(wildcards):
     prev_stage = stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["prev_stage"]
     haplotype_list = stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["haplotype_list"]
-    string_list = ["s/^{0}.{1}.{2}//g".format(wildcards.genome_prefix,
-                                                   prev_stage,
-                                                   haplotype) for haplotype in haplotype_list]
+    string_list = ["s/^{0}.{1}.{2}/{0}.purge_dups.{2}/g".format(wildcards.genome_prefix,
+                                                                prev_stage,
+                                                                haplotype,
+                                                                ) for haplotype in haplotype_list]
     print(string_list)
     return ";".join(string_list)
 

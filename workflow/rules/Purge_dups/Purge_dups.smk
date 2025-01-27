@@ -128,8 +128,16 @@ rule create_quast_links_if_skipping_purge_dups:
         " mkdir -p ${{OUT_DIR}} > {log.mkdir} 2>&1; "
         " ln -sf ../../../../../{input.dir} {output.dir} > {log.ln} 2>&1; "
 
+def generate_sed_string_for_renaming_haplotype_prefixes(wildcards):
+    prev_stage = stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["prev_stage"]
+    haplotype_list = stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["haplotype_list"]
+    string_list = ["s/^{0}.{1}.{2}//g".format(wildcards.genome_prefix,
+                                                   prev_stage,
+                                                   haplotype) for haplotype in haplotype_list],
+    return ";".join(string_list)
 
-rule create_merqury_links_if_skipping_purge_dups:
+
+rule get_merqury_results_if_skipping_purge_dups:
     input:
         qv_file=lambda wildcards: out_dir_path / ("%s/{prev_stage_parameters}/assembly_qc/merqury/{genome_prefix}.%s.qv" % (stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["prev_stage"],
                                                                                                                             stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["prev_stage"])),
@@ -138,9 +146,11 @@ rule create_merqury_links_if_skipping_purge_dups:
     output:
         qv_file=out_dir_path / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, purge_dups_skipped.*}/assembly_qc/merqury/{genome_prefix, [^/]+}.purge_dups.qv",
         completeness_stats_file=out_dir_path / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, purge_dups_skipped.*}/assembly_qc/merqury/{genome_prefix, [^/]+}.purge_dups.completeness.stats",
+    params:
+        sed_string=generate_sed_string_for_renaming_haplotype_prefixes
     log:
         mkdir=output_dict["log"]  / "create_merqury_links_if_skipping_purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.mkdir.log",
-        ln=output_dict["log"]  / "create_merqury_links_if_skipping_purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.ln.log",
+        sed=output_dict["log"]  / "create_merqury_links_if_skipping_purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.sed.log",
         cluster_log=output_dict["cluster_log"] / "create_merqury_links_if_skipping_purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "create_merqury_links_if_skipping_purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.cluster.err"
     benchmark:
@@ -159,8 +169,8 @@ rule create_merqury_links_if_skipping_purge_dups:
         " INPUT_DIR=`dirname {input.completeness_stats_file}`;"
         " OUT_DIR=`dirname {output.completeness_stats_file}`; "
         " mkdir -p ${{OUT_DIR}} > {log.mkdir} 2>&1; "
-        " ln -sf ../../../../../{input.qv_file} {output.qv_file} > {log.ln} 2>&1; "
-        " ln -sf ../../../../../{input.completeness_stats_file} {output.completeness_stats_file} > {log.ln} 2>&1; "
+        " sed '{params.sed_string}' ../../../../../{input.qv_file} > {output.qv_file} 2>{log.sed}; "
+        " sed '{params.sed_string}' ../../../../../{input.completeness_stats_file} > {output.completeness_stats_file} 2>>{log.sed}; "
 
 
 rule create_contig_links:

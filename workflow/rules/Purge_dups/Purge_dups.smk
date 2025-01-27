@@ -69,7 +69,7 @@ rule create_busco_links_if_skipping_purge_dups:
     output:
         busco_tar_gz=out_dir_path / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, purge_dups_skipped.*}/assembly_qc/busco5/{genome_prefix}.purge_dups.{haplotype}.busco5.{busco_lineage}.tar.gz",
         busco_summary=out_dir_path / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, purge_dups_skipped.*}/assembly_qc/busco5/{genome_prefix}.purge_dups.{haplotype}.busco5.{busco_lineage}.summary",
-        busco_summary_json=out_dir_path / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, purge_dups_skipped.*}assembly_qc/busco5/{genome_prefix}.purge_dups.{haplotype}.busco5.{busco_lineage}.summary.json",
+        busco_summary_json=out_dir_path / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, purge_dups_skipped.*}/assembly_qc/busco5/{genome_prefix}.purge_dups.{haplotype}.busco5.{busco_lineage}.summary.json",
         busco_table=out_dir_path / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, purge_dups_skipped.*}/assembly_qc/busco5/{genome_prefix}.purge_dups.{haplotype}.busco5.{busco_lineage}.full_table.tsv",
         busco_missing_busco_ids=out_dir_path / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, purge_dups_skipped.*}/assembly_qc/busco5/{genome_prefix}.purge_dups.{haplotype}.busco5.{busco_lineage}.missing.ids",
     log:

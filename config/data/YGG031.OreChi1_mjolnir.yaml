@@ -251,14 +251,17 @@
     "hifiasm_correct":
         "blacklist":
             - "mjolnircomp07fl"
+            - "mjolnircomp09fl"
         "whitelist": [ ]
     "hifiasm_hic":
         "blacklist":
             - "mjolnircomp07fl"
+            - "mjolnircomp09fl"
         "whitelist": [ ]
     "hifiasm_hifi":
         "blacklist":
             - "mjolnircomp07fl"
+            - "mjolnircomp09fl"
         "whitelist": [ ]
 #------------------------------------------------------
 #"adaptor_scan": True

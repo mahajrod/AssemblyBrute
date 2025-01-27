@@ -135,7 +135,7 @@ def generate_sed_string_for_renaming_haplotype_prefixes(wildcards):
                                                                 prev_stage,
                                                                 haplotype,
                                                                 ) for haplotype in haplotype_list]
-    print(string_list)
+    #print(string_list)
     return ";".join(string_list)
 
 
@@ -171,8 +171,8 @@ rule get_merqury_results_if_skipping_purge_dups:
         " INPUT_DIR=`dirname {input.completeness_stats_file}`;"
         " OUT_DIR=`dirname {output.completeness_stats_file}`; "
         " mkdir -p ${{OUT_DIR}} > {log.mkdir} 2>&1; "
-        " sed '{params.sed_string}' ../../../../../{input.qv_file} > {output.qv_file} 2>{log.sed}; "
-        " sed '{params.sed_string}' ../../../../../{input.completeness_stats_file} > {output.completeness_stats_file} 2>>{log.sed}; "
+        " sed '{params.sed_string}' {input.qv_file} > {output.qv_file} 2>{log.sed}; "
+        " sed '{params.sed_string}' {input.completeness_stats_file} > {output.completeness_stats_file} 2>>{log.sed}; "
 
 
 rule create_contig_links:

@@ -71,6 +71,7 @@ def group_option_sets(option_set_dict, grouping_option_list):
 
 
 def parse_node_list(rulename, grid_system="slurm"):
+    print(rulename)
     black_list = set(config["nodes"]["blacklist"])
     white_list = set(config["nodes"]["whitelist"])
     if rulename in config["rule_nodes"]:
@@ -81,7 +82,7 @@ def parse_node_list(rulename, grid_system="slurm"):
     if grid_system == "slurm":
         whitelist_option = " --nodelist={0} ".format(",".join(white_list)) if white_list else " "
         blacklist_option = " --exclude={0} ".format(",".join(black_list)) if black_list else " "
-
+        print(whitelist_option + blacklist_option)
         return whitelist_option + blacklist_option
     else:
         print("White and black node lists are implemented only for slurm. "

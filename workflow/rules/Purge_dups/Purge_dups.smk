@@ -7,9 +7,9 @@ ruleorder: create_assembly_links_if_skipping_purge_dups > ref_faidx
 ruleorder: create_assembly_links_if_skipping_purge_dups > get_seq_len
 
 ruleorder: create_busco_links_if_skipping_purge_dups > busco5
-ruleorder: create_merqury_links_if_skipping_purge_dups > merqury
+ruleorder: get_merqury_results_if_skipping_purge_dups > merqury
 ruleorder: create_quast_links_if_skipping_purge_dups > quast
-localrules: create_assembly_links_if_skipping_purge_dups, create_busco_links_if_skipping_purge_dups, create_merqury_links_if_skipping_purge_dups, create_quast_links_if_skipping_purge_dups
+localrules: create_assembly_links_if_skipping_purge_dups, create_busco_links_if_skipping_purge_dups, get_merqury_results_if_skipping_purge_dups, create_quast_links_if_skipping_purge_dups
 
 wildcard_constraints:
     haplotype="[^.]+"

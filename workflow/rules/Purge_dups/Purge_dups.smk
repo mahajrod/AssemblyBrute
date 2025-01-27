@@ -133,7 +133,7 @@ def generate_sed_string_for_renaming_haplotype_prefixes(wildcards):
     haplotype_list = stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["haplotype_list"]
     string_list = ["s/^{0}.{1}.{2}//g".format(wildcards.genome_prefix,
                                                    prev_stage,
-                                                   haplotype) for haplotype in haplotype_list],
+                                                   haplotype) for haplotype in haplotype_list]
     print(string_list)
     return ";".join(string_list)
 

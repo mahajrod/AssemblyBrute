@@ -134,6 +134,7 @@ def generate_sed_string_for_renaming_haplotype_prefixes(wildcards):
     string_list = ["s/^{0}.{1}.{2}//g".format(wildcards.genome_prefix,
                                                    prev_stage,
                                                    haplotype) for haplotype in haplotype_list],
+    print(string_list)
     return ";".join(string_list)
 
 

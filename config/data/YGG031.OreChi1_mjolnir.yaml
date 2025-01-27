@@ -97,7 +97,7 @@
     "purge_dups":
         #- "default"
         - "keep_hicov"
-        #- "skipped"
+        - "skipped"
     "salsa2":
         - "phased_reads"
         #- "unphased_reads"

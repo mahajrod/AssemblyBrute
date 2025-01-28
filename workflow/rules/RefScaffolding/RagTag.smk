@@ -1,5 +1,5 @@
 
-pritn(parameters["tool_options"]["ragtag"])
+print(parameters["tool_options"]["ragtag"])
 
 rule ragtag: #
     input:

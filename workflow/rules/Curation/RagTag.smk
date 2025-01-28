@@ -22,7 +22,8 @@ rule ragtag_curation: #
         node_options=parse_node_list("ragtag"),
         cpus=parameters["threads"]["ragtag"],
         time=parameters["time"]["ragtag"],
-        mem=parameters["memory_mb"]["ragtag"]
+        mem=parameters["memory_mb"]["ragtag"],
+        ragtag=1
     threads: parameters["threads"]["ragtag"]
 
     shell:

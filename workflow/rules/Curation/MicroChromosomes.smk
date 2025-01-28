@@ -42,21 +42,14 @@ rule miniprot:
         " sort 2>{log.sort} | uniq -c 2>{log.uniq} | sort -k1,1nr 2>{log.sort2} | awk '{{print $2 \"\\t\" $1}}' > {output.candidate_tsv} 2>{log.awk3} "
 
 
-def test(wildcards):
-    testttt = (out_dir_path / "hic_scaffolding/{0}/{1}.hic_scaffolding.{2}.assembly".format(wildcards.prev_stage_parameters,
-                                                                                            wildcards.genome_prefix,
-
-                                                                                             wildcards.haplotype)) if "hic_scaffolding" in wildcards.prev_stage_parameters else []
-    print(wildcards.prev_stage_parameters)
-    print(testttt)
-    return testttt
-
 rule place_microsomes_first:
     input:
         candidate_tsv=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.candidates.microchromosomes.tsv",
         len_file=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.len",
         fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta",
-        assembly=test
+        assembly= lambda wildcards: (out_dir_path / "hic_scaffolding/{0}/{1}.hic_scaffolding.{2}.assembly".format(wildcards.prev_stage_parameters,
+                                                                                                                  wildcards.genome_prefix,
+                                                                                                                  wildcards.haplotype)) if stage_dict["curation"]["prev_stage"] == "hic_scaffolding" else []
     output:
         filtered_tsv=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.max{max_length, [^/]+}.candidates.microchromosomes.filtered.tsv",
         reordered_fasta=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.max{max_length, [^/]+}.reordered.fasta",

@@ -80,6 +80,9 @@
     "curation":
         "default":
             - "curation"
+    "ref_scaffolding":
+        "default":
+            - "ragtag"
 
 "coretool_option_sets":
     "hifiasm":

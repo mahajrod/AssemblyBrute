@@ -80,6 +80,9 @@
     "curation":
         "default":
             - "curation"
+    "ref_scaffolding":
+        "default":
+            - "ragtag"
 
 "coretool_option_sets":
     "hifiasm":
@@ -107,6 +110,13 @@
         #- "unphased_reads"
     "curation":
         - "default"
+    "ragtag":
+        - "default"
+        #- "min_aln_len_2k"
+        #- "min_aln_len_3k"
+        #- "min_aln_len_5k"
+        #- "min_aln_len_7.5k"
+        #- "min_aln_len_10k"
 
 "other_tool_option_sets":
     "cutadapt":                 "default"   # Allowed: default
@@ -189,7 +199,7 @@
 "custom_enzyme_set_is_no_motif": False
 
 "starting_point": "fastq" # Allowed: "draft"
-"data_types": "hifi" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
+"data_types": "hifi,reference" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
 
 #-------- Options specific for starting point 'draft' ----------------
 "phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads

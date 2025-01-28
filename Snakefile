@@ -988,7 +988,7 @@ if "ref_scaffolding" in config["stage_list"]:
                     stage_dict["ref_scaffolding"]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][ref_scaffolding_tool][option_set] if ref_scaffolding_tool in parameters["tool_options"] else None
                     stage_dict["ref_scaffolding"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["ref_scaffolding"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
                     if not stage_dict["ref_scaffolding"]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
-                        stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["qc_datatypes"]
+                        stage_dict["ref_scaffolding"]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["qc_datatypes"]
 
     parameters_list = list(stage_dict["ref_scaffolding"]["parameters"].keys())
     #print(stage_dict["ref_scaffolding"])

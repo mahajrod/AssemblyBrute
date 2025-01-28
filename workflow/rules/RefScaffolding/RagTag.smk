@@ -1,4 +1,5 @@
 
+pritn(parameters["tool_options"]["ragtag"])
 
 rule ragtag: #
     input:
@@ -7,13 +8,9 @@ rule ragtag: #
         reference_fasta=out_dir_path / "data/reference/{reference}/{reference}.softmasked.fasta",
         reference_syn=out_dir_path / "data/reference/{reference}/{reference}.syn",
     output:
-        #alias_ragtag_fasta=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{genome_prefix}.ref_scaffolding.{haplotype}.fasta",
-        #alias_ragtag_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{genome_prefix}.ref_scaffolding.{haplotype}.agp",
-        #alias_ragtag_stats=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{genome_prefix}.ref_scaffolding.{haplotype}.stats",
         ragtag_fasta=out_dir_path / "ref_scaffolding/{prev_stage_parameters, [^/]+}}..ragtag_{ref_scaf_parameters, [^/]+}@{reference, [^/]+}/{haplotype, [^/]+}/{genome_prefix, [^/]+}.ref_scaffolding.{haplotype}.fasta",
         ragtag_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters, [^/]+}}..ragtag_{ref_scaf_parameters, [^/]+}@{reference, [^/]+}/{haplotype, [^/]+}/{genome_prefix, [^/]+}.ref_scaffolding.{haplotype}.agp",
         ragtag_stats=out_dir_path / "ref_scaffolding/{prev_stage_parameters, [^/]+}}..ragtag_{ref_scaf_parameters, [^/]+}@{reference, [^/]+}/{haplotype, [^/]+}/{genome_prefix, [^/]+}.ref_scaffolding.{haplotype}.stats",
-        #ragtag_syn=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.syn",
     params:
         min_aln_len=lambda wildcards: parse_option("min_aln_len", parameters["tool_options"]["ragtag"][wildcards.ref_scaf_parameters], " -f "),
 
@@ -41,25 +38,17 @@ rule ragtag: #
         " ln -sf ragtag.scaffold.fasta {output.ragtag_fasta} > {log.ln} 2>&1; "
         " ln -sf ragtag.scaffold.agp {output.ragtag_agp} >> {log.ln} 2>&1; "
         " ln -sf ragtag.scaffold.stats {output.ragtag_stats} >> {log.ln} 2>&1; "
-        #" ln -sf {wildcards.haplotype}/{wildcards.genome_prefix}.ref_scaffolding.{wildcards.haplotype}.fasta {output.alias_ragtag_fasta} >> {log.ln} 2>&1; "
-        #" ln -sf {wildcards.haplotype}/{wildcards.genome_prefix}.ref_scaffolding.{wildcards.haplotype}.agp {output.alias_ragtag_agp} >> {log.ln} 2>&1; "
-        #" ln -sf {wildcards.haplotype}/{wildcards.genome_prefix}.ref_scaffolding.{wildcards.haplotype}.stats {output.alias_ragtag_stats} >> {log.ln} 2>&1; "
 
 rule rename_ragtag_scaffolds:
     input:
         fasta=rules.ragtag.output.ragtag_fasta,
         agp=rules.ragtag.output.ragtag_agp,
         stats=rules.ragtag.output.ragtag_stats,
-        #reference_fasta=lambda wildcards: get_reference_fasta_path_from_ref_scaffolding_parameters(wildcards.ref_scaf_parameters) #out_dir_path / "data/reference/{reference}/{reference}.softmasked.fasta"
         reference_syn=out_dir_path / "data/reference/{reference}/{reference}.syn",
     output:
-        #fasta_prefix = results / ref_scaffolding / hifiasm_l3primary_no_hic..purge_dups_keep_hicov..ragtag_default,bCatUst1.pri.v2 / TurFus1.ref_scaffolding.hap0
         final_fasta=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference, [^/]+}/{genome_prefix, [^/]+}}.ref_scaffolding.{haplotype, [^/]+}}.fasta",
         final_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference, [^/]+}/{genome_prefix, [^/]+}}.ref_scaffolding.{haplotype, [^/]+}}.agp",
         final_stats=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference, [^/]+}/{genome_prefix, [^/]+}}.ref_scaffolding.{haplotype, [^/]+}}.stats",
-        #ragtag_fasta=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.fasta",
-        #ragtag_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.agp",
-        #ragtag_stats=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters},{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.stats",
         ragtag_syn=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference, [^/]+}/{haplotype, [^/]+}/{genome_prefix}.ref_scaffolding.{haplotype}.syn",
     log:
         ln=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference}/{haplotype}/rename_ragtag_scaffolds.{genome_prefix}.ref_scaffolding.{haplotype}.ln.log",

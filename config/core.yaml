@@ -140,16 +140,22 @@
                     "hic":
                         "read_number": 1000000
             "ragtag":
-                "default": {}
+                "default":
+                    "qc_datatypes": []
                 "min_aln_len_2k":
+                    "qc_datatypes": []
                     "min_aln_len": 2000
                 "min_aln_len_3k":
+                    "qc_datatypes": []
                     "min_aln_len": 3000
                 "min_aln_len_5k":
+                    "qc_datatypes": []
                     "min_aln_len": 5000
                 "min_aln_len_7.5k":
+                    "qc_datatypes": []
                     "min_aln_len": 7500
                 "min_aln_len_10k":
+                    "qc_datatypes": []
                     "min_aln_len": 10000
             "microsome_detection":
                 "default":

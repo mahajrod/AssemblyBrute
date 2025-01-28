@@ -1,13 +1,4 @@
 
-
-def get_min_aln_len_for_ragtag(wildcards):
-    min_aln_len = parse_option("min_aln_len", parameters["tool_options"]["ragtag"][wildcards.ref_scaf_parameters], " -f ")
-    print("AAAAAA")
-    print(parameters["tool_options"]["ragtag"][wildcards.ref_scaf_parameters])
-    print(min_aln_len)
-
-    return min_aln_len
-
 rule ragtag: #
     input:
         fasta=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta" % (stage_dict["ref_scaffolding"]["prev_stage"],
@@ -19,7 +10,7 @@ rule ragtag: #
         ragtag_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters, [^/]+}}..ragtag_{ref_scaf_parameters, [^/]+}@{reference, [^/]+}/{haplotype, [^/]+}/{genome_prefix, [^/]+}.ref_scaffolding.{haplotype}.agp",
         ragtag_stats=out_dir_path / "ref_scaffolding/{prev_stage_parameters, [^/]+}}..ragtag_{ref_scaf_parameters, [^/]+}@{reference, [^/]+}/{haplotype, [^/]+}/{genome_prefix, [^/]+}.ref_scaffolding.{haplotype}.stats",
     params:
-        min_aln_len=get_min_aln_len_for_ragtag
+        min_aln_len=lambda wildcards: parse_option("min_aln_len", parameters["tool_options"]["ragtag"][wildcards.ref_scaf_parameters], " -f ")
 
     log:
         ragtag=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference}/{haplotype}/ragtag.{genome_prefix}.ref_scaffolding.{haplotype}.log",
@@ -79,6 +70,6 @@ rule rename_ragtag_scaffolds:
     shell:
         " RAGTAG_DIR=`dirname {input.fasta}`; "
         " awk '{{print $2\"_RagTag\tps\"$1 }}' {input.reference_syn} > {output.ragtag_syn} 2>{log.awk}; "
-        " rename_sequence_ids.py -i {input.fasta} -o {output.final_fasta} -s {output.ragtag_syn} -k 0 -c 1 > {log.rename_fasta} 2>&1; "
+        " rename_sequence_ids.py -i {input.fasta} -o {output.final_fasta} -l -s {output.ragtag_syn} -k 0 -c 1 > {log.rename_fasta} 2>&1; "
         " ln -sf {wildcards.haplotype}/{wildcards.genome_prefix}.ref_scaffolding.{wildcards.haplotype}.stats {output.final_stats} > {log.ln} 2>&1; "
         " replace_column_value_by_syn.py -i {input.agp} -o {output.final_agp} -s {output.ragtag_syn} -c 0 > {log.rename_agp} 2>&1; " # -k 0 -c 1

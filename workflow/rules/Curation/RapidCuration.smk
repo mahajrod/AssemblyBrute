@@ -52,8 +52,8 @@ rule create_curation_input_files_for_scaffolds: #
     threads: parameters["threads"]["create_curation_input_files"]
 
     shell:
-        " cp -f `realpath -s {input.fasta}` {output.fasta} > {log.cp} 2>&1; "
-        " cp -f `realpath -s {input.fai}` {output.fai} >> {log.cp} 2>&1; "
+        " sed 's/\s.*//' `realpath -s {input.fasta}` {output.fasta} > {log.cp} 2>&1; "
+        " samtools faidx -o {output.fai} {output.fasta} >> {log.cp} 2>&1; "
         " cp -f `realpath -s {input.len}` {output.len} >> {log.cp} 2>&1; "
 
 rule create_curation_input_files_for_contigs: #
@@ -90,8 +90,8 @@ rule create_curation_input_files_for_contigs: #
     threads: parameters["threads"]["create_curation_input_files"]
 
     shell:
-        " cp -f `realpath -s {input.fasta}` {output.fasta} > {log.cp} 2>&1; "
-        " cp -f `realpath -s {input.fai}` {output.fai} >> {log.cp} 2>&1; "
+        " sed 's/\s.*//' `realpath -s {input.fasta}` {output.fasta} > {log.cp} 2>&1; "
+        " samtools faidx -o {output.fai} {output.fasta} >> {log.cp} 2>&1; "
         " cp -f `realpath -s {input.len}` {output.len} >> {log.cp} 2>&1; "
         " cp -f `realpath -s {input.transfer_agp}` {output.transfer_agp} >> {log.cp} 2>&1; "
 

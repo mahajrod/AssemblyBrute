@@ -10,8 +10,8 @@ def get_min_aln_len_for_ragtag(wildcards):
 
 rule ragtag: #
     input:
-        fasta=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta" %(stage_dict["ref_scaffolding"]["prev_stage"],
-                                                                                                  stage_dict["ref_scaffolding"]["prev_stage"])),
+        fasta=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta" % (stage_dict["ref_scaffolding"]["prev_stage"],
+                                                                                                   stage_dict["ref_scaffolding"]["prev_stage"])),
         reference_fasta=out_dir_path / "data/reference/{reference}/{reference}.softmasked.fasta",
         reference_syn=out_dir_path / "data/reference/{reference}/{reference}.syn",
     output:

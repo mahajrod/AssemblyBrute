@@ -1,5 +1,12 @@
 
-print(parameters["tool_options"]["ragtag"])
+
+def get_min_aln_len_for_ragtag(wildcards):
+    min_aln_len = parse_option("min_aln_len", parameters["tool_options"]["ragtag"][wildcards.ref_scaf_parameters], " -f ")
+    print("AAAAAA")
+    print(parameters["tool_options"]["ragtag"][wildcards.ref_scaf_parameters])
+    print(min_aln_len)
+
+    return min_aln_len
 
 rule ragtag: #
     input:
@@ -12,7 +19,7 @@ rule ragtag: #
         ragtag_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters, [^/]+}}..ragtag_{ref_scaf_parameters, [^/]+}@{reference, [^/]+}/{haplotype, [^/]+}/{genome_prefix, [^/]+}.ref_scaffolding.{haplotype}.agp",
         ragtag_stats=out_dir_path / "ref_scaffolding/{prev_stage_parameters, [^/]+}}..ragtag_{ref_scaf_parameters, [^/]+}@{reference, [^/]+}/{haplotype, [^/]+}/{genome_prefix, [^/]+}.ref_scaffolding.{haplotype}.stats",
     params:
-        min_aln_len=lambda wildcards: parse_option("min_aln_len", parameters["tool_options"]["ragtag"][wildcards.ref_scaf_parameters], " -f "),
+        min_aln_len=get_min_aln_len_for_ragtag
 
     log:
         ragtag=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference}/{haplotype}/ragtag.{genome_prefix}.ref_scaffolding.{haplotype}.log",

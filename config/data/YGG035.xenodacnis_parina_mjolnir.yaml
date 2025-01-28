@@ -90,7 +90,7 @@
          #- "l3primary_dual_scaf"
          #- "l1primary_dual_scaf"
          - "l3primary_no_hic"
-         - "l3primary_no_hic_no_telo"
+         #- "l3primary_no_hic_no_telo"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
     "purge_dups":

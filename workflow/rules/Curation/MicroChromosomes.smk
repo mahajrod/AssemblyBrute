@@ -45,7 +45,9 @@ rule miniprot:
 def test(wildcards):
     testttt = (out_dir_path / "hic_scaffolding/{0}/{1}.hic_scaffolding.{2}.assembly".format(wildcards.prev_stage_parameters,
                                                                                             wildcards.genome_prefix,
-                                                                                            wildcards.haplotype)) if "hic_scaffolding" in wildcards.prev_stage_parameters else []
+
+                                                                                             wildcards.haplotype)) if "hic_scaffolding" in wildcards.prev_stage_parameters else []
+    print(wildcards.prev_stage_parameters)
     print(testttt)
     return testttt
 

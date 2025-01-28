@@ -154,7 +154,7 @@
 "genome_prefix": "NeoVis1_v1"
 "busco_lineage_list":
     - "mammalia_odb10"
-    - "carnivora_odb10" #
+    #- "carnivora_odb10" #
 
 "telomere_motif": "CCCTAA"  # telomere motif at 5'-end; CCCTAA for human, place null if unknown
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,

@@ -1,7 +1,6 @@
 #---- Bioconda config ----
 
-#TODO: check tools and versions
-"name": "yggbase"
+"name": "hifiasm"
 "channels":
   - "mahajrod"
   - "bioconda"

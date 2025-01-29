@@ -83,7 +83,7 @@
     "ref_scaffolding":
         "default":
             - "ragtag"
-            -
+
 "coretool_option_sets":
     "hifiasm":
          #- "l0primary"

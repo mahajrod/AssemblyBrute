@@ -80,7 +80,10 @@
     "curation":
         "default":
             - "curation"
-
+    "ref_scaffolding":
+        "default":
+            - "ragtag"
+            -
 "coretool_option_sets":
     "hifiasm":
          #- "l0primary"
@@ -105,6 +108,13 @@
         #- "unphased_reads"
     "curation":
         - "default"
+    "ragtag":
+        - "default"
+        #- "min_aln_len_2k"
+        #- "min_aln_len_3k"
+        #- "min_aln_len_5k"
+        #- "min_aln_len_7.5k"
+        #- "min_aln_len_10k"
 
 "other_tool_option_sets":
     "cutadapt":                 "default"   # Allowed: default

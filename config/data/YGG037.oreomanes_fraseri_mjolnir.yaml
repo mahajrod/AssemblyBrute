@@ -166,6 +166,7 @@
 
 "species_name": "Conirostrum binghami" # NCBI uses outdated name - Oreomanes fraseri
 "tax_id": 62231 # # necessary for contamination scan via FCS
+"bird_genome": True
 
 "database_set":
     "kraken2":

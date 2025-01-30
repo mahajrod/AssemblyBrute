@@ -377,6 +377,9 @@ if "draft_qc" in config["stage_list"]:
                                 haplotype=stage_dict["draft_qc"]["parameters"][parameters_label]["haplotype_list"]
                                 ) for parameters_label in parameters_list],
                      ]
+
+
+
     if not config["skip_busco"]:
         results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
                                 busco_lineage=config["busco_lineage_list"],
@@ -968,73 +971,152 @@ if "gap_closing" in config["stage_list"]: # TODO: modify it and all initiation o
 """
 
 if "ref_scaffolding" in config["stage_list"]:
-    prev_stage = stage_dict["ref_scaffolding"]["prev_stage"]
-    curation_tool_list = config["stage_coretools"]["ref_scaffolding"]["default"]
-    stage_dict["ref_scaffolding"]["parameters"] = {}
+    current_stage = "ref_scaffolding"
+    prev_stage = stage_dict[current_stage]["prev_stage"]
+    curation_tool_list = config["stage_coretools"][current_stage]["default"]
+    stage_dict[current_stage]["parameters"] = {}
 
-    ref_scaffolding_tool_list = config["stage_coretools"]["ref_scaffolding"]["default"]
-    stage_dict["ref_scaffolding"]["parameters"] = {}
+    ref_scaffolding_tool_list = config["stage_coretools"][current_stage]["default"]
+    stage_dict[current_stage]["parameters"] = {}
     for ref_scaffolding_tool in ref_scaffolding_tool_list:
         for option_set in config["coretool_option_sets"][ref_scaffolding_tool]:
             #print(prev_stage)
             for prev_parameters in stage_dict[prev_stage]["parameters"]:
                 for reference in list(input_reference_filedict.keys()):
                     parameters_label = "{0}..{1}_{2}@{3}".format(prev_parameters, ref_scaffolding_tool, option_set, reference)
-                    stage_dict["ref_scaffolding"]["parameters"][parameters_label] = {}
-                    stage_dict["ref_scaffolding"]["parameters"][parameters_label]["included"] = True
-                    stage_dict["ref_scaffolding"]["parameters"][parameters_label]["ref_scaffolder"] = ref_scaffolding_tool
-                    stage_dict["ref_scaffolding"]["parameters"][parameters_label]["prev_stage"] = prev_stage
-                    stage_dict["ref_scaffolding"]["parameters"][parameters_label]["prev_parameters"] = prev_parameters
-                    stage_dict["ref_scaffolding"]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][ref_scaffolding_tool][option_set] if ref_scaffolding_tool in parameters["tool_options"] else None
-                    stage_dict["ref_scaffolding"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["ref_scaffolding"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
-                    if not stage_dict["ref_scaffolding"]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
-                        stage_dict["ref_scaffolding"]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["qc_datatypes"]
+                    stage_dict[current_stage]["parameters"][parameters_label] = {}
+                    stage_dict[current_stage]["parameters"][parameters_label]["included"] = True
+                    stage_dict[current_stage]["parameters"][parameters_label]["ref_scaffolder"] = ref_scaffolding_tool
+                    stage_dict[current_stage]["parameters"][parameters_label]["prev_stage"] = prev_stage
+                    stage_dict[current_stage]["parameters"][parameters_label]["prev_parameters"] = prev_parameters
+                    stage_dict[current_stage]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][ref_scaffolding_tool][option_set] if ref_scaffolding_tool in parameters["tool_options"] else None
+                    stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict[current_stage]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
+                    if not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
+                        stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["qc_datatypes"]
 
-    parameters_list = list(stage_dict["ref_scaffolding"]["parameters"].keys())
+    parameters_list = list(stage_dict[current_stage]["parameters"].keys())
     #print(stage_dict["ref_scaffolding"])
-    results_list += [[expand(out_dir_path / "ref_scaffolding/{parameters}/{genome_prefix}.ref_scaffolding.{haplotype}.fasta",#"{assembly_stage}/{parameters}/{genome_prefix}.ref_scaffolding.{haplotype}.fasta",
-                             #assembly_stage=["ref_scaffolding", ],
+    results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",#"{assembly_stage}/{parameters}/{genome_prefix}.ref_scaffolding.{haplotype}.fasta",
+                             assembly_stage=[current_stage],
                              parameters=[parameters_label],
                              genome_prefix=[config["genome_prefix"], ],
-                             haplotype=stage_dict["ref_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
+                             haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
                              ) for parameters_label in parameters_list],
                      [expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
+                                genome_prefix=[config["genome_prefix"], ],
+                                assembly_stage=[current_stage],
+                                haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
+                                parameters=[parameters_label]) for parameters_label in parameters_list],
+                     expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
+                                genome_prefix=[config["genome_prefix"], ],
+                                assembly_stage=[current_stage],),]
+
+
+
+    results_list += [[[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
+                               threshold_type=["absolute", "relative"],
+                               genome_prefix=[config["genome_prefix"], ],
+                               assembly_stage=[current_stage, ],
+                               track_type=[track_type],
+                               window=[parameters["tool_options"]["assembly_qc"][track_type]["options"][window_settings]["window"]],
+                               step=[parameters["tool_options"]["assembly_qc"][track_type]["options"][window_settings]["step"]],
+                               haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
+                               parameters=[parameters_label])
+
+                        for window_settings in parameters["tool_options"]["assembly_qc"][track_type]["options"]]
+                        for parameters_label in stage_dict[current_stage]["parameters"]]
+                        for track_type in ("gap", "gc")],  #"windowmasker", "trf"
+                      ]
+    """              
+                                      [
+                                          expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.canonical.txt",
+                                              seq_type=["scaffolds"],
+                                              genome_prefix=[config["genome_prefix"], ],
+                                              assembly_stage=["curation", ],
+                                              haplotype=stage_dict["curation"]["parameters"][parameters_label][
+                                                  "haplotype_list"],
+                                              parameters=[parameters_label]) for parameters_label in
+                                          stage_dict["curation"]["parameters"]],
+                                      [
+                                          expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical_telomere.win1000.step200.track.bedgraph",
+                                              seq_type=["scaffolds"],
+                                              genome_prefix=[config["genome_prefix"], ],
+                                              assembly_stage=["curation", ],
+                                              haplotype=stage_dict["curation"]["parameters"][parameters_label][
+                                                  "haplotype_list"],
+                                              parameters=[parameters_label]) for parameters_label in
+                                          stage_dict["curation"]["parameters"]],
+                                      [
+                                          expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical_telomere_warning.win1000.step200.track.bedgraph",
+                                              seq_type=["scaffolds"],
+                                              genome_prefix=[config["genome_prefix"], ],
+                                              assembly_stage=["curation", ],
+                                              haplotype=stage_dict["curation"]["parameters"][parameters_label][
+                                                  "haplotype_list"],
+                                              parameters=[parameters_label]) for parameters_label in
+                                          stage_dict["curation"]["parameters"]],
+                                      ]"""
+    """
+    if coverage_track_data_type_set:
+        results_list += [[[
+                              expand(out_dir_path / "curation/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.{datatype}.coverage.win{window}.step{step}.png",
+                                  window=
+                                  stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"][
+                                      "options"][window_step_set]["window"],
+                                  step=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"][
+                                      "options"][window_step_set]["step"],
+                                  genome_prefix=[config["genome_prefix"], ],
+                                  assembly_stage=["curation", ],
+                                  datatype=coverage_track_data_type_set,
+                                  haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
+                                  parameters=[parameters_label]) for window_step_set in
+                              stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"][
+                                  "options"]] for parameters_label in
+                          stage_dict["curation"]["parameters"]] if coverage_track_data_type_set else [],
+                         [[
+                              expand(out_dir_path / "curation/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.{datatype}_{cov_type}_coverage.win{window}.step{step}.track.bedgraph",
+                                  cov_type=["mean", "median"],
+                                  window=
+                                  stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"][
+                                      "options"][window_step_set]["window"],
+                                  step=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"][
+                                      "options"][window_step_set]["step"],
+                                  genome_prefix=[config["genome_prefix"], ],
+                                  assembly_stage=["curation", ],
+                                  datatype=coverage_track_data_type_set,
+                                  haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
+                                  parameters=[parameters_label]) for window_step_set in
+                              stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"][
+                                  "options"]] for parameters_label in
+                          stage_dict["curation"]["parameters"]] if coverage_track_data_type_set else [],
+                         ]
+    """
+
+    if not config["skip_busco"]:
+        results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
+                                busco_lineage=config["busco_lineage_list"],
+                                genome_prefix=[config["genome_prefix"], ],
+                                assembly_stage=["ref_scaffolding", ],
+                                haplotype=stage_dict["ref_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
+                                parameters=[parameters_label]) for parameters_label in parameters_list],
+                        *[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.merged.tsv",
+                                busco_lineage=config["busco_lineage_list"],
+                                genome_prefix=[config["genome_prefix"], ],
+                                assembly_stage=["ref_scaffolding"],
+                                parameters=[parameters_label]) for parameters_label in parameters_list],
+                        *[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.merged.tsv",
+                                busco_lineage=config["busco_lineage_list"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["ref_scaffolding"],
                                 haplotype=stage_dict["ref_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
                                 parameters=[parameters_label]) for parameters_label in parameters_list],
-                     expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
-                                genome_prefix=[config["genome_prefix"], ],
-                                assembly_stage=["ref_scaffolding"],),
-                            ]
-    if not config["skip_busco"]:
-        results_list += [*[
-            expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
-                busco_lineage=config["busco_lineage_list"],
-                genome_prefix=[config["genome_prefix"], ],
-                assembly_stage=["ref_scaffolding", ],
-                haplotype=stage_dict["ref_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
-                parameters=[parameters_label]) for parameters_label in parameters_list],
-    *[
-        expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.merged.tsv",
-            busco_lineage=config["busco_lineage_list"],
-            genome_prefix=[config["genome_prefix"], ],
-            assembly_stage=["ref_scaffolding"],
-            parameters=[parameters_label]) for parameters_label in parameters_list],
-    *[
-        expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.merged.tsv",
-            busco_lineage=config["busco_lineage_list"],
-            genome_prefix=[config["genome_prefix"], ],
-            assembly_stage=["ref_scaffolding"],
-            haplotype=stage_dict["ref_scaffolding"]["parameters"][parameters_label]["haplotype_list"],
-            parameters=[parameters_label]) for parameters_label in parameters_list],
-    expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/all_intersection/{genome_prefix}.{busco_lineage}.busco.merged.tsv",
-        busco_lineage=config["busco_lineage_list"],
-        genome_prefix=[config["genome_prefix"], ],
-        assembly_stage=["ref_scaffolding"],
-        parameters=parameters_list
-           ),
-    ]
+                        expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/all_intersection/{genome_prefix}.{busco_lineage}.busco.merged.tsv",
+                            busco_lineage=config["busco_lineage_list"],
+                            genome_prefix=[config["genome_prefix"], ],
+                            assembly_stage=["ref_scaffolding"],
+                            parameters=parameters_list
+                               ),
+                        ]
 
 if "curation" in config["stage_list"]:
     prev_stage = stage_dict["curation"]["prev_stage"]
@@ -1342,7 +1424,7 @@ if "hic" in data_types:
         include: "workflow/rules/HiC/YAHS.smk"
         include: "workflow/rules/HiC/3DDNA.smk"
 
-
+"""
 if "curation" in config["stage_list"]:
     include: "workflow/rules/Curation/RapidCuration.smk"
     include: "workflow/rules/Curation/GapTrack.smk"
@@ -1357,6 +1439,19 @@ if "curation" in config["stage_list"]:
     include: "workflow/rules/Curation/RagTag.smk"
     if "hic" in data_types:
         include: "workflow/rules/Curation/HiGlassTrack.smk"
+"""
+
+include: "workflow/rules/QCAssembly/RapidCuration.smk"
+include: "workflow/rules/QCAssembly/GapTrack.smk"
+#include: "workflow/rules/Curation/WindowmaskerTrack.smk"
+include: "workflow/rules/QCAssembly/CoverageTrack.smk"
+#include: "workflow/rules/Curation/TelomereTrack.smk"
+#include: "workflow/rules/Curation/TRFTrack.smk"
+#include: "workflow/rules/Curation/Masking.smk"
+include: "workflow/rules/QCAssembly/GCTrack.smk"
+#include: "workflow/rules/Curation/WGA.smk"
+#include: "workflow/rules/Curation/VariantTrack.smk"
+#include: "workflow/rules/Curation/RagTag.smk"
 
 
 if "gap_closing" in config["stage_list"]:

@@ -25,7 +25,7 @@ gfa2fasta	1	1	1	1	1	1	1	1	1
 get_coverage_from_hifiasm_graph	1	1	1	1	1	1	1	1	1
 get_read_bed_from_hifiasm_graph	1	1	1	1	1	1	1	1	1
 busco5_download	1	1	1	1	1	1	1	1	1
-busco5	50	10	30	40	40	40	40	40	40
+busco5	40	10	30	40	40	40	40	40	40
 compress_busco5	1	1	1	1	1	1	1	1	1
 busco5_intersect_haplotypes	1	1	1	1	1	1	1	1	1
 busco5_intersect_stages	1	1	1	1	1	1	1	1	1
@@ -41,7 +41,7 @@ merge_pri_hapdups_with_alt	1	1	1	1	1	1	1	1	1
 get_purge_stat_haplotype_comparison	1	1	1	1	1	1	1	1	1
 create_links	1	1	1	1	1	1	1	1	1
 bwa_index	1	1	1	1	1	1	1	1	1
-bwa_map	50	15	30	40	40	40	40	40	40
+bwa_map	40	15	30	40	40	40	40	40	40
 bwa_map_arima	20	10	10	20	20	25	25	30	30
 two_read_bam_combiner	1	1	1	1	1	1	1	1	1
 samtools_sort	8	2	4	8	8	8	8	8	8

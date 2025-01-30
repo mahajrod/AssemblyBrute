@@ -23,4 +23,4 @@ rule create_gc_track: #
 
     shell:
         " workflow/scripts/curation/count_gc_in_windows.py -i {input.fasta} "
-        " -w {wildcards.window} -s {wildcards.step} -o {output.gap_bedgraph} 2>{log.gc}; "
+        " -w {wildcards.window} -s {wildcards.step} -o {output.gc_bedgraph} 2>{log.gc}; "

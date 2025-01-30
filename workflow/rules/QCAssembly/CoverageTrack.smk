@@ -136,8 +136,8 @@ rule create_coverage_table:
     input:
         per_base=rules.calculate_coverage.output.per_base,
     output:
-        stat_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{haplotype, [^/]+}/{genome_prefix}.{assembly_stage}.{haplotype, [^.]+}.{datatype, [^.]+}.win{window, [0-9]+}.step{step, [0-9]+}.stat",
-        all_stat_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{haplotype, [^/]+}/{genome_prefix}.{assembly_stage}.{haplotype, [^.]+}.{datatype, [^.]+}.win{window, [0-9]+}.step{step, [0-9]+}.all.stat"
+        stat_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, [^./]+}.win{window, [0-9]+}.step{step, [0-9]+}.stat",
+        all_stat_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, [^./]+}.win{window, [0-9]+}.step{step, [0-9]+}.all.stat"
     log:
         std=output_dict["log"]  / "create_coverage_table.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.log",
         cluster_log=output_dict["cluster_log"] / "create_coverage_table.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.cluster.log",

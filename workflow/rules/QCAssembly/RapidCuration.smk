@@ -232,7 +232,7 @@ rule get_track_stats: #
         all_stat=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/track_stats/{haplotype, [^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.stat",
         thresholds=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/track_stats/{haplotype, [^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.thresholds"
     params:
-        normalization=lambda wildcards: parse_option_flag("normalize_by_len", stage_dict["curation"]["parameters"][wildcards.parameters]["option_set"][wildcards.track_type], "-n")
+        normalization=lambda wildcards: parse_option_flag("normalize_by_len", parameters["tool_options"]["assembly_qc"][wildcards.track_type]["options"], "-n")
     log:
         std=output_dict["log"]  / "get_track_stats.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.std.log",
         cluster_log=output_dict["cluster_log"] / "get_track_stats.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.cluster.log",

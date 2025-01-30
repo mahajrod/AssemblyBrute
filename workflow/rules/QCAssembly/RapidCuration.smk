@@ -138,8 +138,8 @@ rule create_windows: #
 
 rule create_bedgraph_track: #
     input:
-        track_bed=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type}/{haplotype, [^.]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.{track_type}.track.bed",
-        windows_bed=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/{genome_prefix}.{assembly_stage}.{haplotype}.win{window, [0-9]+}.step{step, [0-9]+}.windows.bed"
+        track_bed=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type}/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.track.bed",
+        windows_bed=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.win{window, [0-9]+}.step{step, [0-9]+}.windows.bed"
     output:
         bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{haplotype, [^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, [^./]+}.win{window, [0-9]+}.step{step, [0-9]+}.track.bedgraph"
     log:

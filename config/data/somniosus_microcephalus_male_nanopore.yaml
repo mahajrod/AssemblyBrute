@@ -235,6 +235,7 @@
             - "mjolnircomp05fl"
             - "mjolnircomp06fl"
         "whitelist": []
+
 #------------------------------------------------------
 #"adaptor_scan": True
 #"fcs_gx_scan": True

@@ -281,7 +281,8 @@ rule draw_track: #
         png=out_dir_path / "{assembly_stage, [^.]+}/{parameters, [^.]+}/assembly_qc/trackplots/{haplotype, [^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.{threshold_type}.png"
     params: # TODO: move parameters from "curation" to "qc" or something similar
         thresholds=lambda wildcards: parse_option("absolute_thresholds",
-                                                  stage_dict["curation"]["parameters"][wildcards.parameters]["option_set"][wildcards.track_type],
+                                                  parameters["tool_options"]["assembly_qc"][wildcards.track_type],
+                                                  #stage_dict["curation"]["parameters"][wildcards.parameters]["option_set"][wildcards.track_type],
                                                   "--density_thresholds",
                                                   expression=lambda s: ",".join(list(map(str, s))))
     log:

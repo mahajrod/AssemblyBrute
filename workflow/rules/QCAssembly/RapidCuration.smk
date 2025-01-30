@@ -260,7 +260,6 @@ rule draw_track: #
         whitelist = rules.select_long_scaffolds.output.whitelist,
         orderlist = rules.select_long_scaffolds.output.orderlist,
         len_file = out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
-        all_stat_file = rules.create_coverage_table.output.all_stat_file,
         bedgraph=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph",
         relative_thresholds=lambda wildcards: expand(rules.get_track_stats.output.thresholds,
                                                        assembly_stage=[wildcards.assembly_stage],

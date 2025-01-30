@@ -35,7 +35,7 @@
             "in_memory":    True
     "fcs":
         "fcs_gx":
-            "path":         "/projects/mjolnir1/people/xsg178/db/fcs/gxdb/" # add path to fcs_gx database
+            "path":         "/datasets/globe_databases/fcs-gx/20240912/gxdb/" # add path to fcs_gx database
             "image_path":   "/projects/mjolnir1/people/xsg178/soft/FCS-GX/fcs-gx.sif"
             "memory_mb":    512000 # Entire database must be in memory, it requires at least 490 Gbp
             "threads":      30
@@ -78,6 +78,9 @@
     "curation":
         "default":
             - "curation"
+    "ref_scaffolding":
+        "default":
+            - "ragtag"
 
 "coretool_option_sets":
     "hifiasm":
@@ -92,7 +95,7 @@
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
     "purge_dups":
-        - "default"
+        - "skipped"
         - "keep_hicov"
     "salsa2":
         - "phased_reads"
@@ -102,9 +105,9 @@
         - "unphased_reads"
     "threeddna":
         #- "phased_reads"
-        - "unphased_reads"
+        #- "unphased_reads"
         #- "phased_reads_editor_repcov_5"
-        - "unphased_reads_editor_repcov_5"
+        #- "unphased_reads_editor_repcov_5"
         #- "phased_reads_editor_repcov_10"
         - "unphased_reads_editor_repcov_10"
     "curation":
@@ -114,6 +117,13 @@
     "samba":
         - "phased_reads"
         #- "unphased_reads"
+    "ragtag":
+        - "default"
+        #- "min_aln_len_2k"
+        #- "min_aln_len_3k"
+        #- "min_aln_len_5k"
+        #- "min_aln_len_7.5k"
+        #- "min_aln_len_10k"
 
 "other_tool_option_sets":
     "cutadapt":                 "default"   # Allowed: default
@@ -145,6 +155,7 @@
     "tadbit":                   "default"   # Allowed: default
     "krater_from_histo":        "default"   # Allowed: default
     "microsome_detection":      "default"   # Allowed: default
+    "assembly_qc":              "default"   # Allowed: default
 
 "tool_manually_adjusted_features":
     "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions
@@ -154,11 +165,12 @@
 
 "ploidy": 2
 "bwa_tool": "bwa" # Allowed: bwa, bwa-mem2
-"genome_prefix": "SomMic2"
+"genome_prefix": "SomMic2_v1"
 "busco_lineage_list":
     - "vertebrata_odb10" #
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
+"telomere_motif": "CCCTAA"
 
 "species_name": "somniosus microcephalus"
 "tax_id": 191813  # necessary for contamination scan via FCS
@@ -196,7 +208,7 @@
 "mode": "assembly"                # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
-"assembly_mode": "contig"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
+"assembly_mode": "purge_dups"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []

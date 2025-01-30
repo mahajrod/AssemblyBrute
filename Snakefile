@@ -1013,9 +1013,10 @@ if "ref_scaffolding" in config["stage_list"]:
 
     print(parameters["tool_options"]["assembly_qc"])
 
-    #out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph",#
+    #out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph",
+    #out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/track_stats/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.track.stat",
 
-    results_list += [[[[expand( out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/track_stats/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.track.stat", #out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
+    results_list += [[[[expand( out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
                                threshold_type=["absolute", "relative"],
                                genome_prefix=[config["genome_prefix"], ],
                                assembly_stage=[current_stage, ],

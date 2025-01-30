@@ -277,7 +277,7 @@ rule draw_track: #
         #                                    track_type=[wildcards.track_type],
         #                                    window=[wildcards.window],
         #                                    step=[wildcards.step]) if wildcards.threshold_type == 'relative' else []
-    outp#ut:
+    output:
         png=out_dir_path / "{assembly_stage, [^.]+}/{parameters, [^.]+}/assembly_qc/trackplots/{haplotype, [^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.{threshold_type}.png"
     params: # TODO: move parameters from "curation" to "qc" or something similar
         thresholds=lambda wildcards: parse_option("absolute_thresholds",

@@ -28,16 +28,16 @@
             "time":         "06:00:00"
             "in_memory":    True
         "nt":
-            "path":         "/projects/mjolnir1/people/xsg178/db/kraken/nt/05302024" # add path to nt database
+            "path":         "/datasets/globe_databases/kraken2/kraken2_nt/20240530/" # add path to nt database
             "memory_mb":    1024000
             "threads":      30
             "time":         "03:00:00"
             "in_memory":    True
     "fcs":
         "fcs_gx":
-            "path":         "/projects/mjolnir1/people/xsg178/db/fcs/gxdb/" # add path to fcs_gx database
+            "path":         "/datasets/globe_databases/fcs-gx/20240912/gxdb/" # add path to fcs_gx database
             "image_path":   "/projects/mjolnir1/people/xsg178/soft/FCS-GX/fcs-gx.sif"
-            "memory_mb":    512000 # Entire database must be in memory, it requires at least 490 Gbp
+            "memory_mb":    612000 # Entire database must be in memory, it requires at least 490 Gbp
             "threads":      30
             "time":         "06:00:00"
             "in_memory":    True
@@ -78,6 +78,9 @@
     "curation":
         "default":
             - "curation"
+    "ref_scaffolding":
+        "default":
+            - "ragtag"
 
 "coretool_option_sets":
     "hifiasm":
@@ -94,6 +97,7 @@
     "purge_dups":
         #- "default"
         - "keep_hicov"
+        -  "skipped"
     "salsa2":
         - "phased_reads"
         - "unphased_reads"
@@ -102,9 +106,9 @@
         - "unphased_reads"
     "threeddna":
         #- "phased_reads"
-        - "unphased_reads"
+        #- "unphased_reads"
         #- "phased_reads_editor_repcov_5"
-        - "unphased_reads_editor_repcov_5"
+       #- "unphased_reads_editor_repcov_5"
         #- "phased_reads_editor_repcov_10"
         - "unphased_reads_editor_repcov_10"
     "curation":
@@ -114,6 +118,13 @@
     "samba":
         - "phased_reads"
         #- "unphased_reads"
+    "ragtag":
+        - "default"
+        #- "min_aln_len_2k"
+        #- "min_aln_len_3k"
+        #- "min_aln_len_5k"
+        #- "min_aln_len_7.5k"
+        #- "min_aln_len_10k"
 
 "other_tool_option_sets":
     "cutadapt":                 "default"   # Allowed: default
@@ -145,6 +156,7 @@
     "tadbit":                   "default"   # Allowed: default
     "krater_from_histo":        "default"   # Allowed: default
     "microsome_detection":      "default"   # Allowed: default
+    "assembly_qc":              "default"   # Allowed: default
 
 "tool_manually_adjusted_features":
     "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions
@@ -154,7 +166,7 @@
 
 "ploidy": 2
 "bwa_tool": "bwa" # Allowed: bwa, bwa-mem2
-"genome_prefix": "SomMic2"
+"genome_prefix": "SomMic1_v1"
 "busco_lineage_list":
     - "vertebrata_odb10" #
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
@@ -162,6 +174,7 @@
 
 "species_name": "somniosus microcephalus"
 "tax_id": 191813  # necessary for contamination scan via FCS
+"telomere_motif": "CCCTAA"
 
 "database_set":
     "kraken2":
@@ -196,7 +209,7 @@
 "mode": "assembly"                # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
-"assembly_mode": "hic_scaffolding"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
+"assembly_mode": "purge_dups"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []
@@ -207,7 +220,7 @@
 
 "skip_read_qc": False
 "skip_filter_reads": False
-"skip_busco": True
+"skip_busco": False
 "skip_gcp": True
 "skip_fcs": False
 "skip_fcs_adaptor": False

@@ -1031,6 +1031,14 @@ if "ref_scaffolding" in config["stage_list"]:
                         for parameters_label in stage_dict[current_stage]["parameters"]]
                         for track_type in ("gap", "gc")],  #"windowmasker", "trf"
                       ]
+    results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}.cannonical_telomere.win1000.step200.track.bedgraph",
+                            genome_prefix=[config["genome_prefix"], ],
+                            assembly_stage=[current_stage, ],
+                            haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
+                           ) for parameters_label in stage_dict[current_stage]["parameters"]
+                      ]
+                     ]
+
     """              
                                       [
                                           expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.canonical.txt",
@@ -1449,7 +1457,7 @@ include: "workflow/rules/QCAssembly/RapidCuration.smk"
 include: "workflow/rules/QCAssembly/GapTrack.smk"
 #include: "workflow/rules/Curation/WindowmaskerTrack.smk"
 include: "workflow/rules/QCAssembly/CoverageTrack.smk"
-#include: "workflow/rules/Curation/TelomereTrack.smk"
+include: "workflow/rules/Curation/TelomereTrack.smk"
 #include: "workflow/rules/Curation/TRFTrack.smk"
 #include: "workflow/rules/Curation/Masking.smk"
 include: "workflow/rules/QCAssembly/GCTrack.smk"

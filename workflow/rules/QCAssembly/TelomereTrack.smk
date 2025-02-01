@@ -5,12 +5,12 @@ rule telo_finder:
     input:
         fasta="{fasta_dir}/{fasta_prefix}.fasta"
     output:
-        canonical="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.canonical.txt",
-        canonical_kmer="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.canonical.kmer",
-        canonical_top_kmer="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.canonical.top.kmer",
-        non_canonical="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.non_canonical.txt",
-        non_canonical_kmer="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.non_canonical.kmer",
-        non_canonical_top_kmer="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.non_canonical.top.kmer",
+        canonical="{fasta_dir}/telomere/{fasta_prefix}.canonical.txt",
+        canonical_kmer="{fasta_dir}/telomere/{fasta_prefix}.canonical.kmer",
+        canonical_top_kmer="{fasta_dir}/telomere/{fasta_prefix}.canonical.top.kmer",
+        non_canonical="{fasta_dir}/telomere/{fasta_prefix}.non_canonical.txt",
+        non_canonical_kmer="{fasta_dir}/telomere/{fasta_prefix}.non_canonical.kmer",
+        non_canonical_top_kmer="{fasta_dir}/telomere/{fasta_prefix}.non_canonical.top.kmer",
     params:
         size=parse_option("size", parameters["tool_options"]["telo_finder"],  "--size", default_value="default"),
         min_kmer=parse_option("min_kmer", parameters["tool_options"]["telo_finder"], "--klo", default_value="default"),

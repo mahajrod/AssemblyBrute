@@ -1031,7 +1031,7 @@ if "ref_scaffolding" in config["stage_list"]:
                         for parameters_label in stage_dict[current_stage]["parameters"]]
                         for track_type in ("gap", "gc")],  #"windowmasker", "trf"
                       ]
-    """
+
     results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.bedgraph",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=[current_stage, ],
@@ -1040,7 +1040,7 @@ if "ref_scaffolding" in config["stage_list"]:
                            ) for parameters_label in stage_dict[current_stage]["parameters"]
                       ]
                      ]
-    """
+
     results_list += [[
                          expand(out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical.txt",
                              genome_prefix=[config["genome_prefix"], ],

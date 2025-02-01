@@ -1467,15 +1467,15 @@ if "curation" in config["stage_list"]:
 
 include: "workflow/rules/QCAssembly/RapidCuration.smk"
 include: "workflow/rules/QCAssembly/GapTrack.smk"
-#include: "workflow/rules/Curation/WindowmaskerTrack.smk"
+#include: "workflow/rules/QCAssembly/WindowmaskerTrack.smk"
 include: "workflow/rules/QCAssembly/CoverageTrack.smk"
-include: "workflow/rules/Curation/TelomereTrack.smk"
-#include: "workflow/rules/Curation/TRFTrack.smk"
-#include: "workflow/rules/Curation/Masking.smk"
+include: "workflow/rules/QCAssembly/TelomereTrack.smk"
+#include: "workflow/rules/QCAssembly/TRFTrack.smk"
+#include: "workflow/rules/QCAssembly/Masking.smk"
 include: "workflow/rules/QCAssembly/GCTrack.smk"
-#include: "workflow/rules/Curation/WGA.smk"
-#include: "workflow/rules/Curation/VariantTrack.smk"
-#include: "workflow/rules/Curation/RagTag.smk"
+#include: "workflow/rules/QCAssembly/WGA.smk"
+#include: "workflow/rules/QCAssembly/VariantTrack.smk"
+#include: "workflow/rules/QCAssembly/RagTag.smk"
 
 
 if "gap_closing" in config["stage_list"]:

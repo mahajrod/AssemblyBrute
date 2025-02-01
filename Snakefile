@@ -705,6 +705,7 @@ if "contig" in config["stage_list"]:
                            assembly_stage=["contig"],),
                     ] # Tested only on hifiasm
 
+    print(parameters["tool_options"]["assembly_qc"])
     print(parameters["tool_options"]["assembly_qc"]["gap"])
     results_list += [
                      [[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",

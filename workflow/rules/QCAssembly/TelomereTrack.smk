@@ -77,9 +77,9 @@ rule telo_container: #TODO: add possibility to use custom telomere c
     params:
         container=config["tool_containers"]["rapid_telomere"]
     log:
-        std="{fasta_dir}/telo_container.{fasta_prefix, [^/]+}.log",
-        cluster_log="{fasta_dir}/telo_container.{fasta_prefix, [^/]+}.cluster.log",
-        cluster_err="{fasta_dir}/telo_container.{fasta_prefix, [^/]+}.cluster.err"
+        std="{fasta_dir}/telo_container.{fasta_prefix}.log",
+        cluster_log="{fasta_dir}/telo_container.{fasta_prefix}.cluster.log",
+        cluster_err="{fasta_dir}/telo_container.{fasta_prefix}.cluster.err"
     benchmark:
         "{fasta_dir}/telo_container.{fasta_prefix}.benchmark.txt"
     conda:

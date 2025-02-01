@@ -642,6 +642,7 @@ if "filter_draft" in config["stage_list"]:
     results_list += [ ] # TODO: implement
 
 if "contig" in config["stage_list"] or "draft_qc" in config["stage_list"]:
+    current_stage = "contig"
     stage_dict["contig"] = {}
     assembler_list = config["stage_coretools"]["contig"][config["contig_datatype"]]
     stage_dict["contig"]["parameters"] = {}
@@ -703,6 +704,29 @@ if "contig" in config["stage_list"]:
                            assembly_stage=["contig"],),
                     ] # Tested only on hifiasm
 
+
+    results_list += [
+                     [[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
+                               threshold_type=["absolute", "relative"],
+                               genome_prefix=[config["genome_prefix"], ],
+                               assembly_stage=[current_stage, ],
+                               track_type=[track_type],
+                               window=[parameters["tool_options"]["assembly_qc"][track_type]["options"][window_settings]["window"]],
+                               step=[parameters["tool_options"]["assembly_qc"][track_type]["options"][window_settings]["step"]],
+                               haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
+                               parameters=[parameters_label])
+
+                        for window_settings in parameters["tool_options"]["assembly_qc"][track_type]["options"]]
+                        for parameters_label in stage_dict[current_stage]["parameters"]]
+                        for track_type in ("gap", "gc")],  #"windowmasker", "trf"
+                     [expand(out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere_warning.win1000.step200.track.bedgraph",
+                            genome_prefix=[config["genome_prefix"], ],
+                            assembly_stage=[current_stage, ],
+                            parameters=[parameters_label],
+                            haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
+                           ) for parameters_label in stage_dict[current_stage]["parameters"]
+                     ]
+                    ]
     if not config["skip_busco"]:
         results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
                                 busco_lineage=config["busco_lineage_list"],

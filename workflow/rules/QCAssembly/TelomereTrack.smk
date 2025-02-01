@@ -183,6 +183,8 @@ rule get_telomere_warning:
     output:
         canonical_telo_warning_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_telomere_warning.win1000.step200.track.bedgraph",
         non_canonical_telo_warning_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere_warning.win1000.step200.track.bedgraph",
+        canonical_telo_status="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_telomere_warning.win1000.step200.track.status",
+        non_canonical_telo_status="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere_warning.win1000.step200.track.status"
     log:
         canonical="{fasta_dir}/get_telomere_warning.{fasta_prefix}.canonical.log",
         non_canonical="{fasta_dir}/get_telomere_warning.{fasta_prefix}.non_canonical.log",
@@ -203,17 +205,19 @@ rule get_telomere_warning:
     threads: parameters["threads"]["get_telomere_warning"]
 
     shell:
+        " CANONICAL_PREFIX={wildcards.fasta_prefix}.canonical_telomere_warning.win1000.step200.track; "
+        " NON_CANONICAL_PREFIX={wildcards.fasta_prefix}.non_canonical_telomere_warning.win1000.step200.track; "
         " if [ -s {input.canonical_telo_track} ]; "
         " then "
-        "       workflow/scripts/curation/find_internal_telomere.py  -i {input.canonical_telo_track}  "
-        "                   -f {input.fai} > {output.canonical_telo_warning_track} 2>{log.canonical}; "
+        "       workflow/scripts/curation/check_telomere.py  -i {input.canonical_telo_track}  "
+        "                   -f {input.fai} -p ${{CANONICAL_PREFIX}} > {log.canonical} 2>&1; "
         " else"
         "       touch {output.canonical_telo_warning_track} > {log.canonical_touch} 2>&1; "
         " fi;"
         " if [ -s {input.non_canonical_telo_track} ]; "
         " then "
-        "       workflow/scripts/curation/find_internal_telomere.py  -i {input.non_canonical_telo_track}  "
-        "                   -f {input.fai} > {output.non_canonical_telo_warning_track} 2>{log.non_canonical}; "
+        "       workflow/scripts/curation/chec_telomere.py  -i {input.non_canonical_telo_track}  "
+        "                   -f {input.fai} -p ${{NON_CANONICAL_PREFIX}}  > {log.non_canonical} 2>&1; "
         " else"
         "       touch {output.non_canonical_telo_warning_track} > {log.non_canonical_touch} 2>&1; "
         " fi; "

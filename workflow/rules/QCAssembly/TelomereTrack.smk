@@ -100,7 +100,7 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         " INPUT_CANONICAL_KMER=`realpath -s {input.canonical_top_kmer}`; "
         " INPUT_NONCANONICAL_KMER=`realpath -s {input.non_canonical_top_kmer}`; "
         " FINALDIR=`dirname {output.canonical_telo_track}`; "
-        " cd ${{FINAL_DIR}}; "
+        " cd ${{FINALDIR}}; "
         " WORKDIR=./telo_tmp/; "
         " DESTDIR=${{WORKDIR}}/results/; "
         " TEMPDIR=${{WORKDIR}}/tmp/; "

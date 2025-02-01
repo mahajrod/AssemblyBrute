@@ -218,7 +218,7 @@ rule get_telomere_warning:
         "       touch {output.non_canonical_telo_warning_track} > {log.non_canonical_touch} 2>&1; "
         " fi; "
 
-rule create_telomere_links:
+rule copy_telomere_files:
     input:
         canonical_telo_track=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.bedgraph",
         canonical_telo_warning_track=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere_warning.win1000.step200.track.bedgraph",
@@ -253,7 +253,4 @@ rule create_telomere_links:
 
     shell:
         " OUTDIR=`dirname {output.canonical_telo_track}`; "
-        " for FILE in {input}; "
-        "   do "
-        "   ln -s ../../../../../`${{FILE}} ${{OUTDIR}} > {log.ln} 2>&1; "
-        "   done "
+        " cp {input} ${{OUTDIR}} > {log.ln} 2>&1; "

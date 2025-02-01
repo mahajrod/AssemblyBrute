@@ -63,17 +63,17 @@ rule telo_finder:
 rule telo_container: #TODO: add possibility to use custom telomere c
     input:
         fasta="{fasta_dir}/{fasta_prefix}.fasta",
-        non_cannonical_top_kmer=rules.telo_finder.output.non_canonical_top_kmer,
-        cannonical_top_kmer=rules.telo_finder.output.canonical_top_kmer
+        non_canonical_top_kmer=rules.telo_finder.output.non_canonical_top_kmer,
+        canonical_top_kmer=rules.telo_finder.output.canonical_top_kmer
     output:
-        cannonical_telo_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.cannonical_telomere.win1000.step200.track.bedgraph",
-        cannonical_telo_bed="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.cannonical.telomere.bed",
-        cannonical_telo="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.cannonical.telomere",
-        cannonical_telo_win="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.cannonical.telomere.windows",
-        non_cannonical_telo_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.non_cannonical_telomere.win1000.step200.track.bedgraph",
-        non_cannonical_telo_bed="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.non_cannonical.telomere.bed",
-        non_cannonical_telo="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.non_cannonical.telomere",
-        non_cannonical_telo_win="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.non_cannonical.telomere.windows",
+        canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.canonical_telomere.win1000.step200.track.bedgraph",
+        canonical_telo_bed="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.canonical.telomere.bed",
+        canonical_telo="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.canonical.telomere",
+        canonical_telo_win="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.canonical.telomere.windows",
+        non_canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.non_canonical_telomere.win1000.step200.track.bedgraph",
+        non_canonical_telo_bed="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.non_canonical.telomere.bed",
+        non_canonical_telo="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.non_canonical.telomere",
+        non_canonical_telo_win="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.non_canonical.telomere.windows",
     params:
         container=config["tool_containers"]["rapid_telomere"]
     log:
@@ -97,9 +97,9 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         " LOG=`realpath -s {log.std}`; "
         " > ${{LOG}}; "
         " FASTA=`realpath -s {input.fasta}`; "
-        " INPUT_CANNONICAL_KMER=`realpath -s {input.cannonical_top_kmer}`; "
-        " INPUT_NONCANNONICAL_KMER=`realpath -s {input.non_cannonical_top_kmer}`; "
-        " FINALDIR=`dirname {output.cannonical_telo_track}`; "
+        " INPUT_CANONICAL_KMER=`realpath -s {input.canonical_top_kmer}`; "
+        " INPUT_NONCANONICAL_KMER=`realpath -s {input.non_canonical_top_kmer}`; "
+        " FINALDIR=`dirname {output.canonical_telo_track}`; "
         " cd ${{FINAL_DIR}}; "
         " WORKDIR=./telo_tmp/; "
         " DESTDIR=${{WORKDIR}}/results/; "
@@ -108,63 +108,63 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         " mkdir -p ${{DESTDIR}} ${{TEMPDIR}} ${{HICDIR}} > ${{LOG}} 2>&1; "
         " cp ${{FASTA}} ${{WORKDIR}}/ref.fa >> ${{LOG}} 2>&1; "
         " export SINGULARITY_BIND=${{WORKDIR}}:/data,${{HICDIR}}:/hic,${{DESTDIR}}:/output,${{TEMPDIR}}:/tmp; "
-        " if [ -s ${{INPUT_CANNONICAL_KMER}} ]; "
+        " if [ -s ${{INPUT_CANONICAL_KMER}} ]; "
         " then "
-        "       CANNONICAL_TEL_KMER=`head -n 1 ${{INPUT_CANNONICAL_KMER}}`; "
-        "       CANNONICAL_OUTPUT_PREFIX=`basename {output.cannonical_telo_bed}`'.tmp'; "
-        "       singularity run {params.container} -t ${{CANNONICAL_OUTPUT_PREFIX}} "
-        "       -s ${{CANNONICAL_TEL_KMER}} >> ${{LOG}} 2>&1 || true ; "
-        "       sort -k1,1V -k2,2n -k3,3n ${{DESTDIR}}/${{CANNONICAL_OUTPUT_PREFIX}}_telomere.bedgraph > {output.cannonical_telo_track} 2>>${{LOG}}; "
-        "       sort -k1,1V -k2,2n -k3,3n  ${{DESTDIR}}/${{CANNONICAL_OUTPUT_PREFIX}}_telomere.bed > {output.cannonical_telo_bed} 2>>${{LOG}}; "
-        "       cp ${{DESTDIR}}/ref.telomere {output.cannonical_telo} >> ${{LOG}} 2>&1; "
-        "       cp ${{DESTDIR}}/ref.windows {output.cannonical_telo_win} >> ${{LOG}} 2>&1; "
+        "       CANONICAL_TEL_KMER=`head -n 1 ${{INPUT_CANONICAL_KMER}}`; "
+        "       CANONICAL_OUTPUT_PREFIX=`basename {output.canonical_telo_bed}`'.tmp'; "
+        "       singularity run {params.container} -t ${{CANONICAL_OUTPUT_PREFIX}} "
+        "       -s ${{CANONICAL_TEL_KMER}} >> ${{LOG}} 2>&1 || true ; "
+        "       sort -k1,1V -k2,2n -k3,3n ${{DESTDIR}}/${{CANONICAL_OUTPUT_PREFIX}}_telomere.bedgraph > {output.canonical_telo_track} 2>>${{LOG}}; "
+        "       sort -k1,1V -k2,2n -k3,3n  ${{DESTDIR}}/${{CANONICAL_OUTPUT_PREFIX}}_telomere.bed > {output.canonical_telo_bed} 2>>${{LOG}}; "
+        "       cp ${{DESTDIR}}/ref.telomere {output.canonical_telo} >> ${{LOG}} 2>&1; "
+        "       cp ${{DESTDIR}}/ref.windows {output.canonical_telo_win} >> ${{LOG}} 2>&1; "
         "       rm -r ${{DESTDIR}}/* >> ${{LOG}} 2>&1; "
         " else "
-        "       touch {output.cannonical_telo_track} >> ${{LOG}} 2>&1; "
-        "       touch {output.cannonical_telo_bed} >> ${{LOG}} 2>&1; "
-        "       touch {output.cannonical_telo} >> ${{LOG}} 2>&1; "
-        "       touch {output.cannonical_telo_win} >> ${{LOG}}  2>&1; "
+        "       touch {output.canonical_telo_track} >> ${{LOG}} 2>&1; "
+        "       touch {output.canonical_telo_bed} >> ${{LOG}} 2>&1; "
+        "       touch {output.canonical_telo} >> ${{LOG}} 2>&1; "
+        "       touch {output.canonical_telo_win} >> ${{LOG}}  2>&1; "
         " fi; "
-        " if [ -s ${{INPUT_NONCANNONICAL_KMER}} ]; "
+        " if [ -s ${{INPUT_NONCANONICAL_KMER}} ]; "
         " then "
-        "       NON_CANNONICAL_TEL_KMER=`head -n 1 ${{INPUT_NONCANNONICAL_KMER}}`; "
-        "       NON_CANNONICAL_OUTPUT_PREFIX=`basename {output.non_cannonical_telo_bed}`'.tmp'; "   
-        "       singularity run {params.container} -t ${{NON_CANNONICAL_OUTPUT_PREFIX}} "
-        "       -s ${{NON_CANNONICAL_TEL_KMER}} >> ${{LOG}} 2>&1 || true; "
+        "       NON_CANONICAL_TEL_KMER=`head -n 1 ${{INPUT_NONCANONICAL_KMER}}`; "
+        "       NON_CANONICAL_OUTPUT_PREFIX=`basename {output.non_canonical_telo_bed}`'.tmp'; "   
+        "       singularity run {params.container} -t ${{NON_CANONICAL_OUTPUT_PREFIX}} "
+        "       -s ${{NON_CANONICAL_TEL_KMER}} >> ${{LOG}} 2>&1 || true; "
         "       if [ -s '${{DESTDIR}}/ref.telomere' ]; "
         "       then"
-        "           sort -k1,1V -k2,2n -k3,3n ${{DESTDIR}}/${{NON_CANNONICAL_OUTPUT_PREFIX}}_telomere.bedgraph > {output.non_cannonical_telo_track} 2>>${{LOG}}; "
-        "           sort -k1,1V -k2,2n -k3,3n ${{DESTDIR}}/${{NON_CANNONICAL_OUTPUT_PREFIX}}_telomere.bed > {output.non_cannonical_telo_bed} 2>>${{LOG}}; "
-        "           cp ${{DESTDIR}}/ref.telomere {output.non_cannonical_telo} >> ${{LOG}}} 2>&1; "
-        "           cp ${{DESTDIR}}/ref.windows {output.non_cannonical_telo_win} >> ${{LOG}} 2>&1; "
+        "           sort -k1,1V -k2,2n -k3,3n ${{DESTDIR}}/${{NON_CANONICAL_OUTPUT_PREFIX}}_telomere.bedgraph > {output.non_canonical_telo_track} 2>>${{LOG}}; "
+        "           sort -k1,1V -k2,2n -k3,3n ${{DESTDIR}}/${{NON_CANONICAL_OUTPUT_PREFIX}}_telomere.bed > {output.non_canonical_telo_bed} 2>>${{LOG}}; "
+        "           cp ${{DESTDIR}}/ref.telomere {output.non_canonical_telo} >> ${{LOG}}} 2>&1; "
+        "           cp ${{DESTDIR}}/ref.windows {output.non_canonical_telo_win} >> ${{LOG}} 2>&1; "
         "       else"
-        "           touch  {output.non_cannonical_telo_track}  >> ${{LOG}} 2>&1; "
-        "           touch  {output.non_cannonical_telo_bed} >> ${{LOG}} 2>&1; "
-        "           touch  {output.non_cannonical_telo}  >> ${{LOG}} 2>&1; "
-        "           touch  {output.non_cannonical_telo_win} >> ${{LOG}} 2>&1; "
+        "           touch  {output.non_canonical_telo_track}  >> ${{LOG}} 2>&1; "
+        "           touch  {output.non_canonical_telo_bed} >> ${{LOG}} 2>&1; "
+        "           touch  {output.non_canonical_telo}  >> ${{LOG}} 2>&1; "
+        "           touch  {output.non_canonical_telo_win} >> ${{LOG}} 2>&1; "
         "       fi; "
         "       rm -r ${{DESTDIR}}/* >> ${{LOG}} 2>&1; "
         " else "
-        "       touch {output.non_cannonical_telo_track} >> ${{LOG}} 2>&1; "
-        "       touch {output.non_cannonical_telo_bed} >> ${{LOG}} 2>&1; "
-        "       touch {output.non_cannonical_telo} >> ${{LOG}} 2>&1; "
-        "       touch {output.non_cannonical_telo_win} >> ${{LOG}}  2>&1; "
+        "       touch {output.non_canonical_telo_track} >> ${{LOG}} 2>&1; "
+        "       touch {output.non_canonical_telo_bed} >> ${{LOG}} 2>&1; "
+        "       touch {output.non_canonical_telo} >> ${{LOG}} 2>&1; "
+        "       touch {output.non_canonical_telo_win} >> ${{LOG}}  2>&1; "
         " fi; "
         " rm -r ${{WORKDIR}} >> ${{LOG}} 2>&1; "
 
 rule get_telomere_warning:
     input:
-        cannonical_telo_track=rules.telo_container.output.cannonical_telo_track, #out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.cannonical.telomere.bedgraph",
-        non_cannonical_telo_track=rules.telo_container.output.non_cannonical_telo_track, # out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.non_cannonical.telomere.bedgraph",
+        canonical_telo_track=rules.telo_container.output.canonical_telo_track, #out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.canonical.telomere.bedgraph",
+        non_canonical_telo_track=rules.telo_container.output.non_canonical_telo_track, # out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.non_canonical.telomere.bedgraph",
         fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta.fai",
     output:
-        cannonical_telo_warning_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical_telomere_warning.win1000.step200.track.bedgraph",
-        non_cannonical_telo_warning_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.non_cannonical_telomere_warning.win1000.step200.track.bedgraph",
+        canonical_telo_warning_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.canonical_telomere_warning.win1000.step200.track.bedgraph",
+        non_canonical_telo_warning_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.non_canonical_telomere_warning.win1000.step200.track.bedgraph",
     log:
-        cannonical=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cannonical.log",
-        non_cannonical=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.non_cannonical.log",
-        cannonical_touch=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cannonical.touch.log",
-        non_cannonical_touch=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.non_cannonical.touch.log",
+        canonical=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.canonical.log",
+        non_canonical=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.non_canonical.log",
+        canonical_touch=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.canonical.touch.log",
+        non_canonical_touch=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.non_canonical.touch.log",
         cluster_log=output_dict["cluster_log"] / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
@@ -180,17 +180,17 @@ rule get_telomere_warning:
     threads: parameters["threads"]["get_telomere_warning"]
 
     shell:
-        " if [ -s {input.cannonical_telo_track} ]; "
+        " if [ -s {input.canonical_telo_track} ]; "
         " then "
-        "       workflow/scripts/curation/find_internal_telomere.py  -i {input.cannonical_telo_track}  "
-        "                   -f {input.fai} > {output.cannonical_telo_warning_track} 2>{log.cannonical}; "
+        "       workflow/scripts/curation/find_internal_telomere.py  -i {input.canonical_telo_track}  "
+        "                   -f {input.fai} > {output.canonical_telo_warning_track} 2>{log.canonical}; "
         " else"
-        "       touch {output.cannonical_telo_warning_track} > {log.cannonical_touch} 2>&1; "
+        "       touch {output.canonical_telo_warning_track} > {log.canonical_touch} 2>&1; "
         " fi;"
-        " if [ -s {input.non_cannonical_telo_track} ]; "
+        " if [ -s {input.non_canonical_telo_track} ]; "
         " then "
-        "       workflow/scripts/curation/find_internal_telomere.py  -i {input.non_cannonical_telo_track}  "
-        "                   -f {input.fai} > {output.non_cannonical_telo_warning_track} 2>{log.non_cannonical}; "
+        "       workflow/scripts/curation/find_internal_telomere.py  -i {input.non_canonical_telo_track}  "
+        "                   -f {input.fai} > {output.non_canonical_telo_warning_track} 2>{log.non_canonical}; "
         " else"
-        "       touch {output.non_cannonical_telo_warning_track} > {log.non_cannonical_touch} 2>&1; "
+        "       touch {output.non_canonical_telo_warning_track} > {log.non_canonical_touch} 2>&1; "
         " fi; "

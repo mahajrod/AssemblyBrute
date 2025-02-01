@@ -705,8 +705,6 @@ if "contig" in config["stage_list"]:
                            assembly_stage=["contig"],),
                     ] # Tested only on hifiasm
 
-    print(parameters["tool_options"]["assembly_qc"])
-    print(parameters["tool_options"]["assembly_qc"]["gap"])
     results_list += [
                      [[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
                                threshold_type=["absolute", "relative"],
@@ -1093,7 +1091,7 @@ if "ref_scaffolding" in config["stage_list"]:
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=[current_stage],),]
 
-    results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{genome_prefix, [^/]+}.ref_scaffolding.{haplotype}.fasta",
+    results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.fasta",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=[current_stage],
                             haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],

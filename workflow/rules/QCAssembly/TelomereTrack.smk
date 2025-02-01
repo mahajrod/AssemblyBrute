@@ -17,9 +17,9 @@ rule telo_finder:
         max_kmer=parse_option("max_kmer", parameters["tool_options"]["telo_finder"], "--khi", default_value="default"),
         ends=parse_option("ends", parameters["tool_options"]["telo_finder"], "--ends", default_value="default")
     log:
-        std="{fasta_dir}/telomere/{fasta_prefix}.log",
-        cluster_log="{fasta_dir}/telomere/{fasta_prefix}.cluster.log",
-        cluster_err="{fasta_dir}/telomere/{fasta_prefix}.cluster.err"
+        std="{fasta_dir}/telo_finder.{fasta_prefix}.log",
+        cluster_log="{fasta_dir}/telo_finder.{fasta_prefix}.cluster.log",
+        cluster_err="{fasta_dir}/telo_finder.{fasta_prefix}.cluster.err"
     benchmark:
         "{fasta_dir}/telomere/{fasta_prefix}.benchmark.txt"
     conda:
@@ -77,9 +77,9 @@ rule telo_container: #TODO: add possibility to use custom telomere c
     params:
         container=config["tool_containers"]["rapid_telomere"]
     log:
-        std="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.log",
-        cluster_log="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.cluster.log",
-        cluster_err="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.cluster.err"
+        std="{fasta_dir}/telo_container.{fasta_prefix, [^/]+}.log",
+        cluster_log="{fasta_dir}/telo_container.{fasta_prefix, [^/]+}.cluster.log",
+        cluster_err="{fasta_dir}/telo_container.{fasta_prefix, [^/]+}.cluster.err"
     benchmark:
         "{fasta_dir}/telomere/{fasta_prefix, [^/]+}.benchmark.txt"
     conda:

@@ -163,7 +163,7 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         "       fi; "
         "       rm -r ${{DESTDIR}}/* >> ${{LOG}} 2>&1; "
         " else "
-        "           cd ${{STARTDIR}} >> ${{LOG}} 2>&1; "
+        "       cd ${{STARTDIR}} >> ${{LOG}} 2>&1; "
         "       echo 'No non canonical kmer found. Creating empty output files...'  >> ${{LOG}};  "
         "       touch {output.non_canonical_telo_track} >> ${{LOG}} 2>&1; "
         "       touch {output.non_canonical_telo_bed} >> ${{LOG}} 2>&1; "

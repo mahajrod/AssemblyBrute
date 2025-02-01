@@ -1034,6 +1034,7 @@ if "ref_scaffolding" in config["stage_list"]:
     results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}.cannonical_telomere.win1000.step200.track.bedgraph",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=[current_stage, ],
+                            parameters=[parameters_label],
                             haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
                            ) for parameters_label in stage_dict[current_stage]["parameters"]
                       ]

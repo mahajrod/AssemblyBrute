@@ -672,6 +672,7 @@ if "contig" in config["stage_list"] or "draft_qc" in config["stage_list"]:
             #    stage_dict["contig"]["parameters"][parameters_label][option_supergroup] = option_cluster_reverse_dict[assembler][option_supergroup][option_set]
 #print (stage_dict)
 if "contig" in config["stage_list"]:
+    current_stage = "contig"
     parameters_list = list(stage_dict["contig"]["parameters"].keys())
     #if "hifiasm" in assembler_list:
     #    results_list += [expand(output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.ec.bin",
@@ -704,7 +705,7 @@ if "contig" in config["stage_list"]:
                            assembly_stage=["contig"],),
                     ] # Tested only on hifiasm
 
-
+    print(parameters["tool_options"]["assembly_qc"]["gap"])
     results_list += [
                      [[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
                                threshold_type=["absolute", "relative"],

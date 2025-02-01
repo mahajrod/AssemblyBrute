@@ -50,7 +50,7 @@ telomere_df["length"] = fai_df["length"]
 telomere_df["five_prime_dist"] = telomere_df["end"]
 telomere_df["three_prime_dist"] = telomere_df["length"] - telomere_df["start"]
 telomere_df["min_end_distance"] = np.minimum(telomere_df["five_prime_dist"], telomere_df["three_prime_dist"])
-
+print(telomere_df.apply(get_status, axis=1))
 telomere_df["status"] = telomere_df.apply(get_status, axis=1)
 
 internal_telomere_warning = "{0}.bedgraph".format(args.output_prefix)

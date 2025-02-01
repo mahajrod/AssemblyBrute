@@ -135,7 +135,7 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         "       then"
         "           sort -k1,1V -k2,2n -k3,3n ${{DESTDIR}}/${{NON_CANONICAL_OUTPUT_PREFIX}}_telomere.bedgraph > {output.non_canonical_telo_track} 2>>${{LOG}}; "
         "           sort -k1,1V -k2,2n -k3,3n ${{DESTDIR}}/${{NON_CANONICAL_OUTPUT_PREFIX}}_telomere.bed > {output.non_canonical_telo_bed} 2>>${{LOG}}; "
-        "           cp ${{DESTDIR}}/ref.telomere {output.non_canonical_telo} >> ${{LOG}}} 2>&1; "
+        "           cp ${{DESTDIR}}/ref.telomere {output.non_canonical_telo} >> ${{LOG}} 2>&1; "
         "           cp ${{DESTDIR}}/ref.windows {output.non_canonical_telo_win} >> ${{LOG}} 2>&1; "
         "       else"
         "           touch  {output.non_canonical_telo_track}  >> ${{LOG}} 2>&1; "

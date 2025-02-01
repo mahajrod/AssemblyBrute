@@ -95,7 +95,7 @@ rule telo_container: #TODO: add possibility to use custom telomere c
 
     shell: # TODO pack code below as script. Issue with container - it return 111 inside of 0 and snakemake breaks. Added ' || true'
         " LOG=`realpath -s {log.std}`; "
-        " > ${{LOG}}; "
+        " echo \"Started logging...\" > ${{LOG}}; "
         " FASTA=`realpath -s {input.fasta}`; "
         " INPUT_CANONICAL_KMER=`realpath -s {input.canonical_top_kmer}`; "
         " INPUT_NONCANONICAL_KMER=`realpath -s {input.non_canonical_top_kmer}`; "

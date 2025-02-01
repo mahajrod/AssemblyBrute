@@ -21,7 +21,7 @@ rule telo_finder:
         cluster_log="{fasta_dir}/telo_finder.{fasta_prefix}.cluster.log",
         cluster_err="{fasta_dir}/telo_finder.{fasta_prefix}.cluster.err"
     benchmark:
-        "{fasta_dir}/telomere/{fasta_prefix}.benchmark.txt"
+        "{fasta_dir}/telo_finder.{fasta_prefix}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -81,7 +81,7 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         cluster_log="{fasta_dir}/telo_container.{fasta_prefix, [^/]+}.cluster.log",
         cluster_err="{fasta_dir}/telo_container.{fasta_prefix, [^/]+}.cluster.err"
     benchmark:
-        "{fasta_dir}/telomere/{fasta_prefix, [^/]+}.benchmark.txt"
+        "{fasta_dir}/telo_container.{fasta_prefix}.benchmark.txt"
     conda:
         config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
     resources:
@@ -106,6 +106,8 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         " TEMPDIR=${{WORKDIR}}/tmp/; "
         " HICDIR=${{WORKDIR}}/hic/; "
         " mkdir -p ${{DESTDIR}} ${{TEMPDIR}} ${{HICDIR}} > ${{LOG}} 2>&1; "
+        " echo \"Current directory:\" `pwd` >> ${{LOG}}; "
+        " ls ./ >> ${{LOG}}; "
         " cp ${{FASTA}} ${{WORKDIR}}/ref.fa >> ${{LOG}} 2>&1; "
         " export SINGULARITY_BIND=${{WORKDIR}}:/data,${{HICDIR}}:/hic,${{DESTDIR}}:/output,${{TEMPDIR}}:/tmp; "
         " if [ -s ${{INPUT_CANONICAL_KMER}} ]; "
@@ -156,19 +158,19 @@ rule get_telomere_warning:
     input:
         canonical_telo_track=rules.telo_container.output.canonical_telo_track, #out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.canonical.telomere.bedgraph",
         non_canonical_telo_track=rules.telo_container.output.non_canonical_telo_track, # out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.non_canonical.telomere.bedgraph",
-        fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta.fai",
+        fai="{fasta_dir}/{fasta_prefix}.fasta.fai",
     output:
-        canonical_telo_warning_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.canonical_telomere_warning.win1000.step200.track.bedgraph",
-        non_canonical_telo_warning_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.non_canonical_telomere_warning.win1000.step200.track.bedgraph",
+        canonical_telo_warning_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_telomere_warning.win1000.step200.track.bedgraph",
+        non_canonical_telo_warning_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere_warning.win1000.step200.track.bedgraph",
     log:
-        canonical=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.canonical.log",
-        non_canonical=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.non_canonical.log",
-        canonical_touch=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.canonical.touch.log",
-        non_canonical_touch=output_dict["log"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.non_canonical.touch.log",
-        cluster_log=output_dict["cluster_log"] / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cluster.err"
+        canonical="{fasta_dir}/get_telomere_warning.{fasta_prefix}.canonical.log",
+        non_canonical="{fasta_dir}/get_telomere_warning.{fasta_prefix}.non_canonical.log",
+        canonical_touch="{fasta_dir}/get_telomere_warning.{fasta_prefix}.canonical.touch.log",
+        non_canonical_touch="{fasta_dir}/get_telomere_warning.{fasta_prefix}.non_canonical.touch.log",
+        cluster_log="{fasta_dir}/get_telomere_warning.{fasta_prefix}.cluster.log",
+        cluster_err="{fasta_dir}/get_telomere_warning.{fasta_prefix}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "get_telomere_warning.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.benchmark.txt"
+        "{fasta_dir}/get_telomere_warning.{fasta_prefix}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

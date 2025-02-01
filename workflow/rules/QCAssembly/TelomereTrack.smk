@@ -1,7 +1,7 @@
 ruleorder: telo_container > create_bedgraph_track
 ruleorder: get_telomere_warning > create_bedgraph_track
 
-localrules: create_telomere_links
+localrules: copy_telomere_files
 
 rule telo_finder:
     input:

@@ -1032,7 +1032,7 @@ if "ref_scaffolding" in config["stage_list"]:
                         for track_type in ("gap", "gc")],  #"windowmasker", "trf"
                       ]
     """
-    results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}.cannonical_telomere.win1000.step200.track.bedgraph",
+    results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.bedgraph",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=[current_stage, ],
                             parameters=[parameters_label],
@@ -1042,7 +1042,7 @@ if "ref_scaffolding" in config["stage_list"]:
                      ]
     """
     results_list += [[
-                         expand(out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}.canonical.txt",
+                         expand(out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical.txt",
                              genome_prefix=[config["genome_prefix"], ],
                              assembly_stage=[current_stage, ],
                              parameters=[parameters_label],
@@ -1062,7 +1062,7 @@ if "ref_scaffolding" in config["stage_list"]:
                                               parameters=[parameters_label]) for parameters_label in
                                           stage_dict["curation"]["parameters"]],
                                       [
-                                          expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical_telomere.win1000.step200.track.bedgraph",
+                                          expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.canonical_telomere.win1000.step200.track.bedgraph",
                                               seq_type=["scaffolds"],
                                               genome_prefix=[config["genome_prefix"], ],
                                               assembly_stage=["curation", ],
@@ -1071,7 +1071,7 @@ if "ref_scaffolding" in config["stage_list"]:
                                               parameters=[parameters_label]) for parameters_label in
                                           stage_dict["curation"]["parameters"]],
                                       [
-                                          expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical_telomere_warning.win1000.step200.track.bedgraph",
+                                          expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.canonical_telomere_warning.win1000.step200.track.bedgraph",
                                               seq_type=["scaffolds"],
                                               genome_prefix=[config["genome_prefix"], ],
                                               assembly_stage=["curation", ],
@@ -1212,13 +1212,13 @@ if "curation" in config["stage_list"]:
                                 assembly_stage=["curation", ],
                                 haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                                 parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
-                         [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical_telomere.win1000.step200.track.bedgraph",
+                         [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.canonical_telomere.win1000.step200.track.bedgraph",
                                 seq_type=["scaffolds"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["curation", ],
                                 haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                                 parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
-                         [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical_telomere_warning.win1000.step200.track.bedgraph",
+                         [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.canonical_telomere_warning.win1000.step200.track.bedgraph",
                                 seq_type=["scaffolds"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["curation", ],
@@ -1252,13 +1252,13 @@ if "curation" in config["stage_list"]:
                                 parameters=[parameters_label]) for window_step_set in stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"]["options"]] for parameters_label in stage_dict["curation"]["parameters"]] if coverage_track_data_type_set else [],
                          ]
         if "hic_scaffolding" in config["stage_list"]:
-            results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical_telomere_warning.win1000.step200.scaled.track.bedgraph",
+            results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.canonical_telomere_warning.win1000.step200.scaled.track.bedgraph",
                                 seq_type=["scaffolds"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["curation", ],
                                 haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                                 parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
-                            [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.cannonical_telomere.win1000.step200.scaled.track.bedgraph",
+                            [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.canonical_telomere.win1000.step200.scaled.track.bedgraph",
                                 seq_type=["scaffolds"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["curation", ],
@@ -1306,14 +1306,14 @@ if "curation" in config["stage_list"]:
                                 haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                                 parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
                          *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{telo_type}.win1000.step200.track.assembly.bedgraph",
-                                telo_type=["cannonical_telomere", "non_cannonical_telomere"],
+                                telo_type=["canonical_telomere", "non_canonical_telomere"],
                                 seq_type=["contigs"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["curation", ],
                                 haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                                 parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
                          *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{telo_type}.win1000.step200.track.assembly.bedgraph",
-                                telo_type=["cannonical_telomere_warning", "non_cannonical_telomere_warning"],
+                                telo_type=["canonical_telomere_warning", "non_canonical_telomere_warning"],
                                 seq_type=["contigs"],
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=["curation", ],

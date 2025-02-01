@@ -5,12 +5,12 @@ rule telo_finder:
     input:
         fasta="{fasta_dir}/{fasta_prefix}.fasta"
     output:
-        canonical="{fasta_dir}/telomere/{fasta_prefix}.canonical.txt",
-        canonical_kmer="{fasta_dir}/telomere/{fasta_prefix}.canonical.kmer",
-        canonical_top_kmer="{fasta_dir}/telomere/{fasta_prefix}.canonical.top.kmer",
-        non_canonical="{fasta_dir}/telomere/{fasta_prefix}.non_canonical.txt",
-        non_canonical_kmer="{fasta_dir}/telomere/{fasta_prefix}.non_canonical.kmer",
-        non_canonical_top_kmer="{fasta_dir}/telomere/{fasta_prefix}.non_canonical.top.kmer",
+        canonical="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.canonical.txt",
+        canonical_kmer="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.canonical.kmer",
+        canonical_top_kmer="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.canonical.top.kmer",
+        non_canonical="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.non_canonical.txt",
+        non_canonical_kmer="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.non_canonical.kmer",
+        non_canonical_top_kmer="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.non_canonical.top.kmer",
     params:
         size=parse_option("size", parameters["tool_options"]["telo_finder"],  "--size", default_value="default"),
         min_kmer=parse_option("min_kmer", parameters["tool_options"]["telo_finder"], "--klo", default_value="default"),
@@ -66,14 +66,14 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         non_canonical_top_kmer=rules.telo_finder.output.non_canonical_top_kmer,
         canonical_top_kmer=rules.telo_finder.output.canonical_top_kmer
     output:
-        canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.canonical_telomere.win1000.step200.track.bedgraph",
-        canonical_telo_bed="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.canonical.telomere.bed",
-        canonical_telo="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.canonical.telomere",
-        canonical_telo_win="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.canonical.telomere.windows",
-        non_canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.non_canonical_telomere.win1000.step200.track.bedgraph",
-        non_canonical_telo_bed="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.non_canonical.telomere.bed",
-        non_canonical_telo="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.non_canonical.telomere",
-        non_canonical_telo_win="{fasta_dir}/telomere/{fasta_prefix, [^/]+}.non_canonical.telomere.windows",
+        canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_telomere.win1000.step200.track.bedgraph",
+        canonical_telo_bed="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical.telomere.bed",
+        canonical_telo="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical.telomere",
+        canonical_telo_win="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical.telomere.windows",
+        non_canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.bedgraph",
+        non_canonical_telo_bed="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical.telomere.bed",
+        non_canonical_telo="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical.telomere",
+        non_canonical_telo_win="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical.telomere.windows",
     params:
         container=config["tool_containers"]["rapid_telomere"]
     log:

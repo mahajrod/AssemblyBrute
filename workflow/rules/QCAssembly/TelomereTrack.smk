@@ -188,8 +188,6 @@ rule get_telomere_warning:
     log:
         canonical="{fasta_dir}/get_telomere_warning.{fasta_prefix}.canonical.log",
         non_canonical="{fasta_dir}/get_telomere_warning.{fasta_prefix}.non_canonical.log",
-        canonical_touch="{fasta_dir}/get_telomere_warning.{fasta_prefix}.canonical.touch.log",
-        non_canonical_touch="{fasta_dir}/get_telomere_warning.{fasta_prefix}.non_canonical.touch.log",
         cluster_log="{fasta_dir}/get_telomere_warning.{fasta_prefix}.cluster.log",
         cluster_err="{fasta_dir}/get_telomere_warning.{fasta_prefix}.cluster.err"
     benchmark:
@@ -209,19 +207,23 @@ rule get_telomere_warning:
         " CANONICAL_PREFIX=${{CANONICAL_PREFIX%.bedgraph}}; "
         " NON_CANONICAL_PREFIX={output.non_canonical_telo_warning_track}; "
         " NON_CANONICAL_PREFIX=${{NON_CANONICAL_PREFIX%.bedgraph}}; "
+        " echo 'Checking positions of canonical telomeres...' > {log.canonical} 2>&1; "
         " if [ -s {input.canonical_telo_track} ]; "
         " then "
         "       workflow/scripts/curation/check_telomere.py  -i {input.canonical_telo_track}  "
-        "                   -f {input.fai} -p ${{CANONICAL_PREFIX}} > {log.canonical} 2>&1; "
+        "                   -f {input.fai} -p ${{CANONICAL_PREFIX}} >> {log.canonical} 2>&1; "
         " else"
-        "       touch {output.canonical_telo_warning_track} > {log.canonical_touch} 2>&1; "
+        "       touch {output.canonical_telo_warning_track} >> {log.canonical} 2>&1; "
+        "       touch {output.canonical_telo_status} >> {log.canonical} 2>&1; "
         " fi;"
+        " echo 'Checking positions of non canonical telomeres...' > {log.non_canonical} 2>&1; "
         " if [ -s {input.non_canonical_telo_track} ]; "
         " then "
         "       workflow/scripts/curation/check_telomere.py  -i {input.non_canonical_telo_track}  "
-        "                   -f {input.fai} -p ${{NON_CANONICAL_PREFIX}}  > {log.non_canonical} 2>&1; "
+        "                   -f {input.fai} -p ${{NON_CANONICAL_PREFIX}}  >> {log.non_canonical} 2>&1; "
         " else"
-        "       touch {output.non_canonical_telo_warning_track} > {log.non_canonical_touch} 2>&1; "
+        "       touch {output.non_canonical_telo_warning_track} >> {log.non_canonical} 2>&1; "
+        "       touch {output.non_canonical_telo_status} >> {log.non_canonical} 2>&1; "
         " fi; "
 
 rule copy_telomere_files:

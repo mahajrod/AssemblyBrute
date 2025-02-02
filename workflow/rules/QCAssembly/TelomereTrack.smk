@@ -207,7 +207,8 @@ rule get_telomere_warning:
     shell:
         " CANONICAL_PREFIX={output.canonical_telo_warning_track}; "
         " CANONICAL_PREFIX=${{CANONICAL_PREFIX%.bedgraph}}; "
-        " NON_CANONICAL_PREFIX={wildcards.fasta_prefix}.non_canonical_telomere_warning.win1000.step200.track; "
+        " NON_CANONICAL_PREFIX={output.non_canonical_telo_warning_track}; "
+        " NON_CANONICAL_PREFIX=${{NON_CANONICAL_PREFIX%.bedgraph}} "
         " if [ -s {input.canonical_telo_track} ]; "
         " then "
         "       workflow/scripts/curation/check_telomere.py  -i {input.canonical_telo_track}  "

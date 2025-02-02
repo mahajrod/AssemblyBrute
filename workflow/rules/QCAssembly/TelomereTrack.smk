@@ -218,7 +218,7 @@ rule get_telomere_warning:
         " fi;"
         " if [ -s {input.non_canonical_telo_track} ]; "
         " then "
-        "       workflow/scripts/curation/chec_telomere.py  -i {input.non_canonical_telo_track}  "
+        "       workflow/scripts/curation/check_telomere.py  -i {input.non_canonical_telo_track}  "
         "                   -f {input.fai} -p ${{NON_CANONICAL_PREFIX}}  > {log.non_canonical} 2>&1; "
         " else"
         "       touch {output.non_canonical_telo_warning_track} > {log.non_canonical_touch} 2>&1; "

@@ -1127,6 +1127,21 @@ if "ref_scaffolding" in config["stage_list"]:
                            ) for parameters_label in stage_dict[current_stage]["parameters"]
                      ]
                     ]
+    if not config["skip_wga"]:
+        results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/wga.{query_prefix}.to.{target_prefix}.YASS.R11.soft.min_len{min_target_len}.png",
+                                 genome_prefix=[config["genome_prefix"], ],
+                                 assembly_stage=[current_stage, ],
+                                 parameters=[parameters_label],
+                                 min_target_len=parameters["tool_options"]["wga"]["min_target_len"],
+                                 query_prefix=expand("{genome_prefix}.{assembly_stage}.{haplotype}",
+                                                     genome_prefix=[config["genome_prefix"], ],
+                                                     assembly_stage=[current_stage, ],
+                                                     haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]) + list(input_reference_filedict.keys()),
+                                 target_prefix=expand("{genome_prefix}.{assembly_stage}.{haplotype}",
+                                                     genome_prefix=[config["genome_prefix"], ],
+                                                     assembly_stage=[current_stage, ],
+                                                     haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]),
+                               ) for parameters_label in stage_dict[current_stage]["parameters"]]]
 
     """
     if coverage_track_data_type_set:

@@ -31,7 +31,7 @@ rule windowmasker: #
 
 rule copy_windowmasker_track: #
     input:
-        bed="{fasta_dir}/repeats/{fasta_prefix}.{track_type, windowmasker}.track.bed",
+        bed="{fasta_dir}/repeats/{fasta_prefix}.{track_type}.track.bed",
     output:
         qc_track_bed="{fasta_dir}/assembly_qc/{track_type, windowmasker}/{fasta_prefix, [^/]+}/{fasta_prefix}.{track_type}.track.bed"
     log:

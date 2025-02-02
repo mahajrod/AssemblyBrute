@@ -4,9 +4,9 @@ rule windowmasker: #
     input:
         fasta="{fasta_dir}/{fasta_prefix}.fasta",
     output:
-        counts="{fasta_dir}/repeats/{fasta_prefix}.{track_type, windowmasker}.counts",
-        interval="{fasta_dir}/repeats/{fasta_prefix}.{track_type, windowmasker}.intervals",
-        bed="{fasta_dir}/repeats/{fasta_prefix}.{track_type, windowmasker}.track.bed",
+        counts="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.{track_type, windowmasker}.counts",
+        interval="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.{track_type, windowmasker}.intervals",
+        bed="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.{track_type, windowmasker}.track.bed",
         #qc_track_bed="{fasta_dir}/assembly_qc/{track_type, windowmasker}/{fasta_prefix, [^/]+}/{fasta_prefix}.{track_type}.track.bed"
     log:
         std="{fasta_dir}/windowmasker.{fasta_prefix}.{track_type}.stage1.log",

@@ -14,11 +14,11 @@ THREE_PRIME_DIST_COLUMN_INDEX = 5
 MIN_END_DISTANCE_COLUMN_INDEX = 6
 
 def get_status(df_row):
-    if (df_row[FIVE_PRIME_DIST_COLUMN_INDEX] >= args.min_distance) and (df_row[THREE_PRIME_DIST_COLUMN_INDEX] >= args.min_distance):
+    if (df_row.iloc[FIVE_PRIME_DIST_COLUMN_INDEX] >= args.min_distance) and (df_row.iloc[THREE_PRIME_DIST_COLUMN_INDEX] >= args.min_distance):
         return "INTERNAL"
-    elif (df_row[FIVE_PRIME_DIST_COLUMN_INDEX] < args.min_distance) and (df_row[THREE_PRIME_DIST_COLUMN_INDEX] >= args.min_distance):
+    elif (df_row.iloc[FIVE_PRIME_DIST_COLUMN_INDEX] < args.min_distance) and (df_row.iloc[THREE_PRIME_DIST_COLUMN_INDEX] >= args.min_distance):
         return "FIVE_PRIME"
-    elif (df_row[THREE_PRIME_DIST_COLUMN_INDEX] < args.min_distance) and (df_row[FIVE_PRIME_DIST_COLUMN_INDEX] >= args.min_distance):
+    elif (df_row.iloc[THREE_PRIME_DIST_COLUMN_INDEX] < args.min_distance) and (df_row.iloc[FIVE_PRIME_DIST_COLUMN_INDEX] >= args.min_distance):
         return "THREE_PRIME"
     else:
         return "UNKNOWN"
@@ -53,14 +53,14 @@ telomere_df["min_end_distance"] = np.minimum(telomere_df["five_prime_dist"], tel
 print(telomere_df.apply(get_status, axis=1))
 telomere_df["status"] = telomere_df.apply(get_status, axis=1)
 
-internal_telomere_warning = "{0}.bedgraph".format(args.output_prefix)
-telomere_window_status = "{0}.status".format(args.output_prefix)
+internal_telomere_warning_file = "{0}.bedgraph".format(args.output_prefix)
+telomere_window_status_file = "{0}.status".format(args.output_prefix)
 
-telomere_df[telomere_df["status"] == "INTERNAL"][["start", "end", "score"]].to_csv(internal_telomere_warning,
+telomere_df[telomere_df["status"] == "INTERNAL"][["start", "end", "score"]].to_csv(internal_telomere_warnin_file,
                                                                                    sep="\t",
                                                                                    index=True,
                                                                                    header=False)
-telomere_df.to_csv(telomere_window_status,
+telomere_df.to_csv(telomere_window_status_file,
                    sep="\t",
                    index=True,
                    header=False)

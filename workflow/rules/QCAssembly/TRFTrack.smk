@@ -5,7 +5,7 @@ rule trf: #
     output:
         simple_bed="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.{track_type, trf}.simple.bed",
         bed="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.{track_type, trf}.track.bed",
-        qc_track_bed="{fasta_dir}/assembly_qc/{track_type, trf}/{fasta_prefix, [^/]+}/{fasta_prefix}.{track_type, trf}.track.bed"
+        #qc_track_bed="{fasta_dir}/assembly_qc/{track_type, trf}/{fasta_prefix, [^/]+}/{fasta_prefix}.{track_type, trf}.track.bed"
     params:
         matching_weight=parse_option("matching_weight", parameters["tool_options"]["trf"], " -m "),
         mismatching_penalty=parse_option("mismatching_penalty", parameters["tool_options"]["trf"], " -s "),
@@ -42,4 +42,28 @@ rule trf: #
         " {params.max_period} {params.max_repeat_length} -i ${{INPUT_FASTA}} -o ${{OUTPUT_PREFIX}} > ${{LOG}} 2>&1; "
         " cut -f1-3 `basename {output.simple_bed}` 2>>${{LOG}} | grep -vP '^#' 2>>${{LOG}} | sort -k1,1V -k2,2n -k3,3n  2>>${{LOG}} | "
         " bedtools merge -i stdin > `basename {output.bed}` 2>>${{LOG}}; "
-        " cp {output.bed} {output.qc_track_bed} > ${{LOG}} 2>&1; "
+
+
+
+rule copy_trf_track: #
+    input:
+        bed="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.{track_type, trf}.track.bed",
+    output:
+        qc_track_bed="{fasta_dir}/assembly_qc/{track_type, trf}/{fasta_prefix, [^/]+}/{fasta_prefix}.{track_type, trf}.track.bed"
+    log:
+        std="{fasta_dir}/copy_trf_track.{fasta_prefix}.{track_type}log",
+        cluster_log="{fasta_dir}/copy_trf_track.{fasta_prefix}.{track_type}.cluster.log",
+        cluster_err="{fasta_dir}/copy_trf_track.{fasta_prefix}.{track_type}.cluster.err"
+    benchmark:
+        "{fasta_dir}/copy_trf_track.{fasta_prefix}.{track_type}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("windowmasker"),
+        cpus=parameters["threads"]["windowmasker"] ,
+        time=parameters["time"]["windowmasker"],
+        mem=parameters["memory_mb"]["windowmasker"]
+    threads: parameters["threads"]["windowmasker"]
+    shell:
+        " cp {input.bed} {output.qc_track_bed} > {log.std} 2>&1; "

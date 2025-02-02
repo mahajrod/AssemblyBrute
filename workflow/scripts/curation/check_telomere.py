@@ -14,11 +14,11 @@ THREE_PRIME_DIST_COLUMN_INDEX = 5
 MIN_END_DISTANCE_COLUMN_INDEX = 6
 
 def get_status(df_row):
-    if (df_row(FIVE_PRIME_DIST_COLUMN_INDEX) >= args.min_distance) and (df_row(THREE_PRIME_DIST_COLUMN_INDEX) >= args.min_distance):
+    if (df_row[FIVE_PRIME_DIST_COLUMN_INDEX] >= args.min_distance) and (df_row[THREE_PRIME_DIST_COLUMN_INDEX] >= args.min_distance):
         return "INTERNAL"
-    elif (df_row(FIVE_PRIME_DIST_COLUMN_INDEX) < args.min_distance) and (df_row(THREE_PRIME_DIST_COLUMN_INDEX) >= args.min_distance):
+    elif (df_row[FIVE_PRIME_DIST_COLUMN_INDEX] < args.min_distance) and (df_row[THREE_PRIME_DIST_COLUMN_INDEX] >= args.min_distance):
         return "FIVE_PRIME"
-    elif (df_row(THREE_PRIME_DIST_COLUMN_INDEX) < args.min_distance) and (df_row(FIVE_PRIME_DIST_COLUMN_INDEX) >= args.min_distance):
+    elif (df_row[THREE_PRIME_DIST_COLUMN_INDEX] < args.min_distance) and (df_row[FIVE_PRIME_DIST_COLUMN_INDEX] >= args.min_distance):
         return "THREE_PRIME"
     else:
         return "UNKNOWN"

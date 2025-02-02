@@ -19,3 +19,4 @@
 "skip_kmer": False
 "skip_ragtag": False
 "skip_gathering": True
+"skip_trf": False

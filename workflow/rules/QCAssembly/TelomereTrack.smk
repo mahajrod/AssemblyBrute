@@ -175,6 +175,40 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         " echo 'Removing temporary workdir...'  >> ${{LOG}};  "
         " rm -r ${{WORKDIR}} >> ${{LOG}} 2>&1; "
 
+
+rule collapse_telomere_track: #TODO: add possibility to use custom telomere c
+    input:
+        canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_telomere.win1000.step200.track.bedgraph",
+        non_canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.bedgraph",
+    output:
+        canonical_collapsed_telo_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_telomere.win1000.step200.track.collapsed.bedgraph",
+        non_canonical_collapsed_telo_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.collapsed.bedgraph",
+    params:
+        container=config["tool_containers"]["rapid_telomere"]
+    log:
+        std="{fasta_dir}/collapse_telomere_track.{fasta_prefix}.log",
+        cluster_log="{fasta_dir}/collapse_telomere_track.{fasta_prefix}.cluster.log",
+        cluster_err="{fasta_dir}/collapse_telomere_track.{fasta_prefix}.cluster.err"
+    benchmark:
+        "{fasta_dir}/collapse_telomere_track.{fasta_prefix}.benchmark.txt"
+    conda:
+        config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("telo_container"),
+        cpus=parameters["threads"]["telo_finder"] ,
+        time=parameters["time"]["telo_finder"],
+        mem=parameters["memory_mb"]["telo_finder"],
+    threads: parameters["threads"]["telo_finder"]
+
+    shell:
+        " echo -e '#scaffold\tstart\tend\tlength\tmedian\tmean\tstdev\tmode\tabsmin\n' > {output.canonical_collapsed_telo_track} 2>{log.std}; "
+        " bedtools merge -c 4 -o median,mean,stdev,mode,absmin -i {input.canonical_telo_track} | "
+        " awk '{{print $1\"\t\"$2\"\t\"$3\"\t\"$3-$2\"\t\"$4\"\t\"$5\"\t\"$6\"\t\"$7\"\t\"$8}}' > {output.canonical_collapsed_telo_track} 2>>{log.std}; "
+        " echo -e '#scaffold\tstart\tend\tmedian\tmean\tstdev\tmode\tabsmin\n' > {output.non_canonical_collapsed_telo_track} 2>>{log.std}; "
+        " bedtools merge -c 4 -o median,mean,stdev,mode,absmin -i {input.non_canonical_telo_track} | "
+        " awk '{{print $1\"\t\"$2\"\t\"$3\"\t\"$3-$2\"\t\"$4\"\t\"$5\"\t\"$6\"\t\"$7\"\t\"$8}}' > {output.non_canonical_collapsed_telo_track} 2>>{log.std}; "
+
 rule get_telomere_warning:
     input:
         canonical_telo_track=rules.telo_container.output.canonical_telo_track, #out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.canonical.telomere.bedgraph",
@@ -230,19 +264,13 @@ rule copy_telomere_files:
     input:
         canonical_telo_track=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.bedgraph",
         canonical_telo_warning_track=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere_warning.win1000.step200.track.bedgraph",
-        #canonical_telo_bed=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical.telomere.bed",
-        #canonical_telo=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical.telomere",
-        #canonical_telo_win=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical.telomere.windows",
         non_canonical_telo_track=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.bedgraph",
         non_canonical_telo_warning_track=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere_warning.win1000.step200.track.bedgraph",
-        #non_canonical_telo_bed=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical.telomere.bed",
-        #non_canonical_telo=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical.telomere",
-        #non_canonical_telo_win=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical.telomere.windows",
     output:
-        canonical_telo_track = out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.bedgraph",
-        canonical_telo_warning_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere_warning.win1000.step200.track.bedgraph",
-        non_canonical_telo_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.bedgraph",
-        non_canonical_telo_warning_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere_warning.win1000.step200.track.bedgraph",
+        canonical_telo_track = out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.bedgraph",
+        canonical_telo_warning_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere_warning.win1000.step200.track.bedgraph",
+        non_canonical_telo_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.bedgraph",
+        non_canonical_telo_warning_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere_warning.win1000.step200.track.bedgraph",
     log:
         ln=out_dir_path / "{assembly_stage}/{parameters}/create_telomere_links.{genome_prefix}.{assembly_stage}.{haplotype}.ln.log",
         cluster_log=out_dir_path / "{assembly_stage}/{parameters}/create_telomere_links.{genome_prefix}.{assembly_stage}.{haplotype}.cluster.log",

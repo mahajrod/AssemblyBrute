@@ -5,8 +5,8 @@ rule maskfasta: #
         trf_bed=rules.trf.output.bed if not config["skip_trf"] else [], # trf sometimes hangs on specific genomes
         windowmasker_bed=rules.windowmasker.output.bed
     output:
-        masked_fasta="{fasta_dir}/repeats/{fasta_prefix}.softmasked.fasta",
-        merged_bed="{fasta_dir}/repeats/{fasta_prefix}.repeats.track.bed",
+        masked_fasta="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.softmasked.fasta",
+        merged_bed="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.repeats.track.bed",
     log:
         std="{fasta_dir}/maskfasta.{fasta_prefix}.log",
         cluster_log="{fasta_dir}/maskfasta.{fasta_prefix}.cluster.log",

@@ -178,8 +178,8 @@ rule telo_container: #TODO: add possibility to use custom telomere c
 
 rule collapse_telomere_track: #TODO: add possibility to use custom telomere c
     input:
-        canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_telomere.win1000.step200.track.bedgraph",
-        non_canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.bedgraph",
+        canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.canonical_telomere.win1000.step200.track.bedgraph",
+        non_canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.bedgraph",
     output:
         canonical_collapsed_telo_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_telomere.win1000.step200.track.collapsed.bedgraph",
         non_canonical_collapsed_telo_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.collapsed.bedgraph",

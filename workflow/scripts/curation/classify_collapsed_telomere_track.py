@@ -52,6 +52,10 @@ telomere_region_filtered_status_file = "{0}.filtered.status".format(args.output_
 telomere_region_count_filtered_file = "{0}.filtered.count".format(args.output_prefix)
 telomere_scaffold_filtered_status_file = "{0}.filtered.scaffold.status".format(args.output_prefix)
 
+telomere_scaffold_filtered_scaffold_both_telomeres_id_file = "{0}.filtered.scaffold.telomeres.both.ids".format(args.output_prefix)
+telomere_scaffold_filtered_scaffold_five_prime_only_id_file = "{0}.filtered.scaffold.telomeres.five_prime_only.ids".format(args.output_prefix)
+telomere_scaffold_filtered_scaffold_three_prime_only_id_file = "{0}.filtered.scaffold.telomeres.three_prime_only.ids".format(args.output_prefix)
+
 fai_df = pd.read_csv(args.fai_file, sep="\t", header=None, names=["scaffold", "length"],
                      usecols=[0, 1], index_col="scaffold").sort_values(by=["length", "scaffold"], ascending=(False, True))
 
@@ -65,7 +69,9 @@ scaffold_status_df["AMBIGUOUS"] = False
 
 if Path(args.input).stat().st_size == 0: #telomere_df.empty:
     sys.stderr.write("Empty input. Creating empty output files and scaffold status file... ... ")
-    for filename in telomere_region_all_status_file, telomere_region_filtered_status_file, telomere_region_count_filtered_file:
+    for filename in telomere_region_all_status_file, telomere_region_filtered_status_file, telomere_region_count_filtered_file, \
+                    telomere_scaffold_filtered_scaffold_both_telomeres_id_file, telomere_scaffold_filtered_scaffold_five_prime_only_id_file, \
+                    telomere_scaffold_filtered_scaffold_three_prime_only_id_file:
         with open(filename, "w") as out_fd:
             pass
     scaffold_status_df.to_csv(telomere_scaffold_filtered_status_file,
@@ -94,7 +100,9 @@ telomere_filtered_df = telomere_df[telomere_df[args.score_type] >= args.score_th
 
 if telomere_filtered_df.empty:
     sys.stderr.write("Empty dataframe after filtering. Creating empty intermediate files and scaffold status file... ")
-    for filename in telomere_region_filtered_status_file, telomere_region_count_filtered_file:
+    for filename in telomere_region_filtered_status_file, telomere_region_count_filtered_file, \
+                    telomere_scaffold_filtered_scaffold_both_telomeres_id_file, telomere_scaffold_filtered_scaffold_five_prime_only_id_file, \
+                    telomere_scaffold_filtered_scaffold_three_prime_only_id_file:
         with open(filename, "w") as out_fd:
             pass
     scaffold_status_df.to_csv(telomere_scaffold_filtered_status_file,
@@ -125,3 +133,15 @@ scaffold_status_df.to_csv(telomere_scaffold_filtered_status_file,
                          index=True,
                          header=True)
 
+pd.Series(scaffold_status_df[(scaffold_status_df["FIVE_PRIME"]) & (scaffold_status_df["THREE_PRIME"])].index).to_csv(telomere_scaffold_filtered_scaffold_both_telomeres_id_file,
+                                                                                                                     sep="\t",
+                                                                                                                     index=False,
+                                                                                                                     header=False)
+pd.Series(scaffold_status_df[scaffold_status_df["FIVE_PRIME"]].index).to_csv(telomere_scaffold_filtered_scaffold_five_prime_only_id_file,
+                                                                             sep="\t",
+                                                                             index=False,
+                                                                             header=False)
+pd.Series(scaffold_status_df[scaffold_status_df["THREE_PRIME"]].index).to_csv(telomere_scaffold_filtered_scaffold_three_prime_only_id_file,
+                                                                              sep="\t",
+                                                                              index=False,
+                                                                              header=False)

@@ -174,13 +174,15 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         " rm -r ${{WORKDIR}} >> ${{LOG}} 2>&1; "
 
 
-rule collapse_telomere_track: #TODO: add possibility to use custom telomere c
+rule collapse_overlapping_telomere_windows:
     input:
-        canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.canonical_telomere.win1000.step200.track.bedgraph",
-        non_canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.bedgraph",
+        canonical_telo_track = rules.telo_container.output.canonical_telo_track,
+        non_canonical_telo_track = rules.telo_container.output.non_canonical_telo_track,
+        #canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.canonical_telomere.win1000.step200.track.bedgraph",
+        #non_canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.bedgraph",
     output:
-        canonical_collapsed_telo_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_telomere.win1000.step200.track.collapsed.bedgraph",
-        non_canonical_collapsed_telo_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.collapsed.bedgraph",
+        canonical_collapsed_telo_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_telomere.win1000.step200.track.collapsed.bed",
+        non_canonical_collapsed_telo_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.collapsed.bed",
     params:
         container=config["tool_containers"]["rapid_telomere"]
     log:
@@ -207,16 +209,58 @@ rule collapse_telomere_track: #TODO: add possibility to use custom telomere c
         " bedtools merge -c 4 -o median,mean,stdev,mode,absmin -i {input.non_canonical_telo_track} | "
         " awk '{{print $1\"\t\"$2\"\t\"$3\"\t\"$3-$2\"\t\"$4\"\t\"$5\"\t\"$6\"\t\"$7\"\t\"$8}}' > {output.non_canonical_collapsed_telo_track} 2>>{log.std}; "
 
+rule classify_telomeric_regions_windows:
+    input:
+        canonical_collapsed_telo_track="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.canonical_telomere.win1000.step200.track.collapsed.bed",
+        non_canonical_collapsed_telo_track="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.collapsed.bed",
+        fai="{fasta_dir}/{fasta_prefix}.fasta.fai"
+    output:
+        canonical_region_all_status="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_telomere.win1000.step200.track.collapsed.all.status",
+        canonical_region_filtered_status="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_telomere.win1000.step200.track.collapsed.filtered.status",
+        canonical_region_filtered_count="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_telomere.win1000.step200.track.collapsed.filtered.count",
+        canonical_region_filtered_scaffold_status="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.status",
+        non_canonical_region_all_status="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.collapsed.all.status",
+        non_canonical_region_filtered_status="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.status",
+        non_canonical_region_filtered_count="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.count",
+        non_canonical_region_filtered_scaffold_status="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.status",
+    params:
+        fraction_threshold=config["parameters"]["tool_options"]["assembly_qc"]["telomere"]["fraction_threshold"]
+    log:
+        std="{fasta_dir}/classify_telomeric_regions_windows.{fasta_prefix}.log",
+        cluster_log="{fasta_dir}/classify_telomeric_regions_windows{fasta_prefix}.cluster.log",
+        cluster_err="{fasta_dir}/classify_telomeric_regions_windows.{fasta_prefix}.cluster.err"
+    benchmark:
+        "{fasta_dir}/classify_telomeric_regions_windows.{fasta_prefix}.benchmark.txt"
+    conda:
+        config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("telo_container"),
+        cpus=parameters["threads"]["telo_finder"] ,
+        time=parameters["time"]["telo_finder"],
+        mem=parameters["memory_mb"]["telo_finder"],
+    threads: parameters["threads"]["telo_finder"]
+
+    shell:
+        " CANONICAL_OUT_PREFIX={input.canonical_collapsed_telo_track}; "
+        " CANONICAL_OUT_PREFIX=${{CANONICAL_OUT_PREFIX%.bed}}; "
+        " NON_CANONICAL_OUT_PREFIX={input.non_canonical_collapsed_telo_track}; "
+        " NON_CANONICAL_OUT_PREFIX=${{NON_CANONICAL_OUT_PREFIX%.bed}}; "
+        " workflow/scripts/curation/classify_collapsed_telomere_track.py -i {input.canonical_collapsed_telo_track} "
+        "          -p ${{CANONICAL_OUT_PREFIX}} -f {input.fai} -s {params.fraction_threshold} >{log.std} 2>&1; "
+
 rule get_telomere_warning:
     input:
-        canonical_telo_track=rules.telo_container.output.canonical_telo_track, #out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.canonical.telomere.bedgraph",
-        non_canonical_telo_track=rules.telo_container.output.non_canonical_telo_track, # out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.non_canonical.telomere.bedgraph",
+        canonical_telo_track=rules.telo_container.output.canonical_telo_track,
+        non_canonical_telo_track=rules.telo_container.output.non_canonical_telo_track,
         fai="{fasta_dir}/{fasta_prefix}.fasta.fai",
     output:
         canonical_telo_warning_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_telomere_warning.win1000.step200.track.bedgraph",
         non_canonical_telo_warning_track="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere_warning.win1000.step200.track.bedgraph",
         canonical_telo_status="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_telomere_warning.win1000.step200.track.status",
         non_canonical_telo_status="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere_warning.win1000.step200.track.status"
+    params:
+        fraction_threshold=config["parameters"]["tool_options"]["assembly_qc"]["telomere"]["fraction_threshold"]
     log:
         canonical="{fasta_dir}/get_telomere_warning.{fasta_prefix}.canonical.log",
         non_canonical="{fasta_dir}/get_telomere_warning.{fasta_prefix}.non_canonical.log",
@@ -242,8 +286,8 @@ rule get_telomere_warning:
         " echo 'Checking positions of canonical telomeres...' > {log.canonical} 2>&1; "
         " if [ -s {input.canonical_telo_track} ]; "
         " then "
-        "       workflow/scripts/curation/check_telomere.py  -i {input.canonical_telo_track}  "
-        "                   -f {input.fai} -p ${{CANONICAL_PREFIX}} >> {log.canonical} 2>&1; "
+        "       workflow/scripts/curation/check_telomere.py  -i {input.canonical_telo_track} -f {input.fai} "
+        "                  -s {params.fraction_threshold} -p ${{CANONICAL_PREFIX}} >> {log.canonical} 2>&1; "
         " else"
         "       touch {output.canonical_telo_warning_track} >> {log.canonical} 2>&1; "
         "       touch {output.canonical_telo_status} >> {log.canonical} 2>&1; "
@@ -251,12 +295,13 @@ rule get_telomere_warning:
         " echo 'Checking positions of non canonical telomeres...' > {log.non_canonical} 2>&1; "
         " if [ -s {input.non_canonical_telo_track} ]; "
         " then "
-        "       workflow/scripts/curation/check_telomere.py  -i {input.non_canonical_telo_track}  "
-        "                   -f {input.fai} -p ${{NON_CANONICAL_PREFIX}}  >> {log.non_canonical} 2>&1; "
+        "       workflow/scripts/curation/check_telomere.py  -i {input.non_canonical_telo_track} -f {input.fai} "
+        "                  -s {params.fraction_threshold} -p ${{NON_CANONICAL_PREFIX}}  >> {log.non_canonical} 2>&1; "
         " else"
         "       touch {output.non_canonical_telo_warning_track} >> {log.non_canonical} 2>&1; "
         "       touch {output.non_canonical_telo_status} >> {log.non_canonical} 2>&1; "
         " fi; "
+
 
 rule copy_telomere_files:
     input:

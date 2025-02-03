@@ -46,11 +46,35 @@ parser.add_argument("-p", "--output_prefix", action="store", dest="output_prefix
 
 args = parser.parse_args()
 
+telomere_region_all_status_file = "{0}.all.status".format(args.output_prefix)
+telomere_region_filtered_status_file = "{0}.filtered.status".format(args.output_prefix)
+telomere_region_count_filtered_file = "{0}.filtered.count".format(args.output_prefix)
+telomere_scaffold_filtered_status_file = "{0}.filtered.scaffold.status".format(args.output_prefix)
+
 fai_df = pd.read_csv(args.fai_file, sep="\t", header=None, names=["scaffold", "length"],
                      usecols=[0, 1], index_col="scaffold").sort_values(by=["length", "scaffold"], ascending=(False, True))
 
 telomere_df = pd.read_csv(args.input, sep="\t", header=0,
                           usecols=[0, 1, 2, 3, 4, 5, 6, 7, 8], index_col="#scaffold")
+
+# ---- Initialization of the scaffold status file ----
+scaffold_status_df = fai_df[["length"]]
+scaffold_status_df["FIVE_PRIME"] = False
+scaffold_status_df["THREE_PRIME"] = False
+scaffold_status_df["INTERNAL"] = False
+scaffold_status_df["AMBIGUOUS"] = False
+# ----
+
+if telomere_df.empty:
+    sys.stderr("Empty input. Creating empty output files and scaffold status file... ... ")
+    for filename in telomere_region_all_status_file, telomere_region_filtered_status_file, telomere_region_count_filtered_file:
+        with open(filename, "w") as out_fd:
+            pass
+    scaffold_status_df.to_csv(telomere_scaffold_filtered_status_file,
+                              sep="\t",
+                              index=True,
+                              header=True)
+    exit(0)
 #telomere_df.index.name = "scaffold"
 
 telomere_df["scaffold_length"] = fai_df["length"]
@@ -60,23 +84,43 @@ telomere_df["min_end_distance"] = np.minimum(telomere_df["five_prime_dist"], tel
 
 telomere_df["status"] = telomere_df.apply(get_status, axis=1)
 
-internal_telomere_warning_file = "{0}.bedgraph".format(args.output_prefix)
-telomere_window_status_file = "{0}.status".format(args.output_prefix)
-telomere_window_status_filtered_file = "{0}.filtered.status".format(args.output_prefix)
-telomere_contig_status_file = "{0}.contig.status".format(args.output_prefix)
-
-telomere_df.to_csv(telomere_window_status_file,
+telomere_df.to_csv(telomere_region_all_status_file,
                    sep="\t",
                    index=True,
                    header=True)
 
 telomere_filtered_df = telomere_df[telomere_df[args.score_type] >= args.score_threshold]
-#scaffold_status_df = fai_df[["length"]]
-print(telomere_filtered_df[["status", args.score_type]].groupby(["#scaffold", "status"]).count())
-print(telomere_filtered_df[["status", args.score_type]])
-#print(telomere_filtered_df)
-#telomere_filtered_df[telomere_filtered_df["status"] == "INTERNAL"][["start", "end", "score"]].to_csv(internal_telomere_warning_file,
-#                                                                                                     sep="\t",
-#                                                                                                     index=True,
-#                                                                                                     header=False)
+
+if telomere_filtered_df.empty:
+    sys.stderr("Empty input. Creating empty intermediate files and scaffold status file... ")
+    for filename in telomere_region_filtered_status_file, telomere_region_count_filtered_file:
+        with open(filename, "w") as out_fd:
+            pass
+    scaffold_status_df.to_csv(telomere_scaffold_filtered_status_file,
+                              sep="\t",
+                              index=True,
+                              header=True)
+    exit(0)
+
+telomere_filtered_df.to_csv(telomere_region_filtered_status_file,
+                            sep="\t",
+                            index=True,
+                            header=True)
+
+telomere_count_df = telomere_filtered_df[["status", args.score_type]].groupby(["#scaffold", "status"]).count()
+telomere_count_df.columns = pd.Index(["count"])
+telomere_count_df = telomere_count_df.reset_index(level=1, drop=False)[["status", "count"]]
+telomere_count_df.to_csv(telomere_region_count_filtered_file,
+                         sep="\t",
+                         index=True,
+                         header=True)
+
+for status in "FIVE_PRIME", "THREE_PRIME", "INTERNAL", "AMBIGUOUS":
+    scaffold_status_df.loc[telomere_count_df[telomere_count_df["status"] == status].index, status] = True
+
+scaffold_status_df = scaffold_status_df.sort_values(by=["FIVE_PRIME", "THREE_PRIME", "INTERNAL", "AMBIGUOUS"], ascending=False)
+scaffold_status_df.to_csv(telomere_scaffold_filtered_status_file,
+                         sep="\t",
+                         index=True,
+                         header=True)
 

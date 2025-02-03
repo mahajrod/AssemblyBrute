@@ -4,16 +4,16 @@ rule windowmasker: #
     input:
         fasta="{fasta_dir}/{fasta_prefix}.fasta",
     output:
-        counts="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.{track_type, windowmasker}.counts",
-        interval="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.{track_type, windowmasker}.intervals",
-        bed="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.{track_type, windowmasker}.track.bed",
+        counts="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.windowmasker.counts",
+        interval="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.windowmasker.intervals",
+        bed="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.windowmasker.track.bed",
         #qc_track_bed="{fasta_dir}/assembly_qc/{track_type, windowmasker}/{fasta_prefix, [^/]+}/{fasta_prefix}.{track_type}.track.bed"
     log:
-        std="{fasta_dir}/windowmasker.{fasta_prefix}.{track_type}.stage1.log",
-        cluster_log="{fasta_dir}/windowmasker.{fasta_prefix}.{track_type}.cluster.log",
-        cluster_err="{fasta_dir}/windowmasker.{fasta_prefix}.{track_type}.cluster.err"
+        std="{fasta_dir}/windowmasker.{fasta_prefix}.windowmasker.stage1.log",
+        cluster_log="{fasta_dir}/windowmasker.{fasta_prefix}.windowmasker.cluster.log",
+        cluster_err="{fasta_dir}/windowmasker.{fasta_prefix}.windowmasker.cluster.err"
     benchmark:
-        "{fasta_dir}/windowmasker.{fasta_prefix}.{track_type}.benchmark.txt"
+        "{fasta_dir}/windowmasker.{fasta_prefix}.windowmasker.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

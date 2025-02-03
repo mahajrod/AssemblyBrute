@@ -258,8 +258,11 @@
                         #"w10k.s1k":
                         #    "window": 10000
                         #    "step":   1000
+                    "telomere":
+                        "fraction_threshold": 0.6
                     "bin_size": 10000
                     "bin_step": 10000
+
                 "hifi":
                     "qc_datatypes":
                         - "hifi"

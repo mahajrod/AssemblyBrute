@@ -1147,8 +1147,7 @@ if "ref_scaffolding" in config["stage_list"]:
 
     if coverage_track_data_type_set:
         results_list += [[[
-                              expand(out_dir_path / "curation/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.{datatype}.coverage.win{window}.step{step}.png",
-                                  out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.coverage.win{window}.step{step}.png",
+                              expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.coverage.win{window}.step{step}.png",
                                   window=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["window"],
                                   step=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
                                   genome_prefix=[config["genome_prefix"], ],

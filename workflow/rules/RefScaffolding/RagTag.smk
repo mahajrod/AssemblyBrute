@@ -3,7 +3,7 @@ rule ragtag: #
     input:
         fasta=out_dir_path / ("%s/{prev_stage_parameters}/{genome_prefix}.%s.{haplotype}.fasta" % (stage_dict["ref_scaffolding"]["prev_stage"],
                                                                                                    stage_dict["ref_scaffolding"]["prev_stage"])),
-        reference_fasta=out_dir_path / "data/reference/{reference}/{reference}.softmasked.fasta",
+        reference_fasta=out_dir_path / "data/reference/{reference}/{reference}.fasta",
         reference_syn=out_dir_path / "data/reference/{reference}/{reference}.syn",
     output:
         ragtag_fasta=out_dir_path / "ref_scaffolding/{prev_stage_parameters, [^/]+}..ragtag_{ref_scaf_parameters, [^/]+}@{reference, [^/]+}/{haplotype, [^/]+}/{genome_prefix, [^/]+}.ragtag.{haplotype}.fasta",

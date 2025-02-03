@@ -117,7 +117,7 @@ rule create_links_for_reference:
         whitelist=lambda wildcards: input_reference_filedict[wildcards.ref_name]["whitelist"].resolve(),
         orderlist=lambda wildcards: input_reference_filedict[wildcards.ref_name]["orderlist"].resolve(),
     output:
-        fasta=out_dir_path / "data/reference/{ref_name}/{ref_name}.softmasked.fasta",
+        fasta=out_dir_path / "data/reference/{ref_name}/{ref_name}.fasta",
         syn=out_dir_path / "data/reference/{ref_name}/{ref_name}.syn",
         whitelist=out_dir_path / "data/reference/{ref_name}/{ref_name}.whitelist",
         orderlist=out_dir_path / "data/reference/{ref_name}/{ref_name}.orderlist",

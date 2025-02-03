@@ -224,7 +224,7 @@ rule classify_telomeric_regions_windows:
         non_canonical_region_filtered_count="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.count",
         non_canonical_region_filtered_scaffold_status="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.status",
     params:
-        fraction_threshold=config["tool_options"]["assembly_qc"]["telomere"]["fraction_threshold"]
+        fraction_threshold=parameters["tool_options"]["assembly_qc"]["telomere"]["fraction_threshold"]
     log:
         std="{fasta_dir}/classify_telomeric_regions_windows.{fasta_prefix}.log",
         cluster_log="{fasta_dir}/classify_telomeric_regions_windows{fasta_prefix}.cluster.log",
@@ -260,7 +260,7 @@ rule get_telomere_warning:
         canonical_telo_status="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_telomere_warning.win1000.step200.track.status",
         non_canonical_telo_status="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere_warning.win1000.step200.track.status"
     params:
-        fraction_threshold=config["tool_options"]["assembly_qc"]["telomere"]["fraction_threshold"]
+        fraction_threshold=parameters["tool_options"]["assembly_qc"]["telomere"]["fraction_threshold"]
     log:
         canonical="{fasta_dir}/get_telomere_warning.{fasta_prefix}.canonical.log",
         non_canonical="{fasta_dir}/get_telomere_warning.{fasta_prefix}.non_canonical.log",

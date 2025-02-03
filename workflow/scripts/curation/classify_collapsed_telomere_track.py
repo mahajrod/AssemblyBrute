@@ -64,7 +64,7 @@ scaffold_status_df["AMBIGUOUS"] = False
 # ----
 
 if Path(args.input).stat().st_size == 0: #telomere_df.empty:
-    sys.stderr("Empty input. Creating empty output files and scaffold status file... ... ")
+    sys.stderr.write("Empty input. Creating empty output files and scaffold status file... ... ")
     for filename in telomere_region_all_status_file, telomere_region_filtered_status_file, telomere_region_count_filtered_file:
         with open(filename, "w") as out_fd:
             pass
@@ -93,7 +93,7 @@ telomere_df.to_csv(telomere_region_all_status_file,
 telomere_filtered_df = telomere_df[telomere_df[args.score_type] >= args.score_threshold]
 
 if telomere_filtered_df.empty:
-    sys.stderr("Empty input. Creating empty intermediate files and scaffold status file... ")
+    sys.stderr.write("Empty input. Creating empty intermediate files and scaffold status file... ")
     for filename in telomere_region_filtered_status_file, telomere_region_count_filtered_file:
         with open(filename, "w") as out_fd:
             pass

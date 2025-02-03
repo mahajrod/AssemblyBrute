@@ -91,6 +91,7 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         cpus=parameters["threads"]["telo_finder"] ,
         time=parameters["time"]["telo_finder"],
         mem=parameters["memory_mb"]["telo_finder"],
+        telosif=1
     threads: parameters["threads"]["telo_finder"]
 
     shell: # TODO pack code below as script. Issue with container - it return 111 inside of 0 and snakemake breaks. Added ' || true'

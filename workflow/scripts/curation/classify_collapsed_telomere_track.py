@@ -137,11 +137,11 @@ pd.Series(scaffold_status_df[(scaffold_status_df["FIVE_PRIME"]) & (scaffold_stat
                                                                                                                      sep="\t",
                                                                                                                      index=False,
                                                                                                                      header=False)
-pd.Series(scaffold_status_df[scaffold_status_df["FIVE_PRIME"]].index).to_csv(telomere_scaffold_filtered_scaffold_five_prime_only_id_file,
+pd.Series(scaffold_status_df[(scaffold_status_df["FIVE_PRIME"]) & (~scaffold_status_df["THREE_PRIME"])].index).to_csv(telomere_scaffold_filtered_scaffold_five_prime_only_id_file,
                                                                              sep="\t",
                                                                              index=False,
                                                                              header=False)
-pd.Series(scaffold_status_df[scaffold_status_df["THREE_PRIME"]].index).to_csv(telomere_scaffold_filtered_scaffold_three_prime_only_id_file,
+pd.Series(scaffold_status_df[(~scaffold_status_df["FIVE_PRIME"]) & (scaffold_status_df["THREE_PRIME"])].index).to_csv(telomere_scaffold_filtered_scaffold_three_prime_only_id_file,
                                                                               sep="\t",
                                                                               index=False,
                                                                               header=False)

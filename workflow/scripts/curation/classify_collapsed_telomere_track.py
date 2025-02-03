@@ -55,8 +55,6 @@ telomere_scaffold_filtered_status_file = "{0}.filtered.scaffold.status".format(a
 fai_df = pd.read_csv(args.fai_file, sep="\t", header=None, names=["scaffold", "length"],
                      usecols=[0, 1], index_col="scaffold").sort_values(by=["length", "scaffold"], ascending=(False, True))
 
-
-
 # ---- Initialization of the scaffold status file ----
 scaffold_status_df = fai_df[["length"]]
 scaffold_status_df["FIVE_PRIME"] = False

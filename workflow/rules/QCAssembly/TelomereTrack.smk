@@ -227,7 +227,7 @@ rule classify_telomeric_regions_windows:
         fraction_threshold=parameters["tool_options"]["assembly_qc"]["telomere"]["fraction_threshold"]
     log:
         std="{fasta_dir}/classify_telomeric_regions_windows.{fasta_prefix}.log",
-        cluster_log="{fasta_dir}/classify_telomeric_regions_windows{fasta_prefix}.cluster.log",
+        cluster_log="{fasta_dir}/classify_telomeric_regions_windows.{fasta_prefix}.cluster.log",
         cluster_err="{fasta_dir}/classify_telomeric_regions_windows.{fasta_prefix}.cluster.err"
     benchmark:
         "{fasta_dir}/classify_telomeric_regions_windows.{fasta_prefix}.benchmark.txt"
@@ -246,8 +246,12 @@ rule classify_telomeric_regions_windows:
         " CANONICAL_OUT_PREFIX=${{CANONICAL_OUT_PREFIX%.bed}}; "
         " NON_CANONICAL_OUT_PREFIX={input.non_canonical_collapsed_telo_track}; "
         " NON_CANONICAL_OUT_PREFIX=${{NON_CANONICAL_OUT_PREFIX%.bed}}; "
+        " echo 'Classifying cannonical telomere regions...' > {log.std}; "
         " workflow/scripts/curation/classify_collapsed_telomere_track.py -i {input.canonical_collapsed_telo_track} "
-        "          -p ${{CANONICAL_OUT_PREFIX}} -f {input.fai} -s {params.fraction_threshold} >{log.std} 2>&1; "
+        "          -p ${{CANONICAL_OUT_PREFIX}} -f {input.fai} -s {params.fraction_threshold} >> {log.std} 2>&1; "
+        " echo 'Classifying non cannonical telomere regions...' >> {log.std}; "
+        " workflow/scripts/curation/classify_collapsed_telomere_track.py -i {input.non_canonical_collapsed_telo_track} "
+        "          -p ${{NON_CANONICAL_OUT_PREFIX}} -f {input.fai} -s {params.fraction_threshold} >> {log.std} 2>&1; "
 
 rule get_telomere_warning:
     input:

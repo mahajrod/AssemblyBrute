@@ -3,8 +3,8 @@ rule trf: #
     input:
         fasta="{fasta_dir}/{fasta_prefix}.fasta",
     output:
-        simple_bed="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.{track_type, trf}.simple.bed",
-        bed="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.{track_type, trf}.track.bed",
+        simple_bed="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.trf.simple.bed",
+        bed="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.trf.track.bed",
         #qc_track_bed="{fasta_dir}/assembly_qc/{track_type, trf}/{fasta_prefix, [^/]+}/{fasta_prefix}.{track_type, trf}.track.bed"
     params:
         matching_weight=parse_option("matching_weight", parameters["tool_options"]["trf"], " -m "),
@@ -16,11 +16,11 @@ rule trf: #
         max_period=parse_option("max_period", parameters["tool_options"]["trf"], " -e "),
         max_repeat_length=parse_option("max_repeat_length", parameters["tool_options"]["trf"], " -g "),
     log:
-        std="{fasta_dir}/trf.{fasta_prefix}.{track_type}.log",
-        cluster_log="{fasta_dir}/trf.{fasta_prefix}.{track_type}.cluster.log",
-        cluster_err="{fasta_dir}/trf.{fasta_prefix}.{track_type}.cluster.err"
+        std="{fasta_dir}/trf.{fasta_prefix}.trf.log",
+        cluster_log="{fasta_dir}/trf.{fasta_prefix}.trf.cluster.log",
+        cluster_err="{fasta_dir}/trf.{fasta_prefix}.trf.cluster.err"
     benchmark:
-        "{fasta_dir}/trf.{fasta_prefix}.{track_type}.benchmark.txt"
+        "{fasta_dir}/trf.{fasta_prefix}.trf.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -44,18 +44,17 @@ rule trf: #
         " bedtools merge -i stdin > `basename {output.bed}` 2>>${{LOG}}; "
 
 
-
 rule copy_trf_track: #
     input:
-        bed="{fasta_dir}/repeats/{fasta_prefix}.{track_type}.track.bed",
+        bed="{fasta_dir}/repeats/{fasta_prefix}.trf.track.bed",
     output:
-        qc_track_bed="{fasta_dir}/assembly_qc/{track_type, trf}/{fasta_prefix, [^/]+}/{fasta_prefix}.{track_type}.track.bed"
+        qc_track_bed="{fasta_dir}/assembly_qc/trf/{fasta_prefix, [^/]+}/{fasta_prefix}.trf.track.bed"
     log:
-        std="{fasta_dir}/copy_trf_track.{fasta_prefix}.{track_type}log",
-        cluster_log="{fasta_dir}/copy_trf_track.{fasta_prefix}.{track_type}.cluster.log",
-        cluster_err="{fasta_dir}/copy_trf_track.{fasta_prefix}.{track_type}.cluster.err"
+        std="{fasta_dir}/copy_trf_track.{fasta_prefix}.trf.log",
+        cluster_log="{fasta_dir}/copy_trf_track.{fasta_prefix}.trf.cluster.log",
+        cluster_err="{fasta_dir}/copy_trf_track.{fasta_prefix}.trf.cluster.err"
     benchmark:
-        "{fasta_dir}/copy_trf_track.{fasta_prefix}.{track_type}.benchmark.txt"
+        "{fasta_dir}/copy_trf_track.{fasta_prefix}.trf.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

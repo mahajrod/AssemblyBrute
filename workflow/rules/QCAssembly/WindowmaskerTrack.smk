@@ -7,7 +7,6 @@ rule windowmasker: #
         counts="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.windowmasker.counts",
         interval="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.windowmasker.intervals",
         bed="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.windowmasker.track.bed",
-        #qc_track_bed="{fasta_dir}/assembly_qc/{track_type, windowmasker}/{fasta_prefix, [^/]+}/{fasta_prefix}.{track_type}.track.bed"
     log:
         std="{fasta_dir}/windowmasker.{fasta_prefix}.windowmasker.stage1.log",
         cluster_log="{fasta_dir}/windowmasker.{fasta_prefix}.windowmasker.cluster.log",
@@ -31,15 +30,15 @@ rule windowmasker: #
 
 rule copy_windowmasker_track: #
     input:
-        bed="{fasta_dir}/repeats/{fasta_prefix}.{track_type}.track.bed",
+        bed="{fasta_dir}/repeats/{fasta_prefix}.windowmasker.track.bed",
     output:
-        qc_track_bed="{fasta_dir}/assembly_qc/{track_type, windowmasker}/{fasta_prefix, [^/]+}/{fasta_prefix}.{track_type}.track.bed"
+        qc_track_bed="{fasta_dir}/assembly_qc/windowmasker/{fasta_prefix, [^/]+}/{fasta_prefix}.windowmasker.track.bed"
     log:
-        std="{fasta_dir}/copy_windowmasker_track.{fasta_prefix}.{track_type}log",
-        cluster_log="{fasta_dir}/copy_windowmasker_track.{fasta_prefix}.{track_type}.cluster.log",
-        cluster_err="{fasta_dir}/copy_windowmasker_track.{fasta_prefix}.{track_type}.cluster.err"
+        std="{fasta_dir}/copy_windowmasker_track.{fasta_prefix}.windowmasker.log",
+        cluster_log="{fasta_dir}/copy_windowmasker_track.{fasta_prefix}.windowmasker.cluster.log",
+        cluster_err="{fasta_dir}/copy_windowmasker_track.{fasta_prefix}.windowmasker.cluster.err"
     benchmark:
-        "{fasta_dir}/copy_windowmasker_track.{fasta_prefix}.{track_type}.benchmark.txt"
+        "{fasta_dir}/copy_windowmasker_track.{fasta_prefix}.windowmasker.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

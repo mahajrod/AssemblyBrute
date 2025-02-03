@@ -261,6 +261,10 @@
             - "mjolnircomp05fl"
             - "mjolnircomp06fl"
         "whitelist": []
+    "telo_container":
+        "blacklist":
+            - "mjolnircomp09fl"
+        "whitelist": [ ]
 #------------------------------------------------------
 #"adaptor_scan": True
 #"fcs_gx_scan": True

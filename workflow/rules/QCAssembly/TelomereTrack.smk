@@ -309,11 +309,28 @@ rule copy_telomere_files:
         canonical_telo_warning_track=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere_warning.win1000.step200.track.bedgraph",
         non_canonical_telo_track=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.bedgraph",
         non_canonical_telo_warning_track=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere_warning.win1000.step200.track.bedgraph",
+        canonical_region_all_status=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.collapsed.all.status",
+        canonical_region_filtered_status=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.collapsed.filtered.status",
+        canonical_region_filtered_count=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.collapsed.filtered.count",
+        canonical_region_filtered_scaffold_status=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.status",
+        non_canonical_region_all_status=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.collapsed.all.status",
+        non_canonical_region_filtered_status=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.status",
+        non_canonical_region_filtered_count=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.count",
+        non_canonical_region_filtered_scaffold_status=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.status",
     output:
         canonical_telo_track = out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.bedgraph",
         canonical_telo_warning_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere_warning.win1000.step200.track.bedgraph",
         non_canonical_telo_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.bedgraph",
         non_canonical_telo_warning_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere_warning.win1000.step200.track.bedgraph",
+        canonical_region_all_status=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qctelomere/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.collapsed.all.status",
+        canonical_region_filtered_status=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/telomere/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.collapsed.filtered.status",
+        canonical_region_filtered_count=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/telomere/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.collapsed.filtered.count",
+        canonical_region_filtered_scaffold_status=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/telomere/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.status",
+        non_canonical_region_all_status=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/telomere/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.collapsed.all.status",
+        non_canonical_region_filtered_status=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/telomere/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.status",
+        non_canonical_region_filtered_count=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/telomere/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.count",
+        non_canonical_region_filtered_scaffold_status=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/telomere/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.status",
+
     log:
         ln=out_dir_path / "{assembly_stage}/{parameters}/create_telomere_links.{genome_prefix}.{assembly_stage}.{haplotype}.ln.log",
         cluster_log=out_dir_path / "{assembly_stage}/{parameters}/create_telomere_links.{genome_prefix}.{assembly_stage}.{haplotype}.cluster.log",
@@ -331,5 +348,11 @@ rule copy_telomere_files:
     threads: parameters["threads"]["get_telomere_warning"]
 
     shell:
-        " OUTDIR=`dirname {output.canonical_telo_track}`; "
-        " cp {input} ${{OUTDIR}} > {log.ln} 2>&1; "
+        " TRACK_DIR=`dirname {output.canonical_telo_track}`; "
+        " TELOMERE_DIR=`dirname {output.canonical_region_all_status}`; "
+        " cp {input.canonical_telo_track} {input.canonical_telo_warning_track} {input.non_canonical_telo_track} "
+        "    {input.non_canonical_telo_warning_track} ${{TRACK_DIR}} > {log.ln} 2>&1; "
+        " cp {input.canonical_region_all_status} {input.canonical_region_filtered_status} "
+        "    {input.canonical_region_filtered_count} {input.canonical_region_filtered_scaffold_status} ${{TELOMERE_DIR}} > {log.ln} 2>&1; "
+        " cp {input.non_canonical_region_all_status} {input.non_canonical_region_filtered_status} "
+        "    {input.non_canonical_region_filtered_count} {input.non_canonical_region_filtered_scaffold_status} ${{TELOMERE_DIR}} > {log.ln} 2>&1; "

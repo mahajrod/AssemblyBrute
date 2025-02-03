@@ -1143,41 +1143,37 @@ if "ref_scaffolding" in config["stage_list"]:
                                                      haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]),
                                ) for parameters_label in stage_dict[current_stage]["parameters"]]]
 
-    """
+
     if coverage_track_data_type_set:
         results_list += [[[
                               expand(out_dir_path / "curation/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.{datatype}.coverage.win{window}.step{step}.png",
-                                  window=
-                                  stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"][
-                                      "options"][window_step_set]["window"],
-                                  step=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"][
-                                      "options"][window_step_set]["step"],
+                                  out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.coverage.win{window}.step{step}.png",
+                                  window=stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["coverage"]["options"][window_step_set]["window"],
+                                  step=stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["coverage"]["options"][window_step_set]["step"],
                                   genome_prefix=[config["genome_prefix"], ],
-                                  assembly_stage=["curation", ],
+                                  assembly_stage=[current_stage, ],
                                   datatype=coverage_track_data_type_set,
-                                  haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
+                                  haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
                                   parameters=[parameters_label]) for window_step_set in
-                              stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"][
-                                  "options"]] for parameters_label in
-                          stage_dict["curation"]["parameters"]] if coverage_track_data_type_set else [],
-                         [[
-                              expand(out_dir_path / "curation/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.{datatype}_{cov_type}_coverage.win{window}.step{step}.track.bedgraph",
-                                  cov_type=["mean", "median"],
-                                  window=
-                                  stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"][
-                                      "options"][window_step_set]["window"],
-                                  step=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"][
-                                      "options"][window_step_set]["step"],
-                                  genome_prefix=[config["genome_prefix"], ],
-                                  assembly_stage=["curation", ],
-                                  datatype=coverage_track_data_type_set,
-                                  haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                  parameters=[parameters_label]) for window_step_set in
-                              stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"][
-                                  "options"]] for parameters_label in
-                          stage_dict["curation"]["parameters"]] if coverage_track_data_type_set else [],
+                                        stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["coverage"]["options"]] for parameters_label in
+                                                  stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],
+                         #[[
+                         #     expand(out_dir_path / "curation/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.{datatype}_{cov_type}_coverage.win{window}.step{step}.track.bedgraph",
+                         #         cov_type=["mean", "median"],
+                         #         window=
+                         #         stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"][
+                         #             "options"][window_step_set]["window"],
+                         #         step=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"][
+                         #             "options"][window_step_set]["step"],
+                         #         genome_prefix=[config["genome_prefix"], ],
+                         #         assembly_stage=["curation", ],
+                         #         datatype=coverage_track_data_type_set,
+                         #         haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
+                         #         parameters=[parameters_label]) for window_step_set in
+                         #     stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"][
+                         #         "options"]] for parameters_label in stage_dict["curation"]["parameters"]] if coverage_track_data_type_set else [],
                          ]
-    """
+
 
     if not config["skip_busco"]:
         results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",

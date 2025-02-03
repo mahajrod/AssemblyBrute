@@ -13,7 +13,7 @@ rule minimap2_cov: # TODO: add nanopore support
                      allow_missing=True),
         reference=out_dir_path  / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
     output:
-        bam=out_dir_path  / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{haplotype, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.{datatype, hifi|simplex|duplex|nanopore}.bam"
+        bam=out_dir_path  / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^/]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, hifi|simplex|duplex|nanopore}.bam"
         #paf=out_dir_path  / ("purge_dups/{assembler}/{haplotype}/%s.purge_dups.{assembler}.{haplotype}.minimap2.{fileprefix}.paf.gz" % config["genome_name"])
     params:
         index_size=lambda wildcards: parse_option("index_size", parameters["tool_options"]["minimap2"][wildcards.datatype], " -I "),
@@ -66,7 +66,7 @@ rule bwa_cov:
         reference=out_dir_path  / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
         reference_index=out_dir_path  / ("{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta%s" % (".bwt" if config["bwa_tool"] == "bwa" else ".bwt.2bit.64")),
     output:
-        bam=out_dir_path  / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{haplotype, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.{datatype, illumina}.bam"
+        bam=out_dir_path  / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{genome_prefix, [^/]+}.{assembly_stage}.{track_type, coverage}/{haplotype, [^/]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, illumina}.bam"
 
     params:
         bwa_tool=config["bwa_tool"],
@@ -105,10 +105,10 @@ rule bwa_cov:
 
 rule calculate_coverage:
     input:
-        bam=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type}/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.bam",
-        bai=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type}/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.bam.bai"
+        bam=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type}/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.bam",
+        bai=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type}/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.bam.bai"
     output:
-        per_base=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.per-base.bed.gz"
+        per_base=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.per-base.bed.gz"
     params:
         min_mapq= lambda wildcards: parse_option("min_mapping_quality", parameters["tool_options"]["mosdepth"][wildcards.datatype], " -Q ", none_value=0),
     log:
@@ -136,8 +136,8 @@ rule create_coverage_table:
     input:
         per_base=rules.calculate_coverage.output.per_base,
     output:
-        stat_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, [^./]+}.win{window, [0-9]+}.step{step, [0-9]+}.stat",
-        all_stat_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, [^./]+}.win{window, [0-9]+}.step{step, [0-9]+}.all.stat"
+        stat_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, [^./]+}.win{window, [0-9]+}.step{step, [0-9]+}.stat",
+        all_stat_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, [^./]+}.win{window, [0-9]+}.step{step, [0-9]+}.all.stat"
     log:
         std=output_dict["log"]  / "create_coverage_table.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.log",
         cluster_log=output_dict["cluster_log"] / "create_coverage_table.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.cluster.log",
@@ -162,9 +162,9 @@ rule create_coverage_table:
 
 rule create_bedgraph_from_coverage_table:
     input:
-        stat_file=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type}/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.win{window}.step{step}.stat"
+        stat_file=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type}/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.win{window}.step{step}.stat"
     output:
-        bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{haplotype, [^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, [^./]+}_{cov_type, [^./]+}_{track_type, coverage}.win{window, [0-9]+}.step{step, [0-9]+}.track.bedgraph"
+        bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, [^./]+}_{cov_type, [^./]+}_{track_type, coverage}.win{window, [0-9]+}.step{step, [0-9]+}.track.bedgraph"
     params:
         coverage_col= lambda wildcards: 6 if wildcards.cov_type == "mean" else 7
     log:
@@ -194,8 +194,8 @@ rule draw_coverage_heatmap:
         len_file=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
         all_stat_file=rules.create_coverage_table.output.all_stat_file
     output:
-        png=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/png/{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype,  [^./]+}.{track_type, coverage}.win{window, [0-9]+}.step{step, [0-9]+}.png",
-        split_png=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/png/{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, [^./]+}.{track_type, coverage}.win{window, [0-9]+}.step{step, [0-9]+}.split_thresholds.png"
+        png=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/trackplots/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, [^./]+}.{track_type, coverage}.win{window, [0-9]+}.step{step, [0-9]+}.png",
+        split_png=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/trackplots/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, [^./]+}.{track_type, coverage}.win{window, [0-9]+}.step{step, [0-9]+}.split_thresholds.png"
 
     log:
         std=output_dict["log"]  / "draw_coverage_heatmap.{assembly_stage}..{parameters}..{track_type}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.log",

@@ -202,10 +202,10 @@ rule collapse_overlapping_telomere_windows:
     threads: parameters["threads"]["telo_finder"]
 
     shell:
-        " echo -e '#scaffold\tstart\tend\tlength\tmedian\tmean\tstdev\tmode\tabsmin\n' > {output.canonical_collapsed_telo_track} 2>{log.std}; "
+        " echo -e '#scaffold\tstart\tend\tlength\tmedian\tmean\tstdev\tmode\tabsmin' > {output.canonical_collapsed_telo_track} 2>{log.std}; "
         " bedtools merge -c 4 -o median,mean,stdev,mode,absmin -i {input.canonical_telo_track} 2>>{log.std} | "
         " awk '{{print $1\"\t\"$2\"\t\"$3\"\t\"$3-$2\"\t\"$4\"\t\"$5\"\t\"$6\"\t\"$7\"\t\"$8}}' >> {output.canonical_collapsed_telo_track} 2>>{log.std}; "
-        " echo -e '#scaffold\tstart\tend\tmedian\tmean\tstdev\tmode\tabsmin\n' > {output.non_canonical_collapsed_telo_track} 2>>{log.std}; "
+        " echo -e '#scaffold\tstart\tend\tmedian\tmean\tstdev\tmode\tabsmin' > {output.non_canonical_collapsed_telo_track} 2>>{log.std}; "
         " bedtools merge -c 4 -o median,mean,stdev,mode,absmin -i {input.non_canonical_telo_track} | "
         " awk '{{print $1\"\t\"$2\"\t\"$3\"\t\"$3-$2\"\t\"$4\"\t\"$5\"\t\"$6\"\t\"$7\"\t\"$8}}' >> {output.non_canonical_collapsed_telo_track} 2>>{log.std}; "
 

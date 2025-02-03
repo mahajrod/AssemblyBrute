@@ -192,7 +192,7 @@ rule collapse_overlapping_telomere_windows:
     benchmark:
         "{fasta_dir}/collapse_telomere_track.{fasta_prefix}.benchmark.txt"
     conda:
-        config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("telo_container"),
@@ -232,7 +232,7 @@ rule classify_telomeric_regions_windows:
     benchmark:
         "{fasta_dir}/classify_telomeric_regions_windows.{fasta_prefix}.benchmark.txt"
     conda:
-        config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("telo_container"),

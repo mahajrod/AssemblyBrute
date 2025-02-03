@@ -157,7 +157,7 @@ def select_query_synfile(wildcards):
 
 rule draw_alignment: #
     input:
-        tab="{target_dir}/{query_prefix}.to.{target_prefix}.YASS.R11.soft.min_len{min_target_len}.tab.gz",
+        tab="{target_dir}/wga.{query_prefix}.to.{target_prefix}.YASS.R11.soft.min_len{min_target_len}.tab.gz",
         #tab=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.tab.gz",#out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/input/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.tab.gz",
         target_whitelist="{target_dir}/{target_prefix}.whitelist",
         target_orderlist="{target_dir}/{target_prefix}.orderlist",

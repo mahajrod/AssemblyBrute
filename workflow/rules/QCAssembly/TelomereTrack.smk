@@ -241,11 +241,11 @@ rule classify_telomeric_regions_windows:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
-        node_options=parse_node_list("telo_container"),
-        cpus=parameters["threads"]["telo_finder"] ,
-        time=parameters["time"]["telo_finder"],
-        mem=parameters["memory_mb"]["telo_finder"],
-    threads: parameters["threads"]["telo_finder"]
+        node_options=parse_node_list("get_telomere_warning"),
+        cpus=parameters["threads"]["get_telomere_warning"] ,
+        time=parameters["time"]["get_telomere_warning"],
+        mem=parameters["memory_mb"]["get_telomere_warning"],
+    threads: parameters["threads"]["get_telomere_warning"]
 
     shell:
         " CANONICAL_OUT_PREFIX={input.canonical_collapsed_telo_track}; "

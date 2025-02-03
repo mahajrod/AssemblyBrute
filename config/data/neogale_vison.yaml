@@ -115,6 +115,7 @@
             - "ragtag"
 
 "extended_qc_stages":
+    - "purge_dups"
     - "hic_scaffolding"
     - "ref_scaffolding"
 

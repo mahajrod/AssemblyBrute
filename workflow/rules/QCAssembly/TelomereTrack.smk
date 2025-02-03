@@ -359,4 +359,4 @@ rule copy_telomere_files:
         " cp {input.canonical_region_all_status} {input.canonical_region_filtered_status} "
         "    {input.canonical_region_filtered_count} {input.canonical_region_filtered_scaffold_status} ${{TELOMERE_DIR}} > {log.std} 2>&1; "
         " cp {input.non_canonical_region_all_status} {input.non_canonical_region_filtered_status} "
-        "    {input.non_canonical_region_filtered_count} {input.non_canonical_region_filtered_scaffold_status} ${{TELOMERE_DIR}} > {log.ln} 2>&1; "
+        "    {input.non_canonical_region_filtered_count} {input.non_canonical_region_filtered_scaffold_status} ${{TELOMERE_DIR}} > {log.std} 2>&1; "

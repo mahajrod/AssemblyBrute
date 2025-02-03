@@ -117,7 +117,7 @@
 "extended_qc_stages":
     - "hic_scaffolding"
     - "ref_scaffolding"
-    -
+
 "other_tool_option_sets":
     "cutadapt":                 "default"   # Allowed: default
     "porechop_abi":             "default"   # Allowed: default

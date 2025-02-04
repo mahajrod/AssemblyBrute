@@ -1046,6 +1046,44 @@ if "hic_scaffolding" in config["stage_list"]:
                                         parameters=[parameters_label])
                                  ]
 
+    results_list += [
+                     [[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
+                               threshold_type=["absolute", "relative"],
+                               genome_prefix=[config["genome_prefix"], ],
+                               assembly_stage=[current_stage, ],
+                               track_type=[track_type],
+                               window=[parameters["tool_options"]["assembly_qc"][track_type]["options"][window_settings]["window"]],
+                               step=[parameters["tool_options"]["assembly_qc"][track_type]["options"][window_settings]["step"]],
+                               haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
+                               parameters=[parameters_label])
+
+                        for window_settings in parameters["tool_options"]["assembly_qc"][track_type]["options"]]
+                        for parameters_label in stage_dict[current_stage]["parameters"]]
+                        for track_type in ("gap", "gc")],  #"windowmasker", "trf"
+                     [expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.bedgraph",
+                            genome_prefix=[config["genome_prefix"], ],
+                            assembly_stage=[current_stage, ],
+                            parameters=[parameters_label],
+                            haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
+                           ) for parameters_label in stage_dict[current_stage]["parameters"]
+                     ]
+                    ]
+
+    if current_stage in config["extended_qc_stages"]:
+        results_list += [[[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
+                               threshold_type=["absolute", "relative"],
+                               genome_prefix=[config["genome_prefix"], ],
+                               assembly_stage=[current_stage, ],
+                               track_type=[track_type],
+                               window=[parameters["tool_options"]["assembly_qc"][track_type]["options"][window_settings]["window"]],
+                               step=[parameters["tool_options"]["assembly_qc"][track_type]["options"][window_settings]["step"]],
+                               haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
+                               parameters=[parameters_label])
+
+                        for window_settings in parameters["tool_options"]["assembly_qc"][track_type]["options"]]
+                        for parameters_label in stage_dict[current_stage]["parameters"]]
+                        for track_type in ["windowmasker", "trf"]],]
+
     if not config["skip_busco"]:
         results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
                                 busco_lineage=config["busco_lineage_list"],

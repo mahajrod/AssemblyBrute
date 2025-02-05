@@ -128,7 +128,6 @@
         #- "w10k.s10k"
     "reference_scaffold_sets":
         - "custom"
-        - "long"
     "assembly_scaffold_sets":
         - "long"
         - "short"

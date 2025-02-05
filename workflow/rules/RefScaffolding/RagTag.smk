@@ -89,7 +89,7 @@ rule ragtag_filter: #
         " ln -sf ragtag.scaffold.telomere.split.final.renamed.agp {output.ragtag_filtered_agp} >> {log.ln} 2>&1; "
         " ln -sf ragtag.scaffold.telomere.split.final.renamed.stats {output.ragtag_filtered_stats} >> {log.ln} 2>&1; "
 
-rule ragtag_generated_filtered_fasta: #
+rule ragtag_generate_filtered_fasta: #
     input:
         ragtag_filtered_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference}/{haplotype}/{genome_prefix}.ragtag.{haplotype}.agp",
         fasta=out_dir_path / ("%s/{prev_stage_parameters}/%s.%s.{haplotype}.fasta" % (stage_dict["ref_scaffolding"]["prev_stage"],

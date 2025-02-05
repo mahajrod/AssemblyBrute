@@ -891,7 +891,7 @@ if "purge_dups" in config["stage_list"]:
                                       datatype=coverage_track_data_type_set,
                                       haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
                                       parameters=[parameters_label]) for window_step_set in
-                                            parameters["tool_options"]["assembly_qc"]["coverage"]["options"]] for parameters_label in
+                                            config["qc_settings"]["windows_sets"]] for parameters_label in
                                                       stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],
                              ]
 
@@ -1122,7 +1122,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                       datatype=coverage_track_data_type_set,
                                       haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
                                       parameters=[parameters_label]) for window_step_set in
-                                            parameters["tool_options"]["assembly_qc"]["coverage"]["options"]] for parameters_label in
+                                            config["qc_settings"]["windows_sets"]] for parameters_label in
                                                       stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],
                              ]
 
@@ -1295,9 +1295,8 @@ if "ref_scaffolding" in config["stage_list"]:
                                       assembly_stage=[current_stage, ],
                                       datatype=coverage_track_data_type_set,
                                       haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
-                                      parameters=[parameters_label]) for window_step_set in
-                                            parameters["tool_options"]["assembly_qc"]["coverage"]["options"]] for parameters_label in
-                                                      stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],
+                                      parameters=[parameters_label]) for window_step_set in config["qc_settings"]["windows_sets"]]
+                                                 for parameters_label in stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],
                              ]
 
 

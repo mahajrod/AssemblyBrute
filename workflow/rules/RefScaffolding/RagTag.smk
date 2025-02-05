@@ -60,7 +60,7 @@ rule ragtag: #
 
 rule ragtag_filter: #
     input:
-        ragtag_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters, [^/]+}..ragtag_{ref_scaf_parameters, [^/]+}@{reference, [^/]+}/{haplotype, [^./]+}/ragtag.scaffold.agp",
+        ragtag_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference}/{haplotype}/ragtag.scaffold.agp",
         contig_five_prime_blacklist=out_dir_path / ("%s/{prev_stage_parameters}/assembly_qc/telomere/{genome_prefix}.%s.{haplotype}/{genome_prefix}.%s.{haplotype}.%s_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.five_prime.ids" %
                                                   (stage_dict["ref_scaffolding"]["prev_stage"],
                                                    stage_dict["ref_scaffolding"]["prev_stage"],

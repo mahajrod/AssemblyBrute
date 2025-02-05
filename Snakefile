@@ -864,7 +864,7 @@ if "purge_dups" in config["stage_list"]:
                         for track_type in ["windowmasker", "trf"]],]
         if not config["skip_wga"]:
             results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/wga.{query_prefix}.{query_length}.to.{target_prefix}.{target_length}.YASS.R11.soft.min_len{min_target_len}.png",
-                                     query_length=config["qc_settings"]["reference_scaffold_sets"],
+                                     query_length=config["qc_settings"]["assembly_scaffold_sets"],
                                      target_length=config["qc_settings"]["assembly_scaffold_sets"],
                                      genome_prefix=[config["genome_prefix"], ],
                                      assembly_stage=[current_stage, ],
@@ -873,12 +873,26 @@ if "purge_dups" in config["stage_list"]:
                                      query_prefix=expand("{genome_prefix}.{assembly_stage}.{haplotype}",
                                                          genome_prefix=[config["genome_prefix"], ],
                                                          assembly_stage=[current_stage, ],
-                                                         haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]) + list(input_reference_filedict.keys()),
+                                                         haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]),
                                      target_prefix=expand("{genome_prefix}.{assembly_stage}.{haplotype}",
                                                          genome_prefix=[config["genome_prefix"], ],
                                                          assembly_stage=[current_stage, ],
                                                          haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]),
-                                   ) for parameters_label in stage_dict[current_stage]["parameters"]]]
+                                   ) for parameters_label in stage_dict[current_stage]["parameters"]],
+                             [expand(out_dir_path / "{assembly_stage}/{parameters}/wga.{query_prefix}.{query_length}.to.{target_prefix}.{target_length}.YASS.R11.soft.min_len{min_target_len}.png",
+                                     query_length=config["qc_settings"]["reference_scaffold_sets"],
+                                     target_length=config["qc_settings"]["assembly_scaffold_sets"],
+                                     genome_prefix=[config["genome_prefix"], ],
+                                     assembly_stage=[current_stage, ],
+                                     parameters=[parameters_label],
+                                     min_target_len=parameters["tool_options"]["wga"]["min_target_len"],
+                                     query_prefix=list(input_reference_filedict.keys()),
+                                     target_prefix=expand("{genome_prefix}.{assembly_stage}.{haplotype}",
+                                                         genome_prefix=[config["genome_prefix"], ],
+                                                         assembly_stage=[current_stage, ],
+                                                         haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]),
+                                   ) for parameters_label in stage_dict[current_stage]["parameters"]],
+                             ]
 
         if coverage_track_data_type_set:
             results_list += [[[
@@ -1095,7 +1109,7 @@ if "hic_scaffolding" in config["stage_list"]:
                         for track_type in ["windowmasker", "trf"]],]
         if not config["skip_wga"]:
             results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/wga.{query_prefix}.{query_length}.to.{target_prefix}.{target_length}.YASS.R11.soft.min_len{min_target_len}.png",
-                                     query_length=config["qc_settings"]["reference_scaffold_sets"],
+                                     query_length=config["qc_settings"]["assembly_scaffold_sets"],
                                      target_length=config["qc_settings"]["assembly_scaffold_sets"],
                                      genome_prefix=[config["genome_prefix"], ],
                                      assembly_stage=[current_stage, ],
@@ -1104,12 +1118,26 @@ if "hic_scaffolding" in config["stage_list"]:
                                      query_prefix=expand("{genome_prefix}.{assembly_stage}.{haplotype}",
                                                          genome_prefix=[config["genome_prefix"], ],
                                                          assembly_stage=[current_stage, ],
-                                                         haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]) + list(input_reference_filedict.keys()),
+                                                         haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]),
                                      target_prefix=expand("{genome_prefix}.{assembly_stage}.{haplotype}",
                                                          genome_prefix=[config["genome_prefix"], ],
                                                          assembly_stage=[current_stage, ],
                                                          haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]),
-                                   ) for parameters_label in stage_dict[current_stage]["parameters"]]]
+                                   ) for parameters_label in stage_dict[current_stage]["parameters"]],
+                             [expand(out_dir_path / "{assembly_stage}/{parameters}/wga.{query_prefix}.{query_length}.to.{target_prefix}.{target_length}.YASS.R11.soft.min_len{min_target_len}.png",
+                                     query_length=config["qc_settings"]["reference_scaffold_sets"],
+                                     target_length=config["qc_settings"]["assembly_scaffold_sets"],
+                                     genome_prefix=[config["genome_prefix"], ],
+                                     assembly_stage=[current_stage, ],
+                                     parameters=[parameters_label],
+                                     min_target_len=parameters["tool_options"]["wga"]["min_target_len"],
+                                     query_prefix=list(input_reference_filedict.keys()),
+                                     target_prefix=expand("{genome_prefix}.{assembly_stage}.{haplotype}",
+                                                         genome_prefix=[config["genome_prefix"], ],
+                                                         assembly_stage=[current_stage, ],
+                                                         haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]),
+                                   ) for parameters_label in stage_dict[current_stage]["parameters"]],
+                             ]
 
         if coverage_track_data_type_set:
             results_list += [[[
@@ -1269,7 +1297,7 @@ if "ref_scaffolding" in config["stage_list"]:
                         for track_type in ["windowmasker", "trf"]],]
         if not config["skip_wga"]:
             results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/wga.{query_prefix}.{query_length}.to.{target_prefix}.{target_length}.YASS.R11.soft.min_len{min_target_len}.png",
-                                     query_length=config["qc_settings"]["reference_scaffold_sets"],
+                                     query_length=config["qc_settings"]["assembly_scaffold_sets"],
                                      target_length=config["qc_settings"]["assembly_scaffold_sets"],
                                      genome_prefix=[config["genome_prefix"], ],
                                      assembly_stage=[current_stage, ],
@@ -1278,12 +1306,26 @@ if "ref_scaffolding" in config["stage_list"]:
                                      query_prefix=expand("{genome_prefix}.{assembly_stage}.{haplotype}",
                                                          genome_prefix=[config["genome_prefix"], ],
                                                          assembly_stage=[current_stage, ],
-                                                         haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]) + list(input_reference_filedict.keys()),
+                                                         haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]),
                                      target_prefix=expand("{genome_prefix}.{assembly_stage}.{haplotype}",
                                                          genome_prefix=[config["genome_prefix"], ],
                                                          assembly_stage=[current_stage, ],
                                                          haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]),
-                                   ) for parameters_label in stage_dict[current_stage]["parameters"]]]
+                                   ) for parameters_label in stage_dict[current_stage]["parameters"]],
+                             [expand(out_dir_path / "{assembly_stage}/{parameters}/wga.{query_prefix}.{query_length}.to.{target_prefix}.{target_length}.YASS.R11.soft.min_len{min_target_len}.png",
+                                     query_length=config["qc_settings"]["reference_scaffold_sets"],
+                                     target_length=config["qc_settings"]["assembly_scaffold_sets"],
+                                     genome_prefix=[config["genome_prefix"], ],
+                                     assembly_stage=[current_stage, ],
+                                     parameters=[parameters_label],
+                                     min_target_len=parameters["tool_options"]["wga"]["min_target_len"],
+                                     query_prefix=list(input_reference_filedict.keys()),
+                                     target_prefix=expand("{genome_prefix}.{assembly_stage}.{haplotype}",
+                                                         genome_prefix=[config["genome_prefix"], ],
+                                                         assembly_stage=[current_stage, ],
+                                                         haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]),
+                                   ) for parameters_label in stage_dict[current_stage]["parameters"]],
+                             ]
 
         if coverage_track_data_type_set:
             results_list += [[[
@@ -1363,14 +1405,36 @@ if "curation" in config["stage_list"]:
                                         ) for parameters_label in stage_dict["curation"]["parameters"]],
                                  ]
         if not config["skip_wga"]:
-            results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.png",
-                                    genome_prefix=[config["genome_prefix"], ],
-                                    assembly_stage=["curation", ],
-                                    parameters=[parameters_label],
-                                    min_target_len=parameters["tool_options"]["wga"]["min_target_len"],
-                                    query_haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"] + list(input_reference_filedict.keys()),
-                                    target_haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                    ) for parameters_label in stage_dict["curation"]["parameters"]]]
+            results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/wga.{query_prefix}.{query_length}.to.{target_prefix}.{target_length}.YASS.R11.soft.min_len{min_target_len}.png",
+                                     query_length=config["qc_settings"]["assembly_scaffold_sets"],
+                                     target_length=config["qc_settings"]["assembly_scaffold_sets"],
+                                     genome_prefix=[config["genome_prefix"], ],
+                                     assembly_stage=[current_stage, ],
+                                     parameters=[parameters_label],
+                                     min_target_len=parameters["tool_options"]["wga"]["min_target_len"],
+                                     query_prefix=expand("{genome_prefix}.{assembly_stage}.{haplotype}",
+                                                         genome_prefix=[config["genome_prefix"], ],
+                                                         assembly_stage=[current_stage, ],
+                                                         haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]),
+                                     target_prefix=expand("{genome_prefix}.{assembly_stage}.{haplotype}",
+                                                         genome_prefix=[config["genome_prefix"], ],
+                                                         assembly_stage=[current_stage, ],
+                                                         haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]),
+                                   ) for parameters_label in stage_dict[current_stage]["parameters"]],
+                             [expand(out_dir_path / "{assembly_stage}/{parameters}/wga.{query_prefix}.{query_length}.to.{target_prefix}.{target_length}.YASS.R11.soft.min_len{min_target_len}.png",
+                                     query_length=config["qc_settings"]["reference_scaffold_sets"],
+                                     target_length=config["qc_settings"]["assembly_scaffold_sets"],
+                                     genome_prefix=[config["genome_prefix"], ],
+                                     assembly_stage=[current_stage, ],
+                                     parameters=[parameters_label],
+                                     min_target_len=parameters["tool_options"]["wga"]["min_target_len"],
+                                     query_prefix=list(input_reference_filedict.keys()),
+                                     target_prefix=expand("{genome_prefix}.{assembly_stage}.{haplotype}",
+                                                         genome_prefix=[config["genome_prefix"], ],
+                                                         assembly_stage=[current_stage, ],
+                                                         haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]),
+                                   ) for parameters_label in stage_dict[current_stage]["parameters"]],
+                             ]
         results_list += [[[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
                                 threshold_type=config["qc_settings"]["threshold_types"],
                                 genome_prefix=[config["genome_prefix"], ],

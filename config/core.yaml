@@ -1534,21 +1534,21 @@
                             - 0.5
                             - 0.7
                         "options":
-                            "w1000k.s1000k":
-                                "window": 1000000
-                                "step":   1000000
+                            #"w1000k.s1000k":
+                            #    "window": 1000000
+                            #    "step":   1000000
                             "w1000k.s100k":
                                 "window": 1000000
                                 "step":   100000
-                            "w100k.s100k":
-                                "window": 100000
-                                "step":   100000
+                            #"w100k.s100k":
+                            #    "window": 100000
+                            #    "step":   100000
                             "w100k.s10k":
                                 "window": 100000
                                 "step":   10000
-                            "w10k.s10k":
-                                "window": 10000
-                                "step":   10000
+                            #"w10k.s10k":
+                            #    "window": 10000
+                            #    "step":   10000
                     "gc":
                         "relative_thresholds": # median +- threshold * median
                             - 0.05

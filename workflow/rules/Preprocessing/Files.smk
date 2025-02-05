@@ -1,5 +1,6 @@
 localrules: create_fastq_links, create_links_for_draft, create_fasta_links, create_links_for_reference
 ruleorder: preprocess_hic_fastq > create_fastq_links
+
 rule create_fastq_links:
     priority: 1000
     input:

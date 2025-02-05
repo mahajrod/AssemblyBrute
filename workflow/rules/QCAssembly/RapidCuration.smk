@@ -1,6 +1,9 @@
 import pandas as pd
 
-localrules: select_long_scaffolds # create_curation_input_files_for_scaffolds, create_curation_input_files_for_contigs,
+localrules: select_scaffolds # create_curation_input_files_for_scaffolds, create_curation_input_files_for_contigs,
+
+ruleorder: create_links_for_reference > select_scaffolds
+
 #ruleorder: create_curation_input_files_for_scaffolds  > ref_faidx
 #ruleorder: create_curation_input_files_for_contigs  > ref_faidx
 #ruleorder: create_curation_input_files_for_scaffolds > get_seq_len

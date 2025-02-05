@@ -91,7 +91,7 @@ rule ragtag_filter: #
 
 rule ragtag_generate_filtered_fasta: #
     input:
-        ragtag_filtered_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference}/{haplotype}/{genome_prefix}.ragtag.{haplotype}.agp",
+        ragtag_filtered_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.agp",
         fasta=out_dir_path / ("%s/{prev_stage_parameters}/%s.%s.{haplotype}.fasta" % (stage_dict["ref_scaffolding"]["prev_stage"],
                                                                                       config["genome_prefix"],
                                                                                       stage_dict["ref_scaffolding"]["prev_stage"])),

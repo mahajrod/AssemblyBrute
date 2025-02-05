@@ -162,10 +162,10 @@ rule draw_alignment: #
         target_orderlist="{target_dir}/{target_prefix}.{target_scaffold_length}.orderlist",
         query_whitelist=lambda wildcards: out_dir_path / "data/reference/{0}/{0}.{1}.whitelist".format(wildcards.query_prefix,
                                                                                                        wildcards.query_scaffold_length) if wildcards.query_prefix in input_reference_filedict \
-                                          else "{0}/{1}.whitelist".format(wildcards.target_dir, wildcards.query_prefix),  #select_query_whitelist, #out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/scaffolds/{genome_prefix}.input.{query_haplotype}.whitelist",
+                                          else "{0}/{1}.{2}.whitelist".format(wildcards.target_dir, wildcards.query_prefix, wildcards.query_scaffold_length),  #select_query_whitelist, #out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/scaffolds/{genome_prefix}.input.{query_haplotype}.whitelist",
         query_orderlist=lambda wildcards: out_dir_path / "data/reference/{0}/{0}.{1}.orderlist".format(wildcards.query_prefix,
                                                                                                        wildcards.query_scaffold_length) if wildcards.query_prefix in input_reference_filedict \
-                                          else "{0}/{1}.orderlist".format(wildcards.target_dir, wildcards.query_prefix),
+                                          else "{0}/{1}.{2}.orderlist".format(wildcards.target_dir, wildcards.query_prefix, wildcards.query_scaffold_length),
         query_synfile=lambda wildcards: out_dir_path / "data/reference/{0}/{0}.syn".format(wildcards.query_prefix) if wildcards.query_prefix in input_reference_filedict \
                                           else [],
     output:

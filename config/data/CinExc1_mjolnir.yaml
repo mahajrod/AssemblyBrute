@@ -144,7 +144,7 @@
     "mapping_pipeline":         "arima"  # Allowed: arima, bwa_only, pairtools.
     "trf":                      "default"
     "wga":                      "default"
-    "select_long_scaffolds":    "default"
+    "select_scaffolds":         "default"
     "deepvariant":              "default"   # Allowed: default
     "pairtools_parse":          "default"   # Allowed: default
     "samtools_stats":           "default"   # Allowed: default

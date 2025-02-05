@@ -122,7 +122,7 @@ rule ragtag_generate_filtered_fasta: #
 
 rule create_links_ragtag_scaffolds:
     input:
-        fasta=rules.ragtag_generated_filtered_fasta.output.ragtag_filtered_fasta,
+        fasta=rules.ragtag_generate_filtered_fasta.output.ragtag_filtered_fasta,
         agp=rules.ragtag_filter.output.ragtag_filtered_agp,
         stats=rules.ragtag_filter.output.ragtag_filtered_stats,
     output:

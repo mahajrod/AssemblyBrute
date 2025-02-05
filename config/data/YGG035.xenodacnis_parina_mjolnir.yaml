@@ -168,10 +168,12 @@
 "busco_lineage_list":
     - "aves_odb10" #
     - "vertebrata_odb10"
+
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
 
 "telomere_motif": "CCCTAA"  # telomere motif at 5'-end; CCCTAA for human, place null if unknown
+"use_canonical_telomere": True # True - use canonical telomere motif from telo_finder, False - use non_canonical
 
 "species_name": "Xenodacnis parina"
 "tax_id": 62261 # # necessary for contamination scan via FCS

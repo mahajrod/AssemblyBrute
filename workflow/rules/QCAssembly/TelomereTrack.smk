@@ -223,6 +223,8 @@ rule classify_telomeric_regions_windows:
         canonical_region_filtered_scaffold_both_telomeres_id_file="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.both.ids",
         canonical_region_filtered_scaffold_five_prime_only_id_file="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.five_prime_only.ids",
         canonical_region_filtered_scaffold_three_prime_only_id_file="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.three_prime_only.ids",
+        canonical_region_filtered_scaffold_five_prime_id_file="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.five_prime.ids",
+        canonical_region_filtered_scaffold_three_prime_id_file="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.three_prime.ids",
         non_canonical_region_all_status="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.collapsed.all.status",
         non_canonical_region_filtered_status="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.status",
         non_canonical_region_filtered_count="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.count",
@@ -230,6 +232,8 @@ rule classify_telomeric_regions_windows:
         non_canonical_region_filtered_scaffold_both_telomeres_id_file="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.both.ids",
         non_canonical_region_filtered_scaffold_five_prime_only_id_file="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.five_prime_only.ids",
         non_canonical_region_filtered_scaffold_three_prime_only_id_file="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.three_prime_only.ids",
+        non_canonical_region_filtered_scaffold_five_prime_id_file="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.five_prime.ids",
+        non_canonical_region_filtered_scaffold_three_prime_id_file="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.three_prime.ids",
     params:
         fraction_threshold=parameters["tool_options"]["assembly_qc"]["telomere"]["fraction_threshold"]
     log:
@@ -334,7 +338,10 @@ rule copy_telomere_files:
         non_canonical_region_filtered_scaffold_both_telomeres_id_file=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.both.ids",
         non_canonical_region_filtered_scaffold_five_prime_only_id_file=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.five_prime_only.ids",
         non_canonical_region_filtered_scaffold_three_prime_only_id_file=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.three_prime_only.ids",
-
+        canonical_region_filtered_scaffold_five_prime_id_file=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.five_prime.ids",
+        canonical_region_filtered_scaffold_three_prime_id_file=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.three_prime.ids",
+        non_canonical_region_filtered_scaffold_five_prime_id_file=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.five_prime.ids",
+        non_canonical_region_filtered_scaffold_three_prime_id_file=out_dir_path / "{assembly_stage}/{parameters}/telomere/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.three_prime.ids",
     output:
         canonical_telo_track = out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.bedgraph",
         canonical_telo_warning_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere_warning.win1000.step200.track.bedgraph",
@@ -354,7 +361,10 @@ rule copy_telomere_files:
         non_canonical_region_filtered_scaffold_both_telomeres_id_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/telomere/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.both.ids",
         non_canonical_region_filtered_scaffold_five_prime_only_id_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/telomere/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.five_prime_only.ids",
         non_canonical_region_filtered_scaffold_three_prime_only_id_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/telomere/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.three_prime_only.ids",
-
+        canonical_region_filtered_scaffold_five_prime_id_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/telomere/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.five_prime.ids",
+        canonical_region_filtered_scaffold_three_prime_id_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/telomere/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.three_prime.ids",
+        non_canonical_region_filtered_scaffold_five_prime_id_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/telomere/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.five_prime.ids",
+        non_canonical_region_filtered_scaffold_three_prime_id_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/telomere/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.three_prime.ids",
     log:
         std=out_dir_path / "{assembly_stage}/{parameters}/create_telomere_links.{genome_prefix}.{assembly_stage}.{haplotype}.std.log",
         cluster_log=out_dir_path / "{assembly_stage}/{parameters}/create_telomere_links.{genome_prefix}.{assembly_stage}.{haplotype}.cluster.log",
@@ -381,6 +391,8 @@ rule copy_telomere_files:
         " cp {input.non_canonical_region_all_status} {input.non_canonical_region_filtered_status} "
         "    {input.non_canonical_region_filtered_count} {input.non_canonical_region_filtered_scaffold_status} ${{TELOMERE_DIR}} > {log.std} 2>&1; "
         " cp {input.canonical_region_filtered_scaffold_both_telomeres_id_file} {input.canonical_region_filtered_scaffold_five_prime_only_id_file} "
-        "    {input.canonical_region_filtered_scaffold_three_prime_only_id_file} ${{TELOMERE_DIR}} > {log.std} 2>&1; "
+        "    {input.canonical_region_filtered_scaffold_three_prime_only_id_file} {input.canonical_region_filtered_scaffold_five_prime_id_file}"
+        "    {input.canonical_region_filtered_scaffold_three_prime_id_file} ${{TELOMERE_DIR}} > {log.std} 2>&1; "
         " cp {input.non_canonical_region_filtered_scaffold_both_telomeres_id_file} {input.non_canonical_region_filtered_scaffold_five_prime_only_id_file} "
-        "    {input.non_canonical_region_filtered_scaffold_three_prime_only_id_file} ${{TELOMERE_DIR}} > {log.std} 2>&1; "
+        "    {input.non_canonical_region_filtered_scaffold_three_prime_only_id_file} {input.non_canonical_region_filtered_scaffold_five_prime_id_file}"
+        "    {input.non_canonical_region_filtered_scaffold_three_prime_id_file} ${{TELOMERE_DIR}} > {log.std} 2>&1; "

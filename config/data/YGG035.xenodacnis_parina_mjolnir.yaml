@@ -119,9 +119,9 @@
         - "default"
         #- "min_aln_len_2k"
         #- "min_aln_len_3k"
-        #- "min_aln_len_5k"
+        - "min_aln_len_5k"
         #- "min_aln_len_7.5k"
-        #- "min_aln_len_10k"
+        - "min_aln_len_10k"
 
 "other_tool_option_sets":
     "cutadapt":                 "default"   # Allowed: default

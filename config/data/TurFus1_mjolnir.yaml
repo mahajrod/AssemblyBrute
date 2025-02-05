@@ -37,7 +37,7 @@
         "fcs_gx":
             "path":         "/projects/mjolnir1/people/xsg178/db/fcs/gxdb/" # add path to fcs_gx database
             "image_path":   "/projects/mjolnir1/people/xsg178/soft/FCS-GX/fcs-gx.sif"
-            "memory_mb":    512000 # Entire database must be in memory, it requires at least 490 Gbp
+            "memory_mb":    612000 # Entire database must be in memory, it requires at least 490 Gbp
             "threads":      30
             "time":         "06:00:00"
             "in_memory":    True

@@ -2,8 +2,8 @@ localrules: create_links_ragtag_scaffolds
 
 rule ragtag: #
     input:
-        fasta=out_dir_path / ("%s/{prev_stage_parameters}/%s.%s.{haplotype}.fasta" % (config["genome_prefix"],
-                                                                                      stage_dict["ref_scaffolding"]["prev_stage"],
+        fasta=out_dir_path / ("%s/{prev_stage_parameters}/%s.%s.{haplotype}.fasta" % (stage_dict["ref_scaffolding"]["prev_stage"],
+                                                                                      config["genome_prefix"],
                                                                                       stage_dict["ref_scaffolding"]["prev_stage"])),
         contig_both_blacklist=out_dir_path / ("%s/{prev_stage_parameters}/assembly_qc/telomere/%s.%s.{haplotype}/%s.%s.{haplotype}.%s_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.both.ids" %
                                                   (stage_dict["ref_scaffolding"]["prev_stage"],
@@ -92,11 +92,11 @@ rule ragtag_filter: #
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
-        node_options=parse_node_list("ragtag"),
-        cpus=parameters["threads"]["ragtag"],
-        time=parameters["time"]["ragtag"],
-        mem=parameters["memory_mb"]["ragtag"]
-    threads: parameters["threads"]["ragtag"]
+        node_options=parse_node_list("ragtag_filter"),
+        cpus=parameters["threads"]["ragtag_filter"],
+        time=parameters["time"]["ragtag_filter"],
+        mem=parameters["memory_mb"]["ragtag_filter"]
+    threads: parameters["threads"]["ragtag_filter"]
 
     shell:
         " RAGTAG_DIR=`dirname {output.ragtag_fasta}`; "

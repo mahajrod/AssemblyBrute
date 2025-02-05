@@ -112,9 +112,9 @@ rule ragtag_filter: #
 
 rule create_links_ragtag_scaffolds:
     input:
-        fasta=rules.ragtag.output.ragtag_fasta,
-        agp=rules.ragtag.output.ragtag_agp,
-        stats=rules.ragtag.output.ragtag_stats,
+        fasta=rules.ragtag_filter.output.ragtag_fasta,
+        agp=rules.ragtag_filter.output.ragtag_agp,
+        stats=rules.ragtag_filter.output.ragtag_stats,
         #reference_syn=out_dir_path / "data/reference/{reference}/{reference}.syn",
     output:
         final_fasta=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference, [^/]+}/{genome_prefix, [^/]+}.ref_scaffolding.{haplotype, [^/]+}.fasta",

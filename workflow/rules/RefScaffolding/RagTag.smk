@@ -73,14 +73,11 @@ rule ragtag_filter: #
                                                    stage_dict["ref_scaffolding"]["prev_stage"],
                                                    "canonical" if config["use_canonical_telomere"] else "non_canonical"
                                                    )),
-        reference_fasta=out_dir_path / "data/reference/{reference}/repeats/{reference}.softmasked.fasta",
+        #reference_fasta=out_dir_path / "data/reference/{reference}/repeats/{reference}.softmasked.fasta",
     output:
-        ragtag_fasta=out_dir_path / "ref_scaffolding/{prev_stage_parameters, [^/]+}..ragtag_{ref_scaf_parameters, [^/]+}@{reference, [^/]+}/{haplotype, [^./]+}/{genome_prefix, [^/]+}.ragtag.{haplotype}.fasta",
-        ragtag_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters, [^/]+}..ragtag_{ref_scaf_parameters, [^/]+}@{reference, [^/]+}/{haplotype, [^./]+}/{genome_prefix, [^/]+}.ragtag.{haplotype}.agp",
-        ragtag_stats=out_dir_path / "ref_scaffolding/{prev_stage_parameters, [^/]+}..ragtag_{ref_scaf_parameters, [^/]+}@{reference, [^/]+}/{haplotype, [^./]+}/{genome_prefix, [^/]+}.ragtag.{haplotype}.stats",
-    params:
-        min_aln_len=lambda wildcards: parse_option("min_aln_len", parameters["tool_options"]["ragtag"][wildcards.ref_scaf_parameters], " -f ")
-
+        #ragtag_fasta=out_dir_path / "ref_scaffolding/{prev_stage_parameters, [^/]+}..ragtag_{ref_scaf_parameters, [^/]+}@{reference, [^/]+}/{haplotype, [^./]+}/{genome_prefix, [^/]+}.ragtag.{haplotype}.fasta",
+        ragtag_filtered_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters, [^/]+}..ragtag_{ref_scaf_parameters, [^/]+}@{reference, [^/]+}/{haplotype, [^./]+}/{genome_prefix, [^/]+}.ragtag.{haplotype}.agp",
+        ragtag_filtered_stats=out_dir_path / "ref_scaffolding/{prev_stage_parameters, [^/]+}..ragtag_{ref_scaf_parameters, [^/]+}@{reference, [^/]+}/{haplotype, [^./]+}/{genome_prefix, [^/]+}.ragtag.{haplotype}.stats",
     log:
         ragtag=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference}/{haplotype}/ragtag_filter.{genome_prefix}.ragtag.{haplotype}.log",
         ln=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference}/{haplotype}/ragtag_filter.{genome_prefix}.ragtag.{haplotype}.ln.log",
@@ -99,16 +96,56 @@ rule ragtag_filter: #
     threads: parameters["threads"]["ragtag_filter"]
 
     shell:
-        " RAGTAG_DIR=`dirname {output.ragtag_fasta}`; "
-        " echo 'Spliting agp at internal telomeres...' >> {log.ragtag} 2>&1; "
+        " RAGTAG_DIR=`dirname {output.ragtag_filtered_agp}`; "
+        " echo 'Spliting agp at internal telomeres...' > {log.ragtag} 2>&1; "
         " workflow/scripts/curation/split_agp_by_telomeric_merges.py -a {input.ragtag_agp} "
         "   --five_prime_blacklist {input.contig_five_prime_blacklist} "
         "   --three_prime_blacklist {input.contig_three_prime_blacklist} -p ${{RAGTAG_DIR}}/ragtag.scaffold >> {log.ragtag} 2>&1; "
-        " echo 'Assembly fasta from modified agp...' >> {log.ragtag} 2>&1; "
-        " ragtag.py agp2fa ${{RAGTAG_DIR}}/ragtag.scaffold.telomere.split.final.renamed.agp {input.reference_fasta} > ${{RAGTAG_DIR}}/ragtag.scaffold.telomere.split.final.renamed.fasta 2>>{log.ragtag}; "
+        " ln -sf ragtag.scaffold.telomere.split.final.renamed.agp {output.ragtag_filtered_agp} >> {log.ln} 2>&1; "
+        " ln -sf ragtag.scaffold.telomere.split.final.renamed.stats {output.ragtag_filtered_stats} >> {log.ln} 2>&1; "
+
+rule ragtag_generated_filtered_fasta: #
+    input:
+        ragtag_filtered_agp=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference}/{haplotype}/{genome_prefix}.ragtag.{haplotype}.agp",
+        contig_five_prime_blacklist=out_dir_path / ("%s/{prev_stage_parameters}/assembly_qc/telomere/{genome_prefix}.%s.{haplotype}/{genome_prefix}.%s.{haplotype}.%s_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.five_prime.ids" %
+                                                  (stage_dict["ref_scaffolding"]["prev_stage"],
+                                                   stage_dict["ref_scaffolding"]["prev_stage"],
+                                                   stage_dict["ref_scaffolding"]["prev_stage"],
+                                                   "canonical" if config["use_canonical_telomere"] else "non_canonical"
+                                                   )),
+        contig_three_prime_blacklist=out_dir_path / ("%s/{prev_stage_parameters}/assembly_qc/telomere/{genome_prefix}.%s.{haplotype}/{genome_prefix}.%s.{haplotype}.%s_telomere.win1000.step200.track.collapsed.filtered.scaffold.telomeres.three_prime.ids" %
+                                                  (stage_dict["ref_scaffolding"]["prev_stage"],
+                                                   stage_dict["ref_scaffolding"]["prev_stage"],
+                                                   stage_dict["ref_scaffolding"]["prev_stage"],
+                                                   "canonical" if config["use_canonical_telomere"] else "non_canonical"
+                                                   )),
+        fasta=out_dir_path / ("%s/{prev_stage_parameters}/%s.%s.{haplotype}.fasta" % (stage_dict["ref_scaffolding"]["prev_stage"],
+                                                                                      config["genome_prefix"],
+                                                                                      stage_dict["ref_scaffolding"]["prev_stage"])),
+    output:
+        ragtag_fasta=out_dir_path / "ref_scaffolding/{prev_stage_parameters, [^/]+}..ragtag_{ref_scaf_parameters, [^/]+}@{reference, [^/]+}/{haplotype, [^./]+}/{genome_prefix, [^/]+}.ragtag.{haplotype}.fasta",
+    log:
+        ragtag=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference}/{haplotype}/ragtag_filter.{genome_prefix}.ragtag.{haplotype}.log",
+        ln=out_dir_path / "ref_scaffolding/{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference}/{haplotype}/ragtag_filter.{genome_prefix}.ragtag.{haplotype}.ln.log",
+        cluster_log=output_dict["cluster_log"] / "ragtag_filter.{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "ragtag_filter.{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference}.{genome_prefix}.{haplotype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "ragtag_filter.{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference}.{genome_prefix}.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["ragtag"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["ragtag"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("ragtag_filter"),
+        cpus=parameters["threads"]["ragtag_filter"],
+        time=parameters["time"]["ragtag_filter"],
+        mem=parameters["memory_mb"]["ragtag_filter"]
+    threads: parameters["threads"]["ragtag_filter"]
+
+    shell:
+        " RAGTAG_DIR=`dirname {output.ragtag_fasta}`; "
+        " echo 'Assembly fasta from modified agp...' > {log.ragtag} 2>&1; "
+        " ragtag.py agp2fa {input.ragtag_filtered_agp} {input.fasta} > ${{RAGTAG_DIR}}/ragtag.scaffold.telomere.split.final.renamed.fasta 2>>{log.ragtag}; "
         " ln -sf ragtag.scaffold.telomere.split.final.renamed.fasta {output.ragtag_fasta} > {log.ln} 2>&1; "
-        " ln -sf ragtag.scaffold.telomere.split.final.renamed.agp {output.ragtag_agp} >> {log.ln} 2>&1; "
-        " ln -sf ragtag.scaffold.telomere.split.final.renamed.stats {output.ragtag_stats} >> {log.ln} 2>&1; "
 
 rule create_links_ragtag_scaffolds:
     input:

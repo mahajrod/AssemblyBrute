@@ -189,8 +189,8 @@ rule create_bedgraph_from_coverage_table:
 rule draw_coverage_heatmap:
     input:
         stat_file=rules.create_coverage_table.output.stat_file,
-        whitelist=rules.select_scaffolds.output.whitelist,
-        orderlist=rules.select_scaffolds.output.orderlist,
+        whitelist=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.{scaffold_length}.whitelist",
+        orderlist=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.{scaffold_length}.orderlist",
         len_file=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
         all_stat_file=rules.create_coverage_table.output.all_stat_file
     output:

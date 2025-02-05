@@ -2863,16 +2863,6 @@
             "draft": #TODO: implement
                 - "purge_dups"
                 - "hic_scaffolding"
-        "curation":
-            "fastq":
-                - "contig"
-                - "purge_dups"
-                - "hic_scaffolding"
-                - "curation"
-            "draft": #TODO: implement
-                - "purge_dups"
-                - "hic_scaffolding"
-                - "curation"
         "hic_scaffolding":
             "fastq":
                 - "contig"
@@ -2887,14 +2877,6 @@
                 - "hic_scaffolding"
             "draft":
                 - "hic_scaffolding"
-        "curation_no_purge_dups":
-            "fastq":
-                - "contig"
-                - "hic_scaffolding"
-                - "curation"
-            "draft":
-                - "hic_scaffolding"
-                - "curation"
         "purge_dups":
             "fastq":
                 - "contig"
@@ -2909,21 +2891,9 @@
             "fastq":
                 - "contig"
                 - "purge_dups"
-                - "curation"
             "draft":
                 - "purge_dups"
-                - "curation"
         "ref_scaffolding_skip_hic_scaffolding":
-            "fastq":
-                - "contig"
-                - "purge_dups"
-                - "ref_scaffolding"
-                - "curation"
-            "draft":
-                - "purge_dups"
-                - "ref_scaffolding"
-                - "curation"
-        "ref_scaffolding_skip_hic_scaffolding_no_curation":
             "fastq":
                 - "contig"
                 - "purge_dups"
@@ -2937,39 +2907,23 @@
                 - "purge_dups"
                 - "hic_scaffolding"
                 - "ref_scaffolding"
-                - "curation"
             "draft":
                 - "purge_dups"
                 - "ref_scaffolding"
                 - "hic_scaffolding"
-                - "curation"
     "finalization":
         "gap_closing":
             "fastq":
                 - "gap_closing"
             "draft":
                 - "gap_closing"
-        "curation":
-            "fastq":
-                - "gap_closing"
-                - "curation"
-            "draft":
-                - "gap_closing"
-                - "curation"
-        "curation_only":
-            "fastq":
-                - "curation"
-            "draft":
-                - "curation"
         "full":
             "fastq":
                 - "gap_closing"
                 - "ref_scaffolding"
-                - "curation"
             "draft":
                 - "gap_closing"
                 - "ref_scaffolding"
-                - "curation"
         "gap_closing_ref_scaffolding":
             "fastq":
                 - "gap_closing"
@@ -2982,13 +2936,7 @@
                 - "ref_scaffolding"
             "draft":
                 - "ref_scaffolding"
-        "ref_scaffolding_curation":
-            "fastq":
-                - "ref_scaffolding"
-                - "curation"
-            "draft":
-                - "ref_scaffolding"
-                - "curation"
+
 "tool_specific_features":
     "hifiasm":
         "options_affecting_error_correction":

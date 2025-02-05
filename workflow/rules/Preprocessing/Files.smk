@@ -119,8 +119,8 @@ rule create_links_for_reference:
     output:
         fasta=out_dir_path / "data/reference/{ref_name}/{ref_name}.fasta",
         syn=out_dir_path / "data/reference/{ref_name}/{ref_name}.syn",
-        whitelist=out_dir_path / "data/reference/{ref_name}/{ref_name}.whitelist",
-        orderlist=out_dir_path / "data/reference/{ref_name}/{ref_name}.orderlist",
+        whitelist=out_dir_path / "data/reference/{ref_name}/{ref_name}.custom.whitelist",
+        orderlist=out_dir_path / "data/reference/{ref_name}/{ref_name}.custom.orderlist",
     log:
         ln=output_dict["log"]  / "create_links_for_reference.{ref_name}.ln.log",
         cluster_log=output_dict["cluster_log"] / "create_links_for_reference.{ref_name}.cluster.log",
@@ -142,3 +142,4 @@ rule create_links_for_reference:
         " ln -sf {input.syn} {output.syn} 2>>{log.ln}; "
         " ln -sf {input.whitelist} {output.whitelist} 2>>{log.ln}; "
         " ln -sf {input.orderlist} {output.orderlist} 2>>{log.ln}; "
+

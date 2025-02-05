@@ -20,4 +20,4 @@ rule get_seq_len:
     threads:
         parameters["threads"]["get_seq_len"]
     shell:
-         " workflow/scripts/get_sequence_lengths_from_fai.py -i {input.fasta} -o {output.len_file} 1>{log.std} 2>&1;" #{params.MAVR_dir}/scripts/sequence/
+         " workflow/scripts/get_sequence_lengths_from_fai.py -i {input.fasta} -o {output.len_file} >{log.std} 2>&1;"

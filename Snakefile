@@ -380,7 +380,8 @@ if "draft_qc" in config["stage_list"]:
                                 ) for parameters_label in parameters_list],
                      ]
     results_list += [
-                     [[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
+                     [[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.png",
+                               scaffold_length=["long", "middle", "short", "micro"],
                                threshold_type=["absolute", "relative"],
                                genome_prefix=[config["genome_prefix"], ],
                                assembly_stage=[current_stage, ],
@@ -476,7 +477,8 @@ if "draft_qc" in config["stage_list"]:
                          ]
 
         results_list += [
-                     [[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
+                     [[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.png",
+                               scaffold_length=["long", "middle", "short", "micro"],
                                threshold_type=["absolute", "relative"],
                                genome_prefix=[config["genome_prefix"], ],
                                assembly_stage=[current_stage, ],
@@ -706,7 +708,8 @@ if "contig" in config["stage_list"]:
                     ] # Tested only on hifiasm
 
     results_list += [
-                     [[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
+                     [[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.png",
+                               scaffold_length=["long", "middle", "short", "micro"],
                                threshold_type=["absolute", "relative"],
                                genome_prefix=[config["genome_prefix"], ],
                                assembly_stage=[current_stage, ],
@@ -821,7 +824,8 @@ if "purge_dups" in config["stage_list"]:
 
                     ]
     results_list += [
-                     [[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
+                     [[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.png",
+                               scaffold_length=["long", "middle", "short", "micro"],
                                threshold_type=["absolute", "relative"],
                                genome_prefix=[config["genome_prefix"], ],
                                assembly_stage=[current_stage, ],
@@ -844,7 +848,8 @@ if "purge_dups" in config["stage_list"]:
                     ]
 
     if current_stage in config["extended_qc_stages"]:
-        results_list += [[[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
+        results_list += [[[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.png",
+                               scaffold_length=["long", "middle", "short", "micro"],
                                threshold_type=["absolute", "relative"],
                                genome_prefix=[config["genome_prefix"], ],
                                assembly_stage=[current_stage, ],
@@ -858,7 +863,9 @@ if "purge_dups" in config["stage_list"]:
                         for parameters_label in stage_dict[current_stage]["parameters"]]
                         for track_type in ["windowmasker", "trf"]],]
         if not config["skip_wga"]:
-            results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/wga.{query_prefix}.to.{target_prefix}.YASS.R11.soft.min_len{min_target_len}.png",
+            results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/wga.{query_prefix}.{query_length}.to.{target_prefix}.{target_length}.YASS.R11.soft.min_len{min_target_len}.png",
+                                     query_length=["custom", "long", "middle", "short", "micro"],
+                                     target_length=["long", "middle", "short", "micro"],
                                      genome_prefix=[config["genome_prefix"], ],
                                      assembly_stage=[current_stage, ],
                                      parameters=[parameters_label],
@@ -875,7 +882,8 @@ if "purge_dups" in config["stage_list"]:
 
         if coverage_track_data_type_set:
             results_list += [[[
-                                  expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.coverage.win{window}.step{step}.png",
+                                  expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.coverage.{scaffold_length}.win{window}.step{step}.png",
+                                      scaffold_length=["long", "middle", "short", "micro"],
                                       window=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["window"],
                                       step=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
                                       genome_prefix=[config["genome_prefix"], ],
@@ -1047,7 +1055,8 @@ if "hic_scaffolding" in config["stage_list"]:
                                  ]
 
     results_list += [
-                     [[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
+                     [[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.png",
+                               scaffold_length=["long", "middle", "short", "micro"],
                                threshold_type=["absolute", "relative"],
                                genome_prefix=[config["genome_prefix"], ],
                                assembly_stage=[current_stage, ],
@@ -1070,7 +1079,8 @@ if "hic_scaffolding" in config["stage_list"]:
                     ]
 
     if current_stage in config["extended_qc_stages"]:
-        results_list += [[[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
+        results_list += [[[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.png",
+                               scaffold_length=["long", "middle", "short", "micro"],
                                threshold_type=["absolute", "relative"],
                                genome_prefix=[config["genome_prefix"], ],
                                assembly_stage=[current_stage, ],
@@ -1188,7 +1198,8 @@ if "ref_scaffolding" in config["stage_list"]:
     #out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/track_stats/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.track.thresholds",
 
     results_list += [
-                     [[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
+                     [[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.png",
+                               scaffold_length=["long", "middle", "short", "micro"],
                                threshold_type=["absolute", "relative"],
                                genome_prefix=[config["genome_prefix"], ],
                                assembly_stage=[current_stage, ],
@@ -1210,7 +1221,8 @@ if "ref_scaffolding" in config["stage_list"]:
                      ]
                     ]
     if current_stage in config["extended_qc_stages"]:
-        results_list += [[[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
+        results_list += [[[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.png",
+                               scaffold_length=["long", "middle", "short", "micro"],
                                threshold_type=["absolute", "relative"],
                                genome_prefix=[config["genome_prefix"], ],
                                assembly_stage=[current_stage, ],
@@ -1224,7 +1236,9 @@ if "ref_scaffolding" in config["stage_list"]:
                         for parameters_label in stage_dict[current_stage]["parameters"]]
                         for track_type in ["windowmasker", "trf"]],]
         if not config["skip_wga"]:
-            results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/wga.{query_prefix}.to.{target_prefix}.YASS.R11.soft.min_len{min_target_len}.png",
+            results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/wga.{query_prefix}.{query_length}.to.{target_prefix}.{target_length}.YASS.R11.soft.min_len{min_target_len}.png",
+                                     query_length=["custom", "long", "middle", "short", "micro"],
+                                     target_length=["long", "middle", "short", "micro"],
                                      genome_prefix=[config["genome_prefix"], ],
                                      assembly_stage=[current_stage, ],
                                      parameters=[parameters_label],
@@ -1241,7 +1255,8 @@ if "ref_scaffolding" in config["stage_list"]:
 
         if coverage_track_data_type_set:
             results_list += [[[
-                                  expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.coverage.win{window}.step{step}.png",
+                                  expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.{scaffold_length}.coverage.win{window}.step{step}.png",
+                                      scaffold_length=["long", "middle", "short", "micro"],
                                       window=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["window"],
                                       step=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
                                       genome_prefix=[config["genome_prefix"], ],

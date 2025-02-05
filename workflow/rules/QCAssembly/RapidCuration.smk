@@ -80,32 +80,34 @@ rule create_curation_bed_input_file: # Added as separated rule to allow turning 
     shell:
         " cp -f `realpath -s {input.bed}` {output.bed} > {log.cp} 2>&1; "
 """
-rule select_long_scaffolds: #
+rule select_scaffolds: #
     input:
-        len=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len"
+        len="{len_dir}/{len_prefix}.len"
     output:
-        whitelist=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.whitelist",
-        orderlist=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.orderlist"
+        whitelist="{len_dir}/{len_prefix, [^/]+}.{scaffold_length, [^/]+}.whitelist",
+        orderlist="{len_dir}/{len_prefix, [^/]+}.{scaffold_length, [^/]+}.orderlist",
     params:
-        max_scaffolds=parameters["tool_options"]["select_long_scaffolds"]["max_scaffolds"]
+        max_scaffolds=lambda wildcards: parameters["tool_options"]["select_scaffolds"][wildcards.scaffold_length]["max_scaffolds"],
+        max_len=lambda wildcards: parameters["tool_options"]["select_scaffolds"][wildcards.scaffold_length]["max_len"],
+        min_len=lambda wildcards: parameters["tool_options"]["select_scaffolds"][wildcards.scaffold_length]["min_len"]
     log:
-        ln=output_dict["log"]  / "select_long_scaffolds.{assembly_stage}.{parameters}.scaffolds.{genome_prefix}.{haplotype}.ln.log",
-        cluster_log=output_dict["cluster_log"] / "select_long_scaffolds.{assembly_stage}.{parameters}.scaffolds.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "select_long_scaffolds.{assembly_stage}.{parameters}.scaffolds.{genome_prefix}.{haplotype}.cluster.err"
+        std="{len_dir}/select_scaffolds.{len_prefix}.{scaffold_length}.std.log",
+        cluster_log="{len_dir}/select_scaffolds.{len_prefix}.{scaffold_length}.{scaffold_length}.cluster.log",
+        cluster_err="{len_dir}/select_scaffolds.{len_prefix}.{scaffold_length}.{scaffold_length}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "select_long_scaffolds.{assembly_stage}.{parameters}.scaffolds.{genome_prefix}.{haplotype}.benchmark.txt"
-
+        "{len_dir}/select_scaffolds.{len_prefix}.{scaffold_length}.{scaffold_length}.benchmark.txt"
     resources:
         queue=config["queue"]["cpu"],
-        node_options=parse_node_list("select_long_scaffolds"),
-        cpus=parameters["threads"]["select_long_scaffolds"],
-        time=parameters["time"]["select_long_scaffolds"],
-        mem=parameters["memory_mb"]["select_long_scaffolds"]
-    threads: parameters["threads"]["select_long_scaffolds"]
+        node_options=parse_node_list("select_scaffolds"),
+        cpus=parameters["threads"]["select_scaffolds"],
+        time=parameters["time"]["select_scaffolds"],
+        mem=parameters["memory_mb"]["select_scaffolds"]
+    threads: parameters["threads"]["select_scaffolds"]
     run:
         length_df = pd.read_csv(input.len, sep='\t', header=None, index_col=0, names=["scaffold", "length"])
-        threshold = min(length_df["length"].iloc[0] / 100, 1000000)
-        whitelist_sr = pd.Series(length_df[length_df["length"] >= threshold].index)
+        whitelist_sr = pd.Series(length_df[length_df["length"] >= params.min_len].index)
+        if params.max_len:
+            whitelist_sr = pd.Series(length_df[(length_df["length"] >= params.min_len) & (length_df["length"] <= params.max_len) ].index)
         if len(whitelist_sr) > params.max_scaffolds:
             whitelist_sr = whitelist_sr.iloc[:params.max_scaffolds]
         whitelist_sr.to_csv(output.whitelist, header=False, index=False)
@@ -262,8 +264,8 @@ rule get_track_stats: #
 
 rule draw_track: #
     input:
-        whitelist=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.whitelist",
-        orderlist=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.orderlist",
+        whitelist=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.{scaffold_length}.whitelist",
+        orderlist=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.{scaffold_length}.orderlist",
         len_file=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
         bedgraph=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph",
         relative_thresholds=lambda wildcards: expand(rules.get_track_stats.output.thresholds,
@@ -283,7 +285,7 @@ rule draw_track: #
                                             window=[wildcards.window],
                                             step=[wildcards.step]) if wildcards.threshold_type == 'relative' else []
     output:
-        png=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/trackplots/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, [^/]+}.win{window}.step{step}.{threshold_type}.png"
+        png=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/trackplots/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, [^/]+}.{scaffold_length, [^./]+}.win{window}.step{step}.{threshold_type, [^/]+}.png"
     params: # TODO: move parameters from "curation" to "qc" or something similar
         thresholds=lambda wildcards: parse_option("absolute_thresholds",
                                                   parameters["tool_options"]["assembly_qc"][wildcards.track_type],
@@ -291,11 +293,11 @@ rule draw_track: #
                                                   "--density_thresholds",
                                                   expression=lambda s: ",".join(list(map(str, s))))
     log:
-        draw=output_dict["log"]  / "draw_track.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.draw.log",
-        cluster_log=output_dict["cluster_log"] / "draw_track.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "draw_track.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.cluster.err"
+        draw=output_dict["log"]  / "draw_track.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.draw.log",
+        cluster_log=output_dict["cluster_log"] / "draw_track.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "draw_track.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "draw_track.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.benchmark.txt"
+        output_dict["benchmark"]  / "draw_track.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

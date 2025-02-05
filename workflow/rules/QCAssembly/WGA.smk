@@ -158,28 +158,29 @@ def select_query_synfile(wildcards):
 rule draw_alignment: #
     input:
         tab="{target_dir}/wga.{query_prefix}.to.{target_prefix}.YASS.R11.soft.min_len{min_target_len}.tab.gz",
-        #tab=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/scaffolds/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.min_len{min_target_len}.tab.gz",#out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{target_haplotype}/input/{genome_prefix}.input.wga.{query_haplotype}.to.{target_haplotype}.YASS.R11.soft.tab.gz",
-        target_whitelist="{target_dir}/{target_prefix}.whitelist",
-        target_orderlist="{target_dir}/{target_prefix}.orderlist",
-        query_whitelist=lambda wildcards: out_dir_path / "data/reference/{0}/{0}.whitelist".format(wildcards.query_prefix) if wildcards.query_prefix in input_reference_filedict \
+        target_whitelist="{target_dir}/{target_prefix}.{target_scaffold_length}.whitelist",
+        target_orderlist="{target_dir}/{target_prefix}.{target_scaffold_length}.orderlist",
+        query_whitelist=lambda wildcards: out_dir_path / "data/reference/{0}/{0}.{1}.whitelist".format(wildcards.query_prefix,
+                                                                                                       wildcards.query_scaffold_length) if wildcards.query_prefix in input_reference_filedict \
                                           else "{0}/{1}.whitelist".format(wildcards.target_dir, wildcards.query_prefix),  #select_query_whitelist, #out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{query_haplotype}/scaffolds/{genome_prefix}.input.{query_haplotype}.whitelist",
-        query_orderlist=lambda wildcards: out_dir_path / "data/reference/{0}/{0}.orderlist".format(wildcards.query_prefix) if wildcards.query_prefix in input_reference_filedict \
+        query_orderlist=lambda wildcards: out_dir_path / "data/reference/{0}/{0}.{1}.orderlist".format(wildcards.query_prefix,
+                                                                                                       wildcards.query_scaffold_length) if wildcards.query_prefix in input_reference_filedict \
                                           else "{0}/{1}.orderlist".format(wildcards.target_dir, wildcards.query_prefix),
         query_synfile=lambda wildcards: out_dir_path / "data/reference/{0}/{0}.syn".format(wildcards.query_prefix) if wildcards.query_prefix in input_reference_filedict \
                                           else [],
     output:
-        png="{target_dir}/wga.{query_prefix, [^/]+}.to.{target_prefix, [^/]+}.YASS.R11.soft.min_len{min_target_len}.png",
-        svg="{target_dir}/wga.{query_prefix, [^/]+}.to.{target_prefix, [^/]+}.YASS.R11.soft.min_len{min_target_len}.svg",
+        png="{target_dir}/wga.{query_prefix, [^/]+}.{query_scaffold_length, [^/]+}.to.{target_prefix, [^/]+}.{target_scaffold_length, [^/]+}.YASS.R11.soft.min_len{min_target_len}.png",
+        svg="{target_dir}/wga.{query_prefix, [^/]+}.{query_scaffold_length, [^/]+}.to.{target_prefix, [^/]+}.{target_scaffold_length, [^/]+}.YASS.R11.soft.min_len{min_target_len}.svg",
     params:
         per_thread_mem=parameters["memory_mb"]["last_alignment_per_thread"],
         query_syn_file=lambda wildcards: " --query_syn_file {0}".format(str(out_dir_path / "data/reference/{0}/{0}.syn".format(wildcards.query_prefix))) \
                                          if wildcards.query_prefix in input_reference_filedict else ""
     log:
-        dotplot="{target_dir}/draw_alignment.{query_prefix}.to.{target_prefix}.min_len{min_target_len}.dotplot.log",
-        cluster_log="{target_dir}/draw_alignment.{query_prefix}.to.{target_prefix}.min_len{min_target_len}.cluster.log",
-        cluster_err="{target_dir}/draw_alignment.{query_prefix}.to.{target_prefix}.min_len{min_target_len}.cluster.err"
+        dotplot="{target_dir}/draw_alignment.{query_prefix}.{query_scaffold_length}.to.{target_prefix}.{target_scaffold_length}.min_len{min_target_len}.dotplot.log",
+        cluster_log="{target_dir}/draw_alignment.{query_prefix}.{query_scaffold_length}.to.{target_prefix}.{target_scaffold_length}.min_len{min_target_len}.cluster.log",
+        cluster_err="{target_dir}/draw_alignment.{query_prefix}.{query_scaffold_length}.to.{target_prefix}.{target_scaffold_length}.min_len{min_target_len}.cluster.err"
     benchmark:
-        "{target_dir}/draw_alignment.{query_prefix}.to.{target_prefix}.min_len{min_target_len}.benchmark.txt"
+        "{target_dir}/draw_alignment.{query_prefix}.{query_scaffold_length}.to.{target_prefix}.{target_scaffold_length}.min_len{min_target_len}.benchmark.txt"
     conda:
         config["conda"]["chromodoter"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["chromodoter"]["yaml"])
     resources:

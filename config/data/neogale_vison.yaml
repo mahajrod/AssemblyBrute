@@ -131,7 +131,7 @@
         - "long"
     "assembly_scaffold_sets":
         - "long"
-        - "small"
+        - "short"
     "threshold_types":
         - "absolute"
         - "relative"

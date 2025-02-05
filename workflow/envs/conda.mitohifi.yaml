@@ -1,3 +1,6 @@
+#---- Bioconda config ----
+
+"name": "mitohifi"
 channels:
   - "conda-forge"
   - "bioconda"

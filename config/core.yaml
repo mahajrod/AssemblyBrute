@@ -62,6 +62,9 @@
     "microchromosomes":
         "yaml": "workflow/envs/conda.microchromosomes.yaml"
         "name": "microchromosomes"
+    "simulate_pcr":
+        "yaml": "workflow/envs/conda.simulate_pcr.yaml"
+        "name": "simulate_pcr"
 
 "resources_dir": "config/resources/"
 #"threads":      "config/resources/threads.tab"

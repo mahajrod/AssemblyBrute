@@ -1,0 +1,12 @@
+#---- Bioconda config for salsa2 ----
+
+"name": "simulate_pcr"
+"channels":
+  - "bioconda"
+  - "conda-forge"
+  - "anaconda"
+"dependencies":
+  - "blast>=2.2.27"
+  - "perl-bioperl"
+  - "perl-lwp-simple"
+  - "perl-getopt-long"

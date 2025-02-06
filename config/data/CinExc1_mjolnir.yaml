@@ -98,15 +98,15 @@
         #- "w10k.s10k"
     "reference_scaffold_sets":
         - "custom"
-        - "long"
-        - "middle"
-        - "short"
-        - "micro"
+        #- "long"
+        #- "middle"
+        #- "short"
+        #- "micro"
     "assembly_scaffold_sets":
         - "long"
-        - "middle"
-        - "short"
-        - "micro"
+        #- "middle"
+        #- "short"
+        #- "micro"
     "threshold_types":
         - "absolute"
         - "relative"

@@ -284,15 +284,17 @@
             - "mjolnircomp06fl"
         "whitelist": []
     "trf":
-        "blacklist": []
-        "whitelist":
-            - "mjolnircomp10fl"
-            - "mjolnircomp11fl"
-            - "mjolnircomp12fl"
-            - "mjolnircomp13fl"
-            - "mjolnircomp14fl"
-            - "mjolnircomp15fl"
-            - "mjolnircomp16fl"
+        "blacklist":
+            - "mjolnircomp01fl"
+            - "mjolnircomp02fl"
+            - "mjolnircomp03fl"
+            - "mjolnircomp04fl"
+            - "mjolnircomp05fl"
+            - "mjolnircomp06fl"
+            - "mjolnircomp07fl"
+            - "mjolnircomp08fl"
+            - "mjolnircomp09fl"
+        "whitelist": []
 #------------------------------------------------------
 #"adaptor_scan": True
 #"fcs_gx_scan": True

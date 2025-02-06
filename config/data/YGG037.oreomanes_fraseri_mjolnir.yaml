@@ -283,6 +283,16 @@
             - "mjolnircomp05fl"
             - "mjolnircomp06fl"
         "whitelist": []
+    "trf":
+        "blacklist": []
+        "whitelist":
+            - "mjolnircomp10fl"
+            - "mjolnircomp11fl"
+            - "mjolnircomp12fl"
+            - "mjolnircomp13fl"
+            - "mjolnircomp14fl"
+            - "mjolnircomp15fl"
+            - "mjolnircomp16fl"
 #------------------------------------------------------
 #"adaptor_scan": True
 #"fcs_gx_scan": True

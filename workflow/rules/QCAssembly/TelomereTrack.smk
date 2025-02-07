@@ -1,5 +1,6 @@
 ruleorder: telo_container > create_bedgraph_track
 ruleorder: get_telomere_warning > create_bedgraph_track
+ruleorder: copy_telomere_files > classify_telomeric_regions_windows
 
 localrules: copy_telomere_files
 

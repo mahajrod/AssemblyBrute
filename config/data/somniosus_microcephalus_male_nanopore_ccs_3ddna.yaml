@@ -147,7 +147,7 @@
     "mapping_pipeline":         "juicer"     # Allowed: arima, bwa_only, juicer, pairtools
     "trf":                      "default"   # Allowed: default
     "wga":                      "default"   # Allowed: default
-    "select_long_scaffolds":    "default"   # Allowed: default
+    "select_scaffolds":    "default"   # Allowed: default
     "deepvariant":              "default"   # Allowed: default
     "pairtools_parse":          "default"   # Allowed: default
     "samtools_stats":           "default"   # Allowed: default

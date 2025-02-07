@@ -120,6 +120,14 @@
                 "default":
                     "qc_datatypes":
                         - "hifi"
+                    "sex_determination":
+                        "birds":
+                            "CHD1_1":
+                                min_amplicon_len=,
+                                max_amplicon_len=,
+                                mix_primers=,
+                                max_mismatches=,
+                                three_prime_fixed_bases=
                     "coverage":
                         "options":
                             "w1000k.s1000k":

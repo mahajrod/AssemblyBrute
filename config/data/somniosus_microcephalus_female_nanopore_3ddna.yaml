@@ -82,6 +82,33 @@
         "default":
             - "ragtag"
 
+"extended_qc_stages":
+    - "purge_dups"
+    - "hic_scaffolding"
+    - "ref_scaffolding"
+
+"qc_settings":
+    "windows_sets":
+        #- "w1000k.s1000k"
+        - "w1000k.s100k"
+        #- "w100k.s100k"
+        - "w100k.s10k"
+        #- "w10k.s10k"
+    "reference_scaffold_sets":
+        - "custom"
+        #- "long"
+        #- "middle"
+        #- "short"
+        #- "micro"
+    "assembly_scaffold_sets":
+        - "long"
+        #- "middle"
+        #- "short"
+        #- "micro"
+    "threshold_types":
+        - "absolute"
+        - "relative"
+
 "coretool_option_sets":
     "hifiasm":
          #- "l0primary"

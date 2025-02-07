@@ -47,6 +47,7 @@ rule gather_stats_per_stage_parameter:
 
 
 rule gather_stage_stats:
+    priority: 100000
     input:
         stats=lambda wildcards: expand(out_dir_path / ("%s/{parameters}/assembly_qc/%s.%s.parameter_stats" % (wildcards.assembly_stage,
                                                                                                     wildcards.genome_prefix,

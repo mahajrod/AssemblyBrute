@@ -288,7 +288,7 @@
                     "qc_datatypes":
                         - "duplex"
                         - "simplex"
-                        - "nanopore"
+                        #- "nanopore"
                 "simplex":
                     "qc_datatypes":
                         - "simplex"
@@ -628,7 +628,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        ##- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -648,7 +648,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        ##- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -668,7 +668,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        ##- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -688,7 +688,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -709,7 +709,7 @@
                         - "hifi"
                         - "duplex"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
@@ -728,7 +728,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -749,7 +749,7 @@
                         - "hifi"
                         - "duplex"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
@@ -768,7 +768,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -788,7 +788,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -808,7 +808,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -844,7 +844,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
@@ -880,7 +880,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -900,7 +900,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -920,7 +920,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -940,7 +940,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -960,7 +960,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -981,7 +981,7 @@
                         - "hifi"
                         - "duplex"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
@@ -1000,7 +1000,7 @@
                     "main_datatypes":
                         - "simplex"
                         - "duplex"
-                        - "nanopore"
+                        #- "nanopore"
                     "ultra_long_reads": []
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": True
@@ -1019,7 +1019,7 @@
                         - "hifi"
                         - "simplex"
                         - "duplex"
-                        - "nanopore"
+                        #- "nanopore"
                     "ultra_long_reads": [ ]
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": True
@@ -1037,7 +1037,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -1058,7 +1058,7 @@
                         - "hifi"
                         - "duplex"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
@@ -1077,7 +1077,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -1113,7 +1113,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
@@ -1149,7 +1149,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -1169,7 +1169,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -1189,7 +1189,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -1209,7 +1209,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -1229,7 +1229,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -1249,7 +1249,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -1269,7 +1269,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -1289,7 +1289,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -1311,7 +1311,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -1334,7 +1334,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -1357,7 +1357,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -1379,7 +1379,7 @@
                     "main_datatypes":
                         - "hifi"
                     "ultra_long_reads":
-                        - "nanopore"
+                        #- "nanopore"
                         - "simplex"
                         - "duplex"
                         - "lqccs"
@@ -2736,7 +2736,7 @@
 "allowed_data_types": # No "_" is allowed in the datatype name, as it is used as separator for merged datatypes
     - "hifi"
     #- "clr"
-    - "nanopore"
+    #- "nanopore"
     - "duplex"
     - "simplex"
     #- "bionano"
@@ -2749,7 +2749,7 @@
 "fastqc_data_types":
     - "hifi"
     #- "clr"
-    #- "nanopore"
+    ##- "nanopore"
     #- "bionano"
     - "hic"
     - "illumina"
@@ -2760,7 +2760,7 @@
 "long_read_data":
     - "hifi"
     - "clr"
-    - "nanopore"
+    #- "nanopore"
     - "duplex"
     - "simplex"
     - "lqccs"
@@ -2769,7 +2769,7 @@
     - "hifi"
     - "illumina"
     #- "hic"
-    - "nanopore"
+    #- "nanopore"
     - "simplex"
     - "duplex"
 
@@ -2777,7 +2777,7 @@
     - "hifi"
     - "illumina"
     - "hic"
-    - "nanopore"
+    #- "nanopore"
     - "duplex"
     - "simplex"
     - "lqccs"
@@ -2791,7 +2791,7 @@
     - "hifi"
     - "lqccs"
     #- "clr"
-    - "nanopore"
+    #- "nanopore"
     - "duplex"
     - "simplex"
     - "hic"
@@ -2802,14 +2802,14 @@
     - "hifi"
     #- "clr"
     - "lqccs"
-    - "nanopore"
+    #- "nanopore"
     - "duplex"
     - "simplex"
 
 "fasta_based_data": # Datatypes that might be in fasta format. For example corrected hifi or nanopore reads
     - "hifi"
     - "clr"
-    - "nanopore"
+    #- "nanopore"
     - "duplex"
     - "simplex"
     - "lqccs"
@@ -2826,19 +2826,19 @@
     - "illumina"
     - "hifi"
     #- "clr"
-    #- "nanopore" # TODO: add nanopore support
+    ##- "nanopore" # TODO: add nanopore support
 
 "purge_dups_data": # Data which might be used for purging haplotypic duplications
     - "hifi"
     #- "clr"
-    - "nanopore"
+    #- "nanopore"
     - "duplex"
     - "simplex"
 
 "gap_filling_data": # Data which might be used for filling gaps
     - "hifi"
     #- "clr"
-    - "nanopore"
+    #- "nanopore"
     - "duplex"
     - "simplex"
 
@@ -2846,7 +2846,7 @@
     - "hifi"
     - "illumina"
     #- "clr"
-    #- "nanopore"
+    ##- "nanopore"
 
 "fastq_extension": ".fastq.gz"
 "fasta_extension": ".fasta.gz"

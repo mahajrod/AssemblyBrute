@@ -48,7 +48,7 @@ rule copy_trf_track: #
     input:
         bed="{fasta_dir}/repeats/{fasta_prefix}/{fasta_prefix}.trf.track.bed",
     output:
-        qc_track_bed="{fasta_dir}/{fasta_prefix, [^/]+}/assembly_qc/trf/{fasta_prefix}/{fasta_prefix}.trf.track.bed"
+        qc_track_bed="{fasta_dir}/assembly_qc/trf/{fasta_prefix}/{fasta_prefix}.trf.track.bed"
     log:
         std="{fasta_dir}/copy_trf_track.{fasta_prefix}.trf.log",
         cluster_log="{fasta_dir}/copy_trf_track.{fasta_prefix}.trf.cluster.log",

@@ -58,7 +58,7 @@
         "cpu": "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0.sif"
         "gpu": null #"gpu": "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
 
-"stage_coretools":     #TODO: add bionano
+"stage_coretools":
     "filtering":
         "hifi": "cutadapt"
         "illumina": "cutadapt"
@@ -83,9 +83,9 @@
             - "ragtag"
 
 "extended_qc_stages":
+    #- "purge_dups"
     - "hic_scaffolding"
     - "ref_scaffolding"
-    #- "purge_dups"
 
 "qc_settings":
     "windows_sets":
@@ -122,9 +122,8 @@
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
     "purge_dups":
-        #- "default"
+        - "skipped"
         - "keep_hicov"
-        -  "skipped"
     "salsa2":
         - "phased_reads"
         - "unphased_reads"
@@ -135,7 +134,7 @@
         #- "phased_reads"
         #- "unphased_reads"
         #- "phased_reads_editor_repcov_5"
-       #- "unphased_reads_editor_repcov_5"
+        #- "unphased_reads_editor_repcov_5"
         #- "phased_reads_editor_repcov_10"
         - "unphased_reads_editor_repcov_10"
     "curation":
@@ -152,6 +151,7 @@
         #- "min_aln_len_5k"
         #- "min_aln_len_7.5k"
         #- "min_aln_len_10k"
+
 
 "other_tool_option_sets":
     "cutadapt":                 "default"   # Allowed: default

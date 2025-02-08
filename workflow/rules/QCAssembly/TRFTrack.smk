@@ -39,7 +39,7 @@ rule trf: #
         " cd ${{WORK_DIR}}; "
         " tandem_repeat_masking.py --sleep 120 -t {threads} {params.matching_weight} {params.mismatching_penalty} "
         " {params.indel_penalty} {params.match_probability} {params.indel_probability} {params.min_alignment_score} "
-        " {params.max_period} {params.max_repeat_length} -i ../${{INPUT_FASTA}} -o ${{OUTPUT_PREFIX}} > ${{LOG}} 2>&1; "
+        " {params.max_period} {params.max_repeat_length} -i ../../${{INPUT_FASTA}} -o ${{OUTPUT_PREFIX}} > ${{LOG}} 2>&1; "
         " cut -f1-3 `basename {output.simple_bed}` 2>>${{LOG}} | grep -vP '^#' 2>>${{LOG}} | sort -k1,1V -k2,2n -k3,3n  2>>${{LOG}} | "
         " bedtools merge -i stdin > `basename {output.bed}` 2>>${{LOG}}; "
 

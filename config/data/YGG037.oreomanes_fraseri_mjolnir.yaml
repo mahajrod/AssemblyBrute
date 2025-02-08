@@ -127,6 +127,7 @@
         - "keep_hicov"
     "salsa2":
         - "phased_reads"
+        - "skipped"
         #- "unphased_reads"
     "yahs":
         - "phased_reads"

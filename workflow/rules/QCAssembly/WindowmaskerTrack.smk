@@ -4,9 +4,9 @@ rule windowmasker: #
     input:
         fasta="{fasta_dir}/{fasta_prefix}.fasta",
     output:
-        counts="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.windowmasker.counts",
-        interval="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.windowmasker.intervals",
-        bed="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.windowmasker.track.bed",
+        counts="{fasta_dir}/repeats/{fasta_prefix}/{fasta_prefix, [^/]+}.windowmasker.counts",
+        interval="{fasta_dir}/repeats/{fasta_prefix}/{fasta_prefix, [^/]+}.windowmasker.intervals",
+        bed="{fasta_dir}/repeats/{fasta_prefix}/{fasta_prefix, [^/]+}.windowmasker.track.bed",
     log:
         std="{fasta_dir}/windowmasker.{fasta_prefix}.windowmasker.stage1.log",
         cluster_log="{fasta_dir}/windowmasker.{fasta_prefix}.windowmasker.cluster.log",
@@ -30,7 +30,7 @@ rule windowmasker: #
 
 rule copy_windowmasker_track: #
     input:
-        bed="{fasta_dir}/repeats/{fasta_prefix}.windowmasker.track.bed",
+        bed="{fasta_dir}/repeats/{fasta_prefix}/{fasta_prefix}.windowmasker.track.bed",
     output:
         qc_track_bed="{fasta_dir}/assembly_qc/windowmasker/{fasta_prefix, [^/]+}/{fasta_prefix}.windowmasker.track.bed"
     log:

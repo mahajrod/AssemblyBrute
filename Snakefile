@@ -359,8 +359,8 @@ if "draft_qc" in config["stage_list"]:
             stage_dict["draft_qc"]["parameters"][parameters_label] = {}
             stage_dict["draft_qc"]["parameters"][parameters_label]["qcer"] = qcer
             stage_dict["draft_qc"]["parameters"][parameters_label]["stage_seq_type"] = None
-            print(qcer)
-            stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"] = deepcopy(parameters["tool_options"][qcer][option_set])
+            #print(qcer)
+            stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"] = deepcopy(parameters["tool_options"][qcer]) #[option_set])
             stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]
             stage_dict["draft_qc"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
             stage_dict["draft_qc"]["parameters"][parameters_label]["option_set_group"] = None

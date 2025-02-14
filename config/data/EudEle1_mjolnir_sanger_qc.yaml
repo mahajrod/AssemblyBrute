@@ -115,7 +115,7 @@
         #- "micro"
     "threshold_types":
         - "absolute"
-        -
+        - "relative"
 
 "coretool_option_sets":
     "hifiasm":

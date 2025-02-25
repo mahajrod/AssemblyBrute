@@ -57,7 +57,7 @@ rule genomescope:
     threads:
         parameters["threads"]["genomescope"]
     shell:
-         " genomescope.R {params.start_shift} {params.starting_lambda} -i {input.histo} -p {params.ploidy} -k {wildcards.kmer_length}  "
+         " genomescope2 {params.start_shift} {params.starting_lambda} -i {input.histo} -p {params.ploidy} -k {wildcards.kmer_length}  "
          " -n {params.genome_name} --fitted_hist  --testing  -o {params.out_dir} > {log.std} 2>&1" # -m {params.max_coverage}
 
 

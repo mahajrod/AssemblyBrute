@@ -80,6 +80,36 @@
     "curation":
         "default":
             - "curation"
+    "ref_scaffolding":
+        "default":
+            - "ragtag"
+
+"extended_qc_stages":
+    - "purge_dups"
+    - "hic_scaffolding"
+    - "ref_scaffolding"
+
+"qc_settings":
+    "windows_sets":
+        #- "w1000k.s1000k"
+        - "w1000k.s100k"
+        #- "w100k.s100k"
+        - "w100k.s10k"
+        #- "w10k.s10k"
+    "reference_scaffold_sets":
+        - "custom"
+        #- "long"
+        #- "middle"
+        #- "short"
+        #- "micro"
+    "assembly_scaffold_sets":
+        - "long"
+        #- "middle"
+        #- "short"
+        #- "micro"
+    "threshold_types":
+        - "absolute"
+        - "relative"
 
 "coretool_option_sets":
     "hifiasm":
@@ -93,6 +123,7 @@
          #- "repeat_enhanced_l2"
     "purge_dups":
         - "keep_hicov"
+        - "skipped"
     "salsa2":
         - "phased_reads"
         #- "unphased_reads"
@@ -128,7 +159,7 @@
     "mapping_pipeline":         "arima"  # Allowed: arima, bwa_only, pairtools.
     "trf":                      "default"
     "wga":                      "default"
-    "select_long_scaffolds":    "default"
+    "select_scaffolds":    "default"
     "deepvariant":              "default"   # Allowed: default
     "pairtools_parse":          "default"   # Allowed: default
     "samtools_stats":           "default"   # Allowed: default

@@ -39,7 +39,7 @@ rule bwa_map: #
     shell:
         " {params.bwa_tool} mem -SP5M -t {threads} -R  \'@RG\\tID:{params.id}\\tPU:x\\tSM:{params.id}\\tPL:illumina\\tLB:x\' "
         " {input.reference} <(zcat {input.fastq} {params.trim_cmd} 2>{log.fastx}) 2>{log.map} |"
-        " filter_five_end.pl 2>{log.filter} | samtools view -Sb - > {output.bam} 2>{log.sort} "
+        " workflow/external_tools/arima_mapping_pipeline/filter_five_end.pl 2>{log.filter} | samtools view -Sb - > {output.bam} 2>{log.sort} "
 
 rule bam_merge_pairs:
     input:
@@ -87,7 +87,8 @@ rule bam_merge_pairs:
     threads: parameters["threads"]["two_read_bam_combiner"] + parameters["threads"]["samtools_sort"]
     shell:
         " TMP_PREFIX=`dirname {output.bam}`/{wildcards.pairprefix}; "
-        " two_read_bam_combiner.pl {input.forward_bam} {input.reverse_bam} samtools {params.min_mapq} 2>{log.merge} | "
+        " workflow/external_tools/arima_mapping_pipeline/two_read_bam_combiner.pl {input.forward_bam} "
+        " {input.reverse_bam} samtools {params.min_mapq} 2>{log.merge} | "
         " samtools view -bS -t {input.reference_fai} - 2>{log.view} | "
         " samtools sort -T ${{TMP_PREFIX}} -m {params.sort_memory}M -@ {params.sort_threads} -o {output.bam} 2>{log.sort}"
 
@@ -149,4 +150,4 @@ rule rmdup:
         " picard -Xmx{resources.mem}m MarkDuplicates -I {input} -O {output.bam} " 
         " --REMOVE_DUPLICATES true -M {output.dup_stats}  --TMP_DIR ${{TMP_DIRECTORY}} >{log.std} 2>&1;"
         #" samtools index {output.bam}; "
-        " get_stats.pl {output.bam} > {output.bam_stats}"
+        " workflow/external_tools/arima_mapping_pipeline/get_stats.pl {output.bam} > {output.bam_stats}"

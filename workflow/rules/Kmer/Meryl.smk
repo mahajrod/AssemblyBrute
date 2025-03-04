@@ -26,7 +26,7 @@ rule meryl:
     threads:
         parameters["threads"]["meryl"]
     shell:
-         " meryl k={wildcards.kmer_length} threads={threads} memory={resources.mem}m count "
+         " workflow/external_tools/meryl-1.4/bin/meryl k={wildcards.kmer_length} threads={threads} memory={resources.mem}m count "
          " output {output.db_dir} {input} 1>{log.std} 2>&1;"
 
 
@@ -54,7 +54,7 @@ rule meryl_pe:
     threads:
         parameters["threads"]["meryl"]
     shell:
-         " meryl k={wildcards.kmer_length} threads={threads} memory={resources.mem}m count "
+         " workflow/external_tools/meryl-1.4/bin/meryl k={wildcards.kmer_length} threads={threads} memory={resources.mem}m count "
          " output {output.db_dir} {input} 1>{log.std} 2>&1;"
 
 def get_meryl_dbs_for_merging(wildcards):
@@ -108,9 +108,9 @@ rule merge_meryl:
     threads:
         parameters["threads"]["meryl"]
     shell:
-         " meryl threads={threads} memory={resources.mem}m"
+         " workflow/external_tools/meryl-1.4/bin/meryl threads={threads} memory={resources.mem}m"
          " union-sum output {output.db_dir} {input} 1>{log.count_log} 2>&1;"
-         " meryl threads={threads} memory={resources.mem}m "
+         " workflow/external_tools/meryl-1.4/bin/meryl threads={threads} memory={resources.mem}m "
          " histogram {output.db_dir} > {output.histo} 2>{log.histo_log}"
 
 rule meryl_extract:
@@ -137,7 +137,7 @@ rule meryl_extract:
     threads:
         parameters["threads"]["meryl_extract"]
     shell:
-         " meryl threads={threads} memory={resources.mem}m "
+         " workflow/external_tools/meryl-1.4/bin/meryl threads={threads} memory={resources.mem}m "
          " print less-than {wildcards.max_upper_boundary} greater-than {wildcards.min_lower_boundary}  {input.db} 2>{log.meryl} | "
          " sort > {output.kmer} 2>{log.sort};"
 

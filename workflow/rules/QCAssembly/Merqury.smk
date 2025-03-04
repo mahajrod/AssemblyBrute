@@ -70,7 +70,7 @@ rule merqury: # TODO: add handling for cases of haploid and polyploid genomes
          "      ALTERNATIVE_ASSEMBLY=`realpath -s {input.alternative_assembly}`; "
          " fi;"
          " cd ${{OUT_DIR}}; "
-         " OMP_NUM_THREADS={threads} merqury.sh ${{MERYL_DB}} "
+         " OMP_NUM_THREADS={threads} workflow/external_tools/merqury/merqury.sh ${{MERYL_DB}} "
          " ${{PRIMARY_ASSEMBLY}} ${{ALTERNATIVE_ASSEMBLY}} {params.out_prefix}  1>{log.std} 2>&1;"
 
 

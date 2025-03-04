@@ -61,6 +61,7 @@ rule merqury: # TODO: add handling for cases of haploid and polyploid genomes
         parameters["threads"]["merqury"]
     shell:
          " MERQURY_SCRIPT=`realpath workflow/external_tools/merqury/merqury.sh`; "
+         " MERQURY=`dirname ${{MERQURY_SCRIPT}}`; "
          " MERQURY_DIR=`dirname ${{MERQURY_SCRIPT}}`; "
          " OUT_DIR=`dirname {output.qv_file}`; "
          " MERYL_DB=`realpath -s {input.meryl_db_dir}`;"

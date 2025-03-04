@@ -707,7 +707,7 @@ if "contig" in config["stage_list"]:
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=["contig"],),
                     ] # Tested only on hifiasm
-    print([parameters["tool_options"]["assembly_qc"]["gap"]])
+    #print([parameters["tool_options"]["assembly_qc"]["gap"]])
     results_list += [
                      [[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.png",
                                scaffold_length=config["qc_settings"]["assembly_scaffold_sets"],
@@ -1092,6 +1092,12 @@ if "hic_scaffolding" in config["stage_list"]:
                            ) for parameters_label in stage_dict[current_stage]["parameters"]
                      ]
                     ]
+
+    results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/combined/alignment/NA/{genome_prefix}.{assembly_stage}.NA.combined.nodup.pairs",
+                            genome_prefix=[config["genome_prefix"], ],
+                            assembly_stage=[current_stage, ],
+                            parameters=stage_dict[current_stage]["parameters"],
+                            )]
 
     if current_stage in config["extended_qc_stages"]:
         results_list += [[[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.png",

@@ -130,3 +130,5 @@ extract_lambda_value	1	1	1	1	1	1	1	1	1
 rename_ragtag_scaffolds	1	1	1	1	1	1	1	1	1
 blast	1	1	1	1	1	1	1	1	1
 simulate_pcr	4	4	4	4	4	4	4	4	4
+combine_haplotypes	1	1	1	1	1	1	1	1	1
+bam2bed_for_hic_map	15	15	15	15	15	15	15	15	15

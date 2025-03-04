@@ -15,7 +15,7 @@ rule meryl:
     benchmark:
         output_dict["benchmark"] / "meryl.{datatype}.{stage}.{fileprefix}.{kmer_length}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("meryl"),
@@ -43,7 +43,7 @@ rule meryl_pe:
     benchmark:
         output_dict["benchmark"] / "meryl.{datatype}.{stage}.{pairprefix}.{kmer_length}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("meryl_pe"),
@@ -98,7 +98,7 @@ rule merge_meryl:
     benchmark:
         output_dict["benchmark"] / "merge_meryl.{datatype}.{stage}.{kmer_length}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("merge_meryl"),
@@ -127,7 +127,7 @@ rule meryl_extract:
     benchmark:
         output_dict["benchmark"] / "meryl_extract.{datatype}.{stage}.{kmer_length}.L{min_lower_boundary}.U{max_upper_boundary}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("meryl_extract"),
@@ -161,7 +161,7 @@ rule subset_extracted_kmers:
     benchmark:
         output_dict["benchmark"] / "subset_extracted_kmers.{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("subset_extracted_kmers"),

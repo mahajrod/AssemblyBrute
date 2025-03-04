@@ -11,7 +11,7 @@ rule meryl_assembly:
     benchmark:
         output_dict["benchmark"] / "meryl_assembly.{genome_prefix}.{stage}.{parameters}.{haplotype}.{assembly_kmer_length}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("meryl_assembly"),
@@ -45,7 +45,7 @@ rule meryl_extract_unique_hap_kmers:
     benchmark:
         output_dict["benchmark"] / "meryl_extract_unique_hap_kmers.{genome_prefix}.{stage}.{parameters}.{assembly_kmer_length}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("meryl_extract_unique_hap_kmers"),
@@ -87,7 +87,7 @@ rule extract_pe_reads_by_unique_hap_kmers:
     benchmark:
         output_dict["benchmark"] / "extract_reads_by_unique_hap_kmers.{datatype}.{stage}.{parameters}.{pairprefix}.{assembly_kmer_length}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("extract_pe_reads_by_unique_hap_kmers"),
@@ -123,7 +123,7 @@ rule extract_se_reads_by_unique_hap_kmers:
     benchmark:
         output_dict["benchmark"] / "extract_reads_by_unique_hap_kmers.{datatype}.{stage}.{parameters}.{fileprefix}.{assembly_kmer_length}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("extract_se_reads_by_unique_hap_kmers"),
@@ -159,7 +159,7 @@ rule extract_se_reads_from_fasta_by_unique_hap_kmers: #TODO: merge with extract_
     benchmark:
         output_dict["benchmark"] / "extract_se_reads_from_fasta_by_unique_hap_kmers.{datatype}.{stage}.{parameters}.{fileprefix}.{assembly_kmer_length}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("extract_se_reads_from_fasta_by_unique_hap_kmers"),

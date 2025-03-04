@@ -20,7 +20,7 @@ rule gc_count:
     benchmark:
         output_dict["benchmark"] / "gc_plot.{datatype}.{stage}.{kmer_length}.L{min_coverage}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("gc_count"),

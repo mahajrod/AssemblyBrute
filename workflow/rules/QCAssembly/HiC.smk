@@ -1,4 +1,4 @@
-
+ruleorder: combine_haplotypes > create_final_links_purge_dups
 
 rule combine_haplotypes:
     input:

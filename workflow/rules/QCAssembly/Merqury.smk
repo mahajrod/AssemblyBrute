@@ -60,6 +60,7 @@ rule merqury: # TODO: add handling for cases of haploid and polyploid genomes
     threads:
         parameters["threads"]["merqury"]
     shell:
+         " MERQURY_SCRIPT=`realpath workflow/external_tools/merqury/merqury.sh`; "
          " OUT_DIR=`dirname {output.qv_file}`; "
          " MERYL_DB=`realpath -s {input.meryl_db_dir}`;"
          " PRIMARY_ASSEMBLY=`realpath -s {input.primary_assembly}`;"
@@ -70,7 +71,7 @@ rule merqury: # TODO: add handling for cases of haploid and polyploid genomes
          "      ALTERNATIVE_ASSEMBLY=`realpath -s {input.alternative_assembly}`; "
          " fi;"
          " cd ${{OUT_DIR}}; "
-         " OMP_NUM_THREADS={threads} workflow/external_tools/merqury/merqury.sh ${{MERYL_DB}} "
+         " OMP_NUM_THREADS={threads} ${{MERQURY_SCRIPT}} ${{MERYL_DB}} "
          " ${{PRIMARY_ASSEMBLY}} ${{ALTERNATIVE_ASSEMBLY}} {params.out_prefix}  1>{log.std} 2>&1;"
 
 

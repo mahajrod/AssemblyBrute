@@ -4,10 +4,10 @@
     "common":
         "yaml": "workflow/envs/conda.common.yaml"
         "name": "yggbase"
+        "pip": "workflow/envs/pip.common.requirements"
     "kmer":
         "yaml": "workflow/envs/conda.kmer.yaml"
         "name": "kmer"
-        "pip": "workflow/envs/pip.common.requirements"
     "hifiasm":
         "yaml": "workflow/envs/conda.hifiasm.yaml"
         "name": "hifiasm"

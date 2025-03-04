@@ -1,5 +1,7 @@
 ruleorder: combine_haplotypes > create_final_links_purge_dups
 ruleorder: bam_merge_files_for_hic_map > bam_merge_files
+ruleorder: rmdup_for_hic_map > rmdup
+
 
 rule combine_haplotypes:
     input:

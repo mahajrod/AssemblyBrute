@@ -164,7 +164,7 @@ rule bwa_map_for_hic_map: #
 
 rule bam_merge_files_for_hic_map:
     input:
-        bams=expand(rules.bwa_map.output.bam, #out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.filtered.{pairprefix}.bam",
+        bams=expand(rules.bwa_map_for_hic_map.output.bam, #out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.filtered.{pairprefix}.bam",
                     allow_missing=True,
                     pairprefix=input_pairprefix_dict["hic"]), #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         reference_fai=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.combined.fasta.fai",
@@ -193,7 +193,7 @@ rule bam_merge_files_for_hic_map:
 
 rule rmdup_for_hic_map:
     input:
-        bam=rules.bam_merge_files.output.bam
+        bam=rules.bam_merge_files_for_hic_map.output.bam
     output:
         bam=out_dir_path / "{assembly_stage}/{parameters}/combined/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.combined.rmdup.bam",
         #bai=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam.bai",

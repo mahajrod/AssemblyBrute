@@ -21,7 +21,7 @@ rule meryl_assembly:
     threads:
         parameters["threads"]["meryl_assembly"]
     shell:
-         " meryl k={wildcards.assembly_kmer_length} threads={threads} memory={resources.mem}m count "
+         " workflow/external_tools/meryl-1.4/bin/meryl k={wildcards.assembly_kmer_length} threads={threads} memory={resources.mem}m count "
          " output {output.db_dir} {input} 1>{log.std} 2>&1;"
 
 
@@ -55,7 +55,7 @@ rule meryl_extract_unique_hap_kmers:
     threads:
         parameters["threads"]["meryl_extract_unique_hap_kmers"]
     shell:
-         " meryl threads={threads} memory={resources.mem}m difference {input.target_hap_db_dir} {input.rest_hap_db_dirs} output {output.unique_hap_db_dir} > {log.std} 2>&1; "
+         " workflow/external_tools/meryl-1.4/bin/meryl threads={threads} memory={resources.mem}m difference {input.target_hap_db_dir} {input.rest_hap_db_dirs} output {output.unique_hap_db_dir} > {log.std} 2>&1; "
 
 rule extract_pe_reads_by_unique_hap_kmers:
     input:
@@ -97,7 +97,7 @@ rule extract_pe_reads_by_unique_hap_kmers:
     threads:
         parameters["threads"]["extract_reads_by_unique_hap_kmers"]
     shell:
-         " meryl-lookup -exclude -sequence {input.forward_read} {input.reverse_read} "
+         " workflow/external_tools/meryl-1.4/bin/meryl-lookup -exclude -sequence {input.forward_read} {input.reverse_read} "
          " -mers {input.rest_hap_db_dirs} -output {output.forward_hap_read} {output.reverse_hap_read} > {log.std} 2>&1;"
 
 rule extract_se_reads_by_unique_hap_kmers:
@@ -133,7 +133,7 @@ rule extract_se_reads_by_unique_hap_kmers:
     threads:
         parameters["threads"]["extract_reads_by_unique_hap_kmers"]
     shell:
-         " meryl-lookup -exclude -sequence {input.se_read} "
+         " workflow/external_tools/meryl-1.4/bin/meryl-lookup -exclude -sequence {input.se_read} "
          " -mers {input.rest_hap_db_dirs} -output {output.hap_se_read} > {log.std} 2>&1;"
 
 rule extract_se_reads_from_fasta_by_unique_hap_kmers: #TODO: merge with extract_se_reads_by_unique_hap_kmers:

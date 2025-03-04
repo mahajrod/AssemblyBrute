@@ -67,7 +67,7 @@ rule bam2bed_for_hic_map:
         " sort -k4 --parallel=10 -S50G -T . > {output.bed} 2>{log.sort}; "
 
 
-rule bed2pairs:
+rule bed2pairs_for_hic_map:
     input:
         bed=out_dir_path / "{assembly_stage}/{parameters}/combined/alignment/NA/{genome_prefix}.{assembly_stage}.NA.combined.nodup.bed",
     output:
@@ -103,7 +103,7 @@ rule bed2pairs:
         #" cooler zoomify --resolutions 5000,10000,20000,40000,60000,80000,100000,120000,150000,200000,300000,400000,500000,1000000,2500000 "
         #" -o {output.higlass_mcool} {output.higlass_cool} 2>{log.zoomify}; "
 
-rule bwa_map_hic_map: #
+rule bwa_map_for_hic_map: #
     input:
         index=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.combined.fasta.ann",
         reference=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.combined.fasta",
@@ -162,7 +162,7 @@ rule bwa_map_hic_map: #
         " {params.bwa_tool} mem -SP5M -t {threads} -R  \'@RG\\tID:{params.id}\\tPU:x\\tSM:{params.id}\\tPL:illumina\\tLB:x\' "
         " {input.reference} {input.forward_fastq} {input.reverse_fastq} 2>{log.map} | samtools view -Sb - > {output.bam} 2>{log.sort} "
 
-rule bam_merge_files:
+rule bam_merge_files_for_hic_map:
     input:
         bams=expand(rules.bwa_map.output.bam, #out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.filtered.{pairprefix}.bam",
                     allow_missing=True,
@@ -191,7 +191,7 @@ rule bam_merge_files:
     shell:
         " samtools merge -@ {params.sort_threads} -o {output.bam} {input.bams} 1>{log.std} 2>&1"
 
-rule rmdup:
+rule rmdup_for_hic_map:
     input:
         bam=rules.bam_merge_files.output.bam
     output:

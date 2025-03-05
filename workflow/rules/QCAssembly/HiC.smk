@@ -68,7 +68,7 @@ rule bam2bed_for_hic_map:
 
     shell:
         " samtools view -@ 4 -u -F0x400 {input.bam} 2>{log.samtools} | bamToBed 2>{log.bam2bed} | "
-        " sort -k4 --parallel=10 -S50G -T . > {output.bed} 2>{log.sort}; "
+        " sort -k4 --parallel=10 -S50G -T {output.bed}.tmp > {output.bed} 2>{log.sort}; "
 
 
 rule bed2pairs_for_hic_map:
@@ -101,7 +101,7 @@ rule bed2pairs_for_hic_map:
         " awk 'BEGIN {{FS=\"\t\"; OFS=\"\t\"}} "
         "      {{if ($1 > $7) {{print substr($4,1,length($4)-2),$12,$7,$8,\"16\",$6,$1,$2,\"8\",$11,$5}} "
         "      else {{print substr($4,1,length($4)-2),$6,$1,$2,\"8\",$12,$7,$8,\"16\",$5,$11}} }}' 2>{log.awk1} | "
-        " tr '\-+' '01' 2>{log.tr} | sort -k3,3d -k7,7d 2>{log.sort} | awk 'NF==11' > {output.pairs} 2>{log.awk2} "
+        " tr '\-+' '01' 2>{log.tr} | sort -k3,3d -k7,7d --parallel=10 -S50G -T {output.pairs}.tmp 2>{log.sort} | awk 'NF==11' > {output.pairs} 2>{log.awk2} "
 
         #" cooler cload pairs -0 -c1 3 -p1 4 -c2 7 -p2 8 {output.genome_higlass}:1000 {output.higlass_bed} {output.higlass_cool} 2>{log.cload}; "
         #" cooler zoomify --resolutions 5000,10000,20000,40000,60000,80000,100000,120000,150000,200000,300000,400000,500000,1000000,2500000 "

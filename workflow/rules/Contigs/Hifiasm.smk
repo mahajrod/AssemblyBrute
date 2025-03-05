@@ -354,7 +354,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
          " ln -sf `basename {output.alt_contig_graph}` {output.alt_alias} 1>>{log.std} 2>&1; "
          " sleep 60;"
          #" COV_UPPER_BOUNDARY=`awk 'NR==2 {{printf \"%.0f\", {params.cov_multiplicator} * $2}}' {input.genomescope_report}`; "
-
+"""
 rule hifiasm_hic_tetra: # TODO: add support for polyploid assemblies
     priority: 1000
     input:
@@ -473,7 +473,7 @@ rule hifiasm_hic_tetra: # TODO: add support for polyploid assemblies
          "    ln -sf ${{OUTPUT_PREFIX_BASENAME}}.hic.${{HAP}}.p_ctg.gfa ${{OUTPUT_PREFIX_BASENAME}}.${{HAP}}.unfiltered.gfa >>{log.std}  2>&1;  "
          "    done; "
          " sleep 60; "
-
+"""
 
 rule hifiasm_long_reads_only:
     priority: 1000

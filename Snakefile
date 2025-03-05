@@ -1097,7 +1097,22 @@ if "hic_scaffolding" in config["stage_list"]:
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=[current_stage, ],
                             parameters=stage_dict[current_stage]["parameters"],
-                            )]
+                            ),
+                     expand(out_dir_path / "{assembly_stage}/{parameters}/combined/alignment/NA/{genome_prefix}.{assembly_stage}.NA.combined.nodup.higlass.mcool",
+                            genome_prefix=[config["genome_prefix"], ],
+                            assembly_stage=[current_stage, ],
+                            parameters=stage_dict[current_stage]["parameters"],
+                            ),]
+
+    results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/combined/alignment/NA/{genome_prefix}.{assembly_stage}.NA.combined.{resolution}.map.{ext}",
+                                  genome_prefix=[config["genome_prefix"], ],
+                                  assembly_stage=[current_stage],
+                                  parameters=stage_dict[current_stage]["parameters"],
+                                  resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
+                                  ext=parameters["tool_options"]["pretextsnapshot"]["format"])
+                        ]
+
+
 
     if current_stage in config["extended_qc_stages"]:
         results_list += [[[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.png",

@@ -114,6 +114,39 @@ if ("hic_scaffolding" in config["stage_list"]) and ("hic" in data_types) :
             #" cooler zoomify --resolutions 5000,10000,20000,40000,60000,80000,100000,120000,150000,200000,300000,400000,500000,1000000,2500000 "
             #" -o {output.higlass_mcool} {output.higlass_cool} 2>{log.zoomify}; "
 
+    rule create_higlass_track_from_bed: #
+        input:
+            fai=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.hic_scaffolding.combined.fasta.fai",
+            pairs=out_dir_path / "{assembly_stage}/{parameters}/combined/alignment/NA/{genome_prefix}.hic_scaffolding.NA.combined.nodup.pairs"
+        output:
+            genome_higlass=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.hic_scaffolding.combined.higlass.genome",
+            higlass_cool=out_dir_path / "{assembly_stage}/{parameters}/combined/alignment/NA/{genome_prefix}.hic_scaffolding.NA.combined.nodup.higlass.cool",
+            higlass_mcool=out_dir_path / "{assembly_stage}/{parameters}/combined/alignment/NA/{genome_prefix}.hic_scaffolding.NA.combined.nodup.higlass.mcool",
+        log:
+            cut=output_dict["log"]  / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.combined.cut.log",
+            sed1=output_dict["log"] / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.combined.sed1.log",
+            sort=output_dict["log"] / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.combined.sort.log",
+            cload=output_dict["log"]  / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.combined.cload.log",
+            zoomify=output_dict["log"]  / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.combined}.zoomify.log",
+            cluster_log=output_dict["cluster_log"] / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.combined.cluster.log",
+            cluster_err=output_dict["cluster_error"] / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.combined.cluster.err"
+        benchmark:
+            output_dict["benchmark"]  / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.combined.benchmark.txt"
+        conda:
+            config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        resources:
+            queue=config["queue"]["cpu"],
+            node_options=parse_node_list("create_higlass_track_from_bed"),
+            cpus=parameters["threads"]["create_higlass_track"] ,
+            time=parameters["time"]["create_higlass_track"],
+            mem=parameters["memory_mb"]["create_higlass_track"]
+        threads: parameters["threads"]["create_higlass_track"]
+        shell:
+            " cut -f1,2 {input.fai} 2>{log.cut} | sed 's/-/_/g' 2>{log.sed1} | sort -k2,2 -nr > {output.genome_higlass} 2>{log.sort}; "
+            " cooler cload pairs -0 -c1 3 -p1 4 -c2 7 -p2 8 {output.genome_higlass}:1000 {input.pairs} {output.higlass_cool} 2>{log.cload}; "
+            " cooler zoomify --resolutions 5000,10000,25000,50000,100000,150000,200000,300000,400000,500000,1000000,2500000 "
+            " -o {output.higlass_mcool} {output.higlass_cool} 2>{log.zoomify}; "
+
     rule bwa_map_for_hic_map: #
         input:
             index=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.combined.fasta.ann",

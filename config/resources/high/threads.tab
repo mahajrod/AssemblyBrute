@@ -131,5 +131,5 @@ rename_ragtag_scaffolds	1	1	1	1	1	1	1	1	1
 blast	1	1	1	1	1	1	1	1	1
 simulate_pcr	4	4	4	4	4	4	4	4	4
 combine_haplotypes	1	1	1	1	1	1	1	1	1
-bam2bed_for_hic_map	15	15	15	15	15	15	15	15	15
-bed2pairs	15	15	15	15	15	15	15	15	15
+bam2bed_for_hic_map	25	25	25	25	25	25	25	25	25
+bed2pairs	25	25	25	25	25	25	25	25	25

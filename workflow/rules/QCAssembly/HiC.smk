@@ -70,7 +70,7 @@ rule bam2bed_for_hic_map:
         " TMP_DIR={output.bed}.tmp; "
         " mkdir -p ${{TMP_DIR}}; "
         " samtools view -@ 4 -u -F0x400 {input.bam} 2>{log.samtools} | bamToBed 2>{log.bam2bed} | "
-        " sort -k4 --parallel=10 -S50G -T ${{TMP_DIR}} > {output.bed} 2>{log.sort}; "
+        " sort -k4 --parallel=20 -S100G -T ${{TMP_DIR}} > {output.bed} 2>{log.sort}; "
         " rm -r ${{TMP_DIR}}; "
 
 
@@ -106,7 +106,7 @@ rule bed2pairs_for_hic_map:
         " awk 'BEGIN {{FS=\"\t\"; OFS=\"\t\"}} "
         "      {{if ($1 > $7) {{print substr($4,1,length($4)-2),$12,$7,$8,\"16\",$6,$1,$2,\"8\",$11,$5}} "
         "      else {{print substr($4,1,length($4)-2),$6,$1,$2,\"8\",$12,$7,$8,\"16\",$5,$11}} }}' 2>{log.awk1} | "
-        " tr '\-+' '01' 2>{log.tr} | sort -k3,3d -k7,7d --parallel=10 -S50G -T ${{TMP_DIR}} 2>{log.sort} | awk 'NF==11' > {output.pairs} 2>{log.awk2};"
+        " tr '\-+' '01' 2>{log.tr} | sort -k3,3d -k7,7d --parallel=20 -S100G -T ${{TMP_DIR}} 2>{log.sort} | awk 'NF==11' > {output.pairs} 2>{log.awk2};"
         " rm -r ${{TMP_DIR}}; "
 
         #" cooler cload pairs -0 -c1 3 -p1 4 -c2 7 -p2 8 {output.genome_higlass}:1000 {output.higlass_bed} {output.higlass_cool} 2>{log.cload}; "
@@ -169,7 +169,7 @@ rule bwa_map_for_hic_map: #
         mem=parameters["memory_mb"]["bwa_map"]
     threads: parameters["threads"]["bwa_map"]
     shell:
-        " {params.bwa_tool} mem -SP5Cp -t {threads} -R  \'@RG\\tID:{params.id}\\tPU:x\\tSM:{params.id}\\tPL:illumina\\tLB:x\' "
+        " {params.bwa_tool} mem -SP5 -t {threads} -R  \'@RG\\tID:{params.id}\\tPU:x\\tSM:{params.id}\\tPL:illumina\\tLB:x\' "
         " {input.reference} {input.forward_fastq} {input.reverse_fastq} 2>{log.map} | samtools view -Sb - > {output.bam} 2>{log.sort} "
 
 rule bam_merge_files_for_hic_map:

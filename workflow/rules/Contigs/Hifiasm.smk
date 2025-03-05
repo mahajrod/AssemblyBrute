@@ -387,7 +387,7 @@ rule hifiasm_hic_tetra: # TODO: add support for polyploid assemblies
                                  haplotype=["hap1", "hap2", "hap3", "hap4",], allow_missing=True),
         alt_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.a_ctg.gfa",
         contig_graph_alias_list=expand(output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.{haplotype}.unfiltered.gfa",
-                                 haplotype=["hap1", "hap2", "hap3", "hap4"]),
+                                 haplotype=["hap1", "hap2", "hap3", "hap4"], allow_missing=True),
         alt_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.alt.unfiltered.gfa",
     params:
         purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge level"],

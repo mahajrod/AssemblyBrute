@@ -1,5 +1,5 @@
 #ruleorder: hifiasm_hic > hifiasm_hifi
-ruleorder: hifiasm_hic > hifiasm_hic_tetra
+#ruleorder: hifiasm_hic > hifiasm_hic_tetra
 localrules: get_lowcoverage_contig_ids, extract_lambda_value
 
 def get_main_read_filelist_for_correction(wildcards):

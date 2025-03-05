@@ -1,5 +1,5 @@
 #ruleorder: hifiasm_hic > hifiasm_hifi
-#ruleorder: hifiasm_hic > hifiasm_hic_tetra
+ruleorder: hifiasm_hic > hifiasm_hic_tetra
 localrules: get_lowcoverage_contig_ids, extract_lambda_value
 
 def get_main_read_filelist_for_correction(wildcards):
@@ -383,11 +383,22 @@ rule hifiasm_hic_tetra: # TODO: add support for polyploid assemblies
         #coverage_estimator_report_filename=get_coverage_estimator_report_filename
         lambda_file=rules.extract_lambda_value.output.lambda_file
     output:
-        contig_graph_list=expand(output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.{haplotype}.p_ctg.gfa",
-                                 haplotype=["hap1", "hap2", "hap3", "hap4",], allow_missing=True),
+        primary_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap1.p_ctg.gfa",
+        alternative_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap2.p_ctg.gfa",
+        third_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap3.p_ctg.gfa",
+        forth_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap4.p_ctg.gfa",
+        #alt_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.a_ctg.gfa",
+        primary_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap1.unfiltered.gfa",
+        alternative_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap2.unfiltered.gfa",
+        third_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap3.unfiltered.gfa",
+        forth_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap4.unfiltered.gfa",
+        #alt_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.alt.unfiltered.gfa",
+
+        #contig_graph_list=expand(output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.{haplotype}.p_ctg.gfa",
+        #                         haplotype=["hap1", "hap2", "hap3", "hap4",], allow_missing=True),
         alt_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.a_ctg.gfa",
-        contig_graph_alias_list=expand(output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.{haplotype}.unfiltered.gfa",
-                                 haplotype=["hap1", "hap2", "hap3", "hap4"], allow_missing=True),
+        #contig_graph_alias_list=expand(output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.{haplotype}.unfiltered.gfa",
+        #                         haplotype=["hap1", "hap2", "hap3", "hap4"], allow_missing=True),
         alt_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.alt.unfiltered.gfa",
     params:
         purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge level"],

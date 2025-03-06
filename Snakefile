@@ -1170,7 +1170,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                       genome_prefix=[config["genome_prefix"], ],
                                       assembly_stage=[current_stage, ],
                                       datatype=coverage_track_data_type_set,
-                                      haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
+                                      haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"] + ["combined"],
                                       parameters=[parameters_label]) for window_step_set in
                                             config["qc_settings"]["windows_sets"]] for parameters_label in
                                                       stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],

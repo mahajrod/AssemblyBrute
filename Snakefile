@@ -1078,7 +1078,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                track_type=[track_type],
                                window=[parameters["tool_options"]["assembly_qc"][track_type]["options"][window_settings]["window"]],
                                step=[parameters["tool_options"]["assembly_qc"][track_type]["options"][window_settings]["step"]],
-                               haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
+                               haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"] + ["combined"],
                                parameters=[parameters_label])
 
                         for window_settings in config["qc_settings"]["windows_sets"]]
@@ -1088,7 +1088,7 @@ if "hic_scaffolding" in config["stage_list"]:
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=[current_stage, ],
                             parameters=[parameters_label],
-                            haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
+                            haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"] + ["combined"],
                            ) for parameters_label in stage_dict[current_stage]["parameters"]
                      ]
                     ]
@@ -1123,7 +1123,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                track_type=[track_type],
                                window=[parameters["tool_options"]["assembly_qc"][track_type]["options"][window_settings]["window"]],
                                step=[parameters["tool_options"]["assembly_qc"][track_type]["options"][window_settings]["step"]],
-                               haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
+                               haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"] + ["combined"],
                                parameters=[parameters_label])
 
                         for window_settings in config["qc_settings"]["windows_sets"]]

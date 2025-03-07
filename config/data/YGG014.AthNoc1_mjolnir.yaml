@@ -117,12 +117,12 @@
          #- "l1primary"
          #- "l2primary"
          - "l3primary"
-         - "l3primary_no_telo"
+         #- "l3primary_no_telo"
          #- "l1primary_no_hic"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
     "purge_dups":
-        - "keep_hicov"
+        #- "keep_hicov"
         - "skipped"
     "salsa2":
         - "phased_reads"

@@ -16,7 +16,7 @@ if ("hic_scaffolding" in config["stage_list"]) and ("hic" in data_types) :
                              haplotype=stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"] ,
                              allow_missing=True)
         output:
-            combined_fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.combined.fasta",
+            combined_fasta=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.combined.fasta",
         params:
             haplotype_list=lambda wildcards: stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
             out_dir=str(out_dir_path)

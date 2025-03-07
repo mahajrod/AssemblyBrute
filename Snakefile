@@ -1080,7 +1080,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                track_type=[track_type],
                                window=[parameters["tool_options"]["assembly_qc"][track_type]["options"][window_settings]["window"]],
                                step=[parameters["tool_options"]["assembly_qc"][track_type]["options"][window_settings]["step"]],
-                               haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"] + ["combined"],
+                               haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"] + ["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
                                parameters=[parameters_label])
 
                         for window_settings in config["qc_settings"]["windows_sets"]]
@@ -1090,7 +1090,7 @@ if "hic_scaffolding" in config["stage_list"]:
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=[current_stage, ],
                             parameters=[parameters_label],
-                            haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"] + ["combined"],
+                            haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"] + ["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
                            ) for parameters_label in stage_dict[current_stage]["parameters"]
                      ]
                     ]
@@ -1126,7 +1126,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                track_type=[track_type],
                                window=[parameters["tool_options"]["assembly_qc"][track_type]["options"][window_settings]["window"]],
                                step=[parameters["tool_options"]["assembly_qc"][track_type]["options"][window_settings]["step"]],
-                               haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"] + ["combined"],
+                               haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"] + ["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
                                parameters=[parameters_label])
 
                         for window_settings in config["qc_settings"]["windows_sets"]]
@@ -1173,7 +1173,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                       genome_prefix=[config["genome_prefix"], ],
                                       assembly_stage=[current_stage, ],
                                       datatype=coverage_track_data_type_set,
-                                      haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"] + ["combined"],
+                                      haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"] + ["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
                                       parameters=[parameters_label]) for window_step_set in
                                             config["qc_settings"]["windows_sets"]] for parameters_label in
                                                       stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],
@@ -1211,9 +1211,9 @@ if "hic_scaffolding" in config["stage_list"]:
         results_list += [[expand(out_dir_path / "hic_scaffolding/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.max{max_length}.candidates.microchromosomes.filtered.tsv",
                                  assembly_stage=["hic_scaffolding"],
                                  parameters=[parameter_label],
-                                 haplotype=stage_dict["hic_scaffolding"]["parameters"][parameter_label]["haplotype_list"] + ["combined"],
+                                 haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
                                  genome_prefix=[config["genome_prefix"],],
-                                 max_length=parameters["tool_options"]["microsome_detection"]["max_length"],
+                                 max_length=[parameters["tool_options"]["microsome_detection"]["max_length"]],
                                  ) for parameter_label in stage_dict["hic_scaffolding"]["parameters"]]
                          ]
 """

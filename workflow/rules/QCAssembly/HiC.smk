@@ -45,20 +45,22 @@ if ("hic_scaffolding" in config["stage_list"]) and ("hic" in data_types) :
             "                          -l ${{HAP}} -s '.' >> {output.combined_fasta} 2>{log.log} ; "
             " done "
 
+    hic_curation_haplotype = "reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"
+
     rule bam2bed_for_hic_map:
         input:
-            bam=out_dir_path / "{assembly_stage}/{parameters}/combined/alignment/NA/{genome_prefix}.{assembly_stage}.NA.combined.rmdup.bam",
+            bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.rmdup.bam",
 
         output:
-            bed=out_dir_path / "{assembly_stage}/{parameters}/combined/alignment/NA/{genome_prefix}.{assembly_stage}.NA.combined.nodup.bed"
+            bed=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.nodup.bed"
         log:
-            samtools=output_dict["log"]  / "bam2bed_for_hic_map.{assembly_stage}..{parameters}.{genome_prefix}.samtools.log",
-            bam2bed=output_dict["log"] / "bam2bed_for_hic_map.{assembly_stage}..{parameters}.{genome_prefix}.bam2bed.log",
-            sort=output_dict["log"] / "bam2bed_for_hic_map.{assembly_stage}..{parameters}.{genome_prefix}.sort.log",
-            cluster_log=output_dict["cluster_log"] / "bam2bed_for_hic_map.{assembly_stage}..{parameters}.{genome_prefix}.cluster.log",
-            cluster_err=output_dict["cluster_error"] / "bam2bed_for_hic_map.{assembly_stage}..{parameters}.{genome_prefix}.cluster.err"
+            samtools=output_dict["log"]  / "bam2bed_for_hic_map.{assembly_stage}..{parameters}.{genome_prefix}.{haplotype}.samtools.log",
+            bam2bed=output_dict["log"] / "bam2bed_for_hic_map.{assembly_stage}..{parameters}.{genome_prefix}.{haplotype}.bam2bed.log",
+            sort=output_dict["log"] / "bam2bed_for_hic_map.{assembly_stage}..{parameters}.{genome_prefix}.{haplotype}.sort.log",
+            cluster_log=output_dict["cluster_log"] / "bam2bed_for_hic_map.{assembly_stage}..{parameters}.{genome_prefix}.{haplotype}.cluster.log",
+            cluster_err=output_dict["cluster_error"] / "bam2bed_for_hic_map.{assembly_stage}..{parameters}.{genome_prefix}.{haplotype}.cluster.err"
         benchmark:
-            output_dict["benchmark"]  / "bam2bed_for_hic_map.{assembly_stage}..{parameters}.{genome_prefix}.benchmark.txt"
+            output_dict["benchmark"]  / "bam2bed_for_hic_map.{assembly_stage}..{parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
         conda:
             config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
         resources:
@@ -79,19 +81,19 @@ if ("hic_scaffolding" in config["stage_list"]) and ("hic" in data_types) :
 
     rule bed2pairs_for_hic_map:
         input:
-            bed=out_dir_path / "{assembly_stage}/{parameters}/combined/alignment/NA/{genome_prefix}.{assembly_stage}.NA.combined.nodup.bed",
+            bed=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.nodup.bed",
         output:
-            pairs=out_dir_path / "{assembly_stage}/{parameters}/combined/alignment/NA/{genome_prefix}.{assembly_stage}.NA.combined.nodup.pairs",
+            pairs=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.nodup.pairs",
         log:
-            paste=output_dict["log"]  / "bed2pairs.{assembly_stage}..{parameters}.{genome_prefix}.paste.log",
-            awk1=output_dict["log"] / "bed2pairs.{assembly_stage}..{parameters}.{genome_prefix}.awk1.log",
-            awk2=output_dict["log"] / "bed2pairs.{assembly_stage}..{parameters}.{genome_prefix}.awk2.log",
-            tr=output_dict["log"] / "bed2pairs.{assembly_stage}..{parameters}.{genome_prefix}.tr.log",
-            sort=output_dict["log"] / "bed2pairs.{assembly_stage}..{parameters}.{genome_prefix}.sort.log",
-            cluster_log=output_dict["cluster_log"] / "bed2pairs.{assembly_stage}..{parameters}.{genome_prefix}.cluster.log",
-            cluster_err=output_dict["cluster_error"] / "bed2pairs.{assembly_stage}..{parameters}.{genome_prefix}.cluster.err"
+            paste=output_dict["log"]  / "bed2pairs.{assembly_stage}..{parameters}.{genome_prefix}.{haplotype}.paste.log",
+            awk1=output_dict["log"] / "bed2pairs.{assembly_stage}..{parameters}.{genome_prefix}.{haplotype}.awk1.log",
+            awk2=output_dict["log"] / "bed2pairs.{assembly_stage}..{parameters}.{genome_prefix}.{haplotype}.awk2.log",
+            tr=output_dict["log"] / "bed2pairs.{assembly_stage}..{parameters}.{genome_prefix}.{haplotype}.tr.log",
+            sort=output_dict["log"] / "bed2pairs.{assembly_stage}..{parameters}.{genome_prefix}.{haplotype}.sort.log",
+            cluster_log=output_dict["cluster_log"] / "bed2pairs.{assembly_stage}..{parameters}.{genome_prefix}.{haplotype}.cluster.log",
+            cluster_err=output_dict["cluster_error"] / "bed2pairs.{assembly_stage}..{parameters}.{genome_prefix}.{haplotype}.cluster.err"
         benchmark:
-            output_dict["benchmark"]  / "bed2pairs.{assembly_stage}..{parameters}.{genome_prefix}.benchmark.txt"
+            output_dict["benchmark"]  / "bed2pairs.{assembly_stage}..{parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
         conda:
             config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
         resources:
@@ -118,22 +120,22 @@ if ("hic_scaffolding" in config["stage_list"]) and ("hic" in data_types) :
 
     rule create_higlass_track_from_bed: #
         input:
-            fai=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.hic_scaffolding.combined.fasta.fai",
-            pairs=out_dir_path / "{assembly_stage}/{parameters}/combined/alignment/NA/{genome_prefix}.hic_scaffolding.NA.combined.nodup.pairs"
+            fai=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.fasta.fai",
+            pairs=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.hic_scaffolding.NA.{haplotype}.nodup.pairs"
         output:
-            genome_higlass=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.hic_scaffolding.combined.higlass.genome",
-            higlass_cool=out_dir_path / "{assembly_stage}/{parameters}/combined/alignment/NA/{genome_prefix}.hic_scaffolding.NA.combined.nodup.higlass.cool",
-            higlass_mcool=out_dir_path / "{assembly_stage}/{parameters}/combined/alignment/NA/{genome_prefix}.hic_scaffolding.NA.combined.nodup.higlass.mcool",
+            genome_higlass=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.higlass.genome",
+            higlass_cool=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.hic_scaffolding.NA.{haplotype}.nodup.higlass.cool",
+            higlass_mcool=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.hic_scaffolding.NA.{haplotype}.nodup.higlass.mcool",
         log:
-            cut=output_dict["log"]  / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.combined.cut.log",
-            sed1=output_dict["log"] / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.combined.sed1.log",
-            sort=output_dict["log"] / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.combined.sort.log",
-            cload=output_dict["log"]  / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.combined.cload.log",
-            zoomify=output_dict["log"]  / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.combined}.zoomify.log",
-            cluster_log=output_dict["cluster_log"] / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.combined.cluster.log",
-            cluster_err=output_dict["cluster_error"] / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.combined.cluster.err"
+            cut=output_dict["log"]  / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cut.log",
+            sed1=output_dict["log"] / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.sed1.log",
+            sort=output_dict["log"] / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.sort.log",
+            cload=output_dict["log"]  / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cload.log",
+            zoomify=output_dict["log"]  / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.zoomify.log",
+            cluster_log=output_dict["cluster_log"] / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.log",
+            cluster_err=output_dict["cluster_error"] / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.err"
         benchmark:
-            output_dict["benchmark"]  / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.combined.benchmark.txt"
+            output_dict["benchmark"]  / "create_higlass_track.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
         conda:
             config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
         resources:
@@ -151,8 +153,8 @@ if ("hic_scaffolding" in config["stage_list"]) and ("hic" in data_types) :
 
     rule bwa_map_for_hic_map: #
         input:
-            index=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.combined.fasta.ann",
-            reference=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.combined.fasta",
+            index=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.ann",
+            reference=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
             #fastq=lambda wildcards: output_dict["data"] / "fastq/hic/raw/{0}{1}".format(wildcards.fileprefix, config["fastq_extension"]) if wildcards.phasing_kmer_length == "NA" else \
             #                        out_dir_path / "{0}/{1}/fastq/{2}/{3}/hic/{4}{5}".format(config["phasing_stage"], #wildcards.assembly_stage,
             #                                                                                 detect_phasing_parameters(wildcards.parameters, config["phasing_stage"], stage_separator=".."), #wildcards.parameters,
@@ -183,18 +185,18 @@ if ("hic_scaffolding" in config["stage_list"]) and ("hic" in data_types) :
                                                                                                 config["fastq_extension"]),
         output:
             #bam=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam"
-            bam=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/combined/alignment/{phasing_kmer_length, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{phasing_kmer_length}.combined.{pairprefix, [^/]+}.bwa.bam"
+            bam=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/{haplotype}/alignment/{phasing_kmer_length, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix, [^/]+}.bwa.bam"
         params:
             id="{0}_hic".format(config["genome_prefix"]),
             bwa_tool=config["bwa_tool"]
         log:
-            map=output_dict["log"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.combined.{phasing_kmer_length}.{pairprefix}.map.log",
-            sort=output_dict["log"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.combined.{phasing_kmer_length}.{pairprefix}.sort.log",
+            map=output_dict["log"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{pairprefix}.map.log",
+            sort=output_dict["log"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{pairprefix}.sort.log",
             #filter=output_dict["log"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{pairprefix}.filter.log",
-            cluster_log=output_dict["cluster_log"] / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.combined.{pairprefix}.cluster.log",
-            cluster_err=output_dict["cluster_error"] / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.combined.{pairprefix}.cluster.err"
+            cluster_log=output_dict["cluster_log"] / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.cluster.log",
+            cluster_err=output_dict["cluster_error"] / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.cluster.err"
         benchmark:
-            output_dict["benchmark"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.combined.{phasing_kmer_length}.{pairprefix}.benchmark.txt"
+            output_dict["benchmark"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{pairprefix}.benchmark.txt"
         conda:
             config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
         resources:
@@ -213,18 +215,18 @@ if ("hic_scaffolding" in config["stage_list"]) and ("hic" in data_types) :
             bams=expand(rules.bwa_map_for_hic_map.output.bam, #out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.filtered.{pairprefix}.bam",
                         allow_missing=True,
                         pairprefix=input_pairprefix_dict["hic"]), #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            reference_fai=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.combined.fasta.fai",
-            reference=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.combined.fasta"
+            reference_fai=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.fai",
+            reference=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
         output:
-            bam=out_dir_path / "{assembly_stage}/{parameters}/combined/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.combined.bwa.bam" # TODO: make temp
+            bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.bam" # TODO: make temp
         params:
             sort_threads=parameters["threads"]["samtools_sort"]
         log:
-            std=output_dict["log"] / "bam_merge_files.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.combined.log",
-            cluster_log=output_dict["cluster_log"] / "bam_merge_files.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.combined.cluster.log",
-            cluster_err=output_dict["cluster_error"] / "bam_merge_files.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.combined.cluster.err"
+            std=output_dict["log"] / "bam_merge_files.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.log",
+            cluster_log=output_dict["cluster_log"] / "bam_merge_files.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.log",
+            cluster_err=output_dict["cluster_error"] / "bam_merge_files.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.err"
         benchmark:
-            output_dict["benchmark"]  / "bam_merge_files.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.combined.benchmark.txt"
+            output_dict["benchmark"]  / "bam_merge_files.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.benchmark.txt"
         conda:
             config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
         resources:
@@ -241,7 +243,7 @@ if ("hic_scaffolding" in config["stage_list"]) and ("hic" in data_types) :
         input:
             bam=rules.bam_merge_files_for_hic_map.output.bam
         output:
-            bam=out_dir_path / "{assembly_stage}/{parameters}/combined/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.combined.rmdup.bam",
+            bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
             #bai=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam.bai",
         params:
             sort_threads=parameters["threads"]["samtools_sort"],
@@ -250,14 +252,14 @@ if ("hic_scaffolding" in config["stage_list"]) and ("hic" in data_types) :
             markdup_threads=parameters["threads"]["samtools_markdup"],
             sort_per_thread=parameters["memory_mb"]["samtools_sort_per_thread"]
         log:
-            collate=output_dict["log"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.combined.collate.log",
-            fixmate=output_dict["log"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.combined.fixmate.log",
-            sort=output_dict["log"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.combined.sort.log",
-            markdup=output_dict["log"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.combined.markdup.log",
-            cluster_log=output_dict["cluster_log"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.combined.cluster.log",
-            cluster_err=output_dict["cluster_error"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.combined.cluster.err"
+            collate=output_dict["log"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.collate.log",
+            fixmate=output_dict["log"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.fixmate.log",
+            sort=output_dict["log"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.sort.log",
+            markdup=output_dict["log"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.markdup.log",
+            cluster_log=output_dict["cluster_log"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.log",
+            cluster_err=output_dict["cluster_error"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.err"
         benchmark:
-            output_dict["benchmark"]  / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.combined.benchmark.txt"
+            output_dict["benchmark"]  / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.benchmark.txt"
         conda:
             config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
         resources:

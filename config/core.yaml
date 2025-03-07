@@ -319,9 +319,7 @@
                     "min_aln_len": 10000
             "microsome_detection":
                 "default":
-                    "max_length":
-                        - 1000000
-                        - 10000000
+                    "max_length": 10000000
             "mitohifi":
                 "default":
                     "min_mapping_quality": 20

@@ -44,29 +44,29 @@ rule miniprot:
 
 rule place_microsomes_first:
     input:
-        candidate_tsv=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.candidates.microchromosomes.tsv",
-        len_file=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
-        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
+        candidate_tsv=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.combined.candidates.microchromosomes.tsv",
+        len_file=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.combined.len",
+        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.combined.fasta",
         assembly= lambda wildcards: (out_dir_path / "{0}/{1}/{2}.{0}.{3}.assembly".format(wildcards.assembly_stage,
                                                                                                 wildcards.parameters,
                                                                                                 wildcards.genome_prefix,
-                                                                                                wildcards.haplotype,
+                                                                                                "combined",
                                                                                                 )) if (wildcards.assembly_stage == "hic_scaffolding") and (wildcards.haplotype != "combined") else []
     output:
-        filtered_tsv=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.max{max_length, [^/]+}.candidates.microchromosomes.filtered.tsv",
-        reordered_fasta=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.max{max_length, [^/]+}.reordered.fasta",
+        filtered_tsv=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.reordered.candidates.microchromosomes.filtered.tsv",
+        reordered_fasta=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.reordered.fasta",
     params:
         assembly_option= lambda wildcards: " -a " + str(out_dir_path / "{0}/{1}/{2}.{0}.{3}.assembly".format(wildcards.assembly_stage,
                                                                                                             wildcards.parameters,
                                                                                                             wildcards.genome_prefix,
-                                                                                                            wildcards.haplotype,
+                                                                                                            "combined",
                                                                                                             )) if (wildcards.assembly_stage == "hic_scaffolding") and (wildcards.haplotype != "combined") else ""
     log:
-        log=output_dict["log"]  / "place_microsomes_first.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.max{max_length}.log",
-        cluster_log=output_dict["cluster_log"] / "place_microsomes_first.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.max{max_length}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "place_microsomes_first.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.max{max_length}.cluster.err"
+        log=output_dict["log"]  / "place_microsomes_first.{assembly_stage}.{parameters}.{genome_prefix}.combined.log",
+        cluster_log=output_dict["cluster_log"] / "place_microsomes_first.{assembly_stage}.{parameters}.{genome_prefix}.combined.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "place_microsomes_first.{assembly_stage}.{parameters}.{genome_prefix}.combined.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "place_microsomes_first.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{max_length}.benchmark.txt"
+        output_dict["benchmark"]  / "place_microsomes_first.{assembly_stage}.{parameters}.{genome_prefix}.combined.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

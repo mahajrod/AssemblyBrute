@@ -1205,8 +1205,9 @@ if "hic_scaffolding" in config["stage_list"]:
                                 parameters=parameters_list
                                 ),
                          ]
-    """
+
     if ("bird_genome" in config) and config["bird_genome"]:
+        print(current_stage)
         results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.max{max_length}.candidates.microchromosomes.filtered.tsv",
                                  assembly_stage=[current_stage],
                                  parameters=[parameter_label],
@@ -1214,7 +1215,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                  genome_prefix=[config["genome_prefix"],],
                                  max_length=parameters["tool_options"]["microsome_detection"]["max_length"],
                                  ) for parameter_label in stage_dict[current_stage]["parameters"]]
-                         ]"""
+                         ]
 """
 
 if "gap_closing" in config["stage_list"]: # TODO: modify it and all initiation of stage_dict entries to make it normal!!!!

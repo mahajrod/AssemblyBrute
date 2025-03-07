@@ -80,5 +80,5 @@ rule place_microsomes_first:
     shell:
         " OUTPUT_PREFIX={output.reordered_fasta}; "
         " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.reordered.fasta}}; "
-        " workflow/scripts/curation/move_microchromosomes_first.py  -i {input.candidate_tsv}  {params.assembly_option} "
+        " workflow/scripts/curation/move_microchromosomes_first.py  -i {input.candidate_tsv}  " # {params.assembly_option} "
         " -l {input.len_file} -f {input.fasta} -m {params.max_length} -o ${{OUTPUT_PREFIX}} > {log.log} 2>&1; "

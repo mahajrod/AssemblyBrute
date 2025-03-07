@@ -3,8 +3,8 @@ rule miniprot:
     input:
         fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
     output:
-        miniprot_gff=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, combined}.miniprot.gff",
-        candidate_tsv=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, combined}.candidates.microchromosomes.tsv"
+        miniprot_gff=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.miniprot.gff",
+        candidate_tsv=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.candidates.microchromosomes.tsv"
     params:
         microchromosome_prot_set=config["microchromosome_prot_set"]
     log:

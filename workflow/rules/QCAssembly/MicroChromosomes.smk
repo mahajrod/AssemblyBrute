@@ -1,30 +1,30 @@
 
 rule miniprot:
     input:
-        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
+        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.combined.fasta"
     output:
-        miniprot_gff=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.miniprot.gff",
-        candidate_tsv=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.candidates.microchromosomes.tsv"
+        miniprot_gff=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.combined.miniprot.gff",
+        candidate_tsv=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.combined.candidates.microchromosomes.tsv"
     params:
         microchromosome_prot_set=config["microchromosome_prot_set"]
     log:
-        miniprot=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.miniprot.log",
-        awk=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.awk.log",
-        grep=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.grep.log",
-        cut=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cut.log",
-        tr=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.tr.log",
-        cut2=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cut2.log",
-        sed=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.sed.log",
-        awk2=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.awk2.log",
-        cut3=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cut3.log",
-        sort=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.sort.log",
-        uniq=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.uniq.log",
-        sort2=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.sort2.log",
-        awk3=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.awk3.log",
-        cluster_log=output_dict["cluster_log"] / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.err"
+        miniprot=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.combined.miniprot.log",
+        awk=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.combined.awk.log",
+        grep=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.combined.grep.log",
+        cut=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.combined.cut.log",
+        tr=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.combined.tr.log",
+        cut2=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.combined.cut2.log",
+        sed=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.combined.sed.log",
+        awk2=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.combined.awk2.log",
+        cut3=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.combined.cut3.log",
+        sort=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.combined.sort.log",
+        uniq=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.combined.uniq.log",
+        sort2=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.combined.sort2.log",
+        awk3=output_dict["log"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.combined.awk3.log",
+        cluster_log=output_dict["cluster_log"] / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.combined.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.combined.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+        output_dict["benchmark"]  / "miniprot.{assembly_stage}.{parameters}.{genome_prefix}.combined.benchmark.txt"
     conda:
         config["conda"]["microchromosomes"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["microchromosomes"]["yaml"])
     resources:

@@ -1767,5 +1767,5 @@ if "gap_closing" in config["stage_list"]:
 if "ref_scaffolding" in config["stage_list"]:
     include: "workflow/rules/RefScaffolding/RagTag.smk"
 
-include: "workflow/rules/Curation/CurationFiles.smk"
-include: "workflow/rules/Curation/MicroChromosomes.smk"
+#include: "workflow/rules/Curation/CurationFiles.smk"
+#include: "workflow/rules/Curation/MicroChromosomes.smk"

@@ -1213,6 +1213,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                      genome_prefix=[config["genome_prefix"],],
                                      max_length=parameters["tool_options"]["microsome_detection"]["max_length"],
                                     ) for parameter_label in stage_dict[current_stage]["parameters"]],
+                         ]
 """
 
 if "gap_closing" in config["stage_list"]: # TODO: modify it and all initiation of stage_dict entries to make it normal!!!!

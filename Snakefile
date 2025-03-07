@@ -1211,7 +1211,7 @@ if "hic_scaffolding" in config["stage_list"]:
         results_list += [[expand(out_dir_path / "hic_scaffolding/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.max{max_length}.candidates.microchromosomes.filtered.tsv",
                                  assembly_stage=["hic_scaffolding"],
                                  parameters=[parameter_label],
-                                 haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
+                                 haplotype=["combined"],
                                  genome_prefix=[config["genome_prefix"],],
                                  max_length=[parameters["tool_options"]["microsome_detection"]["max_length"]],
                                  ) for parameter_label in stage_dict["hic_scaffolding"]["parameters"]]

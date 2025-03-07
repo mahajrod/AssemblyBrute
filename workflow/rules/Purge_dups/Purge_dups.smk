@@ -501,7 +501,7 @@ rule create_final_links_purge_dups:
                                                                                                                 wildcards.haplotype,
                                                                                                                 wildcards.genome_prefix),
     output:
-        purged_alias=out_dir_path / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, [^/]+}/{genome_prefix, [^/]+}.purge_dups.{haplotype, [^.]+}.fasta"
+        purged_alias=out_dir_path / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, [^/]+}/{genome_prefix, [^/]+}.purge_dups.{haplotype, hap[^.]+}.fasta"
     params:
         data_folder=lambda wildcards: "first_stage" if wildcards.haplotype == "hap0" else "second_stage"
     log:

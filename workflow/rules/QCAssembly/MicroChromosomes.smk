@@ -47,18 +47,20 @@ rule place_microsomes_first:
         candidate_tsv=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.candidates.microchromosomes.tsv",
         len_file=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
         fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
-        assembly= lambda wildcards: (out_dir_path / "{3}/{0}/{1}.{3}.{2}.assembly".format(wildcards.parameters,
+        assembly= lambda wildcards: (out_dir_path / "{0}/{1}/{2}.{0}.{3}.assembly".format(wildcards.assembly_stage,
+                                                                                                wildcards.parameters,
                                                                                                 wildcards.genome_prefix,
                                                                                                 wildcards.haplotype,
-                                                                                                wildcards.assembly_stage)) if wildcards.assembly_stage == "hic_scaffolding" else []
+                                                                                                )) if wildcards.assembly_stage == "hic_scaffolding" else []
     output:
         filtered_tsv=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.max{max_length, [^/]+}.candidates.microchromosomes.filtered.tsv",
         reordered_fasta=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.max{max_length, [^/]+}.reordered.fasta",
     params:
-        assembly_option= lambda wildcards: " -a " + str(out_dir_path / "{3}/{0}/{1}.{3}.{2}.assembly".format(wildcards.parameters,
-                                                                                                             wildcards.genome_prefix,
-                                                                                                             wildcards.haplotype,
-                                                                                                             wildcards.assembly_stage)) if wildcards.assembly_stage == "hic_scaffolding" else ""
+        assembly_option= lambda wildcards: " -a " + str(out_dir_path / "{0}/{1}/{2}.{0}.{3}.assembly".format(wildcards.assembly_stage,
+                                                                                                            wildcards.parameters,
+                                                                                                            wildcards.genome_prefix,
+                                                                                                            wildcards.haplotype,
+                                                                                                            )) if wildcards.assembly_stage == "hic_scaffolding" else ""
     log:
         log=output_dict["log"]  / "place_microsomes_first.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.max{max_length}.log",
         cluster_log=output_dict["cluster_log"] / "place_microsomes_first.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.max{max_length}.cluster.log",

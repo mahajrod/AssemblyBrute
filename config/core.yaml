@@ -1603,7 +1603,11 @@
                     "mapq": 10
             "pretextmap":
                 "default":
-                    "mapq": 10
+                    "mapq":
+                        - 20
+                        - 10
+                        - 1
+                        - 0
                     "sortby": "length"
                     "sortorder": "descend"
             "pretextsnapshot":

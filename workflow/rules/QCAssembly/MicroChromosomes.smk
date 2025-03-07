@@ -47,20 +47,21 @@ rule place_microsomes_first:
         candidate_tsv=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.combined.candidates.microchromosomes.tsv",
         len_file=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.combined.len",
         fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.combined.fasta",
-        assembly= lambda wildcards: (out_dir_path / "{0}/{1}/{2}.{0}.{3}.assembly".format(wildcards.assembly_stage,
-                                                                                                wildcards.parameters,
-                                                                                                wildcards.genome_prefix,
-                                                                                                "combined",
-                                                                                                )) if (wildcards.assembly_stage == "hic_scaffolding") and (wildcards.haplotype != "combined") else []
+        #assembly= lambda wildcards: (out_dir_path / "{0}/{1}/{2}.{0}.{3}.assembly".format(wildcards.assembly_stage,
+        #                                                                                        wildcards.parameters,
+        #                                                                                        wildcards.genome_prefix,
+        #                                                                                        "combined",
+        #                                                                                        )) if (wildcards.assembly_stage == "hic_scaffolding") and (wildcards.haplotype != "combined") else []
     output:
         filtered_tsv=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.reordered.candidates.microchromosomes.filtered.tsv",
         reordered_fasta=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.reordered.fasta",
     params:
-        assembly_option= lambda wildcards: " -a " + str(out_dir_path / "{0}/{1}/{2}.{0}.{3}.assembly".format(wildcards.assembly_stage,
-                                                                                                            wildcards.parameters,
-                                                                                                            wildcards.genome_prefix,
-                                                                                                            "combined",
-                                                                                                            )) if (wildcards.assembly_stage == "hic_scaffolding") and (wildcards.haplotype != "combined") else ""
+        #assembly_option= lambda wildcards: " -a " + str(out_dir_path / "{0}/{1}/{2}.{0}.{3}.assembly".format(wildcards.assembly_stage,
+        #                                                                                                    wildcards.parameters,
+        #                                                                                                    wildcards.genome_prefix,
+        #                                                                                                    "combined",
+        #                                                                                                    )) if (wildcards.assembly_stage == "hic_scaffolding") and (wildcards.haplotype != "combined") else "",
+        max_length=parameters["tool_options"]["microsome_detection"]["max_length"]
     log:
         log=output_dict["log"]  / "place_microsomes_first.{assembly_stage}.{parameters}.{genome_prefix}.combined.log",
         cluster_log=output_dict["cluster_log"] / "place_microsomes_first.{assembly_stage}.{parameters}.{genome_prefix}.combined.cluster.log",
@@ -80,4 +81,4 @@ rule place_microsomes_first:
         " OUTPUT_PREFIX={output.reordered_fasta}; "
         " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.reordered.fasta}}; "
         " workflow/scripts/curation/move_microchromosomes_first.py  -i {input.candidate_tsv}  {params.assembly_option} "
-        " -l {input.len_file} -f {input.fasta} -m {wildcards.max_length} -o ${{OUTPUT_PREFIX}} > {log.log} 2>&1; "
+        " -l {input.len_file} -f {input.fasta} -m {params.max_length} -o ${{OUTPUT_PREFIX}} > {log.log} 2>&1; "

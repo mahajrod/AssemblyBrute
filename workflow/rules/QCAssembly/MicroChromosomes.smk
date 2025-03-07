@@ -53,7 +53,7 @@ rule place_microsomes_first:
         #                                                                                        "combined",
         #                                                                                        )) if (wildcards.assembly_stage == "hic_scaffolding") and (wildcards.haplotype != "combined") else []
     output:
-        filtered_tsv=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.reordered.candidates.microchromosomes.filtered.tsv",
+        filtered_tsv=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.combined.candidates.microchromosomes.filtered.tsv",
         reordered_fasta=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.reordered.fasta",
     params:
         #assembly_option= lambda wildcards: " -a " + str(out_dir_path / "{0}/{1}/{2}.{0}.{3}.assembly".format(wildcards.assembly_stage,

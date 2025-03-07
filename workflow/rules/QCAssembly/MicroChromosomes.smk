@@ -51,7 +51,7 @@ rule place_microsomes_first:
                                                                                                 wildcards.parameters,
                                                                                                 wildcards.genome_prefix,
                                                                                                 wildcards.haplotype,
-                                                                                                )) if wildcards.assembly_stage == "hic_scaffolding" else []
+                                                                                                )) if (wildcards.assembly_stage == "hic_scaffolding") and (wildcards.haplotype != "combined") else []
     output:
         filtered_tsv=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, combined}.max{max_length, [^/]+}.candidates.microchromosomes.filtered.tsv",
         reordered_fasta=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, combined}.max{max_length, [^/]+}.reordered.fasta",
@@ -60,7 +60,7 @@ rule place_microsomes_first:
                                                                                                             wildcards.parameters,
                                                                                                             wildcards.genome_prefix,
                                                                                                             wildcards.haplotype,
-                                                                                                            )) if wildcards.assembly_stage == "hic_scaffolding" else ""
+                                                                                                            )) if (wildcards.assembly_stage == "hic_scaffolding") and (wildcards.haplotype != "combined") else ""
     log:
         log=output_dict["log"]  / "place_microsomes_first.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.max{max_length}.log",
         cluster_log=output_dict["cluster_log"] / "place_microsomes_first.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.max{max_length}.cluster.log",

@@ -438,22 +438,62 @@
                         "kmer_length": 7
             "mosdepth":
                 "default":
-                    "illumina":
-                        "min_mapping_quality": 30
-                    "nanopore":
-                        "min_mapping_quality": 10
-                    "duplex":
-                        "min_mapping_quality": 10
-                    "simplex":
-                        "min_mapping_quality": 10
-                    "clr":
-                        "min_mapping_quality": 20
-                    "hifi":
-                        "min_mapping_quality": 30
-                    "lqccs":
-                        "min_mapping_quality": 10
-                    "hic":
-                        "min_mapping_quality": 10
+                    "options":
+                        "default": # default mosdepth settings
+                            "blacklist_flags": 0x704 #  read unmapped (0x4), not primary alignment (0x100), read fails platform/vendor quality checks (0x200), read is PCR or optical duplicate (0x400)
+                            "illumina":
+                                "min_mapping_quality": 0
+                            "nanopore":
+                                "min_mapping_quality": 0
+                            "duplex":
+                                "min_mapping_quality": 0
+                            "simplex":
+                                "min_mapping_quality": 0
+                            "clr":
+                                "min_mapping_quality": 0
+                            "hifi":
+                                "min_mapping_quality": 0
+                            "lqccs":
+                                "min_mapping_quality": 0
+                            "hic":
+                                "min_mapping_quality": 0
+                        "hq_mapping": # default mosdepth settings
+                            "blacklist_flags": 0x704 #  read unmapped (0x4), not primary alignment (0x100), read fails platform/vendor quality checks (0x200), read is PCR or optical duplicate (0x400)
+                            "illumina":
+                                "min_mapping_quality": 30
+                            "nanopore":
+                                "min_mapping_quality": 10
+                            "duplex":
+                                "min_mapping_quality": 10
+                            "simplex":
+                                "min_mapping_quality": 10
+                            "clr":
+                                "min_mapping_quality": 20
+                            "hifi":
+                                "min_mapping_quality": 30
+                            "lqccs":
+                                "min_mapping_quality": 10
+                            "hic":
+                                "min_mapping_quality": 10
+                        "all_nodup_reads":
+                            "blacklist_flags": 0x404  #read unmapped (0x4), not primary alignment (0x100), read fails platform/vendor quality checks (0x200), read is PCR or optical duplicate (0x400)
+                            "illumina":
+                                "min_mapping_quality": 0
+                            "nanopore":
+                                "min_mapping_quality": 0
+                            "duplex":
+                                "min_mapping_quality": 0
+                            "simplex":
+                                "min_mapping_quality": 0
+                            "clr":
+                                "min_mapping_quality": 0
+                            "hifi":
+                                "min_mapping_quality": 0
+                            "lqccs":
+                                "min_mapping_quality": 0
+                            "hic":
+                                "min_mapping_quality": 0
+
             "jellyfish":
                 "default":
                     "illumina":

@@ -108,15 +108,16 @@ rule calculate_coverage:
         bam=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type}/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.bam",
         bai=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type}/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.bam.bai"
     output:
-        per_base=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.per-base.bed.gz"
+        per_base=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.{settings}.per-base.bed.gz"
     params:
-        min_mapq= lambda wildcards: parse_option("min_mapping_quality", parameters["tool_options"]["mosdepth"][wildcards.datatype], " -Q ", none_value=0),
+        min_mapq= lambda wildcards: parse_option("min_mapping_quality", parameters["tool_options"]["mosdepth"]["options"][wildcards.settings][wildcards.datatype], " -Q ", none_value=0),
+        blacklist_flags= lambda wildcards: parse_option("blacklist_flags", parameters["tool_options"]["mosdepth"]["options"][wildcards.settings], " -F "),
     log:
-        std=output_dict["log"]  / "calculate_coverage.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.log",
-        cluster_log=output_dict["cluster_log"] / "calculate_coverage.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "calculate_coverage.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.cluster.err"
+        std=output_dict["log"]  / "calculate_coverage.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{settings}.log",
+        cluster_log=output_dict["cluster_log"] / "calculate_coverage.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{settings}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "calculate_coverage.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{settings}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "calculate_coverage.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.benchmark.txt"
+        output_dict["benchmark"]  / "calculate_coverage.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{settings}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -130,20 +131,20 @@ rule calculate_coverage:
     shell:
         " PREFIX={output.per_base};"
         " PREFIX=${{PREFIX%.per-base.bed.gz}}; "
-        " mosdepth -t {threads} ${{PREFIX}} {input.bam} 2>{log.std}; "
+        " mosdepth -t {threads} {params.blacklist_flags} {params.min_mapq} ${{PREFIX}} {input.bam} 2>{log.std}; "
 
 rule create_coverage_table:
     input:
         per_base=rules.calculate_coverage.output.per_base,
     output:
-        stat_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, [^./]+}.win{window, [0-9]+}.step{step, [0-9]+}.stat",
-        all_stat_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, [^./]+}.win{window, [0-9]+}.step{step, [0-9]+}.all.stat"
+        stat_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, [^./]+}_{settings, [^./]+}.win{window, [0-9]+}.step{step, [0-9]+}.stat",
+        all_stat_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, [^./]+}_{settings, [^./]+}.win{window, [0-9]+}.step{step, [0-9]+}.all.stat"
     log:
-        std=output_dict["log"]  / "create_coverage_table.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.log",
-        cluster_log=output_dict["cluster_log"] / "create_coverage_table.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_coverage_table.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.cluster.err"
+        std=output_dict["log"]  / "create_coverage_table.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{settings}.{window}.{step}.log",
+        cluster_log=output_dict["cluster_log"] / "create_coverage_table.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{settings}.{window}.{step}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_coverage_table.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{settings}.{window}.{step}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "create_coverage_table.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.benchmark.txt"
+        output_dict["benchmark"]  / "create_coverage_table.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{settings}.{window}.{step}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -162,17 +163,17 @@ rule create_coverage_table:
 
 rule create_bedgraph_from_coverage_table:
     input:
-        stat_file=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type}/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.win{window}.step{step}.stat"
+        stat_file=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type}/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}_{settings}.win{window}.step{step}.stat"
     output:
-        bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, [^./]+}_{cov_type, [^./]+}_{track_type, coverage}.win{window, [0-9]+}.step{step, [0-9]+}.track.bedgraph"
+        bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, [^./]+}_{settings, [^./]+}_{cov_type, [^./]+}_{track_type, coverage}.win{window, [0-9]+}.step{step, [0-9]+}.track.bedgraph"
     params:
         coverage_col= lambda wildcards: 6 if wildcards.cov_type == "mean" else 7
     log:
-        std=output_dict["log"]  / "create_bedgraph_from_coverage_table.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{cov_type}.{window}.{step}.log",
-        cluster_log=output_dict["cluster_log"] / "create_bedgraph_from_coverage_table.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{cov_type}.{window}.{step}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_bedgraph_from_coverage_table.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{cov_type}.{window}.{step}.cluster.err"
+        std=output_dict["log"]  / "create_bedgraph_from_coverage_table.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{settings}.{cov_type}.{window}.{step}.log",
+        cluster_log=output_dict["cluster_log"] / "create_bedgraph_from_coverage_table.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{settings}.{cov_type}.{window}.{step}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_bedgraph_from_coverage_table.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{settings}.{cov_type}.{window}.{step}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "create_bedgraph_from_coverage_table.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{cov_type}.{window}.{step}.benchmark.txt"
+        output_dict["benchmark"]  / "create_bedgraph_from_coverage_table.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{datatype}.{settings}.{cov_type}.{window}.{step}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -194,15 +195,15 @@ rule draw_coverage_heatmap:
         len_file=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
         all_stat_file=rules.create_coverage_table.output.all_stat_file
     output:
-        png=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/trackplots/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, [^./]+}.{track_type, coverage}.{scaffold_length}.win{window, [0-9]+}.step{step, [0-9]+}.png",
-        split_png=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/trackplots/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, [^./]+}.{track_type, coverage}.{scaffold_length}.win{window, [0-9]+}.step{step, [0-9]+}.split_thresholds.png"
+        png=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/trackplots/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, [^./]+}.{track_type, coverage}_{settings, [^./]+}.{scaffold_length}.win{window, [0-9]+}.step{step, [0-9]+}.png",
+        split_png=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/trackplots/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, [^./]+}.{track_type, coverage}_{settings, [^./]+}.{scaffold_length}.win{window, [0-9]+}.step{step, [0-9]+}.split_thresholds.png"
 
     log:
-        std=output_dict["log"]  / "draw_coverage_heatmap.{assembly_stage}..{parameters}..{track_type}.{scaffold_length}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.log",
-        cluster_log=output_dict["cluster_log"] / "draw_coverage_heatmap.{assembly_stage}..{parameters}..{track_type}.{scaffold_length}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "draw_coverage_heatmap.{assembly_stage}..{parameters}..{track_type}.{scaffold_length}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.cluster.err"
+        std=output_dict["log"]  / "draw_coverage_heatmap.{assembly_stage}..{parameters}..{track_type}.{scaffold_length}.{genome_prefix}.{haplotype}.{datatype}.{settings}.{window}.{step}.log",
+        cluster_log=output_dict["cluster_log"] / "draw_coverage_heatmap.{assembly_stage}..{parameters}..{track_type}.{scaffold_length}.{genome_prefix}.{haplotype}.{datatype}.{settings}.{window}.{step}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "draw_coverage_heatmap.{assembly_stage}..{parameters}..{track_type}.{scaffold_length}.{genome_prefix}.{haplotype}.{datatype}.{settings}.{window}.{step}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "draw_coverage_heatmap.{assembly_stage}..{parameters}..{track_type}.{scaffold_length}.{genome_prefix}.{haplotype}.{datatype}.{window}.{step}.benchmark.txt"
+        output_dict["benchmark"]  / "draw_coverage_heatmap.{assembly_stage}..{parameters}..{track_type}.{scaffold_length}.{genome_prefix}.{haplotype}.{datatype}.{settings}.{window}.{step}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

@@ -1169,13 +1169,14 @@ if "hic_scaffolding" in config["stage_list"]:
 
         if coverage_track_data_type_set:
             results_list += [[[
-                                  expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.coverage.{scaffold_length}.win{window}.step{step}.png",
+                                  expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.coverage_{settings}.{scaffold_length}.win{window}.step{step}.png",
                                       scaffold_length=config["qc_settings"]["assembly_scaffold_sets"],
                                       window=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["window"],
                                       step=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
                                       genome_prefix=[config["genome_prefix"], ],
                                       assembly_stage=[current_stage, ],
                                       datatype=coverage_track_data_type_set,
+                                      settings=parameters["tool_options"]["mosdepth"]["options"],
                                       haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"] + ["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
                                       parameters=[parameters_label]) for window_step_set in
                                             config["qc_settings"]["windows_sets"]] for parameters_label in

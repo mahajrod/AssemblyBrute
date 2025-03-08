@@ -1108,7 +1108,7 @@ if "hic_scaffolding" in config["stage_list"]:
                             parameters=stage_dict[current_stage]["parameters"],
                             ),]
 
-    results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{subset}.mapq{mapq}.{res}.{resolution}.{ext}",
+    results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.pretext",
                                   res=["default", "high_res"],
                                   haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
                                   subset=["all"] + ( ["microchr"] if ("bird_genome" in config) and config["bird_genome"] else [] ),

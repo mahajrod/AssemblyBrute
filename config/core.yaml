@@ -1646,8 +1646,13 @@
                         - 10
                         - 1
                         - 0
-                    "sortby": "length"
-                    "sortorder": "descend"
+                    "sortby": "nosort" # Allowed: "length", "name", "nosort"
+                    "sortorder": null # Allowed: "ascend", "descend", null
+                    "subsets":
+                        "all":
+                            "max_len": null
+                        "microchr":
+                            "max_len": 20000000
             "pretextsnapshot":
                 "default":
                     "sequences": "=full"

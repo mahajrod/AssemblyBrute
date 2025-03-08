@@ -71,10 +71,10 @@ rule pretextsnapshot: #Pretext-snapshot doesn't support long file names!!!!!!!!!
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("pretextsnapshot"),
-        cpus=parameters["threads"]["pretextmap"] ,
-        time=parameters["time"]["pretextmap"],
-        mem=parameters["memory_mb"]["pretextmap"]
-    threads: parameters["threads"]["pretextmap"]
+        cpus=parameters["threads"]["pretextsnapshot"] ,
+        time=parameters["time"]["pretextsnapshot"],
+        mem=parameters["memory_mb"]["pretextsnapshot"]
+    threads: parameters["threads"]["pretextsnapshot"]
     shell:
         " LOG=`realpath -s -m {log.std}`; "
         " cd `dirname {input.map}`; "

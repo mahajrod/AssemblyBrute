@@ -1095,18 +1095,21 @@ if "hic_scaffolding" in config["stage_list"]:
                      ]
                     ]
 
-    results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/combined/alignment/NA/{genome_prefix}.{assembly_stage}.NA.combined.nodup.pairs",
+    results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.nodup.pairs",
+                            haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=[current_stage, ],
                             parameters=stage_dict[current_stage]["parameters"],
                             ),
-                     expand(out_dir_path / "{assembly_stage}/{parameters}/combined/alignment/NA/{genome_prefix}.{assembly_stage}.NA.combined.nodup.higlass.mcool",
+                     expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.nodup.higlass.mcool",
+                            haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=[current_stage, ],
                             parameters=stage_dict[current_stage]["parameters"],
                             ),]
 
-    results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/combined/alignment/NA/{genome_prefix}.{assembly_stage}.NA.combined.mapq{mapq}.{resolution}.{ext}",
+    results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.mapq{mapq}.{resolution}.{ext}",
+                                  haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
                                   genome_prefix=[config["genome_prefix"], ],
                                   assembly_stage=[current_stage],
                                   parameters=stage_dict[current_stage]["parameters"],

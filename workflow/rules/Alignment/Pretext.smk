@@ -34,7 +34,12 @@ rule pretextmap: # #Pretext-map probably doesn't support long file names!!!!!!!!
     shell:
         " MAP_LOG=`realpath -s -m {log.map}` ; "
         " VIEW_LOG=`realpath -s -m {log.view}` ; "
-        " awk '{{if ($2 > {params.max_len}) print $1}}' {input.len} > {output.filtered_out} 2>{log.awk}; "
+        " if [ '{params.max_len}' == 'None' ];"
+        "   then "
+        "       > {output.filtered_out}; "
+        "   else "
+        "       awk '{{if ($2 > {params.max_len}) print $1}}' {input.len} > {output.filtered_out} 2>{log.awk}; "
+        "   fi; "
         " if [[ -s {output.filtered_out} ]]; "
         "   then "
         "       FILTER_OUT=' --filterExclude '; "

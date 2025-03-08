@@ -38,7 +38,7 @@ rule pretextmap: # #Pretext-map probably doesn't support long file names!!!!!!!!
         " if [[ -s {output.filtered_out} ]]; "
         "   then "
         "       FILTER_OUT=' --filterExclude '; "
-        "       FILTER_OUT=\"${{FILTER_OUT}} `cat {output.filtered_out} | tr '\n' ',' | sed 's/,\+$//'` | sed 's/,/, /g' \"; "
+        "       FILTER_OUT=\"${{FILTER_OUT}} `cat {output.filtered_out} | tr '\\n' ',' | sed 's/,\+$//'` | sed 's/,/, /g' \"; "
         "   else "
         "       FILTER_OUT=''; "
         "   fi; " 

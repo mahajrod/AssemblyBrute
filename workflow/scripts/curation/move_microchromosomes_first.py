@@ -62,6 +62,7 @@ if args.assembly_file:
         for line_string in end_list:
             out_fd.write(line_string)
 if args.fasta:
+    print("Writing fasta...")
     collection_fasta = CollectionSequence(in_file=args.fasta)
     scaffold_series = pd.Series(collection_fasta.records.keys())
     non_microchromosome_scaffolds = scaffold_series[~scaffold_series.isin(final_scaffold_df.index)]

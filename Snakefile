@@ -1094,19 +1094,19 @@ if "hic_scaffolding" in config["stage_list"]:
                            ) for parameters_label in stage_dict[current_stage]["parameters"]
                      ]
                     ]
-
-    results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.nodup.pairs",
-                            haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
-                            genome_prefix=[config["genome_prefix"], ],
-                            assembly_stage=[current_stage, ],
-                            parameters=stage_dict[current_stage]["parameters"],
-                            ),
-                     expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.nodup.higlass.mcool",
-                            haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
-                            genome_prefix=[config["genome_prefix"], ],
-                            assembly_stage=[current_stage, ],
-                            parameters=stage_dict[current_stage]["parameters"],
-                            ),]
+    if not config["skip_higlass"]:
+        results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.nodup.pairs",
+                                haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
+                                genome_prefix=[config["genome_prefix"], ],
+                                assembly_stage=[current_stage, ],
+                                parameters=stage_dict[current_stage]["parameters"],
+                                ),
+                         expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.nodup.higlass.mcool",
+                                haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
+                                genome_prefix=[config["genome_prefix"], ],
+                                assembly_stage=[current_stage, ],
+                                parameters=stage_dict[current_stage]["parameters"],
+                                ),]
 
     results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.pretext",
                                   res=["default", "high_res"],

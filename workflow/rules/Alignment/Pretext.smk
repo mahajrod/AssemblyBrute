@@ -94,7 +94,8 @@ rule pretext_inject_tracks:
         gc_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.gc.win{window}.step{step}.track.bedgraph",
         trf_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.trf.win{window}.step{step}.track.bedgraph",
         windowmasker_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.windowmasker.win{window}.step{step}.track.bedgraph",
-        hifi_coverage_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.hifi_all_nodup_reads_mean_coverage.win{window}.step{step}.track.bedgraph"
+        all_hifi_coverage_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.hifi_all_nodup_reads_mean_coverage.win{window}.step{step}.track.bedgraph",
+        default_hifi_coverage_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.hifi_default_mean_coverage.win{window}.step{step}.track.bedgraph"
 
     output:
         updated_map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^./]+}/alignment/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{subset}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.tracks.win_{window, [0-9]+}.{step, [0-9]+}.pretext"
@@ -153,6 +154,9 @@ rule pretext_inject_tracks:
         " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.filtered_out} -i {input.windowmasker_track} | "
         "   awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4 }}' | "
         "   PretextGraph -i {output.updated_map}  -n windowmasker.repeat_density > {log.windowmasker} 2>&1; "
-        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.filtered_out} -i {input.hifi_coverage_track} | "
+        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.filtered_out} -i {input.all_hifi_coverage_track} | "
         "   awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4}}' | "
-        "   PretextGraph -i {output.updated_map}  -n hifi.coverage  > {log.coverage} 2>&1; "
+        "   PretextGraph -i {output.updated_map}  -n hifi_all.coverage  > {log.coverage} 2>&1; "
+        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.filtered_out} -i {input.default_hifi_coverage_track} | "
+        "   awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4}}' | "
+        "   PretextGraph -i {output.updated_map}  -n hifi_default.coverage  > {log.coverage} 2>&1; "

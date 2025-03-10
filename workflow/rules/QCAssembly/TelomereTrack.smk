@@ -3,6 +3,7 @@ ruleorder: get_telomere_warning > create_bedgraph_track
 ruleorder: copy_telomere_files > classify_telomeric_regions_windows
 
 localrules: copy_telomere_files
+localrules: copy_telomere_track_for_pretext, create_telomere_track_for_pretext
 
 rule telo_finder:
     input:
@@ -175,6 +176,69 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         " echo 'Removing temporary workdir...'  >> ${{LOG}};  "
         " rm -r ${{WORKDIR}} >> ${{LOG}} 2>&1; "
 
+rule create_telomere_track_for_pretext:
+    input:
+        canonical_telo="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical.telomere",
+        non_canonical_telo="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical.telomere"
+        #canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.canonical_telomere.win1000.step200.track.bedgraph",
+        #non_canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.bedgraph",
+    output:
+        canonical_telo_bedgraph="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical.telomere.pretext.bedgraph",
+        non_canonical_telo_bedgraph="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical.telomere.pretext.bedgraph"
+    log:
+        canonical="{fasta_dir}/create_telomere_track_for_pretext.{fasta_prefix}.canonical.log",
+        non_canonical="{fasta_dir}/create_telomere_track_for_pretext.{fasta_prefix}.non_canonical.log",
+        cluster_log="{fasta_dir}/create_telomere_track_for_pretext.{fasta_prefix}.cluster.log",
+        cluster_err="{fasta_dir}/create_telomere_track_for_pretext.{fasta_prefix}.cluster.err"
+    benchmark:
+        "{fasta_dir}/create_telomere_track_for_pretext.{fasta_prefix}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("create_telomere_track_for_pretext"),
+        cpus=parameters["threads"]["create_telomere_track_for_pretext"] ,
+        time=parameters["time"]["create_telomere_track_for_pretext"],
+        mem=parameters["memory_mb"]["create_telomere_track_for_pretext"],
+    threads: parameters["threads"]["create_telomere_track_for_pretext"]
+
+    shell:
+        " awk '{{print $1\"\\t\"$4\"\\t\"$5\"\\t\"((($5-$4)<0)?-($5-$4):($5-$4))}}' {input.canonical_telo} | "
+        "   sed 's/>//g' > {output.canonical_telo_bedgraph} 2>{log.canonical}; "
+        " awk '{{print $1\"\\t\"$4\"\\t\"$5\"\\t\"((($5-$4)<0)?-($5-$4):($5-$4))}}' {input.non_canonical_telo} | "
+        "   sed 's/>//g' > {output.non_canonical_telo_bedgraph} 2>{log.non_canonical}; "
+
+
+rule copy_telomere_track_for_pretext:
+    input:
+        canonical_telo_bedgraph="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical.telomere.pretext.bedgraph",
+        non_canonical_telo_bedgraph="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical.telomere.pretext.bedgraph",
+
+        #canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.canonical_telomere.win1000.step200.track.bedgraph",
+        #non_canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.bedgraph",
+    output:
+        canonical_telo_bedgraph="{fasta_dir}/assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.canonical.telomere.pretext.bedgraph",
+        non_canonical_telo_bedgraph="{fasta_dir}/assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.non_canonical.telomere.pretext.bedgraph",
+    log:
+        canonical="{fasta_dir}/copy_telomere_track_for_pretext.{fasta_prefix}.canonical.log",
+        non_canonical="{fasta_dir}/copy_telomere_track_for_pretext.{fasta_prefix}.non_canonical.log",
+        cluster_log="{fasta_dir}/copy_telomere_track_for_pretext.{fasta_prefix}.cluster.log",
+        cluster_err="{fasta_dir}/copy_telomere_track_for_pretext.{fasta_prefix}.cluster.err"
+    benchmark:
+        "{fasta_dir}/copy_telomere_track_for_pretext.{fasta_prefix}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("telo_container"),
+        cpus=parameters["threads"]["copy_telomere_track_for_pretext"] ,
+        time=parameters["time"]["copy_telomere_track_for_pretext"],
+        mem=parameters["memory_mb"]["copy_telomere_track_for_pretext"],
+    threads: parameters["threads"]["copy_telomere_track_for_pretext"]
+
+    shell:
+        " cp -f {input.canonical_telo_bedgraph} {output.canonical_telo_bedgraph} > {log.canonical} 2>&1; "
+        " cp -f {input.non_canonical_telo_bedgraph} {output.non_canonical_telo_bedgraph} > {log.non_canonical} 2>&1; "
 
 rule collapse_overlapping_telomere_windows:
     input:

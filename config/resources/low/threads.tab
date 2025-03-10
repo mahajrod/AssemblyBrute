@@ -134,3 +134,5 @@ simulate_pcr	4	4	4	4	4	4	4	4	4
 combine_haplotypes	1	1	1	1	1	1	1	1	1
 bam2bed_for_hic_map	25	25	25	25	25	25	25	25	25
 bed2pairs	25	25	25	25	25	25	25	25	25
+copy_telomere_track_for_pretext	1	1	1	1	1	1	1	1	1
+create_telomere_track_for_pretext	1	1	1	1	1	1	1	1	1

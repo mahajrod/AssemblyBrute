@@ -1133,6 +1133,8 @@ if "hic_scaffolding" in config["stage_list"]:
     print(current_stage)
     for parameters_label in stage_dict[current_stage]["parameters"]:
         print("\t" + str(parameters_label))
+        for window_step_set in config["qc_settings"]["windows_sets"]:
+            print( window_step_set)
 
     results_list += [[[expand(updated_map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.tracks.win_{window}.{step}.pretext",
                             haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],

@@ -23,22 +23,22 @@ parser.add_argument("-o", "--output", action="store", dest="output", default=sys
 args = parser.parse_args()
 
 if args.id_list is None:
-    id_series = None
+    id_list = None
 else:
     try:
-        id_series = pd.read_csv(args.id_list, sep="\t", header=None).squeeze()
+        id_list = list(pd.read_csv(args.id_list, sep="\t", header=None).squeeze())
     except pd.errors.EmptyDataError:
-        id_series = None
-
+        sys.stderr.write("EMPTY ID FILE\n")
+        id_list = None
 if args.mode == "blacklist":
-    comparator_func = lambda s: s not in id_series
+    comparator_func = lambda s: s not in id_list
 elif args.mode == "whitelist":
-    comparator_func = lambda s: s in id_series
+    comparator_func = lambda s: s in id_list
 else:
     raise ValueError(f"ERROR!!! Unknown mode: {args.mode}")
 
 with FileRoutines.metaopen(args.input, "r") as in_fd, FileRoutines.metaopen(args.output, "w") as out_fd:
-    if id_series is None:
+    if id_list is None:
         for line in in_fd:
             out_fd.write(line)
     else:

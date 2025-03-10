@@ -28,5 +28,5 @@ rule create_gap_track: #
 
     shell:
         " seqtk cutN -n 1 -g  {input.fasta} > {output.gap_bed} 2>{log.seqtk}; "
-        " awk '{{printf \"%s\t%i\\n\" $0,1}}' {output.gap_bed} > {output.gap_bedgraph} 2>{log.awk}; "
+        " awk '{{printf \"%s\\t%i\\n\",$0,1}}' {output.gap_bed} > {output.gap_bedgraph} 2>{log.awk}; "
         " cp {output.gap_bedgraph} {output.gap_bedgraph_alias} > {log.cp} 2>&1; "

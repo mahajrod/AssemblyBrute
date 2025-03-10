@@ -1137,18 +1137,19 @@ if "hic_scaffolding" in config["stage_list"]:
     #        print( window_step_set)
     #        print()
 
-    results_list += [[[expand(updated_map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.tracks.win_{window}.{step}.pretext",
-                            haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
-                            subset=["all"] + (["microchr"] if ("bird_genome" in config) and config["bird_genome"] else []),
-                            genome_prefix=[config["genome_prefix"], ],
-                            assembly_stage=[current_stage],
-                            parameters=stage_dict[current_stage]["parameters"],
-                            resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
-                            mapq=parameters["tool_options"]["pretextmap"]["mapq"],
-                            ext=parameters["tool_options"]["pretextsnapshot"]["format"],
-                            window=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["window"],
-                            step = parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
-                          ) for window_step_set in config["qc_settings"]["windows_sets"]] for parameters_label in
+    results_list += [[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.tracks.win_{window}.{step}.pretext",
+                              res=["default", "high_res"],
+                              haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
+                              subset=["all"] + (["microchr"] if ("bird_genome" in config) and config["bird_genome"] else []),
+                              genome_prefix=[config["genome_prefix"], ],
+                              assembly_stage=[current_stage],
+                              parameters=stage_dict[current_stage]["parameters"],
+                              resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
+                              mapq=parameters["tool_options"]["pretextmap"]["mapq"],
+                              ext=parameters["tool_options"]["pretextsnapshot"]["format"],
+                              window=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["window"],
+                              step = parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
+                             ) for window_step_set in config["qc_settings"]["windows_sets"]] for parameters_label in
                                                       stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],
                      ]
 

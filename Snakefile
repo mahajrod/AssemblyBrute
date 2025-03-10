@@ -1126,7 +1126,20 @@ if "hic_scaffolding" in config["stage_list"]:
                                   parameters=stage_dict[current_stage]["parameters"],
                                   resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
                                   mapq=parameters["tool_options"]["pretextmap"]["mapq"],
-                                  ext=parameters["tool_options"]["pretextsnapshot"]["format"])
+                                  ext=parameters["tool_options"]["pretextsnapshot"]["format"]),
+                    [[expand(updated_map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.tracks.win_{window}.{step}.pretext",
+                            haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
+                            subset=["all"] + (["microchr"] if ("bird_genome" in config) and config["bird_genome"] else []),
+                            genome_prefix=[config["genome_prefix"], ],
+                            assembly_stage=[current_stage],
+                            parameters=stage_dict[current_stage]["parameters"],
+                            resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
+                            mapq=parameters["tool_options"]["pretextmap"]["mapq"],
+                            ext=parameters["tool_options"]["pretextsnapshot"]["format"],
+                            window=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["window"],
+                            step = parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
+                          ) for window_step_set in config["qc_settings"]["windows_sets"]] for parameters_label in
+                                                      stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],
                         ]
 
 

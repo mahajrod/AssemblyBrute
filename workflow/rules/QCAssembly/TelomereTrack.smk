@@ -178,8 +178,8 @@ rule telo_container: #TODO: add possibility to use custom telomere c
 
 rule create_telomere_track_for_pretext:
     input:
-        canonical_telo="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical.telomere",
-        non_canonical_telo="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical.telomere"
+        canonical_telo="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.canonical.telomere",
+        non_canonical_telo="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.non_canonical.telomere"
         #canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.canonical_telomere.win1000.step200.track.bedgraph",
         #non_canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.bedgraph",
     output:
@@ -211,14 +211,14 @@ rule create_telomere_track_for_pretext:
 
 rule copy_telomere_track_for_pretext:
     input:
-        canonical_telo_bedgraph="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical.telomere.pretext.bedgraph",
-        non_canonical_telo_bedgraph="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical.telomere.pretext.bedgraph",
+        canonical_telo_bedgraph="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.canonical.telomere.pretext.bedgraph",
+        non_canonical_telo_bedgraph="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.non_canonical.telomere.pretext.bedgraph",
 
         #canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.canonical_telomere.win1000.step200.track.bedgraph",
         #non_canonical_telo_track="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.non_canonical_telomere.win1000.step200.track.bedgraph",
     output:
-        canonical_telo_bedgraph="{fasta_dir}/assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.canonical.telomere.pretext.bedgraph",
-        non_canonical_telo_bedgraph="{fasta_dir}/assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.non_canonical.telomere.pretext.bedgraph",
+        canonical_telo_bedgraph="{fasta_dir}/assembly_qc/tracks/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical.telomere.pretext.bedgraph",
+        non_canonical_telo_bedgraph="{fasta_dir}/assembly_qc/tracks/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical.telomere.pretext.bedgraph",
     log:
         canonical="{fasta_dir}/copy_telomere_track_for_pretext.{fasta_prefix}.canonical.log",
         non_canonical="{fasta_dir}/copy_telomere_track_for_pretext.{fasta_prefix}.non_canonical.log",

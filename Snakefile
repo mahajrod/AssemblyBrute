@@ -1014,6 +1014,8 @@ if "hic_scaffolding" in config["stage_list"]:
     #                            parameters=[parameters_label]) for parameters_label in parameters_list]
     # stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"]
     #prev_parameters_label = stage_dict["hic_scaffolding"]["parameters"][parameters_label]["prev_parameters"]
+
+    """
     if not (config["skip_prescaf_pretext"] or config["skip_both_pretext"]):
         results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.mapq{mapq}.{resolution}.{ext}",
                                   genome_prefix=[config["genome_prefix"], ],
@@ -1037,7 +1039,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                   ext=parameters["tool_options"]["pretextsnapshot"]["format"]) if "threeddna" not in parameter_labels else [] for parameters_label in stage_dict["hic_scaffolding"]["parameters"]],
                         ]
 
-
+    """
     results_list += [
                     [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam.general_stats",
                             genome_prefix=[config["genome_prefix"], ],

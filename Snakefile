@@ -1748,6 +1748,7 @@ if "purge_dups" in config["stage_list"]:
 include: "workflow/rules/HiC/ReadPhasing.smk"
 
 include: "workflow/rules/Alignment/Index.smk"
+include: "workflow/rules/Alignment/Merge.smk"
 include: "workflow/rules/Alignment/Stats.smk"
 
 if "hic" in data_types:

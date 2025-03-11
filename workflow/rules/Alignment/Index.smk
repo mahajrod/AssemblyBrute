@@ -25,33 +25,6 @@ rule bwa_index:
     shell:
         " {params.bwa_tool} index {input.fasta} 1>{log.std} 2>&1;"
 
-"""
-rule bwa_index:
-    input:
-        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
-    output:
-        index=out_dir_path / ("{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta%s" % (".bwt" if config["bwa_tool"] == "bwa" else ".bwt.2bit.64")), #  or (config["other_tool_option_sets"]["mapping_pipeline"] == "arima")
-    params:
-        bwa_tool=config["bwa_tool"] # if config["other_tool_option_sets"]["mapping_pipeline"] != "arima" else "bwa",
-    log:
-        std=output_dict["log"]  / "bwa_index.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.log",
-        cluster_log=output_dict["cluster_log"] / "bwa_index.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "bwa_index.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.cluster.err"
-    benchmark:
-        output_dict["benchmark"]  / "bwa_indexs.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
-    conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
-    resources:
-        queue=config["queue"]["cpu"],
-        cpus=parameters["threads"]["bwa_index"] ,
-        time=parameters["time"]["bwa_index"],
-        mem=parameters["memory_mb"]["bwa_index"]
-    threads: parameters["threads"]["bwa_index"]
-
-    shell:
-        " {params.bwa_tool} index {input.fasta} 1>{log.std} 2>&1;"
-"""
-
 rule ref_faidx:
     input:
         fasta="{fasta_prefix}.fasta"

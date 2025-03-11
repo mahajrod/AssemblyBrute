@@ -91,7 +91,7 @@ rule bam_merge_pairs:
         " {input.reverse_bam} samtools {params.min_mapq} 2>{log.merge} | "
         " samtools view -bS -t {input.reference_fai} - 2>{log.view} | "
         " samtools sort -T ${{TMP_PREFIX}} -m {params.sort_memory}M -@ {params.sort_threads} -o {output.bam} 2>{log.sort}"
-
+"""
 rule bam_merge_files:
     input:
         bams=expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.bam", #out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.filtered.{pairprefix}.bam",
@@ -121,7 +121,7 @@ rule bam_merge_files:
     threads: parameters["threads"]["samtools_sort"]
     shell:
         " samtools merge -@ {params.sort_threads} -o {output.bam} {input.bams} 1>{log.std} 2>&1"
-
+"""
 rule rmdup:
     input:
         bam=rules.bam_merge_files.output.bam

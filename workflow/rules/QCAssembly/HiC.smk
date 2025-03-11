@@ -113,10 +113,6 @@ if ("hic_scaffolding" in config["stage_list"]) and ("hic" in data_types) :
             " tr '\-+' '01' 2>{log.tr} | sort -k3,3d -k7,7d --parallel=20 -S100G -T ${{TMP_DIR}} 2>{log.sort} | awk 'NF==11' > {output.pairs} 2>{log.awk2};"
             " rm -r ${{TMP_DIR}}; "
 
-            #" cooler cload pairs -0 -c1 3 -p1 4 -c2 7 -p2 8 {output.genome_higlass}:1000 {output.higlass_bed} {output.higlass_cool} 2>{log.cload}; "
-            #" cooler zoomify --resolutions 5000,10000,20000,40000,60000,80000,100000,120000,150000,200000,300000,400000,500000,1000000,2500000 "
-            #" -o {output.higlass_mcool} {output.higlass_cool} 2>{log.zoomify}; "
-
     rule create_higlass_track_from_bed: #
         input:
             fai=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.fasta.fai",
@@ -188,7 +184,7 @@ if ("hic_scaffolding" in config["stage_list"]) and ("hic" in data_types) :
         shell:
             " {params.bwa_tool} mem  -T 0 -SP5 -t {threads} -R  \'@RG\\tID:{params.id}\\tPU:x\\tSM:{params.id}\\tPL:illumina\\tLB:x\' "
             " {input.reference} {input.forward_fastq} {input.reverse_fastq} 2>{log.map} | samtools view -Sb - > {output.bam} 2>{log.sort} "
-
+    """
     rule bam_merge_files_for_hic_map:
         input:
             bams=expand(rules.bwa_map_for_hic_map.output.bam, #out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.filtered.{pairprefix}.bam",
@@ -217,10 +213,10 @@ if ("hic_scaffolding" in config["stage_list"]) and ("hic" in data_types) :
         threads: parameters["threads"]["samtools_sort"]
         shell:
             " samtools merge -@ {params.sort_threads} -o {output.bam} {input.bams} 1>{log.std} 2>&1"
-
+    """
     rule rmdup_for_hic_map:
         input:
-            bam=rules.bam_merge_files_for_hic_map.output.bam
+            bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.bam"
         output:
             bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, combined|reordered}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
             #bai=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam.bai",

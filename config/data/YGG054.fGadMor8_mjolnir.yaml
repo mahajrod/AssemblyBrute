@@ -194,6 +194,7 @@
 
 "filtered_data":
     - "hifi"
+    - "hic"
     - "illumina"
     - "nanopore"
 

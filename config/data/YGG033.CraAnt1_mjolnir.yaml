@@ -187,9 +187,9 @@
 
 "filtered_data":
     - "hifi"
+    - "hic"
     - "illumina"
     - "nanopore"
-    - "hic"
     - "ccs"
 
 "final_kmer_counter": "meryl" # pipeline allows usage of different kmer counter tools, but only one genomesize assessment could be used

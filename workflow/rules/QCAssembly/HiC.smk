@@ -207,7 +207,7 @@ if ("hic_scaffolding" in config["stage_list"]) and ("hic" in data_types) :
             mem=parameters["memory_mb"]["bwa_map"]
         threads: parameters["threads"]["bwa_map"]
         shell:
-            " {params.bwa_tool} mem -SP5 -t {threads} -R  \'@RG\\tID:{params.id}\\tPU:x\\tSM:{params.id}\\tPL:illumina\\tLB:x\' "
+            " {params.bwa_tool} mem -T 0 -SP5 -t {threads} -R  \'@RG\\tID:{params.id}\\tPU:x\\tSM:{params.id}\\tPL:illumina\\tLB:x\' "
             " {input.reference} {input.forward_fastq} {input.reverse_fastq} 2>{log.map} | samtools view -Sb - > {output.bam} 2>{log.sort} "
 
     rule bam_merge_files_for_hic_map:

@@ -4,7 +4,8 @@ rule bwa_map: #
     input:
         index=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.ann",
         reference=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
-        fastq=lambda wildcards: output_dict["data"] / "fastq/hic/raw/{0}{1}".format(wildcards.fileprefix, config["fastq_extension"]) if wildcards.phasing_kmer_length == "NA" else \
+        fastq=lambda wildcards: output_dict["data"] / "fastq/hic/raw/{0}{1}".format(wildcards.fileprefix,
+                                                                                    config["fastq_extension"]) if wildcards.phasing_kmer_length == "NA" else \
                                 out_dir_path / "{0}/{1}/fastq/{2}/{3}/hic/{4}{5}".format(config["phasing_stage"], #wildcards.assembly_stage,
                                                                                          detect_phasing_parameters(wildcards.parameters, config["phasing_stage"], stage_separator=".."), #wildcards.parameters,
                                                                                          wildcards.haplotype,
@@ -17,7 +18,6 @@ rule bwa_map: #
     params:
         id="{0}_hic".format(config["genome_prefix"]),
         bwa_tool=config["bwa_tool"],
-        trim_cmd="" #" | fastx_trimmer -f 8" if not config["skip_filter_reads"] else "" # trimming was moved to preprocessing
     log:
         fastx=output_dict["log"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{fileprefix}.fastx.log",
         map=output_dict["log"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{fileprefix}.map.log",
@@ -38,7 +38,7 @@ rule bwa_map: #
     threads: parameters["threads"]["bwa_map_arima"]
     shell:
         " {params.bwa_tool} mem -SP5M -t {threads} -R  \'@RG\\tID:{params.id}\\tPU:x\\tSM:{params.id}\\tPL:illumina\\tLB:x\' "
-        " {input.reference} <(zcat {input.fastq} {params.trim_cmd} 2>{log.fastx}) 2>{log.map} |"
+        " {input.reference} <(zcat {input.fastq}  2>{log.fastx}) 2>{log.map} |"
         " workflow/external_tools/arima_mapping_pipeline/filter_five_end.pl 2>{log.filter} | samtools view -Sb - > {output.bam} 2>{log.sort} "
 
 rule bam_merge_pairs:

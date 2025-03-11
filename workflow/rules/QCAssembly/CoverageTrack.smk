@@ -163,7 +163,7 @@ rule create_coverage_table:
 
 rule create_bedgraph_from_coverage_table:
     input:
-        stat_file=rules.create_coverage_table.output.stat_file#out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type}/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}_{settings}.win{window}.step{step}.stat"
+        stat_file=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type}/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}_{settings}.win{window}.step{step}.stat"
     output:
         bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, [^./]+}_{settings, [^./]+}_{cov_type, [^./]+}_{track_type, coverage}.win{window, [0-9]+}.step{step, [0-9]+}.track.bedgraph"
     params:

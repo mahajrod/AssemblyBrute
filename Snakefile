@@ -1107,7 +1107,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                 assembly_stage=[current_stage, ],
                                 parameters=stage_dict[current_stage]["parameters"],
                                 ),]
-
+    """
     results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.pretext",
                                   res=["default", "high_res"],
                                   haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
@@ -1152,7 +1152,7 @@ if "hic_scaffolding" in config["stage_list"]:
                              ) for window_step_set in config["qc_settings"]["windows_sets"]] for parameters_label in
                                                       stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],
                      ]
-
+    """
     if current_stage in config["extended_qc_stages"]:
         results_list += [[[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.png",
                                scaffold_length=config["qc_settings"]["assembly_scaffold_sets"],
@@ -1199,7 +1199,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                                          haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]),
                                    ) for parameters_label in stage_dict[current_stage]["parameters"]],
                              ]
-
+        """
         if coverage_track_data_type_set:
             results_list += [[[
                                   expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.coverage_{settings}.{scaffold_length}.win{window}.step{step}.png",
@@ -1215,7 +1215,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                             config["qc_settings"]["windows_sets"]] for parameters_label in
                                                       stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],
                              ]
-
+        """
     if not config["skip_busco"]:
         results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
                                 busco_lineage=config["busco_lineage_list"],

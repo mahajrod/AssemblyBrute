@@ -2,10 +2,10 @@ if ("hic_scaffolding" in config["stage_list"]) and ("hic" in data_types) :
     #ruleorder: combine_haplotypes > create_final_links_purge_dups
     #ruleorder: combine_haplotypes > yahs
     #ruleorder: combine_haplotypes > create_assembly_links_if_skipping_purge_dups
-    ruleorder: bam_merge_files_for_hic_map > bam_merge_files
-    ruleorder: rmdup_for_hic_map > rmdup
-    ruleorder: combine_haplotypes > yahs
-    ruleorder: bwa_map_for_hic_map > bam_merge_pairs
+    #ruleorder: bam_merge_files_for_hic_map > bam_merge_files
+    #ruleorder: rmdup_for_hic_map > rmdup
+    #ruleorder: combine_haplotypes > yahs
+    #ruleorder: bwa_map_for_hic_map > bam_merge_pairs
 
     rule combine_haplotypes:
         input:
@@ -218,7 +218,7 @@ if ("hic_scaffolding" in config["stage_list"]) and ("hic" in data_types) :
             reference_fai=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.fai",
             reference=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
         output:
-            bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, combined|reordered}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.bam" # TODO: make temp
+            bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.bam" # TODO: make temp
         params:
             sort_threads=parameters["threads"]["samtools_sort"]
         log:
@@ -243,7 +243,7 @@ if ("hic_scaffolding" in config["stage_list"]) and ("hic" in data_types) :
         input:
             bam=rules.bam_merge_files_for_hic_map.output.bam
         output:
-            bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, combined|reordered}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
+            bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
             #bai=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam.bai",
         params:
             sort_threads=parameters["threads"]["samtools_sort"],

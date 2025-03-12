@@ -1085,7 +1085,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                 assembly_stage=[current_stage, ],
                                 parameters=stage_dict[current_stage]["parameters"],
                                 ),]
-    """
+
     if not (config["skip_prescaf_pretext"] or config["skip_both_pretext"]):
         results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.mapq{mapq}.{resolution}.{ext}",
                                       genome_prefix=[config["genome_prefix"], ],
@@ -1132,13 +1132,6 @@ if "hic_scaffolding" in config["stage_list"]:
 
                         ]
 
-    #print(current_stage)
-    #for parameters_label in stage_dict[current_stage]["parameters"]:
-    #    print("\t" + str(parameters_label))
-    #    for window_step_set in config["qc_settings"]["windows_sets"]:
-    #        print( window_step_set)
-    #        print()
-
     results_list += [[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.tracks.win_{window}.{step}.pretext",
                               res=["default", "high_res"],
                               haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
@@ -1154,7 +1147,7 @@ if "hic_scaffolding" in config["stage_list"]:
                              ) for window_step_set in config["qc_settings"]["windows_sets"]] for parameters_label in
                                                       stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],
                      ]
-    """
+
     if current_stage in config["extended_qc_stages"]:
         results_list += [[[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.png",
                                scaffold_length=config["qc_settings"]["assembly_scaffold_sets"],

@@ -12,8 +12,8 @@ if ("hic_scaffolding" in config["stage_list"]) and ("hic" in data_types) :
                                                                                                          wildcards.parameters,
                                                                                                          wildcards.genome_prefix,
                                                                                                          wildcards.assembly_stage)),
-                             haplotype=stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"] ,
-                             allow_missing=True)
+                                                 haplotype=stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"] ,
+                                                 allow_missing=True)
         output:
             combined_fasta=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.combined.fasta",
         params:
@@ -76,7 +76,6 @@ if ("hic_scaffolding" in config["stage_list"]) and ("hic" in data_types) :
             " samtools view -@ 4 -u -F0x400 {input.bam} 2>{log.samtools} | bamToBed 2>{log.bam2bed} | "
             " sort -k4 --parallel=20 -S100G -T ${{TMP_DIR}} > {output.bed} 2>{log.sort}; "
             " rm -r ${{TMP_DIR}}; "
-
 
     rule bed2pairs_for_hic_map:
         input:
@@ -184,36 +183,7 @@ if ("hic_scaffolding" in config["stage_list"]) and ("hic" in data_types) :
         shell:
             " {params.bwa_tool} mem  -T 0 -SP5 -t {threads} -R  \'@RG\\tID:{params.id}\\tPU:x\\tSM:{params.id}\\tPL:illumina\\tLB:x\' "
             " {input.reference} {input.forward_fastq} {input.reverse_fastq} 2>{log.map} | samtools view -Sb - > {output.bam} 2>{log.sort} "
-    """
-    rule bam_merge_files_for_hic_map:
-        input:
-            bams=expand(rules.bwa_map_for_hic_map.output.bam, #out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.filtered.{pairprefix}.bam",
-                        allow_missing=True,
-                        pairprefix=input_pairprefix_dict["hic"]), #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            reference_fai=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.fai",
-            reference=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
-        output:
-            bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, combined|reordered}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.bam" # TODO: make temp
-        params:
-            sort_threads=parameters["threads"]["samtools_sort"]
-        log:
-            std=output_dict["log"] / "bam_merge_files.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.log",
-            cluster_log=output_dict["cluster_log"] / "bam_merge_files.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.log",
-            cluster_err=output_dict["cluster_error"] / "bam_merge_files.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.err"
-        benchmark:
-            output_dict["benchmark"]  / "bam_merge_files.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.benchmark.txt"
-        conda:
-            config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
-        resources:
-            queue=config["queue"]["cpu"],
-            node_options=parse_node_list("bwa_merge_files"),
-            cpus=parameters["threads"]["samtools_sort"] ,
-            time=parameters["time"]["samtools_sort"],
-            mem=parameters["memory_mb"]["samtools_sort"]
-        threads: parameters["threads"]["samtools_sort"]
-        shell:
-            " samtools merge -@ {params.sort_threads} -o {output.bam} {input.bams} 1>{log.std} 2>&1"
-    """
+
     rule rmdup_for_hic_map:
         input:
             bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.bam"

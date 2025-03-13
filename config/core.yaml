@@ -1750,6 +1750,19 @@
                      "min_mapping_quality": 10
                      "phasing_kmer_length": "NA"
                      "use_phased_reads": False
+            "yahs_juicer_pre":
+                "all":
+                    "mapq":
+                        - 0
+                        - 1
+                        - 10
+                "mapq1":
+                    "mapq":
+                        - 0
+                        - 1
+                "mapq0":
+                    "mapq":
+                        - 0
             "juicer_tools_pre":
                 "default":
                     "resolution_list":

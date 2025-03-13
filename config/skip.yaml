@@ -20,3 +20,6 @@
 "skip_ragtag": False
 "skip_gathering": True
 "skip_trf": False
+"skip_combined_hic": False
+"skip_combined_contig_hic": False
+

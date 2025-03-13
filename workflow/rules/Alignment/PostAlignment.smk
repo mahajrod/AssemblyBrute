@@ -61,22 +61,23 @@ rule yahs_juicer_pre_prescaffolding: #
         bai=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam.bai",
         agp=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.pre.agp"
     output:
-        links_bed=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.bed",
-        liftover_agp=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.liftover.agp",
-        liftover_syn=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.liftover.syn",
-        assembly=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.assembly",
-        assembly_original=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.original.assembly",
-        assembly_agp=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.assembly.agp",
-        log=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.yahs.juicer_pre.log",
+        links_bed=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.mapq{min_mapq, [0-9]+}.bed",
+        liftover_agp=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.mapq{min_mapq, [0-9]+}.liftover.agp",
+        liftover_syn=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.mapq{min_mapq, [0-9]+}.liftover.syn",
+        assembly=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.mapq{min_mapq, [0-9]+}.assembly",
+        assembly_original=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.mapq{min_mapq, [0-9]+}.original.assembly",
+        assembly_agp=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.mapq{min_mapq, [0-9]+}.assembly.agp",
+        log=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.mapq{min_mapq, [0-9]+}.yahs.juicer_pre.log",
+
     log:
         #std=output_dict["log"]  / "yahs_juicer_pre.{prev_stage_parameters}..yahs_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.log",
-        mv=output_dict["log"]  / "yahs_juicer_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.mv.log",
-        cut=output_dict["log"]  / "yahs_juicer_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.cut.log",
-        rename=output_dict["log"]  / "yahs_juicer_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.rename.log",
-        cluster_log=output_dict["cluster_log"] / "yahs_juicer_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "yahs_juicer_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.cluster.err"
+        mv=output_dict["log"]  / "yahs_juicer_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.mapq{min_mapq}.mv.log",
+        cut=output_dict["log"]  / "yahs_juicer_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.mapq{min_mapq}.cut.log",
+        rename=output_dict["log"]  / "yahs_juicer_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.mapq{min_mapq}.rename.log",
+        cluster_log=output_dict["cluster_log"] / "yahs_juicer_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.mapq{min_mapq}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "yahs_juicer_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.mapq{min_mapq}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "yahs_juicer_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.benchmark.txt"
+        output_dict["benchmark"]  / "yahs_juicer_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.mapq{min_mapq, [0-9]+}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -89,7 +90,7 @@ rule yahs_juicer_pre_prescaffolding: #
     shell:
         " OUTPUT_PREFIX={output.links_bed}; "
         " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.bed}}; "
-        " juicer pre -a -o ${{OUTPUT_PREFIX}} {input.bam} {input.agp} {input.reference_fai} > {output.log} 2>&1;"
+        " juicer pre -a -q {wildcards.min_mapq} -o ${{OUTPUT_PREFIX}} {input.bam} {input.agp} {input.reference_fai} > {output.log} 2>&1;"
         " mv ${{OUTPUT_PREFIX}}.txt {output.links_bed} > {log.mv} 2>&1; "
         " cut -f 1,6 {output.liftover_agp} > {output.liftover_syn} 2>{log.cut}; "
         " ./workflow/scripts/hic_scaffolding/rename_scaffolds_in_assembly_file.py -a {output.assembly} "
@@ -101,20 +102,20 @@ rule juicer_tools_pre_prescaffolding: #
         yahs_juicer_pre_log=rules.yahs_juicer_pre_prescaffolding.output.log,
         yahs_juicer_pre_bed=rules.yahs_juicer_pre_prescaffolding.output.links_bed
     output:
-        hic=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.hic",
+        hic=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.mapq{min_mapq, [0-9]+}.hic",
     params:
         resolution_list=" ".join(map(str,parameters["tool_options"]["juicer_tools_pre"]["resolution_list"]))
     log:
-        grep0=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.grep0.log",
-        sed0=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.sed0.log",
-        juicer=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.juicer.log",
-        cat=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.cat.log",
-        grep=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.grep.log",
-        awk=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.awk.log",
-        cluster_log=output_dict["cluster_log"] / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.cluster.err"
+        grep0=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.mapq{min_mapq}.grep0.log",
+        sed0=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.mapq{min_mapq}.sed0.log",
+        juicer=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.mapq{min_mapq}.juicer.log",
+        cat=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.mapq{min_mapq}.cat.log",
+        grep=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.mapq{min_mapq}.grep.log",
+        awk=output_dict["log"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.mapq{min_mapq}.awk.log",
+        cluster_log=output_dict["cluster_log"] / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.mapq{min_mapq}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.mapq{min_mapq}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.benchmark.txt"
+        output_dict["benchmark"]  / "juicer_tools_pre_prescaffolding.{assembly_stage}.{parameters}.{haplotype}.{phasing_kmer_length}.{genome_prefix}.mapq{min_mapq}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

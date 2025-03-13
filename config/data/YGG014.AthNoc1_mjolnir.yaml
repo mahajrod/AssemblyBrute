@@ -1,5 +1,7 @@
 #---- Main config file ----
 "main_config_file": "config/core.yaml"      # Path to main config file relative to Snakefile
+#---- Secondary tool config file ----
+"secondary_tool_config_file": "config/core.secondary_tools.yaml"      # Path to main config file relative to Snakefile
 #---- Skip step config file ----
 "skip_config_file": "config/skip.yaml"      # Path to 'skip' config file relative to Snakefile
 #--------------------------
@@ -135,38 +137,8 @@
     "curation":
         - "default"
 
-"other_tool_option_sets":
-    "cutadapt":                 "default"   # Allowed: default
-    "porechop_abi":             "default"   # Allowed: default
-    "chopper":                  "default"   # Allowed: default
-    "fastqc":                   "default"   # Allowed: default
-    "mosdepth":                 "default"   # Allowed: default
-    "jellyfish":                "default"   # Allowed: default
-    "meryl":                    "default"   # Allowed: default
-    "smudgeplot":               "default"   # Allowed: default
-    "telo_finder":              "default"   # Allowed: default
-    "quast":                    "default"   # Allowed: default
-    "minimap2":                 "default"   # Allowed: default
-    #"curation":                 "default"   # Allowed: default
-    "two_read_bam_combiner":    "default"   # Allowed: default
-    "pretextmap":               "default"   # Allowed: default
-    "pretextsnapshot":          "default"   # Allowed: default
-    "gcp":                      "default"   # Allowed: default
-    "kat":                      "default"   # Allowed: default
-    "juicer_tools_qc":          "default"   # Allowed: default
-    "juicer_tools_pre":         "default"   # Allowed: default
+"other_tool_option_sets": # Options set here overwrite settings from "secondary_tool_config_file". Check it for configurable option list
     "mapping_pipeline":         "arima"  # Allowed: arima, bwa_only, pairtools.
-    "trf":                      "default"
-    "wga":                      "default"
-    "select_scaffolds":    "default"
-    "deepvariant":              "default"   # Allowed: default
-    "pairtools_parse":          "default"   # Allowed: default
-    "samtools_stats":           "default"   # Allowed: default
-    "trimmomatic":              "default"   # Allowed: default
-    "tadbit":                   "default"   # Allowed: default
-    "krater_from_histo":        "default"   # Allowed: default
-    "microsome_detection":      "default"   # Allowed: default
-    "assembly_qc":              "default"   # Allowed: default
 
 "tool_manually_adjusted_features":
     "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions

@@ -1,0 +1,32 @@
+"other_tool_option_sets":
+    "cutadapt":                 "default"   # Allowed: default
+    "porechop_abi":             "default"   # Allowed: default
+    "chopper":                  "default"   # Allowed: default
+    "fastqc":                   "default"   # Allowed: default
+    "mosdepth":                 "default"   # Allowed: default
+    "jellyfish":                "default"   # Allowed: default
+    "meryl":                    "default"   # Allowed: default
+    "smudgeplot":               "default"   # Allowed: default
+    "telo_finder":              "default"   # Allowed: default
+    "quast":                    "default"   # Allowed: default
+    "minimap2":                 "default"   # Allowed: default
+    "two_read_bam_combiner":    "default"   # Allowed: default
+    "pretextmap":               "default"   # Allowed: default
+    "pretextsnapshot":          "default"   # Allowed: default
+    "gcp":                      "default"   # Allowed: default
+    "kat":                      "default"   # Allowed: default
+    "juicer_tools_qc":          "default"   # Allowed: default
+    "juicer_tools_pre":         "default"   # Allowed: default
+    "mapping_pipeline":         "arima"  # Allowed: arima, bwa_only, pairtools.
+    "trf":                      "default"
+    "wga":                      "default"
+    "select_scaffolds":         "default"
+    "deepvariant":              "default"   # Allowed: default
+    "pairtools_parse":          "default"   # Allowed: default
+    "samtools_stats":           "default"   # Allowed: default
+    "trimmomatic":              "default"   # Allowed: default
+    "tadbit":                   "default"   # Allowed: default
+    "krater_from_histo":        "default"   # Allowed: default
+    "microsome_detection":      "default"   # Allowed: default
+    "assembly_qc":              "default"   # Allowed: default
+    "yahs_juicer_pre":          "all"       # Allowed: 'all' (mapq 0, 1, 10), 'mapq1' (mapq 0, 1), 'mapq' (0)

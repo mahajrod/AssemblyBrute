@@ -12,6 +12,11 @@ from pathlib import Path, PosixPath
 from numbers import Number # Abstract class for numeric types
 import pandas as pd
 
+#---- Include sections for functions ----
+include: "workflow/functions/option_parsing.py"
+include: "workflow/functions/general_parsing.py"
+#----------------------------------------
+
 #---- Read config files ----
 #-------- Read core config file --------
 with open(config["main_config_file"], "r") as core_yaml_fd:
@@ -37,10 +42,7 @@ for resource, res_datatype in zip(["threads", "memory_mb", "time"], [int, int, s
 
 #---------------------------
 
-#---- Include sections for functions ----
-include: "workflow/functions/option_parsing.py"
-include: "workflow/functions/general_parsing.py"
-#----------------------------------------
+
 
 
 #-- Initialization of path variables from config file --

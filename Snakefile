@@ -21,12 +21,9 @@ include: "workflow/functions/general_parsing.py"
 #-------- Read core config file --------
 with open(config["main_config_file"], "r") as core_yaml_fd:
     config.update(yaml.safe_load(core_yaml_fd))
-#-------- Read secondary tools condfig file -------
-print(config["other_tool_option_sets"])
+#-------- Read secondary tools config file -------
 with open(config["secondary_tool_config_file"], "r") as secondary_tool_fd:
     copy_absent_entries(yaml.safe_load(secondary_tool_fd), config)
-print("AAAAAAAA")
-print(config["other_tool_option_sets"])
 #-------- Read 'skip' config file --------
 with open(config["skip_config_file"], "r") as skip_yaml_fd:
     for key, value in yaml.safe_load(skip_yaml_fd).items():

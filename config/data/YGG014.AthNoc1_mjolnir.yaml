@@ -96,7 +96,7 @@
         - "w1000k.s100k"
         #- "w100k.s100k"
         - "w100k.s10k"
-        #- "w10k.s10k"
+        - "w10k.s10k"
     "reference_scaffold_sets":
         - "custom"
         #- "long"

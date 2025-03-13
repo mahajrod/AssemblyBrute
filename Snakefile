@@ -399,7 +399,7 @@ if "draft_qc" in config["stage_list"]:
 
                         for window_settings in config["qc_settings"]["windows_sets"]]
                         for parameters_label in stage_dict[current_stage]["parameters"]]
-                        for track_type in ("gap", "gc")],  #"windowmasker", "trf"
+                        for track_type in "gc"],  #"windowmasker", "trf"
                      [expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.bedgraph",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=[current_stage, ],
@@ -497,7 +497,7 @@ if "draft_qc" in config["stage_list"]:
 
                         for window_settings in config["qc_settings"]["windows_sets"]]
                         for parameters_label in stage_dict[current_stage]["parameters"]]
-                        for track_type in ("gap", "gc")],  #"windowmasker", "trf"
+                        for track_type in  "gc"],  #"windowmasker", "trf"
                      [expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.bedgraph",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=[current_stage, ],
@@ -728,7 +728,7 @@ if "contig" in config["stage_list"]:
 
                         for window_settings in config["qc_settings"]["windows_sets"]]
                         for parameters_label in stage_dict[current_stage]["parameters"]]
-                        for track_type in ("gap", "gc")],  #"windowmasker", "trf"
+                        for track_type in "gc"],  #"windowmasker", "trf"
                      [expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.bedgraph",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=[current_stage, ],
@@ -852,7 +852,7 @@ if "purge_dups" in config["stage_list"]:
 
                         for window_settings in config["qc_settings"]["windows_sets"]]
                         for parameters_label in stage_dict[current_stage]["parameters"]]
-                        for track_type in ("gap", "gc")],  #"windowmasker", "trf"
+                        for track_type in "gc"],  #"windowmasker", "trf"
                      [expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.bedgraph",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=[current_stage, ],
@@ -1077,7 +1077,7 @@ if "hic_scaffolding" in config["stage_list"]:
 
                         for window_settings in config["qc_settings"]["windows_sets"]]
                         for parameters_label in stage_dict[current_stage]["parameters"]]
-                        for track_type in ("gap", "gc")],  #"windowmasker", "trf"
+                        for track_type in "gc"],  #"windowmasker", "trf"
                      [expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.bedgraph",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=[current_stage, ],
@@ -1349,7 +1349,7 @@ if "ref_scaffolding" in config["stage_list"]:
 
                         for window_settings in config["qc_settings"]["windows_sets"]]
                         for parameters_label in stage_dict[current_stage]["parameters"]]
-                        for track_type in ["gap", "gc"]],  #"windowmasker", "trf"
+                        for track_type in "gc"],  #"windowmasker", "trf"
                      [expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.bedgraph",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=[current_stage, ],
@@ -1521,7 +1521,7 @@ if "curation" in config["stage_list"]:
                                 window=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["window"]],
                                 step=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["step"]],
                                 haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ("gap", "windowmasker", "trf", "gc") ],
+                                parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ("windowmasker", "trf", "gc") ],
                          [[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.stat",
                                 seq_type=["scaffolds"],
                                 threshold_type=config["qc_settings"]["threshold_types"],
@@ -1531,7 +1531,7 @@ if "curation" in config["stage_list"]:
                                 window=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["window"]],
                                 step=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["step"]],
                                 haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ("gap", "windowmasker", "trf", "gc") ],
+                                parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ("windowmasker", "trf", "gc") ],
                          [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.canonical.txt",
                                 seq_type=["scaffolds"],
                                 genome_prefix=[config["genome_prefix"], ],
@@ -1599,7 +1599,7 @@ if "curation" in config["stage_list"]:
                                 window=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["window"]],
                                 step=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["step"]],
                                 haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ("gap", "windowmasker", "trf", "gc") ],
+                                parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ("windowmasker", "trf", "gc") ],
                              ]
             if coverage_track_data_type_set:
                 results_list += [[[expand(out_dir_path / "curation/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.{datatype}_{cov_type}_coverage.win{window}.step{step}.scaled.track.bedgraph",

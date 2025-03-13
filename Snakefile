@@ -24,7 +24,9 @@ with open(config["main_config_file"], "r") as core_yaml_fd:
 #-------- Read secondary tools condfig file -------
 print(config["other_tool_option_sets"])
 with open(config["secondary_tool_config_file"], "r") as secondary_tool_fd:
-    copy_absent_entries(yaml.safe_load(secondary_tool_fd), config["other_tool_option_sets"])
+    copy_absent_entries(yaml.safe_load(secondary_tool_fd), config)
+print("AAAAAAAA")
+print(config["other_tool_option_sets"])
 #-------- Read 'skip' config file --------
 with open(config["skip_config_file"], "r") as skip_yaml_fd:
     for key, value in yaml.safe_load(skip_yaml_fd).items():
@@ -1647,7 +1649,7 @@ if "curation" in config["stage_list"]:
                                 haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                                 parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
                          ]
-    
+
     if not config["skip_higlass"]:
         for parameters_label in parameters_list:
             if stage_dict["curation"]["parameters"][parameters_label]["prev_stage"] == "hic_scaffolding": # TODO: add handling for a case when "hic_scaffolding" is not a stage before the "curation"
@@ -1657,7 +1659,7 @@ if "curation" in config["stage_list"]:
                                 haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
                                 parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],]
 
-    
+
     if config["create_hic_file_during_curation"]:
         results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.hic",
                                 assembly_stage=[stage_dict["curation"]["prev_stage"]],

@@ -146,7 +146,7 @@ rule create_bedgraph_track: #
         track_bed=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type}/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.track.bed",
         windows_bed=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.win{window}.step{step}.windows.bed"
     output:
-        bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, [^/.]+}.win{window, [0-9]+}.step{step, [0-9]+}.track.bedgraph"
+        bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, ^((?!coverage).)*$}.win{window, [0-9]+}.step{step, [0-9]+}.track.bedgraph"
     log:
         intersect=output_dict["log"]  / "create_bedgraph_track.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.intersect.log",
         awk=output_dict["log"]  / "create_bedgraph_track.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.awk.log",

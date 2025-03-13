@@ -17,7 +17,7 @@ import pandas as pd
 with open(config["main_config_file"], "r") as core_yaml_fd:
     config.update(yaml.safe_load(core_yaml_fd))
 #-------- Read secondary tools condfig file -------
-with open("secondary_tool_config_file", "r") as secondary_tool_fd:
+with open(config["secondary_tool_config_file"], "r") as secondary_tool_fd:
     copy_absent_entries(yaml.safe_load(secondary_tool_fd), config["other_tool_option_sets"])
 #-------- Read 'skip' config file --------
 with open(config["skip_config_file"], "r") as skip_yaml_fd:

@@ -1272,7 +1272,7 @@ if "hic_scaffolding" in config["stage_list"]:
                          ]
 
     if candidate_agp_filename is not None:
-        results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/per_chr/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.tracks.win_{window}.{step}.maps.list",
+        results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/per_chr/{genome_prefix}.{assembly_stage}.NA.{haplotype}.rmdup.mapq{mapq}.{res}.tracks.win_{window}.{step}.maps.list",
                                 assembly_stage=["hic_scaffolding"],
                                 parameters=[parameter_label],
                                 haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],

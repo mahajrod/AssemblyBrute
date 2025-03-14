@@ -2,7 +2,7 @@
 
 checkpoint get_candidate_chr_from_painted_agp: # #Pretext-map probably doesn't support long file names!!!!!!!!!!!
     input:
-        painted_agp=input_dir_path / "candidate_chr/{0}".format(candidate_agp_filename)
+        painted_agp=candidate_agp_filename
     output:
         out_dir=directory(output_dict["data"] / "candidate_chr/")
     log:
@@ -35,20 +35,20 @@ rule pretextmap_per_chr: # #Pretext-map probably doesn't support long file names
         bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
         candidate_chr_black_list=output_dict["data"] / "candidate_chr/candidate.{candidate_chr_id}.pretext.blacklist"
     output:
-        map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length, [^.]+}/per_chr/{candidate_chr_id}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{subset}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.{candidate_chr_id}.pretext",
-        filtered_out=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length, [^.]+}/per_chr/{candidate_chr_id}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{subset}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.{candidate_chr_id}.filtered_out.ids",
+        map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length, [^.]+}/per_chr/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.{candidate_chr_id}.pretext",
+        filtered_out=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length, [^.]+}/per_chr/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.{candidate_chr_id}.filtered_out.ids",
     params:
         resolution = lambda wildcards: " --highRes" if wildcards.res == "high_res" else "",
         sortby=parse_option("sortby", parameters["tool_options"]["pretextmap"], " --sortby "),
         sortorder=parse_option("sortorder", parameters["tool_options"]["pretextmap"], " --sortorder "),
     log:
-        view=output_dict["log"]  / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{candidate_chr_id}.{mapq}.{res}.view.log",
-        awk=output_dict["log"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{candidate_chr_id}.{mapq}.{res}.awk.log",
-        map=output_dict["log"]  / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{candidate_chr_id}.{mapq}.{res}..map.log",
-        cluster_log=output_dict["cluster_log"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{subset}.{mapq}.{res}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{subset}.{mapq}.{res}.cluster.err"
+        view=output_dict["log"]  / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.view.log",
+        awk=output_dict["log"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.awk.log",
+        map=output_dict["log"]  / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}..map.log",
+        cluster_log=output_dict["cluster_log"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{subset}.{mapq}.{res}.benchmark.txt"
+        output_dict["benchmark"]  / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -77,8 +77,8 @@ rule pretextmap_per_chr: # #Pretext-map probably doesn't support long file names
 rule pretext_inject_tracks_per_chr:
     input:
         #bam=out_dir_path  / ("{assembly_stage}/{assembler}/{haplotype}/alignment/%s.{assembly_stage}.{assembler}.{haplotype}.bwa.filtered.rmdup.bam"  % config["genome_name"]),
-        map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/per_chr/{candidate_chr_id}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.{candidate_chr_id}.pretext",
-        filtered_out=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/per_chr/{candidate_chr_id}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.{candidate_chr_id}.filtered_out.ids",
+        map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/per_chr/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq}.{res}.{candidate_chr_id}.pretext",
+        filtered_out=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/per_chr/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq}.{res}.{candidate_chr_id}.filtered_out.ids",
         gap_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.gap.track.bedgraph",
         canonical_telomere_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical.telomere.pretext.bedgraph",
         non_canonical_telomere_track=out_dir_path/ "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical.telomere.pretext.bedgraph",
@@ -89,23 +89,23 @@ rule pretext_inject_tracks_per_chr:
         default_hifi_coverage_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.hifi_default_mean_coverage.win{window}.step{step}.track.bedgraph"
 
     output:
-        updated_map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^./]+}/alignment/{phasing_kmer_length, [^.]+}/per_chr/{candidate_chr_id}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{subset}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.tracks.win_{window, [0-9]+}.{step, [0-9]+}.{candidate_chr_id}.pretext"
+        updated_map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^./]+}/alignment/{phasing_kmer_length, [^.]+}/per_chr/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.tracks.win_{window, [0-9]+}.{step, [0-9]+}.{candidate_chr_id}.pretext"
     params:
         min_mapq=parameters["tool_options"]["pretextmap"]["mapq"]
     log:
-        gap=output_dict["log"]  / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.{window}.{step}.{candidate_chr_id}.gap.log",
-        can_tel=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.{window}.{step}.{candidate_chr_id}.can_tel.log",
-        non_can_tel=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.{window}.{step}.{candidate_chr_id}.non_can_tel.log",
-        gc=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.{window}.{step}.{candidate_chr_id}.gc.log",
-        trf=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.{window}.{step}.{candidate_chr_id}.trf.log",
-        windowmasker=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.{window}.{step}.{candidate_chr_id}.windowmasker.log",
-        coverage=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.{window}.{step}.{candidate_chr_id}.coverage.log",
-        awk=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.{window}.{step}.{candidate_chr_id}.awk.log",
-        rm=output_dict["log"] / "pretextmap.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.{window}.{step}.{candidate_chr_id}.rm.log",
-        cluster_log=output_dict["cluster_log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.{window}.{step}.{candidate_chr_id}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.{window}.{step}.{candidate_chr_id}.cluster.err"
+        gap=output_dict["log"]  / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.{window}.{step}.gap.log",
+        can_tel=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.{window}.{step}.can_tel.log",
+        non_can_tel=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.{window}.{step}.non_can_tel.log",
+        gc=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.{window}.{step}.gc.log",
+        trf=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.{window}.{step}.trf.log",
+        windowmasker=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.{window}.{step}.windowmasker.log",
+        coverage=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.{window}.{step}.coverage.log",
+        awk=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.{window}.{step}.awk.log",
+        rm=output_dict["log"] / "pretextmap.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.{window}.{step}.rm.log",
+        cluster_log=output_dict["cluster_log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.{window}.{step}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.{window}.{step}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.{window}.{step}.{candidate_chr_id}.benchmark.txt"
+        output_dict["benchmark"]  / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.{window}.{step}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -151,7 +151,7 @@ rule pretext_inject_tracks_per_chr:
 
 def aggregate_per_chr_maps_input(wildcards):
     checkpoint_output = checkpoints.get_candidate_chr_from_painted_agp.get(**wildcards).output.out_dir
-    return expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/per_chr/{candidate_chr_id}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.tracks.win_{window}.{step}.{candidate_chr_id}.pretext",
+    return expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/per_chr/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.rmdup.mapq{mapq}.{res}.tracks.win_{window}.{step}.{candidate_chr_id}.pretext",
                   candidate_chr=glob_wildcards(os.path.join(checkpoint_output,"/candidate.{candidate_chr_id}.pretext.blacklist")).candidate_chr_id,
                   allow_missing=True)
 
@@ -159,13 +159,13 @@ rule aggregate_per_chr_maps: # #Pretext-map probably doesn't support long file n
     input:
         aggregate_per_chr_maps_input
     output:
-        out_dir=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^./]+}/{haplotype, [^./]+}/alignment/{phasing_kmer_length, [^./]+}/per_chr/{genome_prefix, [^/]+}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{subset, [^/]+}.rmdup.mapq{mapq, [0-9]+}.{res, [^/]+}.tracks.win_{window, [0-9]+}.{step, [0-9]+}.maps.list"
+        out_dir=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^./]+}/{haplotype, [^./]+}/alignment/{phasing_kmer_length, [^./]+}/per_chr/{genome_prefix, [^/]+}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq, [0-9]+}.{res, [^/]+}.tracks.win_{window, [0-9]+}.{step, [0-9]+}.maps.list"
     log:
-        log=output_dict["log"]  / "aggregate_per_chr_maps.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.{window}.{step}.log",
-        cluster_log=output_dict["cluster_log"] / "aggregate_per_chr_maps.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.{window}.{step}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "aggregate_per_chr_maps.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.{window}.{step}.cluster.err"
+        log=output_dict["log"]  / "aggregate_per_chr_maps.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.{res}.{window}.{step}.log",
+        cluster_log=output_dict["cluster_log"] / "aggregate_per_chr_maps.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.{res}.{window}.{step}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "aggregate_per_chr_maps.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.{res}.{window}.{step}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "get_candidate_chr_from_painted_agp.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.{window}.{step}.benchmark.txt"
+        output_dict["benchmark"]  / "get_candidate_chr_from_painted_agp.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.{res}.{window}.{step}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

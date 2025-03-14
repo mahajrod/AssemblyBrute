@@ -159,7 +159,7 @@ rule aggregate_per_chr_maps: # #Pretext-map probably doesn't support long file n
     input:
         aggregate_per_chr_maps_input
     output:
-        out_dir=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^./]+}/{haplotype, [^./]+}/alignment/{phasing_kmer_length, [^./]+}/per_chr/{genome_prefix, [^/]+}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq, [0-9]+}.{res, [^/]+}.tracks.win_{window, [0-9]+}.{step, [0-9]+}.maps.list"
+        out_dir=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/{haplotype, [^./]+}/alignment/{phasing_kmer_length, [^./]+}/per_chr/{genome_prefix, [^/]+}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq, [0-9]+}.{res, [^/]+}.tracks.win_{window, [0-9]+}.{step, [0-9]+}.maps.list"
     log:
         log=output_dict["log"]  / "aggregate_per_chr_maps.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.{res}.{window}.{step}.log",
         cluster_log=output_dict["cluster_log"] / "aggregate_per_chr_maps.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.{res}.{window}.{step}.cluster.log",

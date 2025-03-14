@@ -1,6 +1,7 @@
 #ruleorder: pretextmap > pretextsnapshot
-localrules: get_candidate_chr_from_painted_agp
+#localrules: get_candidate_chr_from_painted_agp
 
+"""
 checkpoint get_candidate_chr_from_painted_agp: # #Pretext-map probably doesn't support long file names!!!!!!!!!!!
     input:
         painted_agp=candidate_agp_filename
@@ -29,7 +30,7 @@ checkpoint get_candidate_chr_from_painted_agp: # #Pretext-map probably doesn't s
         " mkdir -p {output.out_dir} > {log.mkdir} 2>&1; "
         " workflow/scripts/curation/extract_components_of_painted_scaffolds_from_agp.py -i {input.painted_agp} "
         "       -p {output.out_dir}/candidate "
-
+"""
 
 rule pretextmap_per_chr: # #Pretext-map probably doesn't support long file names!!!!!!!!!!!
     input:
@@ -149,7 +150,7 @@ rule pretext_inject_tracks_per_chr:
         "   awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4}}' | "
         "   PretextGraph -i {output.updated_map}  -n hifi_default.coverage  > {log.coverage} 2>&1; "
 
-
+"""
 def aggregate_per_chr_maps_input(wildcards):
     checkpoint_output = checkpoints.get_candidate_chr_from_painted_agp.get(**wildcards).output[0]
     print(checkpoint_output)
@@ -182,3 +183,4 @@ rule aggregate_per_chr_maps: # #Pretext-map probably doesn't support long file n
 
     shell:
         " cat {input} > {output} 2>{log.log}; "
+"""

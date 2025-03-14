@@ -120,6 +120,22 @@ if len(candidate_agp_filename) > 1:
     raise ValueError(f"ERROR!!! More than one agp file was detected in folder {str(candidate_agp_dir_path.name)}!")
 elif len(candidate_agp_filename) == 1:
     candidate_agp_filename = candidate_agp_filename[0]
+    candidate_output_prefix = output_dict["data"] / "candidate_chr/candidate"
+    agp_df = pd.read_csv(candidate_agp_filename, sep="\t", header=None,
+                            names=["scaffold_id", "start", "end", "part_number", "part_type",
+                                   "part_id/gap_length", "part_start/gap_type",
+                                   "part_end/linkage", "orientation/evidence", "comment"],
+                            index_col="scaffold_id")
+
+    all_contig_series = agp_df[agp_df["part_type"] != "U"]["part_id/gap_length"]
+    chr_component_series = agp_df[agp_df["comment"] == "Painted"]["part_id/gap_length"]
+    chr_component_series.to_csv(f"{candidate_output_prefix}.all_chr.components.ids",sep="\t",header=False,index=False)
+    candidate_chr_id_list = list(chr_component_series.index)
+    for scaffold_id in chr_component_series.index:
+        chr_component_series[
+            scaffold_id].to_csv(f"{candidate_output_prefix}.{scaffold_id}.components.ids",sep="\t",header=False,index=False)
+        chr_black_list_series = chr_component_series[~chr_component_series.isin(chr_component_series[scaffold_id])]
+        chr_black_list_series.to_csv(f"{candidate_output_prefix}.{scaffold_id}.pretext.blacklist",sep="\t",header=False,index=False)
 else:
     candidate_agp_filename = None
 #logging.info("Checking input files...")
@@ -1272,7 +1288,8 @@ if "hic_scaffolding" in config["stage_list"]:
                          ]
 
     if candidate_agp_filename is not None:
-        results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/per_chr/{genome_prefix}.{assembly_stage}.NA.{haplotype}.rmdup.mapq{mapq}.{res}.tracks.win_{window}.{step}.maps.list",
+        results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/per_chr/{genome_prefix}.{assembly_stage}.NA.{haplotype}.rmdup.mapq{mapq}.{res}.tracks.win_{window}.{step}.{candidate_chr_id}.pretext",
+                                candidate_chr_id=candidate_chr_id_list,
                                 assembly_stage=["hic_scaffolding"],
                                 parameters=[parameter_label],
                                 haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],

@@ -1,19 +1,16 @@
 #ruleorder: pretextmap > pretextsnapshot
 rule pretextmap: # #Pretext-map probably doesn't support long file names!!!!!!!!!!!
     input:
-        #bam=out_dir_path  / ("{assembly_stage}/{assembler}/{haplotype}/alignment/%s.{assembly_stage}.{assembler}.{haplotype}.bwa.filtered.rmdup.bam"  % config["genome_name"]),
         bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
         len=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len"
     output:
-        #map=out_dir_path  / ("{assembly_stage}/{assembler}/{haplotype}/alignment/%s.{assembly_stage}.{assembler}.{haplotype}.bwa.filtered.rmdup.map.pretext"  % config["genome_name"]),
         map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{subset}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.pretext",
         filtered_out=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{subset}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.filtered_out.ids"
     params:
-        #min_mapq=parameters["tool_options"]["pretextmap"]["mapq"],
         resolution=lambda wildcards: " --highRes" if wildcards.res == "high_res" else "",
         max_len=lambda wildcards: parameters["tool_options"]["pretextmap"]["subsets"][wildcards.subset]["max_len"],
-        sortby=parse_option("sortby", parameters["tool_options"]["pretextmap"], "--sortby"),
-        sortorder=parse_option("sortorder", parameters["tool_options"]["pretextmap"], "--sortorder"),
+        sortby=parse_option("sortby", parameters["tool_options"]["pretextmap"], " --sortby "),
+        sortorder=parse_option("sortorder", parameters["tool_options"]["pretextmap"], " --sortorder "),
     log:
         view=output_dict["log"]  / "pretextmap.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.view.log",
         awk=output_dict["log"] / "pretextmap.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.awk.log",
@@ -56,7 +53,6 @@ rule pretextmap: # #Pretext-map probably doesn't support long file names!!!!!!!!
 rule pretextsnapshot: #Pretext-snapshot doesn't support long file names!!!!!!!!!!!
     input:
         map=expand(rules.pretextmap.output.map, res=["default"], allow_missing=True)
-        #map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.filtered.rmdup.map.pretext"
     output:
         dir=directory(out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{subset}.mapq{mapq, [0-9]+}.default.{resolution, [0-9]+}.{ext}"),
     params:
@@ -85,7 +81,6 @@ rule pretextsnapshot: #Pretext-snapshot doesn't support long file names!!!!!!!!!
 
 rule pretext_inject_tracks:
     input:
-        #bam=out_dir_path  / ("{assembly_stage}/{assembler}/{haplotype}/alignment/%s.{assembly_stage}.{assembler}.{haplotype}.bwa.filtered.rmdup.bam"  % config["genome_name"]),
         map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.pretext",
         filtered_out=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.filtered_out.ids",
         gap_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.gap.track.bedgraph",
@@ -101,10 +96,6 @@ rule pretext_inject_tracks:
         updated_map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^./]+}/alignment/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{subset}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.tracks.win_{window, [0-9]+}.{step, [0-9]+}.pretext"
     params:
         min_mapq=parameters["tool_options"]["pretextmap"]["mapq"],
-        #resolution=lambda wildcards: " --highRes" if wildcards.res == "high_res" else "",
-        #max_len=lambda wildcards: parameters["tool_options"]["pretextmap"]["subsets"][wildcards.subset]["max_len"],
-        #sortby=parse_option("sortby", parameters["tool_options"]["pretextmap"], "--sortby"),
-        #sortorder=parse_option("sortorder", parameters["tool_options"]["pretextmap"], "--sortorder"),
     log:
         gap=output_dict["log"]  / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.{window}.{step}.gap.log",
         can_tel=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.{window}.{step}.can_tel.log",

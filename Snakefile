@@ -112,6 +112,16 @@ if config["final_kmer_datatype"] not in fastq_based_data_type_set:
 #----
 
 #---- Checking input files ----
+candidate_agp_dir_path = input_dir_path / "candidate_chr/"
+candidate_agp_filename = list(candidate_agp_dir_path.glob("*.agp"))
+print(candidate_agp_filename)
+print(candidate_agp_dir_path.name)
+if len(candidate_agp_filename) > 1:
+    raise ValueError(f"ERROR!!! More than one agp file was detected in folder {str(candidate_agp_dir_path.name)}!")
+elif len(candidate_agp_filename) == 1:
+    candidate_agp_filename = candidate_agp_filename[0]
+else:
+    candidate_agp_filename = None
 #logging.info("Checking input files...")
 
 input_filedict = {}
@@ -1251,7 +1261,7 @@ if "hic_scaffolding" in config["stage_list"]:
                          ]
 
     if ("bird_genome" in config) and config["bird_genome"]:
-        print(current_stage)
+        #print(current_stage)
         results_list += [[expand(out_dir_path / "hic_scaffolding/{parameters}/{genome_prefix}.{assembly_stage}.candidates.microchromosomes.filtered.tsv",
                                  assembly_stage=["hic_scaffolding"],
                                  parameters=[parameter_label],
@@ -1259,6 +1269,19 @@ if "hic_scaffolding" in config["stage_list"]:
                                  genome_prefix=[config["genome_prefix"],],
                                  #max_length=[parameters["tool_options"]["microsome_detection"]["max_length"]],
                                  ) for parameter_label in stage_dict["hic_scaffolding"]["parameters"]]
+                         ]
+
+    if candidate_agp_filename is not None:
+        results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/per_chr/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.tracks.win_{window}.{step}.maps.list",
+                                assembly_stage=["hic_scaffolding"],
+                                parameters=[parameter_label],
+                                haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
+                                genome_prefix=[config["genome_prefix"], ],
+                                res=["high_res"],
+                                mapq=parameters["tool_options"]["pretextmap"]["mapq"],
+                                window=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["window"],
+                                step=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
+                                ) for parameter_label in stage_dict[current_stage]["parameters"] for window_step_set in config["qc_settings"]["windows_sets"]]
                          ]
 """
 
@@ -1804,6 +1827,7 @@ include: "workflow/rules/QCAssembly/GCTrack.smk"
 include: "workflow/rules/QCAssembly/WGA.smk"
 include: "workflow/rules/QCAssembly/HiC.smk"
 include: "workflow/rules/QCAssembly/MicroChromosomes.smk"
+include: "workflow/rules/QCAssembly/PretextPerChr.smk"
 #include: "workflow/rules/QCAssembly/VariantTrack.smk"
 #include: "workflow/rules/QCAssembly/RagTag.smk"
 

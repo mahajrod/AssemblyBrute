@@ -1,4 +1,5 @@
 #ruleorder: pretextmap > pretextsnapshot
+localrules: get_candidate_chr_from_painted_agp
 
 checkpoint get_candidate_chr_from_painted_agp: # #Pretext-map probably doesn't support long file names!!!!!!!!!!!
     input:

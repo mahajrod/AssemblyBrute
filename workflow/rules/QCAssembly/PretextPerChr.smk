@@ -73,7 +73,7 @@ rule pretextmap_per_chr: # #Pretext-map probably doesn't support long file names
         "   fi; " 
         " cd `dirname {input.bam}`; "
         " samtools view -@4 -F0x400 -h `basename {input.bam}` 2>${{VIEW_LOG}} | "
-        " PretextMap -o `basename {output.map}` {params.sortby} {params.sortorder} "
+        " PretextMap -o per_chr/`basename {output.map}` {params.sortby} {params.sortorder} "
         "            --mapq {wildcards.mapq} ${{FILTER_OUT}} {params.resolution} > ${{MAP_LOG}} 2>&1"
 
 rule pretext_inject_tracks_per_chr:

@@ -114,8 +114,8 @@ if config["final_kmer_datatype"] not in fastq_based_data_type_set:
 #---- Checking input files ----
 candidate_agp_dir_path = input_dir_path / "candidate_chr/"
 candidate_agp_filename = list(candidate_agp_dir_path.glob("*.agp"))
-print(candidate_agp_filename)
-print(candidate_agp_dir_path.name)
+#print(candidate_agp_filename)
+#print(candidate_agp_dir_path.name)
 if len(candidate_agp_filename) > 1:
     raise ValueError(f"ERROR!!! More than one agp file was detected in folder {str(candidate_agp_dir_path.name)}!")
 elif len(candidate_agp_filename) == 1:

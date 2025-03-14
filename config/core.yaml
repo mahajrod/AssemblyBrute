@@ -1642,8 +1642,6 @@
             "pretextmap":
                 "default":
                     "mapq":
-                        - 20
-                        - 10
                         - 1
                         - 0
                     "sortby": "nosort" # Allowed: "length", "name", "nosort"

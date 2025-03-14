@@ -153,6 +153,7 @@ rule pretext_inject_tracks_per_chr:
 def aggregate_per_chr_maps_input(wildcards):
     checkpoint_output = checkpoints.get_candidate_chr_from_painted_agp.get(**wildcards).output[0]
     print(checkpoint_output)
+    print(os.path.join(checkpoint_output,"/candidate.{candidate_chr_id}.pretext.blacklist"))
     print(glob_wildcards(os.path.join(checkpoint_output,"/candidate.{candidate_chr_id}.pretext.blacklist")).candidate_chr_id)
     return expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/per_chr/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq}.{res}.tracks.win_{window}.{step}.{candidate_chr_id}.pretext",
                   candidate_chr=glob_wildcards(os.path.join(checkpoint_output,"/candidate.{candidate_chr_id}.pretext.blacklist")).candidate_chr_id,

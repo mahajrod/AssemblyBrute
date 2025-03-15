@@ -67,7 +67,7 @@ rule pretextmap_per_chr: # #Pretext-map probably doesn't support long file names
         " if [[ -s {input.candidate_chr_black_list} ]]; "
         "   then "
         "       FILTER_OUT=' --filterExclude '; "
-        "       FILTER_OUT=\"${{FILTER_OUT}} `cat {input.candidate_chr_black_list} | tr '\\n' ',' | sed 's/,\+$//'` | sed 's/,/, /g' \"; "
+        "       FILTER_OUT=\"${{FILTER_OUT}} `cat {input.candidate_chr_black_list} | tr '\\n' ',' | sed 's/,\+$//'`  \"; "
         "   else "
         "       FILTER_OUT=''; "
         "   fi; " 
@@ -75,7 +75,7 @@ rule pretextmap_per_chr: # #Pretext-map probably doesn't support long file names
         " samtools view -@4 -F0x400 -h `basename {input.bam}` 2>${{VIEW_LOG}} | "
         " PretextMap -o per_chr/`basename {output.map}` {params.sortby} {params.sortorder} "
         "            --mapq {wildcards.mapq} ${{FILTER_OUT}} {params.resolution} > ${{MAP_LOG}} 2>&1 || true "
-
+        #| sed 's/,/, /g'
 rule pretext_inject_tracks_per_chr:
     input:
         #bam=out_dir_path  / ("{assembly_stage}/{assembler}/{haplotype}/alignment/%s.{assembly_stage}.{assembler}.{haplotype}.bwa.filtered.rmdup.bam"  % config["genome_name"]),

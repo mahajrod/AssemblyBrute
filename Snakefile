@@ -1232,7 +1232,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                                          haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]),
                                    ) for parameters_label in stage_dict[current_stage]["parameters"]],
                              ]
-
+        """
         if coverage_track_data_type_set:
             results_list += [[[
                                   expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.coverage_{settings}.{scaffold_length}.win{window}.step{step}.png",
@@ -1248,7 +1248,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                             config["qc_settings"]["windows_sets"]] for parameters_label in
                                                       stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],
                              ]
-
+        """
     if not config["skip_busco"]:
         results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
                                 busco_lineage=config["busco_lineage_list"],
@@ -1286,7 +1286,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                  #max_length=[parameters["tool_options"]["microsome_detection"]["max_length"]],
                                  ) for parameter_label in stage_dict["hic_scaffolding"]["parameters"]]
                          ]
-
+    """
     if candidate_agp_filename is not None:
         results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/per_chr/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{candidate_chr_id}.rmdup.mapq{mapq}.{res}.tracks.win_{window}.{step}.pretext",
                                 candidate_chr_id=candidate_chr_id_list,
@@ -1300,6 +1300,9 @@ if "hic_scaffolding" in config["stage_list"]:
                                 step=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
                                 ) for parameter_label in stage_dict[current_stage]["parameters"] for window_step_set in config["qc_settings"]["windows_sets"]]
                          ]
+    """
+
+
 """
 
 if "gap_closing" in config["stage_list"]: # TODO: modify it and all initiation of stage_dict entries to make it normal!!!!

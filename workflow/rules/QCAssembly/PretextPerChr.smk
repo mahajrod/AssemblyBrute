@@ -31,7 +31,7 @@ checkpoint get_candidate_chr_from_painted_agp: # #Pretext-map probably doesn't s
         " workflow/scripts/curation/extract_components_of_painted_scaffolds_from_agp.py -i {input.painted_agp} "
         "       -p {output.out_dir}/candidate "
 """
-
+"""
 rule pretextmap_chr: # #Pretext-map probably doesn't support long file names!!!!!!!!!!!
     input:
         bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
@@ -65,7 +65,7 @@ rule pretextmap_chr: # #Pretext-map probably doesn't support long file names!!!!
     shell:
         " pwd "
 
-"""
+
         " MAP_LOG=`realpath -s -m {log.map}` ; "
         " VIEW_LOG=`realpath -s -m {log.view}` ; "
         " if [ '{params.max_len}' == 'None' ];"
@@ -87,14 +87,14 @@ rule pretextmap_chr: # #Pretext-map probably doesn't support long file names!!!!
         "            --mapq {wildcards.mapq} ${{FILTER_OUT}} {params.resolution} > ${{MAP_LOG}} 2>&1"
 
 """
-"""
+
 rule pretextmap_chr:
     input:
         bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
         candidate_chr_black_list=output_dict["data"] / "candidate_chr/candidate.{candidate_chr_id}.pretext.blacklist"
     output:
-        map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.{candidate_chr_id}.pretext",
-        filtered_out=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.{candidate_chr_id}.filtered_out.ids",
+        map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/per_chr/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.pretext",
+        #filtered_out=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/per_chr/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.{candidate_chr_id}.filtered_out.ids",
     params:
         resolution = lambda wildcards: " --highRes" if wildcards.res == "high_res" else "",
         sortby=parse_option("sortby", parameters["tool_options"]["pretextmap"], " --sortby "),
@@ -122,34 +122,34 @@ rule pretextmap_chr:
     threads: parameters["threads"]["pretextmap_chr"]
 
     shell:
-        " pwd "
-        #" MAP_LOG=`realpath -s -m {log.map}` ; "
-        #" VIEW_LOG=`realpath -s -m {log.view}` ; "
-        #" ECHO_LOG=`realpath -s -m {log.echo}` ; "
-        #" CD_LOG=`realpath -s -m {log.cd}` ; "
-        #" if [[ -s {input.candidate_chr_black_list} ]]; "
-        #"   then "
-        #"       echo 'Blacklist is not empty...' > ${{ECHO_LOG}} 2>&1; "
-        #"       FILTER_OUT=`cat {input.candidate_chr_black_list} | tr '\\n' ',' | sed 's/,\+$//' `; echo ${{FILTER_OUT}} >> ${{ECHO_LOG}} 2>&1; "
-        #"       FILTER_OUT=\" --filterExclude ${{FILTER_OUT}}\"; echo $? >> ${{ECHO_LOG}} 2>&1; "
-        #"   else "
-        #"       echo 'Blacklist is empty...' > ${{ECHO_LOG}} 2>&1; "
-        #"       FILTER_OUT=''; echo $? >> ${{ECHO_LOG}} 2>&1;"
-        #"   fi; "
-        #" echo 'Entering workdir...' >> ${{ECHO_LOG}} 2>&1; "
-        #" cd `dirname {input.bam}` > ${{CD_LOG}} 2>&1; echo $? >> ${{ECHO_LOG}} 2>&1; "
-        #" echo 'Creating pretext map...' >> ${{ECHO_LOG}} 2>&1; "
-        #" samtools view -@ 4 -F0x400 -h `basename {input.bam}` 2>${{VIEW_LOG}} | "
-        #" PretextMap -o `basename {output.map}` {params.sortby} {params.sortorder} "
-        #"            --mapq {wildcards.mapq} ${{FILTER_OUT}} {params.resolution} > ${{MAP_LOG}} 2>&1; "
-        #" echo 'Creating pretext map finished...' >> ${{ECHO_LOG}} 2>&1; "
-        #" echo $? >> ${{ECHO_LOG}} 2>&1; "
-"""
+        " MAP_LOG=`realpath -s -m {log.map}` ; "
+        " VIEW_LOG=`realpath -s -m {log.view}` ; "
+        " ECHO_LOG=`realpath -s -m {log.echo}` ; "
+        " CD_LOG=`realpath -s -m {log.cd}` ; "
+        " if [[ -s {input.candidate_chr_black_list} ]]; "
+        "   then "
+        "       echo 'Blacklist is not empty...' > ${{ECHO_LOG}} 2>&1; "
+        "       FILTER_OUT=`cat {input.candidate_chr_black_list} | tr '\\n' ',' | sed 's/,\+$//' `; echo ${{FILTER_OUT}} >> ${{ECHO_LOG}} 2>&1; "
+        "       FILTER_OUT=\" --filterExclude ${{FILTER_OUT}}\"; echo $? >> ${{ECHO_LOG}} 2>&1; "
+        "   else "
+        "       echo 'Blacklist is empty...' > ${{ECHO_LOG}} 2>&1; "
+        "       FILTER_OUT=''; echo $? >> ${{ECHO_LOG}} 2>&1;"
+        "   fi; "
+        " echo 'Entering workdir...' >> ${{ECHO_LOG}} 2>&1; "
+        " cd `dirname {input.bam}` > ${{CD_LOG}} 2>&1; echo $? >> ${{ECHO_LOG}} 2>&1; "
+        " echo 'Creating pretext map...' >> ${{ECHO_LOG}} 2>&1; "
+        " samtools view -@ 4 -F0x400 -h `basename {input.bam}` 2>${{VIEW_LOG}} | "
+        " PretextMap -o per_chr/`basename {output.map}` {params.sortby} {params.sortorder} "
+        "            --mapq {wildcards.mapq} ${{FILTER_OUT}} {params.resolution} > ${{MAP_LOG}} 2>&1; "
+        " echo 'Creating pretext map finished...' >> ${{ECHO_LOG}} 2>&1; "
+        " echo $? >> ${{ECHO_LOG}} 2>&1; "
+
 rule pretext_inject_tracks_per_chr:
     input:
         #bam=out_dir_path  / ("{assembly_stage}/{assembler}/{haplotype}/alignment/%s.{assembly_stage}.{assembler}.{haplotype}.bwa.filtered.rmdup.bam"  % config["genome_name"]),
         map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/per_chr/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.rmdup.mapq{mapq}.{res}.pretext",
-        filtered_out=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/per_chr/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.rmdup.mapq{mapq}.{res}.filtered_out.ids",
+        candidate_chr_black_list=output_dict["data"] / "candidate_chr/candidate.{candidate_chr_id}.pretext.blacklist",
+        #filtered_out=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/per_chr/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.rmdup.mapq{mapq}.{res}.filtered_out.ids",
         gap_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.gap.track.bedgraph",
         canonical_telomere_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical.telomere.pretext.bedgraph",
         non_canonical_telomere_track=out_dir_path/ "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical.telomere.pretext.bedgraph",
@@ -189,33 +189,33 @@ rule pretext_inject_tracks_per_chr:
 
     shell:
         " cp -f {input.map} {output.updated_map}; "
-        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.filtered_out} -i {input.gap_track}  | "
+        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.gap_track}  | "
         "   PretextGraph -i {output.updated_map} -n gap > {log.gap} 2>&1; "
         " if [[ -s {input.canonical_telomere_track} ]]; "
         "   then "
-        "   workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.filtered_out} -i {input.canonical_telomere_track} | "
+        "   workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.canonical_telomere_track} | "
         "       awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4}}' | "
         "       PretextGraph -i {output.updated_map} -n canonical.telomere > {log.can_tel} 2>&1;"
         "   fi; "
         " if [[ -s {input.non_canonical_telomere_track} ]]; "
         "   then "
-        "   workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.filtered_out} -i {input.non_canonical_telomere_track} | "
+        "   workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.non_canonical_telomere_track} | "
         "       awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4}}' | "
         "       PretextGraph -i {output.updated_map} -n noncanonical.telomere > {log.non_can_tel} 2>&1;"
         "   fi;  "
-        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.filtered_out} -i {input.gc_track} | "
+        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.gc_track} | "
         "   awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4 }}' | "
         "   PretextGraph -i {output.updated_map} -n GC.repeat_density  > {log.gc} 2>&1; "
-        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.filtered_out} -i {input.trf_track} | "
+        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.trf_track} | "
         "   awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4 }}' | "
         "   PretextGraph -i {output.updated_map}  -n TRF.repeat_density > {log.trf} 2>&1; "
-        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.filtered_out} -i {input.windowmasker_track} | "
+        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.windowmasker_track} | "
         "   awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4 }}' | "
         "   PretextGraph -i {output.updated_map}  -n windowmasker.repeat_density > {log.windowmasker} 2>&1; "
-        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.filtered_out} -i {input.all_hifi_coverage_track} | "
+        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.all_hifi_coverage_track} | "
         "   awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4}}' | "
         "   PretextGraph -i {output.updated_map}  -n hifi_all.coverage  > {log.coverage} 2>&1; "
-        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.filtered_out} -i {input.default_hifi_coverage_track} | "
+        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.default_hifi_coverage_track} | "
         "   awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4}}' | "
         "   PretextGraph -i {output.updated_map}  -n hifi_default.coverage  > {log.coverage} 2>&1; "
 

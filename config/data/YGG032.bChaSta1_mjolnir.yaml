@@ -245,6 +245,13 @@
             - "mjolnircomp05fl"
             - "mjolnircomp06fl"
         "whitelist": []
+    "pretextmap":
+        "blacklist":
+            - "mjolnircomp01fl"
+            - "mjolnircomp02fl"
+            - "mjolnirgpu01fl"
+            - "mjolnirgpu02fl"
+        "whitelist": [ ]
 #------------------------------------------------------
 #"adaptor_scan": True
 #"fcs_gx_scan": True

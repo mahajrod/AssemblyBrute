@@ -45,8 +45,11 @@ rule pretextmap_per_chr: # #Pretext-map probably doesn't support long file names
         sortorder=parse_option("sortorder", parameters["tool_options"]["pretextmap"], " --sortorder "),
     log:
         view=output_dict["log"]  / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.view.log",
-        awk=output_dict["log"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.awk.log",
-        map=output_dict["log"]  / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}..map.log",
+        cat=output_dict["log"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.cat.log",
+        tr=output_dict["log"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.tr.log",
+        sed=output_dict["log"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.sed.log",
+        map=output_dict["log"]  / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.map.log",
+        echo=output_dict["log"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.echo.log",
         cluster_log=output_dict["cluster_log"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.cluster.err"
     benchmark:
@@ -62,19 +65,19 @@ rule pretextmap_per_chr: # #Pretext-map probably doesn't support long file names
     threads: parameters["threads"]["pretextmap"]
 
     shell:
-        " MAP_LOG=`realpath -s -m {log.map}` ; echo $?; "
-        " VIEW_LOG=`realpath -s -m {log.view}` ; echo $?; "
+        " MAP_LOG=`realpath -s -m {log.map}` ; echo $? > {log.echo} 2>&1; "
+        " VIEW_LOG=`realpath -s -m {log.view}` ; echo $? > {log.echo} 2>&1; "
         " if [[ -s {input.candidate_chr_black_list} ]]; "
         "   then "
-        "       FILTER_OUT=' --filterExclude '; echo $?; "
-        "       FILTER_OUT=\"${{FILTER_OUT}} `cat {input.candidate_chr_black_list} | tr '\\n' ',' | sed 's/,\+$//'`  \"; echo $?; "
+        "       FILTER_OUT=' --filterExclude '; echo $? > {log.echo} 2>&1; "
+        "       FILTER_OUT=\"${{FILTER_OUT}} `cat {input.candidate_chr_black_list} 2>{log.cat} | tr '\\n' ','  2>{log.tr} | sed 's/,\+$//'` 2>{log.sed}  \"; echo $? > {log.echo} 2>&1; "
         "   else "
-        "       FILTER_OUT=''; echo $?;"
+        "       FILTER_OUT=''; echo $? > {log.echo} 2>&1;"
         "   fi; " 
-        " cd `dirname {input.bam}`; echo $?; "
+        " cd `dirname {input.bam}`; echo $? > {log.echo} 2>&1; "
         " samtools view -@ 4 -F0x400 -h `basename {input.bam}` 2>${{VIEW_LOG}} | "
         " PretextMap -o per_chr/`basename {output.map}` {params.sortby} {params.sortorder} "
-        "            --mapq {wildcards.mapq} ${{FILTER_OUT}} {params.resolution} > ${{MAP_LOG}} 2>&1; echo $?; "
+        "            --mapq {wildcards.mapq} ${{FILTER_OUT}} {params.resolution} > ${{MAP_LOG}} 2>&1; echo $? > {log.echo} 2>&1; "
 
 rule pretext_inject_tracks_per_chr:
     input:

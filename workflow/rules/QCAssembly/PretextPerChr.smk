@@ -32,7 +32,7 @@ checkpoint get_candidate_chr_from_painted_agp: # #Pretext-map probably doesn't s
         "       -p {output.out_dir}/candidate "
 """
 
-rule pretextmap_per_chr: # #Pretext-map probably doesn't support long file names!!!!!!!!!!!
+rule pretextmap_chr:
     input:
         bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
         candidate_chr_black_list=output_dict["data"] / "candidate_chr/candidate.{candidate_chr_id}.pretext.blacklist"
@@ -59,11 +59,11 @@ rule pretextmap_per_chr: # #Pretext-map probably doesn't support long file names
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
-        node_options=parse_node_list("pretextmap"),
-        cpus=parameters["threads"]["pretextmap"] ,
-        time=parameters["time"]["pretextmap"],
-        mem=parameters["memory_mb"]["pretextmap"]
-    threads: parameters["threads"]["pretextmap"]
+        node_options=parse_node_list("pretextmap_chr"),
+        cpus=parameters["threads"]["pretextmap_chr"] ,
+        time=parameters["time"]["pretextmap_chr"],
+        mem=parameters["memory_mb"]["pretextmap_chr"]
+    threads: parameters["threads"]["pretextmap_chr"]
 
     shell:
         " ls "

@@ -1288,7 +1288,7 @@ if "hic_scaffolding" in config["stage_list"]:
                          ]
 
     if candidate_agp_filename is not None:
-        results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/per_chr/{genome_prefix}.{assembly_stage}.NA.{haplotype}.rmdup.mapq{mapq}.{res}.tracks.win_{window}.{step}.{candidate_chr_id}.pretext",
+        results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/per_chr/{genome_prefix}.{assembly_stage}.NA.{haplotype}.rmdup.mapq{mapq}.{res}.{candidate_chr_id}.tracks.win_{window}.{step}.pretext",
                                 candidate_chr_id=candidate_chr_id_list,
                                 assembly_stage=["hic_scaffolding"],
                                 parameters=[parameter_label],

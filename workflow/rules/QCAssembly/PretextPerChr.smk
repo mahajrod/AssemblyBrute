@@ -48,6 +48,7 @@ rule pretextmap_per_chr: # #Pretext-map probably doesn't support long file names
         cat=output_dict["log"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.cat.log",
         tr=output_dict["log"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.tr.log",
         sed=output_dict["log"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.sed.log",
+        cd=output_dict["log"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.cd.log",
         map=output_dict["log"]  / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.map.log",
         echo=output_dict["log"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.echo.log",
         cluster_log=output_dict["cluster_log"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.cluster.log",
@@ -74,7 +75,7 @@ rule pretextmap_per_chr: # #Pretext-map probably doesn't support long file names
         "   else "
         "       FILTER_OUT=''; echo $? >> {log.echo} 2>&1;"
         "   fi; " 
-        " cd `dirname {input.bam}`; echo $? >> {log.echo} 2>&1; "
+        " cd `dirname {input.bam}` > {log.cd} 2>&1; echo $? >> {log.echo} 2>&1; "
         " samtools view -@ 4 -F0x400 -h `basename {input.bam}` 2>${{VIEW_LOG}} | "
         " PretextMap -o per_chr/`basename {output.map}` {params.sortby} {params.sortorder} "
         "            --mapq {wildcards.mapq} ${{FILTER_OUT}} {params.resolution} > ${{MAP_LOG}} 2>&1; echo $? >> {log.echo} 2>&1; "

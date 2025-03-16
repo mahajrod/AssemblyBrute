@@ -54,6 +54,7 @@ ref_dict	1	1	1	1	1	1	1	1	1
 rmdup	4	4	4	4	4	4	4	4	4
 bam2bed	4	4	4	4	4	4	4	4	4
 pretextmap	6	6	6	6	6	6	6	6	6
+pretextmap_chr	6	6	6	6	6	6	6	6	6
 pretextsnapshot	4	4	4	4	4	4	4	4	4
 pretext_inject_tracks	4	4	4	4	4	4	4	4	4
 salsa2	10	10	10	10	10	10	20	20	20

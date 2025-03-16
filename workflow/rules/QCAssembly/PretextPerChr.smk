@@ -66,22 +66,24 @@ rule pretextmap_per_chr: # #Pretext-map probably doesn't support long file names
     threads: parameters["threads"]["pretextmap"]
 
     shell:
-        " MAP_LOG=`realpath -s -m {log.map}` ; echo $? > {log.echo} 2>&1; "
-        " VIEW_LOG=`realpath -s -m {log.view}` ; echo $? >> {log.echo} 2>&1; "
+        " MAP_LOG=`realpath -s -m {log.map}` ; "
+        " VIEW_LOG=`realpath -s -m {log.view}` ; "
+        " ECHO_LOG=`realpath -s -m {log.echo}` ; "
+        " CD_LOG=`realpath -s -m {log.cd}` ; "
         " if [[ -s {input.candidate_chr_black_list} ]]; "
         "   then "
-        "       echo 'Blacklist is not empty...' >> {log.echo} 2>&1; "
-        "       FILTER_OUT=`cat {input.candidate_chr_black_list} 2>{log.cat} | tr '\\n' ','  2>{log.tr} | sed 's/,\+$//' 2>{log.sed}`; echo ${{FILTER_OUT}} >> {log.echo} 2>&1; "
-        "       FILTER_OUT=\" --filterExclude ${{FILTER_OUT}}\"; echo $? >> {log.echo} 2>&1; "
+        "       echo 'Blacklist is not empty...' > ${{ECHO_LOG}} 2>&1; "
+        "       FILTER_OUT=`cat {input.candidate_chr_black_list} 2>{log.cat} | tr '\\n' ','  2>{log.tr} | sed 's/,\+$//' 2>{log.sed}`; echo ${{FILTER_OUT}} >> ${{ECHO_LOG}} 2>&1; "
+        "       FILTER_OUT=\" --filterExclude ${{FILTER_OUT}}\"; echo $? >> ${{ECHO_LOG}} 2>&1; "
         "   else "
-        "       echo 'Blacklist is empty...' >> {log.echo} 2>&1; "
-        "       FILTER_OUT=''; echo $? >> {log.echo} 2>&1;"
+        "       echo 'Blacklist is empty...' > ${{ECHO_LOG}} 2>&1; "
+        "       FILTER_OUT=''; echo $? >> ${{ECHO_LOG}} 2>&1;"
         "   fi; " 
-        " echo 'Entering workdir...' >> {log.echo} 2>&1;" 
-        " cd `dirname {input.bam}` > {log.cd} 2>&1; echo $? >> {log.echo} 2>&1; "
+        " echo 'Entering workdir...' >> ${{ECHO_LOG}} 2>&1;" 
+        " cd `dirname {input.bam}` > ${{CD_LOG}} 2>&1; echo $? >> ${{ECHO_LOG}} 2>&1; "
         " samtools view -@ 4 -F0x400 -h `basename {input.bam}` 2>${{VIEW_LOG}} | "
         " PretextMap -o per_chr/`basename {output.map}` {params.sortby} {params.sortorder} "
-        "            --mapq {wildcards.mapq} ${{FILTER_OUT}} {params.resolution} > ${{MAP_LOG}} 2>&1; echo $? >> {log.echo} 2>&1; "
+        "            --mapq {wildcards.mapq} ${{FILTER_OUT}} {params.resolution} > ${{MAP_LOG}} 2>&1; echo $? >> ${{ECHO_LOG}} 2>&1; "
 
 rule pretext_inject_tracks_per_chr:
     input:

@@ -66,7 +66,7 @@ rule pretextmap_per_chr: # #Pretext-map probably doesn't support long file names
     threads: parameters["threads"]["pretextmap"]
 
     shell:
-        " ls; "
+        " ls "
         #" MAP_LOG=`realpath -s -m {log.map}` ; "
         #" VIEW_LOG=`realpath -s -m {log.view}` ; "
         #" ECHO_LOG=`realpath -s -m {log.echo}` ; "

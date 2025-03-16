@@ -66,18 +66,18 @@ rule pretextmap_per_chr: # #Pretext-map probably doesn't support long file names
 
     shell:
         " MAP_LOG=`realpath -s -m {log.map}` ; echo $? > {log.echo} 2>&1; "
-        " VIEW_LOG=`realpath -s -m {log.view}` ; echo $? > {log.echo} 2>&1; "
+        " VIEW_LOG=`realpath -s -m {log.view}` ; echo $? >> {log.echo} 2>&1; "
         " if [[ -s {input.candidate_chr_black_list} ]]; "
         "   then "
-        "       FILTER_OUT=' --filterExclude '; echo $? > {log.echo} 2>&1; "
-        "       FILTER_OUT=\"${{FILTER_OUT}} `cat {input.candidate_chr_black_list} 2>{log.cat} | tr '\\n' ','  2>{log.tr} | sed 's/,\+$//'` 2>{log.sed}  \"; echo $? > {log.echo} 2>&1; "
+        "       FILTER_OUT=' --filterExclude '; echo $? >> {log.echo} 2>&1; "
+        "       FILTER_OUT=\"${{FILTER_OUT}} `cat {input.candidate_chr_black_list} 2>{log.cat} | tr '\\n' ','  2>{log.tr} | sed 's/,\+$//' 2>{log.sed}`  \"; echo $? >> {log.echo} 2>&1; "
         "   else "
-        "       FILTER_OUT=''; echo $? > {log.echo} 2>&1;"
+        "       FILTER_OUT=''; echo $? >> {log.echo} 2>&1;"
         "   fi; " 
-        " cd `dirname {input.bam}`; echo $? > {log.echo} 2>&1; "
+        " cd `dirname {input.bam}`; echo $? >> {log.echo} 2>&1; "
         " samtools view -@ 4 -F0x400 -h `basename {input.bam}` 2>${{VIEW_LOG}} | "
         " PretextMap -o per_chr/`basename {output.map}` {params.sortby} {params.sortorder} "
-        "            --mapq {wildcards.mapq} ${{FILTER_OUT}} {params.resolution} > ${{MAP_LOG}} 2>&1; echo $? > {log.echo} 2>&1; "
+        "            --mapq {wildcards.mapq} ${{FILTER_OUT}} {params.resolution} > ${{MAP_LOG}} 2>&1; echo $? >> {log.echo} 2>&1; "
 
 rule pretext_inject_tracks_per_chr:
     input:

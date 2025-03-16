@@ -1286,7 +1286,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                  #max_length=[parameters["tool_options"]["microsome_detection"]["max_length"]],
                                  ) for parameter_label in stage_dict["hic_scaffolding"]["parameters"]]
                          ]
-    """
+
     if candidate_agp_filename is not None:
         results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/per_chr/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{candidate_chr_id}.rmdup.mapq{mapq}.{res}.tracks.win_{window}.{step}.pretext",
                                 candidate_chr_id=candidate_chr_id_list,
@@ -1300,7 +1300,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                 step=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
                                 ) for parameter_label in stage_dict[current_stage]["parameters"] for window_step_set in config["qc_settings"]["windows_sets"]]
                          ]
-    """
+
 
 
 """

@@ -44,17 +44,17 @@ rule pretextmap_chr:
         sortby=parse_option("sortby", parameters["tool_options"]["pretextmap"], " --sortby "),
         sortorder=parse_option("sortorder", parameters["tool_options"]["pretextmap"], " --sortorder "),
     log:
-        view=output_dict["log"]  / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.view.log",
-        cat=output_dict["log"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.cat.log",
-        tr=output_dict["log"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.tr.log",
-        sed=output_dict["log"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.sed.log",
-        cd=output_dict["log"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.cd.log",
-        map=output_dict["log"]  / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.map.log",
-        echo=output_dict["log"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.echo.log",
-        cluster_log=output_dict["cluster_log"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.cluster.err"
+        view=output_dict["log"]  / "pretextmap_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.view.log",
+        cat=output_dict["log"] / "pretextmap_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.cat.log",
+        tr=output_dict["log"] / "pretextmap_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.tr.log",
+        sed=output_dict["log"] / "pretextmap_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.sed.log",
+        cd=output_dict["log"] / "pretextmap_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.cd.log",
+        map=output_dict["log"]  / "pretextmap_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.map.log",
+        echo=output_dict["log"] / "pretextmap_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.echo.log",
+        cluster_log=output_dict["cluster_log"] / "pretextmap_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "pretextmap_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "pretextmap_per_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.benchmark.txt"
+        output_dict["benchmark"]  / "pretextmap_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -66,7 +66,7 @@ rule pretextmap_chr:
     threads: parameters["threads"]["pretextmap_chr"]
 
     shell:
-        " ls "
+        " pwd "
         #" MAP_LOG=`realpath -s -m {log.map}` ; "
         #" VIEW_LOG=`realpath -s -m {log.view}` ; "
         #" ECHO_LOG=`realpath -s -m {log.echo}` ; "

@@ -144,7 +144,7 @@ rule pretextmap_chr:
         "            --mapq {wildcards.mapq} ${{FILTER_OUT}} {params.resolution} > ${{MAP_LOG}} 2>&1; "
         " echo 'Creating pretext map finished...' >> ${{ECHO_LOG}} 2>&1; "
         " echo $? >> ${{ECHO_LOG}} 2>&1; "
-
+"""
 rule pretext_inject_tracks_per_chr:
     input:
         #bam=out_dir_path  / ("{assembly_stage}/{assembler}/{haplotype}/alignment/%s.{assembly_stage}.{assembler}.{haplotype}.bwa.filtered.rmdup.bam"  % config["genome_name"]),
@@ -219,38 +219,87 @@ rule pretext_inject_tracks_per_chr:
         " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.default_hifi_coverage_track} | "
         "   awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4}}' | "
         "   PretextGraph -i {output.updated_map}  -n hifi_default.coverage  > {log.coverage} 2>&1; "
-
 """
-def aggregate_per_chr_maps_input(wildcards):
-    checkpoint_output = checkpoints.get_candidate_chr_from_painted_agp.get(**wildcards).output[0]
-    print(checkpoint_output)
-    print(os.path.join(checkpoint_output,"/candidate.{candidate_chr_id}.pretext.blacklist"))
-    print(glob_wildcards(os.path.join(checkpoint_output,"/candidate.{candidate_chr_id}.pretext.blacklist")).candidate_chr_id)
-    return expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/per_chr/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq}.{res}.tracks.win_{window}.{step}.{candidate_chr_id}.pretext",
-                  candidate_chr=glob_wildcards(os.path.join(checkpoint_output,"/candidate.{candidate_chr_id}.pretext.blacklist")).candidate_chr_id,
-                  allow_missing=True)
-
-rule aggregate_per_chr_maps: # #Pretext-map probably doesn't support long file names!!!!!!!!!!!
+rule pretext_inject_tracks_per_chr:
     input:
-        aggregate_per_chr_maps_input
+        map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/per_chr/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.rmdup.mapq{mapq}.{res}.pretext",
+        candidate_chr_black_list=output_dict["data"] / "candidate_chr/candidate.{candidate_chr_id}.pretext.blacklist",
+        gap_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.gap.track.bedgraph",
+        canonical_telomere_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical.telomere.pretext.bedgraph",
+        non_canonical_telomere_track=out_dir_path/ "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical.telomere.pretext.bedgraph",
+        gc_10k_1k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.gc.win10000.step1000.track.bedgraph",
+        gc_100k_10k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.gc.win100000.step10000.track.bedgraph",
+        trf_10k_1k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.trf.win10000.step1000.track.bedgraph",
+        trf_100k_10k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.trf.win100000.step10000.track.bedgraph",
+        windowmasker_10k_1k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.windowmasker.win10000.step1000.track.bedgraph",
+        windowmasker_100k_10k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.windowmasker.win100000.step10000.track.bedgraph",
+        all_hifi_coverage_10k_1k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.hifi_all_nodup_reads_mean_coverage.win10000.step1000.track.bedgraph",
+        all_hifi_coverage_100k_10k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.hifi_all_nodup_reads_mean_coverage.win100000.step10000.track.bedgraph",
     output:
-        out_dir=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/{haplotype, [^./]+}/alignment/{phasing_kmer_length, [^./]+}/per_chr/{genome_prefix, [^/]+}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq, [0-9]+}.{res, [^/]+}.tracks.win_{window, [0-9]+}.{step, [0-9]+}.maps.list"
+        updated_map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^./]+}/alignment/{phasing_kmer_length, [^.]+}/per_chr/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{subset}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.tracks.pretext"
+    params:
+        min_mapq=parameters["tool_options"]["pretextmap"]["mapq"],
     log:
-        log=output_dict["log"]  / "aggregate_per_chr_maps.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.{res}.{window}.{step}.log",
-        cluster_log=output_dict["cluster_log"] / "aggregate_per_chr_maps.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.{res}.{window}.{step}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "aggregate_per_chr_maps.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.{res}.{window}.{step}.cluster.err"
+        gap=output_dict["log"]  / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{subset}.{mapq}.{res}.gap.log",
+        can_tel=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{subset}.{mapq}.{res}.can_tel.log",
+        non_can_tel=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{subset}.{mapq}.{res}.non_can_tel.log",
+        gc=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{subset}.{mapq}.{res}..gc.log",
+        trf=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{subset}.{mapq}.{res}.trf.log",
+        windowmasker=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{subset}.{mapq}.{res}.windowmasker.log",
+        coverage=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{subset}.{mapq}.{res}.coverage.log",
+        awk=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{subset}.{mapq}.{res}.awk.log",
+        rm=output_dict["log"] / "pretextmap.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{subset}.{mapq}.{res}.rm.log",
+        cluster_log=output_dict["cluster_log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{subset}.{mapq}.{res}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{subset}.{mapq}.{res}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "get_candidate_chr_from_painted_agp.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.{res}.{window}.{step}.benchmark.txt"
+        output_dict["benchmark"]  / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{subset}.{mapq}.{res}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
-        node_options=parse_node_list("get_candidate_chr_from_painted_agp"),
-        cpus=parameters["threads"]["get_candidate_chr_from_painted_agp"] ,
-        time=parameters["time"]["get_candidate_chr_from_painted_agp"],
-        mem=parameters["memory_mb"]["get_candidate_chr_from_painted_agp"]
-    threads: parameters["threads"]["get_candidate_chr_from_painted_agp"]
+        node_options=parse_node_list("pretext_inject_tracks"),
+        cpus=parameters["threads"]["pretext_inject_tracks"] ,
+        time=parameters["time"]["pretext_inject_tracks"],
+        mem=parameters["memory_mb"]["pretext_inject_tracks"]
+    threads: parameters["threads"]["pretext_inject_tracks"]
 
     shell:
-        " cat {input} > {output} 2>{log.log}; "
-"""
+        " cp -f {input.map} {output.updated_map}; "
+        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.gap_track}  | "
+        "   PretextGraph -i {output.updated_map} -n gap > {log.gap} 2>&1; "
+        " if [[ -s {input.canonical_telomere_track} ]]; "
+        "   then "
+        "   workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.canonical_telomere_track} | "
+        "       awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4}}' | "
+        "       PretextGraph -i {output.updated_map} -n canonical.telomere > {log.can_tel} 2>&1;"
+        "   fi; "
+        " if [[ -s {input.non_canonical_telomere_track} ]]; "
+        "   then "
+        "   workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.non_canonical_telomere_track} | "
+        "       awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4}}' | "
+        "       PretextGraph -i {output.updated_map} -n noncanonical.telomere > {log.non_can_tel} 2>&1;"
+        "   fi;  "
+        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.gc_10k_1k_track} | "
+        "   awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4 }}' | "
+        "   PretextGraph -i {output.updated_map} -n GC_10k_1k.repeat_density  > {log.gc} 2>&1; "
+        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.gc_100k_10k_track} | "
+        "   awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4 }}' | "
+        "   PretextGraph -i {output.updated_map} -n GC_100k_10k.repeat_density  > {log.gc} 2>&1; "
+        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.trf_10k_1k_track} | "
+        "   awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4 }}' | "
+        "   PretextGraph -i {output.updated_map}  -n TRF_10k_1k.repeat_density > {log.trf} 2>&1; "
+        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.trf_100k_10k_track} | "
+        "   awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4 }}' | "
+        "   PretextGraph -i {output.updated_map}  -n TRF_100k_10k.repeat_density > {log.trf} 2>&1; "
+        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.windowmasker_10k_1k_track} | "
+        "   awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4 }}' | "
+        "   PretextGraph -i {output.updated_map}  -n windowmasker_10k_1k.repeat_density > {log.windowmasker} 2>&1; "
+        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.windowmasker_100k_10k_track} | "
+        "   awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4 }}' | "
+        "   PretextGraph -i {output.updated_map}  -n windowmasker_100k_10k.repeat_density > {log.windowmasker} 2>&1; "
+        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.all_hifi_coverage_10k_1k_track} | "
+        "   awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4}}' | "
+        "   PretextGraph -i {output.updated_map}  -n hifi_all_10k_1k.coverage  > {log.coverage} 2>&1; "
+        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.all_hifi_coverage_100k_10k_track} | "
+        "   awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4}}' | "
+        "   PretextGraph -i {output.updated_map}  -n hifi_all_100k_10k.coverage  > {log.coverage} 2>&1; "

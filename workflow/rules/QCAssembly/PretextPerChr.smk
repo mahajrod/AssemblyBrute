@@ -32,6 +32,62 @@ checkpoint get_candidate_chr_from_painted_agp: # #Pretext-map probably doesn't s
         "       -p {output.out_dir}/candidate "
 """
 
+rule pretextmap_chr: # #Pretext-map probably doesn't support long file names!!!!!!!!!!!
+    input:
+        bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
+        len=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len"
+    output:
+        map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.{candidate_chr_id}.pretext",
+        filtered_out=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.{candidate_chr_id}.filtered_out.ids",
+    params:
+        resolution=lambda wildcards: " --highRes" if wildcards.res == "high_res" else "",
+        max_len=lambda wildcards: parameters["tool_options"]["pretextmap"]["subsets"][wildcards.subset]["max_len"],
+        sortby=parse_option("sortby", parameters["tool_options"]["pretextmap"], " --sortby "),
+        sortorder=parse_option("sortorder", parameters["tool_options"]["pretextmap"], " --sortorder "),
+    log:
+        view=output_dict["log"]  / "pretextmap.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.{res}.{candidate_chr_id}.view.log",
+        awk=output_dict["log"] / "pretextmap.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.{res}.{candidate_chr_id}.awk.log",
+        map=output_dict["log"]  / "pretextmap.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.{res}.{candidate_chr_id}.map.log",
+        cluster_log=output_dict["cluster_log"] / "pretextmap.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.{res}.{candidate_chr_id}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "pretextmap.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.{res}.{candidate_chr_id}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "pretextmap.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{mapq}.{res}.{candidate_chr_id}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("pretextmap"),
+        cpus=parameters["threads"]["pretextmap"] ,
+        time=parameters["time"]["pretextmap"],
+        mem=parameters["memory_mb"]["pretextmap"]
+    threads: parameters["threads"]["pretextmap"]
+
+    shell:
+        " pwd "
+
+"""
+        " MAP_LOG=`realpath -s -m {log.map}` ; "
+        " VIEW_LOG=`realpath -s -m {log.view}` ; "
+        " if [ '{params.max_len}' == 'None' ];"
+        "   then "
+        "       > {output.filtered_out}; "
+        "   else "
+        "       awk '{{if ($2 > {params.max_len}) print $1}}' {input.len} > {output.filtered_out} 2>{log.awk}; "
+        "   fi; "
+        " if [[ -s {output.filtered_out} ]]; "
+        "   then "
+        "       FILTER_OUT=' --filterExclude '; "
+        "       FILTER_OUT=\"${{FILTER_OUT}} `cat {output.filtered_out} | tr '\\n' ',' | sed 's/,\+$//'` \"; "
+        "   else "
+        "       FILTER_OUT=''; "
+        "   fi; " 
+        " cd `dirname {input.bam}`; "
+        " samtools view -@4 -F0x400 -h `basename {input.bam}` 2>${{VIEW_LOG}} | "
+        " PretextMap -o `basename {output.map}` {params.sortby} {params.sortorder} "
+        "            --mapq {wildcards.mapq} ${{FILTER_OUT}} {params.resolution} > ${{MAP_LOG}} 2>&1"
+
+"""
+"""
 rule pretextmap_chr:
     input:
         bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
@@ -88,7 +144,7 @@ rule pretextmap_chr:
         #"            --mapq {wildcards.mapq} ${{FILTER_OUT}} {params.resolution} > ${{MAP_LOG}} 2>&1; "
         #" echo 'Creating pretext map finished...' >> ${{ECHO_LOG}} 2>&1; "
         #" echo $? >> ${{ECHO_LOG}} 2>&1; "
-
+"""
 rule pretext_inject_tracks_per_chr:
     input:
         #bam=out_dir_path  / ("{assembly_stage}/{assembler}/{haplotype}/alignment/%s.{assembly_stage}.{assembler}.{haplotype}.bwa.filtered.rmdup.bam"  % config["genome_name"]),

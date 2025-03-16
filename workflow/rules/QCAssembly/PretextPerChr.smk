@@ -40,7 +40,7 @@ rule pretextmap_per_chr: # #Pretext-map probably doesn't support long file names
         map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length, [^.]+}/per_chr/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.{candidate_chr_id}.pretext",
         filtered_out=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length, [^.]+}/per_chr/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.{candidate_chr_id}.filtered_out.ids",
     params:
-        resolution = lambda wildcards: " --highRes" if wildcards.res == "high_res" else "",
+        resolution = lambda wildcards: " --highRes " if wildcards.res == "high_res" else "",
         sortby=parse_option("sortby", parameters["tool_options"]["pretextmap"], " --sortby "),
         sortorder=parse_option("sortorder", parameters["tool_options"]["pretextmap"], " --sortorder "),
     log:
@@ -70,23 +70,25 @@ rule pretextmap_per_chr: # #Pretext-map probably doesn't support long file names
         " VIEW_LOG=`realpath -s -m {log.view}` ; "
         " ECHO_LOG=`realpath -s -m {log.echo}` ; "
         " CD_LOG=`realpath -s -m {log.cd}` ; "
-        " if [[ -s {input.candidate_chr_black_list} ]]; "
-        "   then "
-        "       echo 'Blacklist is not empty...' > ${{ECHO_LOG}} 2>&1; "
-        "       FILTER_OUT=`cat {input.candidate_chr_black_list} 2>{log.cat} | tr '\\n' ','  2>{log.tr} | sed 's/,\+$//' 2>{log.sed}`; echo ${{FILTER_OUT}} >> ${{ECHO_LOG}} 2>&1; "
-        "       FILTER_OUT=\" --filterExclude ${{FILTER_OUT}}\"; echo $? >> ${{ECHO_LOG}} 2>&1; "
-        "   else "
-        "       echo 'Blacklist is empty...' > ${{ECHO_LOG}} 2>&1; "
-        "       FILTER_OUT=''; echo $? >> ${{ECHO_LOG}} 2>&1;"
-        "   fi; " 
         " echo 'Entering workdir...' >> ${{ECHO_LOG}} 2>&1; " 
         " cd `dirname {input.bam}` > ${{CD_LOG}} 2>&1; echo $? >> ${{ECHO_LOG}} 2>&1; "
         " echo 'Creating pretext map...' >> ${{ECHO_LOG}} 2>&1; "
         " samtools view -@ 4 -F0x400 -h `basename {input.bam}` || true 2>${{VIEW_LOG}} | "
         " PretextMap -o per_chr/`basename {output.map}` {params.sortby} {params.sortorder} "
-        "            --mapq {wildcards.mapq} ${{FILTER_OUT}} {params.resolution} || true > ${{MAP_LOG}} 2>&1; "
+        "            --mapq {wildcards.mapq} {params.resolution} || true > ${{MAP_LOG}} 2>&1; " #${{FILTER_OUT}} 
         " echo 'Creating pretext map finished...' >> ${{ECHO_LOG}} 2>&1; "
         " echo $? >> ${{ECHO_LOG}} 2>&1; "
+
+
+        #" if [[ -s {input.candidate_chr_black_list} ]]; "
+        #"  then "
+        #"       echo 'Blacklist is not empty...' > ${{ECHO_LOG}} 2>&1; "
+        #"       FILTER_OUT=`cat {input.candidate_chr_black_list} 2>{log.cat} | tr '\\n' ','  2>{log.tr} | sed 's/,\+$//' 2>{log.sed}`; echo ${{FILTER_OUT}} >> ${{ECHO_LOG}} 2>&1; "
+        #"       FILTER_OUT=\" --filterExclude ${{FILTER_OUT}}\"; echo $? >> ${{ECHO_LOG}} 2>&1; "
+        #"   else "
+        #"       echo 'Blacklist is empty...' > ${{ECHO_LOG}} 2>&1; "
+        #"       FILTER_OUT=''; echo $? >> ${{ECHO_LOG}} 2>&1;"
+        #"   fi; "
 
 rule pretext_inject_tracks_per_chr:
     input:

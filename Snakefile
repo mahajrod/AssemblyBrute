@@ -113,6 +113,7 @@ if config["final_kmer_datatype"] not in fastq_based_data_type_set:
 
 #---- Checking input files ----
 candidate_agp_dir_path = input_dir_path / "candidate_chr/"
+
 candidate_agp_filename = list(candidate_agp_dir_path.glob("*.agp"))
 #print(candidate_agp_filename)
 #print(candidate_agp_dir_path.name)
@@ -120,7 +121,10 @@ if len(candidate_agp_filename) > 1:
     raise ValueError(f"ERROR!!! More than one agp file was detected in folder {str(candidate_agp_dir_path.name)}!")
 elif len(candidate_agp_filename) == 1:
     candidate_agp_filename = candidate_agp_filename[0]
-    candidate_output_prefix = output_dict["data"] / "candidate_chr/candidate"
+    candidate_output_dir = output_dict["data"] / "candidate_chr/"
+    if not candidate_output_dir.exists():
+        os.system(f" mkdir -p {str(candidate_output_dir)}")
+    candidate_output_prefix = candidate_output_dir / "candidate"
     agp_df = pd.read_csv(candidate_agp_filename, sep="\t", header=None,
                             names=["scaffold_id", "start", "end", "part_number", "part_type",
                                    "part_id/gap_length", "part_start/gap_type",
@@ -129,6 +133,7 @@ elif len(candidate_agp_filename) == 1:
 
     all_contig_series = agp_df[agp_df["part_type"] != "U"]["part_id/gap_length"]
     chr_component_series = agp_df[agp_df["comment"] == "Painted"]["part_id/gap_length"]
+
     chr_component_series.to_csv(f"{candidate_output_prefix}.all_chr.components.ids",sep="\t",header=False,index=False)
     candidate_chr_id_list = list(chr_component_series.index)
     for scaffold_id in chr_component_series.index:

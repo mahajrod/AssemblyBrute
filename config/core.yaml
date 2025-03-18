@@ -1642,7 +1642,7 @@
             "pretextmap":
                 "default":
                     "mapq":
-                        - 1
+                        #- 1
                         - 0
                     "sortby": "nosort" # Allowed: "length", "name", "nosort"
                     "sortorder": null # Allowed: "ascend", "descend", null

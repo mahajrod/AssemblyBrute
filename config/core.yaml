@@ -1891,6 +1891,10 @@
                     "clr":
                         "matching_len": 3500
                         "datatype": "pbclr"
+                    "qc_datatypes":
+                        - "hifi"
+                    "main_datatypes":
+                        - "hifi"
                 "phased_reads":
                     "phasing_kmer_length": 31
                     "hifi":
@@ -1908,6 +1912,10 @@
                     "clr":
                         "matching_len": 3500
                         "datatype": "pbclr"
+                    "qc_datatypes":
+                        - "hifi"
+                    "main_datatypes":
+                        - "hifi"
                 "unphased_reads":
                     "phasing_kmer_length": "NA"
                     "hifi":
@@ -1925,6 +1933,10 @@
                     "clr":
                         "matching_len": 3500
                         "datatype": "pbclr"
+                    "qc_datatypes":
+                        - "hifi"
+                    "main_datatypes":
+                        - "hifi"
             "trf":
                 "default":
                     "matching_weight": 2

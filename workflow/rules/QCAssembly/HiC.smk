@@ -1,6 +1,8 @@
 if (("hic_scaffolding" in config["stage_list"]) or ("gap_closing" in config["stage_list"])) and ("hic" in data_types) : # TODO: remove this bypass in future
-    if create_final_links_purge_dups in rules:
+    try:
         ruleorder: combine_haplotypes > create_final_links_purge_dups
+    except:
+        pass
     ruleorder: combine_haplotypes > yahs
     ruleorder: combine_haplotypes > create_assembly_links_if_skipping_purge_dups
     #ruleorder: bam_merge_files_for_hic_map > bam_merge_files

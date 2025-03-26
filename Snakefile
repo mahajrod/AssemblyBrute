@@ -1809,9 +1809,9 @@ if "hifi" in data_types:
 include: "workflow/rules/Contigs/Graph.smk"
 include: "workflow/rules/Stats/General.smk"
 
-if "purge_dups" in config["stage_list"]:
-    include: "workflow/rules/Purge_dups/Purge_dups.smk"
-    include: "workflow/rules/Purge_dups/Purge_dupsQC.smk"
+#if "purge_dups" in config["stage_list"]:
+include: "workflow/rules/Purge_dups/Purge_dups.smk"
+include: "workflow/rules/Purge_dups/Purge_dupsQC.smk"
 
 include: "workflow/rules/HiC/ReadPhasing.smk"
 

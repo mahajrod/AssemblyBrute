@@ -474,7 +474,7 @@ if "draft_qc" in config["stage_list"]:
                       ]
     """
     if "gap_closing" in config["stage_list"]:
-        current_stage = "draft_qc"
+        current_stage = "gap_closing"
         prev_stage = "draft_qc"
 
         gap_closer_list = config["stage_coretools"]["gap_closing"]["default"]
@@ -552,6 +552,21 @@ if "draft_qc" in config["stage_list"]:
                                     haplotype=stage_dict["gap_closing"]["parameters"][parameters_label]["haplotype_list"],
                                     parameters=[parameters_label]) for parameters_label in parameters_list],
                          ]
+        results_list += [[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.tracks.pretext",
+                              res=["default", "high_res"],
+                              haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
+                              subset=["all"] + (["microchr"] if ("bird_genome" in config) and config["bird_genome"] else []),
+                              genome_prefix=[config["genome_prefix"], ],
+                              assembly_stage=[current_stage],
+                              parameters=stage_dict[current_stage]["parameters"],
+                              resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
+                              mapq=parameters["tool_options"]["pretextmap"]["mapq"],
+                              ext=parameters["tool_options"]["pretextsnapshot"]["format"],
+                              #window=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["window"],
+                              #step = parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
+                             ) for window_step_set in config["qc_settings"]["windows_sets"]] for parameters_label in
+                                                      stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],
+                     ]
 
 if ("filter_reads" in config["stage_list"]) and (not config["skip_filter_reads"]):
     results_list += [expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),

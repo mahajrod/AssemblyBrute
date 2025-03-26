@@ -1832,7 +1832,7 @@ if "hic" in data_types:
             include: "workflow/rules/Alignment/Pairtools.smk"
         include: "workflow/rules/Alignment/PostAlignment.smk"
 
-    if ("hic_scaffolding" in config["stage_list"]) or ("curation" in config["stage_list"]):
+    if ("hic_scaffolding" in config["stage_list"]) or ("curation" in config["stage_list"]) or ("gap_closing" in config["stage_list"]):
         include: "workflow/rules/Alignment/Pretext.smk"
 
     if "hic_scaffolding" in config["stage_list"]:

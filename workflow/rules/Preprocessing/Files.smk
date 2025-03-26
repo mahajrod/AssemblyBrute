@@ -91,7 +91,7 @@ rule create_links_for_draft:
     input:
         lambda wildcards: input_dir_path.resolve() / "draft/fasta/{0}".format(draft_file_dict[wildcards.haplotype])
     output:
-        out_dir_path / "draft_qc/{parameters}/{genome_prefix}.draft_qc.{haplotype}.fasta"
+        out_dir_path / "draft_qc/{parameters}/{genome_prefix}.draft_qc.{haplotype, hap.*}.fasta"
     log:
         ln=output_dict["log"]  / "create_links_for_draft.{genome_prefix}.{parameters}.draft_qc.{haplotype}.ln.log",
         cluster_log=output_dict["cluster_log"] / "create_links_for_draft.{genome_prefix}.{parameters}.draft_qc.{haplotype}.cluster.log",

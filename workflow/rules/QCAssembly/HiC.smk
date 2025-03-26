@@ -1,4 +1,4 @@
-if ("hic_scaffolding" in config["stage_list"]) and ("hic" in data_types) :
+if (("hic_scaffolding" in config["stage_list"]) or ("gap_closing" in config["stage_list"])) and ("hic" in data_types) :
     ruleorder: combine_haplotypes > create_final_links_purge_dups
     ruleorder: combine_haplotypes > yahs
     ruleorder: combine_haplotypes > create_assembly_links_if_skipping_purge_dups

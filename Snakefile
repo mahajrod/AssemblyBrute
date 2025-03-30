@@ -129,7 +129,7 @@ elif len(candidate_agp_filename) == 1:
                             names=["scaffold_id", "start", "end", "part_number", "part_type",
                                    "part_id/gap_length", "part_start/gap_type",
                                    "part_end/linkage", "orientation/evidence", "comment"],
-                            index_col="scaffold_id")
+                            index_col="scaffold_id", usecols=[0,1,2,3,4,5,6,7,8,9,10])
 
     all_contig_series = agp_df[agp_df["part_type"] != "U"]["part_id/gap_length"]
     chr_component_series = agp_df[agp_df["comment"] == "Painted"]["part_id/gap_length"]

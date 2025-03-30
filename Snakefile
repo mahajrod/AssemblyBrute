@@ -504,13 +504,15 @@ if "draft_qc" in config["stage_list"]:
                          expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=["gap_closing"],),
-                         [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.mapq{mapq}.hic",
-                                  assembly_stage=["gap_closing"],
-                                  parameters=[parameters_label],
-                                  genome_prefix=[config["genome_prefix"], ],
-                                  haplotype=stage_dict["gap_closing"]["parameters"][parameters_label]["haplotype_list"],
-                                  phasing_kmer_length=[stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["phasing_kmer_length"]],
-                                  mapq=parameters["tool_options"]["yahs_juicer_pre"]["mapq"])
+                        ]
+        if not config["skip_hic_file"]:
+            results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.mapq{mapq}.hic",
+                                      assembly_stage=["gap_closing"],
+                                      parameters=[parameters_label],
+                                      genome_prefix=[config["genome_prefix"], ],
+                                      haplotype=stage_dict["gap_closing"]["parameters"][parameters_label]["haplotype_list"],
+                                      phasing_kmer_length=[stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["phasing_kmer_length"]],
+                                      mapq=parameters["tool_options"]["yahs_juicer_pre"]["mapq"])
                            for parameters_label in parameters_list] if not config["skip_hic_file"] else []
                          ]
 

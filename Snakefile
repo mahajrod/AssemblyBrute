@@ -456,6 +456,21 @@ if "draft_qc" in config["stage_list"]:
                                 haplotype=stage_dict["draft_qc"]["parameters"][parameters_label]["haplotype_list"],
                                 parameters=[parameters_label]) for parameters_label in parameters_list],
                          ]
+    if (not config["skip_all_pretext"]) and (not config["skip_draft_qc_pretext"]):
+        results_list += [[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.tracks.pretext",
+                                  res=["default", "high_res"],
+                                  haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
+                                  subset=["all"] + (["microchr"] if ("bird_genome" in config) and config["bird_genome"] else []),
+                                  genome_prefix=[config["genome_prefix"], ],
+                                  assembly_stage=[current_stage],
+                                  parameters=stage_dict[current_stage]["parameters"],
+                                  resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
+                                  mapq=parameters["tool_options"]["pretextmap"]["mapq"],
+                                  ext=parameters["tool_options"]["pretextsnapshot"]["format"],
+                                  #window=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["window"],
+                                  #step = parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
+                                     ) for window_step_set in config["qc_settings"]["windows_sets"]] for parameters_label in stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],
+                         ]
     #TODO: remove after debugging
     """
     results_list += [ *[expand(out_dir_path / "{stage}/{parameters}/kmer/{genome_prefix}.{stage}.{haplotype}.{assembly_kmer_length}",
@@ -556,20 +571,21 @@ if "draft_qc" in config["stage_list"]:
                                     haplotype=stage_dict["gap_closing"]["parameters"][parameters_label]["haplotype_list"],
                                     parameters=[parameters_label]) for parameters_label in parameters_list],
                          ]
-        results_list += [[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.tracks.pretext",
-                              res=["default", "high_res"],
-                              haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
-                              subset=["all"] + (["microchr"] if ("bird_genome" in config) and config["bird_genome"] else []),
-                              genome_prefix=[config["genome_prefix"], ],
-                              assembly_stage=[current_stage],
-                              parameters=stage_dict[current_stage]["parameters"],
-                              resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
-                              mapq=parameters["tool_options"]["pretextmap"]["mapq"],
-                              ext=parameters["tool_options"]["pretextsnapshot"]["format"],
-                              #window=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["window"],
-                              #step = parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
-                             ) for window_step_set in config["qc_settings"]["windows_sets"]] for parameters_label in
-                                                      stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],
+        if (not config["skip_all_pretext"]) and (not config["skip_gap_closing_pretext"]):
+            results_list += [[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.tracks.pretext",
+                                  res=["default", "high_res"],
+                                  haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
+                                  subset=["all"] + (["microchr"] if ("bird_genome" in config) and config["bird_genome"] else []),
+                                  genome_prefix=[config["genome_prefix"], ],
+                                  assembly_stage=[current_stage],
+                                  parameters=stage_dict[current_stage]["parameters"],
+                                  resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
+                                  mapq=parameters["tool_options"]["pretextmap"]["mapq"],
+                                  ext=parameters["tool_options"]["pretextsnapshot"]["format"],
+                                  #window=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["window"],
+                                  #step = parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
+                                 ) for window_step_set in config["qc_settings"]["windows_sets"]] for parameters_label in
+                                                          stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],
                      ]
         if candidate_agp_filename is not None:
             results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/per_chr/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{candidate_chr_id}.rmdup.mapq{mapq}.{res}.tracks.pretext",

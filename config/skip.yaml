@@ -15,6 +15,11 @@
 "skip_higlass": True
 "skip_variantcalling": True
 "skip_hic_file": False
+"skip_draft_qc_hic_file": False
+"skip_gap_closing_hic_file": False
+"skip_all_pretext": False
+"skip_draft_qc_pretext": False
+"skip_gap_closing_pretext": False
 "skip_krater": True
 "skip_kmer": False
 "skip_ragtag": False

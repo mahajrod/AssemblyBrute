@@ -1853,7 +1853,9 @@ include: "workflow/rules/Alignment/Merge.smk"
 include: "workflow/rules/Alignment/Stats.smk"
 
 if "hic" in data_types:
-    if ("hic_scaffolding" in config["stage_list"]) or ("curation" in config["stage_list"]) or ("gap_closing" in config["stage_list"]):
+    if (sum(list(pd.Series(["hic_scaffolding",
+                        "gap_closing",
+                        "draft_qc"]).isin(config["stage_list"]))) > 0) :
         if config["other_tool_option_sets"]["mapping_pipeline"] == "arima":
             print("Mapping pipeline: Arima")
             include: "workflow/rules/Alignment/Arima.smk"
@@ -1865,7 +1867,9 @@ if "hic" in data_types:
             include: "workflow/rules/Alignment/Pairtools.smk"
         include: "workflow/rules/Alignment/PostAlignment.smk"
 
-    if ("hic_scaffolding" in config["stage_list"]) or ("curation" in config["stage_list"]) or ("gap_closing" in config["stage_list"]):
+    if (sum(list(pd.Series(["hic_scaffolding",
+                        "gap_closing",
+                        "draft_qc"]).isin(config["stage_list"]))) > 0) :
         include: "workflow/rules/Alignment/Pretext.smk"
 
     if "hic_scaffolding" in config["stage_list"]:

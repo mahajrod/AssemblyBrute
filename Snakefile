@@ -567,6 +567,19 @@ if "draft_qc" in config["stage_list"]:
                              ) for window_step_set in config["qc_settings"]["windows_sets"]] for parameters_label in
                                                       stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],
                      ]
+        if candidate_agp_filename is not None:
+            results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/per_chr/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{candidate_chr_id}.rmdup.mapq{mapq}.{res}.tracks.pretext",
+                                    candidate_chr_id=candidate_chr_id_list,
+                                    assembly_stage=[current_stage],
+                                    parameters=[parameter_label],
+                                    haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
+                                    genome_prefix=[config["genome_prefix"], ],
+                                    res=["high_res"],
+                                    mapq=parameters["tool_options"]["pretextmap"]["mapq"],
+                                    #window=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["window"],
+                                    #step=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
+                                    ) for parameter_label in stage_dict[current_stage]["parameters"] for window_step_set in config["qc_settings"]["windows_sets"]]
+                             ]
 
 if ("filter_reads" in config["stage_list"]) and (not config["skip_filter_reads"]):
     results_list += [expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),

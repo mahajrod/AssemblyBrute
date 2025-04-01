@@ -42,7 +42,7 @@
   - "kraken2"
   - "smudgeplot"
   - "parallel"
-  - "routoolpa>=0.115"
+  - "routoolpa>=0.116"
   - "mavr>=0.113"
   - "jellyfish>=2"
   - "krater>=2.7.11"

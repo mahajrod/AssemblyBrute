@@ -605,6 +605,10 @@
                         "max_len": 10000000
                         "min_len": 1000000
                         #"min_fraction": 0.01
+                    "very_short":
+                        "max_scaffolds": 200
+                        "max_len": 5000000
+                        "min_len": 100000
                     "micro":
                         "max_scaffolds": 200
                         "max_len": 1000000

@@ -471,6 +471,50 @@ if "draft_qc" in config["stage_list"]:
                                   #step = parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
                                      ) for window_step_set in config["qc_settings"]["windows_sets"]] for parameters_label in stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],
                          ]
+    if (not config["skip_wga"]) and (not config["skip_draft_qc_wga"]):
+        results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/wga.{query_prefix}.{query_length}.to.{target_prefix}.{target_length}.YASS.R11.soft.min_len{min_target_len}.png",
+                                     query_length=config["qc_settings"]["assembly_scaffold_sets"],
+                                     target_length=config["qc_settings"]["assembly_scaffold_sets"],
+                                     genome_prefix=[config["genome_prefix"], ],
+                                     assembly_stage=[current_stage, ],
+                                     parameters=[parameters_label],
+                                     min_target_len=parameters["tool_options"]["wga"]["min_target_len"],
+                                     query_prefix=expand("{genome_prefix}.{assembly_stage}.{haplotype}",
+                                                         genome_prefix=[config["genome_prefix"], ],
+                                                         assembly_stage=[current_stage, ],
+                                                         haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]),
+                                     target_prefix=expand("{genome_prefix}.{assembly_stage}.{haplotype}",
+                                                         genome_prefix=[config["genome_prefix"], ],
+                                                         assembly_stage=[current_stage, ],
+                                                         haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]),
+                                   ) for parameters_label in stage_dict[current_stage]["parameters"]],
+                             ]
+        if input_reference_filedict:
+            results_list += [
+                             [expand(out_dir_path / "{assembly_stage}/{parameters}/wga.{query_prefix}.{query_length}.to.{target_prefix}.{target_length}.YASS.R11.soft.min_len{min_target_len}.png",
+                                     query_length=config["qc_settings"]["reference_scaffold_sets"],
+                                     target_length=config["qc_settings"]["assembly_scaffold_sets"],
+                                     genome_prefix=[config["genome_prefix"], ],
+                                     assembly_stage=[current_stage, ],
+                                     parameters=[parameters_label],
+                                     min_target_len=parameters["tool_options"]["wga"]["min_target_len"],
+                                     query_prefix=list(input_reference_filedict.keys()),
+                                     target_prefix=expand("{genome_prefix}.{assembly_stage}.{haplotype}",
+                                                         genome_prefix=[config["genome_prefix"], ],
+                                                         assembly_stage=[current_stage, ],
+                                                         haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]),
+                                   ) for parameters_label in stage_dict[current_stage]["parameters"]],
+                             ]
+
+    if input_reference_filedict and (not config["skip_draft_qc_ragtag"]) and (not config["skip_ragtag"]):
+        results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/ragtag/{reference}/{genome_prefix}.{assembly_stage}.{haplotype}.to.{reference}.fasta",
+                                        genome_prefix=[config["genome_prefix"], ],
+                                        assembly_stage=[current_stage],
+                                        parameters=[parameters_label],
+                                        reference=list(input_reference_filedict.keys()),
+                                        haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
+                                        ) for parameters_label in stage_dict[current_stage]["parameters"]],
+                         ]
     #TODO: remove after debugging
     """
     results_list += [ *[expand(out_dir_path / "{stage}/{parameters}/kmer/{genome_prefix}.{stage}.{haplotype}.{assembly_kmer_length}",
@@ -1905,8 +1949,9 @@ include: "workflow/rules/QCAssembly/WGA.smk"
 include: "workflow/rules/QCAssembly/HiC.smk"
 include: "workflow/rules/QCAssembly/MicroChromosomes.smk"
 include: "workflow/rules/QCAssembly/PretextPerChr.smk"
+include: "workflow/rules/QCAssembly/RagTag.smk"
 #include: "workflow/rules/QCAssembly/VariantTrack.smk"
-#include: "workflow/rules/QCAssembly/RagTag.smk"
+
 
 
 if "gap_closing" in config["stage_list"]:

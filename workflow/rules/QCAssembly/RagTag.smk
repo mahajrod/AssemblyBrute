@@ -3,7 +3,7 @@
 rule ragtag_qc: #
     input:
         fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
-        reference_fasta=out_dir_path / "data/reference/{reference}/{reference}.softmasked.fasta"
+        reference_fasta=out_dir_path / "data/reference/{reference}/repeats/{reference}.softmasked.fasta"
     output:
         ragtag_fasta=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/{haplotype, [^.]+}/ragtag/{reference, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.to.{reference}.fasta",
         ragtag_agp=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{haplotype, [^.]+}/ragtag/{reference, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.to.{reference}.agp",

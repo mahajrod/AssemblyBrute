@@ -512,7 +512,7 @@ if "draft_qc" in config["stage_list"]:
                                         assembly_stage=[current_stage],
                                         parameters=[parameters_label],
                                         reference=list(input_reference_filedict.keys()),
-                                        haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
+                                        haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
                                         ) for parameters_label in stage_dict[current_stage]["parameters"]],
                          ]
     #TODO: remove after debugging

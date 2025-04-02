@@ -109,12 +109,12 @@
         #- "long"
         - "middle"
         - "short"
-        #- "micro"
+        - "micro"
     "assembly_scaffold_sets":
         - "long"
         - "middle"
         - "short"
-        #- "micro"
+        - "micro"
     "threshold_types":
         - "absolute"
         - "relative"

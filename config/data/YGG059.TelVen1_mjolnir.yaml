@@ -61,7 +61,6 @@
         "gpu": null #"gpu": "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
 
 'alternative_tmp_dir': None
-
 "stage_coretools":     #TODO: add bionano
     "filtering":
         "hifi": "cutadapt"
@@ -82,19 +81,55 @@
     "curation":
         "default":
             - "curation"
+    "ref_scaffolding":
+        "default":
+            - "ragtag"
+    "draft_qc":
+        "default":
+            - "assembly_qc"
+    "gap_closing":
+        "default":
+            - "samba"
+
+"extended_qc_stages":
+    - "purge_dups"
+    - "hic_scaffolding"
+    - "ref_scaffolding"
+
+"qc_settings":
+    "windows_sets":
+        #- "w1000k.s1000k"
+        - "w1000k.s100k"
+        #- "w100k.s100k"
+        - "w100k.s10k"
+        - "w10k.s10k"
+    "reference_scaffold_sets":
+        - "custom"
+        #- "long"
+        #- "middle"
+        #- "short"
+        #- "micro"
+    "assembly_scaffold_sets":
+        - "long"
+        #- "middle"
+        #- "short"
+        #- "micro"
+    "threshold_types":
+        - "absolute"
+        - "relative"
 
 "coretool_option_sets":
     "hifiasm":
          #- "l0primary"
-         #- "l1primary_no_hic"
+         #- "l1primary"
          #- "l2primary"
-         - "l1primary"
-         #- "l3primary_no_hic"
+         - "l3primary"
          #- "l1primary_no_hic"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
     "purge_dups":
-        - "keep_hicov"
+        #- "keep_hicov"
+        - "skipped"
     "salsa2":
         - "phased_reads"
         #- "unphased_reads"
@@ -106,6 +141,10 @@
         #- "unphased_reads"
     "curation":
         - "default"
+    "assembly_qc":
+        - "default"
+    "samba":
+        - "phased_reads"
 
 "other_tool_option_sets": # Options set here overwrite settings from "secondary_tool_config_file". Check it for configurable option list
     "mapping_pipeline":         "arima"  # Allowed: arima, bwa_only, pairtools.

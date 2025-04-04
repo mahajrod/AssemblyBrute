@@ -236,6 +236,8 @@
 "skip_hic_file": True
 "skip_krater": True
 "skip_ragtag": False
+"skip_draft_qc_ragtag": True
+"skip_draft_qc_wga": True
 
 "create_hic_file_during_curation": False
 #------------ Options specific for cluster ------------

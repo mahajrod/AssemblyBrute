@@ -31,3 +31,5 @@
 
 "skip_gap_closing_pretext": False
 "skip_gap_closing_hic_file": False
+"skip_gap_closing_ragtag": False
+"skip_gap_closing_wga": False

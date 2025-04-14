@@ -964,7 +964,7 @@ if "contig" in config["stage_list"]:
                                     parameters=[parameters_label],
                                     database=config["database_set"]["fcs"]) for parameters_label in parameters_list]
                             ]
-    if (not config["skip_combined_hic"]) and (not config["skip_combined_contig_hic"]):
+    if (not config["skip_combined_hic"]) and (not config["skip_combined_contig_hic"]) and ("hic" in data_types):
         results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.rmdup.pre.mapq{mapq}.hic",
                                       assembly_stage=["contig"],
                                       parameters=[parameters_label],

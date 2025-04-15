@@ -16,6 +16,7 @@ from stone.backends.obj_c import comment_prefix
 #---- Include sections for functions ----
 include: "workflow/functions/option_parsing.py"
 include: "workflow/functions/general_parsing.py"
+include: "workflow/functions/resources.py"
 #----------------------------------------
 
 #---- Read config files ----

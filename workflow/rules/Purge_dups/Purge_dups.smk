@@ -233,7 +233,7 @@ rule minimap2_purge_dups_reads:
         node_options=parse_node_list("minimap2_purge_dups_reads"),
         cpus=parameters["threads"]["minimap2"] ,
         time=parameters["time"]["minimap2"],
-        mem=parameters["memory_mb"]["minimap2"]
+        mem=partial(get_memory, parameters["memory_mb"]["minimap2"], mode="linear")
     threads: parameters["threads"]["minimap2"]
 
     shell: # awk -F'\t' '{{if ($12 >= {params.min_mapq}) print $0 }}' 2>{log.awk} | "
@@ -320,7 +320,7 @@ rule minimap2_purge_dups_assembly:
         node_options=parse_node_list("minimap2_purge_dups_assembly"),
         cpus=parameters["threads"]["minimap2"] ,
         time=parameters["time"]["minimap2"],
-        mem=parameters["memory_mb"]["minimap2"]
+        mem=partial(get_memory, parameters["memory_mb"]["minimap2"], mode="linear")
     threads: parameters["threads"]["minimap2"]
 
     shell:

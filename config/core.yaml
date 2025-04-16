@@ -1320,6 +1320,90 @@
                         - "lqccs"
                     "coverage_estimator": "genomescope" # Allowed: genomescope, krater
                     "use_telomere": True
+                "l3primary_no_hic_s0.4":
+                    "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic": False
+                    "dual_scaf": False
+                    "assembly_ploidy": 1
+                    "ul-cut": 1000
+                    "min_contig_coverage": 1
+                    "ont_mode": False
+                    "qc_datatypes": [ ]
+                    "lambda": null
+                    "main_datatypes":
+                        - "hifi"
+                    "ultra_long_reads":
+                        #- "nanopore"
+                        - "simplex"
+                        - "duplex"
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
+                    "use_telomere": True
+                    "sim_threshold_for_hapdup_reads": 0.4
+                "l3primary_no_hic_s0.3":
+                    "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic": False
+                    "dual_scaf": False
+                    "assembly_ploidy": 1
+                    "ul-cut": 1000
+                    "min_contig_coverage": 1
+                    "ont_mode": False
+                    "qc_datatypes": [ ]
+                    "lambda": null
+                    "main_datatypes":
+                        - "hifi"
+                    "ultra_long_reads":
+                        #- "nanopore"
+                        - "simplex"
+                        - "duplex"
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
+                    "use_telomere": True
+                    "sim_threshold_for_hapdup_reads": 0.3
+                "l3primary_no_hic_s0.2":
+                    "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic": False
+                    "dual_scaf": False
+                    "assembly_ploidy": 1
+                    "ul-cut": 1000
+                    "min_contig_coverage": 1
+                    "ont_mode": False
+                    "qc_datatypes": [ ]
+                    "lambda": null
+                    "main_datatypes":
+                        - "hifi"
+                    "ultra_long_reads":
+                        #- "nanopore"
+                        - "simplex"
+                        - "duplex"
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
+                    "use_telomere": True
+                    "sim_threshold_for_hapdup_reads": 0.2
+                "l3primary_no_hic_s0.1":
+                    "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "use_hic": False
+                    "dual_scaf": False
+                    "assembly_ploidy": 1
+                    "ul-cut": 1000
+                    "min_contig_coverage": 1
+                    "ont_mode": False
+                    "qc_datatypes": [ ]
+                    "lambda": null
+                    "main_datatypes":
+                        - "hifi"
+                    "ultra_long_reads":
+                        #- "nanopore"
+                        - "simplex"
+                        - "duplex"
+                        - "lqccs"
+                    "coverage_estimator": "genomescope" # Allowed: genomescope, krater
+                    "use_telomere": True
+                    "sim_threshold_for_hapdup_reads": 0.1
                 "l3primary_no_hic_no_telo":
                     "purge level": 3 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
                     "cov_multiplicator": 4.5 # 4.5 *lambda

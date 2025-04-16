@@ -298,6 +298,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         D=lambda wildcards: parse_option("D", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -D "), #" -D {0} ".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["D"]) if "D" in parameters["tool_options"]["hifiasm"][wildcards.contig_options] else "",
         N=lambda wildcards: parse_option("N", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -N "),
         ignore_bin=lambda wildcards: " -i " if ("ignore_bin" in parameters["tool_options"]["hifiasm"][wildcards.contig_options]) and parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ignore_bin"] else "",
+        sim_threshold_for_hapdup_reads=lambda wildcards: parse_option_flag("sim_threshold_for_hapdup_reads", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -s "),
         hic_forward=(" --h1 " + ",".join(map(str, expand(output_dict["data"] / ("fastq/hic/filtered/{pairprefix}_1%s" % config["fastq_extension"]), pairprefix=input_pairprefix_dict["hic"]) ))) if "hic" in input_filedict else "", #in case of multiple hic libraries files in the list MUST be COMMA-separated
         hic_reverse=(" --h2 " + ",".join(map(str, expand(output_dict["data"] / ("fastq/hic/filtered/{pairprefix}_2%s" % config["fastq_extension"]), pairprefix=input_pairprefix_dict["hic"]) ))) if "hic" in input_filedict else "",
         ultralong_reads=lambda wildcards: (" --ul " + ",".join(map(str,
@@ -518,6 +519,7 @@ rule hifiasm_long_reads_only:
         dual_scaf=lambda wildcards: parse_option_flag("dual_scaf", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --dual-scaf "),
         ignore_bin=lambda wildcards: " -i " if ("ignore_bin" in parameters["tool_options"]["hifiasm"][wildcards.contig_options]) and parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ignore_bin"] else "",
         telomere_motif= lambda wildcards: parse_option("telomere_motif",config," --telo-m ")  if parameters["tool_options"]["hifiasm"][wildcards.contig_options]["use_telomere"] else "",
+        sim_threshold_for_hapdup_reads=lambda wildcards: parse_option_flag("sim_threshold_for_hapdup_reads", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -s "),
         #nanopore=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
         #                                              fileprefix=input_file_prefix_dict["nanopore"],
         #                                              allow_missing=True)))) if "nanopore" in input_filedict else "",

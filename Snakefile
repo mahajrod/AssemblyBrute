@@ -1213,16 +1213,16 @@ if "hic_scaffolding" in config["stage_list"]:
     #                            parameters=[parameters_label]) for parameters_label in parameters_list]
     # stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"]
     #prev_parameters_label = stage_dict["hic_scaffolding"]["parameters"][parameters_label]["prev_parameters"]
-
-
-    results_list += [
-                    [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam.general_stats",
+    if config["other_tool_option_sets"]["mapping_pipeline"] != "juicer":
+        results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam.general_stats",
                             genome_prefix=[config["genome_prefix"], ],
                             assembly_stage=[prev_stage,],
                             haplotype=stage_dict[prev_stage]["parameters"][stage_dict["hic_scaffolding"]["parameters"][current_parameter_label]["prev_parameters"]]["haplotype_list"],
                             phasing_kmer_length=[stage_dict["hic_scaffolding"]["parameters"][current_parameter_label]["option_set"]["phasing_kmer_length"]], #[stage_dict["hic_scaffolding"]["parameters"][parameters_label]["option_set"]["phasing_kmer_length"] for parameter_label in stage_dict["hic_scaffolding"]["parameters"]],
                             parameters=[stage_dict["hic_scaffolding"]["parameters"][current_parameter_label]["prev_parameters"]],) if "threeddna" not in current_parameter_label else [] for current_parameter_label in stage_dict["hic_scaffolding"]["parameters"]],
+                         ]
 
+    results_list += [
                     *[expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
                            genome_prefix=[config["genome_prefix"], ],
                            assembly_stage=["hic_scaffolding", ],

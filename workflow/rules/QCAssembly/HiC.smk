@@ -12,8 +12,9 @@ if (sum(list(pd.Series(["hic_scaffolding",
     else:
         pass
     #ruleorder: bam_merge_files_for_hic_map > bam_merge_files
-    ruleorder: rmdup_for_hic_map > rmdup
-    ruleorder: bwa_map_for_hic_map > bam_merge_pairs
+    if config["other_tool_option_sets"]["mapping_pipeline"] != "juicer":
+        ruleorder: rmdup_for_hic_map > rmdup
+        ruleorder: bwa_map_for_hic_map > bam_merge_pairs
 
     rule combine_haplotypes:
         input:

@@ -6,7 +6,6 @@
 #---- Resource profile ----
 "resource_profile": "high"      # Should be present in resource directory
 #--------------------------
-
 "allowed_databases":
     "kraken2":
         "silva":
@@ -36,7 +35,7 @@
     "fcs":
         "fcs_gx":
             "path":         "/datasets/globe_databases/fcs-gx/20240912/gxdb/" # add path to fcs_gx database
-            "image_path":   "/projects/mjolnir1/people/xsg178/soft/FCS-GX/fcs-gx.sif"
+            "image_path":   "/maps/projects/tomg/people/xsg178/soft/FCS-GX/fcs-gx.sif"
             "memory_mb":    512000 # Entire database must be in memory, it requires at least 490 Gbp
             "threads":      30
             "time":         "06:00:00"
@@ -44,7 +43,7 @@
     "fcs_adaptor":
         "adaptor":
             "path":         null # database is embedded in singularity image
-            "image_path":   "/projects/mjolnir1/people/xsg178/soft/fcsadaptor/fcs-adaptor.sif"
+            "image_path":   "/maps/projects/tomg/people/xsg178/soft/fcsadaptor/fcs-adaptor.sif"
             "memory_mb":    20000 #
             "threads":      1
             "time":         "01:00:00"
@@ -53,12 +52,13 @@
 "final_fcs_db": "fcs_gx" # this database will be used for the filtration of the contigs if skip_fcs is False
 
 "tool_containers":
-    "rapid_telomere":       "/projects/mjolnir1/people/xsg178/soft/rapid-curation/rapid_hic_software/runTelo.sif"
+    "rapid_telomere":       "/maps/projects/tomg/people/xsg178/soft/rapid-curation/rapid_hic_software/runTelo.sif"
     "deepvariant":
-        "cpu": "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0.sif"
+        "cpu": "/maps/projects/tomg/people/xsg178/soft/deepvariant/deepvariant_1.5.0.sif"
         "gpu": null #"gpu": "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
 
-"stage_coretools":
+'alternative_tmp_dir': None
+"stage_coretools":     #TODO: add bionano
     "filtering":
         "hifi": "cutadapt"
         "illumina": "cutadapt"
@@ -73,14 +73,20 @@
     "hic_scaffolding":
         "default":
             #- "salsa2" # Allowed: "salsa2", "yahs", "3d-dna"
-            #- "yahs"
-            - "threeddna"
+            - "yahs"
+            #- "threeddna"
     "curation":
         "default":
             - "curation"
     "ref_scaffolding":
         "default":
             - "ragtag"
+    "draft_qc":
+        "default":
+            - "assembly_qc"
+    "gap_closing":
+        "default":
+            - "samba"
 
 "extended_qc_stages":
     #- "purge_dups"
@@ -116,14 +122,14 @@
          #- "l2primary"
          #- "l3primary"
          #- "l0primary_no_hic"
-         - "l1primary_no_hic"
+         #- "l1primary_no_hic"
          #- "l2primary_no_hic"
          #- "l3primary_no_hic"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
     "purge_dups":
         - "skipped"
-        - "keep_hicov"
+        #- "keep_hicov"
     "salsa2":
         - "phased_reads"
         - "unphased_reads"

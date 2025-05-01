@@ -179,7 +179,7 @@ rule threeddna: #
     output:
         draft_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, hap[^./]*}/scaffolding/{genome_prefix, [^/]+}.input.{haplotype}.fasta",
         rawchrom_hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, hap[^./]*}/scaffolding/{genome_prefix, [^/]+}.input.{haplotype}.rawchrom.hic",
-        alias_rawchrom_hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, hap[^./]*}.hic_scaffolding.{haplotype}.hic",
+        alias_rawchrom_hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, hap[^./]*}.hic",
         rawchrom_assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, hap[^./]*}/scaffolding/{genome_prefix, [^/]+}.input.{haplotype}.rawchrom.assembly",
         alias_rawchrom_assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, hap[^./]*}.assembly",
         hic_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, hap[^./]*}/scaffolding/{genome_prefix, [^/]+}.input.{haplotype}_HiC.fasta",

@@ -12,11 +12,14 @@ def get_hic_reads_for_juicer(wildcards):
     output_forward_suffix = "_R1_001"
     output_reverse_suffix = "_R2_001"
     if stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["option_set"]["phasing_kmer_length"] == "NA":
-        forward_suffix = input_forward_suffix_dict["hic"]
-        reverse_suffix = input_reverse_suffix_dict["hic"]
+
         if "hic" in config["filtered_data"]:
+            forward_suffix = "_1"
+            reverse_suffix = "_2"
             directory = output_dict["data"] / "fastq/hic/filtered/"
         else:
+            forward_suffix = input_forward_suffix_dict["hic"]
+            reverse_suffix = input_reverse_suffix_dict["hic"]
             directory = output_dict["data"] / "fastq/hic/raw/"
     else:
         forward_suffix = "_1"
@@ -33,7 +36,7 @@ def get_hic_reads_for_juicer(wildcards):
     output_reverse_filelist = []
 
     for pairprefix in input_pairprefix_dict["hic"]:
-        input_forward_filelist.append("{0}/{1}{2}{3}".format(directory, pairprefix, forward_suffix,config["fastq_extension"]))
+        input_forward_filelist.append("{0}/{1}{2}{3}".format(directory, pairprefix, forward_suffix, config["fastq_extension"]))
         input_reverse_filelist.append("{0}/{1}{2}{3}".format(directory, pairprefix, reverse_suffix,config["fastq_extension"]))
         output_forward_filelist.append("{0}/{1}{2}{3}".format(output_directory, pairprefix, output_forward_suffix,config["fastq_extension"]))
         output_reverse_filelist.append("{0}/{1}{2}{3}".format(output_directory, pairprefix, output_reverse_suffix,config["fastq_extension"]))

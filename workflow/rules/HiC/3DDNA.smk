@@ -14,7 +14,10 @@ def get_hic_reads_for_juicer(wildcards):
     if stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["option_set"]["phasing_kmer_length"] == "NA":
         forward_suffix = input_forward_suffix_dict["hic"]
         reverse_suffix = input_reverse_suffix_dict["hic"]
-        directory = output_dict["data"] / "fastq/hic/raw/"
+        if "hic" in config["filtered_data"]:
+            directory = output_dict["data"] / "fastq/hic/filtered/"
+        else:
+            directory = output_dict["data"] / "fastq/hic/raw/"
     else:
         forward_suffix = "_1"
         reverse_suffix = "_2"

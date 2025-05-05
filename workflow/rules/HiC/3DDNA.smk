@@ -1,4 +1,4 @@
-localrules: create_fastq_links_for_juicer
+localrules: create_fastq_links_for_juicer, threeddna_create_links
 ruleorder: create_fastq_links_for_juicer > create_fastq_links
 #stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["option_set"]
 
@@ -185,12 +185,11 @@ rule threeddna: #
     output:
         draft_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, hap[^./]*}/scaffolding/{genome_prefix, [^/]+}.input.{haplotype}.fasta",
         rawchrom_hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, hap[^./]*}/scaffolding/{genome_prefix, [^/]+}.input.{haplotype}.rawchrom.hic",
-        alias_rawchrom_hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, hap[^./]*}.hic",
+        #alias_rawchrom_hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, hap[^./]*}.hic",
         rawchrom_assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, hap[^./]*}/scaffolding/{genome_prefix, [^/]+}.input.{haplotype}.rawchrom.assembly",
-        alias_rawchrom_assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, hap[^./]*}.assembly",
+        #alias_rawchrom_assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, hap[^./]*}.assembly",
         hic_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, hap[^./]*}/scaffolding/{genome_prefix, [^/]+}.input.{haplotype}_HiC.fasta",
-        alias_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, hap[^./]*}.fasta",
-
+        #alias_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, hap[^./]*}.fasta",
     log:
         threeddna=output_dict["log"]  / "threeddna.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.threeddna.log",
         ln=output_dict["log"]  / "threeddna.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.ln.log",
@@ -218,9 +217,42 @@ rule threeddna: #
         " ln -s ${{INPUT_FASTA}} {output.draft_fasta} >> ${{LN_LOG}} 2>&1; "
         " cd ${{OUTPUT_DIR}}; "
         " ${{SCRIPT}} {params.editor_repeat_coverage} {params.min_contig_length} {params.min_mapping_quality} `basename {output.draft_fasta}` `basename {input.merged_nodups}` > ${{THREEDDNA_LOG}} 2>&1; "
-        " ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}_HiC.fasta "
-        " ../../`basename {output.alias_fasta}` >> ${{LN_LOG}} 2>&1;"
-        " ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}.rawchrom.hic "
-        " ../../`basename {output.alias_rawchrom_hic}` >> ${{LN_LOG}} 2>&1"
-        " ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}.rawchrom.assembly "
-        " ../../`basename {output.alias_rawchrom_assembly}` >> ${{LN_LOG}} 2>&1"
+        #" ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}_HiC.fasta "
+        #" ../../`basename {output.alias_fasta}` >> ${{LN_LOG}} 2>&1;"
+        #" ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}.rawchrom.hic "
+        #" ../../`basename {output.alias_rawchrom_hic}` >> ${{LN_LOG}} 2>&1"
+        #" ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}.rawchrom.assembly "
+        #" ../../`basename {output.alias_rawchrom_assembly}` >> ${{LN_LOG}} 2>&1"
+
+rule threeddna_create_links: #
+    input:
+        rawchrom_hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}.input.{haplotype}.rawchrom.hic",
+        rawchrom_assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}.input.{haplotype}.rawchrom.assembly",
+        hic_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}.input.{haplotype}_HiC.fasta",
+    output:
+        alias_rawchrom_hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, hap[^./]*}.hic",
+        alias_rawchrom_assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, hap[^./]*}.assembly",
+        alias_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, hap[^./]*}.fasta",
+    log:
+        ln=output_dict["log"]  / "threeddna_create_links.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.ln.log",
+        cluster_log=output_dict["cluster_log"] / "threeddna_create_links.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "threeddna_create_links.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "threeddna_create_links.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("create_fastq_links_for_juicera"),
+        cpus=parameters["threads"]["create_fastq_links_for_juicer"] ,
+        time=parameters["time"]["create_fastq_links_for_juicer"],
+        mem=parameters["memory_mb"]["create_fastq_links_for_juicer"]
+    threads: parameters["threads"]["create_fastq_links_for_juicer"]
+    shell:
+        " OUTPUT_DIR=`dirname {output.alias_fasta}`; "
+        " LN_LOG=`realpath -s {log.ln}`; "
+        " > ${{LN_LOG}}; "
+        " cd ${{OUTPUT_DIR}}; "
+        " ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}_HiC.fasta `basename {output.alias_fasta}` >> ${{LN_LOG}} 2>&1;"
+        " ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}.rawchrom.hic `basename {output.alias_rawchrom_hic}` >> ${{LN_LOG}} 2>&1"
+        " ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}.rawchrom.assembly `basename {output.alias_rawchrom_assembly}` >> ${{LN_LOG}} 2>&1"

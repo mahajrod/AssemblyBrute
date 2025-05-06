@@ -254,5 +254,5 @@ rule threeddna_create_links: #
         " > ${{LN_LOG}}; "
         " cd ${{OUTPUT_DIR}}; "
         " ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}_HiC.fasta `basename {output.alias_fasta}` >> ${{LN_LOG}} 2>&1;"
-        " ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}.rawchrom.hic `basename {output.alias_rawchrom_hic}` >> ${{LN_LOG}} 2>&1"
-        " ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}.rawchrom.assembly `basename {output.alias_rawchrom_assembly}` >> ${{LN_LOG}} 2>&1"
+        " ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}.rawchrom.hic `basename {output.alias_rawchrom_hic}` >> ${{LN_LOG}} 2>&1; "
+        " ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}.rawchrom.assembly `basename {output.alias_rawchrom_assembly}` >> ${{LN_LOG}} 2>&1; "

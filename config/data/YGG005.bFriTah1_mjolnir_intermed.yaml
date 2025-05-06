@@ -93,6 +93,7 @@
             - "samba"
 
 "extended_qc_stages":
+    - "draft_qc"
     - "purge_dups"
     - "hic_scaffolding"
     - "ref_scaffolding"
@@ -227,7 +228,7 @@
 "skip_kraken": True
 "skip_phasing": False
 "skip_prescaf_pretext": False
-"skip_postscaf_pretext": True
+"skip_postscaf_pretext": FalseS
 "skip_both_pretext": False
 "skip_nanoqc": False
 "skip_nanoplot": False

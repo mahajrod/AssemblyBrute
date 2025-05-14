@@ -120,7 +120,7 @@
 "coretool_option_sets":
     "hifiasm":
          #- "l0primary"
-         #- "l1primary"
+         - "l1primary"
          #- "l2primary"
          - "l3primary"
          #- "l1primary_no_hic"

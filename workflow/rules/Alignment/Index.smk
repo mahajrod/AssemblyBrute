@@ -19,7 +19,7 @@ rule bwa_index:
         node_options=parse_node_list("bwa_index"),
         cpus=parameters["threads"]["bwa_index"] ,
         time=parameters["time"]["bwa_index"],
-        mem=parameters["memory_mb"]["bwa_index"]
+        mem=partial(get_memory, start_mem=parameters["memory_mb"]["bwa_index"], coeff=1.5, mode="exp")
     threads: parameters["threads"]["bwa_index"]
 
     shell:
@@ -44,7 +44,7 @@ rule ref_faidx:
         node_options=parse_node_list("ref_faidx"),
         cpus=parameters["threads"]["ref_faidx"] ,
         time=parameters["time"]["ref_faidx"],
-        mem=parameters["memory_mb"]["ref_faidx"]
+        mem=partial(get_memory, start_mem=parameters["memory_mb"]["ref_faidx"], coeff=1.5, mode="exp")
     threads: parameters["threads"]["ref_faidx"]
 
     shell:
@@ -68,7 +68,7 @@ rule ref_dict:
         node_options=parse_node_list("ref_dict"),
         cpus=parameters["threads"]["ref_dict"] ,
         time=parameters["time"]["ref_dict"],
-        mem=parameters["memory_mb"]["ref_dict"]
+        mem=partial(get_memory, start_mem=parameters["memory_mb"]["ref_dict"], coeff=1.5, mode="exp")
     threads: parameters["threads"]["ref_dict"]
 
     shell:
@@ -92,7 +92,7 @@ rule index_bam:
         node_options=parse_node_list("index_bam"),
         cpus=parameters["threads"]["samtools_index"] ,
         time=parameters["time"]["samtools_index"],
-        mem=parameters["memory_mb"]["samtools_index"]
+        mem=partial(get_memory, start_mem=parameters["memory_mb"]["samtools_index"], coeff=1.5, mode="exp")
     threads: parameters["threads"]["samtools_index"]
     shell:
         " samtools index -@ {threads} {input} > {log.std} 2>&1; "

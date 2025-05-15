@@ -1,6 +1,6 @@
 import os
 import sys
-
+from functools import partial
 import yaml
 #import logging
 import shutil

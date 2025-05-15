@@ -96,3 +96,26 @@ rule index_bam:
     threads: parameters["threads"]["samtools_index"]
     shell:
         " samtools index -@ {threads} {input} > {log.std} 2>&1; "
+
+rule index_bam_csi:
+    input:
+        bam="{bam_prefix}.bam"
+    output:
+        bai="{bam_prefix}.bam.csi"
+    log:
+        std="{bam_prefix}.index_bam.log",
+        cluster_log="{bam_prefix}.index_bam.cluster.log",
+        cluster_err="{bam_prefix}.index_bam.cluster.err"
+    benchmark:
+        "{bam_prefix}.index_bam.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("index_bam"),
+        cpus=parameters["threads"]["samtools_index"] ,
+        time=parameters["time"]["samtools_index"],
+        mem=partial(get_memory, start_mem=parameters["memory_mb"]["samtools_index"], coeff=1.5, mode="exp")
+    threads: parameters["threads"]["samtools_index"]
+    shell:
+        " samtools index -c -@ {threads} {input} > {log.std} 2>&1; "

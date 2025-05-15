@@ -1,5 +1,5 @@
 jobs: 100
-attempts: 3
+attempt: 3
 reason: True
 use-conda: True
 latency-wait: 60

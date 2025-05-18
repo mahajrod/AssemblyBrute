@@ -227,6 +227,7 @@
 "skip_nanoqc": False
 "skip_nanoplot": False
 "skip_wga": False
+"skip_trf": True
 "skip_higlass": True
 "skip_variantcalling": True
 "skip_hic_file": False

@@ -1060,7 +1060,7 @@ if "purge_dups" in config["stage_list"]:
 
                         for window_settings in config["qc_settings"]["windows_sets"]]
                         for parameters_label in stage_dict[current_stage]["parameters"]]
-                        for track_type in ["windowmasker", "trf"]],]
+                        for track_type in ["windowmasker"] + (["trf"] if not config["skip_trf"] else [])],]
         if not config["skip_wga"]:
             results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/wga.{query_prefix}.{query_length}.to.{target_prefix}.{target_length}.YASS.R11.soft.min_len{min_target_len}.png",
                                      query_length=config["qc_settings"]["assembly_scaffold_sets"],
@@ -1358,7 +1358,7 @@ if "hic_scaffolding" in config["stage_list"]:
 
                         for window_settings in config["qc_settings"]["windows_sets"]]
                         for parameters_label in stage_dict[current_stage]["parameters"]]
-                        for track_type in ["windowmasker", "trf"]],]
+                        for track_type in ["windowmasker"] + (["trf"] if not config["skip_trf"] else [])],]
         if not config["skip_wga"]:
             results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/wga.{query_prefix}.{query_length}.to.{target_prefix}.{target_length}.YASS.R11.soft.min_len{min_target_len}.png",
                                      query_length=config["qc_settings"]["assembly_scaffold_sets"],
@@ -1574,7 +1574,7 @@ if "ref_scaffolding" in config["stage_list"]:
 
                         for window_settings in config["qc_settings"]["windows_sets"]]
                         for parameters_label in stage_dict[current_stage]["parameters"]]
-                        for track_type in ["windowmasker", "trf"]],]
+                        for track_type in ["windowmasker"] + (["trf"] if not config["skip_trf"] else [])],]
         if not config["skip_wga"]:
             results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/wga.{query_prefix}.{query_length}.to.{target_prefix}.{target_length}.YASS.R11.soft.min_len{min_target_len}.png",
                                      query_length=config["qc_settings"]["assembly_scaffold_sets"],
@@ -1723,7 +1723,7 @@ if "curation" in config["stage_list"]:
                                 window=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["window"]],
                                 step=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["step"]],
                                 haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ("windowmasker", "trf", "gc") ],
+                                parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in  ["windowmasker", "gc"] + (["trf"] if not config["skip_trf"] else []) ],
                          [[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.stat",
                                 seq_type=["scaffolds"],
                                 threshold_type=config["qc_settings"]["threshold_types"],
@@ -1733,7 +1733,7 @@ if "curation" in config["stage_list"]:
                                 window=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["window"]],
                                 step=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["step"]],
                                 haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ("windowmasker", "trf", "gc") ],
+                                parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ["windowmasker", "gc"] + (["trf"] if not config["skip_trf"] else []) ],
                          [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.canonical.txt",
                                 seq_type=["scaffolds"],
                                 genome_prefix=[config["genome_prefix"], ],
@@ -1801,7 +1801,7 @@ if "curation" in config["stage_list"]:
                                 window=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["window"]],
                                 step=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["step"]],
                                 haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ("windowmasker", "trf", "gc") ],
+                                parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ["windowmasker", "gc"] + (["trf"] if not config["skip_trf"] else []) ],
                              ]
             if coverage_track_data_type_set:
                 results_list += [[[expand(out_dir_path / "curation/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.{datatype}_{cov_type}_coverage.win{window}.step{step}.scaled.track.bedgraph",
@@ -1826,7 +1826,7 @@ if "curation" in config["stage_list"]:
                                 window=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["window"]],
                                 step=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["step"]],
                                 haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ("gap", "windowmasker", "trf", "gc") ],
+                                parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ["windowmasker", "gc", "gap"] + (["trf"] if not config["skip_trf"] else []) ],
                          *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.canonical.txt",
                                 seq_type=["contigs"],
                                 genome_prefix=[config["genome_prefix"], ],

@@ -330,7 +330,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         node_options=parse_node_list("hifiasm_hic"),
         cpus=parameters["threads"]["hifiasm"],
         time=parameters["time"]["hifiasm"],
-        mem=partial(get_memory, start_mem=parameters["memory_mb"]["hifiasm"], coeff=1.5, mode="exp"),
+        mem=parameters["memory_mb"]["hifiasm"] #partial(get_memory, start_mem=parameters["memory_mb"]["hifiasm"], coeff=1.5, mode="exp"),
     threads:
         parameters["threads"]["hifiasm"]
     shell:
@@ -545,7 +545,7 @@ rule hifiasm_long_reads_only:
         node_options=parse_node_list("hifiasm_hifi"),
         cpus=parameters["threads"]["hifiasm"],
         time=parameters["time"]["hifiasm"],
-        mem=partial(get_memory, start_mem=parameters["memory_mb"]["hifiasm"], coeff=1.5, mode="exp"),
+        mem=parameters["memory_mb"]["hifiasm"] #partial(get_memory, start_mem=parameters["memory_mb"]["hifiasm"], coeff=1.5, mode="exp"),
     threads:
         parameters["threads"]["hifiasm"]
     shell:

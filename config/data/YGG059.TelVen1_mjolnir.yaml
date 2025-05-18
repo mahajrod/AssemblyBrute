@@ -91,7 +91,7 @@
             - "samba"
 
 "extended_qc_stages":
-    - "purge_dups"
+    #- "purge_dups"
     - "hic_scaffolding"
     - "ref_scaffolding"
 
@@ -120,7 +120,7 @@
 "coretool_option_sets":
     "hifiasm":
          #- "l0primary"
-         - "l1primary"
+         #- "l1primary"
          #- "l2primary"
          - "l3primary"
          #- "l1primary_no_hic"

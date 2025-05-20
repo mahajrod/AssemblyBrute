@@ -160,7 +160,6 @@
         #- "min_aln_len_7.5k"
         #- "min_aln_len_10k"
 
-
 "other_tool_option_sets":
     "cutadapt":                 "default"   # Allowed: default
     "porechop_abi":             "default"   # Allowed: default
@@ -201,7 +200,7 @@
 
 "ploidy": 2
 "bwa_tool": "bwa" # Allowed: bwa, bwa-mem2
-"genome_prefix": "SomMic1_v1"
+"genome_prefix": "sSomMic1"
 "busco_lineage_list":
     - "vertebrata_odb10" #
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
@@ -270,7 +269,7 @@
 "skip_wga": False
 "skip_higlass": True
 "skip_variantcalling": True
-"skip_hic_file": False
+"skip_hic_file": True
 "skip_krater": True
 "skip_kmer": False
 "skip_ragtag": False

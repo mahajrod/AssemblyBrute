@@ -276,6 +276,8 @@
 "skip_ragtag": False
 "skip_gathering": True
 
+"skip_pretext_10k_1k_cov_track": True
+
 "create_hic_file_during_curation": False
 #------------ Options specific for cluster ------------
 # This option have no effect if pipeline runs on local machine

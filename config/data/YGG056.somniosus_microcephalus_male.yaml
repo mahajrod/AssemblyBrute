@@ -276,6 +276,7 @@
 "skip_gathering": True
 
 "skip_pretext_10k_1k_cov_track": True
+"skip_pretext_1000k_100k_cov_track": False
 
 "create_hic_file_during_curation": False
 #------------ Options specific for cluster ------------

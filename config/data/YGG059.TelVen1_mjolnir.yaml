@@ -236,6 +236,8 @@
 "skip_krater": True
 "skip_ragtag": False
 
+"skip_pretext_1000k_100k_cov_track": False
+
 "create_hic_file_during_curation": False
 #------------ Options specific for cluster ------------
 # This option have no effect if pipeline runs on local machine

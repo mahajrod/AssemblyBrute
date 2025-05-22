@@ -236,7 +236,8 @@
 "skip_krater": True
 "skip_ragtag": False
 
-"skip_pretext_1000k_100k_cov_track": False
+"skip_pretext_10k_1k_tracks": True
+"skip_pretext_1000k_100k_tracks": False
 
 "create_hic_file_during_curation": False
 #------------ Options specific for cluster ------------

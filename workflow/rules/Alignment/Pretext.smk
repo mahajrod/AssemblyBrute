@@ -104,7 +104,7 @@ rule pretext_inject_tracks:
         min_mapq=parameters["tool_options"]["pretextmap"]["mapq"],
         skip_trf=config["skip_trf"],
         skip_10k_1k_tracks=config["skip_pretext_10k_1k_tracks"],
-        skip_1000k_100k_tracks=config["skip_pretext_10k_1k_tracks"]
+        skip_1000k_100k_tracks=config["skip_pretext_1000k_100k_tracks"]
     log:
         gap=output_dict["log"]  / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.gap.log",
         can_tel=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.can_tel.log",

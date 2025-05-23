@@ -3091,6 +3091,12 @@
             "draft":
                 - "purge_dups"
                 - "ref_scaffolding"
+        "ref_scaffolding_only":
+            "fastq":
+                - "contig"
+                - "ref_scaffolding"
+            "draft":
+                - "ref_scaffolding"
         "ref_scaffolding":
             "fastq":
                 - "contig"

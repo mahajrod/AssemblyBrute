@@ -85,6 +85,9 @@
     "ref_scaffolding":
         "default":
             - "ragtag"
+    "draft_qc":
+        "default":
+            - "assembly_qc"
 
 "extended_qc_stages":
     - "hic_scaffolding"

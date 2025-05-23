@@ -215,6 +215,7 @@
     - "contigs" # works only if precuration stage is hic_sscaffolding
 
 "skip_read_qc": False
+"skip_kmer": True
 "skip_filter_reads": False
 "skip_busco": True
 "skip_gcp": True

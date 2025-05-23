@@ -146,6 +146,8 @@
         - "min_aln_len_5k"
         #- "min_aln_len_7.5k"
         - "min_aln_len_10k"
+    "assembly_qc":
+        - "default"
 
 "other_tool_option_sets": # Options set here overwrite settings from "secondary_tool_config_file". Check it for configurable option list
     "mapping_pipeline":         "arima"  # Allowed: arima, bwa_only, pairtools.

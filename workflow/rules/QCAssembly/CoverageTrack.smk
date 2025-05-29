@@ -66,7 +66,7 @@ rule bwa_cov:
         reference=out_dir_path  / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
         reference_index=out_dir_path  / ("{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta%s" % (".bwt" if config["bwa_tool"] == "bwa" else ".bwt.2bit.64")),
     output:
-        bam=out_dir_path  / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{genome_prefix, [^/]+}.{assembly_stage}.{track_type, coverage}/{haplotype, [^/]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, illumina}.bam"
+        bam=out_dir_path  / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^/]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, illumina}.bam"
 
     params:
         bwa_tool=config["bwa_tool"],

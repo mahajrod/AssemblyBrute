@@ -97,15 +97,22 @@ def apply_changes(records_df): # function intended to deal with single scaffold 
 
     return tmp_df
 
+def read_blacklist(filename):
+    try:
+        tmp_list = list(pd.read_csv(filename, sep="\t", header=None).squeeze())
+    except pd.errors.EmptyDataError:
+        tmp_list = []
+    return tmp_list
+
 parser = argparse.ArgumentParser()
 
 parser.add_argument("-a", "--agp", action="store", dest="agp", default=sys.stdin,
                     help="Input agp file. Default: stdin")
 parser.add_argument("--five_prime_blacklist", action="store", dest="five_prime_blacklist", required=True,
-                    type=lambda filename: list(pd.read_csv(filename, sep="\t", header=None).squeeze()),
+                    type=read_blacklist,
                     help="File with contigs blacklisted to have 5' joins. Required.")
 parser.add_argument("--three_prime_blacklist", action="store", dest="three_prime_blacklist", required=True,
-                    type=lambda filename: list(pd.read_csv(filename, sep="\t", header=None).squeeze()),
+                    type=read_blacklist,
                     help="File with contigs blacklisted to have 3' joins. Required.")
 parser.add_argument("-s", "--separator", action="store", dest="separator", default="@",
                     help="Separator between original scaffold id and split. Default: '@'")

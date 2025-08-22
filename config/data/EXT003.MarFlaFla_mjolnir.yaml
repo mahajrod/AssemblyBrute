@@ -191,9 +191,8 @@
 "phasing_stage": "purge_dups"
 
 "contig_datatype": "hifi"
-"hic_enzyme_set":  "custom"
-"custom_enzyme_set":
-    - "MboI" # None
+"hic_enzyme_set":  "MboI"
+"custom_enzyme_set": null # None
 "custom_enzyme_set_is_no_motif": False
 
 "starting_point": "fastq" # Allowed: "draft"

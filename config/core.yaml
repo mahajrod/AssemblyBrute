@@ -3167,6 +3167,8 @@
         - "MseI"
     "DpnII":
         - "DpnII"
+    "MboI":
+        - "MboI"
     "OmniC": []       # OmniC using nonenzyme fragmentation
     "unknown": []
 

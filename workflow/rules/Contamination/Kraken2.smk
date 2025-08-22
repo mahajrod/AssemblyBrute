@@ -62,7 +62,7 @@ rule kraken2: #
     shell:
         " OUT_FILE={output.out}; "
         " kraken2 --threads {threads} {params.memory_mapping} {params.paired} {params.compressed}  --db {input.db} "
-        " --output ${{OUT_FILE%.gz}} --report {output.summary} "
+        " --report-minimizer-data --output ${{OUT_FILE%.gz}} --report {output.summary} "
         " {input.se_fastq} {params.forward_fastq} {params.reverse_fastq} > {log.std} 2>&1;"
         " pigz -p {threads} ${{OUT_FILE%.gz}} > {log.pigz} 2>&1"
 

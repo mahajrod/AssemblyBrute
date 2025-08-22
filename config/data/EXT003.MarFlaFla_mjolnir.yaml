@@ -180,6 +180,8 @@
     - "hifi"
     - "illumina"
     - "nanopore"
+    - "simplex"
+    - "duplex"
     - "hic"
 
 "final_kmer_counter": "meryl" # pipeline allows usage of different kmer counter external_tools, but only one genomesize assessment could be used

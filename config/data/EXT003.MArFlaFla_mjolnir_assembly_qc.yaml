@@ -159,7 +159,7 @@
         "haploid_diploid_threshold": null
         "upper_threshold": null
 
-"ploidy": 2
+"ploidy": 1
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
 "genome_prefix": "mMarFla1"
 "busco_lineage_list":

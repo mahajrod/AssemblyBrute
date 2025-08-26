@@ -277,7 +277,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         primary_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap1.unfiltered.gfa",
         alternative_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap2.unfiltered.gfa",
         alt_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.alt.unfiltered.gfa",
-    """
+
     params:
         purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge level"],
         ploidy=lambda wildcards: stage_dict["contig"]["parameters"][f"hifiasm_{wildcards.contig_options}"]["option_set"]["assembly_ploidy"], #config["ploidy"],
@@ -308,7 +308,6 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         ul_cut=lambda wildcards: parse_option("ul-cut", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --ul-cut "),
         ont_assembly= lambda wildcards: parse_option_flag("ont_mode", parameters["tool_options"]["hifiasm"][wildcards.contig_options]," --ont "),
         ont_mode=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"],
-    """
     log:
         std=output_dict["log"] / "hifiasm.{contig_options}.{genome_prefix}.log",
         cluster_log=output_dict["cluster_log"] / "hifiasm.{contig_options}.{genome_prefix}.cluster.log",

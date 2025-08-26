@@ -3,7 +3,7 @@ ruleorder: remove_fcs_contaminants > gfa2fasta
 rule fcs: #
     priority: 10000
     input:
-        fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.lenfiltered.fasta",
+        fasta=rules.filter_contigs_by_coverage.output.filtered_fasta, #out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.lenfiltered.fasta",
         db=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["path"],
         image=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["image_path"],
     output:
@@ -52,7 +52,7 @@ rule fcs: #
 rule remove_fcs_contaminants: #
     priority: 5000
     input:
-        fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.lenfiltered.fasta",
+        fasta=rules.filter_contigs_by_coverage.output.filtered_fasta, #out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.lenfiltered.fasta",
         image=lambda wildcards: config["allowed_databases"]["fcs"][config["final_fcs_db"]]["image_path"],
         fcs_report=(out_dir_path / ("contig/{parameters}/contamination_scan/{haplotype}/fcs/%s/{genome_prefix}.contig.{haplotype}.lenfiltered.%s.summary" % (config["final_fcs_db"], config["final_fcs_db"]))) if not config["skip_fcs"] else []
     output:
@@ -104,7 +104,7 @@ rule remove_fcs_contaminants: #
 rule fcs_adaptor: #
     priority: 2000
     input:
-        fasta=out_dir_path / out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.lenfiltered.fasta", #"contig/{parameters}/{genome_prefix}.contig.{haplotype}.lenfiltered.fasta",
+        fasta=rules.filter_contigs_by_coverage.output.filtered_fasta, #out_dir_path / out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.lenfiltered.fasta", #"contig/{parameters}/{genome_prefix}.contig.{haplotype}.lenfiltered.fasta",
         #db=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["path"],
         image=lambda wildcards: config["allowed_databases"]["fcs_adaptor"][wildcards.database]["image_path"],
     output:

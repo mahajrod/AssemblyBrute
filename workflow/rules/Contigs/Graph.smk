@@ -25,10 +25,10 @@ rule gfa2fasta:
 
 rule get_length_and_coverage_from_hifiasm_graph:
     input:
-        gfa=out_dir_path / "contig/{gfa_prefix}.unfiltered.gfa"
+        gfa=out_dir_path / "contig/{gfa_prefix}.gfa"
     output:
-        cov=out_dir_path / "contig/{gfa_prefix}.unfiltered.gfa.cov",
-        len_cov=out_dir_path / "contig/{gfa_prefix}.unfiltered.gfa.lencov"
+        cov=out_dir_path / "contig/{gfa_prefix}.gfa.cov",
+        len_cov=out_dir_path / "contig/{gfa_prefix}.gfa.lencov"
     log:
         std=out_dir_path / "contig/{gfa_prefix}.get_length_and_coverage_from_hifiasm_graph.log",
         cluster_log=out_dir_path / "contig/{gfa_prefix}.get_length_and_coverage_from_hifiasm_graph.cluster.log",

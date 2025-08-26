@@ -18,7 +18,7 @@ include: "workflow/functions/option_parsing.py"
 include: "workflow/functions/general_parsing.py"
 include: "workflow/functions/resources.py"
 #----------------------------------------
-include: "workflow/rules/Contigs/Hifiasm.smk"
+
 #---- Read config files ----
 #-------- Read core config file --------
 with open(config["main_config_file"], "r") as core_yaml_fd:
@@ -333,7 +333,7 @@ with open(final_config_yaml, 'w') as final_config_fd, open(final_input_yaml, 'w'
 #-------------------------------------------
 localrules: all
 #ruleorder: create_fastq_links > fastqc
-
+include: "workflow/rules/Contigs/Hifiasm.smk"
 print(stage_dict)
 
 results_dict = {}

@@ -872,7 +872,7 @@ if "contig" in config["stage_list"]:
     for parameter_label in stage_dict["contig"]["parameters"]:
         print(parameters_label)
         read_filelist = []
-        for datatype in stage_dict["contig"]["parameters"][parameters_label]["main_datatypes"]:
+        for datatype in parameters["tool_options"]["hifiasm"][parameters_label]["main_datatypes"]:
             if datatype not in input_filedict:
                 continue
             read_filelist += expand(

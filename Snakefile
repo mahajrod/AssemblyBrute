@@ -472,7 +472,7 @@ if "draft_qc" in config["stage_list"]:
                                   #window=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["window"],
                                   #step = parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
                                      ) for window_step_set in config["qc_settings"]["windows_sets"]] for parameters_label in stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],
-    """                     ]
+                         ]"""
     if (not config["skip_wga"]) and (not config["skip_draft_qc_wga"]):
         results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/wga.{query_prefix}.{query_length}.to.{target_prefix}.{target_length}.YASS.R11.soft.min_len{min_target_len}.png",
                                      query_length=config["qc_settings"]["assembly_scaffold_sets"],

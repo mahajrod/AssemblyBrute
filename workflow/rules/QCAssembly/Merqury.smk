@@ -2,10 +2,10 @@
 #stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"]
 
 def get_meryl_db_for_merqury(wildcards):
-    if stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["option_set"]["qc_datatypes"]:
-        qc_datatypes = stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["option_set"]["qc_datatypes"]
+    if ("qc_datatypes" in config) and config["qc_datatypes"]:
+        qc_datatypes = config["qc_datatypes"]
     else:
-        qc_datatypes = config["qc_datatypes"] if "qc_datatypes" in config else []
+        qc_datatypes = stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["option_set"]["qc_datatypes"]
     print("QC datatypes: {0}\n".format('.'.join(qc_datatypes)))
     kmer_datatype_list = []
     filtered_flag = False

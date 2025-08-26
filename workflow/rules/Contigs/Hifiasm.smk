@@ -254,20 +254,20 @@ def get_main_read_filelist(wildcards):
 rule hifiasm_hic: # TODO: add support for polyploid assemblies
     priority: 1000
     input:
-        #main_reads=get_main_read_filelist,
+        main_reads=get_main_read_filelist,
         #hifi=expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),
         #            fileprefix=input_file_prefix_dict["hifi"],
         #            allow_missing=True),
-        #ultralong_reads=lambda wildcards: get_ultralong_read_files(input_file_prefix_dict,
-        #                                                           stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set"]),
-        #hic_forward=expand(output_dict["data"] / ("fastq/hic/filtered/{pairprefix}_1%s" % config["fastq_extension"]), pairprefix=input_pairprefix_dict["hic"]) if "hic" in input_filedict else [],
-        #hic_reverse=expand(output_dict["data"] / ("fastq/hic/filtered/{pairprefix}_2%s" % config["fastq_extension"]), pairprefix=input_pairprefix_dict["hic"]) if "hic" in input_filedict else [],
-        #ec_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ec.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
-        #                                                                                                  wildcards.genome_prefix) if not parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"] else [],
-        #ovlp_reverse_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ovlp.reverse.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
-        #                                                                                                                      wildcards.genome_prefix) if not parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"] else [],
-        #ovlp_source_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ovlp.source.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
-        #                                                                                                                    wildcards.genome_prefix) if not parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"] else [],
+        ultralong_reads=lambda wildcards: get_ultralong_read_files(input_file_prefix_dict,
+                                                                   stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set"]),
+        hic_forward=expand(output_dict["data"] / ("fastq/hic/filtered/{pairprefix}_1%s" % config["fastq_extension"]), pairprefix=input_pairprefix_dict["hic"]) if "hic" in input_filedict else [],
+        hic_reverse=expand(output_dict["data"] / ("fastq/hic/filtered/{pairprefix}_2%s" % config["fastq_extension"]), pairprefix=input_pairprefix_dict["hic"]) if "hic" in input_filedict else [],
+        ec_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ec.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
+                                                                                                          wildcards.genome_prefix) if not parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"] else [],
+        ovlp_reverse_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ovlp.reverse.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
+                                                                                                                              wildcards.genome_prefix) if not parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"] else [],
+        ovlp_source_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ovlp.source.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
+                                                                                                                            wildcards.genome_prefix) if not parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"] else [],
         #coverage_estimator_report_filename=get_coverage_estimator_report_filename
         lambda_file=rules.extract_lambda_value.output.lambda_file
     output:
@@ -303,12 +303,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
                                            ) if get_ultralong_read_files(input_file_prefix_dict,
                                                                          stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set"]) else "",
         telomere_motif= lambda wildcards: parse_option("telomere_motif", config, " --telo-m ") if parameters["tool_options"]["hifiasm"][wildcards.contig_options]["use_telomere"] else "",
-        #nanopore=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
-        #                                              fileprefix=input_file_prefix_dict["nanopore"],
-        #                                              allow_missing=True)))) if "nanopore" in input_filedict else "",
-        #lqccs=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/lqccs/filtered/{fileprefix}%s" % config["fastq_extension"]),
-        #                                              fileprefix=input_file_prefix_dict["nanopore"],
-        #                                              allow_missing=True)))) if "nanopore" in input_filedict else "",
+
         ul_cut=lambda wildcards: parse_option("ul-cut", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --ul-cut "),
         ont_assembly= lambda wildcards: parse_option_flag("ont_mode", parameters["tool_options"]["hifiasm"][wildcards.contig_options]," --ont "),
         ont_mode=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"],
@@ -473,6 +468,89 @@ rule hifiasm_hic_tetra: # TODO: add support for polyploid assemblies
          "    done; "
          " sleep 60; "
 """
+
+rule hifiasm_hic_ont: # TODO: add support for polyploid assemblies
+    priority: 1000
+    input:
+        main_reads=get_main_read_filelist,
+        #hifi=expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),
+        #            fileprefix=input_file_prefix_dict["hifi"],
+        #            allow_missing=True),
+        ultralong_reads=lambda wildcards: get_ultralong_read_files(input_file_prefix_dict,
+                                                                   stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set"]),
+        hic_forward=expand(output_dict["data"] / ("fastq/hic/filtered/{pairprefix}_1%s" % config["fastq_extension"]), pairprefix=input_pairprefix_dict["hic"]) if "hic" in input_filedict else [],
+        hic_reverse=expand(output_dict["data"] / ("fastq/hic/filtered/{pairprefix}_2%s" % config["fastq_extension"]), pairprefix=input_pairprefix_dict["hic"]) if "hic" in input_filedict else [],
+        lambda_file=rules.extract_lambda_value.output.lambda_file
+    output:
+        primary_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap1.p_ctg.gfa",
+        alternative_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap2.p_ctg.gfa",
+        alt_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.a_ctg.gfa",
+        primary_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap1.unfiltered.gfa",
+        alternative_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap2.unfiltered.gfa",
+        alt_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.alt.unfiltered.gfa",
+    params:
+        purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge level"],
+        ploidy=lambda wildcards: stage_dict["contig"]["parameters"][f"hifiasm_{wildcards.contig_options}"]["option_set"]["assembly_ploidy"], #config["ploidy"],
+        cov_multiplicator=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["cov_multiplicator"],
+        window_size=lambda wildcards: parse_option("window_size", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -w "),
+        bloom_filter_bits=lambda wildcards: parse_option("bloom_filter_bits", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -f "),
+        rounds_of_error_correction=lambda wildcards: parse_option("rounds_of_error_correction", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -r "),
+        length_of_adapters=lambda wildcards: parse_option("length_of_adapters", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -z "),
+        max_kocc=lambda wildcards: parse_option("max-kocc", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --max-kocc "),
+        hg_size=lambda wildcards: parse_option("hg-size", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --hg-size "),
+        kmer_length=lambda wildcards: parse_option("kmer_len", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -k "),
+        dual_scaf=lambda wildcards: parse_option_flag("dual_scaf", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --dual-scaf "),
+        D=lambda wildcards: parse_option("D", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -D "), #" -D {0} ".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["D"]) if "D" in parameters["tool_options"]["hifiasm"][wildcards.contig_options] else "",
+        N=lambda wildcards: parse_option("N", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -N "),
+        ignore_bin=lambda wildcards: " -i " if ("ignore_bin" in parameters["tool_options"]["hifiasm"][wildcards.contig_options]) and parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ignore_bin"] else "",
+        sim_threshold_for_hapdup_reads=lambda wildcards: parse_option("sim_threshold_for_hapdup_reads", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -s "),
+        hic_forward=(" --h1 " + ",".join(map(str, expand(output_dict["data"] / ("fastq/hic/filtered/{pairprefix}_1%s" % config["fastq_extension"]), pairprefix=input_pairprefix_dict["hic"]) ))) if "hic" in input_filedict else "", #in case of multiple hic libraries files in the list MUST be COMMA-separated
+        hic_reverse=(" --h2 " + ",".join(map(str, expand(output_dict["data"] / ("fastq/hic/filtered/{pairprefix}_2%s" % config["fastq_extension"]), pairprefix=input_pairprefix_dict["hic"]) ))) if "hic" in input_filedict else "",
+        ultralong_reads=lambda wildcards: (" --ul " + ",".join(map(str,
+                                                                   get_ultralong_read_files(input_file_prefix_dict,
+                                                                                            stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set"])
+                                                                   )
+                                                              )
+                                           ) if get_ultralong_read_files(input_file_prefix_dict,
+                                                                         stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set"]) else "",
+        telomere_motif= lambda wildcards: parse_option("telomere_motif", config, " --telo-m ") if parameters["tool_options"]["hifiasm"][wildcards.contig_options]["use_telomere"] else "",
+
+        ul_cut=lambda wildcards: parse_option("ul-cut", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --ul-cut "),
+    log:
+        std=output_dict["log"] / "hifiasm.{contig_options}.{genome_prefix}.log",
+        cluster_log=output_dict["cluster_log"] / "hifiasm.{contig_options}.{genome_prefix}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "hifiasm.{contig_options}.{genome_prefix}.cluster.err"
+    benchmark:
+        output_dict["benchmark"] / "hifiasm.{contig_options}.{genome_prefix}.benchmark.txt"
+    conda:
+        config["conda"]["hifiasm"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["hifiasm"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("hifiasm_hic"),
+        cpus=parameters["threads"]["hifiasm"],
+        time=parameters["time"]["hifiasm"],
+        mem=parameters["memory_mb"]["hifiasm"] #partial(get_memory, start_mem=parameters["memory_mb"]["hifiasm"], coeff=1.5, mode="exp"),
+    threads:
+        parameters["threads"]["hifiasm"]
+    shell:
+         " OUTPUT_PREFIX={output.primary_alias}; "
+         " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.hap1.unfiltered.gfa}}; "
+         " OUT_DIR=`dirname ${{OUTPUT_PREFIX}}`; "
+         " LAMBDA=`head -n 1 {input.lambda_file}` 1>>{log.std} 2>&1;  "
+         " COV_UPPER_BOUNDARY=`echo \"{params.cov_multiplicator}*${{LAMBDA}}\" | bc` 1>>{log.std} 2>&1;  "
+         " COV_UPPER_BOUNDARY=${{COV_UPPER_BOUNDARY%.*}}; "
+         " hifiasm {params.window_size} {params.bloom_filter_bits} --ont "
+         " {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size}"
+         " {params.kmer_length} {params.D} {params.N} {params.ignore_bin} {params.sim_threshold_for_hapdup_reads} --primary -t {threads} -l {params.purge_level}  -o ${{OUTPUT_PREFIX}} "
+         " --n-hap {params.ploidy} --purge-max ${{COV_UPPER_BOUNDARY}} "
+         " {params.hic_forward} {params.hic_reverse} {params.ultralong_reads} {params.ul_cut} {params.dual_scaf} "
+         " {params.telomere_motif} "
+         " {input.main_reads}  1>{log.std} 2>&1; "         
+         " ln -sf `basename {output.primary_contig_graph}` {output.primary_alias} 1>>{log.std} 2>&1; "
+         " ln -sf `basename {output.alternative_contig_graph}` {output.alternative_alias} 1>>{log.std} 2>&1; "
+         " ln -sf `basename {output.alt_contig_graph}` {output.alt_alias} 1>>{log.std} 2>&1; "
+         " sleep 60;"
+
 
 rule hifiasm_long_reads_only:
     priority: 1000

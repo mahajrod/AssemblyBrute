@@ -311,6 +311,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         #                                              allow_missing=True)))) if "nanopore" in input_filedict else "",
         ul_cut=lambda wildcards: parse_option("ul-cut", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --ul-cut "),
         ont_assembly= lambda wildcards: parse_option_flag("ont_mode", parameters["tool_options"]["hifiasm"][wildcards.contig_options]," --ont "),
+        ont_mode=parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"],
     log:
         std=output_dict["log"] / "hifiasm.{contig_options}.{genome_prefix}.log",
         cluster_log=output_dict["cluster_log"] / "hifiasm.{contig_options}.{genome_prefix}.cluster.log",
@@ -331,9 +332,12 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
          " OUTPUT_PREFIX={output.primary_alias}; "
          " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.hap1.unfiltered.gfa}}; "
          " OUT_DIR=`dirname ${{OUTPUT_PREFIX}}`; "
-         " ln -sf ../../../{input.ec_bin} ${{OUT_DIR}} 1>{log.std} 2>&1; "
-         " ln -sf ../../../{input.ovlp_reverse_bin} ${{OUT_DIR}} 1>>{log.std} 2>&1; "
-         " ln -sf ../../../{input.ovlp_source_bin} ${{OUT_DIR}} 1>>{log.std} 2>&1; "
+         " if [[ '{params.ont_mode}' != 'True' ]]; "
+         "      then "
+         "      ln -sf ../../../{input.ec_bin} ${{OUT_DIR}} 1>{log.std} 2>&1; "
+         "      ln -sf ../../../{input.ovlp_reverse_bin} ${{OUT_DIR}} 1>>{log.std} 2>&1; "
+         "      ln -sf ../../../{input.ovlp_source_bin} ${{OUT_DIR}} 1>>{log.std} 2>&1; "
+         "      fi; "
          " LAMBDA=`head -n 1 {input.lambda_file}` 1>>{log.std} 2>&1;  "
          " COV_UPPER_BOUNDARY=`echo \"{params.cov_multiplicator}*${{LAMBDA}}\" | bc` 1>>{log.std} 2>&1;  "
          " COV_UPPER_BOUNDARY=${{COV_UPPER_BOUNDARY%.*}}; "
@@ -546,9 +550,12 @@ rule hifiasm_long_reads_only:
          " OUTPUT_PREFIX={output.primary_alias}; "
          " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.hap0.unfiltered.gfa}}; "
          " OUT_DIR=`dirname ${{OUTPUT_PREFIX}}`; "
-         " ln -sf ../../../{input.ec_bin} ${{OUT_DIR}}; "
-         " ln -sf ../../../{input.ovlp_reverse_bin} ${{OUT_DIR}}; "
-         " ln -sf ../../../{input.ovlp_source_bin} ${{OUT_DIR}}; "
+         " if [[ '{params.ont_mode}' != 'True' ]]; "
+         "      then "
+         "      ln -sf ../../../{input.ec_bin} ${{OUT_DIR}}; "
+         "      ln -sf ../../../{input.ovlp_reverse_bin} ${{OUT_DIR}}; "
+         "      ln -sf ../../../{input.ovlp_source_bin} ${{OUT_DIR}}; "
+         "      fi; "
          " LAMBDA=`head -n 1 {input.lambda_file}`; "
          " COV_UPPER_BOUNDARY=`echo \"{params.cov_multiplicator}*${{LAMBDA}}\" | bc`; "
          " COV_UPPER_BOUNDARY=${{COV_UPPER_BOUNDARY%.*}}; "

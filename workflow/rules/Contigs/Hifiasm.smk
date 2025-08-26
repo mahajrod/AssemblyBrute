@@ -311,7 +311,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         #                                              allow_missing=True)))) if "nanopore" in input_filedict else "",
         ul_cut=lambda wildcards: parse_option("ul-cut", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --ul-cut "),
         ont_assembly= lambda wildcards: parse_option_flag("ont_mode", parameters["tool_options"]["hifiasm"][wildcards.contig_options]," --ont "),
-        ont_mode=parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"],
+        ont_mode=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"],
     log:
         std=output_dict["log"] / "hifiasm.{contig_options}.{genome_prefix}.log",
         cluster_log=output_dict["cluster_log"] / "hifiasm.{contig_options}.{genome_prefix}.cluster.log",
@@ -530,6 +530,7 @@ rule hifiasm_long_reads_only:
                                                                          stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set"]) else "",
         ul_cut=lambda wildcards: parse_option("ul-cut", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --ul-cut "),
         ont_assembly= lambda wildcards: parse_option_flag("ont_mode", parameters["tool_options"]["hifiasm"][wildcards.contig_options]," --ont "),
+        ont_mode= lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"],
     log:
         std=output_dict["log"] / "hifiasm.{contig_options}.{genome_prefix}.log",
         cluster_log=output_dict["cluster_log"] / "hifiasm.{contig_options}.{genome_prefix}.cluster.log",

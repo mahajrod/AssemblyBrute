@@ -653,17 +653,17 @@ rule hifiasm_long_reads_only:
 
 rule get_lowcoverage_contig_ids:
     input:
-        cov=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.{haplotype}.unfiltered.gfa.cov"
+        cov=output_dict["contig"] / "{parameters}/{genome_prefix}.contig.{haplotype}.unfiltered.gfa.cov"
     output:
-        low_cov_ids=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.{haplotype, [^/]+}.unfiltered.gfa.lowcov.ids",
+        low_cov_ids=output_dict["contig"] / "{parameters}/{genome_prefix, [^/]+}.contig.{haplotype, [^/]+}.unfiltered.gfa.lowcov.ids",
     log:
-        std=output_dict["log"] / "get_lowcoverage_contig_ids.{contig_options}.{genome_prefix}.{haplotype}.log",
-        cluster_log=output_dict["cluster_log"] / "get_lowcoverage_contig_ids.{contig_options}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "get_lowcoverage_contig_ids.{contig_options}.{genome_prefix}.{haplotype}.cluster.err",
+        std=output_dict["log"] / "get_lowcoverage_contig_ids.{parameters}.{genome_prefix}.{haplotype}.log",
+        cluster_log=output_dict["cluster_log"] / "get_lowcoverage_contig_ids.{parameters}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "get_lowcoverage_contig_ids.{parameters}.{genome_prefix}.{haplotype}.cluster.err",
     params:
         min_coverage=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["min_contig_coverage"]
     benchmark:
-        output_dict["benchmark"] / "get_lowcoverage_contig_ids.{contig_options}.{genome_prefix}.{haplotype}.benchmark.txt"
+        output_dict["benchmark"] / "get_lowcoverage_contig_ids.{parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -686,16 +686,16 @@ rule get_lowcoverage_contig_ids:
 
 rule filter_contigs_by_coverage:
     input:
-        low_cov_ids=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.{haplotype}.unfiltered.gfa.lowcov.ids",
-        unfiltered_fasta=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.{haplotype}.unfiltered.fasta"
+        low_cov_ids=output_dict["contig"] / "{parameters}/{genome_prefix}.contig.{haplotype}.unfiltered.gfa.lowcov.ids",
+        unfiltered_fasta=output_dict["contig"] / "{parameters}/{genome_prefix}.contig.{haplotype}.unfiltered.fasta"
     output:
-        filtered_fasta=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.{haplotype, [^/]+}.lenfiltered.fasta",
+        filtered_fasta=output_dict["contig"] / "{parameters}/{genome_prefix, [^/]+}.contig.{haplotype, [^/]+}.lenfiltered.fasta",
     log:
-        std=output_dict["log"] / "filter_contigs_by_coverage.{contig_options}.{genome_prefix}.{haplotype}.log",
-        cluster_log=output_dict["cluster_log"] / "filter_contigs_by_coverage.{contig_options}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "filter_contigs_by_coverage.{contig_options}.{genome_prefix}.{haplotype}.cluster.err",
+        std=output_dict["log"] / "filter_contigs_by_coverage.{parameters}.{genome_prefix}.{haplotype}.log",
+        cluster_log=output_dict["cluster_log"] / "filter_contigs_by_coverage.{parameters}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "filter_contigs_by_coverage.{parameters}.{genome_prefix}.{haplotype}.cluster.err",
     benchmark:
-        output_dict["benchmark"] / "filter_contigs_by_coverage.{contig_options}.{genome_prefix}.{haplotype}.benchmark.txt"
+        output_dict["benchmark"] / "filter_contigs_by_coverage.{parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

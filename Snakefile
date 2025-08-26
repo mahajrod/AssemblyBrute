@@ -1958,8 +1958,8 @@ include: "workflow/rules/QCAssembly/General.smk"
 include: "workflow/rules/Contamination/FCS.smk"
 include: "workflow/rules/Contamination/Kraken2.smk"
 
-if "hifi" in data_types:
-    include: "workflow/rules/Contigs/Hifiasm.smk"
+#if "hifi" in data_types:
+include: "workflow/rules/Contigs/Hifiasm.smk"
 
 include: "workflow/rules/Contigs/Graph.smk"
 include: "workflow/rules/Stats/General.smk"

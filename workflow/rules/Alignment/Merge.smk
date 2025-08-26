@@ -26,4 +26,4 @@ if "hic" in input_pairprefix_dict: # TODO: rewrite code to make avoid error when
             mem=parameters["memory_mb"]["samtools_sort"]
         threads: parameters["threads"]["samtools_sort"]
         shell:
-            " samtools merge -@ {params.sort_threads} -o {output.bam} {input.bams} 1>{log.std} 2>&1"
+            " samtools merge -@ {params.sort_threads} --no-PG -o {output.bam} {input.bams} 1>{log.std} 2>&1"

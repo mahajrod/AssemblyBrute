@@ -122,10 +122,11 @@
          #- "l0primary"
          #- "l1primary"
          #- "l2primary"
-         - "l3primary"
+         #- "l3primary"
          #- "l1primary_no_hic"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
+         - "l1primary_main_nanopore_only"
     "purge_dups":
         #- "keep_hicov"
         - "skipped"
@@ -204,10 +205,10 @@
 "phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads
 #---------------------------------------------------------------------
 
-"mode": "qc"                # Allowed: "preprocessing", "qc", "assembly"
+"mode": "assembly"                # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
-"assembly_mode": "hic_scaffolding"     # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
+"assembly_mode": "contig"     # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []

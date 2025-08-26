@@ -246,15 +246,15 @@ def get_main_read_filelist(wildcards):
                                 fileprefix=input_file_prefix_dict[datatype],
                                 datatype=[datatype,],
                                 allow_missing=True)
-    print("AAAA")
-    print(wildcards)
-    print(read_filelist)
+    #print("AAAA")
+    #print(wildcards)
+    #print(read_filelist)
     return read_filelist
 
 rule hifiasm_hic: # TODO: add support for polyploid assemblies
     priority: 1000
     input:
-        main_reads=get_main_read_filelist,
+        #main_reads=get_main_read_filelist,
         #hifi=expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),
         #            fileprefix=input_file_prefix_dict["hifi"],
         #            allow_missing=True),
@@ -269,7 +269,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         #ovlp_source_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ovlp.source.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
         #                                                                                                                    wildcards.genome_prefix) if not parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"] else [],
         #coverage_estimator_report_filename=get_coverage_estimator_report_filename
-        #lambda_file=rules.extract_lambda_value.output.lambda_file
+        lambda_file=rules.extract_lambda_value.output.lambda_file
     output:
         primary_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap1.p_ctg.gfa",
         alternative_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap2.p_ctg.gfa",

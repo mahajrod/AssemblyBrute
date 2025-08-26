@@ -12,6 +12,7 @@
 "skip_both_pretext": False
 "skip_pretext_10k_1k_tracks": False
 "skip_pretext_1000k_100k_tracks": True
+"skip_pretext_coverage_tracks": False
 "skip_nanoqc": False
 "skip_nanoplot": False
 "skip_wga": False

@@ -3,7 +3,7 @@ ruleorder: remove_fcs_contaminants > gfa2fasta
 rule fcs: #
     priority: 10000
     input:
-        fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.lenfiltered.fasta",
+        fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.unfiltered.fasta", #out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.lenfiltered.fasta",
         db=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["path"],
         image=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["image_path"],
     output:

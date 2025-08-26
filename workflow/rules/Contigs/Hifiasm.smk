@@ -602,7 +602,7 @@ rule get_lowcoverage_contig_ids:
          "   awk '{{if ($2 < {params.min_coverage}) print $1}}' {input.cov} > {output.low_cov_ids} 2>{log.std}; "
          " fi; "
 
-ruleorder: filter_contigs_by_coverage > gfa2fasta
+#ruleorder: filter_contigs_by_coverage > gfa2fasta
 
 rule filter_contigs_by_coverage:
     input:

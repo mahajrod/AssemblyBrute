@@ -18,7 +18,7 @@ include: "workflow/functions/option_parsing.py"
 include: "workflow/functions/general_parsing.py"
 include: "workflow/functions/resources.py"
 #----------------------------------------
-
+include: "workflow/rules/Contigs/Hifiasm.smk"
 #---- Read config files ----
 #-------- Read core config file --------
 with open(config["main_config_file"], "r") as core_yaml_fd:

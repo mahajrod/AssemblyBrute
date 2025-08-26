@@ -608,7 +608,7 @@ rule filter_contigs_by_coverage:
         low_cov_ids=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.{haplotype}.unfiltered.gfa.lowcov.ids",
         unfiltered_fasta=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.{haplotype}.unfiltered.fasta"
     output:
-        filtered_fasta=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.{haplotype, [^/]+}.lenfiltered.fasta",
+        filtered_fasta=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix}.contig.{haplotype}.lenfiltered.fasta",
     log:
         std=output_dict["log"] / "filter_contigs_by_coverage.{contig_options}.{genome_prefix}.{haplotype}.log",
         cluster_log=output_dict["cluster_log"] / "filter_contigs_by_coverage.{contig_options}.{genome_prefix}.{haplotype}.cluster.log",

@@ -1,9 +1,9 @@
 
 rule gfa2fasta:
     input:
-        gfa=out_dir_path / "contig/{gfa_prefix}.unfiltered.gfa"
+        gfa=out_dir_path / "contig/{gfa_prefix}.gfa"
     output:
-        fasta=out_dir_path / "contig/{gfa_prefix}.unfiltered.fasta"
+        fasta=out_dir_path / "contig/{gfa_prefix}.fasta"
     log:
         std=out_dir_path / "contig/{gfa_prefix}.gfa2fasta.log",
         cluster_log=out_dir_path / "contig/{gfa_prefix}.gfa2fasta.cluster.log",

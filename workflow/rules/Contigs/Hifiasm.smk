@@ -260,14 +260,6 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         #            allow_missing=True),
         ultralong_reads=lambda wildcards: get_ultralong_read_files(input_file_prefix_dict,
                                                                    stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set"]),
-        #nanopore=expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
-        #                fileprefix=input_file_prefix_dict["nanopore"],
-        #                allow_missing=True) if "nanopore" in input_filedict else [],
-        #lqccs=expand(output_dict["data"] / ("fastq/lqccs/filtered/{fileprefix}%s" % config["fastq_extension"]),
-        #                fileprefix=input_file_prefix_dict["lqccs"],
-        #                allow_missing=True) if "lqccs" in input_filedict else [],
-        #hic_forward=list(map(lambda s: output_dict["data"] / "fastq/hic/raw/" / s.name, input_filedict["hic"][::2])) if "hic" in input_filedict else [],
-        #hic_reverse=list(map(lambda s: output_dict["data"] / "fastq/hic/raw/" / s.name, input_filedict["hic"][1::2])) if "hic" in input_filedict else [],
         hic_forward=expand(output_dict["data"] / ("fastq/hic/filtered/{pairprefix}_1%s" % config["fastq_extension"]), pairprefix=input_pairprefix_dict["hic"]) if "hic" in input_filedict else [],
         hic_reverse=expand(output_dict["data"] / ("fastq/hic/filtered/{pairprefix}_2%s" % config["fastq_extension"]), pairprefix=input_pairprefix_dict["hic"]) if "hic" in input_filedict else [],
         ec_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ec.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
@@ -608,7 +600,7 @@ rule filter_contigs_by_coverage:
         low_cov_ids=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.{haplotype}.unfiltered.gfa.lowcov.ids",
         unfiltered_fasta=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.{haplotype}.unfiltered.fasta"
     output:
-        filtered_fasta=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix}.contig.{haplotype}.lenfiltered.fasta",
+        filtered_fasta=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.{haplotype, [^/]+}.lenfiltered.fasta",
     log:
         std=output_dict["log"] / "filter_contigs_by_coverage.{contig_options}.{genome_prefix}.{haplotype}.log",
         cluster_log=output_dict["cluster_log"] / "filter_contigs_by_coverage.{contig_options}.{genome_prefix}.{haplotype}.cluster.log",

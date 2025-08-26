@@ -868,6 +868,8 @@ if "contig" in config["stage_list"] or "draft_qc" in config["stage_list"]:
 if "contig" in config["stage_list"]:
     current_stage = "contig"
     parameters_list = list(stage_dict["contig"]["parameters"].keys())
+    print(stage_dict["contig"]["parameters"])
+
     #if "hifiasm" in assembler_list:
     #    results_list += [expand(output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.ec.bin",
     #                            genome_prefix=[config["genome_prefix"],],

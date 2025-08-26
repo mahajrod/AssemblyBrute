@@ -254,7 +254,7 @@ def get_paf_list(wildcards):
 rule get_purge_dups_read_stat:
     input:
         paf=get_paf_list,
-        genomescope_report=output_dict["kmer"] / "{0}/filtered/genomescope/{1}.{0}.filtered.{2}.{3}.genomescope.parameters".format(config["final_kmer_datatype"],
+        genomescope_report=output_dict["kmer"] / "{0}/filtered/genomescope/{1}.{0}.filtered.{2}.{3}.genomescope.parameters".format("_".join(config["final_kmer_datatypes"]),
                                                                                                                                    config["genome_prefix"],
                                                                                                                                    config["final_kmer_length"],
                                                                                                                                    config["final_kmer_counter"])

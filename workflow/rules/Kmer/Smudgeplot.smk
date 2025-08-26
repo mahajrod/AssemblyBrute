@@ -63,7 +63,7 @@ rule smudgeplot_plot: # in some cases smudgeplot could fail in geneeration of im
     input:
         coverages=output_dict["kmer"] / "{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}_coverages.tsv",
         genomescope_report=output_dict["kmer"] / ("{datatype}/{stage}/genomescope/%s.%s.filtered.%s.%s.genomescope.parameters" % (config["genome_prefix"],
-                                                                                                                                  config["final_kmer_datatype"],
+                                                                                                                                  "_".join(config["final_kmer_datatypes"]),
                                                                                                                                   config["final_kmer_length"],
                                                                                                                                   config["final_kmer_counter"])),
     output:

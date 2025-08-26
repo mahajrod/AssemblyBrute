@@ -98,16 +98,16 @@ for d_type in data_types:
     if d_type not in config["allowed_data_types"]:
         #logging.error("Unknown data type: {0}".format(d_type))
         raise ValueError("ERROR!!! Unknown data type: {0}".format(d_type))
-
-if config["final_kmer_datatype"] not in fastq_based_data_type_set:
-    if config["mode"] in ["preprocessing", "qc"]:
-        pass
-    else:
-        if ("skip_kmer" in config) and (config["skip_kmer"]):
+for datatype in config["final_kmer_datatypes"]:
+    if datatype not in fastq_based_data_type_set:
+        if config["mode"] in ["preprocessing", "qc"]:
             pass
         else:
-            raise ValueError("ERROR!!! final_kmer_datatype ({0}) is absent among input fastq-based datatypes({1})".format(config["final_kmer_datatype"],
-                                                                                                                      ",".join(fastq_based_data_type_set)))
+            if ("skip_kmer" in config) and (config["skip_kmer"]):
+                pass
+            else:
+                raise ValueError("ERROR!!! dinal kmer datatype ({0}) is absent among input fastq-based datatypes({1})".format(datatype,
+                                                                                                                              ",".join(fastq_based_data_type_set)))
 
 #--------
 

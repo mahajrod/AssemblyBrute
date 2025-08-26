@@ -110,10 +110,10 @@ def get_coverage_estimator(wildcards):
 
 def get_coverage_estimator_report_filename(wildcards):
     coverage_estimator = get_coverage_estimator(wildcards)
-    report_filename = output_dict["kmer"] / ("{0}/filtered/{1}/{2}.{3}.filtered.{4}.{5}.{1}.parameters".format("_".join(config["final_kmer_datatype"]), #parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_datatypes"]), #config["final_kmer_datatype"]
+    report_filename = output_dict["kmer"] / ("{0}/filtered/{1}/{2}.{3}.filtered.{4}.{5}.{1}.parameters".format("_".join(config["final_kmer_datatypes"]), #parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_datatypes"]), #config["final_kmer_datatype"]
                                                                                                                coverage_estimator,
                                                                                                                wildcards.genome_prefix,
-                                                                                                               "_".join(config["final_kmer_datatype"]), #"_".join(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_datatypes"]), #config["final_kmer_datatype"],
+                                                                                                               "_".join(config["final_kmer_datatypes"]), #"_".join(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["main_datatypes"]), #config["final_kmer_datatype"],
                                                                                                                config["final_kmer_length"],
                                                                                                                config["final_kmer_counter"]))
     #print(report_filename)

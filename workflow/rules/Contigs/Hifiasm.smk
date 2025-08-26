@@ -650,7 +650,7 @@ rule hifiasm_long_reads_only:
          " ln -sf `basename {output.alt_contig_graph}` {output.alt_alias};"
 
          #" COV_UPPER_BOUNDARY=`awk 'NR==2 {{printf \"%.0f\", {params.cov_multiplicator} * $2}}' {input.genomescope_report}`; "
-
+"""
 rule get_lowcoverage_contig_ids:
     input:
         cov=output_dict["contig"] / "{parameters}/{genome_prefix}.contig.{haplotype}.unfiltered.gfa.cov"
@@ -709,4 +709,4 @@ rule filter_contigs_by_coverage:
     shell:
          " extract_sequences_by_ids.py -i {input.unfiltered_fasta} -d {input.low_cov_ids} -r "
          " -o {output.filtered_fasta} > {log.std} 2>&1; "
-
+"""

@@ -2986,6 +2986,7 @@
 "coverage_track_data": # Data for which a coverage track will be generated during preparations for manual curation
     - "illumina"
     - "hifi"
+    - "simplex"
     #- "clr"
     ##- "nanopore" # TODO: add nanopore support
 

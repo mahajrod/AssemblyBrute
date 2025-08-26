@@ -262,12 +262,12 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
                                                                    stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set"]),
         hic_forward=expand(output_dict["data"] / ("fastq/hic/filtered/{pairprefix}_1%s" % config["fastq_extension"]), pairprefix=input_pairprefix_dict["hic"]) if "hic" in input_filedict else [],
         hic_reverse=expand(output_dict["data"] / ("fastq/hic/filtered/{pairprefix}_2%s" % config["fastq_extension"]), pairprefix=input_pairprefix_dict["hic"]) if "hic" in input_filedict else [],
-        ec_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ec.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
-                                                                                                          wildcards.genome_prefix) if not parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"] else [],
-        ovlp_reverse_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ovlp.reverse.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
-                                                                                                                              wildcards.genome_prefix) if not parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"] else [],
-        ovlp_source_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ovlp.source.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
-                                                                                                                            wildcards.genome_prefix) if not parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"] else [],
+        ec_bin=lambda wildcards: (output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ec.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
+                                                                                                          wildcards.genome_prefix)) if not parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"] else [],
+        ovlp_reverse_bin=lambda wildcards: (output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ovlp.reverse.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
+                                                                                                                              wildcards.genome_prefix)) if not parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"] else [],
+        ovlp_source_bin=lambda wildcards: (output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ovlp.source.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
+                                                                                                                            wildcards.genome_prefix)) if not parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"] else [],
         #coverage_estimator_report_filename=get_coverage_estimator_report_filename
         lambda_file=rules.extract_lambda_value.output.lambda_file
     output:
@@ -305,8 +305,8 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         telomere_motif= lambda wildcards: parse_option("telomere_motif", config, " --telo-m ") if parameters["tool_options"]["hifiasm"][wildcards.contig_options]["use_telomere"] else "",
 
         ul_cut=lambda wildcards: parse_option("ul-cut", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --ul-cut "),
-        #ont_assembly= lambda wildcards: parse_option_flag("ont_mode", parameters["tool_options"]["hifiasm"][wildcards.contig_options]," --ont "),
-        #ont_mode=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"],
+        ont_assembly= lambda wildcards: parse_option_flag("ont_mode", parameters["tool_options"]["hifiasm"][wildcards.contig_options]," --ont "),
+        ont_mode=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"],
     log:
         std=output_dict["log"] / "hifiasm.{contig_options}.{genome_prefix}.log",
         cluster_log=output_dict["cluster_log"] / "hifiasm.{contig_options}.{genome_prefix}.cluster.log",

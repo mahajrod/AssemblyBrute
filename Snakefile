@@ -869,6 +869,18 @@ if "contig" in config["stage_list"]:
     current_stage = "contig"
     parameters_list = list(stage_dict["contig"]["parameters"].keys())
     print(stage_dict["contig"]["parameters"])
+    for parameter_label in stage_dict["contig"]["parameters"]:
+        print(parameters_label)
+        read_filelist = []
+        for datatype in stage_dict["contig"]["parameters"][parameters_label]["main_datatypes"]:
+            if datatype not in input_filedict:
+                continue
+            read_filelist += expand(
+                output_dict["data"] / ("fastq/{datatype}/filtered/{fileprefix}%s" % config["fastq_extension"]),
+                fileprefix=input_file_prefix_dict[datatype],
+                datatype=[datatype, ],
+                allow_missing=True)
+        print(read_filelist)
 
     #if "hifiasm" in assembler_list:
     #    results_list += [expand(output_dict["error_correction"] / "hifiasm_{correction_options}/{genome_prefix}.contig.ec.bin",

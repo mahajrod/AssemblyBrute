@@ -305,8 +305,8 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         telomere_motif= lambda wildcards: parse_option("telomere_motif", config, " --telo-m ") if parameters["tool_options"]["hifiasm"][wildcards.contig_options]["use_telomere"] else "",
 
         ul_cut=lambda wildcards: parse_option("ul-cut", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --ul-cut "),
-        ont_assembly= lambda wildcards: parse_option_flag("ont_mode", parameters["tool_options"]["hifiasm"][wildcards.contig_options]," --ont "),
-        ont_mode=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"],
+        #ont_assembly= lambda wildcards: parse_option_flag("ont_mode", parameters["tool_options"]["hifiasm"][wildcards.contig_options]," --ont "),
+        #ont_mode=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"],
     log:
         std=output_dict["log"] / "hifiasm.{contig_options}.{genome_prefix}.log",
         cluster_log=output_dict["cluster_log"] / "hifiasm.{contig_options}.{genome_prefix}.cluster.log",
@@ -468,7 +468,7 @@ rule hifiasm_hic_tetra: # TODO: add support for polyploid assemblies
          "    done; "
          " sleep 60; "
 """
-
+"""
 rule hifiasm_hic_ont: # TODO: add support for polyploid assemblies
     priority: 1000
     input:
@@ -550,7 +550,7 @@ rule hifiasm_hic_ont: # TODO: add support for polyploid assemblies
          " ln -sf `basename {output.alternative_contig_graph}` {output.alternative_alias} 1>>{log.std} 2>&1; "
          " ln -sf `basename {output.alt_contig_graph}` {output.alt_alias} 1>>{log.std} 2>&1; "
          " sleep 60;"
-
+"""
 
 rule hifiasm_long_reads_only:
     priority: 1000

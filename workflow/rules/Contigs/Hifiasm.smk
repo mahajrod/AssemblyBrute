@@ -269,11 +269,11 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         hic_forward=expand(output_dict["data"] / ("fastq/hic/filtered/{pairprefix}_1%s" % config["fastq_extension"]), pairprefix=input_pairprefix_dict["hic"]) if "hic" in input_filedict else [],
         hic_reverse=expand(output_dict["data"] / ("fastq/hic/filtered/{pairprefix}_2%s" % config["fastq_extension"]), pairprefix=input_pairprefix_dict["hic"]) if "hic" in input_filedict else [],
         ec_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ec.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
-                                                                                                          wildcards.genome_prefix),
+                                                                                                          wildcards.genome_prefix) if not parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"] else [],
         ovlp_reverse_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ovlp.reverse.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
-                                                                                                                              wildcards.genome_prefix),
+                                                                                                                              wildcards.genome_prefix) if not parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"] else [],
         ovlp_source_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ovlp.source.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
-                                                                                                                            wildcards.genome_prefix),
+                                                                                                                            wildcards.genome_prefix) if not parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"] else [],
         #coverage_estimator_report_filename=get_coverage_estimator_report_filename
         lambda_file=rules.extract_lambda_value.output.lambda_file
     output:
@@ -492,11 +492,11 @@ rule hifiasm_long_reads_only:
         ultralong_reads=lambda wildcards: get_ultralong_read_files(input_file_prefix_dict,
                                                                    stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set"]),
         ec_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ec.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
-                                                                                                          wildcards.genome_prefix),
+                                                                                                          wildcards.genome_prefix) if not parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"] else [],
         ovlp_reverse_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ovlp.reverse.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
-                                                                                                                              wildcards.genome_prefix),
+                                                                                                                              wildcards.genome_prefix) if not parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"] else [],
         ovlp_source_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ovlp.source.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],
-                                                                                                                            wildcards.genome_prefix),
+                                                                                                                            wildcards.genome_prefix) if not parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"] else [],
         lambda_file=rules.extract_lambda_value.output.lambda_file
     output:
         primary_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.p_ctg.gfa",

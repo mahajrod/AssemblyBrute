@@ -166,7 +166,8 @@ rule pretext_inject_tracks_per_chr:
         trf_1000k_100k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.trf.win1000000.step100000.track.bedgraph" if (not config["skip_trf"]) and (not config["skip_pretext_1000k_100k_tracks"]) else [],
         windowmasker_1000k_100k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.windowmasker.win1000000.step100000.track.bedgraph" if not config["skip_pretext_1000k_100k_tracks"] else [],
     output:
-        updated_map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^./]+}/alignment/{phasing_kmer_length, [^.]+}/per_chr/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.tracks.pretext"
+        updated_map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^./]+}/alignment/{phasing_kmer_length, [^.]+}/per_chr/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.tracks.pretext",
+        gap_track_tmp=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^./]+}/alignment/{phasing_kmer_length, [^.]+}/per_chr/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.gap.track"
     params:
         min_mapq=parameters["tool_options"]["pretextmap"]["mapq"],
         skip_trf=config["skip_trf"],
@@ -199,8 +200,11 @@ rule pretext_inject_tracks_per_chr:
 
     shell:
         " cp -f {input.map} {output.updated_map}; "
-        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.gap_track}  | "
-        "   PretextGraph -i {output.updated_map} -n gap > {log.gap} 2>&1; "
+        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.gap_track} > {output.gap_track_tmp}; "
+        " if  [[ -s {output.gap_track_tmp} ]]; "
+        "   then "
+        "   cat {output.gap_track_tmp} | PretextGraph -i {output.updated_map} -n gap > {log.gap} 2>&1; "
+        "   fi; "
         " if [[ -s {input.canonical_telomere_track} ]]; "
         "   then "
         "   workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.canonical_telomere_track} | "

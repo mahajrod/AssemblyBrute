@@ -138,10 +138,11 @@ elif len(candidate_agp_filename) == 1:
     chr_component_series = agp_df[agp_df["comment"] == "Painted"]["part_id/gap_length"]
 
     chr_component_series.to_csv(f"{candidate_output_prefix}.all_chr.components.ids",sep="\t",header=False,index=False)
+    print(chr_component_series)
     candidate_chr_id_list = list(chr_component_series.index)
     for scaffold_id in chr_component_series.index:
-        chr_component_series[
-            scaffold_id].to_csv(f"{candidate_output_prefix}.{scaffold_id}.components.ids",sep="\t",header=False,index=False)
+        print(chr_component_series[scaffold_id])
+        chr_component_series[scaffold_id].to_csv(f"{candidate_output_prefix}.{scaffold_id}.components.ids",sep="\t",header=False,index=False)
         chr_black_list_series = chr_component_series[~chr_component_series.isin(chr_component_series[scaffold_id])]
         chr_black_list_series.to_csv(f"{candidate_output_prefix}.{scaffold_id}.pretext.blacklist",sep="\t",header=False,index=False)
 else:

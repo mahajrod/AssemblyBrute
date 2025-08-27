@@ -143,7 +143,7 @@ elif len(candidate_agp_filename) == 1:
     for scaffold_id in chr_component_series.index:
         print(chr_component_series[scaffold_id])
         chr_component_series[[scaffold_id]].to_csv(f"{candidate_output_prefix}.{scaffold_id}.components.ids",sep="\t",header=False,index=False)
-        chr_black_list_series = chr_component_series[~chr_component_series.isin(chr_component_series[scaffold_id])]
+        chr_black_list_series = chr_component_series[~chr_component_series.isin(chr_component_series[[scaffold_id]])]
         chr_black_list_series.to_csv(f"{candidate_output_prefix}.{scaffold_id}.pretext.blacklist",sep="\t",header=False,index=False)
 else:
     candidate_agp_filename = None

@@ -221,7 +221,7 @@ rule pretext_inject_tracks_per_chr:
         "   workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.windowmasker_10k_1k_track} | "
         "       awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4 }}' | "
         "       PretextGraph -i {output.updated_map}  -n windowmasker_10k_1k.repeat_density > {log.windowmasker} 2>&1; "
-        "   if [[ '{params.skip_trf}' != 'True' ]]; "
+        "   if [[ '{params.skip_pretext_coverage_tracks}' != 'True' ]]; "
         "       then "
         "       workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.candidate_chr_black_list} -i {input.all_hifi_coverage_10k_1k_track} | "
         "           awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4}}' | "

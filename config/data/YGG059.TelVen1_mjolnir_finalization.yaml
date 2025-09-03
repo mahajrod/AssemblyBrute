@@ -109,14 +109,14 @@
         - "custom"
         #- "long"
         - "middle"
-        - "short"
-        - "very_short"
+        #- "short"
+        #- "very_short"
         #- "micro"
     "assembly_scaffold_sets":
         - "long"
         - "middle"
-        - "short"
-        - "very_short"
+        #- "short"
+        #- "very_short"
         #- "micro"
     "threshold_types":
         - "absolute"

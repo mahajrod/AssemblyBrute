@@ -245,6 +245,7 @@
 "skip_ragtag": False
 "skip_draft_qc_ragtag": False
 "skip_draft_qc_wga": False
+"skip_trf": True
 
 "create_hic_file_during_curation": False
 #------------ Options specific for cluster ------------

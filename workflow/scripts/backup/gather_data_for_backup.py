@@ -116,7 +116,6 @@ contamination_scan_dir_path = results_dir_path / "contamination_scan/kraken2/"
 if contamination_scan_dir_path.exists():
     for folder_path in contamination_scan_dir_path.glob("*"):
         scan_datatype = folder_path.name
-        print(scan_datatype)
         kraken2_report_path = contamination_scan_dir_path  / scan_datatype / "kraken2.nt.report"
 
         backup_scan_datatype_path = backup_dir_path  / "contamination_scan/kraken2/" / scan_datatype

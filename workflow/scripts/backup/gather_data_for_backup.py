@@ -51,7 +51,7 @@ for folder_path in kmer_dir_path.glob("*"):
     #shutil.copy(histo_file_path, backup_kmer_datatype_path)
     print(f"\tCopying {genomescope_dir_path}...")
     os.system(f"cp -r {genomescope_dir_path} {backup_kmer_datatype_path}")
-"""
+
 # backup contamination scan
 print("Backuping contamination scan data...")
 contamination_scan_dir_path = results_dir_path / "contamination_scan/kraken2/"
@@ -78,7 +78,7 @@ if error_correction_read_dir_path.exists():
 
 else:
     print("\tError correction read dir was not found, skipping...")
-
+"""
 # backup contig stage
 print("Backuping data from the contig stage...")
 

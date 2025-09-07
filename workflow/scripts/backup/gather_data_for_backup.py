@@ -95,7 +95,7 @@ def copy_stage_file(stage_name, results_path, backup_path, file_pattern_list):
             print(f"\tCopying {filename}...")
             os.system(f"cp -r {filename} {backup_stage_dir_path}")
 
-        for stage_option_dir_path in backup_stage_dir_path.glob("*"):
+        for stage_option_dir_path in stage_dir_path.glob("*"):
             if stage_option_dir_path.is_dir():
                 print(f"\tCopying files for {stage_option_dir_path}...")
 

@@ -100,12 +100,32 @@ if contig_dir_path.exists():
             backup_contig_option_dir_path = backup_contig_dir_path / contig_option
             os.makedirs(backup_contig_option_dir_path, exist_ok=True)
 
-            for pattern in "*.fasta", "*.gfa", "*.bed", "*.len", "*.cov", "*.lencov", "*.ids":
-                for file_path in contig_option_dir_path.glob(pattern):
-                    print(f"\t\t Copying {file_path}...")
-                    os.system(f"cp -r {file_path} {backup_contig_option_dir_path}")
-            #if (contig_option_dir_path / "assembly_qc/").exists:
+            for pattern in "*.fasta", "*.gfa", "*.bed", "*.len", "*.cov", "*.lencov", "*.ids", "telomere":
+                for filepath in contig_option_dir_path.glob(pattern):
+                    print(f"\t\t Copying {filepath}...")
+                    os.system(f"cp -r {filepath} {backup_contig_option_dir_path}")
 
+            assembly_qc_dir_path = contig_option_dir_path / "assembly_qc/"
+            if assembly_qc_dir_path.exists:
+                backup_assembly_qc_contig_option_dir_path = backup_contig_option_dir_path / "assembly_qc/"
+                os.makedirs(backup_assembly_qc_contig_option_dir_path, exist_ok=True)
+
+                for filepath in assembly_qc_dir_path.glob("*") :
+                    if filepath.name == "merqury":
+                        print("\t\tCopying merqury files...")
+                        backup_merqury_qc_path = backup_assembly_qc_contig_option_dir_path / "merqury/"
+                        os.makedirs(backup_merqury_qc_path, exist_ok=True)
+                        for merqury_filepath in filepath.glob("*"):
+                            if merqury_filepath.name[-6:] == ".fasta":
+                                continue
+                            if merqury_filepath.name[-6:] == ".meryl":
+                                continue
+                            print(f"\t\t\t Copying {merqury_filepath}...")
+                            os.system(f"cp -r {merqury_filepath} {backup_merqury_qc_path}")
+
+                    else:
+                        print(f"\t\t Copying {filepath}...")
+                        os.system(f"cp -r {filepath} {backup_assembly_qc_contig_option_dir_path}")
 
 
 else:

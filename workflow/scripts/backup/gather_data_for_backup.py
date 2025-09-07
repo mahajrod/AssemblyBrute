@@ -134,6 +134,7 @@ def copy_stage_file(stage_name, results_path, backup_path, file_pattern_list):
                     set_type_path = stage_option_dir_path / set_type
                     if set_type_path.exists:
                         print(f"\t\tCopying files for {set_type} dataset...")
+                        print(set_type_path)
                         backup_set_type_stage_option_dir_path = backup_stage_option_dir_path / set_type
                         os.makedirs(backup_set_type_stage_option_dir_path, exist_ok=True)
                         for pattern in "*.png", "*.svg", "per_chr", "*.pretext", ".rmdup.bam", ".rmdup.bam.csi", ".rmdup.bam.bai", ".assembly", ".agp", ".bed", ".syn":

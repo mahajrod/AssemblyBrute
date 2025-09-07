@@ -88,6 +88,7 @@ if contig_dir_path.exists():
     backup_contig_dir_path = backup_dir_path / "contig/"
     os.makedirs(backup_contig_dir_path, exist_ok=True)
     stat_file_path_list = list(backup_contig_dir_path.glob("*.stage_stats"))
+    print( stat_file_path_list)
     for filename in stat_file_path_list:
         print(f"\tCopying {filename}...")
         os.system(f"cp -r {filename} {backup_contig_dir_path}")

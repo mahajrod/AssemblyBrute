@@ -64,3 +64,17 @@ for folder_path in contamination_scan_dir_path.glob("*"):
     os.makedirs(backup_scan_datatype_path, exist_ok=True)
     print(f"\tCopying {kraken2_report_path}...")
     os.system(f"cp -r {kraken2_report_path} {backup_scan_datatype_path}")
+
+# backup error corrected hifi reads
+print("Backuping corrected hifi reads data...")
+
+error_correction_read_dir_path = results_dir_path / "error_correction/"
+if error_correction_read_dir_path.exists():
+    print("\tError correction read dir exists...")
+    hifi_read_dir_path = backup_dir_path / "data/hifi/"
+    os.makedirs(hifi_read_dir_path, exist_ok=True)
+    print(f"\tCopying {error_correction_read_dir_path }...")
+    os.system(f"cp -r {error_correction_read_dir_path } {hifi_read_dir_path}")
+
+else:
+    print("\tError correction read dir was not found, skipping...")

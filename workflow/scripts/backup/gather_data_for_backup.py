@@ -92,9 +92,17 @@ if contig_dir_path.exists():
         print(f"\tCopying {filename}...")
         os.system(f"cp -r {filename} {backup_contig_dir_path}")
 
-    for contig_option_dir in backup_contig_dir_path.glob("*"):
-        if contig_option_dir.is_dir():
-            print(contig_option_dir)
+    for contig_option_dir_path in backup_contig_dir_path.glob("*"):
+        if contig_option_dir_path.is_dir():
+            print(f"\t Copying file for {contig_option_dir_path}...")
+
+            contig_option = contig_option_dir_path.name
+            backup_contig_option_dir_path = backup_contig_dir_path / contig_option
+            os.makedirs(backup_contig_option_dir_path, exist_ok=True)
+
+            #if (contig_option_dir_path / "assembly_qc/").exists:
+
+
 
 else:
     print("\tContig dir was not found, skipping...")

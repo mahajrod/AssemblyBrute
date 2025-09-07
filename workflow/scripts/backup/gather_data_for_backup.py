@@ -78,3 +78,27 @@ if error_correction_read_dir_path.exists():
 
 else:
     print("\tError correction read dir was not found, skipping...")
+
+# backup contig stage
+print("Backuping data from the contig stage...")
+
+contig_dir_path = results_dir_path / "contig/"
+
+if contig_dir_path.exists():
+    backup_contig_dir_path = backup_dir_path / "contig/"
+    os.makedirs(backup_contig_dir_path, exist_ok=True)
+    stat_file_path_list = list(backup_contig_dir_path.glob("*.stage_stats"))
+    for filename in stat_file_path_list:
+        print(f"\tCopying {filename}...")
+        os.system(f"cp -r {filename} {backup_contig_dir_path}")
+
+    for contig_option_dir in backup_contig_dir_path.glob("*"):
+        if contig_option_dir.is_dir():
+            print(contig_option_dir)
+
+else:
+    print("\tContig dir was not found, skipping...")
+
+
+
+

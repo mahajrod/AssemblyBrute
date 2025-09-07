@@ -95,12 +95,16 @@ if contig_dir_path.exists():
 
     for contig_option_dir_path in contig_dir_path.glob("*"):
         if contig_option_dir_path.is_dir():
-            print(f"\t Copying file for {contig_option_dir_path}...")
+            print(f"\t Copying files for {contig_option_dir_path}...")
 
             contig_option = contig_option_dir_path.name
             backup_contig_option_dir_path = backup_contig_dir_path / contig_option
             os.makedirs(backup_contig_option_dir_path, exist_ok=True)
 
+            for pattern in "*.fasta", "*.gfa", "*.bed", "*.len", "*.cov", "*.lencov", "*.ids":
+                for file_path in contig_option_dir_path.glob(pattern):
+                    print(f"\t\t Copying {file_path}...")
+                    os.system(f"cp -r {file_path} {backup_contig_option_dir_path}")
             #if (contig_option_dir_path / "assembly_qc/").exists:
 
 

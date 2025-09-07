@@ -90,7 +90,7 @@ if contig_dir_path.exists():
     stat_file_path_list = list(contig_dir_path.glob("*.stage_stats"))
     for filename in stat_file_path_list:
         print(f"\tCopying {filename}...")
-        os.system(f"cp -r {filename} {backup_contig_dir_path}")
+        #os.system(f"cp -r {filename} {backup_contig_dir_path}")
 
     for contig_option_dir_path in contig_dir_path.glob("*"):
         if contig_option_dir_path.is_dir():
@@ -103,7 +103,7 @@ if contig_dir_path.exists():
             for pattern in "*.fasta", "*.gfa", "*.bed", "*.len", "*.cov", "*.lencov", "*.ids", "telomere":
                 for filepath in contig_option_dir_path.glob(pattern):
                     print(f"\t\tCopying {filepath}...")
-                    os.system(f"cp -r {filepath} {backup_contig_option_dir_path}")
+                    #os.system(f"cp -r {filepath} {backup_contig_option_dir_path}")
 
             assembly_qc_dir_path = contig_option_dir_path / "assembly_qc/"
             if assembly_qc_dir_path.exists:
@@ -111,6 +111,7 @@ if contig_dir_path.exists():
                 os.makedirs(backup_assembly_qc_contig_option_dir_path, exist_ok=True)
 
                 for filepath in assembly_qc_dir_path.glob("*") :
+                    print(filepath.name)
                     if filepath.name == "merqury":
                         print("\t\tCopying merqury files...")
                         backup_merqury_qc_path = backup_assembly_qc_contig_option_dir_path / "merqury/"
@@ -125,7 +126,7 @@ if contig_dir_path.exists():
 
                     else:
                         print(f"\t\tCopying {filepath}...")
-                        os.system(f"cp -r {filepath} {backup_assembly_qc_contig_option_dir_path}")
+                        #os.system(f"cp -r {filepath} {backup_assembly_qc_contig_option_dir_path}")
 
 
 else:

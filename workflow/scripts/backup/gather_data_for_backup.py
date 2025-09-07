@@ -58,9 +58,9 @@ contamination_scan_dir_path = results_dir_path / "contamination_scan/kraken2/"
 for folder_path in contamination_scan_dir_path.glob("*"):
     scan_datatype = folder_path.name
     print(scan_datatype)
-    kraken2_report_path = contamination_scan_dir_path / "contamination_scan/" / scan_datatype / "kraken2.nt.report"
+    kraken2_report_path = contamination_scan_dir_path  / scan_datatype / "kraken2.nt.report"
 
-    backup_scan_datatype_path = backup_dir_path / "contamination_scan/" / scan_datatype
+    backup_scan_datatype_path = backup_dir_path  / scan_datatype
     os.makedirs(backup_scan_datatype_path, exist_ok=True)
     print(f"\tCopying {kraken2_report_path}...")
     os.system(f"cp -r {kraken2_report_path} {backup_scan_datatype_path}")

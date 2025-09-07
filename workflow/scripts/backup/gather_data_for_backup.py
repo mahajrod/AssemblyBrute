@@ -36,6 +36,7 @@ os.system(f"cp -r {qc_dir_path} {backup_dir_path}")
 
 # backup kmer
 kmer_dir_path = results_dir_path / "kmer/"
+print("Backuping kmer data...")
 for folder_path in kmer_dir_path.glob("*"):
     kmer_datatype = folder_path.name
     filtered_kmer_dir_path = kmer_dir_path / kmer_datatype / "filtered/"
@@ -45,7 +46,6 @@ for folder_path in kmer_dir_path.glob("*"):
     backup_kmer_datatype_path = backup_dir_path / "kmer/" / kmer_datatype / "filtered/"
     os.makedirs(backup_kmer_datatype_path, exist_ok=True)
 
-    print("Backuping kmer data...")
     print(f"\tCopying {histo_file_path}...")
     os.system(f"cp -r {histo_file_path} {backup_kmer_datatype_path}")
     #shutil.copy(histo_file_path, backup_kmer_datatype_path)
@@ -53,7 +53,7 @@ for folder_path in kmer_dir_path.glob("*"):
     os.system(f"cp -r {genomescope_dir_path} {backup_kmer_datatype_path}")
 """
 # backup contamination scan
-
+print("Backuping contamination scan data...")
 contamination_scan_dir_path = results_dir_path / "contamination_scan/kraken2/"
 for folder_path in contamination_scan_dir_path.glob("*"):
     scan_datatype = folder_path.name

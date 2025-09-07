@@ -90,7 +90,7 @@ def copy_stage_file(stage_name, results_path, backup_path, file_pattern_list):
     if stage_dir_path.exists():
         backup_stage_dir_path = backup_path / stage_name
         os.makedirs(backup_stage_dir_path, exist_ok=True)
-        stat_file_path_list = list(backup_stage_dir_path.glob("*.stage_stats"))
+        stat_file_path_list = list(stage_dir_path.glob("*.stage_stats"))
         for filename in stat_file_path_list:
             print(f"\tCopying {filename}...")
             os.system(f"cp -r {filename} {backup_stage_dir_path}")

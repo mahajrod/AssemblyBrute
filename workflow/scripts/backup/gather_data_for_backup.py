@@ -14,7 +14,7 @@ def backup_stage_files(stage_name, results_path, backup_path, file_pattern_list)
         stat_file_path_list = list(stage_dir_path.glob("*.stage_stats"))
         for filename in stat_file_path_list:
             print(f"\tCopying {filename}...")
-            os.system(f"cp -r {filename} {backup_stage_dir_path}")
+            os.system(f"cp -rL {filename} {backup_stage_dir_path}")
 
         for stage_option_dir_path in stage_dir_path.glob("*"):
             if stage_option_dir_path.is_dir():
@@ -27,7 +27,7 @@ def backup_stage_files(stage_name, results_path, backup_path, file_pattern_list)
                 for pattern in file_pattern_list:
                     for filepath in stage_option_dir_path.glob(pattern):
                         print(f"\t\tCopying {filepath}...")
-                        os.system(f"cp -r {filepath} {backup_stage_option_dir_path}")
+                        os.system(f"cp -rL {filepath} {backup_stage_option_dir_path}")
 
                 assembly_qc_dir_path = stage_option_dir_path / "assembly_qc/"
                 if assembly_qc_dir_path.exists:
@@ -46,11 +46,11 @@ def backup_stage_files(stage_name, results_path, backup_path, file_pattern_list)
                                 if merqury_filepath.name[-6:] == ".meryl":
                                     continue
                                 print(f"\t\t\tCopying {merqury_filepath}...")
-                                os.system(f"cp -r {merqury_filepath} {backup_merqury_qc_path}")
+                                os.system(f"cp -rL {merqury_filepath} {backup_merqury_qc_path}")
 
                         else:
                             print(f"\t\tCopying {filepath}...")
-                            os.system(f"cp -r {filepath} {backup_assembly_qc_stage_option_dir_path}")
+                            os.system(f"cp -rL {filepath} {backup_assembly_qc_stage_option_dir_path}")
                 for set_type in "reordered", "combined":
                     set_type_path = stage_option_dir_path / set_type
                     if set_type_path.exists:
@@ -60,7 +60,7 @@ def backup_stage_files(stage_name, results_path, backup_path, file_pattern_list)
                         for pattern in "*.png", "*.svg", "per_chr", "*.pretext", ".rmdup.bam", ".rmdup.bam.csi", ".rmdup.bam.bai", ".assembly", ".agp", ".bed", ".syn":
                             for filepath in (set_type_path / "alignment/NA/").glob(pattern):
                                 print(f"\t\t\tCopying {filepath}...")
-                                os.system(f"cp -r {filepath} {backup_set_type_stage_option_dir_path}")
+                                os.system(f"cp -rL {filepath} {backup_set_type_stage_option_dir_path}")
     else:
         print(f"\t{stage_name} dir was not found, skipping...")
 
@@ -84,7 +84,7 @@ print("Backuping QC data...")
 if qc_dir_path.exists():
     print(f"\tCopying {qc_dir_path}...")
 
-    os.system(f"cp -r {qc_dir_path} {backup_dir_path}")
+    os.system(f"cp -rL {qc_dir_path} {backup_dir_path}")
 else:
     print("\tQC data not found, skipping...")
 
@@ -103,13 +103,13 @@ if kmer_dir_path.exists():
         if histo_file_path:
             histo_file_path = histo_file_path[0]
             print(f"\tCopying {histo_file_path}...")
-            os.system(f"cp -r {histo_file_path} {backup_kmer_datatype_path}")
+            os.system(f"cp -rL {histo_file_path} {backup_kmer_datatype_path}")
 
         genomescope_dir_path = list(filtered_kmer_dir_path.glob("genomescope"))
         if genomescope_dir_path:
             genomescope_dir_path = genomescope_dir_path[0]
             print(f"\tCopying {genomescope_dir_path}...")
-            os.system(f"cp -r {genomescope_dir_path} {backup_kmer_datatype_path}")
+            os.system(f"cp -rL {genomescope_dir_path} {backup_kmer_datatype_path}")
 else:
     print("\tKmer data not found, skipping...")
 
@@ -124,7 +124,7 @@ if contamination_scan_dir_path.exists():
         backup_scan_datatype_path = backup_dir_path  / "contamination_scan/kraken2/" / scan_datatype
         os.makedirs(backup_scan_datatype_path, exist_ok=True)
         print(f"\tCopying {kraken2_report_path}...")
-        os.system(f"cp -r {kraken2_report_path} {backup_scan_datatype_path}")
+        os.system(f"cp -rL {kraken2_report_path} {backup_scan_datatype_path}")
 else:
     print("\tContamination scan data not found, skipping...")
 # backup error corrected hifi reads
@@ -135,7 +135,7 @@ if error_correction_read_dir_path.exists():
     hifi_read_dir_path = backup_dir_path / "data/hifi/"
     os.makedirs(hifi_read_dir_path, exist_ok=True)
     print(f"\tCopying {error_correction_read_dir_path }...")
-    os.system(f"cp -r {error_correction_read_dir_path } {hifi_read_dir_path}")
+    os.system(f"cp -rL {error_correction_read_dir_path } {hifi_read_dir_path}")
 
 else:
     print("\tError correction read dir was not found, skipping...")

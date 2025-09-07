@@ -140,8 +140,14 @@ else:
 
 backup_stage_files("contig", results_dir_path, backup_dir_path,
                 ["*.fasta", ".fai", "*.gfa", "*.bed", "*.len", "*.cov", "*.lencov", "*.ids", "telomere"])
-
+backup_stage_files("purge_dups", results_dir_path, backup_dir_path,
+                ["*.fasta", ".fai", "*.bed", "*.len", "*.assembly", "*.agp", "*.ids", "telomere",
+                              "*.png", "*.svg"])
 backup_stage_files("hic_scaffolding", results_dir_path, backup_dir_path,
                 ["*.fasta", ".fai", "*.bed", "*.len", "*.assembly", "*.agp", "*.ids", "*.hic", "telomere",
                               "*.tab.gz", "*.png", "*.svg"])
+for stage in "draft_qc", "gap_closing", "ref_scaffolding":
+    backup_stage_files(stage, results_dir_path, backup_dir_path,
+                    ["*.fasta", ".fai", "*.bed", "*.len", "*.assembly", "*.agp", "*.ids", "telomere",
+                                  "*.png", "*.svg", "*.tab.gz"])
 

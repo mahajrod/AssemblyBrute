@@ -130,8 +130,16 @@ def copy_stage_file(stage_name, results_path, backup_path, file_pattern_list):
                         else:
                             print(f"\t\tCopying {filepath}...")
                             os.system(f"cp -r {filepath} {backup_assembly_qc_stage_option_dir_path}")
-
-
+                for set_type in "reordered", "combined":
+                    set_type_path = stage_option_dir_path / set_type
+                    if set_type_path.exists:
+                        print(f"\t\tCopying files for {set_type} dataset...")
+                        backup_set_type_stage_option_dir_path = backup_stage_option_dir_path / set_type
+                        os.makedirs(backup_set_type_stage_option_dir_path, exist_ok=True)
+                        for pattern in "*.png", "*.svg", "per_chr", "*.pretext", ".rmdup.bam", ".rmdup.bam.csi", ".rmdup.bam.bai", ".assembly", ".agp", ".bed", ".syn":
+                            for filepath in (set_type_path / "alignment/NA/").glob(pattern):
+                                print(f"\t\t\tCopying {filepath}...")
+                                os.system(f"cp -r {filepath} {backup_set_type_stage_option_dir_path}")
     else:
         print(f"\t{stage_name} dir was not found, skipping...")
 
@@ -139,5 +147,6 @@ copy_stage_file("contig", results_dir_path, backup_dir_path,
                 ["*.fasta", "*.gfa", "*.bed", "*.len", "*.cov", "*.lencov", "*.ids", "telomere"])
 
 copy_stage_file("hic_scaffolding", results_dir_path, backup_dir_path,
-                ["*.fasta", "*.bed", "*.len", "*.assembly", "*.agp", "*.ids", ".hic", "telomere"])
+                ["*.fasta", "*.bed", "*.len", "*.assembly", "*.agp", "*.ids", "*.hic", "telomere",
+                              "*.tab.gz", "*.png", "*.svg"])
 

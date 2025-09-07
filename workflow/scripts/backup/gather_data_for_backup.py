@@ -95,16 +95,19 @@ if kmer_dir_path.exists():
     for folder_path in kmer_dir_path.glob("*"):
         kmer_datatype = folder_path.name
         filtered_kmer_dir_path = kmer_dir_path / kmer_datatype / "filtered/"
-        histo_file_path = list(filtered_kmer_dir_path.glob("*.histo"))[0]
-        genomescope_dir_path = list(filtered_kmer_dir_path.glob("genomescope"))[0]
 
         backup_kmer_datatype_path = backup_dir_path / "kmer/" / kmer_datatype / "filtered/"
         os.makedirs(backup_kmer_datatype_path, exist_ok=True)
-        if histo_file_path.exists:
+
+        histo_file_path = list(filtered_kmer_dir_path.glob("*.histo"))
+        if histo_file_path:
+            histo_file_path = histo_file_path[0]
             print(f"\tCopying {histo_file_path}...")
             os.system(f"cp -r {histo_file_path} {backup_kmer_datatype_path}")
 
-        if genomescope_dir_path.exists:
+        genomescope_dir_path = list(filtered_kmer_dir_path.glob("genomescope"))
+        if genomescope_dir_path:
+            genomescope_dir_path = genomescope_dir_path[0]
             print(f"\tCopying {genomescope_dir_path}...")
             os.system(f"cp -r {genomescope_dir_path} {backup_kmer_datatype_path}")
 else:

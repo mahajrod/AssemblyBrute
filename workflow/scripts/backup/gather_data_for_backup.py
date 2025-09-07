@@ -55,7 +55,6 @@ def backup_stage_files(stage_name, results_path, backup_path, file_pattern_list)
                     set_type_path = stage_option_dir_path / set_type
                     if set_type_path.exists:
                         print(f"\t\tCopying files for {set_type} dataset...")
-                        print(set_type_path)
                         backup_set_type_stage_option_dir_path = backup_stage_option_dir_path / set_type
                         os.makedirs(backup_set_type_stage_option_dir_path, exist_ok=True)
                         for pattern in "*.png", "*.svg", "per_chr", "*.pretext", ".rmdup.bam", ".rmdup.bam.csi", ".rmdup.bam.bai", ".assembly", ".agp", ".bed", ".syn":
@@ -101,12 +100,13 @@ if kmer_dir_path.exists():
 
         backup_kmer_datatype_path = backup_dir_path / "kmer/" / kmer_datatype / "filtered/"
         os.makedirs(backup_kmer_datatype_path, exist_ok=True)
+        if histo_file_path.exists:
+            print(f"\tCopying {histo_file_path}...")
+            os.system(f"cp -r {histo_file_path} {backup_kmer_datatype_path}")
 
-        print(f"\tCopying {histo_file_path}...")
-        os.system(f"cp -r {histo_file_path} {backup_kmer_datatype_path}")
-        #shutil.copy(histo_file_path, backup_kmer_datatype_path)
-        print(f"\tCopying {genomescope_dir_path}...")
-        os.system(f"cp -r {genomescope_dir_path} {backup_kmer_datatype_path}")
+        if genomescope_dir_path.exists:
+            print(f"\tCopying {genomescope_dir_path}...")
+            os.system(f"cp -r {genomescope_dir_path} {backup_kmer_datatype_path}")
 else:
     print("\tKmer data not found, skipping...")
 

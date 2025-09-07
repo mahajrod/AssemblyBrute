@@ -94,7 +94,7 @@ if contig_dir_path.exists():
 
     for contig_option_dir_path in contig_dir_path.glob("*"):
         if contig_option_dir_path.is_dir():
-            print(f"\t Copying files for {contig_option_dir_path}...")
+            print(f"\tCopying files for {contig_option_dir_path}...")
 
             contig_option = contig_option_dir_path.name
             backup_contig_option_dir_path = backup_contig_dir_path / contig_option
@@ -102,7 +102,7 @@ if contig_dir_path.exists():
 
             for pattern in "*.fasta", "*.gfa", "*.bed", "*.len", "*.cov", "*.lencov", "*.ids", "telomere":
                 for filepath in contig_option_dir_path.glob(pattern):
-                    print(f"\t\t Copying {filepath}...")
+                    print(f"\t\tCopying {filepath}...")
                     os.system(f"cp -r {filepath} {backup_contig_option_dir_path}")
 
             assembly_qc_dir_path = contig_option_dir_path / "assembly_qc/"
@@ -120,11 +120,11 @@ if contig_dir_path.exists():
                                 continue
                             if merqury_filepath.name[-6:] == ".meryl":
                                 continue
-                            print(f"\t\t\t Copying {merqury_filepath}...")
+                            print(f"\t\t\tCopying {merqury_filepath}...")
                             os.system(f"cp -r {merqury_filepath} {backup_merqury_qc_path}")
 
                     else:
-                        print(f"\t\t Copying {filepath}...")
+                        print(f"\t\tCopying {filepath}...")
                         os.system(f"cp -r {filepath} {backup_assembly_qc_contig_option_dir_path}")
 
 

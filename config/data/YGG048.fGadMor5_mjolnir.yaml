@@ -155,6 +155,7 @@
 
 "species_name": "Gadus morhua"
 "tax_id": 8049 # # necessary for contamination scan via FCS
+"bird_genome": False
 
 "database_set":
     "kraken2":

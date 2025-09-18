@@ -123,7 +123,8 @@
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
     "purge_dups":
-        - "default"
+        #- "default"
+        - "skipped"
     "salsa2":
         - "phased_reads"
         #- "unphased_reads"

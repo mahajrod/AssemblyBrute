@@ -43,8 +43,9 @@ rule fcs: #
         " FASTA_DIR=`dirname {input.fasta}`; "
         " FASTA_DIR=`realpath ${{FASTA_DIR}}`; "
         " FASTA_BASENAME=`basename {input.fasta}`; "
+        " NUM_CORES={threads}; "
         " TMPDIR=${{TMP_DIR}} SINGULARITYENV_TMPDIR=${{SINGULARITYENV_TMP_DIR}} SINGULARITYENV_SQLITE_TMPDIR=${{SINGULARITYENV_SQLITE_TMP_DIR}} "
-        "   singularity exec --pid --contain --bind ${{FCS_DB_DIR}}:/app/db/gxdb --bind ${{FASTA_DIR}}:/sample-volume/ "
+        "   singularity exec --pid --bind ${{FCS_DB_DIR}}:/app/db/gxdb --bind ${{FASTA_DIR}}:/sample-volume/ "
         "      --bind ${{OUT_DIR}}:/output-volume/ {input.image} python3 /app/bin/run_gx --fasta ${{FASTA_BASENAME}} "
         "      --out-dir /output-volume/ --tax-id {params.tax_id} --gx-db /app/db/gxdb/gxdb > {log.std} 2>&1 || : ; "
         " REPORT={output.taxonomy}; "
@@ -55,7 +56,7 @@ rule fcs: #
         " rm -rf  ${{TMP_DIR}} ${{SINGULARITYENV_TMP_DIR}} ${{SINGULARITYENV_SQLITE_TMP_DIR}} >> {log.post} 2>&1; "
 
 """
-        " NUM_CORES={threads}; "
+        
         " export FCS_DEFAULT_IMAGE={input.image}; "
         " TMPDIR=${{TMP_DIR}} SINGULARITYENV_TMPDIR=${{SINGULARITYENV_TMP_DIR}} SINGULARITYENV_SQLITE_TMPDIR=${{SINGULARITYENV_SQLITE_TMP_DIR}} "
         " workflow/external_tools/fcs-gx/fcs.py  screen genome --fasta {input.fasta} --out-dir `dirname {output.taxonomy}` --tax-id {params.tax_id} --gx-db {input.db} > {log.std} 2>&1 || : ; "

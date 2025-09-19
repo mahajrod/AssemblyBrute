@@ -1976,6 +1976,10 @@ include: "workflow/rules/Alignment/Merge.smk"
 include: "workflow/rules/Alignment/Stats.smk"
 
 if "hic" in data_types:
+    #if (sum(list(pd.Series(["hic_scaffolding",
+    #                    "gap_closing",
+    #                    "draft_qc"]).isin(config["stage_list"]))) > 0) :
+    include: "workflow/rules/Alignment/Pretext.smk"
     if (sum(list(pd.Series(["hic_scaffolding",
                         "gap_closing",
                         "draft_qc"]).isin(config["stage_list"]))) > 0) :
@@ -1989,11 +1993,6 @@ if "hic" in data_types:
             print("Mapping pipeline: Pairtools")
             include: "workflow/rules/Alignment/Pairtools.smk"
         include: "workflow/rules/Alignment/PostAlignment.smk"
-
-    if (sum(list(pd.Series(["hic_scaffolding",
-                        "gap_closing",
-                        "draft_qc"]).isin(config["stage_list"]))) > 0) :
-        include: "workflow/rules/Alignment/Pretext.smk"
 
     if "hic_scaffolding" in config["stage_list"]:
         include: "workflow/rules/HiC/YAHS.smk"

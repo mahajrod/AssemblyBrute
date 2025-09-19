@@ -33,7 +33,7 @@ rule fcs: #
 
     shell: # as report(summary) might be modified manually, original version is backuped with .original extension,# || true was added as workaround to handle singularity issue with removal of rootfs after cmd
         " OUT_DIR=`dirname {output.taxonomy}`; "
-        " OUT_DIR=`realpath -s ${{OUTDIR}}`; "
+        " OUT_DIR=`realpath -s ${{OUT_DIR}}`; "
         " TMP_DIR=${{OUT_DIR}}'/tmp_{wildcards.database}/'; "
         " SINGULARITYENV_TMP_DIR=${{OUT_DIR}}'/singularity_{wildcards.database}/'; "
         " SINGULARITYENV_SQLITE_TMP_DIR=${{OUT_DIR}}'/singularity_sqlite_{wildcards.database}/'; "

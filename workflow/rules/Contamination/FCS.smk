@@ -46,7 +46,7 @@ rule fcs: #
         " TMPDIR=${{TMP_DIR}} SINGULARITYENV_TMPDIR=${{SINGULARITYENV_TMP_DIR}} SINGULARITYENV_SQLITE_TMPDIR=${{SINGULARITYENV_SQLITE_TMP_DIR}} "
         "   singularity exec --pid --contain --bind ${{FCS_DB_DIR}}:/app/db/gxdb --bind ${{FASTA_DIR}}:/sample-volume/ "
         "      --bind ${{OUT_DIR}}:/output-volume/ {input.image} python3 /app/bin/run_gx --fasta ${{FASTA_BASENAME}} "
-        "      --out-dir /output-volume/ --tax-id {params.tax_id} --gx-db /app/db/gxdb/gxdb"
+        "      --out-dir /output-volume/ --tax-id {params.tax_id} --gx-db /app/db/gxdb/gxdb > {log.std} 2>&1 || : ; "
         " REPORT={output.taxonomy}; "
         " SUMMARY={output.summary}; "
         " cp ${{REPORT%.{wildcards.database}.taxonomy}}.{params.tax_id}.{wildcards.database}_report.txt ${{SUMMARY}}.original > {log.post} 2>&1; "

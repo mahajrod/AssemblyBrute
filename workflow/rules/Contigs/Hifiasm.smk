@@ -1,7 +1,7 @@
 #ruleorder: hifiasm_hic > hifiasm_hifi
 #ruleorder: hifiasm_hic > hifiasm_hic_tetra
 localrules: extract_lambda_value #get_lowcoverage_contig_ids,
-ruleorder: hifiasm_hic_4p > hifiasm_hic
+#ruleorder: hifiasm_hic_4p > hifiasm_hic
 
 def get_main_read_filelist_for_correction(wildcards):
     read_filelist = []
@@ -711,7 +711,7 @@ rule filter_contigs_by_coverage:
          " extract_sequences_by_ids.py -i {input.unfiltered_fasta} -d {input.low_cov_ids} -r "
          " -o {output.filtered_fasta} > {log.std} 2>&1; "
 """
-
+"""
 rule hifiasm_hic_4p: # TODO: add support for polyploid assemblies
     priority: 1000
     input:
@@ -815,3 +815,4 @@ rule hifiasm_hic_4p: # TODO: add support for polyploid assemblies
          " ln -sf `basename {output.hap4_contig_graph}` {output.hap4_alias} 1>>{log.std} 2>&1; "
          " ln -sf `basename {output.alt_contig_graph}` {output.alt_alias} 1>>{log.std} 2>&1; "
          " sleep 60;"
+"""

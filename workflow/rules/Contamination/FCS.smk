@@ -7,8 +7,8 @@ rule fcs: #
         db=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["path"],
         image=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["image_path"],
     output:
-        taxonomy=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype, [^.]+}/fcs/{database}/{genome_prefix}.contig.{haplotype}.lenfiltered.{database}.taxonomy",
-        summary=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype, [^.]+}/fcs/{database}/{genome_prefix}.contig.{haplotype}.lenfiltered.{database}.summary"
+        taxonomy=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype, [^.]+}/fcs/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.taxonomy",
+        summary=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype, [^.]+}/fcs/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.summary"
         #report=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.contig.{haplotype}.{tax_id}.taxonomy.txt",
         #summary=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.contig.{haplotype}.{tax_id}.fcs_gx_report.txt"
     params:
@@ -68,7 +68,7 @@ rule remove_fcs_contaminants: #
     input:
         fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.unfiltered.fasta",
         image=lambda wildcards: config["allowed_databases"]["fcs"][config["final_fcs_db"]]["image_path"],
-        fcs_report=(out_dir_path / ("contig/{parameters}/contamination_scan/{haplotype}/fcs/%s/{genome_prefix}.contig.{haplotype}.lenfiltered.%s.summary" % (config["final_fcs_db"], config["final_fcs_db"]))) if not config["skip_fcs"] else []
+        fcs_report=(out_dir_path / ("contig/{parameters}/contamination_scan/{haplotype}/fcs/%s/{genome_prefix}.contig.{haplotype}.unfiltered.%s.summary" % (config["final_fcs_db"], config["final_fcs_db"]))) if not config["skip_fcs"] else []
     output:
         fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype, [^.]+}.fasta",
         contaminant_fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype, [^.]+}.contaminant.fasta"
@@ -122,8 +122,8 @@ rule fcs_adaptor: #
         #db=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["path"],
         image=lambda wildcards: config["allowed_databases"]["fcs_adaptor"][wildcards.database]["image_path"],
     output:
-        report=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.contig.{haplotype}.lenfiltered.{database}.report",
-        report_jsonl=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.contig.{haplotype}.lenfiltered.{database}.report.jsonl",
+        report=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.report",
+        report_jsonl=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.report.jsonl",
         #summary=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.contig.{haplotype}.{database}.summary"
         #report=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.contig.{haplotype}.{tax_id}.taxonomy.txt",
         #summary=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.contig.{haplotype}.{tax_id}.fcs_gx_report.txt"

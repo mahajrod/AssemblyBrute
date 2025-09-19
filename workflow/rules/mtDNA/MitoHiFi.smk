@@ -45,15 +45,15 @@ rule mitohifi:
         " cp {input.mito_ref_fasta}` {output.out_dir}/reference.mtdna.fasta > {log.cp} 2>&1; "
         " cp {input.mito_ref_gb}` {output.out_dir}/reference.mtdna.gb >> {log.cp} 2>&1;; "
         " cd {output.out_dir} > {log.cd} 2>&1; "
-        " singularity run --bind ${{OUT_DIR}}:${{OUT_DIR}} "
+        " singularity run --pid --contain --pid --contain --bind ${{OUT_DIR}}:${{OUT_DIR}} "
         " {params.sif} mitohifi.py -r `basename {output.temp_merged_reads}`"
         " -f reference.mtdna.fasta -g reference.mtdna.gb -t {threads} "
         " -a {params.kingdom} -covMap {params.min_mapping_quality} -o {params.genetic_code} > {log.mitohifi} 2>&1; "
 
 
 REF_MTDNA_DIR="/maps/projects/tomg/people/xsg178/yggdrasil/mito/eudromia_elegans/assembly/"
-    sbatch -n 30 -t "02:00:00" --mem 15000 --nodes 1 --wrap="singularity run --bind ${REF_MTDNA_DIR}:${REF_MTDNA_DIR} docker://ghcr.io/marcelauliano/mitohifi:master mitohifi.py -c bEudEle1.sanger.hap1.fasta -f ${REF_MTDNA_DIR}/eudromia_elegans.mtDNA.fasta  -g ${REF_MTDNA_DIR}/eudromia_elegans.mtDNA.gb  -t 30 -a animal -covMap 20 -o 2 "
+    sbatch -n 30 -t "02:00:00" --mem 15000 --nodes 1 --wrap="singularity run --pid --contain --bind ${REF_MTDNA_DIR}:${REF_MTDNA_DIR} docker://ghcr.io/marcelauliano/mitohifi:master mitohifi.py -c bEudEle1.sanger.hap1.fasta -f ${REF_MTDNA_DIR}/eudromia_elegans.mtDNA.fasta  -g ${REF_MTDNA_DIR}/eudromia_elegans.mtDNA.gb  -t 30 -a animal -covMap 20 -o 2 "
 
     FASTQ_DIR=/projects/tomg/people/xsg178/yggdrasil/assembly/eudromia_elegans/input/hifi/fastq/
     REF_MTDNA_DIR="/maps/projects/tomg/people/xsg178/yggdrasil/mito/eudromia_elegans/assembly/"
-    sbatch -n 30 -t "02:00:00" --mem 45000 --nodes 1 --wrap="singularity run --bind ${REF_MTDNA_DIR}:${REF_MTDNA_DIR} --bind ${FASTQ_DIR}:${FASTQ_DIR} docker://ghcr.io/marcelauliano/mitohifi:master mitohifi.py -r ${FASTQ_DIR}/*.fastq.gz -f ${REF_MTDNA_DIR}/NC_002772.2.fasta  -g ${REF_MTDNA_DIR}/NC_002772.2.gb  -t 30 -a animal -covMap 20 -o 2 "
+    sbatch -n 30 -t "02:00:00" --mem 45000 --nodes 1 --wrap="singularity run --pid --contain --bind ${REF_MTDNA_DIR}:${REF_MTDNA_DIR} --bind ${FASTQ_DIR}:${FASTQ_DIR} docker://ghcr.io/marcelauliano/mitohifi:master mitohifi.py -r ${FASTQ_DIR}/*.fastq.gz -f ${REF_MTDNA_DIR}/NC_002772.2.fasta  -g ${REF_MTDNA_DIR}/NC_002772.2.gb  -t 30 -a animal -covMap 20 -o 2 "

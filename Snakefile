@@ -989,7 +989,7 @@ if "contig" in config["stage_list"]:
                                       parameters=[parameters_label],
                                       genome_prefix=[config["genome_prefix"], ],
                                       haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
-                                mapq=parameters["tool_options"]["yahs_juicer_pre"]["mapq"])
+                                mapq=parameters["tool_options"]["yahs_juicer_pre"]["mapq"]) if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else []
                                for parameters_label in parameters_list] if not config["skip_hic_file"] else []]
 
 if "purge_dups" in config["stage_list"]:

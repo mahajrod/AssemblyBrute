@@ -272,11 +272,11 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         #coverage_estimator_report_filename=get_coverage_estimator_report_filename
         lambda_file=rules.extract_lambda_value.output.lambda_file
     output:
-        primary_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap1.p_ctg.gfa",
-        alternative_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap2.p_ctg.gfa",
+        hap1_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap1.p_ctg.gfa",
+        hap2_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap2.p_ctg.gfa",
         alt_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.a_ctg.gfa",
-        primary_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap1.unfiltered.gfa",
-        alternative_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap2.unfiltered.gfa",
+        hap1_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap1.unfiltered.gfa",
+        hap2_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap2.unfiltered.gfa",
         alt_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.alt.unfiltered.gfa",
 
     params:
@@ -326,7 +326,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
     threads:
         parameters["threads"]["hifiasm"]
     shell:
-         " OUTPUT_PREFIX={output.primary_alias}; "
+         " OUTPUT_PREFIX={output.hap1_alias}; "
          " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.hap1.unfiltered.gfa}}; "
          " OUT_DIR=`dirname ${{OUTPUT_PREFIX}}`; "
          " if [[ '{params.ont_mode}' != 'True' ]]; "
@@ -345,8 +345,8 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
          " {params.hic_forward} {params.hic_reverse} {params.ultralong_reads} {params.ul_cut} {params.dual_scaf} "
          " {params.telomere_motif} "
          " {input.main_reads}  1>{log.std} 2>&1; "         
-         " ln -sf `basename {output.primary_contig_graph}` {output.primary_alias} 1>>{log.std} 2>&1; "
-         " ln -sf `basename {output.alternative_contig_graph}` {output.alternative_alias} 1>>{log.std} 2>&1; "
+         " ln -sf `basename {output.hap1_contig_graph}` {output.hap1_alias} 1>>{log.std} 2>&1; "
+         " ln -sf `basename {output.hap2_contig_graph}` {output.hap2_alias} 1>>{log.std} 2>&1; "
          " ln -sf `basename {output.alt_contig_graph}` {output.alt_alias} 1>>{log.std} 2>&1; "
          " sleep 60;"
          #" COV_UPPER_BOUNDARY=`awk 'NR==2 {{printf \"%.0f\", {params.cov_multiplicator} * $2}}' {input.genomescope_report}`; "
@@ -732,13 +732,13 @@ rule hifiasm_hic_4p: # TODO: add support for polyploid assemblies
         #coverage_estimator_report_filename=get_coverage_estimator_report_filename
         lambda_file=rules.extract_lambda_value.output.lambda_file
     output:
-        primary_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap1.p_ctg.gfa",
-        alternative_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap2.p_ctg.gfa",
+        hap1_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap1.p_ctg.gfa",
+        hap2_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap2.p_ctg.gfa",
         hap3_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap3.p_ctg.gfa",
         hap4_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap4.p_ctg.gfa",
         alt_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.a_ctg.gfa",
-        primary_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap1.unfiltered.gfa",
-        alternative_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap2.unfiltered.gfa",
+        hap1_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap1.unfiltered.gfa",
+        hap2_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap2.unfiltered.gfa",
         hap3_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap3.unfiltered.gfa",
         hap4_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap4.unfiltered.gfa",
         alt_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.alt.unfiltered.gfa",
@@ -790,7 +790,7 @@ rule hifiasm_hic_4p: # TODO: add support for polyploid assemblies
     threads:
         parameters["threads"]["hifiasm"]
     shell:
-         " OUTPUT_PREFIX={output.primary_alias}; "
+         " OUTPUT_PREFIX={output.hap1_alias}; "
          " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.hap1.unfiltered.gfa}}; "
          " OUT_DIR=`dirname ${{OUTPUT_PREFIX}}`; "
          " if [[ '{params.ont_mode}' != 'True' ]]; "
@@ -809,8 +809,8 @@ rule hifiasm_hic_4p: # TODO: add support for polyploid assemblies
          " {params.hic_forward} {params.hic_reverse} {params.ultralong_reads} {params.ul_cut} {params.dual_scaf} "
          " {params.telomere_motif} "
          " {input.main_reads}  1>{log.std} 2>&1; "         
-         " ln -sf `basename {output.primary_contig_graph}` {output.primary_alias} 1>>{log.std} 2>&1; "
-         " ln -sf `basename {output.alternative_contig_graph}` {output.alternative_alias} 1>>{log.std} 2>&1; "
+         " ln -sf `basename {output.hap1_contig_graph}` {output.hap1_alias} 1>>{log.std} 2>&1; "
+         " ln -sf `basename {output.hap2_contig_graph}` {output.hap2_alias} 1>>{log.std} 2>&1; "
          " ln -sf `basename {output.hap3_contig_graph}` {output.hap3_alias} 1>>{log.std} 2>&1; "
          " ln -sf `basename {output.hap4_contig_graph}` {output.hap4_alias} 1>>{log.std} 2>&1; "
          " ln -sf `basename {output.alt_contig_graph}` {output.alt_alias} 1>>{log.std} 2>&1; "

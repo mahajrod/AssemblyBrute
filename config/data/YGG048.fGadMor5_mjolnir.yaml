@@ -120,6 +120,7 @@
          #- "l2primary"
          #- "l3primary"
          - "l1primary_no_hic"
+         - "l1primary_4p"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
     "purge_dups":

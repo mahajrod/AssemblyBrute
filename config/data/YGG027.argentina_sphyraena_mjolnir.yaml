@@ -226,6 +226,7 @@
 "skip_hic_file": False
 "skip_krater": False
 "skip_ragtag": False
+"skip_combined_contig_hic": True
 
 "create_hic_file_during_curation": False
 #------------ Options specific for cluster ------------

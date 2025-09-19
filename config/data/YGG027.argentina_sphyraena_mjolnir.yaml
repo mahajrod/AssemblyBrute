@@ -113,16 +113,16 @@
 
 "coretool_option_sets":
     "hifiasm":
-         - "l0primary"
+         #- "l0primary"
          - "l1primary"
-         - "l2primary"
+         #- "l2primary"
          - "l3primary"
          #- "l1primary_4p"
-         #- "l1primary_no_hic"
+         - "l1primary_no_hic"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
     "purge_dups":
-        - "default"
+        #- "default"
         - "skipped"
     "salsa2":
         - "phased_reads"
@@ -136,38 +136,8 @@
     "curation":
         - "default"
 
-"other_tool_option_sets":
-    "cutadapt":                 "default"   # Allowed: default
-    "porechop_abi":             "default"   # Allowed: default
-    "chopper":                  "default"   # Allowed: default
-    "fastqc":                   "default"   # Allowed: default
-    "mosdepth":                 "default"   # Allowed: default
-    "jellyfish":                "default"   # Allowed: default
-    "meryl":                    "default"   # Allowed: default
-    "smudgeplot":               "default"   # Allowed: default
-    "telo_finder":              "default"   # Allowed: default
-    "quast":                    "default"   # Allowed: default
-    "minimap2":                 "default"   # Allowed: default
-    #"curation":                 "default"   # Allowed: default
-    "two_read_bam_combiner":    "default"   # Allowed: default
-    "pretextmap":               "default"   # Allowed: default
-    "pretextsnapshot":          "default"   # Allowed: default
-    "gcp":                      "default"   # Allowed: default
-    "kat":                      "default"   # Allowed: default
-    "juicer_tools_qc":          "default"   # Allowed: default
-    "juicer_tools_pre":         "default"   # Allowed: default
+"other_tool_option_sets": # Options set here overwrite settings from "secondary_tool_config_file". Check it for configurable option list
     "mapping_pipeline":         "arima"  # Allowed: arima, bwa_only, pairtools.
-    "trf":                      "default"
-    "wga":                      "default"
-    "select_scaffolds":         "default"
-    "deepvariant":              "default"   # Allowed: default
-    "pairtools_parse":          "default"   # Allowed: default
-    "samtools_stats":           "default"   # Allowed: default
-    "trimmomatic":              "default"   # Allowed: default
-    "tadbit":                   "default"   # Allowed: default
-    "krater_from_histo":        "default"   # Allowed: default
-    "microsome_detection":      "default"   # Allowed: default
-    "assembly_qc":              "default"   # Allowed: default
 
 "tool_manually_adjusted_features":
     "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions
@@ -183,7 +153,7 @@
     - "vertebrata_odb10" #
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
-
+"telomere_motif": "CCCTAA"  # telomere motif at 5'-end; CCCTAA for human, place null if unknown
 "species_name": "Argentina sphyraena"
 "tax_id": 442169 # # necessary for contamination scan via FCS
 
@@ -204,7 +174,9 @@
 "final_kmer_counter": "meryl" # pipeline allows usage of different kmer counter external_tools, but only one genomesize assessment could be used
 "final_kmer_length": 21 # pipeline allows usage of different kmer length, but only one genomesize assessment could be used
 
-"final_kmer_datatype": "hifi"
+"final_kmer_datatypes":
+    - "hifi"
+    #- "illumina"
 "assembly_kmer_length":
     - 31 # kmer length to be used for phasing hic reads using assembled and purge_dupsed contigs
 "phasing_stage": "purge_dups"
@@ -249,7 +221,7 @@
 "skip_higlass": True
 "skip_variantcalling": True
 "skip_hic_file": False
-"skip_krater": True
+"skip_krater": False
 "skip_ragtag": False
 
 "create_hic_file_during_curation": False

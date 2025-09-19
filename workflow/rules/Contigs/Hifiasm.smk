@@ -1,7 +1,7 @@
 #ruleorder: hifiasm_hic > hifiasm_hifi
 #ruleorder: hifiasm_hic > hifiasm_hic_tetra
 localrules: extract_lambda_value #get_lowcoverage_contig_ids,
-ruleorder: hifiasm_hic > hifiasm_hic_4p
+ruleorder: hifiasm_hic_4p
 
 def get_main_read_filelist_for_correction(wildcards):
     read_filelist = []

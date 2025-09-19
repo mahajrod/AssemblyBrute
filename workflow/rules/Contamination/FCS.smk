@@ -32,22 +32,36 @@ rule fcs: #
     threads: lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["threads"],
 
     shell: # as report(summary) might be modified manually, original version is backuped with .original extension,# || true was added as workaround to handle singularity issue with removal of rootfs after cmd
-        " OUTDIR=`dirname {output.taxonomy}`; "
-        " OUTDIR=`realpath -s ${{OUTDIR}}`; "
-        " TMPDIR=${{OUTDIR}}'/tmp_{wildcards.database}/'; "
-        " SINGULARITYENV_TMPDIR=${{OUTDIR}}'/singularity_{wildcards.database}/'; "
-        " SINGULARITYENV_SQLITE_TMPDIR=${{OUTDIR}}'/singularity_sqlite_{wildcards.database}/'; "
-        " mkdir -p ${{TMPDIR}} ${{SINGULARITYENV_TMPDIR}} ${{SINGULARITYENV_SQLITE_TMPDIR}}; "
-        " NUM_CORES={threads}; "
-        " export FCS_DEFAULT_IMAGE={input.image}; "
-        " TMPDIR=${{TMPDIR}} SINGULARITYENV_TMPDIR=${{SINGULARITYENV_TMPDIR}} SINGULARITYENV_SQLITE_TMPDIR=${{SINGULARITYENV_SQLITE_TMPDIR}} "
-        " workflow/external_tools/fcs-gx/fcs.py  screen genome --fasta {input.fasta} --out-dir `dirname {output.taxonomy}` --tax-id {params.tax_id} --gx-db {input.db} > {log.std} 2>&1 || : ; "
+        " OUT_DIR=`dirname {output.taxonomy}`; "
+        " OUT_DIR=`realpath -s ${{OUTDIR}}`; "
+        " TMP_DIR=${{OUT_DIR}}'/tmp_{wildcards.database}/'; "
+        " SINGULARITYENV_TMP_DIR=${{OUT_DIR}}'/singularity_{wildcards.database}/'; "
+        " SINGULARITYENV_SQLITE_TMP_DIR=${{OUT_DIR}}'/singularity_sqlite_{wildcards.database}/'; "
+        " mkdir -p ${{TMP_DIR}} ${{SINGULARITYENV_TMP_DIR}} ${{SINGULARITYENV_SQLITE_TMP_DIR}}; "
+        " FCS_DB_DIR=`dirname {input.db}`; "
+        " FCS_DB_DIR=`realpath ${{FCS_DB_DIR}}`; "
+        " FASTA_DIR=`dirname {input.fasta}`; "
+        " FASTA_DIR=`realpath ${{FASTA_DIR}}`; "
+        " FASTA_BASENAME=`basename {input.fasta}`; "
+        " TMPDIR=${{TMP_DIR}} SINGULARITYENV_TMPDIR=${{SINGULARITYENV_TMP_DIR}} SINGULARITYENV_SQLITE_TMPDIR=${{SINGULARITYENV_SQLITE_TMP_DIR}} "
+        "   singularity exec --pid --contain --bind ${{FCS_DB_DIR}}:/app/db/gxdb --bind ${{FASTA_DIR}}:/sample-volume/ "
+        "      --bind ${{OUT_DIR}}:/output-volume/ {input.image} python3 /app/bin/run_gx --fasta ${{FASTA_BASENAME}} "
+        "      --out-dir /output-volume/ --tax-id {params.tax_id} --gx-db /app/db/gxdb/gxdb"
         " REPORT={output.taxonomy}; "
         " SUMMARY={output.summary}; "
         " cp ${{REPORT%.{wildcards.database}.taxonomy}}.{params.tax_id}.{wildcards.database}_report.txt ${{SUMMARY}}.original > {log.post} 2>&1; "
         " mv ${{REPORT%.{wildcards.database}.taxonomy}}.{params.tax_id}.{wildcards.database}_report.txt ${{SUMMARY}} >> {log.post} 2>&1; "
         " mv ${{SUMMARY%.{wildcards.database}.summary}}.{params.tax_id}.taxonomy.rpt ${{REPORT}} >> {log.post} 2>&1; "
-        " rm -rf  ${{TMPDIR}} ${{SINGULARITYENV_TMPDIR}} ${{SINGULARITYENV_SQLITE_TMPDIR}} >> {log.post} 2>&1; "
+        " rm -rf  ${{TMP_DIR}} ${{SINGULARITYENV_TMP_DIR}} ${{SINGULARITYENV_SQLITE_TMP_DIR}} >> {log.post} 2>&1; "
+
+"""
+        " NUM_CORES={threads}; "
+        " export FCS_DEFAULT_IMAGE={input.image}; "
+        " TMPDIR=${{TMP_DIR}} SINGULARITYENV_TMPDIR=${{SINGULARITYENV_TMP_DIR}} SINGULARITYENV_SQLITE_TMPDIR=${{SINGULARITYENV_SQLITE_TMP_DIR}} "
+        " workflow/external_tools/fcs-gx/fcs.py  screen genome --fasta {input.fasta} --out-dir `dirname {output.taxonomy}` --tax-id {params.tax_id} --gx-db {input.db} > {log.std} 2>&1 || : ; "
+        
+"""
+
 
 rule remove_fcs_contaminants: #
     priority: 5000

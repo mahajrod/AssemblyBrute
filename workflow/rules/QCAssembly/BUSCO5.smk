@@ -355,6 +355,10 @@ rule create_busco_tracks_for_combined_haplotype:
         duplicated_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.duplicated.track.bed",
         fragmented_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.fragmented.track.bed",
         missing_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.missing.track.bed",
+        single_copy_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.single_copy.track.bedgraph",
+        duplicated_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.duplicated.track.bedgraph",
+        fragmented_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.fragmented.track.bedgraph",
+        missing_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.missing.track.bedgraph",
     params:
         haplotype_list=lambda wildcards: stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
         dir_prefix=lambda wildcards: out_dir_path / "%s/%s/assembly_qc/tracks/%s.%s" % (wildcards.assembly_stage,
@@ -390,6 +394,9 @@ rule create_busco_tracks_for_combined_haplotype:
         "       HAP_TRACK={params.dir_prefix}.${{HAP}}/{params.track_prefix}.${{HAP}}.{params.suffix}.${{BUSCO_TYPE}}.track.bed; "
         "       sed 's/^/'${{HAP}}'\./' ${{HAP_TRACK}} >> ${{OUT_TRACK}} 2>>{log.log}; "
         "       done;"
+        "   OUT_BEDGRAPH={params.dir_prefix}.combined/{params.track_prefix}.combined.{params.suffix}.${{BUSCO_TYPE}}.track.bedgraph; "
+        "   echo \"Converting to bedgraph...\" >> {log.log} 2>&1; "
+        "   awk -F'\t' {{printf \"%s\t%i\t%i\t1\n\",$1,$2,$3}} ${{OUT_TRACK}} > ${{OUT_BEDGRAPH}} 2>>{log.log}; "
         "   done; "
 
 

@@ -299,11 +299,9 @@ rule create_busco_tracks:
         single_copy_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.single_copy.track.bed",
         duplicated_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.duplicated.track.bed",
         fragmented_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.fragmented.track.bed",
-        missing_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.missing.track.bed",
         single_copy_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.single_copy.track.bedgraph",
         duplicated_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.duplicated.track.bedgraph",
         fragmented_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.fragmented.track.bedgraph",
-        missing_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.missing.track.bedgraph",
     log:
         single_copy_track=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.single_copy.log",
         single_copy_grep=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.single_copy.grep.log",
@@ -314,9 +312,6 @@ rule create_busco_tracks:
         fragmented_track=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.fragmented.log",
         fragmented_grep=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.fragmented.grep.log",
         fragmented_awk=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.fragmented.awk.log",
-        missing_track=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.missing.log",
-        missing_grep=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.missing.grep.log",
-        missing_awk=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.missing.awk.log",
         cluster_log=output_dict["cluster_log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.cluster.err"
     benchmark:
@@ -335,11 +330,9 @@ rule create_busco_tracks:
         " grep -P '\\tComplete\\t' {input.busco_table} 2>{log.single_copy_grep} | awk -F '\\t' '{{printf \"%s\\t%i\\t%i\\t%s\\n\",$3,$4,$5,$1}}' 2>{log.single_copy_awk} | sort -k1,1V -k2,2n -k3,3n  > {output.single_copy_track} 2>{log.single_copy_track}; "
         " grep -P '\\tDuplicated\\t' {input.busco_table} 2>{log.duplicated_grep} | awk -F '\\t' '{{printf \"%s\\t%i\\t%i\\t%s\\n\",$3,$4,$5,$1}}' 2>{log.duplicated_awk} | sort -k1,1V -k2,2n -k3,3n  > {output.duplicated_track} 2>{log.duplicated_track}; "
         " grep -P '\\tFragmented\\t' {input.busco_table} 2>{log.fragmented_grep} | awk -F '\\t' '{{printf \"%s\\t%i\\t%i\\t%s\\n\",$3,$4,$5,$1}}' 2>{log.fragmented_awk} | sort -k1,1V -k2,2n -k3,3n  > {output.fragmented_track} 2>{log.fragmented_track}; "
-        " grep -P '\\tMissing\\t' {input.busco_table} 2>{log.missing_grep} | awk -F '\\t' '{{printf \"%s\\t%i\\t%i\\t%s\\n\",$3,$4,$5,$1}}' 2>{log.missing_awk} | sort -k1,1V -k2,2n -k3,3n  > {output.missing_track} 2>{log.missing_track}; "
         " awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.single_copy_track} > {output.single_copy_bedgraph} 2>>{log.single_copy_track}; "
         " awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.duplicated_track} > {output.duplicated_bedgraph} 2>>{log.duplicated_track}; "
         " awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.fragmented_track} > {output.fragmented_bedgraph} 2>>{log.fragmented_track}; "
-        " awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.duplicated_track} > {output.missing_bedgraph} 2>>{log.missing_track}; "
 
 rule create_busco_tracks_for_combined_haplotype:
     priority: 500
@@ -354,18 +347,16 @@ rule create_busco_tracks_for_combined_haplotype:
                                                                                                                                                                                   wildcards.genome_prefix,
                                                                                                                                                                                   wildcards.assembly_stage,
                                                                                                                                                                                   wildcards.busco_lineage)),
-                                                           busco_type=["single_copy", "duplicated", "fragmented", "missing"],
+                                                           busco_type=["single_copy", "duplicated", "fragmented"],
                                                            haplotype=stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
                                                            allow_missing=True)
     output:
         single_copy_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.single_copy.track.bed",
         duplicated_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.duplicated.track.bed",
         fragmented_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.fragmented.track.bed",
-        missing_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.missing.track.bed",
         single_copy_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.single_copy.track.bedgraph",
         duplicated_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.duplicated.track.bedgraph",
         fragmented_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.fragmented.track.bedgraph",
-        missing_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.missing.track.bedgraph",
     params:
         haplotype_list=lambda wildcards: stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
         dir_prefix=lambda wildcards: out_dir_path / ("%s/%s/assembly_qc/tracks/%s.%s" % (wildcards.assembly_stage,
@@ -376,8 +367,8 @@ rule create_busco_tracks_for_combined_haplotype:
         suffix=lambda wildcards: "busco5.%s" % wildcards.busco_lineage,
     log:
         log=output_dict["log"] / "create_busco_tracks_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.combined.{busco_lineage}.log",
-        cluster_log=output_dict["cluster_log"] / "create_busco_tracks_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.{busco_lineage}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_busco_tracks_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.{busco_lineage}.cluster.err"
+        cluster_log=output_dict["cluster_log"] / "create_busco_tracks_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.combined.{busco_lineage}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_busco_tracks_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.combined.{busco_lineage}.cluster.err"
     benchmark:
         output_dict["benchmark"] / "busco5.{assembly_stage}.{parameters}.{genome_prefix}.combined.{busco_lineage}.benchmark.txt"
     conda:
@@ -392,7 +383,7 @@ rule create_busco_tracks_for_combined_haplotype:
         parameters["threads"]["busco5_intersect_all"]
     shell:
         " > {log.log}; "
-        " for BUSCO_TYPE in single_copy duplicated fragmented missing; "
+        " for BUSCO_TYPE in single_copy duplicated fragmented; "
         "   do "
         "   echo \"Processing ${{BUSCO_TYPE}}...\" >> {log.log} 2>&1; "
         "   OUT_TRACK={params.dir_prefix}.combined/{params.track_prefix}.combined.{params.suffix}.${{BUSCO_TYPE}}.track.bed; "

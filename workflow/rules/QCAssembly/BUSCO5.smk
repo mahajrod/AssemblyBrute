@@ -336,20 +336,19 @@ rule create_busco_tracks:
 rule create_busco_tracks_for_combined_haplotype:
     priority: 500
     input:
-        lambda wildcards: expand(rules.create_busco_tracks.output,
-                                 haplotype=stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
-                                 allow_missing=True)
-
-        #single_haplotype_tracks= lambda wildcards: expand(out_dir_path / "%s/%s/assembly_qc/tracks/%s.%s.{haplotype}/%s.%s.{haplotype}.busco5.%s.{busco_type}.track.bed" % (wildcards.assembly_stage,
-        #                                                                                                                                                                          wildcards.parameters,
-        #                                                                                                                                                                          wildcards.genome_prefix,
-        #                                                                                                                                                                          wildcards.assembly_stage,
-        #                                                                                                                                                                          wildcards.genome_prefix,
-        #                                                                                                                                                                          wildcards.assembly_stage,
-        #                                                                                                                                                                          wildcards.busco_lineage),
-        #                                                   busco_type=["single_copy", "duplicated", "fragmented", "missing"],
-        #                                                   haplotype=stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
-        #                                                   allow_missing=True)
+        #lambda wildcards: expand(rules.create_busco_tracks.output,
+        #                         haplotype=stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
+        #                         allow_missing=True)
+        single_haplotype_tracks= lambda wildcards: expand(out_dir_path / "%s/%s/assembly_qc/tracks/%s.%s.{haplotype}/%s.%s.{haplotype}.busco5.%s.{busco_type}.track.bed" % (wildcards.assembly_stage,
+                                                                                                                                                                                  wildcards.parameters,
+                                                                                                                                                                                  wildcards.genome_prefix,
+                                                                                                                                                                                  wildcards.assembly_stage,
+                                                                                                                                                                                  wildcards.genome_prefix,
+                                                                                                                                                                                  wildcards.assembly_stage,
+                                                                                                                                                                                  wildcards.busco_lineage),
+                                                           busco_type=["single_copy", "duplicated", "fragmented", "missing"],
+                                                           haplotype=stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
+                                                           allow_missing=True)
     output:
         single_copy_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.single_copy.track.bed",
         duplicated_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.duplicated.track.bed",

@@ -1,5 +1,5 @@
 localrules: busco5_intersect_haplotypes, busco5_intersect_stages
-#localrules: create_busco_tracks, create_busco_tracks_for_combined_haplotype
+localrules: create_busco_tracks, create_busco_tracks_for_combined_haplotype
 ruleorder: create_busco_tracks_for_combined_haplotype > create_busco_tracks
 
 rule busco5_download:

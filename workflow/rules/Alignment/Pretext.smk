@@ -224,7 +224,7 @@ rule pretext_inject_tracks:
         "           for BUSCO_TYPE in {params.busco_type_list}; "
         "               do "
         "               workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.filtered_out} -i {params.track_prefix}.busco5.${{LINEAGE}}.${{BUSCO_TYPE}}.track.bedgraph  | "
-        "               PretextGraph -i {output.updated_map} -n BUSCO.${{LINEAGE}}.${{BUSCO_TYPE}} > {log.gap} 2>&1;"
+        "               PretextGraph -i {output.updated_map} -n BUSCO.${{LINEAGE}}.${{BUSCO_TYPE}}.gap > {log.gap} 2>&1;"
         "               done; "
         "           done; "
         "       fi; "

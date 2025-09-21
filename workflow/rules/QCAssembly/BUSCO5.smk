@@ -368,6 +368,8 @@ rule create_busco_tracks_for_combined_haplotype:
         suffix=lambda wildcards: ".busco5.%s" % wildcards.busco_lineage,
     log:
         log=output_dict["log"] / "create_busco_tracks_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.combined.{busco_lineage}.log",
+        cluster_log=output_dict["cluster_log"] / "create_busco_tracks_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.{busco_lineage}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_busco_tracks_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.{busco_lineage}.cluster.err"
     benchmark:
         output_dict["benchmark"] / "busco5.{assembly_stage}.{parameters}.{genome_prefix}.combined.{busco_lineage}.benchmark.txt"
     conda:

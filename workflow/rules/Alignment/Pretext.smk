@@ -98,6 +98,10 @@ rule pretext_inject_tracks:
         gc_1000k_100k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.gc.win1000000.step100000.track.bedgraph" if not config["skip_pretext_1000k_100k_tracks"] else [],
         trf_1000k_100k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.trf.win1000000.step100000.track.bedgraph" if (not config["skip_trf"]) and (not config["skip_pretext_1000k_100k_tracks"]) else [],
         windowmasker_1000k_100k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.windowmasker.win1000000.step100000.track.bedgraph" if not config["skip_pretext_1000k_100k_tracks"] else [],
+        busco_tracks=expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.{busco_type}.track.bedgraph",
+                            busco_lineage=config["busco_lineage_list"],
+                            busco_type=["single_copy", "duplicated", "fragmented", "missing"],
+                            allow_missing=True) if not config["skip_busco"] else[],
     output:
         updated_map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^./]+}/alignment/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{subset}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.tracks.pretext",
     params:
@@ -105,7 +109,14 @@ rule pretext_inject_tracks:
         skip_trf=config["skip_trf"],
         skip_10k_1k_tracks=config["skip_pretext_10k_1k_tracks"],
         skip_1000k_100k_tracks=config["skip_pretext_1000k_100k_tracks"],
-        skip_pretext_coverage_tracks=config["skip_pretext_coverage_tracks"]
+        skip_pretext_coverage_tracks=config["skip_pretext_coverage_tracks"],
+        skip_busco=config["skip_busco"],
+        busco_lineages=config["busco_lineage_list"],
+        busco_type_list=["single_copy", "duplicated", "fragmented", "missing"],
+        track_prefix=lambda wildcards: out_dir_path / "{0}/{1}/assembly_qc/tracks/{2}.{0}.{3}/{2}.{0}.{3}".format(wildcards.assembly_stage,
+                                                                                                                        wildcards.parameters,
+                                                                                                                        wildcards.genome_prefix,
+                                                                                                                        wildcards.haplotype)
     log:
         gap=output_dict["log"]  / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.gap.log",
         can_tel=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.can_tel.log",
@@ -206,3 +217,14 @@ rule pretext_inject_tracks:
         "           PretextGraph -i {output.updated_map}  -n TRF_1000k_100k.repeat_density > {log.trf} 2>&1; "
         "       fi; "
         "   fi; "
+        "   if [[ '{params.skip_busco}' != 'True' ]]; "
+        "       then "
+        "       for LINEAGE in {params.busco_lineages}; "
+        "           do "
+        "           for BUSCO_TYPE in {params.busco_type_list}; "
+        "               do "
+        "               workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.filtered_out} -i {params.track_prefix}.busco5.${{LINEAGE}}.${{BUSCO_TYPE}}.track.bedgraph  | "
+        "               PretextGraph -i {output.updated_map} -n BUSCO.${{LINEAGE}}.${{BUSCO_TYPE}} > {log.gap} 2>&1;"
+        "               done; "
+        "           done; "
+        "       fi; "

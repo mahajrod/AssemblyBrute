@@ -306,6 +306,8 @@ rule create_busco_tracks:
         missing_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.missing.track.bedgraph",
     log:
         single_copy_track=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.single_copy.log",
+        single_copy_track_grep=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.single_copy.grep.log",
+        single_copy_track_awk=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.single_copy.awk.log",
         duplicated_track=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.duplicated.log",
         fragmented_track=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.fragmented.log",
         missing_track=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.missing.log",
@@ -324,10 +326,10 @@ rule create_busco_tracks:
     threads:
         parameters["threads"]["busco5_intersect_all"]
     shell:
-        " grep -P '\\tComplete\\t' {input.busco_table} | awk -F '\\t' '{{printf \"%s\\t%i\\t%i\\t%s\\n\",$3,$4,$5,$1}}' | sort -k1,1V -k2,2n -k3,3n  > {output.single_copy_track} 2>{log.single_copy_track}; "
-        " grep -P '\\tDuplicated\\t' {input.busco_table} | awk -F '\\t' '{{printf \"%s\\t%i\\t%i\\t%s\\n\",$3,$4,$5,$1}}' | sort -k1,1V -k2,2n -k3,3n  > {output.duplicated_track} 2>{log.duplicated_track}; "
-        " grep -P '\\tFragmented\\t' {input.busco_table} | awk -F '\\t' '{{printf \"%s\\t%i\\t%i\\t%s\\n\",$3,$4,$5,$1}}' | sort -k1,1V -k2,2n -k3,3n  > {output.fragmented_track} 2>{log.fragmented_track}; "
-        " grep -P '\\tMissing\\t' {input.busco_table} | awk -F '\\t' '{{printf \"%s\\t%i\\t%i\\t%s\\n\",$3,$4,$5,$1}}' | sort -k1,1V -k2,2n -k3,3n  > {output.missing_track} 2>{log.missing_track}; "
+        " grep -P '\\tComplete\\t' {input.busco_table} 2>{log.single_copy_track_grep} | awk -F '\\t' '{{printf \"%s\\t%i\\t%i\\t%s\\n\",$3,$4,$5,$1}}' 2>{log.single_copy_track_awk} | sort -k1,1V -k2,2n -k3,3n  > {output.single_copy_track} 2>{log.single_copy_track}; "
+        #" grep -P '\\tDuplicated\\t' {input.busco_table} | awk -F '\\t' '{{printf \"%s\\t%i\\t%i\\t%s\\n\",$3,$4,$5,$1}}' | sort -k1,1V -k2,2n -k3,3n  > {output.duplicated_track} 2>{log.duplicated_track}; "
+        #" grep -P '\\tFragmented\\t' {input.busco_table} | awk -F '\\t' '{{printf \"%s\\t%i\\t%i\\t%s\\n\",$3,$4,$5,$1}}' | sort -k1,1V -k2,2n -k3,3n  > {output.fragmented_track} 2>{log.fragmented_track}; "
+        #" grep -P '\\tMissing\\t' {input.busco_table} | awk -F '\\t' '{{printf \"%s\\t%i\\t%i\\t%s\\n\",$3,$4,$5,$1}}' | sort -k1,1V -k2,2n -k3,3n  > {output.missing_track} 2>{log.missing_track}; "
         #" awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.single_copy_track} > {output.single_copy_bedgraph} 2>>{log.single_copy_track}; "
         #" awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.duplicated_track} > {output.duplicated_bedgraph} 2>>{log.single_copy_track}; "
         #" awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.fragmented_track} > {output.fragmented_bedgraph} 2>>{log.single_copy_track}; "

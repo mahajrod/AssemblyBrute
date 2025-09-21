@@ -360,10 +360,10 @@ rule create_busco_tracks_for_combined_haplotype:
         missing_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.missing.track.bedgraph",
     params:
         haplotype_list=lambda wildcards: stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
-        dir_prefix=lambda wildcards: out_dir_path / "%s/%s/assembly_qc/tracks/%s.%s" % (wildcards.assembly_stage,
+        dir_prefix=lambda wildcards: out_dir_path / ("%s/%s/assembly_qc/tracks/%s.%s" % (wildcards.assembly_stage,
                                                                                         wildcards.parameters,
                                                                                         wildcards.genome_prefix,
-                                                                                        wildcards.assembly_stage),
+                                                                                        wildcards.assembly_stage)),
         track_prefix=lambda wildcards: "%s.%s" % (wildcards.genome_prefix, wildcards.assembly_stage),
         suffix=lambda wildcards: ".busco5.%s" % wildcards.busco_lineage,
     log:

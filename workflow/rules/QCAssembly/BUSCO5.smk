@@ -339,13 +339,13 @@ rule create_busco_tracks_for_combined_haplotype:
         #lambda wildcards: expand(rules.create_busco_tracks.output,
         #                         haplotype=stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
         #                         allow_missing=True)
-        single_haplotype_tracks= lambda wildcards: expand(out_dir_path / "%s/%s/assembly_qc/tracks/%s.%s.{haplotype}/%s.%s.{haplotype}.busco5.%s.{busco_type}.track.bed" % (wildcards.assembly_stage,
+        single_haplotype_tracks= lambda wildcards: expand(out_dir_path / ("%s/%s/assembly_qc/tracks/%s.%s.{haplotype}/%s.%s.{haplotype}.busco5.%s.{busco_type}.track.bed" % (wildcards.assembly_stage,
                                                                                                                                                                                   wildcards.parameters,
                                                                                                                                                                                   wildcards.genome_prefix,
                                                                                                                                                                                   wildcards.assembly_stage,
                                                                                                                                                                                   wildcards.genome_prefix,
                                                                                                                                                                                   wildcards.assembly_stage,
-                                                                                                                                                                                  wildcards.busco_lineage),
+                                                                                                                                                                                  wildcards.busco_lineage)),
                                                            busco_type=["single_copy", "duplicated", "fragmented", "missing"],
                                                            haplotype=stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
                                                            allow_missing=True)

@@ -328,10 +328,10 @@ rule create_busco_tracks:
         " grep -P '\\tDuplicated\\t' {input.busco_table} | awk -F '\\t' '{{printf \"%s\\t%i\\t%i\\t%s\\n\",$3,$4,$5,$1}}'  > {output.duplicated_track} 2>{log.duplicated_track}; "
         " grep -P '\\tFragmented\\t' {input.busco_table} | awk -F '\\t' '{{printf \"%s\\t%i\\t%i\\t%s\\n\",$3,$4,$5,$1}}'  > {output.fragmented_track} 2>{log.fragmented_track}; "
         " grep -P '\\tMissing\\t' {input.busco_table} | awk -F '\\t' '{{printf \"%s\\t%i\\t%i\\t%s\\n\",$3,$4,$5,$1}}'  > {output.missing_track} 2>{log.missing_track}; "
-        " awk -F'\\t' {{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}} {output.single_copy_track} > {output.single_copy_bedgraph} 2>>{log.single_copy_track}; "
-        " awk -F'\\t' {{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}} {output.duplicated_track} > {output.duplicated_bedgraph} 2>>{log.single_copy_track}; "
-        " awk -F'\\t' {{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}} {output.fragmented_track} > {output.fragmented_bedgraph} 2>>{log.single_copy_track}; "
-        " awk -F'\\t' {{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}} {output.duplicated_track} > {output.duplicated_bedgraph} 2>>{log.single_copy_track}; "
+        " awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.single_copy_track} > {output.single_copy_bedgraph} 2>>{log.single_copy_track}; "
+        " awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.duplicated_track} > {output.duplicated_bedgraph} 2>>{log.single_copy_track}; "
+        " awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.fragmented_track} > {output.fragmented_bedgraph} 2>>{log.single_copy_track}; "
+        " awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.duplicated_track} > {output.duplicated_bedgraph} 2>>{log.single_copy_track}; "
 
 rule create_busco_tracks_for_combined_haplotype:
     priority: 500
@@ -395,7 +395,7 @@ rule create_busco_tracks_for_combined_haplotype:
         "       done;"
         "   OUT_BEDGRAPH={params.dir_prefix}.combined/{params.track_prefix}.combined.{params.suffix}.${{BUSCO_TYPE}}.track.bedgraph; "
         "   echo \"Converting to bedgraph...\" >> {log.log} 2>&1; "
-        "   awk -F'\\t' {{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}} ${{OUT_TRACK}} > ${{OUT_BEDGRAPH}} 2>>{log.log}; "
+        "   awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' ${{OUT_TRACK}} > ${{OUT_BEDGRAPH}} 2>>{log.log}; "
         "   done; "
 
 

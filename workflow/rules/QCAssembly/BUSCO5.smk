@@ -328,10 +328,10 @@ rule create_busco_tracks:
         " grep -P '\\tDuplicated\\t' {input.busco_table} | awk -F '\\t' '{{printf \"%s\\t%i\\t%i\\t%s\\n\",$3,$4,$5,$1}}' | sort -k1,1V -k2,2n -k3,3n  > {output.duplicated_track} 2>{log.duplicated_track}; "
         " grep -P '\\tFragmented\\t' {input.busco_table} | awk -F '\\t' '{{printf \"%s\\t%i\\t%i\\t%s\\n\",$3,$4,$5,$1}}' | sort -k1,1V -k2,2n -k3,3n  > {output.fragmented_track} 2>{log.fragmented_track}; "
         " grep -P '\\tMissing\\t' {input.busco_table} | awk -F '\\t' '{{printf \"%s\\t%i\\t%i\\t%s\\n\",$3,$4,$5,$1}}' | sort -k1,1V -k2,2n -k3,3n  > {output.missing_track} 2>{log.missing_track}; "
-        " awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.single_copy_track} > {output.single_copy_bedgraph} 2>>{log.single_copy_track}; "
-        " awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.duplicated_track} > {output.duplicated_bedgraph} 2>>{log.single_copy_track}; "
-        " awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.fragmented_track} > {output.fragmented_bedgraph} 2>>{log.single_copy_track}; "
-        " awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.duplicated_track} > {output.duplicated_bedgraph} 2>>{log.single_copy_track}; "
+        #" awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.single_copy_track} > {output.single_copy_bedgraph} 2>>{log.single_copy_track}; "
+        #" awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.duplicated_track} > {output.duplicated_bedgraph} 2>>{log.single_copy_track}; "
+        #" awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.fragmented_track} > {output.fragmented_bedgraph} 2>>{log.single_copy_track}; "
+        #" awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.duplicated_track} > {output.duplicated_bedgraph} 2>>{log.single_copy_track}; "
 
 rule create_busco_tracks_for_combined_haplotype:
     priority: 500

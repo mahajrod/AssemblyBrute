@@ -148,7 +148,8 @@
                             "w10k.s10k":
                                 "window": 10000
                                 "step":   10000
-
+                    "purge_dups":
+                        "cov_multiplicator": 4.5 # 4.5 *lambda
                     "trf":
                         "relative_thresholds": # median +- threshold * median
                             - 0.05

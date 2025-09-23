@@ -334,7 +334,7 @@ with open(final_config_yaml, 'w') as final_config_fd, open(final_input_yaml, 'w'
 #-------------------------------------------
 localrules: all
 #ruleorder: create_fastq_links > fastqc
-include: "workflow/rules/Contigs/Hifiasm.smk"
+#include: "workflow/rules/Contigs/Hifiasm.smk"
 print(stage_dict)
 
 results_dict = {}

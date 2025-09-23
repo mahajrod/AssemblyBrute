@@ -157,16 +157,16 @@ if (sum(list(pd.Series(["hic_scaffolding",
 
     rule bwa_map_for_hic_map: #
         input:
-            index=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.ann",
-            reference=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
-            forward_fastq=lambda wildcards: output_dict["data"] / "fastq/hic/{0}/{1}{2}{3}".format("filtered" if "hic" in config["filtered_data"] else "raw",
+            index=ancient(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.ann"),
+            reference=ancient(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"),
+            forward_fastq=lambda wildcards: ancient(output_dict["data"] / "fastq/hic/{0}/{1}{2}{3}".format("filtered" if "hic" in config["filtered_data"] else "raw",
                                                                                                   wildcards.pairprefix,
                                                                                                   "_1" if "hic" in config["filtered_data"] else input_forward_suffix_dict["hic"],
-                                                                                                  config["fastq_extension"]),
-            reverse_fastq=lambda wildcards: output_dict["data"] / "fastq/hic/{0}/{1}{2}{3}".format("filtered" if "hic" in config["filtered_data"] else "raw",
+                                                                                                  config["fastq_extension"])),
+            reverse_fastq=lambda wildcards: ancient(output_dict["data"] / "fastq/hic/{0}/{1}{2}{3}".format("filtered" if "hic" in config["filtered_data"] else "raw",
                                                                                                    wildcards.pairprefix,
                                                                                                    "_2" if "hic" in config["filtered_data"] else input_reverse_suffix_dict["hic"],
-                                                                                                   config["fastq_extension"]) ,
+                                                                                                   config["fastq_extension"])) ,
         output:
             #bam=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam"
             bam=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/{haplotype, combined|reordered}/alignment/{phasing_kmer_length, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix, [^/]+}.bwa.bam"

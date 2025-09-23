@@ -1,6 +1,6 @@
 rule get_seq_len:
     input:
-        fasta="{fasta_prefix}.fasta.fai",
+        fasta=ancient("{fasta_prefix}.fasta.fai"),
     output:
         len_file="{fasta_prefix}.len",
     log:

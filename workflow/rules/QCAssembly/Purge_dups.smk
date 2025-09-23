@@ -208,11 +208,12 @@ rule qc_extract_stats_from_purge_dups_file:
     output:
         extended_bed=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.dups.extended.bed",
         stat=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.dups.stat",
-        junk_ids=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.dups.junk.ids",
-        ovlp_ids=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.dups.ovlp.ids",
-        haplotig_ids=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.dups.haplotig.ids",
-        repeat_ids=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.dups.repeat.ids",
-        highcov_ids=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.dups.highcov.ids"
+        id_files=expand(out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype}/{datatype}/{genome_prefix}.{assembly_stage}.{haplotype}.dups.{artefact_type}.ids",
+                        artefact_type=["junk", "ovlp", "haplotig", "repeat", "highcov"],
+                        allow_missing=True),
+        bed_files=expand(out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype}/{datatype}/{genome_prefix}.{assembly_stage}.{haplotype}.dups.{artefact_type}.extended.bed",
+                        artefact_type=["junk", "ovlp", "haplotig", "repeat", "highcov"],
+                        allow_missing=True)
     log:
         std=out_dir_path / "{assembly_stage}/{parameters}/log/qc_extract_stats_from_purge_dups_file.{parameters}.{genome_prefix}.purge_dups.{haplotype}.{datatype}.log",
         cluster_log=out_dir_path / "{assembly_stage}/{parameters}/log/qc_extract_stats_from_purge_dups_file.{parameters}.{genome_prefix}.purge_dups.{haplotype}.{datatype}.cluster.log",
@@ -233,6 +234,58 @@ rule qc_extract_stats_from_purge_dups_file:
         " STATS_FILE={output.stat}; "
         " ./workflow/scripts/purge_dups/calculate_purge_dups_stats.py  -b {input.bed} -s {input.stat} -l {input.len} "
         " -o ${{STATS_FILE%.stat}} > {log.std} 2>&1; "
+
+rule create_purge_dups_tracks:
+    priority: 500
+    input:
+        busco_table=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.full_table.tsv",
+    output:
+        single_copy_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.single_copy.track.bed",
+        duplicated_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.duplicated.track.bed",
+        fragmented_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.fragmented.track.bed",
+        single_copy_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.single_copy.track.bedgraph",
+        duplicated_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.duplicated.track.bedgraph",
+        fragmented_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.fragmented.track.bedgraph",
+    log:
+        single_copy_track=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.single_copy.log",
+        single_copy_grep=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.single_copy.grep.log",
+        single_copy_awk=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.single_copy.awk.log",
+        duplicated_track=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.duplicated.log",
+        duplicated_grep=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.duplicated.grep.log",
+        duplicated_awk=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.duplicated.awk.log",
+        fragmented_track=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.fragmented.log",
+        fragmented_grep=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.fragmented.grep.log",
+        fragmented_awk=output_dict["log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.fragmented.awk.log",
+        cluster_log=output_dict["cluster_log"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.cluster.err"
+    benchmark:
+        output_dict["benchmark"] / "create_busco_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.benchmark.txt"
+    conda:
+        config["conda"]["busco"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("busco5_intersect_all"),
+        cpus=parameters["threads"]["busco5_intersect_all"],
+        time=parameters["time"]["busco5_intersect_all"],
+        mem=parameters["memory_mb"]["busco5_intersect_all"],
+    threads:
+        parameters["threads"]["busco5_intersect_all"]
+    shell:
+        " grep -P '\\tComplete\\t' {input.busco_table} 2>{log.single_copy_grep} | awk -F '\\t' '{{ if ($6 == \"+\") {{printf \"%s\\t%i\\t%i\\t%s\\t%s\\n\",$3,$4,$5,$6,$1}} else {{printf \"%s\\t%i\\t%i\\t%s\\t%s\\n\",$3,$5,$4,$6,$1}} }}' 2>{log.single_copy_awk} | sort -k1,1V -k2,2n -k3,3n  > {output.single_copy_track} 2>{log.single_copy_track}; "
+        " grep -P '\\tDuplicated\\t' {input.busco_table} 2>{log.duplicated_grep} | awk -F '\\t' '{{ if ($6 == \"+\") {{printf \"%s\\t%i\\t%i\\t%s\\t%s\\n\",$3,$4,$5,$6,$1}} else {{printf \"%s\\t%i\\t%i\\t%s\\t%s\\n\",$3,$5,$4,$6,$1}} }}' 2>{log.duplicated_awk} | sort -k1,1V -k2,2n -k3,3n  > {output.duplicated_track} 2>{log.duplicated_track}; "
+        " grep -P '\\tFragmented\\t' {input.busco_table} 2>{log.fragmented_grep} | awk -F '\\t' '{{ if ($6 == \"+\") {{printf \"%s\\t%i\\t%i\\t%s\\t%s\\n\",$3,$4,$5,$6,$1}} else {{printf \"%s\\t%i\\t%i\\t%s\\t%s\\n\",$3,$5,$4,$6,$1}} }}' 2>{log.fragmented_awk} | sort -k1,1V -k2,2n -k3,3n  > {output.fragmented_track} 2>{log.fragmented_track}; "
+        " awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.single_copy_track} > {output.single_copy_bedgraph} 2>>{log.single_copy_track}; "
+        " awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.duplicated_track} > {output.duplicated_bedgraph} 2>>{log.duplicated_track}; "
+        " awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.fragmented_track} > {output.fragmented_bedgraph} 2>>{log.fragmented_track}; "
+
+
+
+
+
+
+
+
+
 """
 rule qc_extract_artefact_sequences:
     input:

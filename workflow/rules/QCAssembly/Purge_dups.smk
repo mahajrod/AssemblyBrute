@@ -62,7 +62,7 @@ rule qc_get_purge_dups_read_stat:
         stat=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/PB.base.cov.stat",
         bed=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/PB.base.cov.bed"
     params:
-        cov_multiplicator=lambda wildcards: stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["option_set"]["cov_multiplicator"],
+        cov_multiplicator=parameters["tool_options"]["assembly_qc"]["purge_dups"]["cov_multiplicator"],
         calcuts_lower_threshold=parse_option("lower_threshold", config["tool_manually_adjusted_features"]["calcuts"], " -l "),
         calcuts_haploid_diploid_threshold=parse_option("haploid_diploid_threshold", config["tool_manually_adjusted_features"]["calcuts"], " -m "),
         calcuts_upper_threshold=str(config["tool_manually_adjusted_features"]["calcuts"]["upper_threshold"]), # None needs to be converted to "None"

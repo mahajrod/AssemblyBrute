@@ -1,7 +1,7 @@
 
 rule qc_minimap2_purge_dups_reads:
     input:
-        fastq=lambda wildcards: output_dict["data"] / "fastq/{0}/filtered/{1}{2}".format(wildcards.datatype, #stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"],
+        fastq=lambda wildcards: output_dict["data"] / "fastq/{0}/filtered/{1}{2}".format(wildcards.datatype,
                                                                                          wildcards.fileprefix,
                                                                                          config["fastq_extension"]),
         assembly=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
@@ -11,10 +11,8 @@ rule qc_minimap2_purge_dups_reads:
     params:
         index_size=lambda wildcards: parse_option("index_size", parameters["tool_options"]["minimap2"][wildcards.datatype], " -I "),
         alignment_scheme=lambda wildcards: parse_option("alignment_scheme", parameters["tool_options"]["minimap2"][wildcards.datatype], " -x "),
-        #min_mapq=lambda wildcards: stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"][stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"]]["min_mapping_quality"]
     log:
         std=out_dir_path / "{assembly_stage}/{parameters}/log/minimap2_purge_dups_reads.{assembly_stage}.{parameters}.{haplotype}.{datatype}.{genome_prefix}.{fileprefix}.log",
-        #awk=output_dict["log"]  / "minimap2_purge_dups_reads.{prev_stage_parameters}.{purge_dups_parameters}.{haplotype}.{genome_prefix}.{fileprefix}.awk.log",
         gzip=out_dir_path / "{assembly_stage}/{parameters}/log/minimap2_purge_dups_reads.{assembly_stage}.{parameters}.{haplotype}.{datatype}.{genome_prefix}.{fileprefix}.gzip.log",
         cluster_log=out_dir_path / "{assembly_stage}/{parameters}/log/minimap2_purge_dups_reads.{assembly_stage}.{parameters}.{haplotype}.{datatype}.{genome_prefix}.{fileprefix}.{fileprefix}.cluster.log",
         cluster_err=out_dir_path / "{assembly_stage}/{parameters}/log/minimap2_purge_dups_reads.{assembly_stage}.{parameters}.{haplotype}.{datatype}.{genome_prefix}.{fileprefix}.{fileprefix}.cluster.err"
@@ -173,7 +171,6 @@ rule qc_get_purged_seqs: #
                                                         option_prefix="-w", expression=lambda l: ",".join(l)),
         get_seq_prefix=lambda wildcards: "{0}.{1}.{2}".format(wildcards.genome_prefix, wildcards.assembly_stage, wildcards.haplotype)
     log:
-        #purge_dups=output_dict["log"]  / "purge_dups.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.purge_dups.{haplotype}.{purge_stage}.purge_dups.log",
         get_seqs=out_dir_path / "{assembly_stage}/{parameters}/log/qc_get_purged_seqs.{parameters}.{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.get_seqs.log",
         filter=out_dir_path / "{assembly_stage}/{parameters}/log/qc_get_purged_seqspurge_.{parameters}.{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.filter.log",
         ln=out_dir_path / "{assembly_stage}/{parameters}/log/qc_get_purged_seqs.{parameters}.{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.ln.log",

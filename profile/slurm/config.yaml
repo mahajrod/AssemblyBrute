@@ -1,25 +1,11 @@
-
 jobs: 100
-retries: 0
+#attempt: 3
+retries: 1
+reason: True
 use-conda: True
 latency-wait: 60
 printshellcmds: True
 show-failed-logs: True
 rerun-incomplete: True
-
-executor: slurm
-#slurm-cancel-cmd: scancel
-
-slurm:
-  partition: "{resources.queue}"
-  time: "{resources.time}"
-  mem_mb: "{resources.mem}"
-  cpus-per-task: "{resources.cpus}"
-  output: "{log.cluster_log}"
-  error: "{log.cluster_err}"
-  qos: normal
-  extra: "{resources.node_options}"
-  parsable: true
-
-report:
-  reason: true
+cluster-cancel: "scancel"
+cluster: "sbatch {resources.node_options} --qos=normal --partition={resources.queue} -t {resources.time} --mem={resources.mem} -c {resources.cpus} --parsable -o {log.cluster_log} -e {log.cluster_err}"

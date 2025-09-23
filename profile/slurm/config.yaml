@@ -13,7 +13,7 @@ executor: slurm
 slurm:
   partition: "{resources.queue}"
   time: "{resources.time}"
-  mem: "{resources.mem}"
+  mem_mb: "{resources.mem}"
   cpus-per-task: "{resources.cpus}"
   output: "{log.cluster_log}"
   error: "{log.cluster_err}"

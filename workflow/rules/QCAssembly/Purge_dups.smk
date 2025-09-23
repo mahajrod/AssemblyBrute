@@ -1,4 +1,3 @@
-from debugpy.common.log import log_dir
 
 wildcard_constraints:
     haplotype="[^.]+"

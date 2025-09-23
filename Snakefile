@@ -862,8 +862,10 @@ if "contig" in config["stage_list"] or "draft_qc" in config["stage_list"]:
             stage_dict["contig"]["parameters"][parameters_label]["option_set_group"] = option_set_group_assignment_dict[option_set] if option_set_group_assignment_dict is not None else None
             if not stage_dict["contig"]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
                 stage_dict["contig"]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict["contig"]["parameters"][parameters_label]["option_set"]["main_datatypes"]
+            if not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"]:
+                stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["main_datatypes"]
 
-            #for option_supergroup in ["options_affecting_error_correction"]:
+#for option_supergroup in ["options_affecting_error_correction"]:
             #    stage_dict["contig"]["parameters"][parameters_label][option_supergroup] = option_cluster_reverse_dict[assembler][option_supergroup][option_set]
 #print (stage_dict)
 if "contig" in config["stage_list"]:
@@ -1013,6 +1015,8 @@ if "purge_dups" in config["stage_list"]:
                     stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["main_datatypes"] = stage_dict[stage_dict[current_stage]["prev_stage"]]["parameters"][prev_parameters]["option_set"]["main_datatypes"]
                 if not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
                     stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["main_datatypes"]
+                if not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"]:
+                    stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["purge_dups_qc_datatypes"]
 
     parameters_list = list(stage_dict[current_stage]["parameters"].keys())
     results_list += [

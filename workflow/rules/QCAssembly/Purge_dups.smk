@@ -238,7 +238,7 @@ rule qc_extract_stats_from_purge_dups_file:
         " ./workflow/scripts/purge_dups/calculate_purge_dups_stats.py  -b {input.bed} -s {input.stat} -l {input.len} "
         " -o ${{STATS_FILE%.stat}} > {log.std} 2>&1; "
 
-rule extract_artefact_sequences:
+rule qc_extract_artefact_sequences:
     input:
         artefact_ids=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype}/{genome_prefix}.dups.{artefact}.ids",
         reference=out_dir_path / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype}/{genome_prefix}.input.{haplotype}.fasta",

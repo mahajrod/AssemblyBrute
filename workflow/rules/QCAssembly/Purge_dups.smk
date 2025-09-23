@@ -234,7 +234,7 @@ rule qc_extract_stats_from_purge_dups_file:
         " STATS_FILE={output.stat}; "
         " ./workflow/scripts/purge_dups/calculate_purge_dups_stats.py  -b {input.bed} -s {input.stat} -l {input.len} "
         " -o ${{STATS_FILE%.stat}} > {log.std} 2>&1; "
-
+"""
 rule create_purge_dups_tracks:
     priority: 500
     input:
@@ -277,7 +277,7 @@ rule create_purge_dups_tracks:
         " awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.single_copy_track} > {output.single_copy_bedgraph} 2>>{log.single_copy_track}; "
         " awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.duplicated_track} > {output.duplicated_bedgraph} 2>>{log.duplicated_track}; "
         " awk -F'\\t' '{{printf \"%s\\t%i\\t%i\\t1\\n\",$1,$2,$3}}' {output.fragmented_track} > {output.fragmented_bedgraph} 2>>{log.fragmented_track}; "
-
+"""
 
 
 

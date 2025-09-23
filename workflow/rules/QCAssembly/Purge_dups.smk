@@ -267,14 +267,14 @@ rule create_purge_dups_track:
 rule create_purge_dups_track_for_combined_haplotype:
     priority: 500
     input:
-        single_haplotype_tracks=lambda wildcards: expand(out_dir_path / "%s/%s/assembly_qc/tracks/%s.%s.{haplotype}/%s.%s.{haplotype}.purge_dups.%s.%s.track.bed" % (wildcards.assembly_stage,
+        single_haplotype_tracks=lambda wildcards: expand(out_dir_path / ("%s/%s/assembly_qc/tracks/%s.%s.{haplotype}/%s.%s.{haplotype}.purge_dups.%s.%s.track.bed" % (wildcards.assembly_stage,
                                                                                                                                                                            wildcards.parameters,
                                                                                                                                                                            wildcards.genome_prefix,
                                                                                                                                                                            wildcards.assembly_stage,
                                                                                                                                                                            wildcards.genome_prefix,
                                                                                                                                                                            wildcards.assembly_stage,
                                                                                                                                                                            wildcards.datatype,
-                                                                                                                                                                           wildcards.artefact_type),
+                                                                                                                                                                           wildcards.artefact_type)),
                                                            haplotype=stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
                                                            allow_missing=True),
         log_dir=out_dir_path / "{assembly_stage}/{parameters}/log/",

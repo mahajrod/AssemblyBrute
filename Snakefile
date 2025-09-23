@@ -1385,6 +1385,7 @@ if "hic_scaffolding" in config["stage_list"]:
                         for track_type in ["windowmasker"] + (["trf"] if not config["skip_trf"] else [])],]
         if not config["skip_purge_dups_qc"]:
             print(stage_dict[current_stage]["parameters"][parameters_label]["option_set"])
+            print(data_types)
             results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype}/{datatype}/{genome_prefix}.{assembly_stage}.{haplotype}.dups.extended.bed",
                                     assembly_stage=[current_stage,],
                                     parameters=[parameters_label],

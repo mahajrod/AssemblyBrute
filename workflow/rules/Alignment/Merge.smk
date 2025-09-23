@@ -1,7 +1,7 @@
 if "hic" in input_pairprefix_dict: # TODO: rewrite code to make avoid error when hic is absent among input data
     rule bam_merge_files:
         input:
-            bams=expand(ancient(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.bam",
+            bams=ancient(expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.bam",
                         allow_missing=True,
                         pairprefix=input_pairprefix_dict["hic"])),
             reference_fai=ancient(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.fai"),

@@ -150,7 +150,6 @@ rule qc_purge_dups: #
     threads: parameters["threads"]["purge_dups"]
 
     shell:
-        " OUT_DIR=`dirname {output.bed}`; "
         " purge_dups -2 -T {input.cutoffs} -c {input.pbbasecov} {input.self_paf} > {output.bed} 2>{log.purge_dups}; "
 
 rule qc_get_purged_seqs: #

@@ -1377,6 +1377,16 @@ if "hic_scaffolding" in config["stage_list"]:
                         for window_settings in config["qc_settings"]["windows_sets"]]
                         for parameters_label in stage_dict[current_stage]["parameters"]]
                         for track_type in ["windowmasker"] + (["trf"] if not config["skip_trf"] else [])],]
+        if not config["skip_purge_dups_qc"]:
+            results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype}/{datatype}/{genome_prefix}.{assembly_stage}.{haplotype}.dups.extended.bed",
+                                    assembly_stage=[current_stage,],
+                                    parameters=[parameters_label],
+                                    haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
+                                    datatype=stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["main_datatypes"],
+                                    genome_prefix=[config["genome_prefix"], ],
+                                    ) for parameters_label in stage_dict[current_stage]["parameters"]]]
+
+
         if not config["skip_wga"]:
             results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/wga.{query_prefix}.{query_length}.to.{target_prefix}.{target_length}.YASS.R11.soft.min_len{min_target_len}.png",
                                      query_length=config["qc_settings"]["assembly_scaffold_sets"],
@@ -1933,6 +1943,7 @@ rule all:
 #----
 
 #---- Include section ----
+include: "workflow/rules/General/Log.smk"
 include: "workflow/rules/Install/Pip.smk"
 include: "workflow/rules/Preprocessing/Files.smk"
 include: "workflow/rules/QCFiltering/FastQC.smk"

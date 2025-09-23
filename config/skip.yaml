@@ -37,3 +37,5 @@
 "skip_gap_closing_hic_file": False
 "skip_gap_closing_ragtag": False
 "skip_gap_closing_wga": False
+
+"skip_purge_dups_qc": False

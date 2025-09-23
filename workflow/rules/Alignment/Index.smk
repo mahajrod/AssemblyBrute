@@ -99,7 +99,7 @@ rule index_bam:
 
 rule index_bam_csi:
     input:
-        bam="{bam_prefix}.bam"
+        bam=ancient("{bam_prefix}.bam")
     output:
         bai="{bam_prefix}.bam.csi"
     log:

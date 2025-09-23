@@ -14,8 +14,8 @@ rule qc_minimap2_purge_dups_reads:
     log:
         std=out_dir_path / "{assembly_stage}/{parameters}/log/minimap2_purge_dups_reads.{assembly_stage}.{parameters}.{haplotype}.{datatype}.{genome_prefix}.{fileprefix}.log",
         gzip=out_dir_path / "{assembly_stage}/{parameters}/log/minimap2_purge_dups_reads.{assembly_stage}.{parameters}.{haplotype}.{datatype}.{genome_prefix}.{fileprefix}.gzip.log",
-        cluster_log=out_dir_path / "{assembly_stage}/{parameters}/log/minimap2_purge_dups_reads.{assembly_stage}.{parameters}.{haplotype}.{datatype}.{genome_prefix}.{fileprefix}.{fileprefix}.cluster.log",
-        cluster_err=out_dir_path / "{assembly_stage}/{parameters}/log/minimap2_purge_dups_reads.{assembly_stage}.{parameters}.{haplotype}.{datatype}.{genome_prefix}.{fileprefix}.{fileprefix}.cluster.err"
+        cluster_log=out_dir_path / "{assembly_stage}/{parameters}/log/minimap2_purge_dups_reads.{assembly_stage}.{parameters}.{haplotype}.{datatype}.{genome_prefix}.{fileprefix}.cluster.log",
+        cluster_err=out_dir_path / "{assembly_stage}/{parameters}/log/minimap2_purge_dups_reads.{assembly_stage}.{parameters}.{haplotype}.{datatype}.{genome_prefix}.{fileprefix}.cluster.err"
     benchmark:
         out_dir_path / "{assembly_stage}/{parameters}/log/minimap2_purge_dups_reads.{assembly_stage}.{parameters}.{haplotype}.{datatype}.{genome_prefix}.{fileprefix}.benchmark.txt"
     conda:

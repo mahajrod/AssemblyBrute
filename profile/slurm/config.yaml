@@ -8,7 +8,7 @@ show-failed-logs: True
 rerun-incomplete: True
 
 executor: slurm
-slurm-cancel-cmd: scancel
+#slurm-cancel-cmd: scancel
 
 slurm:
   partition: "{resources.queue}"

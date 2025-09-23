@@ -7,7 +7,7 @@ rule qc_minimap2_purge_dups_reads:
         assembly=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
         log_dir=out_dir_path / "{assembly_stage}/{parameters}/log/"
     output:
-        paf=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, [^./]+}/{datatype, [^/]+}/{genome_prefix, [^/]+}.{haplotype, hap[^.]+}.{fileprefix, [^/]+}.paf.gz"
+        paf=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^./]+}/{datatype, [^/]+}/{genome_prefix, [^/]+}.{haplotype}.{fileprefix, [^/]+}.paf.gz"
     params:
         index_size=lambda wildcards: parse_option("index_size", parameters["tool_options"]["minimap2"][wildcards.datatype], " -I "),
         alignment_scheme=lambda wildcards: parse_option("alignment_scheme", parameters["tool_options"]["minimap2"][wildcards.datatype], " -x "),

@@ -310,7 +310,7 @@ rule create_purge_dups_track_for_combined_haplotype:
         " for HAP in {params.haplotype_list}; "
         "    do "
         "    echo \"Processing ${{HAP}}...\" >> {log.log} 2>&1; "
-        "    HAP_TRACK={params.dir_prefix}.${{HAP}}/{params.track_prefix}.${{HAP}}.{params.suffix}.${{BUSCO_TYPE}}.track.bedgraph; "
+        "    HAP_TRACK={params.dir_prefix}.${{HAP}}/{params.track_prefix}.${{HAP}}.{params.suffix}.track.bedgraph; "
         "    sed 's/^/'${{HAP}}'\./' ${{HAP_TRACK}} >> {output.combined_track} 2>>{log.log}; "
         "    done;"
 

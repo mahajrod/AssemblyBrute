@@ -1,11 +1,11 @@
 jobs: 100
 #attempt: 3
 retries: 1
-reason: True
+#reason: True
 use-conda: True
 latency-wait: 60
 printshellcmds: True
 show-failed-logs: True
 rerun-incomplete: True
-cluster-cancel: "scancel"
-cluster: "sbatch {resources.node_options} --qos=normal --partition={resources.queue} -t {resources.time} --mem={resources.mem} -c {resources.cpus} --parsable -o {log.cluster_log} -e {log.cluster_err}"
+#cluster-cancel: "scancel"
+cluster: "sbatch {resources.node_options} --cluster-cancel scancel --reason --qos=normal --partition={resources.queue} -t {resources.time} --mem={resources.mem} -c {resources.cpus} --parsable -o {log.cluster_log} -e {log.cluster_err}"

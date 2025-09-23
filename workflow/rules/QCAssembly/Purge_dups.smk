@@ -1,8 +1,4 @@
 
-wildcard_constraints:
-    haplotype="[^.]+"
-
-
 rule qc_minimap2_purge_dups_reads:
     input:
         fastq=lambda wildcards: output_dict["data"] / "fastq/{0}/filtered/{1}{2}".format(wildcards.datatype, #stage_dict["purge_dups"]["parameters"][wildcards.prev_stage_parameters + ".." + wildcards.purge_dups_parameters]["option_set"]["datatype"],

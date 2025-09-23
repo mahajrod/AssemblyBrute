@@ -105,9 +105,9 @@ rule bwa_cov:
 
 rule calculate_coverage:
     input:
-        bam=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type}/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.bam",
+        bam=ancient(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type}/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.bam"),
         #bai=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type}/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.bam.bai"
-        csi=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type}/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.bam.csi"
+        csi=ancient(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type}/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.bam.csi")
 
     output:
         per_base=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.{settings}.per-base.bed.gz"

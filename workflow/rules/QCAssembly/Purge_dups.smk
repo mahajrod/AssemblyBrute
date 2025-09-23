@@ -129,9 +129,9 @@ rule qc_minimap2_purge_dups_assembly:
 
 rule qc_purge_dups: #
     input:
-        cutoffs=rules.get_purge_dups_read_stat.output.cutoffs,
-        pbbasecov=rules.get_purge_dups_read_stat.output.pbbasecov,
-        self_paf=rules.minimap2_purge_dups_assembly.output.paf,
+        cutoffs=rules.qc_get_purge_dups_read_stat.output.cutoffs,
+        pbbasecov=rules.qc_get_purge_dups_read_stat.output.pbbasecov,
+        self_paf=rules.qc_minimap2_purge_dups_assembly.output.paf,
         log_dir=out_dir_path / "{assembly_stage}/{parameters}/log/"
     output:
         bed=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.dups.raw.bed",

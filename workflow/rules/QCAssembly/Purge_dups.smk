@@ -47,7 +47,7 @@ rule qc_minimap2_purge_dups_reads:
 
 rule qc_get_purge_dups_read_stat:
     input:
-        paf=lambda wildcards: expand(rules.minimap2_purge_dups_reads.output.paf,
+        paf=lambda wildcards: expand(rules.qc_minimap2_purge_dups_reads.output.paf,
                                      fileprefix=input_file_prefix_dict[wildcards.datatype],
                                      genome_prefix=[config["genome_prefix"]],
                                      allow_missing=True),

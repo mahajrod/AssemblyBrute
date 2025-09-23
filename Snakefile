@@ -1378,6 +1378,7 @@ if "hic_scaffolding" in config["stage_list"]:
                         for parameters_label in stage_dict[current_stage]["parameters"]]
                         for track_type in ["windowmasker"] + (["trf"] if not config["skip_trf"] else [])],]
         if not config["skip_purge_dups_qc"]:
+            print(stage_dict[current_stage]["parameters"][parameters_label]["option_set"])
             results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype}/{datatype}/{genome_prefix}.{assembly_stage}.{haplotype}.dups.extended.bed",
                                     assembly_stage=[current_stage,],
                                     parameters=[parameters_label],
@@ -1967,6 +1968,7 @@ include: "workflow/rules/QCAssembly/BUSCO5.smk"
 include: "workflow/rules/QCAssembly/Merqury.smk"
 include: "workflow/rules/QCAssembly/QUAST.smk"
 include: "workflow/rules/QCAssembly/General.smk"
+include: "workflow/rules/QCAssembly/Purge_dups.smk"
 include: "workflow/rules/Contamination/FCS.smk"
 include: "workflow/rules/Contamination/Kraken2.smk"
 

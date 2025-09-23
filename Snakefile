@@ -1389,7 +1389,7 @@ if "hic_scaffolding" in config["stage_list"]:
                                     assembly_stage=[current_stage,],
                                     parameters=[parameters_label],
                                     haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
-                                    datatype=stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["main_datatypes"],
+                                    datatype=stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"],
                                     genome_prefix=[config["genome_prefix"], ],
                                     ) for parameters_label in stage_dict[current_stage]["parameters"]]]
 

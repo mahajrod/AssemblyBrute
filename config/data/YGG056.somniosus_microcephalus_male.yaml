@@ -275,7 +275,8 @@
 "skip_kmer": False
 "skip_ragtag": False
 "skip_gathering": True
-
+"skip_trf": True
+"skip_hic": True
 "skip_pretext_10k_1k_tracks": True
 "skip_pretext_1000k_100k_tracks": False
 

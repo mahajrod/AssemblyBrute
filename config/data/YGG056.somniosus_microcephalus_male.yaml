@@ -116,6 +116,11 @@
     "threshold_types":
         - "absolute"
         - "relative"
+    "purge_dups":
+        "qc_datatypes":
+            - "hifi"
+            #- "illumina"
+            #- "nanopore"
 
 "coretool_option_sets":
     "hifiasm":

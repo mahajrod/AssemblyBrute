@@ -267,7 +267,7 @@ for key in list(config["parameters"].keys()): # remove unused sets of parameters
 
 parameters = config["parameters"][config["parameter_set"]] # short alias for used set of parameters
 
-for tool in parameters["tool_options"]: # sort datatypes in case of mixed datatypes to avoid ouble calculations
+for tool in parameters["tool_options"]: # sort datatypes in case of mixed datatypes to avoid double calculations
     for option_set in parameters["tool_options"][tool]:
         if "main_datatypes" in parameters["tool_options"][tool][option_set]:
             parameters["tool_options"][tool][option_set]["main_datatypes"] = sorted(parameters["tool_options"][tool][option_set]["main_datatypes"])
@@ -860,10 +860,14 @@ if "contig" in config["stage_list"] or "draft_qc" in config["stage_list"]:
 
             stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
             stage_dict["contig"]["parameters"][parameters_label]["option_set_group"] = option_set_group_assignment_dict[option_set] if option_set_group_assignment_dict is not None else None
-            if not stage_dict["contig"]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
-                stage_dict["contig"]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict["contig"]["parameters"][parameters_label]["option_set"]["main_datatypes"]
-            if not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"]:
-                stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["main_datatypes"]
+            if ("purge_dups" in config["qc_settings"]) and ("qc_datatypes" in config["qc_settings"]["purge_dups"]) and config["qc_settings"]["purge_dups"]["qc_datatypes"]:
+                stage_dict["contig"]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = config["qc_settings"]["purge_dups"]["qc_datatypes"]
+            else:
+
+                if not stage_dict["contig"]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
+                    stage_dict["contig"]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict["contig"]["parameters"][parameters_label]["option_set"]["main_datatypes"]
+                if not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"]:
+                    stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["main_datatypes"]
 
 #for option_supergroup in ["options_affecting_error_correction"]:
             #    stage_dict["contig"]["parameters"][parameters_label][option_supergroup] = option_cluster_reverse_dict[assembler][option_supergroup][option_set]
@@ -1015,8 +1019,12 @@ if "purge_dups" in config["stage_list"]:
                     stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["main_datatypes"] = stage_dict[stage_dict[current_stage]["prev_stage"]]["parameters"][prev_parameters]["option_set"]["main_datatypes"]
                 if not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
                     stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["main_datatypes"]
-                if ("purge_dups_qc_datatypes" not in stage_dict[current_stage]["parameters"][parameters_label]["option_set"]) or (not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"]):
-                    stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["purge_dups_qc_datatypes"]
+
+                if ("purge_dups" in config["qc_settings"]) and ("qc_datatypes" in config["qc_settings"]["purge_dups"]) and config["qc_settings"]["purge_dups"]["qc_datatypes"]:
+                    stage_dict["contig"]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = config["qc_settings"]["purge_dups"]["qc_datatypes"]
+                else:
+                    if ("purge_dups_qc_datatypes" not in stage_dict[current_stage]["parameters"][parameters_label]["option_set"]) or (not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"]):
+                        stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["purge_dups_qc_datatypes"]
 
     parameters_list = list(stage_dict[current_stage]["parameters"].keys())
     results_list += [
@@ -1224,8 +1232,12 @@ if "hic_scaffolding" in config["stage_list"]:
                     stage_dict[current_stage]["parameters"].pop(parameters_label)
                 if not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
                     stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["qc_datatypes"]
-                if ("purge_dups_qc_datatypes" not in stage_dict[current_stage]["parameters"][parameters_label]["option_set"]) or (not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"]):
-                    stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["purge_dups_qc_datatypes"]
+
+                if ("purge_dups" in config["qc_settings"]) and ("qc_datatypes" in config["qc_settings"]["purge_dups"]) and config["qc_settings"]["purge_dups"]["qc_datatypes"]:
+                    stage_dict["contig"]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = config["qc_settings"]["purge_dups"]["qc_datatypes"]
+                else:
+                    if ("purge_dups_qc_datatypes" not in stage_dict[current_stage]["parameters"][parameters_label]["option_set"]) or (not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"]):
+                        stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["purge_dups_qc_datatypes"]
 
     #for parameter_label in stage_dict["hic_scaffolding"]["parameters"].keys(): # remove ignore
     #    if not stage_dict["hic_scaffolding"]["parameters"][parameter_label]["included"]:

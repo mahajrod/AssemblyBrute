@@ -145,6 +145,16 @@
         "lower_threshold": null #
         "haploid_diploid_threshold": null #
         "upper_threshold": null #
+    "hifiasm":
+        "coverage_estimator": null
+        "lambda": 36
+    "krater":
+        "use_second_peak": null
+        "low_limit": null
+        "high_limit": null
+    "genomescope":
+        "starting_lambda": 30
+        "start_shift": null
 
 "ploidy": 2
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
@@ -198,7 +208,7 @@
 "mode": "assembly"                # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
-"assembly_mode": "hic_scaffolding"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
+"assembly_mode": "contig "#"hic_scaffolding"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []

@@ -197,6 +197,12 @@ rule extract_lambda_value:
                             lambda_value = config["tool_manually_adjusted_features"]["hifiasm"]["lambda"]
                             print("Using a preset lambda value ({0}) for contig assembly hifiasm_{1} ...".format(config["tool_manually_adjusted_features"]["hifiasm"]["lambda"],
                                                                                                                  wildcards.contig_options))
+                            log_fd.write("Using the preset lambda value ({0}) for contig assembly hifiasm_{1} ...\n".format(lambda_value,
+                                                                                                                            wildcards.contig_options))
+
+                            log_fd.write("Report file:\tIgnored\n")
+                            log_fd.write("Lambda:\t%.2f\n" % lambda_value)
+                            out_fd.write("%.2f\n" % lambda_value)
                             return lambda_value
                         else:
                             message = "ERROR!!! Preset lambda value is not a number! Check value in contig['tool_manually_adjusted_features']['hifiasm']['lambda'] ..."

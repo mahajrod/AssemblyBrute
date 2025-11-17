@@ -1,8 +1,11 @@
 localrules: create_local_log_dir, create_local_benchmark_dir
 
+rule create_stage_dirs:
+
+
 rule create_local_log_dir:
     input:
-        work_dir="{directory}"
+        work_dir=[]
     output:
         log_dir=directory("{directory}/log/")
     log:
@@ -26,7 +29,7 @@ rule create_local_log_dir:
 
 rule create_local_benchmark_dir:
     input:
-        work_dir="{directory}",
+        #work_dir="{directory}",
         log_dir="{directory}/log/"
     output:
         benchmark_dir=directory("{directory}/benchmark/")

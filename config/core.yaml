@@ -68,6 +68,10 @@
     "simulate_pcr":
         "yaml": "workflow/envs/conda.simulate_pcr.yaml"
         "name": "simulate_pcr"
+    "nextpolish2":
+        "yaml": "workflow/envs/conda.nextpolish2.yaml"
+        "name": "nextpolish2"
+
 
 "resources_dir": "config/resources/"
 #"threads":      "config/resources/threads.tab"

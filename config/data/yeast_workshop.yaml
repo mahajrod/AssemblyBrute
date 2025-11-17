@@ -186,8 +186,8 @@
 "final_kmer_length": 21 # pipeline allows usage of different kmer length, but only one genomesize assessment could be used
 
 "final_kmer_datatypes":
-    #- "hifi"
-    - "illumina"
+    - "hifi"
+    #- "illumina"
 
 "assembly_kmer_length":
     - 31 # kmer length to be used for phasing hic reads using assembled and purge_dupsed contigs

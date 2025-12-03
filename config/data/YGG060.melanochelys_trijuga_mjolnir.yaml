@@ -115,13 +115,13 @@
          #- "l0primary"
          #- "l1primary"
          #- "l2primary"
-         #- "l3primary"
+         - "l3primary"
          #- "l3primary_main_nanopore"
          #- "l3primary_main_nanopore_only"
          #- "l3primary_main_hifi_duplex"
          #- "l3primary_no_ul"
-         - "l1primary_no_hic"
-         - "l3primary_no_hic"
+         #- "l1primary_no_hic"
+         #- "l3primary_no_hic"
          #- "l3primary_no_hic_s0.4"
          #- "l3primary_no_hic_s0.2"
          #- "l3primary_no_hic_s0.3"
@@ -129,9 +129,9 @@
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
     "purge_dups":
-        - "default"
+        #- "default"
         - "keep_hicov"
-        #- "skipped"
+        - "skipped"
     "salsa2":
         - "phased_reads"
         #- "unphased_reads"
@@ -155,7 +155,7 @@
 
 "ploidy": 2
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
-"genome_prefix": "MelTri1"
+"genome_prefix": "rMelTri1"
 "busco_lineage_list":
     - "sauropsida_odb10" #
     - "vertebrata_odb10"
@@ -187,8 +187,9 @@
 
 "final_kmer_counter": "meryl" # pipeline allows usage of different kmer counter external_tools, but only one genomesize assessment could be used
 "final_kmer_length": 21 # pipeline allows usage of different kmer length, but only one genomesize assessment could be used
+"final_kmer_datatypes":
+    - "hifi"
 
-"final_kmer_datatype": "hifi"
 "assembly_kmer_length":
     - 31 # kmer length to be used for phasing hic reads using assembled and purge_dupsed contigs
 "phasing_stage": "purge_dups"

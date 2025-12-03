@@ -155,7 +155,7 @@
 
 "ploidy": 2
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
-"genome_prefix": "rMelTri1"
+"genome_prefix": "MelTri1"
 "busco_lineage_list":
     - "sauropsida_odb10" #
     - "vertebrata_odb10"

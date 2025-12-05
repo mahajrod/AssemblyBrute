@@ -41,7 +41,7 @@
             "image_path":   "/maps/projects/tomg/people/xsg178/soft/FCS-GX/fcs-gx.sif"
             "memory_mb":    512000 # Entire database must be in memory, it requires at least 490 Gbp
             "threads":      30
-            "time":         "06:00:00"
+            "time":         "18:00:00"
             "in_memory":    True
     "fcs_adaptor":
         "adaptor":

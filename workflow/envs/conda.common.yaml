@@ -58,3 +58,5 @@
   - "fastx_toolkit"
   - "tabulate"
   - "trimmomatic"
+  - pip:
+      - "distinctipy"

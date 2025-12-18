@@ -1964,7 +1964,7 @@ rule all:
 
 #---- Include section ----
 include: "workflow/rules/General/Log.smk"
-include: "workflow/rules/Install/Pip.smk"
+#include: "workflow/rules/Install/Pip.smk"
 include: "workflow/rules/Preprocessing/Files.smk"
 include: "workflow/rules/QCFiltering/FastQC.smk"
 include: "workflow/rules/QCFiltering/MultiQC.smk"

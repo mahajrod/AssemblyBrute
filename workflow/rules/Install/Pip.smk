@@ -1,3 +1,4 @@
+#TODO: DEPRICATED SMK. REMOVE LATER
 localrules: install_from_pip
 
 rule install_from_pip:

@@ -43,7 +43,7 @@ rule gc_plot:
                                                                                                                           config["genome_prefix"],
                                                                                                                           config["final_kmer_length"],
                                                                                                                           config["final_kmer_counter"])),
-        pip="results/config/pip.common.requirements" # added to ensure that distinctipy package was installed
+        #pip="results/config/pip.common.requirements" # Obsolete - pip packages are now listed in env filesadded to ensure that distinctipy package was installed.
     output:
         heatmap_png=output_dict["kmer"] / "{datatype}/{stage}/gcp/{datatype}.{stage}.{kmer_length}.L{min_coverage}.heatmap.png",
     params:

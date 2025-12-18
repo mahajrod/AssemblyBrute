@@ -115,13 +115,13 @@
          #- "l0primary"
          #- "l1primary"
          #- "l2primary"
-         #- "l3primary"
+         - "l3primary"
          #- "l3primary_main_nanopore"
          #- "l3primary_main_nanopore_only"
          #- "l3primary_main_hifi_duplex"
          #- "l3primary_no_ul"
-         - "l1primary_no_hic"
-         - "l3primary_no_hic"
+         #- "l1primary_no_hic"
+         #- "l3primary_no_hic"
          #- "l3primary_no_hic_s0.4"
          #- "l3primary_no_hic_s0.2"
          #- "l3primary_no_hic_s0.3"
@@ -129,9 +129,9 @@
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
     "purge_dups":
-        - "default"
-        - "keep_hicov"
-        #- "skipped"
+        #- "default"
+        #- "keep_hicov"
+        - "skipped"
     "salsa2":
         - "phased_reads"
         #- "unphased_reads"
@@ -200,7 +200,7 @@
 "custom_enzyme_set_is_no_motif": False
 
 "starting_point": "fastq" # Allowed: "draft"
-"data_types": "hifi" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic" and others
+"data_types": "hifi, hic" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic" and others
 
 #-------- Options specific for starting point 'draft' ----------------
 "phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads
@@ -292,5 +292,5 @@
 
 # TODO:  add modes:  "create_map_bionano", "bionano_scaffolding"
 
-"parameter_set": "normal" # Choice of genome-size based set of parameters
+"parameter_set": "big" # Choice of genome-size based set of parameters
 "use_existing_envs": True # works only if --use-conda flag was set in snakemake command

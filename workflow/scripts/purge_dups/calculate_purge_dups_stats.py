@@ -66,3 +66,5 @@ for artefact in stats_df.index.unique():
 for artefact in artefact_set - set(stats_df.index.unique()):
     with open("{0}.{1}.ids".format(args.output_prefix, str(artefact).lower()), "w") as out_fd:
         pass
+    with open("{0}.{1}.extended.bed".format(args.output_prefix, str(artefact).lower()), "w") as out_fd:
+        pass

@@ -1,3 +1,4 @@
+localrules: qc_extract_stats_from_purge_dups_file
 
 rule qc_minimap2_purge_dups_reads:
     input:

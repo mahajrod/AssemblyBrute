@@ -255,6 +255,8 @@
 "skip_gathering": True
 "skip_pretext_10k_1k_tracks": True
 
+"skip_purge_dups_qc": True
+
 "create_hic_file_during_curation": False
 #------------ Options specific for cluster ------------
 # This option have no effect if pipeline runs on local machine

@@ -344,10 +344,13 @@ primary_haplotype = "hap1" # TODO: obsolete: remove and fix issues
 
 results_list = []
 
+"""
+# Pip dependencies are now installed azutomatically
 for conda_env in config["conda"]:
     if "pip" in config["conda"][conda_env]:
         results_list += [expand("results/config/pip.{conda_env}.requirements",
                                 conda_env=[conda_env])]
+"""
 
 #---- Create output filelist ----
 if "check_reads" in config["stage_list"]:

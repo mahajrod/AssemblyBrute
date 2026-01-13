@@ -404,6 +404,10 @@ if "draft_qc" in config["stage_list"]:
             stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]
             stage_dict["draft_qc"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
             stage_dict["draft_qc"]["parameters"][parameters_label]["option_set_group"] = None
+
+            #TEMP STRING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TODO: replace
+            stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = ["hifi"]
+
             #if not stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
             #    pass # TODO: ADD!!!
 

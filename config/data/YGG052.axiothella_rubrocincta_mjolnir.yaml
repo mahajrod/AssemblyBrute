@@ -148,7 +148,7 @@
 
 "ploidy": 2
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
-"genome_prefix": "PhoHar1"
+"genome_prefix": "AxiRub1"
 "busco_lineage_list":
     - "lophotrochozoa_odb12" #
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,

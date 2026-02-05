@@ -39,7 +39,7 @@ rule busco5: # Downloading of busco datasets is performed by a different rule to
         busco_table=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/busco5/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}.busco5.{busco_lineage}.full_table.tsv",
         missing_busco_ids=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/busco5/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}.busco5.{busco_lineage}.missing.ids",
     params:
-        gene_predictor="--{0}".format(parameters["tool_options"]["busco"][config["other_tool_option_sets"]["busco"]]["gene_predictor"])
+        gene_predictor="--{0}".format(parameters["tool_options"]["busco"]["gene_predictor"])
     log:
         std=output_dict["log"] / "busco5.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.log",
         pigz=output_dict["log"] / "busco5.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.pigz.log",

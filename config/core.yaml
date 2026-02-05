@@ -353,7 +353,7 @@
                     "hic": []
             "busco":
                 "default":
-                    "gene_predictor_list": "metaeuk"
+                    "gene_predictor": "metaeuk"
                 "metaeuk":
                     "gene_predictor": "metaeuk"
                 "augustus":

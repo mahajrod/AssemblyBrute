@@ -360,8 +360,7 @@
                     "augustus": "augustus"
                 "miniprot":
                     "gene_predictor": "miniprot"
-                "auto_lineage":
-                    "gene_predictor": "auto_lineage"
+
             "cutadapt":
                 "default":
                     "hifi":

@@ -38,6 +38,8 @@ rule busco5: # Downloading of busco datasets is performed by a different rule to
         summary_json=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/busco5/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}.busco5.{busco_lineage}.summary.json",
         busco_table=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/busco5/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}.busco5.{busco_lineage}.full_table.tsv",
         missing_busco_ids=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/busco5/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}.busco5.{busco_lineage}.missing.ids",
+    params:
+        gene_predictor="--{0}".format(parameters["tool_options"]["busco"][config["other_tool_option_sets"]["busco"]]["gene_predictor"])
     log:
         std=output_dict["log"] / "busco5.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.log",
         pigz=output_dict["log"] / "busco5.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{busco_lineage}.pigz.log",
@@ -59,7 +61,7 @@ rule busco5: # Downloading of busco datasets is performed by a different rule to
     shell:
          " BUSCO_DIR={output.tar_gz}; "
          " BUSCO_DIR=${{BUSCO_DIR%.tar.gz}}; "
-         " busco --offline -f -m genome -l {input.busco_lineage} -c {threads} -i {input.assembly} "
+         " busco --offline -f -m genome -l {input.busco_lineage} -c {threads} -i {input.assembly} {params.gene_predictor}"
          " -o `basename ${{BUSCO_DIR}}` --out_path `dirname ${{BUSCO_DIR}}` > {log.std} 2>&1;"
          " cp ${{BUSCO_DIR}}/short_summary.specific.{wildcards.busco_lineage}.{wildcards.genome_prefix}.{wildcards.assembly_stage}.{wildcards.haplotype}.busco5.{wildcards.busco_lineage}.txt {output.summary} ; "
          " cp ${{BUSCO_DIR}}/short_summary.specific.{wildcards.busco_lineage}.{wildcards.genome_prefix}.{wildcards.assembly_stage}.{wildcards.haplotype}.busco5.{wildcards.busco_lineage}.json {output.summary_json} ; "

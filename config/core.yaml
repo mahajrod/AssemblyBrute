@@ -351,6 +351,17 @@
                     "simplex": []
                     "duplex": []
                     "hic": []
+            "busco":
+                "default":
+                    "gene_predictor_list": "metaeuk"
+                "metaeuk":
+                    "gene_predictor": "metaeuk"
+                "augustus":
+                    "augustus": "metaeuk"
+                "miniprot":
+                    "gene_predictor": "miniprot"
+                "auto_lineage":
+                    "gene_predictor": "auto_lineage"
             "cutadapt":
                 "default":
                     "hifi":

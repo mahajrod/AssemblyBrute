@@ -30,3 +30,4 @@
     "microsome_detection":      "default"   # Allowed: default
     "assembly_qc":              "default"   # Allowed: default
     "yahs_juicer_pre":          "all"       # Allowed: 'all' (mapq 0, 1, 10), 'mapq1' (mapq 0, 1), 'mapq' (0)
+    "busco":                    "default"

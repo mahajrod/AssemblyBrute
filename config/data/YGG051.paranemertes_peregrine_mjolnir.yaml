@@ -150,7 +150,7 @@
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
 "genome_prefix": "ParPer1"
 "busco_lineage_list":
-    - "lophotrochozoa_odb12" #
+    - "lophotrochozoa_odb10" #
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
 "telomere_motif": null  # telomere motif at 5'-end; CCCTAA for human, place null if unknown

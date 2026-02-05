@@ -357,7 +357,7 @@
                 "metaeuk":
                     "gene_predictor": "metaeuk"
                 "augustus":
-                    "augustus": "metaeuk"
+                    "augustus": "augustus"
                 "miniprot":
                     "gene_predictor": "miniprot"
                 "auto_lineage":

@@ -315,6 +315,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         ul_cut=lambda wildcards: parse_option("ul-cut", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --ul-cut "),
         ont_assembly= lambda wildcards: parse_option_flag("ont_mode", parameters["tool_options"]["hifiasm"][wildcards.contig_options]," --ont "),
         ont_mode=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"],
+        post_join=lambda wildcards: parse_option("post_join", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -u ")
     log:
         std=output_dict["log"] / "hifiasm.{contig_options}.{genome_prefix}.log",
         cluster_log=output_dict["cluster_log"] / "hifiasm.{contig_options}.{genome_prefix}.cluster.log",
@@ -350,7 +351,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
          "         --primary -t {threads} -l {params.purge_level}  -o ${{OUTPUT_PREFIX}} "
          "         --n-hap {params.ploidy} --purge-max ${{COV_UPPER_BOUNDARY}} "
          "         {params.hic_forward} {params.hic_reverse} {params.ultralong_reads} {params.ul_cut} {params.dual_scaf} "
-         "         {params.telomere_motif} "
+         "         {params.telomere_motif} {params.post_join} "
          "         {input.main_reads}  1>>{log.std} 2>&1; "         
          " ln -sf `basename {output.hap1_contig_graph}` {output.hap1_alias} 1>>{log.std} 2>&1; "
          " ln -sf `basename {output.hap2_contig_graph}` {output.hap2_alias} 1>>{log.std} 2>&1; "
@@ -618,6 +619,7 @@ rule hifiasm_long_reads_only:
         ul_cut=lambda wildcards: parse_option("ul-cut", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " --ul-cut "),
         ont_assembly= lambda wildcards: parse_option_flag("ont_mode", parameters["tool_options"]["hifiasm"][wildcards.contig_options]," --ont "),
         ont_mode= lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"],
+        post_join=lambda wildcards: parse_option("post_join", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -u ")
     log:
         std=output_dict["log"] / "hifiasm.{contig_options}.{genome_prefix}.log",
         cluster_log=output_dict["cluster_log"] / "hifiasm.{contig_options}.{genome_prefix}.cluster.log",
@@ -648,12 +650,12 @@ rule hifiasm_long_reads_only:
          " COV_UPPER_BOUNDARY=`echo \"{params.cov_multiplicator}*${{LAMBDA}}\" | bc`; "
          " COV_UPPER_BOUNDARY=${{COV_UPPER_BOUNDARY%.*}}; "
          " hifiasm {params.window_size} {params.bloom_filter_bits} {params.ont_assembly} "
-         " {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size} "
-         " {params.kmer_length} {params.D} {params.N} {params.ignore_bin} {params.ul_cut} {params.sim_threshold_for_hapdup_reads} "
-         " --primary -t {threads} -l {params.purge_level}  -o ${{OUTPUT_PREFIX}} "
-         " --n-hap {params.ploidy} --purge-max ${{COV_UPPER_BOUNDARY}} {params.ultralong_reads} {params.dual_scaf} "
-         " {params.telomere_motif} "
-         " {input.main_reads}  1>{log.std} 2>&1;"
+         "         {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size} "
+         "         {params.kmer_length} {params.D} {params.N} {params.ignore_bin} {params.ul_cut} "
+         "         {params.sim_threshold_for_hapdup_reads} {params.post_join} "
+         "         --primary -t {threads} -l {params.purge_level}  -o ${{OUTPUT_PREFIX}} "
+         "         --n-hap {params.ploidy} --purge-max ${{COV_UPPER_BOUNDARY}} {params.ultralong_reads} {params.dual_scaf} "
+         "         {params.telomere_motif} {input.main_reads}  1>{log.std} 2>&1;"
          " ln -sf `basename {output.primary_contig_graph}` {output.primary_alias};"
          " ln -sf `basename {output.alt_contig_graph}` {output.alt_alias};"
 

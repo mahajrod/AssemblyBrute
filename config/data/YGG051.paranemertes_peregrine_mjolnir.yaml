@@ -129,8 +129,8 @@
         - "phased_reads"
         #- "unphased_reads"
     "yahs":
-        - "phased_reads"
-        #- "unphased_reads"
+        #- "phased_reads"
+        - "unphased_reads"
     "threeddna":
         - "phased_reads"
         #- "unphased_reads"
@@ -189,7 +189,7 @@
 "custom_enzyme_set_is_no_motif": False
 
 "starting_point": "fastq" # Allowed: "draft"
-"data_types": "hifi" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
+"data_types": "hifi,hic" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
 
 #-------- Options specific for starting point 'draft' ----------------
 "phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads
@@ -198,7 +198,7 @@
 "mode": "assembly"                # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
-"assembly_mode": "purge_dups"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
+"assembly_mode": "hic_scaffolding"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []

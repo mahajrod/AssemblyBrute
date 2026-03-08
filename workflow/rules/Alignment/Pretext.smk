@@ -114,6 +114,7 @@ rule pretext_inject_tracks:
                                 artefact_type=["junk", "ovlp", "haplotig", "repeat", "highcov"],
                                 allow_missing=True) if not config["skip_purge_dups_qc"] else [],
     output:
+        tmp_gap_track = temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^./]+}/alignment/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{subset}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.gap_track.tmp.bed"),
         updated_map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^./]+}/alignment/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{subset}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.tracks.pretext",
     params:
         min_mapq=parameters["tool_options"]["pretextmap"]["mapq"],
@@ -157,8 +158,11 @@ rule pretext_inject_tracks:
 
     shell:
         " cp -f {input.map} {output.updated_map}; "
-        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.filtered_out} -i {input.gap_track}  | "
-        "   PretextGraph -i {output.updated_map} -n gap > {log.gap} 2>&1; "
+        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.filtered_out} -i {input.gap_track} > {output.tmp_gap_track} > {log.gap} 2>&1; "
+        " if [ -s {output.tmp_gap_track} ] ; "
+        "   then"
+        "   cat {output.tmp_gap_track} | PretextGraph -i {output.updated_map} -n gap >> {log.gap} 2>&1; "
+        "   fi; "
         " if [[ -s {input.canonical_telomere_track} ]]; "
         "   then "
         "   workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.filtered_out} -i {input.canonical_telomere_track} | "

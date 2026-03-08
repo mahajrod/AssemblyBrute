@@ -1268,6 +1268,8 @@ if "hic_scaffolding" in config["stage_list"]:
                     #stage_dict["hic_scaffolding"]["parameters"][parameters_label]["included"] = False
                     stage_dict[current_stage]["parameters"].pop(parameters_label)
                 print("AAAAAA")
+                print(current_stage)
+                print(parameters_label)
                 print(stage_dict[current_stage]["parameters"][parameters_label])
                 print(stage_dict[current_stage]["parameters"][parameters_label]["option_set"])
                 print(stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["qc_datatypes"])

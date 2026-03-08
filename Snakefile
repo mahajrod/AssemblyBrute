@@ -1267,6 +1267,10 @@ if "hic_scaffolding" in config["stage_list"]:
                 if (len(stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]) == 1) and (stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["use_phased_reads"]):
                     #stage_dict["hic_scaffolding"]["parameters"][parameters_label]["included"] = False
                     stage_dict[current_stage]["parameters"].pop(parameters_label)
+                print("AAAAAA")
+                print(stage_dict[current_stage]["parameters"][parameters_label])
+                print(stage_dict[current_stage]["parameters"][parameters_label]["option_set"])
+                print(stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["qc_datatypes"])
                 if not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
                     stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["qc_datatypes"]
 

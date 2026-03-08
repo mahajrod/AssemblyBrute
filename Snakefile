@@ -1270,6 +1270,7 @@ if "hic_scaffolding" in config["stage_list"]:
                 print("AAAAAA")
                 print(current_stage)
                 print(parameters_label)
+                print(stage_dict[current_stage]["parameters"])
                 print(stage_dict[current_stage]["parameters"][parameters_label])
                 print(stage_dict[current_stage]["parameters"][parameters_label]["option_set"])
                 print(stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["qc_datatypes"])

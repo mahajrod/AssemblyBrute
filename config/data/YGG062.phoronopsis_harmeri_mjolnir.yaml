@@ -87,6 +87,7 @@
             - "ragtag"
 
 "extended_qc_stages":
+    - "contig"
     - "purge_dups"
     - "hic_scaffolding"
     - "ref_scaffolding"
@@ -123,7 +124,7 @@
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
     "purge_dups":
-        - "keep_hicov"
+        #- "keep_hicov"
         - "skipped"
     "salsa2":
         - "phased_reads"
@@ -189,7 +190,7 @@
 "custom_enzyme_set_is_no_motif": False
 
 "starting_point": "fastq" # Allowed: "draft"
-"data_types": "hifi" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
+"data_types": "hifi,hic" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
 
 #-------- Options specific for starting point 'draft' ----------------
 "phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads
@@ -198,7 +199,7 @@
 "mode": "assembly"                # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
-"assembly_mode": "purge_dups"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
+"assembly_mode": "hic_scaffolding"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []

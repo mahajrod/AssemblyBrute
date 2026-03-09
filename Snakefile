@@ -2048,7 +2048,7 @@ include: "workflow/rules/Alignment/Stats.smk"
 if "hic" in data_types:
     if (sum(list(pd.Series(["hic_scaffolding",
                         "gap_closing",
-                        "draft_qc"]).isin(config["stage_list"]))) > 0) :
+                        "draft_qc", "contig"]).isin(config["stage_list"]))) > 0) :
         if config["other_tool_option_sets"]["mapping_pipeline"] == "arima":
             print("Mapping pipeline: Arima")
             include: "workflow/rules/Alignment/Arima.smk"

@@ -2,8 +2,8 @@ import pandas as pd
 
 if (sum(list(pd.Series(["hic_scaffolding",
                         "gap_closing",
-                        "draft_qc"],
-                        ["contig"]).isin(config["stage_list"]))) > 0) and ("hic" in data_types) : # TODO: remove this bypass in future
+                        "draft_qc",
+                        "contig"],).isin(config["stage_list"]))) > 0) and ("hic" in data_types) : # TODO: remove this bypass in future
     if "purge_dups" in config["stage_list"]:
         ruleorder: combine_haplotypes > create_final_links_purge_dups
         ruleorder: combine_haplotypes > create_assembly_links_if_skipping_purge_dups

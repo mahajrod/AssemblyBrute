@@ -2062,7 +2062,7 @@ if "hic" in data_types:
 
     if (sum(list(pd.Series(["hic_scaffolding",
                         "gap_closing",
-                        "draft_qc"]).isin(config["stage_list"]))) > 0) :
+                        "draft_qc", "contig"]).isin(config["stage_list"]))) > 0) :
         include: "workflow/rules/Alignment/Pretext.smk"
 
     if "hic_scaffolding" in config["stage_list"]:

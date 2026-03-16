@@ -145,6 +145,10 @@
         #- "unphased_reads"
     "curation":
         - "default"
+    "assembly_qc":
+        - "default"
+    "samba":
+        - "phased_reads"
 
 "other_tool_option_sets": # Options set here overwrite settings from "secondary_tool_config_file". Check it for configurable option list
     "mapping_pipeline":         "arima"  # Allowed: arima, bwa_only, pairtools.

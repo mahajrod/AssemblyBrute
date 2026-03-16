@@ -240,6 +240,7 @@
 "skip_ragtag": False
 "skip_draft_qc_ragtag": False
 "skip_draft_qc_wga": False
+"skip_purge_dups_qc": True
 
 "create_hic_file_during_curation": False
 #------------ Options specific for cluster ------------

@@ -148,7 +148,7 @@
     "assembly_qc":
         - "default"
     "samba":
-        - "phased_reads"
+        - "unphased_reads"
 
 "other_tool_option_sets": # Options set here overwrite settings from "secondary_tool_config_file". Check it for configurable option list
     "mapping_pipeline":         "arima"  # Allowed: arima, bwa_only, pairtools.
@@ -191,10 +191,12 @@
 "final_kmer_datatypes":
     - "hifi"
     #- "illumina"
+"qc_datatypes":
+    - "hifi"
 
 "assembly_kmer_length":
     - 31 # kmer length to be used for phasing hic reads using assembled and purge_dupsed contigs
-"phasing_stage": "purge_dups"
+"phasing_stage": "draft_qc"
 
 "contig_datatype": "hifi"
 "hic_enzyme_set": "Arima"

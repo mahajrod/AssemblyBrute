@@ -39,9 +39,9 @@
         "fcs_gx":
             "path":         "/datasets/globe_databases/fcs-gx/20240912/gxdb/" # add path to fcs_gx database
             "image_path":   "/maps/projects/tomg/people/xsg178/soft/FCS-GX/fcs-gx.sif"
-            "memory_mb":    512000 # Entire database must be in memory, it requires at least 490 Gbp
+            "memory_mb":    612000 # Entire database must be in memory, it requires at least 490 Gbp
             "threads":      30
-            "time":         "48:00:00"
+            "time":         "96:00:00"
             "in_memory":    True
     "fcs_adaptor":
         "adaptor":

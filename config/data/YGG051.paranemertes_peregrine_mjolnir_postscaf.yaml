@@ -93,6 +93,7 @@
             - "samba"
 
 "extended_qc_stages":
+    - "draft_qc"
     - "contig"
     #- "purge_dups"
     - "hic_scaffolding"

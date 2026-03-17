@@ -82,7 +82,7 @@ rule bam_merge_pairs:
         cpus=parameters["threads"]["two_read_bam_combiner"] ,
         node_options=parse_node_list("bwa_merge_pairs"),
         time=parameters["time"]["two_read_bam_combiner"],
-        mem=parameters["memory_mb"]["two_read_bam_combiner"] + parameters["memory_mb"]["samtools_sort"] * parameters["threads"]["samtools_sort"],
+        mem=parameters["memory_mb"]["two_read_bam_combiner"] + parameters["memory_mb"]["samtools_sort"] * parameters["threads"]["samtools_sort"] + 30000,
         queue=config["queue"]["cpu"]
     threads: parameters["threads"]["two_read_bam_combiner"] + parameters["threads"]["samtools_sort"]
     shell:

@@ -114,7 +114,7 @@ rule pretext_inject_tracks:
                                 artefact_type=["junk", "ovlp", "haplotig", "repeat", "highcov"],
                                 allow_missing=True) if not config["skip_purge_dups_qc"] else [],
     output:
-        tmp_gap_track = out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^./]+}/alignment/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{subset}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.gap_track.tmp.bed",
+        tmp_gap_track = temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^./]+}/alignment/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{subset}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.gap_track.tmp.bed"),
         updated_map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^./]+}/alignment/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{subset}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.tracks.pretext",
     params:
         min_mapq=parameters["tool_options"]["pretextmap"]["mapq"],

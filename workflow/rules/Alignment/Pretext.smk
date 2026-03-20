@@ -158,7 +158,7 @@ rule pretext_inject_tracks:
 
     shell:
         " cp -f {input.map} {output.updated_map}; "
-        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.filtered_out} -i {input.gap_track} > {output.tmp_gap_track} > {log.gap} 2>&1; "
+        " workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.filtered_out} -i {input.gap_track} > {output.tmp_gap_track} 2>{log.gap}; "
         " if [ -s {output.tmp_gap_track} ] ; "
         "   then"
         "   cat {output.tmp_gap_track} | PretextGraph -i {output.updated_map} -n gap >> {log.gap} 2>&1; "

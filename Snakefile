@@ -478,7 +478,7 @@ if "draft_qc" in config["stage_list"]:
 
     if (not config["skip_all_pretext"]) and (not config["skip_draft_qc_pretext"]):
         results_list += [[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.tracks.pretext",
-                                  res=["default", "high_res"],
+                                  res=["high_res"], #"default",
                                   haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
                                   subset=["all"] + (["microchr"] if ("bird_genome" in config) and config["bird_genome"] else []),
                                   genome_prefix=[config["genome_prefix"], ],
@@ -652,7 +652,7 @@ if "draft_qc" in config["stage_list"]:
                          ]
         if (not config["skip_all_pretext"]) and (not config["skip_gap_closing_pretext"]):
             results_list += [[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.tracks.pretext",
-                                  res=["default", "high_res"],
+                                  res=["high_res"], #"default",
                                   haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
                                   subset=["all"] + (["microchr"] if ("bird_genome" in config) and config["bird_genome"] else []),
                                   genome_prefix=[config["genome_prefix"], ],
@@ -1017,7 +1017,7 @@ if "contig" in config["stage_list"]:
     if current_stage in config["extended_qc_stages"]:
         results_list += [[[
                               expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.tracks.pretext",
-                                  res=["default", "high_res"],
+                                  res=["high_res"], #"default",
                                   haplotype=["reordered" if ("bird_genome" in config) and config[
                                       "bird_genome"] else "combined"],
                                   subset=["all"] + (
@@ -1381,7 +1381,7 @@ if "hic_scaffolding" in config["stage_list"]:
                             ]
 
     results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.pretext",
-                                  res=["default", "high_res"],
+                                  res=["high_res"], #"default",
                                   haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
                                   subset=["all"] + ( ["microchr"] if ("bird_genome" in config) and config["bird_genome"] else [] ),
                                   genome_prefix=[config["genome_prefix"], ],
@@ -1403,7 +1403,7 @@ if "hic_scaffolding" in config["stage_list"]:
                         ]
 
     results_list += [[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.tracks.pretext",
-                              res=["default", "high_res"],
+                              res=["high_res"], #"default",
                               haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
                               subset=["all"] + (["microchr"] if ("bird_genome" in config) and config["bird_genome"] else []),
                               genome_prefix=[config["genome_prefix"], ],

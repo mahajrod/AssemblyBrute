@@ -159,7 +159,7 @@
         "haploid_diploid_threshold": null #
         "upper_threshold": null #
 
-"ploidy": 1
+"ploidy": 2
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
 "genome_prefix": "tbPhoHarm3.2"
 "busco_lineage_list":

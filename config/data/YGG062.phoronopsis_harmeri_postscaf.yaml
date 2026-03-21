@@ -105,7 +105,7 @@
         #- "w1000k.s100k"
         #- "w100k.s100k"
         - "w100k.s10k"
-        - "w10k.s10k"
+        #- "w10k.s10k"
     "reference_scaffold_sets":
         - "custom"
         #- "long"
@@ -238,7 +238,7 @@
 "skip_hic_file": True
 "skip_krater": True
 "skip_ragtag": False
-"skip_draft_qc_ragtag": False
+"skip_draft_qc_ragtag": True
 "skip_draft_qc_wga": False
 "skip_purge_dups_qc": True
 

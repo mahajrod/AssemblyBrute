@@ -61,7 +61,7 @@ rule tidk_search:
     threads: parameters["threads"]["tidk_search"]
 
     shell:
-        " OUT_DIR=`dirname {output.canonical_tidk_bedgraph}; "
+        " OUT_DIR=`dirname {output.canonical_tidk_bedgraph}`; "
         " OUT_PREFIX={wildcards.fasta_dir}/telomere_tidk/{wildcards.fasta_prefix}/{wildcards.fasta_prefix}; "
         " if [ -s {input.canonical_top_kmer} ]; "
         "   then "

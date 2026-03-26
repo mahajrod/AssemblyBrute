@@ -32,7 +32,7 @@ rule tidk_download_db:
         "   fi; "
         " touch {output.tidk_db_flag} >> {log.std} 2>&1; "
 
-rule tisk_search:
+rule tidk_search:
     input:
         tidk_db_flag = out_dir_path / "flags/TIDK_DB_FLAG",
         log_dir="{fasta_dir}/log/",
@@ -45,20 +45,20 @@ rule tisk_search:
     params:
         window_size=parameters["tool_options"]["assembly_qc"]["telomere_tidk_search"]["window_size"],
     log:
-        std="{fasta_dir}/log/tisk_search.{fasta_prefix}.log",
-        cluster_log="{fasta_dir}/log/tisk_search.{fasta_prefix}.cluster.log",
-        cluster_err="{fasta_dir}/log/tisk_search.{fasta_prefix}.cluster.err"
+        std="{fasta_dir}/log/tidk_search.{fasta_prefix}.log",
+        cluster_log="{fasta_dir}/log/tidk_search.{fasta_prefix}.cluster.log",
+        cluster_err="{fasta_dir}/log/tidk_search.{fasta_prefix}.cluster.err"
     benchmark:
-        "{fasta_dir}/log/tisk_search.{fasta_prefix}.benchmark.txt"
+        "{fasta_dir}/log/tidk_search.{fasta_prefix}.benchmark.txt"
     conda:
         config["conda"]["tidk"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["tidk"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
-        node_options=parse_node_list("tisk_search"),
-        cpus=parameters["threads"]["tisk_search"] ,
-        time=parameters["time"]["tisk_search"],
-        mem=parameters["memory_mb"]["tisk_search"],
-    threads: parameters["threads"]["tisk_search"]
+        node_options=parse_node_list("tidk_search"),
+        cpus=parameters["threads"]["tidk_search"] ,
+        time=parameters["time"]["tidk_search"],
+        mem=parameters["memory_mb"]["tidk_search"],
+    threads: parameters["threads"]["tidk_search"]
 
     shell:
         " OUT_DIR=`dirname {output.canonical_tidk_bedgraph}; "

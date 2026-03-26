@@ -71,6 +71,9 @@
     "nextpolish2":
         "yaml": "workflow/envs/conda.nextpolish2.yaml"
         "name": "nextpolish2"
+    "tidk":
+        "yaml": "workflow/envs/conda.tidk.yaml"
+        "name": "tidk"
 
 
 "resources_dir": "config/resources/"
@@ -279,6 +282,8 @@
                         #    "step":   1000
                     "telomere":
                         "fraction_threshold": 0.6
+                    "telomere_tidk_search":
+                        "window_size": 1000
                     "bin_size": 10000
                     "bin_step": 10000
 

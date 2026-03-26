@@ -1,0 +1,10 @@
+#---- Bioconda config ----
+
+"name": "tadbit"
+"channels":
+  - "mahajrod"
+  - "bioconda"
+  - "conda-forge"
+  - "anaconda"
+"dependencies":
+  - "tidk"

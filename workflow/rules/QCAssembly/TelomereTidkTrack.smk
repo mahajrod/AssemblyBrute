@@ -62,10 +62,9 @@ rule tidk_search:
 
     shell:
         " OUT_DIR=`dirname {output.canonical_tidk_bedgraph}`; "
-        " OUT_PREFIX={wildcards.fasta_dir}/telomere_tidk/{wildcards.fasta_prefix}/{wildcards.fasta_prefix}; "
         " if [ -s {input.canonical_top_kmer} ]; "
         "   then "
-        "   CANNONICAL_OUT_PREFIX=${{OUT_PREFIX}}.canonical; "
+        "   CANNONICAL_OUT_PREFIX={wildcards.fasta_prefix}.canonical; "
         "   CANONICAL_TEL_KMER=`head -n 1 {input.canonical_top_kmer}`; "
         "   echo \"Seeking for cannonical telomere motif ${{CANONICAL_TEL_KMER}}...\" > {log.std} 2>&1; "
         "   tidk search -s ${{CANONICAL_TEL_KMER}} -d ${{OUT_DIR}} -w {params.window_size} "
@@ -77,7 +76,7 @@ rule tidk_search:
         "   fi;"
         " if [ -s {input.non_canonical_top_kmer} ]; "
         "   then "
-        "   NON_CANNONICAL_OUT_PREFIX=${{OUT_PREFIX}}.non_canonical; "
+        "   NON_CANNONICAL_OUT_PREFIX={wildcards.fasta_prefix}.non_canonical; "
         "   NON_CANONICAL_TEL_KMER=`head -n 1 {input.non_canonical_top_kmer}`; "
         "   echo \"Seeking for non cannonical telomere motif ${{NON_CANONICAL_TEL_KMER}}...\" >> {log.std} 2>&1; "
         "   tidk search -s ${{NON_CANONICAL_TEL_KMER}} -d ${{OUT_DIR}} -w {params.window_size} "

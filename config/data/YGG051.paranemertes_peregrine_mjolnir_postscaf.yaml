@@ -38,7 +38,7 @@
     "fcs":
         "fcs_gx":
             "path":         "/datasets/globe_databases/fcs-gx/20240912/gxdb/" # add path to fcs_gx database
-            "image_path":   "/maps/projects/tomg/people/xsg178/soft/FCS-GX/fcs-gx.sif"
+            "image_path":   docker://ncbi/fcs-gx:0.5.5 #"/maps/projects/tomg/people/xsg178/soft/FCS-GX/fcs-gx.sif"
             "memory_mb":    512000 # Entire database must be in memory, it requires at least 490 Gbp
             "threads":      30
             "time":         "06:00:00"

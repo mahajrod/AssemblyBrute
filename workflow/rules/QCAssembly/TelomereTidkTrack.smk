@@ -87,14 +87,18 @@ rule tidk_search:
         "   > {output.non_canonical_tidk_bedgraph}; "
         "   fi;"
 
-rule copy_tidk_telomere_track_for_pretext:
+rule filter_tidk_telomere_tracks_for_pretext:
     input:
         canonical_telo_bedgraph="{fasta_dir}/telomere_tidk/{fasta_prefix}/{fasta_prefix}.canonical_tidk.bedgraph",
         non_canonical_telo_bedgraph="{fasta_dir}/telomere_tidk/{fasta_prefix}/{fasta_prefix}.non_canonical_tidk.bedgraph",
         log_dir="{fasta_dir}/log/",
     output:
+        canonical_telo_all_bedgraph="{fasta_dir}/assembly_qc/tracks/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_tidk.telomere.all.bedgraph",
+        non_canonical_telo_all_bedgraph="{fasta_dir}/assembly_qc/tracks/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_tidk.telomere.all.bedgraph",
         canonical_telo_bedgraph="{fasta_dir}/assembly_qc/tracks/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_tidk.telomere.pretext.bedgraph",
         non_canonical_telo_bedgraph="{fasta_dir}/assembly_qc/tracks/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_tidk.telomere.pretext.bedgraph",
+    params:
+        min_monomer_number=parameters["tool_options"]["assembly_qc"]["telomere_tidk_search"]["min_monomer_number"]
     log:
         canonical="{fasta_dir}/log/copy_tidk_telomere_track_for_pretext.{fasta_prefix}.canonical.log",
         non_canonical="{fasta_dir}/log/copy_tidk_telomere_track_for_pretext.{fasta_prefix}.non_canonical.log",
@@ -113,6 +117,7 @@ rule copy_tidk_telomere_track_for_pretext:
     threads: parameters["threads"]["copy_telomere_track_for_pretext"]
 
     shell:
-        " cp -f {input.canonical_telo_bedgraph} {output.canonical_telo_bedgraph} > {log.canonical} 2>&1; "
-        " cp -f {input.non_canonical_telo_bedgraph} {output.non_canonical_telo_bedgraph} > {log.non_canonical} 2>&1; "
-
+        " cp -f {input.canonical_telo_bedgraph} {output.canonical_telo_all_bedgraph} > {log.canonical} 2>&1; "
+        " cp -f {input.non_canonical_telo_bedgraph} {output.non_canonical_telo_all_bedgraph} > {log.non_canonical} 2>&1; "
+        " awk '{{ if ($4 >= {params.min_monomer_number}) print $0}}' {input.canonical_telo_bedgraph} > {output.canonical_telo_bedgraph} 2>> {log.canonical}; "
+        " awk '{{ if ($4 >= {params.min_monomer_number}) print $0}}' {input.non_canonical_telo_bedgraph} > {output.non_canonical_telo_bedgraph} 2>> {log.non_canonical}; "

@@ -284,6 +284,7 @@
                         "fraction_threshold": 0.6
                     "telomere_tidk_search":
                         "window_size": 1000
+                        "min_monomer_number": 50
                     "bin_size": 10000
                     "bin_step": 10000
 

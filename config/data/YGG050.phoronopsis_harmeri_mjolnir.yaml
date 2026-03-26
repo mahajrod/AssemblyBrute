@@ -214,7 +214,7 @@
 "skip_busco": False
 "skip_fcs": False
 "skip_fcs_adaptor": False
-"skip_kraken": False
+"skip_kraken": True
 "skip_phasing": False
 "skip_prescaf_pretext": False
 "skip_postscaf_pretext": True
@@ -224,7 +224,7 @@
 "skip_wga": False
 "skip_higlass": True
 "skip_variantcalling": True
-"skip_hic_file": False
+"skip_hic_file": True
 "skip_krater": True
 "skip_ragtag": False
 

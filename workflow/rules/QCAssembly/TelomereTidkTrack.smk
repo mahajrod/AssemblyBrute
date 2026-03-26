@@ -1,5 +1,5 @@
 localrules: tidk_download_db
-localrules: copy_tidk_telomere_track_for_pretext
+localrules: filter_tidk_telomere_tracks_for_pretext
 
 
 rule tidk_download_db:

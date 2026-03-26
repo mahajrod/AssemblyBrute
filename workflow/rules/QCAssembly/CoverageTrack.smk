@@ -181,10 +181,10 @@ rule create_bedgraph_from_coverage_table:
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("create_bedgraph_from_coverage_table"),
-        cpus=parameters["threads"]["create_coverage_table"],
-        time=parameters["time"]["create_coverage_table"],
-        mem=parameters["memory_mb"]["create_coverage_table"]
-    threads: parameters["threads"]["create_coverage_table"]
+        cpus=parameters["threads"]["create_bedgraph_from_coverage_table"],
+        time=parameters["time"]["create_bedgraph_from_coverage_table"],
+        mem=parameters["memory_mb"]["create_bedgraph_from_coverage_table"]
+    threads: parameters["threads"]["create_bedgraph_from_coverage_table"]
 
     shell:
         " tail -n +2 {input.stat_file} | cut -f 1,2,3,{params.coverage_col}  > {output.bedgraph} 2>{log.std}; "

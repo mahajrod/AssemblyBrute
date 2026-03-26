@@ -75,6 +75,7 @@ windowmasker	1	1	1	1	1	1	1	1	1
 create_repeat_bins	1	1	1	1	1	1	1	1	1
 mosdepth	4	4	4	4	4	4	4	4	4
 create_coverage_table	1	1	1	1	1	1	1	1	1
+create_bedgraph_from_coverage_table	1	1	1	1	1	1	1	1	1
 create_higlass_track	10	10	10	10	10	10	10	10	10
 yahs_juicer_pre	5	5	5	5	5	5	5	5	5
 juicer_tools_pre	10	10	10	10	10	10	10	10	10

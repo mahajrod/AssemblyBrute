@@ -362,7 +362,7 @@ if "check_reads" in config["stage_list"]:
 if "check_draft" in config["stage_list"]:
     results_list += [ ] # TODO: implement
 
-
+print(fastqc_data_type_set)
 if ("read_qc" in config["stage_list"]) and (not config["skip_read_qc"]):
     results_list += [[expand(output_dict["qc"] / "fastqc/{datatype}/{stage}/{fileprefix}_fastqc.zip",
                                datatype=[dat_type, ],

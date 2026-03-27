@@ -239,7 +239,7 @@
 "custom_enzyme_set": null # None
 
 "starting_point": "fastq" # Allowed: "draft"
-"data_types": "hifi,hic,simplex" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
+"data_types": "hifi,hic,simplex,illumina" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
 
 "mode": "assembly"                # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"

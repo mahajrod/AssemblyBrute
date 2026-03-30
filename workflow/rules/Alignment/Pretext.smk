@@ -218,7 +218,7 @@ rule pretext_inject_tracks:
         "           fi;"
         "       if [[ '{params.illumina_flag}' == 'True' ]]; "
         "           then "
-        "           workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.filtered_out} -i {input.all_illumina_10k_1k_track} | "
+        "           workflow/scripts/curation/filter_bed_by_scaffolds.py -d {input.filtered_out} -i {input.all_illumina_coverage_10k_1k_track} | "
         "               awk '{{printf \"%s\\t%i\\t%i\\t%i\\n\",$1,$2,$3,$4}}' | "
         "               PretextGraph -i {output.updated_map}  -n illumina_all_10k_1k.coverage  >> {log.coverage} 2>&1; "
         "           fi;"

@@ -280,7 +280,7 @@ rule create_purge_dups_track_for_combined_haplotype:
                                                            allow_missing=True),
         log_dir=out_dir_path / "{assembly_stage}/{parameters}/log/",
     output:
-        combined_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.purge_dups.{datatype}.{artefact_type}.track.bedgraph",
+        combined_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{merged_haplotype, combined|reordered}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.purge_dups.{datatype}.{artefact_type}.track.bedgraph",
     params:
         haplotype_list=lambda wildcards: stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
         dir_prefix=lambda wildcards: out_dir_path / ("%s/%s/assembly_qc/tracks/%s.%s" % (wildcards.assembly_stage,
@@ -290,11 +290,11 @@ rule create_purge_dups_track_for_combined_haplotype:
         track_prefix=lambda wildcards: "%s.%s" % (wildcards.genome_prefix, wildcards.assembly_stage),
         suffix=lambda wildcards: "purge_dups.%s.%s" % (wildcards.datatype, wildcards.artefact_type),
     log:
-        log=out_dir_path / "{assembly_stage}/{parameters}/log/create_purge_dups_track_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.combined.purge_dups.{datatype}.{artefact_type}.log",
-        cluster_log=out_dir_path / "{assembly_stage}/{parameters}/log/create_purge_dups_track_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.combined.purge_dups.{datatype}.{artefact_type}.cluster.log",
-        cluster_err=out_dir_path / "{assembly_stage}/{parameters}/log/create_purge_dups_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.combined.purge_dups.{datatype}.{artefact_type}.cluster.err"
+        log=out_dir_path / "{assembly_stage}/{parameters}/log/create_purge_dups_track_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.{merged_haplotype}.purge_dups.{datatype}.{artefact_type}.log",
+        cluster_log=out_dir_path / "{assembly_stage}/{parameters}/log/create_purge_dups_track_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.{merged_haplotype}.purge_dups.{datatype}.{artefact_type}.cluster.log",
+        cluster_err=out_dir_path / "{assembly_stage}/{parameters}/log/create_purge_dups_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.{merged_haplotype}.purge_dups.{datatype}.{artefact_type}.cluster.err"
     benchmark:
-        out_dir_path / "{assembly_stage}/{parameters}/log/create_purge_dups_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.combined.purge_dups.{datatype}.{artefact_type}.benchmark.txt"
+        out_dir_path / "{assembly_stage}/{parameters}/log/create_purge_dups_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.{merged_haplotype}.purge_dups.{datatype}.{artefact_type}.benchmark.txt"
     conda:
         config["conda"]["busco"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco"]["yaml"])
     resources:

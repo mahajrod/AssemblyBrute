@@ -353,12 +353,12 @@ rule create_busco_tracks_for_combined_haplotype:
                                                            haplotype=stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
                                                            allow_missing=True)
     output:
-        single_copy_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.single_copy.track.bed",
-        duplicated_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.duplicated.track.bed",
-        fragmented_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.fragmented.track.bed",
-        single_copy_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.single_copy.track.bedgraph",
-        duplicated_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.duplicated.track.bedgraph",
-        fragmented_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.combined/{genome_prefix}.{assembly_stage}.combined.busco5.{busco_lineage}.fragmented.track.bedgraph",
+        single_copy_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{merged_haplotype, combined|reordered}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.busco5.{busco_lineage}.single_copy.track.bed",
+        duplicated_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{merged_haplotype, combined|reordered}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.busco5.{busco_lineage}.duplicated.track.bed",
+        fragmented_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{merged_haplotype, combined|reordered}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.busco5.{busco_lineage}.fragmented.track.bed",
+        single_copy_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{merged_haplotype, combined|reordered}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.busco5.{busco_lineage}.single_copy.track.bedgraph",
+        duplicated_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{merged_haplotype, combined|reordered}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.busco5.{busco_lineage}.duplicated.track.bedgraph",
+        fragmented_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{merged_haplotype, combined|reordered}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.busco5.{busco_lineage}.fragmented.track.bedgraph",
     params:
         haplotype_list=lambda wildcards: stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
         dir_prefix=lambda wildcards: out_dir_path / ("%s/%s/assembly_qc/tracks/%s.%s" % (wildcards.assembly_stage,
@@ -368,11 +368,11 @@ rule create_busco_tracks_for_combined_haplotype:
         track_prefix=lambda wildcards: "%s.%s" % (wildcards.genome_prefix, wildcards.assembly_stage),
         suffix=lambda wildcards: "busco5.%s" % wildcards.busco_lineage,
     log:
-        log=output_dict["log"] / "create_busco_tracks_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.combined.{busco_lineage}.log",
-        cluster_log=output_dict["cluster_log"] / "create_busco_tracks_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.combined.{busco_lineage}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_busco_tracks_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.combined.{busco_lineage}.cluster.err"
+        log=output_dict["log"] / "create_busco_tracks_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.{merged_haplotype}.{busco_lineage}.log",
+        cluster_log=output_dict["cluster_log"] / "create_busco_tracks_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.{merged_haplotype}.{busco_lineage}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_busco_tracks_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.{merged_haplotype}.{busco_lineage}.cluster.err"
     benchmark:
-        output_dict["benchmark"] / "busco5.{assembly_stage}.{parameters}.{genome_prefix}.combined.{busco_lineage}.benchmark.txt"
+        output_dict["benchmark"] / "busco5.{assembly_stage}.{parameters}.{genome_prefix}.{merged_haplotype}.{busco_lineage}.benchmark.txt"
     conda:
         config["conda"]["busco"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco"]["yaml"])
     resources:

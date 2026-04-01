@@ -176,7 +176,7 @@
 
 "species_name": "Otidiphaps nobilis"
 "tax_id": 187130   # # necessary for contamination scan via FCS
-"bird_genome": True
+"bird_genome": False
 
 "database_set":
     "kraken2":

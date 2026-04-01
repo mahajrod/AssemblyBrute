@@ -210,7 +210,7 @@
 "custom_enzyme_set_is_no_motif": False
 
 "starting_point": "draft" # Allowed: "draft"
-"data_types": "hifi,hic,illumina"
+"data_types": "hifi,hic,illumina,reference"
 
 #-------- Options specific for starting point 'draft' ----------------
 "phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads

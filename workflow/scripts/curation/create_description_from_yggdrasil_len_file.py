@@ -16,13 +16,17 @@ args = parser.parse_args()
 
 def create_description(scaffold_id):
     description = ""
-    if ("aut" in scaffold_id) or ("chr" in scaffold_id):
+    if ("aut" in scaffold_id) or ("chr" in scaffold_id): # chromosomes/autosomes
         chr_id = scaffold_id.split("_")[0][3:]
         description = "[chromosome={0}]".format(chr_id)
         if "unloc" not in scaffold_id:
             description += " [location=chromosome]"
-
-    if scaffold_id == "mtDNA":
+    elif "cand" in scaffold_id: # candidate chromosomes, usually used for candidate sex chromosomes
+        chr_id = scaffold_id.split("_")[0]
+        description = "[chromosome={0}]".format(chr_id)
+        if "unloc" not in scaffold_id:
+            description += " [location=chromosome]"
+    elif scaffold_id == "mtDNA":
         description += "[location=mitochondrion] [topology=circular] [completeness=complete]"
 
     return pd.NA if description == "" else description

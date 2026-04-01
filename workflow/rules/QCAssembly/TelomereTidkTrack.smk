@@ -30,7 +30,7 @@ rule tidk_download_db:
         "   then "
         "   tidk build > {log.std} 2>&1; "
         "   fi; "
-        " touch {output.tidk_db_flag} >> {log.std} 2>&1; "
+        " > {output.tidk_db_flag} >> {log.std} 2>&1; "
 
 rule tidk_search:
     input:

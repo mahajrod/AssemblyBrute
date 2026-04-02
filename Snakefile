@@ -590,6 +590,8 @@ if "draft_qc" in config["stage_list"]:
                     stage_dict["gap_closing"]["parameters"][parameters_label]["option_set_group"] = None
                     if not stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
                         stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict["gap_closing"]["parameters"][parameters_label]["option_set"]["main_datatypes"]
+                    #TEMP STRING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TODO: replace
+                    stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = ["hifi"]
 
         parameters_list = list(stage_dict["gap_closing"]["parameters"].keys())
         results_list += [*[expand(out_dir_path / "gap_closing/{parameters}/{genome_prefix}.gap_closing.{haplotype}.len",

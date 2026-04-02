@@ -202,6 +202,7 @@
 "phasing_stage": "purge_dups"
 
 "contig_datatype": "hifi"
+"gap_closing_datatype": "hifi"
 "hic_enzyme_set": "Arima"
 "custom_enzyme_set": null # None
 "custom_enzyme_set_is_no_motif": False

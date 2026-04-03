@@ -152,6 +152,7 @@ rule get_precurated_fasta:
 rule get_precurated_bam:
     input:
         bam="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{merged_haplotype}.rmdup.bam",
+        bam_index="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{merged_haplotype}.rmdup.bam.csi",
         precurated_fasta="{fasta_dir}/{merged_haplotype}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.fasta",
         log_dir="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/"
     output:
@@ -180,7 +181,7 @@ rule get_precurated_bam:
 rule pretextmap_chr:
     input:
         precurated_bam="{bam_dir}/{bam_prefix}.rmdup.precurated.bam",
-        precurated_bam_index="{bam_prefix}.rmdup.precurated.bam.csi",
+        precurated_bam_index="{bam_dir}/{bam_prefix}.rmdup.precurated.bam.csi",
         #bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
         candidate_chr_black_list=output_dict["data"] / "candidate_chr/candidate.{candidate_chr_id}.pretext.blacklist",
         log_dir="{bam_dir}/per_chr/log/"

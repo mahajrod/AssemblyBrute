@@ -1,6 +1,6 @@
 #ruleorder: pretextmap > pretextsnapshot
 #localrules: get_candidate_chr_from_painted_agp
-
+localrules: get_precurated_scaffold_order_from_agp
 """
 checkpoint get_candidate_chr_from_painted_agp: # #Pretext-map probably doesn't support long file names!!!!!!!!!!!
     input:
@@ -101,7 +101,7 @@ rule get_precurated_scaffold_order_from_agp:
     log:
         grep1="{fasta_dir}/{merged_haplotype}/log/get_precurated_scaffold_order_from_agp.{genome_prefix}.{assembly_stage}.{merged_haplotype}.grep1.log",
         grep2="{fasta_dir}/{merged_haplotype}/log/get_precurated_scaffold_order_from_agp.{genome_prefix}.{assembly_stage}.{merged_haplotype}.grep2.log",
-        cut="{fasta_dir}/{merged_haplotype}/log/get_precurated_scaffold_order_from_agp.{genome_prefix}.{assembly_stage}.{merged_haplotype}.cutlog",
+        cut="{fasta_dir}/{merged_haplotype}/log/get_precurated_scaffold_order_from_agp.{genome_prefix}.{assembly_stage}.{merged_haplotype}.cut.log",
         cluster_log="{fasta_dir}/{merged_haplotype}/log/get_precurated_scaffold_order_from_agp.{genome_prefix}.{assembly_stage}.{merged_haplotype}.cluster.log",
         cluster_err="{fasta_dir}/{merged_haplotype}/log/get_precurated_scaffold_order_from_agp.{genome_prefix}.{assembly_stage}.{merged_haplotype}.cluster.err"
     benchmark:

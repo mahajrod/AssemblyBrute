@@ -259,8 +259,8 @@ rule pretext_inject_tracks_per_chr:
         windowmasker_1000k_100k_track="{bam_dir}/../../../assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.windowmasker.win1000000.step100000.track.bedgraph" if not config["skip_pretext_1000k_100k_tracks"] else [],
         log_dir="{bam_dir}/per_chr/log/"
     output:
-        updated_map="{bam_dir}/per_chr/{fasta_prefix, [^/]+combined|[^/]+reordered}.{phasing_kmer_length}.{candidate_chr_id}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.tracks.pretext",
-        gap_track_tmp="{bam_dir}/per_chr/{fasta_prefix, [^/]+combined|[^/]+reordered}.{phasing_kmer_length, [^.]+}.{candidate_chr_id}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.gap.track"
+        updated_map="{bam_dir}/per_chr/{fasta_prefix, [^/]+combined|[^/]+reordered}.{phasing_kmer_length}.{candidate_chr_id}.rmdup.precurated.mapq{mapq, [0-9]+}.{res, default|high_res}.tracks.pretext",
+        gap_track_tmp="{bam_dir}/per_chr/{fasta_prefix, [^/]+combined|[^/]+reordered}.{phasing_kmer_length, [^.]+}.{candidate_chr_id}.precurated.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.gap.track"
     params:
         min_mapq=parameters["tool_options"]["pretextmap"]["mapq"],
         skip_trf=config["skip_trf"],

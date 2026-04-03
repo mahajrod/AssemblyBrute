@@ -186,7 +186,7 @@ rule pretextmap_chr:
         candidate_chr_black_list=output_dict["data"] / "candidate_chr/candidate.{candidate_chr_id}.pretext.blacklist",
         log_dir="{bam_dir}/per_chr/log/"
     output:
-        map="{bam_dir}/per_chr/{bam_prefix}.{candidate_chr_id}.rmdup.precurated.mapq{mapq, [0-9]+}.{res, default|high_res}.pretext",
+        map="{bam_dir}/per_chr/{bam_prefix}.{candidate_chr_id}.rmdup.precurated.mapq{mapq, [0-9]+}.{res, default|high_res}.pretext"
 
         #filtered_out=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/per_chr/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.{candidate_chr_id}.filtered_out.ids",
     params:
@@ -230,10 +230,10 @@ rule pretextmap_chr:
         "       FILTER_OUT=''; echo $? >> ${{ECHO_LOG}} 2>&1;"
         "   fi; "
         " echo 'Entering workdir...' >> ${{ECHO_LOG}} 2>&1; "
-        " cd `dirname {input.bam}` > ${{CD_LOG}} 2>&1; echo $? >> ${{ECHO_LOG}} 2>&1; "
+        " cd `dirname {input.precurated_bam}` > ${{CD_LOG}} 2>&1; echo $? >> ${{ECHO_LOG}} 2>&1; "
         " echo 'Creating pretext map...' >> ${{ECHO_LOG}} 2>&1; "
-        " echo \"samtools view -@ 4 -F0x400 -h `basename {input.bam}` 2>${{VIEW_LOG}} | PretextMap -o per_chr/`basename {output.map}` {params.sortby} {params.sortorder} --mapq {wildcards.mapq} ${{FILTER_OUT}} {params.resolution} > ${{MAP_LOG}} 2>&1 \" >> ${{ECHO_LOG}} 2>&1; "
-        " samtools view -@ 4 -F0x400 -h `basename {input.bam}` 2>${{VIEW_LOG}} | "
+        " echo \"samtools view -@ 4 -F0x400 -h `basename {input.precurated_bam}` 2>${{VIEW_LOG}} | PretextMap -o per_chr/`basename {output.map}` {params.sortby} {params.sortorder} --mapq {wildcards.mapq} ${{FILTER_OUT}} {params.resolution} > ${{MAP_LOG}} 2>&1 \" >> ${{ECHO_LOG}} 2>&1; "
+        " samtools view -@ 4 -F0x400 -h `basename {input.precurated_bam}` 2>${{VIEW_LOG}} | "
         " PretextMap -o per_chr/`basename {output.map}` {params.sortby} {params.sortorder} "
         "            --mapq {wildcards.mapq} ${{FILTER_OUT}} {params.resolution} > ${{MAP_LOG}} 2>&1; "
         " echo 'Creating pretext map finished...' >> ${{ECHO_LOG}} 2>&1; "

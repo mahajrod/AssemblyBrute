@@ -125,7 +125,7 @@ rule get_precurated_fasta:
     input:
         #bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
         fasta="{fasta_dir}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.fasta",
-        precurated_scaffold_orderlist="{fasta_dir}/{merged_haplotype, combined|reordered}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.orderlist",
+        precurated_scaffold_orderlist="{fasta_dir}/{merged_haplotype}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.orderlist",
         log_dir="{fasta_dir}/{merged_haplotype}/log/"
     output:
         precurated_fasta="{fasta_dir}/{merged_haplotype, combined|reordered}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.fasta"

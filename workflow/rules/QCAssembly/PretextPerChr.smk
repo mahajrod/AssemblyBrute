@@ -118,7 +118,7 @@ rule get_precurated_scaffold_order_from_agp:
 
     shell:
         " grep -vP \"^#\" {input.candidate_agp} 2>{log.grep1} | "
-        " grep -P \"\tW\t\" 2>{log.grep2} | "
+        " grep -P \"\\tW\\t\" 2>{log.grep2} | "
         " cut -f 6 > {output.precurated_scaffold_orderlist} 2>{log.cut}; "
 
 rule get_precurated_fasta:

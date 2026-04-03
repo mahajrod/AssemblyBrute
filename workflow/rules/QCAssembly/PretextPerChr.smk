@@ -88,12 +88,104 @@ rule pretextmap_chr: # #Pretext-map probably doesn't support long file names!!!!
 
 """
 
+rule get_precurated_scaffold_order_from_agp:
+    input:
+        #bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
+        fasta="{fasta_dir}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.fasta",
+        candidate_agp=candidate_agp_filename,
+        log_dir="{fasta_dir}/{merged_haplotype}/log/"
+    output:
+        precurated_scaffold_orderlist="{fasta_dir}/{merged_haplotype, combined|reordered}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.orderlist",
+
+        #filtered_out=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/per_chr/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.{candidate_chr_id}.filtered_out.ids",
+    log:
+        grep1="{fasta_dir}/{merged_haplotype}/log/get_precurated_scaffold_order_from_agp.{genome_prefix}.{assembly_stage}.{merged_haplotype}.grep1.log",
+        grep2="{fasta_dir}/{merged_haplotype}/log/get_precurated_scaffold_order_from_agp.{genome_prefix}.{assembly_stage}.{merged_haplotype}.grep2.log",
+        cut="{fasta_dir}/{merged_haplotype}/log/get_precurated_scaffold_order_from_agp.{genome_prefix}.{assembly_stage}.{merged_haplotype}.cutlog",
+        cluster_log="{fasta_dir}/{merged_haplotype}/log/get_precurated_scaffold_order_from_agp.{genome_prefix}.{assembly_stage}.{merged_haplotype}.cluster.log",
+        cluster_err="{fasta_dir}/{merged_haplotype}/log/get_precurated_scaffold_order_from_agp.{genome_prefix}.{assembly_stage}.{merged_haplotype}.cluster.err"
+    benchmark:
+        "{fasta_dir}/{merged_haplotype}/log/get_precurated_scaffold_order_from_agp.{genome_prefix}.{assembly_stage}.{merged_haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("get_precurated_scaffold_order_from_agp"),
+        cpus=parameters["threads"]["get_precurated_scaffold_order_from_agp"] ,
+        time=parameters["time"]["get_precurated_scaffold_order_from_agp"],
+        mem=parameters["memory_mb"]["get_precurated_scaffold_order_from_agp"]
+    threads: parameters["threads"]["get_precurated_scaffold_order_from_agp"]
+
+    shell:
+        " grep -vP \"^#\" {input.candidate_agp} 2>{log.grep1} | "
+        " grep -P \"\tW\t\" 2>{log.grep2} | "
+        " cut -f 6 > {output.precurated_scaffold_orderlist} 2>{log.cut}; "
+
+rule get_precurated_fasta:
+    input:
+        #bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
+        fasta="{fasta_dir}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.fasta",
+        precurated_scaffold_orderlist="{fasta_dir}/{merged_haplotype, combined|reordered}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.orderlist",
+        log_dir="{fasta_dir}/{merged_haplotype}/log/"
+    output:
+        precurated_fasta="{fasta_dir}/{merged_haplotype, combined|reordered}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.fasta"
+    log:
+        log="{fasta_dir}/{merged_haplotype}/log/get_precurated_fasta.{genome_prefix}.{assembly_stage}.{merged_haplotype}.log",
+        cluster_log="{fasta_dir}/{merged_haplotype}/log/get_precurated_fasta.{genome_prefix}.{assembly_stage}.{merged_haplotype}.cluster.log",
+        cluster_err="{fasta_dir}/{merged_haplotype}/log/get_precurated_fasta.{genome_prefix}.{assembly_stage}.{merged_haplotype}.cluster.err"
+    benchmark:
+        "{fasta_dir}/{merged_haplotype}/log/get_precurated_fasta.{genome_prefix}.{assembly_stage}.{merged_haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("get_precurated_fasta"),
+        cpus=parameters["threads"]["get_precurated_fasta"] ,
+        time=parameters["time"]["get_precurated_fasta"],
+        mem=parameters["memory_mb"]["get_precurated_fasta"]
+    threads: parameters["threads"]["get_precurated_fasta"]
+
+    shell:
+        " workflow/scripts/sequence/reorder_sequences.py -i {input.fasta} -b orderlist "
+        "         -r {input.precurated_scaffold_orderlist} -o {output.precurated_fasta} > {log.log} 2>&1; "
+
+rule get_precurated_bam:
+    input:
+        bam="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{merged_haplotype}.rmdup.bam",
+        precurated_fasta="{fasta_dir}/{merged_haplotype}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.fasta",
+        log_dir="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/"
+    output:
+        precurated_bam="{fasta_dir}/{merged_haplotype, combined|reordered}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.rmdup.precurated.bam"
+    log:
+        log="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.log",
+        cluster_log="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.cluster.log",
+        cluster_err="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.cluster.err"
+    benchmark:
+        "{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_fasta.{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("get_precurated_bam"),
+        cpus=parameters["threads"]["get_precurated_bam"] ,
+        time=parameters["time"]["get_precurated_bam"],
+        mem=parameters["memory_mb"]["get_precurated_bam"]
+    threads: parameters["threads"]["get_precurated_bam"]
+
+    shell:
+        " picard -Xmx{resources.mem}m MarkDuplicates -R {input.precurated_fasta} -I {input.bam} "
+        "        -O {output.precurated_bam} > {log.log} 2>&1; "
+
+
 rule pretextmap_chr:
     input:
-        bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
-        candidate_chr_black_list=output_dict["data"] / "candidate_chr/candidate.{candidate_chr_id}.pretext.blacklist"
+        precurated_bam="{bam_dir}/{bam_prefix}.rmdup.precurated.bam",
+        precurated_bam_index="{bam_prefix}.rmdup.precurated.bam.csi",
+        #bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
+        candidate_chr_black_list=output_dict["data"] / "candidate_chr/candidate.{candidate_chr_id}.pretext.blacklist",
+        log_dir="{bam_dir}/per_chr/log/"
     output:
-        map=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/{haplotype, [^./]+}/alignment/{phasing_kmer_length, [^./]+}/per_chr/{genome_prefix, [^/]+}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.pretext",
+        map="{bam_dir}/per_chr/{bam_prefix}.{candidate_chr_id}.rmdup.precurated.mapq{mapq, [0-9]+}.{res, default|high_res}.pretext",
 
         #filtered_out=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/per_chr/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.{candidate_chr_id}.filtered_out.ids",
     params:
@@ -101,17 +193,17 @@ rule pretextmap_chr:
         sortby=parse_option("sortby", parameters["tool_options"]["pretextmap"], " --sortby "),
         sortorder=parse_option("sortorder", parameters["tool_options"]["pretextmap"], " --sortorder "),
     log:
-        view=output_dict["log"]  / "pretextmap_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.view.log",
-        cat=output_dict["log"] / "pretextmap_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.cat.log",
-        tr=output_dict["log"] / "pretextmap_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.tr.log",
-        sed=output_dict["log"] / "pretextmap_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.sed.log",
-        cd=output_dict["log"] / "pretextmap_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.cd.log",
-        map=output_dict["log"]  / "pretextmap_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.map.log",
-        echo=output_dict["log"] / "pretextmap_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.echo.log",
-        cluster_log=output_dict["cluster_log"] / "pretextmap_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "pretextmap_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.cluster.err"
+        view="{bam_dir}/per_chr/log/pretextmap_chr.{bam_prefix}.{candidate_chr_id}.{mapq}.{res}.view.log",
+        cat="{bam_dir}/per_chr/log/pretextmap_chr.{bam_prefix}.{candidate_chr_id}.{mapq}.{res}.cat.log",
+        tr="{bam_dir}/per_chr/log/pretextmap_chr.{bam_prefix}.{candidate_chr_id}.{mapq}.{res}.tr.log",
+        sed="{bam_dir}/per_chr/log/pretextmap_chr.{bam_prefix}.{candidate_chr_id}.{mapq}.{res}.sed.log",
+        cd="{bam_dir}/per_chr/log/pretextmap_chr.{bam_prefix}.{candidate_chr_id}.{mapq}.{res}.cd.log",
+        map="{bam_dir}/per_chr/log/pretextmap_chr.{bam_prefix}.{candidate_chr_id}.{mapq}.{res}.map.log",
+        echo="{bam_dir}/per_chr/log/pretextmap_chr.{bam_prefix}.{candidate_chr_id}.{mapq}.{res}.echo.log",
+        cluster_log="{bam_dir}/per_chr/log/pretextmap_chr.{bam_prefix}.{candidate_chr_id}.{mapq}.{res}.cluster.log",
+        cluster_err="{bam_dir}/per_chr/log/pretextmap_chr.{bam_prefix}.{candidate_chr_id}.{mapq}.{res}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "pretextmap_chr.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.benchmark.txt"
+        "{bam_dir}/per_chr/log/pretextmap_chr.{bam_prefix}.{candidate_chr_id}.{mapq}.{res}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -148,26 +240,27 @@ rule pretextmap_chr:
 
 rule pretext_inject_tracks_per_chr:
     input:
-        map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/per_chr/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.rmdup.mapq{mapq}.{res}.pretext",
+        map="{bam_dir}/per_chr/{fasta_prefix}.{phasing_kmer_length}.{candidate_chr_id}.rmdup.precurated.mapq{mapq}.{res}.pretext",
         candidate_chr_black_list=output_dict["data"] / "candidate_chr/candidate.{candidate_chr_id}.pretext.blacklist",
-        gap_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.gap.track.bedgraph",
-        canonical_telomere_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical.telomere.pretext.bedgraph",
-        non_canonical_telomere_track=out_dir_path/ "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.non_canonical.telomere.pretext.bedgraph",
-        gc_10k_1k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.gc.win10000.step1000.track.bedgraph" if not config["skip_pretext_10k_1k_tracks"] else [],
-        gc_100k_10k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.gc.win100000.step10000.track.bedgraph",
-        trf_10k_1k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.trf.win10000.step1000.track.bedgraph" if (not config["skip_trf"]) and (not config["skip_pretext_10k_1k_tracks"]) else [],
-        trf_100k_10k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.trf.win100000.step10000.track.bedgraph" if not config["skip_trf"] else [],
-        windowmasker_10k_1k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.windowmasker.win10000.step1000.track.bedgraph" if not config["skip_pretext_10k_1k_tracks"] else [],
-        windowmasker_100k_10k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.windowmasker.win100000.step10000.track.bedgraph",
-        all_hifi_coverage_10k_1k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.hifi_all_nodup_reads_mean_coverage.win10000.step1000.track.bedgraph" if (not config["skip_pretext_10k_1k_tracks"]) and (not config["skip_pretext_coverage_tracks"]) else [],
-        all_hifi_coverage_100k_10k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.hifi_all_nodup_reads_mean_coverage.win100000.step10000.track.bedgraph" if not config["skip_pretext_coverage_tracks"] else [],
-        all_hifi_coverage_1000k_100k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.hifi_all_nodup_reads_mean_coverage.win1000000.step100000.track.bedgraph" if (not config["skip_pretext_1000k_100k_tracks"]) and (not config["skip_pretext_coverage_tracks"]) else [],
-        gc_1000k_100k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.gc.win1000000.step100000.track.bedgraph" if not config["skip_pretext_1000k_100k_tracks"] else [],
-        trf_1000k_100k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.trf.win1000000.step100000.track.bedgraph" if (not config["skip_trf"]) and (not config["skip_pretext_1000k_100k_tracks"]) else [],
-        windowmasker_1000k_100k_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.windowmasker.win1000000.step100000.track.bedgraph" if not config["skip_pretext_1000k_100k_tracks"] else [],
+        gap_track="{bam_dir}/../../../assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.gap.track.bedgraph",
+        canonical_telomere_track="{bam_dir}/../../../assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.canonical.telomere.pretext.bedgraph",
+        non_canonical_telomere_track="{bam_dir}/../../../assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.non_canonical.telomere.pretext.bedgraph",
+        gc_10k_1k_track="{bam_dir}/../../../assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.gc.win10000.step1000.track.bedgraph" if not config["skip_pretext_10k_1k_tracks"] else [],
+        gc_100k_10k_track="{bam_dir}/../../../assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.gc.win100000.step10000.track.bedgraph",
+        trf_10k_1k_track="{bam_dir}/../../../assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.trf.win10000.step1000.track.bedgraph" if (not config["skip_trf"]) and (not config["skip_pretext_10k_1k_tracks"]) else [],
+        trf_100k_10k_track="{bam_dir}/../../../assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.trf.win100000.step10000.track.bedgraph" if not config["skip_trf"] else [],
+        windowmasker_10k_1k_track="{bam_dir}/../../../assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.windowmasker.win10000.step1000.track.bedgraph" if not config["skip_pretext_10k_1k_tracks"] else [],
+        windowmasker_100k_10k_track="{bam_dir}/../../../assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.windowmasker.win100000.step10000.track.bedgraph",
+        all_hifi_coverage_10k_1k_track="{bam_dir}/../../../assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.hifi_all_nodup_reads_mean_coverage.win10000.step1000.track.bedgraph" if (not config["skip_pretext_10k_1k_tracks"]) and (not config["skip_pretext_coverage_tracks"]) else [],
+        all_hifi_coverage_100k_10k_track="{bam_dir}/../../../assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.hifi_all_nodup_reads_mean_coverage.win100000.step10000.track.bedgraph" if not config["skip_pretext_coverage_tracks"] else [],
+        all_hifi_coverage_1000k_100k_track="{bam_dir}/../../../assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.hifi_all_nodup_reads_mean_coverage.win1000000.step100000.track.bedgraph" if (not config["skip_pretext_1000k_100k_tracks"]) and (not config["skip_pretext_coverage_tracks"]) else [],
+        gc_1000k_100k_track="{bam_dir}/../../..//assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.gc.win1000000.step100000.track.bedgraph" if not config["skip_pretext_1000k_100k_tracks"] else [],
+        trf_1000k_100k_track="{bam_dir}/../../..//assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.trf.win1000000.step100000.track.bedgraph" if (not config["skip_trf"]) and (not config["skip_pretext_1000k_100k_tracks"]) else [],
+        windowmasker_1000k_100k_track="{bam_dir}/../../../assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.windowmasker.win1000000.step100000.track.bedgraph" if not config["skip_pretext_1000k_100k_tracks"] else [],
+        log_dir="{bam_dir}/per_chr/log/"
     output:
-        updated_map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^./]+}/alignment/{phasing_kmer_length, [^.]+}/per_chr/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.tracks.pretext",
-        gap_track_tmp=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^./]+}/alignment/{phasing_kmer_length, [^.]+}/per_chr/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.gap.track"
+        updated_map="{bam_dir}/per_chr/{fasta_prefix, [^/]+combined|[^/]+reordered}.{phasing_kmer_length}.{candidate_chr_id}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.tracks.pretext",
+        gap_track_tmp="{bam_dir}/per_chr/{fasta_prefix, [^/]+combined|[^/]+reordered}.{phasing_kmer_length, [^.]+}.{candidate_chr_id}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.gap.track"
     params:
         min_mapq=parameters["tool_options"]["pretextmap"]["mapq"],
         skip_trf=config["skip_trf"],
@@ -175,19 +268,19 @@ rule pretext_inject_tracks_per_chr:
         skip_1000k_100k_tracks=config["skip_pretext_1000k_100k_tracks"],
         skip_pretext_coverage_tracks=config["skip_pretext_coverage_tracks"]
     log:
-        gap=output_dict["log"]  / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.gap.log",
-        can_tel=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.can_tel.log",
-        non_can_tel=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.non_can_tel.log",
-        gc=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}..gc.log",
-        trf=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.trf.log",
-        windowmasker=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.windowmasker.log",
-        coverage=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.coverage.log",
-        awk=output_dict["log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.awk.log",
-        rm=output_dict["log"] / "pretextmap.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.rm.log",
-        cluster_log=output_dict["cluster_log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.cluster.err"
+        gap="{bam_dir}/per_chr/log/pretext_inject_tracks.{fasta_prefix}.{phasing_kmer_length}.{candidate_chr_id}.{mapq}.{res}.gap.log",
+        can_tel="{bam_dir}/per_chr/log/pretext_inject_tracks.{fasta_prefix}.{phasing_kmer_length}.{candidate_chr_id}.{mapq}.{res}.can_tel.log",
+        non_can_tel="{bam_dir}/per_chr/log/pretext_inject_tracks.{fasta_prefix}.{phasing_kmer_length}.{candidate_chr_id}.{mapq}.{res}.non_can_tel.log",
+        gc="{bam_dir}/per_chr/log/pretext_inject_tracks.{fasta_prefix}.{phasing_kmer_length}.{candidate_chr_id}.{mapq}.{res}..gc.log",
+        trf="{bam_dir}/per_chr/log/pretext_inject_tracks.{fasta_prefix}.{phasing_kmer_length}.{candidate_chr_id}.{mapq}.{res}.trf.log",
+        windowmasker="{bam_dir}/per_chr/log/pretext_inject_tracks.{fasta_prefix}.{phasing_kmer_length}.{candidate_chr_id}.{mapq}.{res}.windowmasker.log",
+        coverage="{bam_dir}/per_chr/log/pretext_inject_tracks.{fasta_prefix}.{phasing_kmer_length}.{candidate_chr_id}.{mapq}.{res}.coverage.log",
+        awk="{bam_dir}/per_chr/log/pretext_inject_tracks.{fasta_prefix}.{phasing_kmer_length}.{candidate_chr_id}.{mapq}.{res}.awk.log",
+        rm="{bam_dir}/per_chr/log/pretextmap.{fasta_prefix}.{candidate_chr_id}.{phasing_kmer_length}.{mapq}.{res}.rm.log",
+        cluster_log="{bam_dir}/per_chr/log/pretext_inject_tracks.{fasta_prefix}.{phasing_kmer_length}.{candidate_chr_id}.{mapq}.{res}.cluster.log",
+        cluster_err="{bam_dir}/per_chr/log/pretext_inject_tracks.{fasta_prefix}.{phasing_kmer_length}.{candidate_chr_id}.{mapq}.{res}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{candidate_chr_id}.{mapq}.{res}.benchmark.txt"
+        "{bam_dir}/per_chr/log/pretext_inject_tracks.{fasta_prefix}.{phasing_kmer_length}.{candidate_chr_id}.{mapq}.{res}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

@@ -141,3 +141,6 @@ create_telomere_track_for_pretext	1	1	1	1	1	1	1	1	1
 get_candidate_chr_from_painted_agp	1	1	1	1	1	1	1	1	1
 tidk_download_db	1	1	1	1	1	1	1	1	1
 tidk_search	1	1	1	1	1	1	1	1	1
+get_precurated_scaffold_order_from_agp	1	1	1	1	1	1	1	1	1
+get_precurated_fasta	1	1	1	1	1	1	1	1	1
+get_precurated_bam	4	4	4	4	4	4	4	4	4

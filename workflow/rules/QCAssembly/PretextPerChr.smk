@@ -175,6 +175,7 @@ if candidate_agp_filename:
         shell:
             " picard -Xmx{resources.mem}m ReorderSam --SEQUENCE_DICTIONARY {input.precurated_fasta} "
             "        --TMP_DIR `dirname {output.precurated_bam}` --MAX_RECORDS_IN_RAM 10000000 "
+            "        --ALLOW_INCOMPLETE_DICT_CONCORDANCE --VALIDATION_STRINGENCY SILENT "
             "        -I {input.bam} -O {output.precurated_bam}  > {log.log} 2>&1; "
 
 

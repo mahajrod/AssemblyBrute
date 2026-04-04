@@ -176,7 +176,7 @@ rule get_precurated_bam:
 
     shell:
         " picard -Xmx{resources.mem}m ReorderSam --SEQUENCE_DICTIONARY {input.precurated_fasta} "
-        "        --TMP_DIR `dirname {output.precurated_bam}` "
+        "        --TMP_DIR `dirname {output.precurated_bam}` --MAX_RECORDS_IN_RAM 10000000 "
         "        -I {input.bam} -O {output.precurated_bam}  > {log.log} 2>&1; "
 
 

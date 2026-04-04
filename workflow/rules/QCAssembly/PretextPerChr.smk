@@ -154,6 +154,7 @@ rule get_precurated_bam:
         bam="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{merged_haplotype}.rmdup.bam",
         bam_index="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{merged_haplotype}.rmdup.bam.csi",
         precurated_fasta="{fasta_dir}/{merged_haplotype}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.fasta",
+        precurated_fasta_dict="{fasta_dir}/{merged_haplotype}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.dict",
         log_dir="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/"
     output:
         precurated_bam="{fasta_dir}/{merged_haplotype, combined|reordered}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.rmdup.precurated.bam"

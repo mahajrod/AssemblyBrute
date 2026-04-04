@@ -95,7 +95,7 @@ rule get_precurated_scaffold_order_from_agp:
         candidate_agp=candidate_agp_filename,
         log_dir="{fasta_dir}/{merged_haplotype}/log/"
     output:
-        precurated_scaffold_orderlist="{fasta_dir}/{merged_haplotype, combined|reordered}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.interval_list",
+        precurated_scaffold_orderlist="{fasta_dir}/{merged_haplotype, combined|reordered}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.orderlist",
 
         #filtered_out=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/per_chr/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.{candidate_chr_id}.filtered_out.ids",
     log:
@@ -120,7 +120,7 @@ rule get_precurated_scaffold_order_from_agp:
         " grep -vP \"^#\" {input.candidate_agp} 2>{log.grep1} | "
         " grep -P \"\\tW\\t\" 2>{log.grep2} | "
         " cut -f 6 > {output.precurated_scaffold_orderlist} 2>{log.cut}; "
-"""
+
 rule get_precurated_fasta:
     input:
         #bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
@@ -148,12 +148,12 @@ rule get_precurated_fasta:
     shell:
         " workflow/scripts/sequence/reorder_sequences.py -i {input.fasta} -b orderlist "
         "         -r {input.precurated_scaffold_orderlist} -o {output.precurated_fasta} > {log.log} 2>&1; "
-"""
+
 rule get_precurated_bam:
     input:
         bam="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{merged_haplotype}.rmdup.bam",
         bam_index="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{merged_haplotype}.rmdup.bam.csi",
-        precurated_scaffold_orderlist="{fasta_dir}/{merged_haplotype}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.interval_list",
+        precurated_fasta="{fasta_dir}/{merged_haplotype}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.fasta",
         log_dir="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/"
     output:
         precurated_bam="{fasta_dir}/{merged_haplotype, combined|reordered}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.rmdup.precurated.bam"
@@ -174,7 +174,7 @@ rule get_precurated_bam:
     threads: parameters["threads"]["get_precurated_bam"]
 
     shell:
-        " picard -Xmx{resources.mem}m ReorderSam --SEQUENCE_DICTIONARY {input.precurated_scaffold_orderlist} "
+        " picard -Xmx{resources.mem}m ReorderSam --SEQUENCE_DICTIONARY {input.precurated_fasta} "
         "        -I {input.bam} -O {output.precurated_bam} > {log.log} 2>&1; "
 
 

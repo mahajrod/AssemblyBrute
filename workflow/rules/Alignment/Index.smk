@@ -1,17 +1,17 @@
 rule bwa_index:
     input:
-        fasta="{fasta_prefix}.fasta"
+        fasta="{fasta_dir}/{fasta_prefix}.fasta"
     output:
-        index="{fasta_prefix}.fasta%s" % (".bwt" if config["bwa_tool"] == "bwa" else ".bwt.2bit.64"), #  or (config["other_tool_option_sets"]["mapping_pipeline"] == "arima")
-        index_ann="{fasta_prefix}.fasta.ann"
+        index="{fasta_dir}/{fasta_prefix}.fasta%s" % (".bwt" if config["bwa_tool"] == "bwa" else ".bwt.2bit.64"), #  or (config["other_tool_option_sets"]["mapping_pipeline"] == "arima")
+        index_ann="{fasta_dir}/{fasta_prefix}.fasta.ann"
     params:
         bwa_tool=config["bwa_tool"] # if config["other_tool_option_sets"]["mapping_pipeline"] != "arima" else "bwa",
     log:
-        std="{fasta_prefix}.bwa_index.log",
-        cluster_log="{fasta_prefix}.bwa_index.cluster.log",
-        cluster_err="{fasta_prefix}.bwa_index.cluster.err"
+        std="{fasta_dir}/bwa_index.{fasta_prefix}.log",
+        cluster_log="{fasta_dir}/bwa_index.{fasta_prefix}.cluster.log",
+        cluster_err="{fasta_dir}/bwa_index.{fasta_prefix}.cluster.err"
     benchmark:
-        "{fasta_prefix}.bwa_index.benchmark.txt"
+        "{fasta_dir}/{fasta_prefix}.bwa_index.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -27,16 +27,17 @@ rule bwa_index:
 
 rule ref_faidx:
     input:
-        fasta="{fasta_prefix}.fasta"
+        fasta="{fasta_dir}/{fasta_prefix}.fasta",
+        log_dir="{fasta_dir}/log"
     output:
-        fai="{fasta_prefix}.fasta.fai",
+        fai="{fasta_dir}/{fasta_prefix}.fasta.fai",
         #fai_alias=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.fai"
     log:
-        std="{fasta_prefix}.ref_faidx.log",
-        cluster_log="{fasta_prefix}.ref_faidx.cluster.log",
-        cluster_err="{fasta_prefix}.ref_faidx.cluster.err"
+        std="{fasta_dir}/ref_faidx.{fasta_prefix}.log",
+        cluster_log="{fasta_dir}/ref_faidx.{fasta_prefix}.cluster.log",
+        cluster_err="{fasta_dir}/ref_faidx.{fasta_prefix}.cluster.err"
     benchmark:
-        "{fasta_prefix}.ref_faidx.benchmark.txt"
+        "{fasta_dir}/ref_faidx.{fasta_prefix}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -52,15 +53,16 @@ rule ref_faidx:
 
 rule ref_dict:
     input:
-        fasta="{fasta_prefix}.fasta"
+        fasta="{fasta_dir}/{fasta_prefix}.fasta",
+        log_dir="{fasta_dir}/log"
     output:
-        dict="{fasta_prefix}.dict"
+        dict="{fasta_dir}/{fasta_prefix}.dict"
     log:
-        std="{fasta_prefix}.ref_dict.log",
-        cluster_log="{fasta_prefix}.ref_dict.cluster.log",
-        cluster_err="{fasta_prefix}.ref_dict.cluster.err"
+        std="{fasta_dir}/ref_dict.{fasta_prefix}.log",
+        cluster_log="{fasta_dir}/ref_dict.{fasta_prefix}.cluster.log",
+        cluster_err="{fasta_dir}/ref_dict.{fasta_prefix}.cluster.err"
     benchmark:
-        "{fasta_prefix}.ref_dict.benchmark.txt"
+        "{fasta_dir}/{fasta_prefix}.ref_dict.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -76,15 +78,16 @@ rule ref_dict:
 
 rule index_bam:
     input:
-        bam="{bam_prefix}.bam"
+        bam="{bam_dir}/{bam_prefix}.bam",
+        log_dir="{bam_dir}/log/"
     output:
-        bai="{bam_prefix}.bam.bai"
+        bai="{bam_dir}/{bam_prefix}.bam.bai"
     log:
-        std="{bam_prefix}.index_bam.log",
-        cluster_log="{bam_prefix}.index_bam.cluster.log",
-        cluster_err="{bam_prefix}.index_bam.cluster.err"
+        std="{bam_dir}/index_bam.{bam_prefix}.log",
+        cluster_log="{bam_dir}/index_bam.{bam_prefix}.cluster.log",
+        cluster_err="{bam_dir}/index_bam.{bam_prefix}.cluster.err"
     benchmark:
-        "{bam_prefix}.index_bam.benchmark.txt"
+        "{bam_dir}/index_bam.{bam_prefix}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -99,15 +102,16 @@ rule index_bam:
 
 rule index_bam_csi:
     input:
-        bam=ancient("{bam_prefix}.bam")
+        bam="{bam_dir}/{bam_prefix}.bam",
+        log_dir="{bam_dir}/log/"
     output:
-        bai="{bam_prefix}.bam.csi"
+        bai="{bam_dir}/{bam_prefix}.bam.csi"
     log:
-        std="{bam_prefix}.index_bam.log",
-        cluster_log="{bam_prefix}.index_bam.cluster.log",
-        cluster_err="{bam_prefix}.index_bam.cluster.err"
+        std="{bam_dir}/log/index_bam.{bam_prefix}.log",
+        cluster_log="{bam_dir}/log/index_bam.cluster.{bam_prefix}.log",
+        cluster_err="{bam_dir}/log/index_bam.cluster.{bam_prefix}.err"
     benchmark:
-        "{bam_prefix}.index_bam.benchmark.txt"
+        "{bam_dir}/log/index_bam.{bam_prefix}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

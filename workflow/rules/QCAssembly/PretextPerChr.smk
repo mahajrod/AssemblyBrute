@@ -95,7 +95,7 @@ rule get_precurated_scaffold_order_from_agp:
         candidate_agp=candidate_agp_filename,
         log_dir="{fasta_dir}/{merged_haplotype}/log/"
     output:
-        precurated_scaffold_orderlist="{fasta_dir}/{merged_haplotype, combined|reordered}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.list",
+        precurated_scaffold_orderlist="{fasta_dir}/{merged_haplotype, combined|reordered}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.interval_list",
 
         #filtered_out=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/per_chr/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.{candidate_chr_id}.filtered_out.ids",
     log:
@@ -153,7 +153,7 @@ rule get_precurated_bam:
     input:
         bam="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{merged_haplotype}.rmdup.bam",
         bam_index="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{merged_haplotype}.rmdup.bam.csi",
-        precurated_scaffold_orderlist="{fasta_dir}/{merged_haplotype}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.list",
+        precurated_scaffold_orderlist="{fasta_dir}/{merged_haplotype}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.interval_list",
         log_dir="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/"
     output:
         precurated_bam="{fasta_dir}/{merged_haplotype, combined|reordered}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.rmdup.precurated.bam"

@@ -2083,7 +2083,7 @@ include: "workflow/rules/QCAssembly/GCTrack.smk"
 include: "workflow/rules/QCAssembly/WGA.smk"
 include: "workflow/rules/QCAssembly/HiC.smk"
 include: "workflow/rules/QCAssembly/MicroChromosomes.smk"
-include: "workflow/rules/QCAssembly/PretextPerChr.smk"
+#include: "workflow/rules/QCAssembly/PretextPerChr.smk"
 include: "workflow/rules/QCAssembly/RagTag.smk"
 #include: "workflow/rules/QCAssembly/VariantTrack.smk"
 

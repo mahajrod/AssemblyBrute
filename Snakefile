@@ -146,7 +146,7 @@ elif len(candidate_agp_filename) == 1:
         chr_black_list_series = chr_component_series[~chr_component_series.isin(chr_component_series[[scaffold_id]])]
         chr_black_list_series.to_csv(f"{candidate_output_prefix}.{scaffold_id}.pretext.blacklist",sep="\t",header=False,index=False)
 else:
-    candidate_agp_filename = None
+    candidate_agp_filename = []
 #logging.info("Checking input files...")
 
 input_filedict = {}
@@ -2083,7 +2083,7 @@ include: "workflow/rules/QCAssembly/GCTrack.smk"
 include: "workflow/rules/QCAssembly/WGA.smk"
 include: "workflow/rules/QCAssembly/HiC.smk"
 include: "workflow/rules/QCAssembly/MicroChromosomes.smk"
-#include: "workflow/rules/QCAssembly/PretextPerChr.smk"
+include: "workflow/rules/QCAssembly/PretextPerChr.smk"
 include: "workflow/rules/QCAssembly/RagTag.smk"
 #include: "workflow/rules/QCAssembly/VariantTrack.smk"
 

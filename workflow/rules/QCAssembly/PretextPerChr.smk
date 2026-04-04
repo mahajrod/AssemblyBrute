@@ -174,7 +174,7 @@ rule get_precurated_bam:
     threads: parameters["threads"]["get_precurated_bam"]
 
     shell:
-        " picard -Xmx{resources.mem}m MarkDuplicates -R {input.precurated_fasta} -I {input.bam} "
+        " picard -Xmx{resources.mem}m ReorderSam -R {input.precurated_fasta} -I {input.bam} "
         "        -O {output.precurated_bam} > {log.log} 2>&1; "
 
 

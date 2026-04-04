@@ -247,7 +247,7 @@
 "skip_variantcalling": True
 "skip_hic_file": False
 "skip_krater": True
-"skip_kmer": True
+"skip_kmer": False
 "skip_ragtag": True
 "skip_draft_qc_ragtag": True
 "skip_draft_qc_wga": False

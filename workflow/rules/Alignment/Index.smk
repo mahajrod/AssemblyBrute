@@ -1,17 +1,18 @@
 rule bwa_index:
     input:
-        fasta="{fasta_dir}/{fasta_prefix}.fasta"
+        fasta="{fasta_dir}/{fasta_prefix}.fasta",
+        log_dir="{fasta_dir}/log/"
     output:
         index="{fasta_dir}/{fasta_prefix}.fasta%s" % (".bwt" if config["bwa_tool"] == "bwa" else ".bwt.2bit.64"), #  or (config["other_tool_option_sets"]["mapping_pipeline"] == "arima")
         index_ann="{fasta_dir}/{fasta_prefix}.fasta.ann"
     params:
         bwa_tool=config["bwa_tool"] # if config["other_tool_option_sets"]["mapping_pipeline"] != "arima" else "bwa",
     log:
-        std="{fasta_dir}/bwa_index.{fasta_prefix}.log",
-        cluster_log="{fasta_dir}/bwa_index.{fasta_prefix}.cluster.log",
-        cluster_err="{fasta_dir}/bwa_index.{fasta_prefix}.cluster.err"
+        std="{fasta_dir}/log/bwa_index.{fasta_prefix}.log",
+        cluster_log="{fasta_dir}/log/bwa_index.{fasta_prefix}.cluster.log",
+        cluster_err="{fasta_dir}/log/bwa_index.{fasta_prefix}.cluster.err"
     benchmark:
-        "{fasta_dir}/{fasta_prefix}.bwa_index.benchmark.txt"
+        "{fasta_dir}/log/{fasta_prefix}.bwa_index.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -28,16 +29,16 @@ rule bwa_index:
 rule ref_faidx:
     input:
         fasta="{fasta_dir}/{fasta_prefix}.fasta",
-        log_dir="{fasta_dir}/log"
+        log_dir="{fasta_dir}/log/"
     output:
         fai="{fasta_dir}/{fasta_prefix}.fasta.fai",
         #fai_alias=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.fai"
     log:
-        std="{fasta_dir}/ref_faidx.{fasta_prefix}.log",
-        cluster_log="{fasta_dir}/ref_faidx.{fasta_prefix}.cluster.log",
-        cluster_err="{fasta_dir}/ref_faidx.{fasta_prefix}.cluster.err"
+        std="{fasta_dir}/log/ref_faidx.{fasta_prefix}.log",
+        cluster_log="{fasta_dir}/log/ref_faidx.{fasta_prefix}.cluster.log",
+        cluster_err="{fasta_dir}/log/ref_faidx.{fasta_prefix}.cluster.err"
     benchmark:
-        "{fasta_dir}/ref_faidx.{fasta_prefix}.benchmark.txt"
+        "{fasta_dir}/log/ref_faidx.{fasta_prefix}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -54,15 +55,15 @@ rule ref_faidx:
 rule ref_dict:
     input:
         fasta="{fasta_dir}/{fasta_prefix}.fasta",
-        log_dir="{fasta_dir}/log"
+        log_dir="{fasta_dir}/log/"
     output:
         dict="{fasta_dir}/{fasta_prefix}.dict"
     log:
-        std="{fasta_dir}/ref_dict.{fasta_prefix}.log",
-        cluster_log="{fasta_dir}/ref_dict.{fasta_prefix}.cluster.log",
-        cluster_err="{fasta_dir}/ref_dict.{fasta_prefix}.cluster.err"
+        std="{fasta_dir}/log/ref_dict.{fasta_prefix}.log",
+        cluster_log="{fasta_dir}/log/ref_dict.{fasta_prefix}.cluster.log",
+        cluster_err="{fasta_dir}/log/ref_dict.{fasta_prefix}.cluster.err"
     benchmark:
-        "{fasta_dir}/{fasta_prefix}.ref_dict.benchmark.txt"
+        "{fasta_dir}/log/{fasta_prefix}.ref_dict.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -83,11 +84,11 @@ rule index_bam:
     output:
         bai="{bam_dir}/{bam_prefix}.bam.bai"
     log:
-        std="{bam_dir}/index_bam.{bam_prefix}.log",
-        cluster_log="{bam_dir}/index_bam.{bam_prefix}.cluster.log",
-        cluster_err="{bam_dir}/index_bam.{bam_prefix}.cluster.err"
+        std="{bam_dir}/log/index_bam.{bam_prefix}.log",
+        cluster_log="{bam_dir}/log/index_bam.{bam_prefix}.cluster.log",
+        cluster_err="{bam_dir}/log/index_bam.{bam_prefix}.cluster.err"
     benchmark:
-        "{bam_dir}/index_bam.{bam_prefix}.benchmark.txt"
+        "{bam_dir}/log/index_bam.{bam_prefix}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

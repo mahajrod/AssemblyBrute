@@ -96,8 +96,6 @@ rule get_precurated_scaffold_order_from_agp:
         log_dir="{fasta_dir}/{merged_haplotype}/log/"
     output:
         precurated_scaffold_orderlist="{fasta_dir}/{merged_haplotype, combined|reordered}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.orderlist",
-
-        #filtered_out=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/per_chr/{phasing_kmer_length, [^.]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.mapq{mapq, [0-9]+}.{res, default|high_res}.{candidate_chr_id}.filtered_out.ids",
     log:
         grep1="{fasta_dir}/{merged_haplotype}/log/get_precurated_scaffold_order_from_agp.{genome_prefix}.{assembly_stage}.{merged_haplotype}.grep1.log",
         grep2="{fasta_dir}/{merged_haplotype}/log/get_precurated_scaffold_order_from_agp.{genome_prefix}.{assembly_stage}.{merged_haplotype}.grep2.log",

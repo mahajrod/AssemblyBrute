@@ -176,7 +176,7 @@ rule get_precurated_bam:
 
     shell:
         " picard -Xmx{resources.mem}m ReorderSam --SEQUENCE_DICTIONARY {input.precurated_fasta} "
-        "        -I {input.bam} -O {output.precurated_bam} > {log.log} 2>&1; "
+        "        -I {input.bam} -O {output.precurated_bam} --TMP_DIR `dirname {output.precurated_bam}` > {log.log} 2>&1; "
 
 
 rule pretextmap_chr:

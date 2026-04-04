@@ -62,7 +62,7 @@ rule bwa_map: #
         " {input.reference} {input.forward_fastq} {input.reverse_fastq} 2>{log.map} | samtools view -Sb - > {output.bam} 2>{log.sort} "
 
 
-
+"""
 rule rmdup:
     input:
         bam=rules.bam_merge_files.output.bam
@@ -99,3 +99,4 @@ rule rmdup:
         " samtools fixmate -@ {params.fixmate_threads} -m - -  2>{log.fixmate} | "
         " samtools sort -T ${{TMP_DIR}}/tmp.sort -@ {params.sort_threads} -m {params.sort_per_thread}M 2>{log.sort} | "
         " samtools markdup -@ {params.markdup_threads} - {output.bam} > {log.markdup} 2>&1; "
+"""

@@ -122,6 +122,8 @@ rule bam_merge_files:
     shell:
         " samtools merge -@ {params.sort_threads} --no-PG -o {output.bam} {input.bams} 1>{log.std} 2>&1"
 """
+
+"""
 rule rmdup:
     input:
         bam=rules.bam_merge_files.output.bam
@@ -151,3 +153,4 @@ rule rmdup:
         " --REMOVE_DUPLICATES true -M {output.dup_stats}  --TMP_DIR ${{TMP_DIRECTORY}} >{log.std} 2>&1;"
         #" samtools index {output.bam}; "
         " workflow/external_tools/arima_mapping_pipeline/get_stats.pl {output.bam} > {output.bam_stats}"
+"""

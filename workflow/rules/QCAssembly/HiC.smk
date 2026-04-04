@@ -161,8 +161,8 @@ if (sum(list(pd.Series(["hic_scaffolding",
 
     rule bwa_map_for_hic_map: #
         input:
-            index=ancient(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.ann"),
-            reference=ancient(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"),
+            index=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.ann",
+            reference=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
             forward_fastq=lambda wildcards: ancient(output_dict["data"] / "fastq/hic/{0}/{1}{2}{3}".format("filtered" if "hic" in config["filtered_data"] else "raw",
                                                                                                   wildcards.pairprefix,
                                                                                                   "_1" if "hic" in config["filtered_data"] else input_forward_suffix_dict["hic"],
@@ -173,7 +173,7 @@ if (sum(list(pd.Series(["hic_scaffolding",
                                                                                                    config["fastq_extension"])) ,
         output:
             #bam=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam"
-            bam=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/{haplotype, combined|reordered}/alignment/{phasing_kmer_length, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix, [^/]+}.bwa.bam"
+            bam=temp(out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/{haplotype, combined|reordered}/alignment/{phasing_kmer_length, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix, [^/]+}.bwa.bam")
         params:
             id="{0}_hic".format(config["genome_prefix"]),
             bwa_tool=config["bwa_tool"]
@@ -197,10 +197,10 @@ if (sum(list(pd.Series(["hic_scaffolding",
         shell:
             " {params.bwa_tool} mem  -T 0 -SP5 -t {threads} -R  \'@RG\\tID:{params.id}\\tPU:x\\tSM:{params.id}\\tPL:illumina\\tLB:x\' "
             " {input.reference} {input.forward_fastq} {input.reverse_fastq} 2>{log.map} | samtools view -Sb - > {output.bam} 2>{log.sort} "
-
+"""
     rule rmdup_for_hic_map:
         input:
-            bam=ancient(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.bam")
+            bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.bam"
         output:
             bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, combined|reordered}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
             #bai=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam.bai",
@@ -234,3 +234,4 @@ if (sum(list(pd.Series(["hic_scaffolding",
             " samtools fixmate -@ {params.fixmate_threads} -m - -  2>{log.fixmate} | "
             " samtools sort -T ${{TMP_DIR}}/tmp.sort -@ {params.sort_threads} -m {params.sort_per_thread}M 2>{log.sort} | "
             " samtools markdup -@ {params.markdup_threads} - {output.bam} > {log.markdup} 2>&1; "
+"""

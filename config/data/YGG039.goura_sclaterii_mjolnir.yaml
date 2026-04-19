@@ -161,7 +161,7 @@
 "use_canonical_telomere": True
 
 "species_name": "Goura sclaterii"
-"tax_id": 2057153   # # necessary for contamination scan via FCS
+"tax_id": 2057153  # necessary for contamination scan via FCS
 "bird_genome": True
 
 "database_set":

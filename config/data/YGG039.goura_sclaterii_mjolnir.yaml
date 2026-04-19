@@ -150,7 +150,7 @@
 
 "ploidy": 2
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
-"genome_prefix": "bOtiNob1"
+"genome_prefix": "bGouScl1"
 "busco_lineage_list":
     - "aves_odb10" #
     - "vertebrata_odb10"

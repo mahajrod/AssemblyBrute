@@ -1,7 +1,7 @@
 
 rule rmdup:
     input:
-        bam="{bam_dir}/{bam_prefix, ^(?!.*rmdup).*}.bam",
+        bam="{bam_dir}/{bam_prefix, ^(?!.*rmdup).*}.bwa.bam",
         stats="{bam_prefix}.bam.general_stats",
         log_dir="{bam_dir}/log/"
     output:

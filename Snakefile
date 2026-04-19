@@ -2087,8 +2087,6 @@ include: "workflow/rules/QCAssembly/PretextPerChr.smk"
 include: "workflow/rules/QCAssembly/RagTag.smk"
 #include: "workflow/rules/QCAssembly/VariantTrack.smk"
 
-
-
 if "gap_closing" in config["stage_list"]:
     include: "workflow/rules/Finalization/GapClosing.smk"
 

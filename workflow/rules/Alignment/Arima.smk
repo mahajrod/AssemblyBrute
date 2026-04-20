@@ -83,8 +83,8 @@ rule arima_bwa_map: #
 
 rule arima_filter_five_end: #
     input:
-        raw_bam=rules.arima_bwa_map.output.raw_bam,
-        stats=(rules.arima_bwa_map.output.raw_bam).with_suffix(".general_stats")
+        raw_bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.raw.bam",
+        stats=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype, hap[^./]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.raw.bam.general_stats"
     output:
         bam=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype, hap[^./]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam"
     params:
@@ -121,6 +121,13 @@ rule arima_two_read_bam_combiner:
                                                                                                                                   wildcards.genome_prefix,
                                                                                                                                   wildcards.pairprefix,
                                                                                                                                   input_forward_suffix_dict["hic"] if wildcards.phasing_kmer_length == "NA" else "_1")),
+        forward_stats=lambda wildcards: out_dir_path / ("{0}/{1}/{2}/alignment/{3}/{4}.{0}.{3}.{2}.{5}{6}.bwa.bam.general_stats".format(wildcards.assembly_stage,
+                                                                                                                                        wildcards.parameters,
+                                                                                                                                        wildcards.haplotype,
+                                                                                                                                        wildcards.phasing_kmer_length,
+                                                                                                                                        wildcards.genome_prefix,
+                                                                                                                                        wildcards.pairprefix,
+                                                                                                                                        input_forward_suffix_dict["hic"] if wildcards.phasing_kmer_length == "NA" else "_1")),
         reverse_bam=lambda wildcards: out_dir_path / ("{0}/{1}/{2}/alignment/{3}/{4}.{0}.{3}.{2}.{5}{6}.bwa.bam".format(wildcards.assembly_stage,
                                                                                                                                   wildcards.parameters,
                                                                                                                                   wildcards.haplotype,
@@ -128,9 +135,16 @@ rule arima_two_read_bam_combiner:
                                                                                                                                   wildcards.genome_prefix,
                                                                                                                                   wildcards.pairprefix,
                                                                                                                                   input_reverse_suffix_dict["hic"] if wildcards.phasing_kmer_length == "NA" else "_2")),
+        reverse_stats=lambda wildcards: out_dir_path / ("{0}/{1}/{2}/alignment/{3}/{4}.{0}.{3}.{2}.{5}{6}.bwa.bam.general_stats".format(wildcards.assembly_stage,
+                                                                                                                                        wildcards.parameters,
+                                                                                                                                        wildcards.haplotype,
+                                                                                                                                        wildcards.phasing_kmer_length,
+                                                                                                                                        wildcards.genome_prefix,
+                                                                                                                                        wildcards.pairprefix,
+                                                                                                                                        input_reverse_suffix_dict["hic"] if wildcards.phasing_kmer_length == "NA" else "_2")),
         reference_fai=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.fai"
     output:
-        bam=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype, hap[^./]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.bam"), # TODO: make_tem
+        bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, hap[^./]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.bam", # TODO: make_tem
     params:
         min_mapq=parameters["tool_options"]["two_read_bam_combiner"]["mapq"],
         sort_threads=parameters["threads"]["samtools_sort"],

@@ -84,7 +84,7 @@ rule arima_bwa_map: #
 rule arima_filter_five_end: #
     input:
         raw_bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.raw.bam",
-        stats=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype, hap[^./]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.raw.bam.general_stats"
+        stats=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.raw.bam.general_stats"
     output:
         bam=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype, hap[^./]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam"
     params:

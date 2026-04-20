@@ -1,6 +1,4 @@
 
-
-
 rule rmdup:
     input:
         bam="{bam_dir}/{bam_prefix}.bwa.bam",

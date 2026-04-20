@@ -5,7 +5,7 @@ rule rmdup:
         stats="{bam_dir}/{bam_prefix}.bwa.bam.general_stats",
         log_dir="{bam_dir}/log/"
     output:
-        bam="{bam_dir}/{bam_prefix, ^(?!.*rmdup).*}.rmdup.bam",
+        bam="{bam_dir}/{bam_prefix}.rmdup.bam",
     params:
         sort_threads=parameters["threads"]["samtools_sort"],
         collate_threads=parameters["threads"]["samtools_collate"],

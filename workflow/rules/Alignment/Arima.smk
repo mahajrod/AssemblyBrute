@@ -83,7 +83,8 @@ rule arima_bwa_map: #
 
 rule arima_filter_five_end: #
     input:
-        raw_bam=rules.arima_bwa_map.output.raw_bam
+        raw_bam=rules.arima_bwa_map.output.raw_bam,
+        stats=(rules.arima_bwa_map.output.raw_bam).with_suffix(".general_stats")
     output:
         bam=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype, hap[^./]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam"
     params:

@@ -116,6 +116,7 @@
          #- "l1primary"
          #- "l2primary"
          - "l3primary"
+         - "l3primary_no_hic"
          #- "l3primary_main_nanopore"
          #- "l3primary_main_nanopore_only"
          #- "l3primary_main_hifi_duplex"

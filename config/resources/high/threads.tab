@@ -43,7 +43,8 @@ create_links	1	1	1	1	1	1	1	1	1
 bwa_index	1	1	1	1	1	1	1	1	1
 bwa_map	40	15	30	40	40	40	40	40	40
 bwa_map_arima	20	10	10	20	20	25	25	30	30
-two_read_bam_combiner	1	1	1	1	1	1	1	1	1
+arima_filter_five_end	1	1	1	1	1	1	1	1	1
+arima_two_read_bam_combiner	1	1	1	1	1	1	1	1	1
 samtools_sort	8	2	4	8	8	8	8	8	8
 samtools_index	1	1	1	1	1	1	1	1	1
 samtools_collate	4	4	4	4	4	4	4	4	4

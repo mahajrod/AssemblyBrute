@@ -1,4 +1,4 @@
-
+localrules: link_bwa_only_bam
 
 rule bwa_map: #
     input:
@@ -36,7 +36,8 @@ rule bwa_map: #
                                                                                             config["fastq_extension"]),
     output:
         #bam=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam"
-        bam=temp(out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/{haplotype, [^.]+}/alignment/{phasing_kmer_length, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix, [^/]+}.bwa.bam")
+        raw_bam=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/{haplotype, [^.]+}/alignment/{phasing_kmer_length, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix, [^/]+}.bwa.raw.bam",
+        bam=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/{haplotype, [^.]+}/alignment/{phasing_kmer_length, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix, [^/]+}.bwa.bam"
     params:
         id="{0}_hic".format(config["genome_prefix"]),
         bwa_tool=config["bwa_tool"]
@@ -61,42 +62,27 @@ rule bwa_map: #
         " {params.bwa_tool} mem -SP5M -t {threads} -R  \'@RG\\tID:{params.id}\\tPU:x\\tSM:{params.id}\\tPL:illumina\\tLB:x\' "
         " {input.reference} {input.forward_fastq} {input.reverse_fastq} 2>{log.map} | samtools view -Sb - > {output.bam} 2>{log.sort} "
 
-
-"""
-rule rmdup:
+rule link_bwa_only_bam: #
     input:
-        bam=rules.bam_merge_files.output.bam
+        raw_bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.raw.bam",
     output:
-        bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
-        #bai=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam.bai",
-    params:
-        sort_threads=parameters["threads"]["samtools_sort"],
-        collate_threads=parameters["threads"]["samtools_collate"],
-        fixmate_threads=parameters["threads"]["samtools_fixmate"],
-        markdup_threads=parameters["threads"]["samtools_markdup"],
-        sort_per_thread=parameters["memory_mb"]["samtools_sort_per_thread"]
+        bam=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/{haplotype, [^.]+}/alignment/{phasing_kmer_length, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix, [^/]+}.bwa.bam"
+
     log:
-        collate=output_dict["log"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.collate.log",
-        fixmate=output_dict["log"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.fixmate.log",
-        sort=output_dict["log"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.sort.log",
-        markdup=output_dict["log"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.markdup.log",
-        cluster_log=output_dict["cluster_log"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.err"
+        log=output_dict["log"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{pairprefix}.log",
+        cluster_log=output_dict["cluster_log"] / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "rmdup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.benchmark.txt"
+        output_dict["benchmark"]  / "bwa_map.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{pairprefix}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
-        node_options=parse_node_list("rmdup"),
-        cpus=parameters["threads"]["samtools_sort"] + parameters["threads"]["samtools_collate"] + parameters["threads"]["samtools_fixmate"] + parameters["threads"]["samtools_markdup"],
-        time=parameters["time"]["rmdup"],
-        mem=50000 + parameters["memory_mb"]["samtools_collate"] + parameters["memory_mb"]["samtools_fixmate"] + parameters["memory_mb"]["samtools_markdup"] + parameters["memory_mb"]["samtools_sort_per_thread"] * parameters["threads"]["samtools_sort"]
-    threads: parameters["threads"]["samtools_sort"] + parameters["threads"]["samtools_collate"] + parameters["threads"]["samtools_fixmate"] + parameters["threads"]["samtools_markdup"]
+        node_options=parse_node_list("create_fastq_links"),
+        cpus=parameters["threads"]["create_fastq_links"] ,
+        time=parameters["time"]["create_fastq_links"],
+        mem=parameters["memory_mb"]["create_fastq_links"]
+    threads: parameters["threads"]["create_fastq_links"]
     shell:
-        " TMP_DIR=`dirname {output.bam}`; "
-        " samtools collate -T ${{TMP_DIR}}/tmp.collate  -@ {params.collate_threads}  -O {input.bam} 2>{log.collate} | "
-        " samtools fixmate -@ {params.fixmate_threads} -m - -  2>{log.fixmate} | "
-        " samtools sort -T ${{TMP_DIR}}/tmp.sort -@ {params.sort_threads} -m {params.sort_per_thread}M 2>{log.sort} | "
-        " samtools markdup -@ {params.markdup_threads} - {output.bam} > {log.markdup} 2>&1; "
-"""
+        " ln -sf `basename {input.raw_bam}` {output.bam} 2>{log.log} "
+

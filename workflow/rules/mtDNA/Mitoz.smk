@@ -96,5 +96,5 @@ rule mitoz:
         "                --requiring_taxa {params.clade} "
         "                --species_name '{params.species_name}' "
         "                --genetic_code {params.genetic_code} "
-        "                --data_size_for_mt_assembly {params.max_raw_data},{params.max_filtered_data} > {log.log} 2>&1; "
+        "                --data_size_for_mt_assembly {params.max_raw_data},{params.max_filtered_data} > {log.log} 2>&1 || true; "
 

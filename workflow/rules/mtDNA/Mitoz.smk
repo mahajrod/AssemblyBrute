@@ -98,17 +98,3 @@ rule mitoz:
         "                --genetic_code {params.genetic_code} "
         "                --data_size_for_mt_assembly {params.max_raw_data},{params.max_filtered_data} > {log.log} 2>&1; "
 
-
-
-
-use rule mitohifi_reads as mitohifi_combined_reads with:
-    input:
-        mtdna_ref_fasta=out_dir_path / "data/mtDNA/{mtdna_ref}/{mtdna_ref}.fasta",
-        mtdna_ref_gb = out_dir_path / "data/mtDNA/{mtdna_ref}/{mtdna_ref}.gb",
-        hifi_reads = output_dict["data"] / ("fastq/hifi/combined/hifi.combined%s" % config["fastq_extension"])
-    output:
-        stats=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, combined}/{fileprefix}/contigs_stats.tsv",
-        #mtDNA_gb=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, combined}/{fileprefix}/final_mitogenome.gb",
-        #mtDNA_fasta=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, combined}/{fileprefix}/final_mitogenome.fasta",
-        #coverage_plot=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, combined}/{fileprefix}/final_mitogenome.coverage.png",
-        #annotation_plot=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, combined}/{fileprefix}/final_mitogenome.annotation.png"

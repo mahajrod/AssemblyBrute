@@ -30,23 +30,23 @@
             "time":         "06:00:00"
             "in_memory":    True
         "nt":
-            "path":         "/projects/mjolnir1/people/xsg178/db/kraken/nt/05302024" # add path to nt database
+            "path":         "/datasets/globe_databases/kraken2/kraken2_nt/20240530/" # add path to nt database
             "memory_mb":    1024000
             "threads":      30
-            "time":         "24:00:00"
+            "time":         "03:00:00"
             "in_memory":    True
     "fcs":
         "fcs_gx":
-            "path":         "/projects/mjolnir1/people/xsg178/db/fcs/gxdb/" # add path to fcs_gx database
-            "image_path":   "/projects/mjolnir1/people/xsg178/soft/FCS-GX/fcs-gx.sif"
-            "memory_mb":    512000 # Entire database must be in memory, it requires at least 490 Gbp
+            "path":         "/datasets/globe_databases/fcs-gx/20240912/gxdb/" # add path to fcs_gx database
+            "image_path":   "/maps/projects/tomg/people/xsg178/soft/FCS-GX/fcs-gx.sif"
+            "memory_mb":    600000 # Entire database must be in memory, it requires at least 490 Gbp
             "threads":      30
             "time":         "06:00:00"
             "in_memory":    True
     "fcs_adaptor":
         "adaptor":
             "path":         null # database is embedded in singularity image
-            "image_path":   "/projects/mjolnir1/people/xsg178/soft/fcsadaptor/fcs-adaptor.sif"
+            "image_path":   "/maps/projects/tomg/people/xsg178/soft/fcsadaptor/fcs-adaptor.sif"
             "memory_mb":    20000 #
             "threads":      1
             "time":         "01:00:00"
@@ -55,10 +55,13 @@
 "final_fcs_db": "fcs_gx" # this database will be used for the filtration of the contigs if skip_fcs is False
 
 "tool_containers":
-    "rapid_telomere":       "/projects/mjolnir1/people/xsg178/soft/rapid-curation/rapid_hic_software/runTelo.sif"
+    "rapid_telomere":       "/maps/projects/tomg/people/xsg178/soft/rapid-curation/rapid_hic_software/runTelo.sif"
     "deepvariant":
-        "cpu": "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0.sif"
-        "gpu": null # "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
+        "cpu": "/maps/projects/tomg/people/xsg178/soft/deepvariant/deepvariant_1.5.0.sif"
+        "gpu": null #"gpu": "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
+    "mitohifi":             "docker://ghcr.io/marcelauliano/mitohifi:master"
+
+'alternative_tmp_dir': None
 
 "stage_coretools":     #TODO: add bionano
     "filtering":
@@ -80,9 +83,33 @@
     "curation":
         "default":
             - "curation"
-    "draft_qc":
-        "default":
-            - "assembly_qc"
+
+"extended_qc_stages":
+    #- "purge_dups"
+    - "hic_scaffolding"
+    - "ref_scaffolding"
+
+"qc_settings":
+    "windows_sets":
+        #- "w1000k.s1000k"
+        - "w1000k.s100k"
+        #- "w100k.s100k"
+        - "w100k.s10k"
+        - "w10k.s10k"
+    "reference_scaffold_sets":
+        - "custom"
+        #- "long"
+        #- "middle"
+        #- "short"
+        #- "micro"
+    "assembly_scaffold_sets":
+        - "long"
+        #- "middle"
+        #- "short"
+        #- "micro"
+    "threshold_types":
+        - "absolute"
+        - "relative"
 
 "coretool_option_sets":
     "hifiasm":
@@ -90,64 +117,75 @@
          #- "l1primary"
          #- "l2primary"
          - "l3primary"
-         #- "l0primary_no_hic"
+         - "l3primary_no_hic"
+         #- "l3primary_main_nanopore"
+         #- "l3primary_main_nanopore_only"
+         #- "l3primary_main_hifi_duplex"
+         #- "l3primary_no_ul"
          #- "l1primary_no_hic"
-         #- "l2primary_no_hic"
-         #- "l3primary_no_hic"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
-         #- "repeat_enhanced_l3"
-         #- "repeat_super_enhanced_l3"
     "purge_dups":
-        - "default"
-        - "keep_hicov"
+        #- "default"
+        #- "keep_hicov"
+        - "skipped"
     "salsa2":
         - "phased_reads"
-        - "unphased_reads"
+        #- "unphased_reads"
     "yahs":
         - "phased_reads"
         #- "unphased_reads"
     "threeddna":
-        #- "phased_reads"
+        - "phased_reads"
         #- "unphased_reads"
     "curation":
         - "default"
-    "assembly_qc":
-        - "default"
-    "samba":
-        - "phased_reads"
-        #- "unphased_reads"
 
 "other_tool_option_sets": # Options set here overwrite settings from "secondary_tool_config_file". Check it for configurable option list
     "mapping_pipeline":         "arima"  # Allowed: arima, bwa_only, pairtools.
 
 "tool_manually_adjusted_features":
     "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions
-        "lower_threshold": null
-        "haploid_diploid_threshold": null
-        "upper_threshold": null
-    "hifiasm":
-        "coverage_estimator": "krater" # Allowed: null, genomescope, krater"
-        "lambda": null
-    "krater":
-        "use_second_peak": True # null
-        "low_limit": 4 # null
-        "high_limit": 100 # null
+        "lower_threshold": null #5
+        "haploid_diploid_threshold": null # 45
+        "upper_threshold": null #135
 
 "ploidy": 2
-"bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2.
-"genome_prefix": "CraAnt1_v1"
+"bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
+"genome_prefix": "bGraAnt1"
 "busco_lineage_list":
     - "aves_odb10" #
     - "vertebrata_odb10"
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
 
-"kingdom": "animal" # required for MitoHiFi. Allowed: animal,plant,fungi
-"mitochondrial_genetic_code": 2 #  NCBI genetic code (2 = vertebrate by default) to use for annotation of mtDNA
-"species_name": "cranioleuca antisianus"
-"tax_id": 86267 # necessary for contamination scan via FCS
+"telomere_motif": "CCCTAA"  # telomere motif at 5'-end; CCCTAA for human, place null if unknown
+"use_canonical_telomere": True
+
+"species_name": "Cranioleuca antisianus"
+"tax_id": 86267  # necessary for contamination scan via FCS
 "bird_genome": True
+"kingdom": "animal"  # "animal", "plant" or "fungi"
+"mtdna_genetic_code":  2 # Organism genetic code should be one from the NCBI table:
+                         #  1. The Standard Code
+                         #  2. The Vertebrate MitochondrialCode
+                         #  3.  The Yeast Mitochondrial Code
+                         #  4.  The Mold,Protozoan, and Coelenterate Mitochondrial Code and the Mycoplasma/Spiroplasma Code
+                         #  5.  The Invertebrate Mitochondrial Code
+                         #  6.  The Ciliate, Dasycladacean and Hexamita Nuclear Code
+                         #  9.  The Echinoderm and Flatworm Mitochondrial Code
+                         # 10. The Euplotid Nuclear Code
+                         # 11. The Bacterial, Archaeal and Plant Plastid Code
+                         # 12. The Alternative Yeast Nuclear Code
+                         # 13. The Ascidian Mitochondrial Code
+                         # 14. The Alternative Flatworm Mitochondrial Code
+                         # 16. Chlorophycean Mitochondrial Code
+                         # 21. Trematode Mitochondrial Code
+                         # 22. Scenedesmus obliquus Mitochondrial Code
+                         # 23. Thraustochytrium Mitochondrial Code
+                         # 24. Pterobranchia Mitochondrial Code
+                         # 25. Candidate Division SR1 and Gracilibacteria Code
+
 
 "database_set":
     "kraken2":
@@ -162,38 +200,45 @@
     - "hic"
     - "illumina"
     - "nanopore"
-    - "ccs"
+    - "simplex"
+    - "duplex"
 
-"final_kmer_counter": "meryl" # pipeline allows usage of different kmer counter tools, but only one genomesize assessment could be used
+"final_kmer_counter": "meryl" # pipeline allows usage of different kmer counter external_tools, but only one genomesize assessment could be used
 "final_kmer_length": 21 # pipeline allows usage of different kmer length, but only one genomesize assessment could be used
 
-"final_kmer_datatype": "hifi"
+"final_kmer_datatypes":
+    - "hifi"
 "assembly_kmer_length":
     - 31 # kmer length to be used for phasing hic reads using assembled and purge_dupsed contigs
-"phasing_stage": "purge_dups"
+"phasing_stage": "contig"
 
 "contig_datatype": "hifi"
 "hic_enzyme_set": "Arima"
 "custom_enzyme_set": null # None
+"custom_enzyme_set_is_no_motif": False
 
 "starting_point": "fastq" # Allowed: "draft"
-"data_types": "hifi,hic" # Allowed: hifi, hic, lqccs, nanopore, reference  #TODO: add bionano and lr and others
+"data_types": "hifi,hic" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic" and others
 
-"mode": "assembly"                # Allowed: "preprocessing", "qc", "assembly"
+#-------- Options specific for starting point 'draft' ----------------
+"phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads
+#---------------------------------------------------------------------
+
+"mode": "assembly"                      # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
-"assembly_mode": "curation"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
+"assembly_mode": "contig" #"hic_scaffolding"       # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []
 "custom_assembly_stages": []
 "curation_seq_type":
     - "scaffolds"
-    - "contigs" # works only if precuration stage is hic_scaffolding
+    - "contigs" # works only if precuration stage is hic_sscaffolding
 
 "skip_read_qc": False
 "skip_filter_reads": False
-"skip_busco": True
+"skip_busco": False
 "skip_gcp": True
 "skip_fcs": False
 "skip_fcs_adaptor": False
@@ -207,7 +252,7 @@
 "skip_wga": False
 "skip_higlass": True
 "skip_variantcalling": True
-"skip_hic_file": False
+"skip_hic_file": True
 "skip_krater": True
 "skip_kmer": False
 "skip_ragtag": False
@@ -229,6 +274,21 @@
             - "mjolnircomp05fl"
             - "mjolnircomp06fl"
         "whitelist": []
+    "hifiasm_correct":
+        "blacklist":
+            - "mjolnircomp07fl"
+            - "mjolnircomp09fl"
+        "whitelist": [ ]
+    "hifiasm_hic":
+        "blacklist":
+            - "mjolnircomp07fl"
+            - "mjolnircomp09fl"
+        "whitelist": [ ]
+    "hifiasm_hifi":
+        "blacklist":
+            - "mjolnircomp07fl"
+            - "mjolnircomp09fl"
+        "whitelist": [ ]
 #------------------------------------------------------
 #"adaptor_scan": True
 #"fcs_gx_scan": True

@@ -61,7 +61,7 @@ rule mitohifi_reads:
     benchmark:
         output_dict["benchmark"]  / "mitohifi_reads.{mtdna_ref}.{stage}.{fileprefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("mitohifi_reads"),

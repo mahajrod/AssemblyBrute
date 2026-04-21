@@ -1,4 +1,4 @@
-rule bwa_index:mitohifi conda
+rule bwa_index:
     input:
         fasta="{fasta_dir}/{fasta_prefix}.fasta",
         log_dir="{fasta_dir}/log/"

@@ -87,7 +87,7 @@ rule mitoz:
     shell:
         " WORKDIR=`dirname {output.results_dir}`; "
         " TMPDIR=${{WORKDIR}}/tmp; "
-        " mkdir ${{TMPDIR}}; "
+        " mkdir -p ${{TMPDIR}}; "
         " mitoz all --workdir ${{WORKDIR}} --thread_number {threads} --assembler {params.assembler} "
         "                --tmp_dir ${{TMPDIR}} "
         "                --fq1 {input.forward_reads} --fq2 {input.reverse_reads} "

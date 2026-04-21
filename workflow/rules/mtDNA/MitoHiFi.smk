@@ -40,26 +40,26 @@ rule mitohifi_reads:
         #hifi=expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),
         #            fileprefix=input_file_prefix_dict["hifi"],
         #            allow_missing=True),
-        hifi_reads=output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"])
+        hifi_reads=output_dict["data"] / ("fastq/hifi/{stage}/{fileprefix}%s" % config["fastq_extension"])
     output:
-        stats=out_dir_path / "mtDNA/{mtdna_ref}/hifi/filtered/{fileprefix}/contig_stats.tsv",
-        mtDNA_gb=out_dir_path / "mtDNA/{mtdna_ref}/hifi/filtered/{fileprefix}/final_mitogenome.gb",
-        mtDNA_fasta=out_dir_path / "mtDNA/{mtdna_ref}/hifi/filtered/{fileprefix}/final_mitogenome.fasta",
-        coverage_plot=out_dir_path / "mtDNA/{mtdna_ref}/hifi/filtered/{fileprefix}/final_mitogenome.coverage.png",
-        annotation_plot=out_dir_path / "mtDNA/{mtdna_ref}/hifi/filtered/{fileprefix}/final_mitogenome.annotation.png"
+        stats=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/contig_stats.tsv",
+        mtDNA_gb=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/final_mitogenome.gb",
+        mtDNA_fasta=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/final_mitogenome.fasta",
+        coverage_plot=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/final_mitogenome.coverage.png",
+        annotation_plot=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/final_mitogenome.annotation.png"
     params:
         sif=config["tool_containers"]["mitohifi"],
         kingdom=config["kingdom"],
         genetic_code=config["mtdna_genetic_code"],
         min_mapping_quality=parameters["tool_options"]["mitohifi"]["min_mapping_quality"]
     log:
-        cp=output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{fileprefix}.cp.log",
-        cd=output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{fileprefix}.cd.log",
-        mitohifi=output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{fileprefix}.mitohifi.log",
-        cluster_log=output_dict["cluster_log"] / "mitohifi_reads.{mtdna_ref}.{fileprefix}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "mitohifi_reads.{mtdna_ref}.{fileprefix}.err"
+        cp=output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{stage}.{fileprefix}.cp.log",
+        cd=output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{stage}.{fileprefix}.cd.log",
+        mitohifi=output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{stage}.{fileprefix}.mitohifi.log",
+        cluster_log=output_dict["cluster_log"] / "mitohifi_reads.{stage}.{mtdna_ref}.{fileprefix}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "mitohifi_reads.{stage}.{mtdna_ref}.{fileprefix}.err"
     benchmark:
-        output_dict["benchmark"]  / "mitohifi_reads.{mtdna_ref}.{fileprefix}.benchmark.txt"
+        output_dict["benchmark"]  / "mitohifi_reads.{mtdna_ref}.{stage}.{fileprefix}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -118,3 +118,9 @@ use rule mitohifi_reads as mitohifi_combined_reads with:
         mtdna_ref_fasta=out_dir_path / "data/mtDNA/{mtdna_ref}/{mtdna_ref}.fasta",
         mtdna_ref_gb = out_dir_path / "data/mtDNA/{mtdna_ref}/{mtdna_ref}.gb",
         hifi_reads = output_dict["data"] / ("fastq/hifi/combined/hifi.combined%s" % config["fastq_extension"])
+    output:
+        stats=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, combined}/{fileprefix}/contig_stats.tsv",
+        mtDNA_gb=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, combined}/{fileprefix}/final_mitogenome.gb",
+        mtDNA_fasta=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, combined}/{fileprefix}/final_mitogenome.fasta",
+        coverage_plot=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, combined}/{fileprefix}/final_mitogenome.coverage.png",
+        annotation_plot=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, combined}/{fileprefix}/final_mitogenome.annotation.png"

@@ -67,7 +67,7 @@ rule mitoz:
         species_name=config["species_name"],
         genetic_code=config["mtdna_genetic_code"],
         assembler="megahit",
-        max_raw_data=1, # Gbp
+        max_raw_data=3, # Gbp
         max_filtered_data=0, # Gbp
     log:
         log=output_dict["log"]  / "mitoz.{datatype}.{stage}.{pairprefix}.log",

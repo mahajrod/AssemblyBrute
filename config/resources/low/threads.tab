@@ -145,3 +145,4 @@ tidk_search	1	1	1	1	1	1	1	1	1
 get_precurated_scaffold_order_from_agp	1	1	1	1	1	1	1	1	1
 get_precurated_fasta	1	1	1	1	1	1	1	1	1
 get_precurated_bam	4	4	4	4	4	4	4	4	4
+get_recommended_mtDNA_reference	1	1	1	1	1	1	1	1	1

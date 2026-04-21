@@ -1,59 +1,120 @@
-
-rule mitohifi:
+rule get_recommended_mtDNA_reference: # reference is inferred by NCBI taxid
     input:
-        mito_ref_fasta=lambda wildcards: input_reference_filedict[wildcards.ref_name]["mtdna.fasta"],#lambda wildcards: input_reference_filedict[wildcards.ref_name]["fasta"].resolve(),
-        mito_ref_gb=lambda wildcards: input_reference_filedict[wildcards.ref_name]["mtdna.gb"],#lambda wildcards: input_reference_filedict[wildcards.ref_name]["fasta"].resolve(),
-        hifi=expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),
-                    fileprefix=input_file_prefix_dict["hifi"],
-                    allow_missing=True),
+        []
     output:
-        out_dir=directory(out_dir_path / "mtDNA/{ref_name}/"),
-        temp_merged_reads=temp(out_dir_path / "mtDNA/{ref_name}/all.fastq.gz"),
-        mtDNA_gb=,
-        mtDNA_fasta=
-        final_mitogenome.fasta
-        final_mitogenome.gb
-        shared_genes.tsv
+        mtdna_ref_fasta=out_dir_path / "data/mtDNA/recommended/recommended.fasta",
+        mtdna_ref_gb=out_dir_path / "data/mtDNA/recommended/recommended.gb",
     params:
-        sif=config["tool_containers"]["mitohifi"],
-        kingdom=config["kingdom"],
-        genetic_code=config["mitochondrial_genetic_code"],
-        min_mapping_quality=parameters["tool_options"]["mitohifi"]["min_mapping_quality"]
+        latin_name=config["species"]
     log:
-        mkdir=output_dict["log"]  / "mitohifi.{ref_name}.mkdir.log",
-        cat=output_dict["log"]  / "mitohifi.{ref_name}.cat.log",
-        cp=output_dict["log"]  / "mitohifi.{ref_name}.cp.log",
-        cd=output_dict["log"]  / "mitohifi.{ref_name}.cd.log",
-        mitohifi=output_dict["log"]  / "mitohifi.{ref_name}.mitohifi.log",
-        cluster_log=output_dict["cluster_log"] / "mitohifi.{ref_name}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "mitohifi.{ref_name}.err"
+        log=output_dict["log"]  / "get_recommended_mtDNA_reference.log",
+        cluster_log=output_dict["cluster_log"] / "get_recommended_mtDNA_reference.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "get_recommended_mtDNA_reference.err"
     benchmark:
-        output_dict["benchmark"]  / "mitohifi.{ref_name}.benchmark.txt"
+        output_dict["benchmark"]  / "get_recommended_mtDNA_reference.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
-        node_options=parse_node_list("mitohifi"),
-        cpus=parameters["threads"]["mitohifi"],
-        time=parameters["time"]["mitohifi"],
-        mem=parameters["memory_mb"]["mitohifi"]
-    threads: parameters["threads"]["mitohifi"]
+        node_options=parse_node_list("get_recommended_mtDNA_reference"),
+        cpus=parameters["threads"]["get_recommended_mtDNA_reference"],
+        time=parameters["time"]["get_recommended_mtDNA_reference"],
+        mem=parameters["memory_mb"]["get_recommended_mtDNA_reference"]
+    threads: parameters["threads"]["get_recommended_mtDNA_reference"]
     shell:
-        " OUT_DIR=`realpath {output.out_dir}`; "
-        " mkdir -p {output.out_dir} > {log.mkdir} 2>&1; "
-        " cat {input.hifi} > {output.temp_merged_reads} 2>{log.cat}; "
-        " cp {input.mito_ref_fasta}` {output.out_dir}/reference.mtdna.fasta > {log.cp} 2>&1; "
-        " cp {input.mito_ref_gb}` {output.out_dir}/reference.mtdna.gb >> {log.cp} 2>&1;; "
-        " cd {output.out_dir} > {log.cd} 2>&1; "
-        " singularity run --pid --contain --pid --contain --bind ${{OUT_DIR}}:${{OUT_DIR}} "
-        " {params.sif} mitohifi.py -r `basename {output.temp_merged_reads}`"
-        " -f reference.mtdna.fasta -g reference.mtdna.gb -t {threads} "
-        " -a {params.kingdom} -covMap {params.min_mapping_quality} -o {params.genetic_code} > {log.mitohifi} 2>&1; "
+        " OUT_DIR=`basename {output.mtdna_ref_fasta}`; "
+        " workflow/external_tools/mitohifi/src/findMitoReference.py "
+        "      --species {params.latin_name} "
+        "      --outfolder ${{OUT_DIR}} "
+        "      --type mitochondrion > {log.log} 2>&1; "
+        " REF_PREFIX=`grep 'output is written' {log.log} | cut -d " " -f 5 `;"
+        " REF_PREFIX=`basename ${{REF_PREFIX}} | sed 's/\.\[gb,fasta\]//'`; "
+        " cp -f ${{OUT_DIR}}/${{REF_PREFIX}}.fasta {output.mtdna_ref_fasta}; "
+        " cp -f ${{OUT_DIR}}/${{REF_PREFIX}}.gb {output.mtdna_ref_fasta}; "
 
 
-REF_MTDNA_DIR="/maps/projects/tomg/people/xsg178/yggdrasil/mito/eudromia_elegans/assembly/"
-    sbatch -n 30 -t "02:00:00" --mem 15000 --nodes 1 --wrap="singularity run --pid --contain --bind ${REF_MTDNA_DIR}:${REF_MTDNA_DIR} docker://ghcr.io/marcelauliano/mitohifi:master mitohifi.py -c bEudEle1.sanger.hap1.fasta -f ${REF_MTDNA_DIR}/eudromia_elegans.mtDNA.fasta  -g ${REF_MTDNA_DIR}/eudromia_elegans.mtDNA.gb  -t 30 -a animal -covMap 20 -o 2 "
+rule mitohifi_reads:
+    input:
+        mtdna_ref_fasta=out_dir_path / "data/mtDNA/{mtdna_ref}/{mtdna_ref}.fasta",#lambda wildcards: input_reference_filedict[wildcards.ref_name]["fasta"].resolve(),
+        mtdna_ref_gb=out_dir_path / "data/mtDNA/{mtdna_ref}/{mtdna_ref}.gb",#lambda wildcards: input_reference_filedict[wildcards.ref_name]["fasta"].resolve(),
+        #hifi=expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),
+        #            fileprefix=input_file_prefix_dict["hifi"],
+        #            allow_missing=True),
+        hifi_reads=output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"])
+    output:
+        stats=out_dir_path / "mtDNA/{mtdna_ref}/hifi/filtered/{fileprefix}/contig_stats.tsv",
+        mtDNA_gb=out_dir_path / "mtDNA/{mtdna_ref}/hifi/filtered/{fileprefix}/final_mitogenome.gb",
+        mtDNA_fasta=out_dir_path / "mtDNA/{mtdna_ref}/hifi/filtered/{fileprefix}/final_mitogenome.fasta",
+        coverage_plot=out_dir_path / "mtDNA/{mtdna_ref}/hifi/filtered/{fileprefix}/final_mitogenome.coverage.png",
+        annotation_plot=out_dir_path / "mtDNA/{mtdna_ref}/hifi/filtered/{fileprefix}/final_mitogenome.annotation.png"
+    params:
+        sif=config["tool_containers"]["mitohifi"],
+        kingdom=config["kingdom"],
+        genetic_code=config["mtdna_genetic_code"],
+        min_mapping_quality=parameters["tool_options"]["mitohifi"]["min_mapping_quality"] # TODO:
+    log:
+        cp=output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{fileprefix}.cp.log",
+        cd=output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{fileprefix}.cd.log",
+        mitohifi=output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{fileprefix}.mitohifi.log",
+        cluster_log=output_dict["cluster_log"] / "mitohifi_reads.{mtdna_ref}.{fileprefix}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "mitohifi_reads.{mtdna_ref}.{fileprefix}.err"
+    benchmark:
+        output_dict["benchmark"]  / "mitohifi_reads.{mtdna_ref}.{fileprefix}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("mitohifi_reads"),
+        cpus=parameters["threads"]["mitohifi_reads"],
+        time=parameters["time"]["mitohifi_reads"],
+        mem=parameters["memory_mb"]["mitohifi_reads"]
+    threads: parameters["threads"]["mitohifi_reads"]
+    shell:
+        " OUT_DIR=`realpath -m {output.stats}`; "
+        " OUT_DIR=`dirname ${{OUT_DIR}}`; "
+        " HIFI_READS=`realpath {input.hifi_reads}`; "
+        " HIFI_DIR=`dirname ${{HIFI_READS}}`; "
+        " REF_FASTA=`realpath {input.mtdna_ref_fasta}`; "
+        " REF_GB=`realpath {input.mtdna_ref_gb}`; "
+        " REF_DIR=`dirname ${{REF_FASTA}}`; "
+        " cp -f {input.mtdna_ref_fasta} {input.mtdna_ref_gb} ${{OUT_DIR}} > {log.cp} 2>&1; "
+        " cd ${{OUT_DIR}} > {log.cd} 2>&1; "
+        " singularity run --pid --contain --pid --contain "
+        "                 --bind ${{OUT_DIR}}:${{OUT_DIR}} "
+        "                 --bind ${{HIFI_DIR}}:${{HIFI_DIR}} "
+        "                 --bind ${{REF_DIR}}:${{REF_DIR}} "
+        "                 {params.sif} mitohifi.py "
+        "                 -r ${{HIFI_READS}} -f ${{REF_FASTA}} -g ${{REF_GB}} "
+        "                 -t {threads} -a {params.kingdom} -covMap {params.min_mapping_quality} "
+        "                 -o {params.genetic_code} > {log.mitohifi} 2>&1; "
 
-    FASTQ_DIR=/projects/tomg/people/xsg178/yggdrasil/assembly/eudromia_elegans/input/hifi/fastq/
-    REF_MTDNA_DIR="/maps/projects/tomg/people/xsg178/yggdrasil/mito/eudromia_elegans/assembly/"
-    sbatch -n 30 -t "02:00:00" --mem 45000 --nodes 1 --wrap="singularity run --pid --contain --bind ${REF_MTDNA_DIR}:${REF_MTDNA_DIR} --bind ${FASTQ_DIR}:${FASTQ_DIR} docker://ghcr.io/marcelauliano/mitohifi:master mitohifi.py -r ${FASTQ_DIR}/*.fastq.gz -f ${REF_MTDNA_DIR}/NC_002772.2.fasta  -g ${REF_MTDNA_DIR}/NC_002772.2.gb  -t 30 -a animal -covMap 20 -o 2 "
+rule combine_long_reads:
+    input:
+        long_reads=lambda wildcards: expand(output_dict["data"] / ("fastq/%s/filtered/{fileprefix}%s" % (wildcards.datatype,
+                                                                                                         config["fastq_extension"])),
+                          fileprefix=input_file_prefix_dict[wildcards.datatype])
+    output:
+        combined_long_reads=output_dict["data"] / ("fastq/{datatype, hifi|nanopore|simplex|duplex}/combined/{datatype}.combined%s" % config["fastq_extension"])
+    log:
+        log=output_dict["log"] / "combine_long_reads.{datatype}.log",
+        cluster_log=output_dict["cluster_log"] / "combine_long_reads.{datatype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "combine_long_reads.{datatype}.err"
+    benchmark:
+        output_dict["benchmark"] / "combine_long_reads.{datatype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" %config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("combine_long_reads"),
+        cpus=parameters["threads"]["combine_long_reads"],
+        time=parameters["time"]["combine_long_reads"],
+        mem=parameters["memory_mb"]["combine_long_reads"],
+    threads: parameters["threads"]["combine_long_reads"]
+    shell:
+        "cat {input.long_reads} > {output.combined_long_reads} 2>{log.log}; "
+
+use rule mitohifi_reads as mitohifi_combined_reads with:
+    input:
+        mtdna_ref_fasta=out_dir_path / "data/mtDNA/{mtdna_ref}/{mtdna_ref}.fasta",
+        mtdna_ref_gb = out_dir_path / "data/mtDNA/{mtdna_ref}/{mtdna_ref}.gb",
+        hifi_reads = output_dict["data"] / ("fastq/hifi/combined/hifi.combined%s" % config["fastq_extension"])

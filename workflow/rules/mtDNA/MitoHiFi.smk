@@ -27,7 +27,7 @@ rule get_recommended_mtDNA_reference: # reference is inferred by NCBI taxid
         "      --species '{params.latin_name}' "
         "      --outfolder ${{OUT_DIR}} "
         "      --type mitochondrion > {log.log} 2>&1; "
-        " REF_PREFIX=`grep 'output is written' {log.log} | cut -d " " -f 5 `;"
+        " REF_PREFIX=`grep 'output is written' {log.log} | cut -d ' ' -f 5 `;"
         " REF_PREFIX=`basename ${{REF_PREFIX}} | sed 's/\.\[gb,fasta\]//'`; "
         " cp -f ${{OUT_DIR}}/${{REF_PREFIX}}.fasta {output.mtdna_ref_fasta}; "
         " cp -f ${{OUT_DIR}}/${{REF_PREFIX}}.gb {output.mtdna_ref_fasta}; "

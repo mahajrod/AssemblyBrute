@@ -39,3 +39,9 @@
 "skip_gap_closing_wga": False
 
 "skip_purge_dups_qc": False
+
+"skip_mtdna": False
+"skip_mtdna_reads": False
+"skip_mtdna_reads_per_file": False
+"skip_mtdna_reads_combined": False
+"skip_mtdna_assembly": False

@@ -392,6 +392,18 @@ if ("read_qc" in config["stage_list"]) and (not config["skip_read_qc"]):
         results_list += [expand(output_dict["qc"] / "tadbit/hic/raw/{genome_prefix}.tadbit.stats",
             genome_prefix=[config["genome_prefix"]])]
 
+if not config["skip_mtdna"]:
+    if not config["skip_mtdna_reads"]:
+        if not "skip_mtdna_reads_per_file":
+            if "hifi" in data_types:
+                results_list += [ expand(out_dir_path / "mtDNA/{mtdna_ref}/hifi/filtered/{fileprefix}/contig_stats.tsv",
+                                         mtdna_ref=["recommended"],
+                                         fileprefix=input_file_prefix_dict["hifi"])]
+        if not "skip_mtdna_reads_combined":
+            if "hifi" in data_types:
+                results_list += [expand(out_dir_path / "mtDNA/{mtdna_ref}/hifi/combined/hifi.combined/contig_stats.tsv",
+                                        mtdna_ref=["recommended"],)]
+
 
 if "draft_qc" in config["stage_list"]:
     current_stage = "draft_qc"
@@ -2088,6 +2100,7 @@ include: "workflow/rules/QCAssembly/HiC.smk"
 include: "workflow/rules/QCAssembly/MicroChromosomes.smk"
 include: "workflow/rules/QCAssembly/PretextPerChr.smk"
 include: "workflow/rules/QCAssembly/RagTag.smk"
+include: "workflow/rules/mtDNA/MitoHiFi.smk"
 #include: "workflow/rules/QCAssembly/VariantTrack.smk"
 
 if "gap_closing" in config["stage_list"]:

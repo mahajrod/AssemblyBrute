@@ -116,7 +116,8 @@ bam_stats	4	4	4	4	4	4	4	4	4
 preprocess_hic_fastq	5	5	5	5	5	5	5	5	5
 extract_yahs_contigs	1	1	1	1	1	1	1	1	1
 liftover_contig_bedgraph	8	8	8	8	8	8	8	8	8
-mitohifi	30	20	20	30	30	30	30	30	30
+mitohifi_reads	20	10	10	20	20	20	30	30	30
+mitohifi_assembly	10	5	5	10	10	15	20	20	20
 scale_create_bedgraph_track	1	1	1	1	1	1	1	1	1
 trimmomatic_pe	8	4	8	8	16	16	16	16	16
 get_lowcoverage_contig_ids	1	1	1	1	1	1	1	1	1
@@ -146,3 +147,4 @@ get_precurated_scaffold_order_from_agp	1	1	1	1	1	1	1	1	1
 get_precurated_fasta	1	1	1	1	1	1	1	1	1
 get_precurated_bam	4	4	4	4	4	4	4	4	4
 get_recommended_mtDNA_reference	1	1	1	1	1	1	1	1	1
+combine_long_reads	1	1	1	1	1	1	1	1	1

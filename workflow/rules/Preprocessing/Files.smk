@@ -33,7 +33,8 @@ rule preprocess_hic_fastq:
         input_dir_path.resolve() / ("hic/fastq/{fileprefix}%s" %  config["fastq_extension"])
     output:
         #directory(output_dict["data"] / "/fastq/{datatype}/raw"),
-        output_dict["data"] / ("fastq/hic/raw/{fileprefix, [^/]+}%s" % config["fastq_extension"])
+        raw_link=output_dict["data"] / ("fastq/hic/raw/{fileprefix, [^/]+}%s" % config["fastq_extension"]),
+        orig_link=output_dict["data"] / ("fastq/hic/orig/{fileprefix, [^/]+}%s" %config["fastq_extension"])
     params:
         hic_type=config["hic_enzyme_set"],
         skip_trimming='skip' if config["skip_filter_reads"] else 'trim'
@@ -54,12 +55,17 @@ rule preprocess_hic_fastq:
     threads:
         parameters["threads"]["preprocess_hic_fastq"]
     shell:
+         " echo 'Creating links for original Hi-C files...' > {log.std}; "
+         " ln -sf {input} {output.orig_link} 2>>{log.std}; "
          " if [ '{params.hic_type}' = 'Arima' -a '{params.skip_trimming}' = 'trim' ]; "
          " then "
-         "      zcat {input} | fastx_trimmer -f 8 | pigz -p {threads} > {output} 2>{log.std}; "
+         "      echo 'Input is Arima Hi-C! Trimming first 8 bp from both forward and reverse reads...' >> {log.std}; "
+         "      zcat {input} | fastx_trimmer -f 8 | pigz -p {threads} > {output.raw_link} 2>>{log.std}; "
          " else "
-         "      ln -sf {input} {output} 2>{log.std}; "
+         "     echo 'Input is not Arima Hi-C! Trimming skipped...' >> {log.std}; "
+         "      ln -sf {input} {output.raw_link} 2>>{log.std}; "
          " fi; "
+
 
 rule create_fasta_links:
     priority: 1000

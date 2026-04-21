@@ -1,7 +1,5 @@
 localrules: create_local_log_dir, create_local_benchmark_dir
 
-rule create_stage_dirs:
-
 
 rule create_local_log_dir:
     input:

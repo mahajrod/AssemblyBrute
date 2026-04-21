@@ -61,7 +61,7 @@ rule mitohifi_reads:
     benchmark:
         output_dict["benchmark"]  / "mitohifi_reads.{mtdna_ref}.{stage}.{fileprefix}.benchmark.txt"
     conda:
-        config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("mitohifi_reads"),
@@ -77,16 +77,17 @@ rule mitohifi_reads:
         " REF_FASTA=`realpath {input.mtdna_ref_fasta}`; "
         " REF_GB=`realpath {input.mtdna_ref_gb}`; "
         " REF_DIR=`dirname ${{REF_FASTA}}`; "
+        " MITOHIFI_LOG=`realpath {log.mitohifi}`; "
         " cp -f {input.mtdna_ref_fasta} {input.mtdna_ref_gb} ${{OUT_DIR}} > {log.cp} 2>&1; "
         " cd ${{OUT_DIR}} > {log.cd} 2>&1; "
-        " singularity run --pid --contain --pid --contain "
+        " singularity run --pid --contain "
         "                 --bind ${{OUT_DIR}}:${{OUT_DIR}} "
         "                 --bind ${{HIFI_DIR}}:${{HIFI_DIR}} "
         "                 --bind ${{REF_DIR}}:${{REF_DIR}} "
         "                 {params.sif} mitohifi.py "
         "                 -r ${{HIFI_READS}} -f ${{REF_FASTA}} -g ${{REF_GB}} "
         "                 -t {threads} -a {params.kingdom} -covMap {params.min_mapping_quality} "
-        "                 -o {params.genetic_code} > {log.mitohifi} 2>&1; "
+        "                 -o {params.genetic_code} > ${{MITOHIFI_LOG}} 2>&1; "
 
 rule combine_long_reads:
     input:

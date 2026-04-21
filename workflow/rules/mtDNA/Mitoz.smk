@@ -94,7 +94,7 @@ rule mitoz:
         "                --outprefix {params.genome_prefix}.mtdna.{wildcards.datatype}.mitoz "
         "                --clade {params.clade} "
         "                --requiring_taxa {params.clade} "
-        "                --species_name {params.species_name} "
+        "                --species_name '{params.species_name}' "
         "                --genetic_code {params.genetic_code} "
         "                --data_size_for_mt_assembly {params.max_raw_data},{params.max_filtered_data} > {log.log} 2>&1; "
 

@@ -22,7 +22,7 @@ rule get_recommended_mtDNA_reference: # reference is inferred by NCBI taxid
         mem=parameters["memory_mb"]["get_recommended_mtDNA_reference"]
     threads: parameters["threads"]["get_recommended_mtDNA_reference"]
     shell:
-        " OUT_DIR=`basename {output.mtdna_ref_fasta}`; "
+        " OUT_DIR=`dirname {output.mtdna_ref_fasta}`; "
         " workflow/external_tools/mitohifi/src/findMitoReference.py "
         "      --species '{params.latin_name}' "
         "      --outfolder ${{OUT_DIR}} "

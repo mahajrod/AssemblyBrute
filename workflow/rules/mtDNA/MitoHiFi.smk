@@ -5,7 +5,7 @@ rule get_recommended_mtDNA_reference: # reference is inferred by NCBI taxid
         mtdna_ref_fasta=out_dir_path / "data/mtDNA/recommended/recommended.fasta",
         mtdna_ref_gb=out_dir_path / "data/mtDNA/recommended/recommended.gb",
     params:
-        latin_name=config["species"]
+        latin_name=config["species_name"]
     log:
         log=output_dict["log"]  / "get_recommended_mtDNA_reference.log",
         cluster_log=output_dict["cluster_log"] / "get_recommended_mtDNA_reference.cluster.log",
@@ -51,7 +51,7 @@ rule mitohifi_reads:
         sif=config["tool_containers"]["mitohifi"],
         kingdom=config["kingdom"],
         genetic_code=config["mtdna_genetic_code"],
-        min_mapping_quality=parameters["tool_options"]["mitohifi"]["min_mapping_quality"] # TODO:
+        min_mapping_quality=parameters["tool_options"]["mitohifi"]["min_mapping_quality"]
     log:
         cp=output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{fileprefix}.cp.log",
         cd=output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{fileprefix}.cd.log",

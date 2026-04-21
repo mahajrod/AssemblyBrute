@@ -148,3 +148,4 @@ get_precurated_fasta	1	1	1	1	1	1	1	1	1
 get_precurated_bam	4	4	4	4	4	4	4	4	4
 get_recommended_mtDNA_reference	1	1	1	1	1	1	1	1	1
 combine_long_reads	1	1	1	1	1	1	1	1	1
+downsample_pe_reads	1	1	1	1	1	1	1	1	1

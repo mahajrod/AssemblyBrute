@@ -149,15 +149,15 @@ else:
     candidate_agp_filename = []
 #logging.info("Checking input files...")
 
-input_filedict = {}
-input_file_prefix_dict = {}
-input_fasta_filedict = {}
-input_fasta_file_prefix_dict = {}
-input_reference_filedict = {}
+input_filedict = OrderedDict()
+input_file_prefix_dict = OrderedDict()
+input_fasta_filedict = OrderedDict()
+input_fasta_file_prefix_dict = OrderedDict()
+input_reference_filedict = OrderedDict()
 
-input_forward_suffix_dict = {}
-input_reverse_suffix_dict = {}
-input_pairprefix_dict = {}
+input_forward_suffix_dict = OrderedDict()
+input_reverse_suffix_dict = OrderedDict()
+input_pairprefix_dict = OrderedDict()
 
 for d_type in fastq_based_data_type_set:
     input_filedict[d_type] = find_fastqs(input_dict[d_type]["fastq_dir"], fastq_extension=config["fastq_extension"])
@@ -170,8 +170,8 @@ for d_type in fasta_based_data_type_set:
                                                 input_fasta_filedict[d_type]))
 
 #---- detect datatypes and check if datatype has files in both fasta and fastq formats ----
-datatype_format_dict = {}
-datatype_extension_dict = {}
+datatype_format_dict = OrderedDict()
+datatype_extension_dict = OrderedDict()
 for d_type in set(data_types):
     print(d_type)
     if (d_type in fastq_based_data_type_set) and (d_type in fasta_based_data_type_set):
@@ -393,17 +393,27 @@ if ("read_qc" in config["stage_list"]) and (not config["skip_read_qc"]):
             genome_prefix=[config["genome_prefix"]])]
 
 if not config["skip_mtdna"]:
-    if not config["skip_mtdna_reads"]:
-        if not config["skip_mtdna_reads_per_file"]:
+    if not config["skip_mitohifi_reads"]:
+        if not config["skip_mitohifi_reads_per_file"]:
             if "hifi" in data_types:
-                results_list += [ expand(out_dir_path / "mtDNA/{mtdna_ref}/hifi/filtered/{fileprefix}/contigs_stats.tsv",
+                results_list += [ expand(out_dir_path / "mtDNA/mitohifi/{mtdna_ref}/hifi/filtered/{fileprefix}/contigs_stats.tsv",
                                          mtdna_ref=["recommended"],
                                          fileprefix=input_file_prefix_dict["hifi"])]
-        if not config["skip_mtdna_reads_combined"]:
+        if not config["skip_mitohifi_reads_combined"]:
             if "hifi" in data_types:
-                results_list += [expand(out_dir_path / "mtDNA/{mtdna_ref}/hifi/combined/hifi.combined/contigs_stats.tsv",
+                results_list += [expand(out_dir_path / "mtDNA/mitohifi/{mtdna_ref}/hifi/combined/hifi.combined/contigs_stats.tsv",
                                         mtdna_ref=["recommended"],)]
-
+    if not config["skip_mitoz"]:
+        if (not "skip_mitoz_hic") and ("hic" in data_types):
+            results_list += [expand(out_dir_path / ("mtDNA/mitoz/denovo/{datatype}/{stage}/{pairprefix}/%s.mtdna.{datatype}.mitoz.results" % config["genome_prefix"]),
+                                    datatype=["hic",],
+                                    stage=["filtered"],
+                                    pairprefix=input_pairprefix_dict["hic"])]
+        if (not "skip_mitoz_illumina") and ("illumina" in data_types):
+            results_list += [expand(out_dir_path / ("mtDNA/mitoz/denovo/{datatype}/{stage}/{pairprefix}/%s.mtdna.{datatype}.mitoz.results" % config["genome_prefix"]),
+                                    datatype=["illumina",],
+                                    stage=["filtered"],
+                                    pairprefix=input_pairprefix_dict["illumina"])]
 
 if "draft_qc" in config["stage_list"]:
     current_stage = "draft_qc"
@@ -2021,6 +2031,7 @@ rule all:
 include: "workflow/rules/General/Log.smk"
 #include: "workflow/rules/Install/Pip.smk"
 include: "workflow/rules/Preprocessing/Files.smk"
+include: "workflow/rules/Preprocessing/Combine.smk"
 include: "workflow/rules/QCFiltering/FastQC.smk"
 include: "workflow/rules/QCFiltering/MultiQC.smk"
 include: "workflow/rules/QCFiltering/Cutadapt.smk"
@@ -2101,6 +2112,7 @@ include: "workflow/rules/QCAssembly/MicroChromosomes.smk"
 include: "workflow/rules/QCAssembly/PretextPerChr.smk"
 include: "workflow/rules/QCAssembly/RagTag.smk"
 include: "workflow/rules/mtDNA/MitoHiFi.smk"
+include: "workflow/rules/mtDNA/Mitoz.smk"
 #include: "workflow/rules/QCAssembly/VariantTrack.smk"
 
 if "gap_closing" in config["stage_list"]:

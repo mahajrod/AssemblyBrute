@@ -165,7 +165,8 @@
 "species_name": "Goura sclaterii"
 "tax_id": 2057153  # necessary for contamination scan via FCS
 "bird_genome": True
-"kingdom": "animal"  # "animal", "plant" or "fungi"
+"kingdom": "animal"  # "animal", "plant" or "fungi" # used in MitoHiFi
+"mitoz_clade": "Chordata" #Allowed: {Chordata,Arthropoda,Echinodermata,Annelida-segmented-worms,Bryozoa,Mollusca,Nematoda,Nemertea-ribbon-worms,Porifera-sponges}
 "mtdna_genetic_code":  2 # Organism genetic code should be one from the NCBI table:
                          #  1. The Standard Code
                          #  2. The Vertebrate MitochondrialCode

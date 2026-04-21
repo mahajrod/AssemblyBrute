@@ -41,7 +41,11 @@
 "skip_purge_dups_qc": False
 
 "skip_mtdna": False
-"skip_mtdna_reads": False
-"skip_mtdna_reads_per_file": False
-"skip_mtdna_reads_combined": False
-"skip_mtdna_assembly": False
+"skip_mitohifi_reads": False
+"skip_mitohifi_reads_per_file": False
+"skip_mitohifi_reads_combined": False
+"skip_mitohifi_assembly": False
+
+"skip_mitoz": False
+"skip_mitoz_hic": False
+"skip_mitoz_illumina": False

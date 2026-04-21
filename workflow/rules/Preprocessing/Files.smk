@@ -149,4 +149,3 @@ rule create_links_for_reference:
         " ln -sf {input.syn} {output.syn} 2>>{log.ln}; "
         " ln -sf {input.whitelist} {output.whitelist} 2>>{log.ln}; "
         " ln -sf {input.orderlist} {output.orderlist} 2>>{log.ln}; "
-

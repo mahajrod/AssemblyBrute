@@ -42,7 +42,7 @@ rule mitohifi_reads:
         #            allow_missing=True),
         hifi_reads=output_dict["data"] / ("fastq/hifi/{stage}/{fileprefix}%s" % config["fastq_extension"])
     output:
-        stats=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/contigs_stats.tsv",
+        stats=out_dir_path / "mtDNA/mitohifi/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/contigs_stats.tsv",
         #mtDNA_gb=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/final_mitogenome.gb",
         #mtDNA_fasta=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/final_mitogenome.fasta",
         #coverage_plot=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/final_mitogenome.coverage.png",
@@ -89,38 +89,13 @@ rule mitohifi_reads:
         "                 -t {threads} -a {params.kingdom} -covMap {params.min_mapping_quality} "
         "                 -o {params.genetic_code} > ${{MITOHIFI_LOG}} 2>&1 || true; "
 
-rule combine_long_reads:
-    input:
-        long_reads=lambda wildcards: expand(output_dict["data"] / ("fastq/%s/filtered/{fileprefix}%s" % (wildcards.datatype,
-                                                                                                         config["fastq_extension"])),
-                          fileprefix=input_file_prefix_dict[wildcards.datatype])
-    output:
-        combined_long_reads=output_dict["data"] / ("fastq/{datatype, hifi|nanopore|simplex|duplex}/combined/{datatype}.combined%s" % config["fastq_extension"])
-    log:
-        log=output_dict["log"] / "combine_long_reads.{datatype}.log",
-        cluster_log=output_dict["cluster_log"] / "combine_long_reads.{datatype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "combine_long_reads.{datatype}.err"
-    benchmark:
-        output_dict["benchmark"] / "combine_long_reads.{datatype}.benchmark.txt"
-    conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" %config["conda"]["common"]["yaml"])
-    resources:
-        queue=config["queue"]["cpu"],
-        node_options=parse_node_list("combine_long_reads"),
-        cpus=parameters["threads"]["combine_long_reads"],
-        time=parameters["time"]["combine_long_reads"],
-        mem=parameters["memory_mb"]["combine_long_reads"],
-    threads: parameters["threads"]["combine_long_reads"]
-    shell:
-        "cat {input.long_reads} > {output.combined_long_reads} 2>{log.log}; "
-
 use rule mitohifi_reads as mitohifi_combined_reads with:
     input:
         mtdna_ref_fasta=out_dir_path / "data/mtDNA/{mtdna_ref}/{mtdna_ref}.fasta",
         mtdna_ref_gb = out_dir_path / "data/mtDNA/{mtdna_ref}/{mtdna_ref}.gb",
         hifi_reads = output_dict["data"] / ("fastq/hifi/combined/hifi.combined%s" % config["fastq_extension"])
     output:
-        stats=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, combined}/{fileprefix}/contigs_stats.tsv",
+        stats=out_dir_path / "mtDNA/mitohifi/{mtdna_ref}/hifi/{stage, combined}/{fileprefix}/contigs_stats.tsv",
         #mtDNA_gb=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, combined}/{fileprefix}/final_mitogenome.gb",
         #mtDNA_fasta=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, combined}/{fileprefix}/final_mitogenome.fasta",
         #coverage_plot=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, combined}/{fileprefix}/final_mitogenome.coverage.png",

@@ -23,9 +23,9 @@
     "busco":
         "yaml": "workflow/envs/conda.busco5.yaml"
         "name": "busco5"
-    "mitohifi":
-        "yaml": "workflow/envs/conda.mitohifi.yaml"
-        "name": "mitohifi"
+    "mitoz":
+        "yaml": "workflow/envs/conda.mitoz.yaml"
+        "name": "mitoz"
     "singularity":
         "yaml": "workflow/envs/conda.singularity.yaml"
         "name": "singularity"

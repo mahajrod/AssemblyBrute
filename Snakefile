@@ -404,12 +404,12 @@ if not config["skip_mtdna"]:
                 results_list += [expand(out_dir_path / "mtDNA/mitohifi/{mtdna_ref}/hifi/combined/hifi.combined/contigs_stats.tsv",
                                         mtdna_ref=["recommended"],)]
     if not config["skip_mitoz"]:
-        if (not not config["skip_mitoz_hic"]) and ("hic" in data_types):
+        if (not config["skip_mitoz_hic"]) and ("hic" in data_types):
             results_list += [expand(out_dir_path / ("mtDNA/mitoz/denovo/{datatype}/{stage}/{pairprefix}/%s.mtdna.{datatype}.mitoz.results" % config["genome_prefix"]),
                                     datatype=["hic",],
                                     stage=["filtered"],
                                     pairprefix=input_pairprefix_dict["hic"])]
-        if (not not config["skip_mitoz_illumina"]) and ("illumina" in data_types):
+        if (not config["skip_mitoz_illumina"]) and ("illumina" in data_types):
             results_list += [expand(out_dir_path / ("mtDNA/mitoz/denovo/{datatype}/{stage}/{pairprefix}/%s.mtdna.{datatype}.mitoz.results" % config["genome_prefix"]),
                                     datatype=["illumina",],
                                     stage=["filtered"],

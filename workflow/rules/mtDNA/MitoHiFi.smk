@@ -87,7 +87,7 @@ rule mitohifi_reads:
         "                 {params.sif} mitohifi.py "
         "                 -r ${{HIFI_READS}} -f ${{REF_FASTA}} -g ${{REF_GB}} "
         "                 -t {threads} -a {params.kingdom} -covMap {params.min_mapping_quality} "
-        "                 -o {params.genetic_code} > ${{MITOHIFI_LOG}} 2>&1; "
+        "                 -o {params.genetic_code} > ${{MITOHIFI_LOG}} 2>&1 || true; "
 
 rule combine_long_reads:
     input:

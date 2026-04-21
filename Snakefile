@@ -396,12 +396,12 @@ if not config["skip_mtdna"]:
     if not config["skip_mtdna_reads"]:
         if not config["skip_mtdna_reads_per_file"]:
             if "hifi" in data_types:
-                results_list += [ expand(out_dir_path / "mtDNA/{mtdna_ref}/hifi/filtered/{fileprefix}/contig_stats.tsv",
+                results_list += [ expand(out_dir_path / "mtDNA/{mtdna_ref}/hifi/filtered/{fileprefix}/contigs_stats.tsv",
                                          mtdna_ref=["recommended"],
                                          fileprefix=input_file_prefix_dict["hifi"])]
         if not config["skip_mtdna_reads_combined"]:
             if "hifi" in data_types:
-                results_list += [expand(out_dir_path / "mtDNA/{mtdna_ref}/hifi/combined/hifi.combined/contig_stats.tsv",
+                results_list += [expand(out_dir_path / "mtDNA/{mtdna_ref}/hifi/combined/hifi.combined/contigs_stats.tsv",
                                         mtdna_ref=["recommended"],)]
 
 

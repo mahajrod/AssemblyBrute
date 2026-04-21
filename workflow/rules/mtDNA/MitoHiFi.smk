@@ -80,7 +80,7 @@ rule mitohifi_reads:
         " MITOHIFI_LOG=`realpath {log.mitohifi}`; "
         " cp -f {input.mtdna_ref_fasta} {input.mtdna_ref_gb} ${{OUT_DIR}} > {log.cp} 2>&1; "
         " cd ${{OUT_DIR}} > {log.cd} 2>&1; "
-        " singularity run --pid --contain "
+        " singularity run --pid "
         "                 --bind ${{OUT_DIR}}:${{OUT_DIR}} "
         "                 --bind ${{HIFI_DIR}}:${{HIFI_DIR}} "
         "                 --bind ${{REF_DIR}}:${{REF_DIR}} "

@@ -68,7 +68,7 @@ rule mitoz:
         genetic_code=config["mtdna_genetic_code"],
         assembler="megahit",
         max_raw_data=1, # Gbp
-        max_filtered_data=0.3, # Gbp
+        max_filtered_data=0, # Gbp
     log:
         log=output_dict["log"]  / "mitoz.{datatype}.{stage}.{pairprefix}.log",
         cluster_log=output_dict["cluster_log"] / "mitoz.{datatype}.{stage}.{pairprefix}.cluster.log",

@@ -24,7 +24,7 @@ rule get_recommended_mtDNA_reference: # reference is inferred by NCBI taxid
     shell:
         " OUT_DIR=`basename {output.mtdna_ref_fasta}`; "
         " workflow/external_tools/mitohifi/src/findMitoReference.py "
-        "      --species {params.latin_name} "
+        "      --species '{params.latin_name}' "
         "      --outfolder ${{OUT_DIR}} "
         "      --type mitochondrion > {log.log} 2>&1; "
         " REF_PREFIX=`grep 'output is written' {log.log} | cut -d " " -f 5 `;"

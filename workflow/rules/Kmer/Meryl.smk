@@ -1,4 +1,64 @@
 #ruleorder: meryl_pe > create_fastq_links
+
+rule meryl_assembly_new: #TODO: in future use this rule for all kmer counts on assemblies -  other rule (meryl_assembly) exists in ReadPhasing.smk
+    input:
+        fasta="{directory}/{fasta_prefix}.fasta",
+        log_dir="{directory}/log/",
+        benchmark_dir="{directory}/benchmark/"
+    output:
+        db_dir=directory("{directory}/kmer/meryl/{fasta_prefix, [^/]+}.{kmer_length, [^/]+}.meryl/")
+    log:
+        std="{directory}/log/meryl_assembly.{fasta_prefix}.{kmer_length}.meryl.log",
+        cluster_log="{directory}/log/meryl_assembly.{fasta_prefix}.{kmer_length}.meryl.cluster.log",
+        cluster_err="{directory}/log/meryl_assembly.{fasta_prefix}.{kmer_length}.meryl.cluster.err"
+    benchmark:
+        "{directory}/benchmark/meryl_assembly.{fasta_prefix}.{kmer_length}.benchmark.txt"
+    conda:
+        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("meryl_assembly"),
+        cpus=parameters["threads"]["meryl_assembly"],
+        time=parameters["time"]["meryl_assembly"],
+        mem=lambda wildcards, attempt: attempt * parameters["memory_mb"]["meryl_assembly"],
+        kmer_counter=1
+    threads:
+        parameters["threads"]["meryl_assembly"]
+    shell:
+         " workflow/external_tools/meryl-1.4/bin/meryl k={wildcards.kmer_length} threads={threads} memory={resources.mem}m count "
+         " output {output.db_dir} {input.fasta} > {log.std} 2>&1;"
+
+rule meryl_get_repetitive_kmers:
+    input:
+        meryl_db="{directory}/{meryl_db_prefix}.meryl/",
+        log_dir="{directory}/log/",
+        benchmark_dir="{directory}/benchmark/"
+    output:
+        repetitive_kmers=directory("{directory}/{meryl_db_prefix}.meryl.repetitive.t")
+    params:
+        distinct=0.9998
+    log:
+        std="{directory}/log/meryl_get_repetitive_kmers.{meryl_db_prefix}.meryl.meryl.log",
+        cluster_log="{directory}/log/meryl_get_repetitive_kmers.{meryl_db_prefix}.meryl.meryl.cluster.log",
+        cluster_err="{directory}/log/meryl_get_repetitive_kmers.{meryl_db_prefix}.meryl.meryl.cluster.err"
+    benchmark:
+        "{directory}/benchmark/meryl_get_repetitive_kmers.{meryl_db_prefix}.meryl.benchmark.txt"
+    conda:
+        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"],
+        node_options=parse_node_list("meryl_extract"),
+        cpus=parameters["threads"]["meryl_extract"],
+        time=parameters["time"]["meryl_extract"],
+        mem=lambda wildcards, attempt: attempt * parameters["memory_mb"]["meryl_extract"],
+        kmer_counter=1
+    threads:
+        parameters["threads"]["meryl_extract"]
+    shell:
+         " workflow/external_tools/meryl-1.4/bin/meryl print greater-than distinct={params.distinct} "
+         " {input.meryl_db} > {output.repetitive_kmers} 2>{log.std}; "
+
+
 rule meryl:
     input:
         lambda wildcards: output_dict["data"] / "{0}/{1}/{2}/{3}{4}".format(datatype_format_dict[wildcards.datatype],

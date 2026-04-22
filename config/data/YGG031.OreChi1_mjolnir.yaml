@@ -163,6 +163,27 @@
 "species_name": "Oreotrochilus chimborazo"
 "tax_id": 304662   # # necessary for contamination scan via FCS
 "bird_genome": True
+"kingdom": "animal"  # "animal", "plant" or "fungi" # used in MitoHiFi
+"mitoz_clade": "Chordata" #Allowed: {Chordata,Arthropoda,Echinodermata,Annelida-segmented-worms,Bryozoa,Mollusca,Nematoda,Nemertea-ribbon-worms,Porifera-sponges}
+"mtdna_genetic_code":  2 # Organism genetic code should be one from the NCBI table:
+                         #  1. The Standard Code
+                         #  2. The Vertebrate MitochondrialCode
+                         #  3.  The Yeast Mitochondrial Code
+                         #  4.  The Mold,Protozoan, and Coelenterate Mitochondrial Code and the Mycoplasma/Spiroplasma Code
+                         #  5.  The Invertebrate Mitochondrial Code
+                         #  6.  The Ciliate, Dasycladacean and Hexamita Nuclear Code
+                         #  9.  The Echinoderm and Flatworm Mitochondrial Code
+                         # 10. The Euplotid Nuclear Code
+                         # 11. The Bacterial, Archaeal and Plant Plastid Code
+                         # 12. The Alternative Yeast Nuclear Code
+                         # 13. The Ascidian Mitochondrial Code
+                         # 14. The Alternative Flatworm Mitochondrial Code
+                         # 16. Chlorophycean Mitochondrial Code
+                         # 21. Trematode Mitochondrial Code
+                         # 22. Scenedesmus obliquus Mitochondrial Code
+                         # 23. Thraustochytrium Mitochondrial Code
+                         # 24. Pterobranchia Mitochondrial Code
+                         # 25. Candidate Division SR1 and Gracilibacteria Code
 
 "database_set":
     "kraken2":
@@ -183,7 +204,8 @@
 "final_kmer_counter": "meryl" # pipeline allows usage of different kmer counter external_tools, but only one genomesize assessment could be used
 "final_kmer_length": 21 # pipeline allows usage of different kmer length, but only one genomesize assessment could be used
 
-"final_kmer_datatype": "hifi"
+"final_kmer_datatypes":
+    - "hifi"
 "assembly_kmer_length":
     - 31 # kmer length to be used for phasing hic reads using assembled and purge_dupsed contigs
 "phasing_stage": "purge_dups"

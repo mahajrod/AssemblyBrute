@@ -59,6 +59,7 @@
     "deepvariant":
         "cpu": "/maps/projects/tomg/people/xsg178/soft/deepvariant/deepvariant_1.5.0.sif"
         "gpu": null #"gpu": "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
+    "mitohifi":             "docker://ghcr.io/marcelauliano/mitohifi:master"
 
 'alternative_tmp_dir': None
 
@@ -150,7 +151,7 @@
 
 "ploidy": 2
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
-"genome_prefix": "OreChi1"
+"genome_prefix": "bOreChi1"
 "busco_lineage_list":
     - "aves_odb10" #
     - "vertebrata_odb10"

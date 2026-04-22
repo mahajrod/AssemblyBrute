@@ -88,7 +88,7 @@ rule mitoz:
         " WORKDIR=`dirname {output.results_dir}`; "
         " TMPDIR=${{WORKDIR}}/tmp; "
         " mkdir -p ${{TMPDIR}}; "
-        " mitoz all --workdir ${{WORKDIR}} --thread_number {threads} --assembler {params.assembler} "
+        " (mitoz all --workdir ${{WORKDIR}} --thread_number {threads} --assembler {params.assembler} "
         "                --tmp_dir ${{TMPDIR}} "
         "                --fq1 {input.forward_reads} --fq2 {input.reverse_reads} "
         "                --outprefix {params.genome_prefix}.mtdna.{wildcards.datatype}.mitoz "
@@ -96,5 +96,5 @@ rule mitoz:
         "                --requiring_taxa {params.clade} "
         "                --species_name '{params.species_name}' "
         "                --genetic_code {params.genetic_code} "
-        "                --data_size_for_mt_assembly {params.max_raw_data},{params.max_filtered_data} > {log.log} 2>&1 || true; "
+        "                --data_size_for_mt_assembly {params.max_raw_data},{params.max_filtered_data} > {log.log} 2>&1 || true ) || true; "
 

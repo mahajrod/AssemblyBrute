@@ -42,7 +42,7 @@ rule mitohifi_reads:
         #            allow_missing=True),
         hifi_reads=output_dict["data"] / ("fastq/hifi/{stage}/{fileprefix}%s" % config["fastq_extension"])
     output:
-        stats=out_dir_path / "mtDNA/mitohifi/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/contigs_stats.tsv",
+        finish_flag=out_dir_path / "mtDNA/mitohifi/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/FINISH_FLAG",
         #mtDNA_gb=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/final_mitogenome.gb",
         #mtDNA_fasta=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/final_mitogenome.fasta",
         #coverage_plot=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/final_mitogenome.coverage.png",
@@ -51,7 +51,8 @@ rule mitohifi_reads:
         sif=config["tool_containers"]["mitohifi"],
         kingdom=config["kingdom"],
         genetic_code=config["mtdna_genetic_code"],
-        min_mapping_quality=parameters["tool_options"]["mitohifi"]["min_mapping_quality"]
+        min_mapping_quality=parameters["tool_options"]["mitohifi"]["min_mapping_quality"],
+        genome_prefix=config["genome_prefix"]
     log:
         cp=output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{stage}.{fileprefix}.cp.log",
         cd=output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{stage}.{fileprefix}.cd.log",
@@ -70,7 +71,7 @@ rule mitohifi_reads:
         mem=parameters["memory_mb"]["mitohifi_reads"]
     threads: parameters["threads"]["mitohifi_reads"]
     shell:
-        " OUT_DIR=`realpath -m {output.stats}`; "
+        " OUT_DIR=`realpath -m {output.finish_flag}`; "
         " OUT_DIR=`dirname ${{OUT_DIR}}`; "
         " HIFI_READS=`realpath {input.hifi_reads}`; "
         " HIFI_DIR=`dirname ${{HIFI_READS}}`; "
@@ -78,6 +79,7 @@ rule mitohifi_reads:
         " REF_GB=`realpath {input.mtdna_ref_gb}`; "
         " REF_DIR=`dirname ${{REF_FASTA}}`; "
         " MITOHIFI_LOG=`realpath {log.mitohifi}`; "
+        " OUTPUT_PREFIX={params.genome_prefix}.mtdna.mitohifi.ref_{wildcards.mtdna_ref}.hifi.{wildcards.fileprefix}.{wildcards.stage}; "
         " cp -f {input.mtdna_ref_fasta} {input.mtdna_ref_gb} ${{OUT_DIR}} > {log.cp} 2>&1; "
         " cd ${{OUT_DIR}} > {log.cd} 2>&1; "
         " singularity run --pid "
@@ -88,6 +90,15 @@ rule mitohifi_reads:
         "                 -r ${{HIFI_READS}} -f ${{REF_FASTA}} -g ${{REF_GB}} "
         "                 -t {threads} -a {params.kingdom} -covMap {params.min_mapping_quality} "
         "                 -o {params.genetic_code} > ${{MITOHIFI_LOG}} 2>&1 || true; "
+        " > FINISH_FLAG; "
+        " if [[ -f 'final_mitogenome.fasta' ]]; "
+        " then "
+        "       cp final_mitogenome.fasta ${{OUTPUT_PREFIX}}.fasta; "
+        "       cp final_mitogenome.gb ${{OUTPUT_PREFIX}}.gb; "
+        "       cp contigs_stats.tsv ${{OUTPUT_PREFIX}}.contigs_stats.tsv; "
+        "       cp final_mitogenome.annotation.png ${{OUTPUT_PREFIX}}.annotation.png; "
+        "       cp final_mitogenome.coverage.png ${{OUTPUT_PREFIX}}.coverage.png; "        
+        " fi; "
 
 use rule mitohifi_reads as mitohifi_combined_reads with:
     input:

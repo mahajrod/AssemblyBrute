@@ -56,11 +56,8 @@ rule mitoz:
         #forward_reads=output_dict["data"] / ("fastq/{datatype, hic|illumina}/downsampled_mitoz/{pairprefix}_1%s" % config["fastq_extension"]),
         #reverse_reads=output_dict["data"] / ("fastq/{datatype, hic|illumina}/downsampled_mitoz/{pairprefix}_2%s" % config["fastq_extension"]),
     output:
-        results_dir=directory(out_dir_path / ("mtDNA/mitoz/denovo/{datatype, hic|illumina}/{stage, filtered}/{pairprefix}/%s.mtdna.{datatype}.mitoz.results" % config["genome_prefix"])),
-        #mtDNA_gb=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/final_mitogenome.gb",
-        #mtDNA_fasta=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/final_mitogenome.fasta",
-        #coverage_plot=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/final_mitogenome.coverage.png",
-        #annotation_plot=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/final_mitogenome.annotation.png"
+        finish_flag=out_dir_path / "mtDNA/mitoz/denovo/{datatype, hic|illumina}/{stage, filtered}/{pairprefix}/FINISH_FLAG"
+
     params:
         genome_prefix=config["genome_prefix"],
         clade=config["mitoz_clade"],
@@ -86,17 +83,24 @@ rule mitoz:
     threads: parameters["threads"]["mitoz"]
     shell:
         " set +e; "
-        " WORKDIR=`dirname {output.results_dir}`; "
+        " WORKDIR=`dirname {output.finish_flag}`; "
         " TMPDIR=${{WORKDIR}}/tmp; "
         " mkdir -p ${{TMPDIR}}; "
+        " OUTPUT_PREFIX={params.genome_prefix}.mtdna.{wildcards.datatype}.mitoz; "
+        " FINAL_FASTA=${{WORKDIR}}/{params.genome_prefix}.mtdna.mitoz.denovo.{wildcards.datatype}.{wildcards.pairprefix}.{wildcards.stage}.fasta; "
         " mitoz all --workdir ${{WORKDIR}} --thread_number {threads} --assembler {params.assembler} "
         "                --tmp_dir ${{TMPDIR}} "
         "                --fq1 {input.forward_reads} --fq2 {input.reverse_reads} "
-        "                --outprefix {params.genome_prefix}.mtdna.{wildcards.datatype}.mitoz "
+        "                --outprefix ${{OUTPUT_PREFIX}} "
         "                --clade {params.clade} "
         "                --requiring_taxa {params.clade} "
         "                --species_name '{params.species_name}' "
         "                --genetic_code {params.genetic_code} "
-        "                --data_size_for_mt_assembly {params.max_raw_data},{params.max_filtered_data} > {log.log} 2>&1; "
+        "                --data_size_for_mt_assembly {params.max_raw_data},{params.max_filtered_data} > {log.log} 2>&1 || true; "
+        " > FINISH_FLAG;"
+        " if [[ -f 'final_mitogenome.fasta' ]]; "
+        " then"
+        "     cp ${{WORKDIR}}/${{OUTPUT_PREFIX}}.result/${{OUTPUT_PREFIX}}.megahit.result/${{OUTPUT_PREFIX}}.megahit.mitogenome.fa ${{FINAL_FASTA}}; "
+        " fi; "
         " exit 0; "
 

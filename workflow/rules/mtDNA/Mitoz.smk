@@ -56,7 +56,7 @@ rule mitoz:
         #forward_reads=output_dict["data"] / ("fastq/{datatype, hic|illumina}/downsampled_mitoz/{pairprefix}_1%s" % config["fastq_extension"]),
         #reverse_reads=output_dict["data"] / ("fastq/{datatype, hic|illumina}/downsampled_mitoz/{pairprefix}_2%s" % config["fastq_extension"]),
     output:
-        results_dir=out_dir_path / ("mtDNA/mitoz/denovo/{datatype, hic|illumina}/{stage, filtered}/{pairprefix}/%s.mtdna.{datatype}.mitoz.results" % config["genome_prefix"]),
+        results_dir=directory(out_dir_path / ("mtDNA/mitoz/denovo/{datatype, hic|illumina}/{stage, filtered}/{pairprefix}/%s.mtdna.{datatype}.mitoz.results" % config["genome_prefix"])),
         #mtDNA_gb=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/final_mitogenome.gb",
         #mtDNA_fasta=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/final_mitogenome.fasta",
         #coverage_plot=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/final_mitogenome.coverage.png",
@@ -70,9 +70,9 @@ rule mitoz:
         max_raw_data=3, # Gbp
         max_filtered_data=0, # Gbp
     log:
-        log=output_dict["log"]  / "mitoz.{datatype}.{stage}.{pairprefix}.log",
+        log=(output_dict["log"]  / "mitoz.{datatype}.{stage}.{pairprefix}.log").resolve(),
         cluster_log=output_dict["cluster_log"] / "mitoz.{datatype}.{stage}.{pairprefix}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "mitoz.{datatype}.{stage}.{pairprefix}.err"
+        cluster_err=output_dict["cluster_error"] / "mitoz.{datatype}.{stage}.{pairprefix}.cluster.err"
     benchmark:
         output_dict["benchmark"]  / "mitoz.{datatype}.{stage}.{pairprefix}.benchmark.txt"
     conda:

@@ -98,7 +98,7 @@ rule mitoz:
         "                --genetic_code {params.genetic_code} "
         "                --data_size_for_mt_assembly {params.max_raw_data},{params.max_filtered_data} > {log.log} 2>&1 || true; "
         " > FINISH_FLAG;"
-        " if [[ -f 'final_mitogenome.fasta' ]]; "
+        " if [[ -f '${{WORKDIR}}/${{OUTPUT_PREFIX}}.result/${{OUTPUT_PREFIX}}.megahit.result/${{OUTPUT_PREFIX}}.megahit.mitogenome.fa' ]]; "
         " then"
         "     cp ${{WORKDIR}}/${{OUTPUT_PREFIX}}.result/${{OUTPUT_PREFIX}}.megahit.result/${{OUTPUT_PREFIX}}.megahit.mitogenome.fa ${{FINAL_FASTA}}; "
         " fi; "

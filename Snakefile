@@ -396,21 +396,21 @@ if not config["skip_mtdna"]:
     if not config["skip_mitohifi_reads"]:
         if not config["skip_mitohifi_reads_per_file"]:
             if "hifi" in data_types:
-                results_list += [ expand(out_dir_path / "mtDNA/mitohifi/{mtdna_ref}/hifi/filtered/{fileprefix}/contigs_stats.tsv",
+                results_list += [ expand(out_dir_path / "mtDNA/mitohifi/{mtdna_ref}/hifi/filtered/{fileprefix}/FINISH_FLAG",
                                          mtdna_ref=["recommended"],
                                          fileprefix=input_file_prefix_dict["hifi"])]
         if not config["skip_mitohifi_reads_combined"]:
             if "hifi" in data_types:
-                results_list += [expand(out_dir_path / "mtDNA/mitohifi/{mtdna_ref}/hifi/combined/hifi.combined/contigs_stats.tsv",
+                results_list += [expand(out_dir_path / "mtDNA/mitohifi/{mtdna_ref}/hifi/combined/hifi.combined/FINISH_FLAG",
                                         mtdna_ref=["recommended"],)]
     if not config["skip_mitoz"]:
         if (not config["skip_mitoz_hic"]) and ("hic" in data_types):
-            results_list += [expand(out_dir_path / ("mtDNA/mitoz/denovo/{datatype}/{stage}/{pairprefix}/%s.mtdna.{datatype}.mitoz.results" % config["genome_prefix"]),
+            results_list += [expand(out_dir_path / ("mtDNA/mitoz/denovo/{datatype}/{stage}/{pairprefix}/FINISH_FLAG" % config["genome_prefix"]),
                                     datatype=["hic",],
                                     stage=["filtered"],
                                     pairprefix=input_pairprefix_dict["hic"])]
         if (not config["skip_mitoz_illumina"]) and ("illumina" in data_types):
-            results_list += [expand(out_dir_path / ("mtDNA/mitoz/denovo/{datatype}/{stage}/{pairprefix}/%s.mtdna.{datatype}.mitoz.results" % config["genome_prefix"]),
+            results_list += [expand(out_dir_path / ("mtDNA/mitoz/denovo/{datatype}/{stage}/{pairprefix}/FINISH_FLAG" % config["genome_prefix"]),
                                     datatype=["illumina",],
                                     stage=["filtered"],
                                     pairprefix=input_pairprefix_dict["illumina"])]

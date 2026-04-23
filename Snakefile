@@ -405,12 +405,12 @@ if not config["skip_mtdna"]:
                                         mtdna_ref=["recommended"],)]
     if not config["skip_mitoz"]:
         if (not config["skip_mitoz_hic"]) and ("hic" in data_types):
-            results_list += [expand(out_dir_path / ("mtDNA/mitoz/denovo/{datatype}/{stage}/{pairprefix}/FINISH_FLAG" % config["genome_prefix"]),
+            results_list += [expand(out_dir_path / "mtDNA/mitoz/denovo/{datatype}/{stage}/{pairprefix}/FINISH_FLAG",
                                     datatype=["hic",],
                                     stage=["filtered"],
                                     pairprefix=input_pairprefix_dict["hic"])]
         if (not config["skip_mitoz_illumina"]) and ("illumina" in data_types):
-            results_list += [expand(out_dir_path / ("mtDNA/mitoz/denovo/{datatype}/{stage}/{pairprefix}/FINISH_FLAG" % config["genome_prefix"]),
+            results_list += [expand(out_dir_path / "mtDNA/mitoz/denovo/{datatype}/{stage}/{pairprefix}/FINISH_FLAG",
                                     datatype=["illumina",],
                                     stage=["filtered"],
                                     pairprefix=input_pairprefix_dict["illumina"])]

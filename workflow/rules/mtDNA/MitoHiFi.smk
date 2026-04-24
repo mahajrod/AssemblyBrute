@@ -85,7 +85,7 @@ rule mitohifi_reads:
         " > FINISH_FLAG; "
         " if [[ -f \"final_mitogenome.fasta\" ]]; "
         " then "
-        "       sed 's/^>/>{wildcards.fileprefix} /' final_mitogenome.fasta > ${{OUTPUT_PREFIX}}.fasta 2>{log.sed}; "
+        "       sed 's/^>/>{params.genome_prefix}.{wildcards.fileprefix} /' final_mitogenome.fasta > ${{OUTPUT_PREFIX}}.fasta 2>{log.sed}; "
         "       cp -f final_mitogenome.gb ${{OUTPUT_PREFIX}}.gb >> {log.cp} 2>&1; "
         "       cp -f contigs_stats.tsv ${{OUTPUT_PREFIX}}.contigs_stats.tsv >> {log.cp} 2>&1; " 
         "       cp -f final_mitogenome.annotation.png ${{OUTPUT_PREFIX}}.annotation.png >> {log.cp} 2>&1; " 

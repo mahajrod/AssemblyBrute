@@ -64,8 +64,8 @@ use rule genomescope as genomescope_per_lib with:
         histo="{db_dir}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.{read_prefix}.histo",
         log="{db_dir}/log/"
     output:
-        summary="{db_dir}/genomescope/{datatype}.{stage}.{kmer_length}.{kmer_tool}.{read_prefix}/%s_summary.txt" % config["genome_prefix"],
-        model="{db_dir}/genomescope/{datatype}.{stage}.{kmer_length}.{kmer_tool}.{read_prefix}/%s_model.txt" % config["genome_prefix"],
+        summary="{db_dir}/genomescope/{datatype, [^.]+}.{stage, [^.]+}.{kmer_length, [^.]+}.{kmer_tool, [^.]+}.{read_prefix}/%s_summary.txt" % config["genome_prefix"],
+        model="{db_dir}/genomescope/{datatype, [^.]+}.{stage, [^.]+}.{kmer_length, [^.]+}.{kmer_tool, [^.]+}.{read_prefix}/%s_model.txt" % config["genome_prefix"],
     log:
         std="{db_dir}/log/genomescope.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{read_prefix}.log",
         cluster_log="{db_dir}/log/genomescope.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{read_prefix}.cluster.log",

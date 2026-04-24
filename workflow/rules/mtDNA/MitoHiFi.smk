@@ -95,10 +95,10 @@ rule mitohifi_reads:
         " if [[ -f \"final_mitogenome.fasta\" ]]; "
         " then "
         "       sed 's/^>/>{wildcards.fileprefix} /' final_mitogenome.fasta > ${{OUTPUT_PREFIX}}.fasta 2>{log.sed}; "
-        "       cp final_mitogenome.gb ${{OUTPUT_PREFIX}}.gb >> {log.cp} 2>&1; "
-        "       cp contigs_stats.tsv ${{OUTPUT_PREFIX}}.contigs_stats.tsv >> {log.cp} 2>&1; " 
-        "       cp final_mitogenome.annotation.png ${{OUTPUT_PREFIX}}.annotation.png >> {log.cp} 2>&1; " 
-        "       cp final_mitogenome.coverage.png ${{OUTPUT_PREFIX}}.coverage.png >> {log.cp} 2>&1; "         
+        "       cp -f final_mitogenome.gb ${{OUTPUT_PREFIX}}.gb >> {log.cp} 2>&1; "
+        "       cp -f contigs_stats.tsv ${{OUTPUT_PREFIX}}.contigs_stats.tsv >> {log.cp} 2>&1; " 
+        "       cp -f final_mitogenome.annotation.png ${{OUTPUT_PREFIX}}.annotation.png >> {log.cp} 2>&1; " 
+        "       cp -f final_mitogenome.coverage.png ${{OUTPUT_PREFIX}}.coverage.png >> {log.cp} 2>&1; "         
         " fi; "
 
 use rule mitohifi_reads as mitohifi_combined_reads with:

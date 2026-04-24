@@ -56,6 +56,7 @@ rule mitohifi_reads:
     log:
         cp=output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{stage}.{fileprefix}.cp.log",
         cd=output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{stage}.{fileprefix}.cd.log",
+        sed=output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{stage}.{fileprefix}.sed.log",
         mitohifi=output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{stage}.{fileprefix}.mitohifi.log",
         cluster_log=output_dict["cluster_log"] / "mitohifi_reads.{stage}.{mtdna_ref}.{fileprefix}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "mitohifi_reads.{stage}.{mtdna_ref}.{fileprefix}.err"
@@ -93,11 +94,11 @@ rule mitohifi_reads:
         " > FINISH_FLAG; "
         " if [[ -f \"final_mitogenome.fasta\" ]]; "
         " then "
-        "       sed 's/^>/>{wildcards.fileprefix} /' final_mitogenome.fasta ${{OUTPUT_PREFIX}}.fasta; "
-        "       cp final_mitogenome.gb ${{OUTPUT_PREFIX}}.gb; "
-        "       cp contigs_stats.tsv ${{OUTPUT_PREFIX}}.contigs_stats.tsv; "
-        "       cp final_mitogenome.annotation.png ${{OUTPUT_PREFIX}}.annotation.png; "
-        "       cp final_mitogenome.coverage.png ${{OUTPUT_PREFIX}}.coverage.png; "        
+        "       sed 's/^>/>{wildcards.fileprefix} /' final_mitogenome.fasta > ${{OUTPUT_PREFIX}}.fasta 2>{log.sed}; "
+        "       cp final_mitogenome.gb ${{OUTPUT_PREFIX}}.gb >> {log.cp} 2>&1; "
+        "       cp contigs_stats.tsv ${{OUTPUT_PREFIX}}.contigs_stats.tsv >> {log.cp} 2>&1; " 
+        "       cp final_mitogenome.annotation.png ${{OUTPUT_PREFIX}}.annotation.png >> {log.cp} 2>&1; " 
+        "       cp final_mitogenome.coverage.png ${{OUTPUT_PREFIX}}.coverage.png >> {log.cp} 2>&1; "         
         " fi; "
 
 use rule mitohifi_reads as mitohifi_combined_reads with:

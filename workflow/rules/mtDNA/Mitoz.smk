@@ -67,7 +67,8 @@ rule mitoz:
         max_raw_data=3, # Gbp
         max_filtered_data=0, # Gbp
     log:
-        log=(output_dict["log"]  / "mitoz.{datatype}.{stage}.{pairprefix}.log").resolve(),
+        mitoz=output_dict["log"]  / "mitoz.{datatype}.{stage}.{pairprefix}.mitozlog",
+        sed=output_dict["log"]  / "mitoz.{datatype}.{stage}.{pairprefix}.sed.log",
         cluster_log=output_dict["cluster_log"] / "mitoz.{datatype}.{stage}.{pairprefix}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "mitoz.{datatype}.{stage}.{pairprefix}.cluster.err"
     benchmark:
@@ -96,13 +97,13 @@ rule mitoz:
         #"                --requiring_taxa {params.clade} "
         #"                --species_name '{params.species_name}' "
         #"                --genetic_code {params.genetic_code} "
-        #"                --data_size_for_mt_assembly {params.max_raw_data},{params.max_filtered_data} > {log.log} 2>&1 || true; "
+        #"                --data_size_for_mt_assembly {params.max_raw_data},{params.max_filtered_data} > {log.mitoz} 2>&1 || true; "
         " > {output.finish_flag}; "
         " echo ${{WORKDIR}}/${{OUTPUT_PREFIX}}.result/${{OUTPUT_PREFIX}}.megahit.result/${{OUTPUT_PREFIX}}.megahit.mitogenome.fa; "
         " if [[ -f \"${{WORKDIR}}/${{OUTPUT_PREFIX}}.result/${{OUTPUT_PREFIX}}.megahit.result/${{OUTPUT_PREFIX}}.megahit.mitogenome.fa\" ]]; "
         " then"
         "     sed 's/^>/>{wildcards.pairprefix}_/' "
-        "         ${{WORKDIR}}/${{OUTPUT_PREFIX}}.result/${{OUTPUT_PREFIX}}.megahit.result/${{OUTPUT_PREFIX}}.megahit.mitogenome.fa > ${{FINAL_FASTA}}; "
+        "         ${{WORKDIR}}/${{OUTPUT_PREFIX}}.result/${{OUTPUT_PREFIX}}.megahit.result/${{OUTPUT_PREFIX}}.megahit.mitogenome.fa > ${{FINAL_FASTA}} 2>{log.sed}; "
         " fi; "
         " exit 0; "
 

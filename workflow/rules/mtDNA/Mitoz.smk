@@ -78,10 +78,10 @@ rule mitoz:
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("mitoz"),
-        cpus=parameters["threads"]["mitoz"],
+        cpus=1, #parameters["threads"]["mitoz"],
         time=parameters["time"]["mitoz"],
-        mem=parameters["memory_mb"]["mitoz"]
-    threads: parameters["threads"]["mitoz"]
+        mem=1000, #parameters["memory_mb"]["mitoz"]
+    threads: 1, #parameters["threads"]["mitoz"]
     shell:
         " set +e; "
         " WORKDIR=`dirname {output.finish_flag}`; "

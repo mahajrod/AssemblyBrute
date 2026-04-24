@@ -83,14 +83,6 @@ rule mitohifi_reads:
         " OUTPUT_PREFIX={params.genome_prefix}.mtdna.mitohifi.ref_{wildcards.mtdna_ref}.hifi.{wildcards.fileprefix}.{wildcards.stage}; "
         " cp -f {input.mtdna_ref_fasta} {input.mtdna_ref_gb} ${{OUT_DIR}} > {log.cp} 2>&1; "
         " cd ${{OUT_DIR}} > {log.cd} 2>&1; "
-        #" singularity run --pid "
-        #"                 --bind ${{OUT_DIR}}:${{OUT_DIR}} "
-        #"                 --bind ${{HIFI_DIR}}:${{HIFI_DIR}} "
-        #"                 --bind ${{REF_DIR}}:${{REF_DIR}} "
-        #"                 {params.sif} mitohifi.py "
-        #"                 -r ${{HIFI_READS}} -f ${{REF_FASTA}} -g ${{REF_GB}} "
-        #"                 -t {threads} -a {params.kingdom} -covMap {params.min_mapping_quality} "
-        #"                 -o {params.genetic_code} > ${{MITOHIFI_LOG}} 2>&1 || true; "
         " > FINISH_FLAG; "
         " if [[ -f \"final_mitogenome.fasta\" ]]; "
         " then "
@@ -100,6 +92,15 @@ rule mitohifi_reads:
         "       cp -f final_mitogenome.annotation.png ${{OUTPUT_PREFIX}}.annotation.png >> {log.cp} 2>&1; " 
         "       cp -f final_mitogenome.coverage.png ${{OUTPUT_PREFIX}}.coverage.png >> {log.cp} 2>&1; "         
         " fi; "
+        #" singularity run --pid "
+        #"                 --bind ${{OUT_DIR}}:${{OUT_DIR}} "
+        #"                 --bind ${{HIFI_DIR}}:${{HIFI_DIR}} "
+        #"                 --bind ${{REF_DIR}}:${{REF_DIR}} "
+        #"                 {params.sif} mitohifi.py "
+        #"                 -r ${{HIFI_READS}} -f ${{REF_FASTA}} -g ${{REF_GB}} "
+        #"                 -t {threads} -a {params.kingdom} -covMap {params.min_mapping_quality} "
+        #"                 -o {params.genetic_code} > ${{MITOHIFI_LOG}} 2>&1 || true; "
+
 
 use rule mitohifi_reads as mitohifi_combined_reads with:
     input:

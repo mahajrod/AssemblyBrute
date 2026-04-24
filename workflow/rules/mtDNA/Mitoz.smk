@@ -80,7 +80,7 @@ rule mitoz:
         node_options=parse_node_list("mitoz"),
         cpus=1 ,#parameters["threads"]["mitoz"],
         time=parameters["time"]["mitoz"],
-        mem=100, #parameters["memory_mb"]["mitoz"]
+        mem=1000, #parameters["memory_mb"]["mitoz"]
     threads: 1 #parameters["threads"]["mitoz"]
     shell:
         " set +e; "
@@ -89,6 +89,14 @@ rule mitoz:
         " mkdir -p ${{TMPDIR}}; "
         " OUTPUT_PREFIX={params.genome_prefix}.mtdna.{wildcards.datatype}.mitoz; "
         " FINAL_FASTA=${{WORKDIR}}/{params.genome_prefix}.mtdna.mitoz.denovo.{wildcards.datatype}.{wildcards.pairprefix}.{wildcards.stage}.fasta; "
+        " > {output.finish_flag}; "
+        " echo ${{WORKDIR}}/${{OUTPUT_PREFIX}}.result/${{OUTPUT_PREFIX}}.megahit.result/${{OUTPUT_PREFIX}}.megahit.mitogenome.fa; "
+        " if [[ -f \"${{WORKDIR}}/${{OUTPUT_PREFIX}}.result/${{OUTPUT_PREFIX}}.megahit.result/${{OUTPUT_PREFIX}}.megahit.mitogenome.fa\" ]]; "
+        " then"
+        "     sed 's/^>/>{wildcards.pairprefix}_/' "
+        "         ${{WORKDIR}}/${{OUTPUT_PREFIX}}.result/${{OUTPUT_PREFIX}}.megahit.result/${{OUTPUT_PREFIX}}.megahit.mitogenome.fa > ${{FINAL_FASTA}} 2>{log.sed}; "
+        " fi; "
+        " exit 0; "
         #" mitoz all --workdir ${{WORKDIR}} --thread_number {threads} --assembler {params.assembler} "
         #"                --tmp_dir ${{TMPDIR}} "
         #"                --fq1 {input.forward_reads} --fq2 {input.reverse_reads} "
@@ -98,12 +106,4 @@ rule mitoz:
         #"                --species_name '{params.species_name}' "
         #"                --genetic_code {params.genetic_code} "
         #"                --data_size_for_mt_assembly {params.max_raw_data},{params.max_filtered_data} > {log.mitoz} 2>&1 || true; "
-        " > {output.finish_flag}; "
-        " echo ${{WORKDIR}}/${{OUTPUT_PREFIX}}.result/${{OUTPUT_PREFIX}}.megahit.result/${{OUTPUT_PREFIX}}.megahit.mitogenome.fa; "
-        " if [[ -f \"${{WORKDIR}}/${{OUTPUT_PREFIX}}.result/${{OUTPUT_PREFIX}}.megahit.result/${{OUTPUT_PREFIX}}.megahit.mitogenome.fa\" ]]; "
-        " then"
-        "     sed 's/^>/>{wildcards.pairprefix}_/' "
-        "         ${{WORKDIR}}/${{OUTPUT_PREFIX}}.result/${{OUTPUT_PREFIX}}.megahit.result/${{OUTPUT_PREFIX}}.megahit.mitogenome.fa > ${{FINAL_FASTA}} 2>{log.sed}; "
-        " fi; "
-        " exit 0; "
 

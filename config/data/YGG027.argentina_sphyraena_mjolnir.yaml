@@ -59,6 +59,7 @@
     "deepvariant":
         "cpu": "/maps/projects/tomg/people/xsg178/soft/deepvariant/deepvariant_1.5.0.sif"
         "gpu": null #"gpu": "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
+    "mitohifi":             "docker://ghcr.io/marcelauliano/mitohifi:master"
 
 'alternative_tmp_dir': None
 
@@ -119,7 +120,7 @@
          - "l1primary"
          #- "l2primary"
          - "l3primary"
-         - "phase_grass"
+         #- "phase_grass"
          #- "l1primary_4p"
          #- "l1primary_no_hic"
          #- "l3primary_no_hic"
@@ -160,6 +161,29 @@
 "telomere_motif": "CCCTAA"  # telomere motif at 5'-end; CCCTAA for human, place null if unknown
 "species_name": "Argentina sphyraena"
 "tax_id": 442169 # # necessary for contamination scan via FCS
+"bird_genome": True
+"kingdom": "animal"  # "animal", "plant" or "fungi"
+"mitoz_clade": "Chordata" #Allowed: {Chordata,Arthropoda,Echinodermata,Annelida-segmented-worms,Bryozoa,Mollusca,Nematoda,Nemertea-ribbon-worms,Porifera-sponges}
+"mtdna_genetic_code":  2 # Organism genetic code should be one from the NCBI table:
+                         #  1. The Standard Code
+                         #  2. The Vertebrate MitochondrialCode
+                         #  3.  The Yeast Mitochondrial Code
+                         #  4.  The Mold,Protozoan, and Coelenterate Mitochondrial Code and the Mycoplasma/Spiroplasma Code
+                         #  5.  The Invertebrate Mitochondrial Code
+                         #  6.  The Ciliate, Dasycladacean and Hexamita Nuclear Code
+                         #  9.  The Echinoderm and Flatworm Mitochondrial Code
+                         # 10. The Euplotid Nuclear Code
+                         # 11. The Bacterial, Archaeal and Plant Plastid Code
+                         # 12. The Alternative Yeast Nuclear Code
+                         # 13. The Ascidian Mitochondrial Code
+                         # 14. The Alternative Flatworm Mitochondrial Code
+                         # 16. Chlorophycean Mitochondrial Code
+                         # 21. Trematode Mitochondrial Code
+                         # 22. Scenedesmus obliquus Mitochondrial Code
+                         # 23. Thraustochytrium Mitochondrial Code
+                         # 24. Pterobranchia Mitochondrial Code
+                         # 25. Candidate Division SR1 and Gracilibacteria Code
+
 
 "database_set":
     "kraken2":
@@ -197,7 +221,7 @@
 "phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads
 #---------------------------------------------------------------------
 
-"mode": "assembly"                # Allowed: "preprocessing", "qc", "assembly"
+"mode": "qc"                # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
 "assembly_mode": "contig"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file

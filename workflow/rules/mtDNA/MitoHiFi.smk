@@ -67,9 +67,9 @@ rule mitohifi_reads:
     resources:
         queue=config["queue"]["cpu"],
         node_options=parse_node_list("mitohifi_reads"),
-        cpus=parameters["threads"]["mitohifi_reads"],
+        cpus=1, #parameters["threads"]["mitohifi_reads"],
         time=parameters["time"]["mitohifi_reads"],
-        mem=parameters["memory_mb"]["mitohifi_reads"]
+        mem=100, #parameters["memory_mb"]["mitohifi_reads"]
     threads: parameters["threads"]["mitohifi_reads"]
     shell:
         " OUT_DIR=`realpath -m {output.finish_flag}`; "

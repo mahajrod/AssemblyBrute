@@ -69,7 +69,7 @@ rule mitohifi_reads:
         node_options=parse_node_list("mitohifi_reads"),
         cpus=1, #parameters["threads"]["mitohifi_reads"],
         time=parameters["time"]["mitohifi_reads"],
-        mem=100, #parameters["memory_mb"]["mitohifi_reads"]
+        mem=1000, #parameters["memory_mb"]["mitohifi_reads"]
     threads: 1 #parameters["threads"]["mitohifi_reads"]
     shell:
         " OUT_DIR=`realpath -m {output.finish_flag}`; "

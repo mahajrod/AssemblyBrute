@@ -162,7 +162,7 @@
 "telomere_motif": "CCCTAA"  # telomere motif at 5'-end; CCCTAA for human, place null if unknown
 "use_canonical_telomere": True
 
-"species_name": "Cranioleuca antisianus"
+"species_name": "Cranioleuca antisiensis"
 "tax_id": 86267  # necessary for contamination scan via FCS
 "bird_genome": True
 "kingdom": "animal"  # "animal", "plant" or "fungi"

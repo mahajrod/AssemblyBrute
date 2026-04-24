@@ -54,10 +54,10 @@ rule mitohifi_reads:
         min_mapping_quality=parameters["tool_options"]["mitohifi"]["min_mapping_quality"],
         genome_prefix=config["genome_prefix"]
     log:
-        cp=output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{stage}.{fileprefix}.cp.log",
-        cd=output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{stage}.{fileprefix}.cd.log",
-        sed=output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{stage}.{fileprefix}.sed.log",
-        mitohifi=output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{stage}.{fileprefix}.mitohifi.log",
+        cp=(output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{stage}.{fileprefix}.cp.log").resolve(),
+        cd=(output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{stage}.{fileprefix}.cd.log").resolve(),
+        sed=(output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{stage}.{fileprefix}.sed.log").resolve(),
+        mitohifi=(output_dict["log"]  / "mitohifi_reads.{mtdna_ref}.{stage}.{fileprefix}.mitohifi.log").resolve(),
         cluster_log=output_dict["cluster_log"] / "mitohifi_reads.{stage}.{mtdna_ref}.{fileprefix}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "mitohifi_reads.{stage}.{mtdna_ref}.{fileprefix}.err"
     benchmark:
@@ -79,7 +79,6 @@ rule mitohifi_reads:
         " REF_FASTA=`realpath {input.mtdna_ref_fasta}`; "
         " REF_GB=`realpath {input.mtdna_ref_gb}`; "
         " REF_DIR=`dirname ${{REF_FASTA}}`; "
-        " MITOHIFI_LOG=`realpath {log.mitohifi}`; "
         " OUTPUT_PREFIX={params.genome_prefix}.mtdna.mitohifi.ref_{wildcards.mtdna_ref}.hifi.{wildcards.fileprefix}.{wildcards.stage}; "
         " cp -f {input.mtdna_ref_fasta} {input.mtdna_ref_gb} ${{OUT_DIR}} > {log.cp} 2>&1; "
         " cd ${{OUT_DIR}} > {log.cd} 2>&1; "
@@ -99,7 +98,7 @@ rule mitohifi_reads:
         #"                 {params.sif} mitohifi.py "
         #"                 -r ${{HIFI_READS}} -f ${{REF_FASTA}} -g ${{REF_GB}} "
         #"                 -t {threads} -a {params.kingdom} -covMap {params.min_mapping_quality} "
-        #"                 -o {params.genetic_code} > ${{MITOHIFI_LOG}} 2>&1 || true; "
+        #"                 -o {params.genetic_code} > {log.mitohifi} 2>&1 || true; "
 
 
 use rule mitohifi_reads as mitohifi_combined_reads with:

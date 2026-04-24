@@ -150,3 +150,4 @@ get_recommended_mtDNA_reference	1	1	1	1	1	1	1	1	1
 combine_long_reads	1	1	1	1	1	1	1	1	1
 downsample_pe_reads	1	1	1	1	1	1	1	1	1
 mitoz	10	10	10	10	10	10	10	10	10
+get_meryl_histo	1	1	1	1	1	1	1	1	1

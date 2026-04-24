@@ -70,7 +70,7 @@ rule mitohifi_reads:
         cpus=1, #parameters["threads"]["mitohifi_reads"],
         time=parameters["time"]["mitohifi_reads"],
         mem=100, #parameters["memory_mb"]["mitohifi_reads"]
-    threads: parameters["threads"]["mitohifi_reads"]
+    threads: 1 #parameters["threads"]["mitohifi_reads"]
     shell:
         " OUT_DIR=`realpath -m {output.finish_flag}`; "
         " OUT_DIR=`dirname ${{OUT_DIR}}`; "

@@ -783,7 +783,7 @@ if ("filter_reads" in config["stage_list"]) and (not config["skip_filter_reads"]
                            stage=["filtered",],
                            kmer_tool=[kmer_tool,],
                            kmer_length=parameters["tool_options"][kmer_tool][dat_type]["kmer_length"],
-                           read_prefix=input_pair_prefix_dict[dat_type] if dat_type in config["paired_fastq_based_data"] else input_file_prefix_dict[dat_type],
+                           read_prefix=input_pairprefix_dict[dat_type] if dat_type in config["paired_fastq_based_data"] else input_file_prefix_dict[dat_type],
                            ) for kmer_tool in config["kmer_counter_list"] ]  for dat_type in genome_size_estimation_data_type_set],
 
     results_list += [expand(output_dict["qc"] / "fastqc/{datatype}/{stage}/{fileprefix}_fastqc.zip",

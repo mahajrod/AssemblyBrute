@@ -212,7 +212,7 @@ rule merge_meryl:
     shell:
          " workflow/external_tools/meryl-1.4/bin/meryl threads={threads} memory={resources.mem}m"
          " union-sum output {output.db_dir} {input} 1>{log.count_log} 2>&1;"
-         " workflow/external_tools/meryl-1.4/bin/meryl threads={threads} memory={resources.mem}m "
+         #" workflow/external_tools/meryl-1.4/bin/meryl threads={threads} memory={resources.mem}m "
          #" histogram {output.db_dir} > {output.histo} 2>{log.histo_log}"
 
 
@@ -233,13 +233,14 @@ rule get_meryl_histo:
         config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
         queue=config["queue"]["cpu"],
-        node_options=parse_node_list("merge_meryl"),
-        cpus=parameters["threads"]["meryl"],
-        time=parameters["time"]["meryl"],
-        mem=lambda wildcards, attempt: attempt * parameters["memory_mb"]["meryl"],
+        node_options=parse_node_list("get_meryl_histo"),
+        cpus=parameters["threads"]["get_meryl_histo"],
+        time=parameters["time"]["get_meryl_histo"],
+        mem=lambda wildcards, attempt: attempt * parameters["memory_mb"]["get_meryl_histo"],
     threads:
         parameters["threads"]["meryl"]
     shell:
+         " workflow/external_tools/meryl-1.4/bin/meryl threads={threads} memory={resources.mem}m "
          " histogram {input.db} > {output.histo} 2>{log.histo_log}"
 
 

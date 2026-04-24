@@ -772,18 +772,20 @@ if ("filter_reads" in config["stage_list"]) and (not config["skip_filter_reads"]
                            kmer_tool=[kmer_tool,],
                            kmer_length=parameters["tool_options"][kmer_tool][dat_type]["kmer_length"],
                            ) for kmer_tool in config["kmer_counter_list"] ]  for dat_type in genome_size_estimation_data_type_set],
+
+
                     ]
-    #if not config["skip_krater"]:
-    #    results_list += [[[expand(output_dict["kmer"] / "{datatype}/{stage}/{analysis_tool}/{datatype}.{stage}.{kmer_length}.{kmer_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.histo.stats",
-    #                       datatype=[dat_type,],
-    #                       genome_prefix=[config["genome_prefix"], ],
-    #                       analysis_tool=["krater"],
-    #                       stage=["filtered",],
-    #                       kmer_tool=[kmer_tool,],
-    #                       kmer_length=parameters["tool_options"][kmer_tool][dat_type]["kmer_length"],
-    #                       ) for kmer_tool in config["kmer_counter_list"] ]  for dat_type in genome_size_estimation_data_type_set],]
-    #print([pairprefix + suffix for suffix in ("_1", "_2") for pairprefix in input_pairprefix_dict[datatype]])
-    #print(set(config["paired_fastq_based_data"]) & fastq_based_data_type_set)
+    if not config["skip_per_lib_genome_estimation"]:
+        results_list += [[expand(output_dict["kmer"] / "{datatype}/{stage}/{analysis_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{read_prefix}.{analysis_tool}.parameters",
+                           datatype=[dat_type,],
+                           genome_prefix=[config["genome_prefix"], ],
+                           analysis_tool=["genomescope"] + (["krater"] if not config["skip_krater"] else []),
+                           stage=["filtered",],
+                           kmer_tool=[kmer_tool,],
+                           kmer_length=parameters["tool_options"][kmer_tool][dat_type]["kmer_length"],
+                           read_prefix=input_pair_prefix_dict[dat_type] if dat_type in config["paired_fastq_based_data"] else input_file_prefix_dict[dat_type],
+                           ) for kmer_tool in config["kmer_counter_list"] ]  for dat_type in genome_size_estimation_data_type_set],
+
     results_list += [expand(output_dict["qc"] / "fastqc/{datatype}/{stage}/{fileprefix}_fastqc.zip",
                             datatype=[dat_type, ],
                             stage=["filtered", ],

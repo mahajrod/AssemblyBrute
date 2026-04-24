@@ -49,3 +49,5 @@
 "skip_mitoz": False
 "skip_mitoz_hic": False
 "skip_mitoz_illumina": False
+
+"skip_per_lib_genome_estimation": False

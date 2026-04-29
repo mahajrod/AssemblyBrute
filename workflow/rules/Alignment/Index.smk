@@ -99,7 +99,7 @@ rule index_bam:
         mem=partial(get_memory, start_mem=parameters["memory_mb"]["samtools_index"], coeff=1.5, mode="exp")
     threads: parameters["threads"]["samtools_index"]
     shell:
-        " samtools index -@ {threads} {input} > {log.std} 2>&1; "
+        " samtools index -@ {threads} {input.bam} > {log.std} 2>&1; "
 
 rule index_bam_csi:
     input:
@@ -123,4 +123,4 @@ rule index_bam_csi:
         mem=partial(get_memory, start_mem=parameters["memory_mb"]["samtools_index"], coeff=1.5, mode="exp")
     threads: parameters["threads"]["samtools_index"]
     shell:
-        " samtools index -c -@ {threads} {input} > {log.std} 2>&1; "
+        " samtools index -c -@ {threads} {input.bam} > {log.std} 2>&1; "

@@ -156,21 +156,21 @@ if candidate_agp_filename:
             #precurated_fasta_dict="{fasta_dir}/{merged_haplotype}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.dict",
             log_dir="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/"
         output:
-            intermediate_bam="{fasta_dir}/{merged_haplotype, combined|reordered}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.rmdup.intermediate.bam",
-            precurated_bam="{fasta_dir}/{merged_haplotype, combined|reordered}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.rmdup.precurated.bam"
+            intermediate_bam="{fasta_dir}/{merged_haplotype, combined|reordered}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{merged_haplotype}.rmdup.intermediate.bam",
+            precurated_bam="{fasta_dir}/{merged_haplotype, combined|reordered}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{merged_haplotype}.rmdup.precurated.bam"
         params:
             sort_threads=parameters["threads"]["samtools_sort"],
             sort_per_thread=parameters["memory_mb"]["samtools_sort_per_thread"]
         log:
-            view_header="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.view_header.log",
-            reorder="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.reorder.log",
-            view_records="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.view_records.log",
-            compress="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.compress.log",
-            sort="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.sort.log",
-            cluster_log="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.cluster.log",
-            cluster_err="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.cluster.err"
+            view_header="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{merged_haplotype}.view_header.log",
+            reorder="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{merged_haplotype}.reorder.log",
+            view_records="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{merged_haplotype}.view_records.log",
+            compress="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{merged_haplotype}.compress.log",
+            sort="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{merged_haplotype}.sort.log",
+            cluster_log="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{merged_haplotype}.cluster.log",
+            cluster_err="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{merged_haplotype}.cluster.err"
         benchmark:
-            "{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_fasta.{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.benchmark.txt"
+            "{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_fasta.{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{merged_haplotype}.benchmark.txt"
         conda:
             config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
         resources:

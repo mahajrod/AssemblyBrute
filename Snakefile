@@ -336,7 +336,7 @@ localrules: all
 #ruleorder: create_fastq_links > fastqc
 #include: "workflow/rules/Contigs/Hifiasm.smk"
 print(stage_dict)
-
+print(datatype_format_dict)
 results_dict = {}
 
 haplotype_list = ["hap{0}".format(i) for i in range(1, config["ploidy"] + 1)] # TODO: obsolete: remove and fix issues

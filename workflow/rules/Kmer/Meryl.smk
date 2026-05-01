@@ -130,7 +130,7 @@ def get_meryl_dbs_for_merging(wildcards):
                                                                                               wildcards.stage,
                                                                                               wildcards.kmer_length,)),
             fileprefix=input_file_prefix_dict[datatype] if datatype_format_dict[datatype] == "fastq" else
-                       input_fasta_file_prefix_dict[datatype],allow_missing=True,) if datatype not in config["paired_fastq_based_data"] else \
+                       input_fasta_file_prefix_dict[datatype], allow_missing=True,) if datatype not in config["paired_fastq_based_data"] else \
             expand(rules.meryl_pe.output,
                 pairprefix=input_pairprefix_dict[datatype],
                 allow_missing=True,)

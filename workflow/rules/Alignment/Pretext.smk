@@ -414,7 +414,7 @@ rule pretext_inject_tracks:
         " "
         " if [ -s {input.gap_track}.{wildcards.subset}.tmp ] ; "
         " then "
-        "   echo \"Injecting {input.gap_track}.{wildcards.subset}.tmp...\" >> {log.injection}"
+        "   echo \"Injecting {input.gap_track}.{wildcards.subset}.tmp...\" >> {log.injection}; "
         "   cat {input.gap_track}.{wildcards.subset}.tmp | PretextGraph -i {output.updated_map} -n gap >> {log.injection} 2>&1; "
         " fi; "
         " if [[ -s {input.canonical_telomere_tidk_track}.{wildcards.subset}.tmp ]]; "

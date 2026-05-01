@@ -178,7 +178,7 @@ if candidate_agp_filename:
             node_options=parse_node_list("get_precurated_bam"),
             cpus=parameters["threads"]["samtools_sort"] + parameters["threads"]["get_precurated_bam"],
             time=parameters["time"]["get_precurated_bam"],
-            mem=parameters["time"]["get_precurated_bam"] + parameters["memory_mb"]["samtools_sort_per_thread"] * parameters["threads"]["samtools_sort"]
+            mem=parameters["memory_mb"]["get_precurated_bam"] + parameters["memory_mb"]["samtools_sort_per_thread"] * parameters["threads"]["samtools_sort"]
 
         threads: parameters["threads"]["samtools_sort"] + parameters["threads"]["get_precurated_bam"]
 

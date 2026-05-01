@@ -417,7 +417,7 @@ rule pretext_inject_tracks:
         " if [ -s {input.gap_track}.tmp ] ; "
         " then "
         "   echo \"Injecting {input.gap_track}.tmp...\" >> {log.injection}"
-        "   cat {output.tmp_gap_track}.tmp | PretextGraph -i {output.updated_map} -n gap >> {log.injection} 2>&1; "
+        "   cat {input.gap_track}.tmp | PretextGraph -i {output.updated_map} -n gap >> {log.injection} 2>&1; "
         " fi; "
         " if [[ -s {input.canonical_telomere_tidk_track}.tmp ]]; "
         "   then "

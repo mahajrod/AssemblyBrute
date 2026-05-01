@@ -383,7 +383,7 @@ rule pretext_inject_tracks:
     log:
         preprocessing=output_dict["log"]  / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.preprocessing.log",
         injection=output_dict["log"]  / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.injection.log",
-        injection_clean=output_dict["log"]  / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.injection.clean.log",
+        #injection_clean=output_dict["log"]  / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.injection.clean.log",
         cluster_log=output_dict["cluster_log"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.cluster.err"
     benchmark:
@@ -402,7 +402,6 @@ rule pretext_inject_tracks:
         " cp -f {input.map} {output.updated_map}; "
         " > {log.preprocessing}; "
         " > {log.injection}; "
-        " > {log.injection_clean}; "
         " echo -e \"Preprocessing ...\\n\" >> {log.preprocessing}; "
         " for TRACK in {input.gap_track} {input.canonical_telomere_track} {input.non_canonical_telomere_track} {input.canonical_telomere_tidk_track} {input.non_canonical_telomere_tidk_track}; "
         " do "
@@ -581,4 +580,4 @@ rule pretext_inject_tracks:
         "               done; "
         "           done; "
         "       fi; "
-        " grep -vP '^Warning:' {log.injection} > {log.injection_clean}; "
+        #" grep -vP '^Warning:' {log.injection} > {log.injection_clean}; "

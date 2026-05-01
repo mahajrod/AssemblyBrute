@@ -402,6 +402,8 @@ rule pretext_inject_tracks:
         " cp -f {input.map} {output.updated_map}; "
         " > {log.preprocessing}; "
         " > {log.injection}; "
+        " > {log.injection_clean}; "
+        " echo -e \"Preprocessing ...\\n\" >> {log.preprocessing}; "
         " for TRACK in {input.gap_track} {input.canonical_telomere_track} {input.non_canonical_telomere_track} {input.canonical_telomere_tidk_track} {input.non_canonical_telomere_tidk_track}; "
         " do "
         "   if [[ -s ${{TRACK}} ]]; "

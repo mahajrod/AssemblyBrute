@@ -255,7 +255,7 @@ if candidate_agp_filename:
 
     use rule pretext_inject_tracks as pretext_inject_tracks_per_chr with:
         input:
-            map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/per_chr/{genome_prefix}.{assembly_stage}.{haplotype}.{phasing_kmer_length}.{candidate_chr_id}.rmdup.predurated.mapq{mapq}.{res}.pretext",
+            map=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/per_chr/{genome_prefix}.{assembly_stage}.{haplotype}.{phasing_kmer_length}.{candidate_chr_id}.rmdup.precurated.mapq{mapq}.{res}.pretext",
             filtered_out=output_dict["data"] / "candidate_chr/candidate.{candidate_chr_id}.pretext.blacklist",
             gap_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.gap.track.bedgraph",
             canonical_telomere_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical.telomere.pretext.bedgraph",

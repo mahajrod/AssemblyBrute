@@ -582,4 +582,3 @@ rule pretext_inject_tracks:
         "      done; "
         "   done; "
         " fi; "
-        #" grep -vP '^Warning:' {log.injection} > {log.injection_clean}; "

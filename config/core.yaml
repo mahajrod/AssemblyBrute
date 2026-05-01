@@ -3136,6 +3136,7 @@
     #- "nanopore"
     - "duplex"
     - "simplex"
+    - "ultralong_nanopore"
     #- "bionano"
     - "hic"
     - "illumina"
@@ -3161,6 +3162,7 @@
     - "duplex"
     - "simplex"
     - "lqccs"
+    - "ultralong_nanopore"
 
 "genome_size_estimation_data":
     - "hifi"
@@ -3178,6 +3180,7 @@
     - "duplex"
     - "simplex"
     - "lqccs"
+    - "ultralong_nanopore"
 
 "read_phasing_data":
     - "hic"
@@ -3194,6 +3197,7 @@
     - "hic"
     - "lr"
     - "illumina"
+    - "ultralong_nanopore"
 
 "bam_based_data":
     - "hifi"
@@ -3202,6 +3206,7 @@
     #- "nanopore"
     - "duplex"
     - "simplex"
+    - "ultralong_nanopore"
 
 "fasta_based_data": # Datatypes that might be in fasta format. For example corrected hifi or nanopore reads
     - "hifi"
@@ -3213,6 +3218,7 @@
     #- "hic"
     #- "lr"
     - "illumina"
+    - "ultralong_nanopore"
 
 "paired_fastq_based_data":
     - "hic"
@@ -3223,6 +3229,7 @@
     - "illumina"
     - "hifi"
     - "simplex"
+    - "ultralong_nanopore"
     #- "clr"
     ##- "nanopore" # TODO: add nanopore support
 
@@ -3239,6 +3246,7 @@
     #- "nanopore"
     - "duplex"
     - "simplex"
+    - "ultralong_nanopore"
 
 "variant_calling_data":
     - "hifi"

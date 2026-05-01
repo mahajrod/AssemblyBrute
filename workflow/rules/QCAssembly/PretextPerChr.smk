@@ -151,13 +151,22 @@ if candidate_agp_filename:
         input:
             bam="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{merged_haplotype}.rmdup.bam",
             bam_index="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{merged_haplotype}.rmdup.bam.csi",
-            precurated_fasta="{fasta_dir}/{merged_haplotype}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.fasta",
-            precurated_fasta_dict="{fasta_dir}/{merged_haplotype}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.dict",
+            precurated_scaffold_orderlist="{fasta_dir}/{merged_haplotype}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.orderlist",
+            #precurated_fasta="{fasta_dir}/{merged_haplotype}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.fasta",
+            #precurated_fasta_dict="{fasta_dir}/{merged_haplotype}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.precurated.dict",
             log_dir="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/"
         output:
+            intermediate_bam="{fasta_dir}/{merged_haplotype, combined|reordered}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.rmdup.intermediate.bam",
             precurated_bam="{fasta_dir}/{merged_haplotype, combined|reordered}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.rmdup.precurated.bam"
+        params:
+            sort_threads=parameters["threads"]["samtools_sort"],
+            sort_per_thread=parameters["memory_mb"]["samtools_sort_per_thread"]
         log:
-            log="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.log",
+            view_header="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.view_header.log",
+            reorder="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.reorder.log",
+            view_records="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.view_records.log",
+            compress="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.compress.log",
+            sort="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.sort.log",
             cluster_log="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.cluster.log",
             cluster_err="{fasta_dir}/{merged_haplotype}/alignment/{phasing_kmer_length}/log/get_precurated_bam.{genome_prefix}.{assembly_stage}.{merged_haplotype}.{phasing_kmer_length}.cluster.err"
         benchmark:
@@ -167,16 +176,20 @@ if candidate_agp_filename:
         resources:
             queue=config["queue"]["cpu"],
             node_options=parse_node_list("get_precurated_bam"),
-            cpus=parameters["threads"]["get_precurated_bam"] ,
+            cpus=parameters["threads"]["samtools_sort"] + parameters["threads"]["get_precurated_bam"],
             time=parameters["time"]["get_precurated_bam"],
-            mem=parameters["memory_mb"]["get_precurated_bam"]
-        threads: parameters["threads"]["get_precurated_bam"]
+            mem=parameters["time"]["get_precurated_bam"] + parameters["memory_mb"]["samtools_sort_per_thread"] * parameters["threads"]["samtools_sort"]
+
+        threads: parameters["threads"]["samtools_sort"] + parameters["threads"]["get_precurated_bam"]
 
         shell:
-            " picard -Xmx{resources.mem}m ReorderSam --SEQUENCE_DICTIONARY {input.precurated_fasta} "
-            "        --TMP_DIR `dirname {output.precurated_bam}` --MAX_RECORDS_IN_RAM 10000000 "
-            "        --ALLOW_INCOMPLETE_DICT_CONCORDANCE --VALIDATION_STRINGENCY SILENT "
-            "        -I {input.bam} -O {output.precurated_bam}  > {log.log} 2>&1; "
+            " TMP_DIR=`dirname {output.precurated_bam}`; "
+            " (samtools view -H {input.bam} 2>{log.view_header} | "
+            "      workflow/scripts/alignment/reorder_scaffolds_in_sam_header.py -r {input.precurated_scaffold_orderlist} 2>{log.reorder}; "
+            "      samtools view {input.bam} 2>{log.view_records}) | "
+            "    samtools view -b -@ {params.sort_threads} > {output.intermediate_bam} 2>{log.compress}; "
+            "  samtools sort -T ${{TMP_DIR}}/tmp.precurated.sort -@ {params.sort_threads} -m {params.sort_per_thread}M "
+            "  -o {output.precurated_bam} {output.intermediate_bam} > {log.sort} 2>&1; "
 
 
     rule pretextmap_chr:

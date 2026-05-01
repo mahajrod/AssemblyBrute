@@ -3171,6 +3171,7 @@
     #- "nanopore"
     - "simplex"
     - "duplex"
+    - "ultralong_nanopore"
 
 "kraken_scan_data":
     - "hifi"

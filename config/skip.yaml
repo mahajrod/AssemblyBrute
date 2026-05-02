@@ -51,3 +51,10 @@
 "skip_mitoz_illumina": False
 
 "skip_per_lib_genome_estimation": False
+
+# Set "skip_porechop_abi" to true if you are sure that adapters and other service sequences
+# are already trimmed in the input data.
+# Porechop still will be run, but for qc purposes.
+# The downstream analysis (starting from chopper for quality filtration) will use raw reads.
+
+"skip_porechop_abi": False

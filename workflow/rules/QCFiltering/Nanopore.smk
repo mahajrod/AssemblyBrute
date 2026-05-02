@@ -30,7 +30,8 @@ rule porechop_abi:
 
 rule chopper:
     input:
-        rules.porechop_abi.output#trimmed_fastq=output_dict["data"] / ("fastq/nanopore/trimmed/{fileprefix}%s" % config["fastq_extension"]),
+        input_fastq=output_dict["data"] / ("fastq/{datatype}/%s/{fileprefix}%s" % ("trimmed" if not config["skip_porechop_abi"] else "raw",
+                                                                                   config["fastq_extension"]))
     output:
         filtered_fastq=output_dict["data"] / ("fastq/{datatype, nanopore|simplex|duplex|ultralong-nanopore}/filtered/{fileprefix, [^/]+}%s" % config["fastq_extension"]),
     params:

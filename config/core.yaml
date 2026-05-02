@@ -609,9 +609,9 @@
                             - 21
                     "ultralong-nanopore":
                         "kmer_length":
-                            - 17
+                            - 19
                             - 21
-                            - 15
+                            #- 15
                             #- 31
                             #- 41 #very RAM hungry option
             "select_scaffolds":

@@ -582,18 +582,19 @@ if "draft_qc" in config["stage_list"]:
     """
 
     if candidate_agp_filename is not None:
-            results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/per_chr/{genome_prefix}.{assembly_stage}.{haplotype}.NA.{candidate_chr_id}.rmdup.precurated.mapq{mapq}.{res}.tracks.pretext",
-                                    candidate_chr_id=candidate_chr_id_list,
-                                    assembly_stage=[current_stage],
-                                    parameters=[parameter_label],
-                                    haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
-                                    genome_prefix=[config["genome_prefix"], ],
-                                    res=["high_res"],
-                                    mapq=parameters["tool_options"]["pretextmap"]["mapq"],
-                                    #window=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["window"],
-                                    #step=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
-                                    ) for parameter_label in stage_dict[current_stage]["parameters"] for window_step_set in config["qc_settings"]["windows_sets"]]
-                             ]
+        print(candidate_agp_filename)
+        results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/per_chr/{genome_prefix}.{assembly_stage}.{haplotype}.NA.{candidate_chr_id}.rmdup.precurated.mapq{mapq}.{res}.tracks.pretext",
+                                candidate_chr_id=candidate_chr_id_list,
+                                assembly_stage=[current_stage],
+                                parameters=[parameter_label],
+                                haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
+                                genome_prefix=[config["genome_prefix"], ],
+                                res=["high_res"],
+                                mapq=parameters["tool_options"]["pretextmap"]["mapq"],
+                                #window=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["window"],
+                                #step=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
+                                ) for parameter_label in stage_dict[current_stage]["parameters"] for window_step_set in config["qc_settings"]["windows_sets"]]
+                         ]
 
     if "gap_closing" in config["stage_list"]:
         current_stage = "gap_closing"

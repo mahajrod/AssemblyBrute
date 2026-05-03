@@ -270,6 +270,7 @@
 "skip_mitoz": True
 "skip_mitohifi": True
 "skip_purge_dups_qc": True
+"skip_per_lib_genome_estimation": True
 
 "create_hic_file_during_curation": False
 #------------ Options specific for cluster ------------

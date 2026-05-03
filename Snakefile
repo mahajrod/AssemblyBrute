@@ -581,7 +581,7 @@ if "draft_qc" in config["stage_list"]:
                       ]
     """
 
-    if candidate_agp_filename is not None:
+    if candidate_agp_filename:
         print(candidate_agp_filename)
         results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/per_chr/{genome_prefix}.{assembly_stage}.{haplotype}.NA.{candidate_chr_id}.rmdup.precurated.mapq{mapq}.{res}.tracks.pretext",
                                 candidate_chr_id=candidate_chr_id_list,

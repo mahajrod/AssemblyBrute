@@ -223,8 +223,8 @@
 "mode": "qc"                      # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
-"assembly_mode": "draft_qc" #"hic_scaffolding"       # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
-"finalization_mode": "draft_qc"
+#"assembly_mode": "draft_qc" #"hic_scaffolding"       # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
+#"finalization_mode": "draft_qc"
 
 
 "custom_preprocessing_stages": []

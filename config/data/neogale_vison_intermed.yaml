@@ -268,6 +268,8 @@
 "skip_draft_qc_ragtag": True
 "skip_draft_qc_wga": False
 "skip_purge_dups_qc": True
+"skip_mitohifi": True
+"skip_mitoz": True
 
 "create_hic_file_during_curation": False
 #------------ Options specific for cluster ------------

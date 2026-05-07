@@ -3287,6 +3287,10 @@
                 - "filter_reads"
                 #- "filter_draft"
                 - "draft_qc"
+        "qc_draft_only":
+            "fastq": []
+            "draft":
+                - "draft_qc"
     "assembly": #TODO: add bionano
         "default": # same as "full"
             "fastq":

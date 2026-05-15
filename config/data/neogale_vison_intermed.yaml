@@ -145,7 +145,7 @@
         - "custom"
     "assembly_scaffold_sets":
         - "long"
-        - "short"
+        #- "short"
     "threshold_types":
         - "absolute"
         - "relative"
@@ -165,6 +165,7 @@
 "genome_prefix": "mNeoVisN"
 "busco_lineage_list":
     - "mammalia_odb10"
+    - "vertebrata_odb10"
     #- "carnivora_odb10" #
 
 "telomere_motif": "CCCTAA"  # telomere motif at 5'-end; CCCTAA for human, place null if unknown

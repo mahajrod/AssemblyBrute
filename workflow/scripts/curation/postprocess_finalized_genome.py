@@ -150,7 +150,10 @@ try:
         output_filename_dict = {}
         for ext in "len", "description", "reorderlist", "fasta", "whitelist", "orderlist", "chromosomes":
             tmp_filename_dict[ext] =  tmp_dir_path / f"{main_output_prefix}.{ext}"
-            output_filename_dict[ext] = out_dir_path / f"{main_output_prefix}.{ext}"
+            if ext == "chromosomes":
+                output_filename_dict[ext] = out_dir_path / f"{main_output_prefix}.{ext}.csv"
+            else:
+                output_filename_dict[ext] = out_dir_path / f"{main_output_prefix}.{ext}"
 
         # read fasta
         fasta_collection = CollectionSequence(in_file=hap_filename_dict[haplotype], get_stats=True)

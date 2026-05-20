@@ -224,7 +224,7 @@
 "assembly_kmer_length":
     - 31 # kmer length to be used for phasing hic reads using assembled and purge_dupsed contigs
 "phasing_stage": "draft_qc"
-
+"gap_closing_datatype": "hifi"
 "contig_datatype": "hifi"
 "hic_enzyme_set": "Arima"
 "custom_enzyme_set": null # None

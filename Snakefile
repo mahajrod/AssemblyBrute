@@ -337,6 +337,7 @@ localrules: all
 print(stage_dict)
 print(datatype_format_dict)
 print(input_file_prefix_dict)
+print(input_fasta_file_prefix_dict)
 results_dict = {}
 
 haplotype_list = ["hap{0}".format(i) for i in range(1, config["ploidy"] + 1)] # TODO: obsolete: remove and fix issues

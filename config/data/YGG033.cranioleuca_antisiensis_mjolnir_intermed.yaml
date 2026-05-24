@@ -178,7 +178,7 @@
 
 "species_name": "Cranioleuca antisiensis"
 "tax_id": 86267  # necessary for contamination scan via FCS
-"bird_genome": True
+"bird_genome": False
 "kingdom": "animal"  # "animal", "plant" or "fungi"
 "mitoz_clade": "Chordata" #Allowed: {Chordata,Arthropoda,Echinodermata,Annelida-segmented-worms,Bryozoa,Mollusca,Nematoda,Nemertea-ribbon-worms,Porifera-sponges}
 "mtdna_genetic_code":  2 # Organism genetic code should be one from the NCBI table:

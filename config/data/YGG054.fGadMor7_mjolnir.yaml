@@ -90,6 +90,7 @@
     - "purge_dups"
     - "hic_scaffolding"
     - "ref_scaffolding"
+    - "contig"
 
 "qc_settings":
     "windows_sets":
@@ -118,7 +119,7 @@
          #- "l0primary"
          - "l1primary"
          #- "l2primary"
-         #- "l3primary"
+         - "l3primary"
          #- "l1primary_no_hic"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
@@ -160,7 +161,8 @@
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
 "genome_prefix": "fGadMor7" #"YGG048.GadMorReseq"
 "busco_lineage_list":
-    - "actinopterygii_odb10" #
+    - "actinopterygii_odb10"
+    - "vertebrata_odb10" #
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
 "telomere_motif": "CCCTAA"  # telomere motif at 5'-end; CCCTAA for human, place null if unknown

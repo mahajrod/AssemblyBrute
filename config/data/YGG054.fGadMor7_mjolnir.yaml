@@ -59,6 +59,7 @@
     "deepvariant":
         "cpu": "/maps/projects/tomg/people/xsg178/soft/deepvariant/deepvariant_1.5.0.sif"
         "gpu": null #"gpu": "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
+    "mitohifi":             "docker://ghcr.io/marcelauliano/mitohifi:master"
 
 'alternative_tmp_dir': None
 

@@ -26,6 +26,9 @@ with open(config["main_config_file"], "r") as core_yaml_fd:
 #-------- Read secondary tools config file -------
 with open(config["secondary_tool_config_file"], "r") as secondary_tool_fd:
     copy_absent_entries(yaml.safe_load(secondary_tool_fd), config)
+#-------- Read cluster config file ---------
+with open(config["cluster_config_file"], "r") as cluster_fd:
+    copy_absent_entries(yaml.safe_load(cluster_fd), config)
 #-------- Read 'skip' config file --------
 with open(config["skip_config_file"], "r") as skip_yaml_fd:
     for key, value in yaml.safe_load(skip_yaml_fd).items():

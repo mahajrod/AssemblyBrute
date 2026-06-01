@@ -16,7 +16,7 @@ rule porechop_abi:
     conda:
         config["conda"]["nanopore"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["nanopore"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("porechop_abi"),
         cpus=parameters["threads"]["porechop_abi"],
         time=parameters["time"]["porechop_abi"],
@@ -51,7 +51,7 @@ rule chopper:
     conda:
         config["conda"]["nanopore"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["nanopore"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("chopper"),
         cpus=parameters["threads"]["chopper"],
         time=parameters["time"]["chopper"],

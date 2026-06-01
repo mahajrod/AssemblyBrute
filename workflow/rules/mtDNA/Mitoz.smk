@@ -67,7 +67,7 @@ rule mitoz:
         max_raw_data=3, # Gbp
         max_filtered_data=0, # Gbp
     log:
-        mitoz=output_dict["log"]  / "mitoz.{datatype}.{stage}.{pairprefix}.mitozlog",
+        mitoz=output_dict["log"]  / "mitoz.{datatype}.{stage}.{pairprefix}.mitoz.log",
         sed=output_dict["log"]  / "mitoz.{datatype}.{stage}.{pairprefix}.sed.log",
         cluster_log=output_dict["cluster_log"] / "mitoz.{datatype}.{stage}.{pairprefix}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "mitoz.{datatype}.{stage}.{pairprefix}.cluster.err"

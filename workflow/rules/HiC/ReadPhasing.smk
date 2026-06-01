@@ -13,7 +13,7 @@ rule meryl_assembly:
     conda:
         config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("meryl_assembly"),
         cpus=parameters["threads"]["meryl_assembly"],
         time=parameters["time"]["meryl_assembly"],
@@ -47,7 +47,7 @@ rule meryl_extract_unique_hap_kmers:
     conda:
         config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("meryl_extract_unique_hap_kmers"),
         cpus=parameters["threads"]["meryl_extract_unique_hap_kmers"],
         time=parameters["time"]["meryl_extract_unique_hap_kmers"],
@@ -89,7 +89,7 @@ rule extract_pe_reads_by_unique_hap_kmers:
     conda:
         config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("extract_pe_reads_by_unique_hap_kmers"),
         cpus=parameters["threads"]["extract_reads_by_unique_hap_kmers"],
         time=parameters["time"]["extract_reads_by_unique_hap_kmers"],
@@ -125,7 +125,7 @@ rule extract_se_reads_by_unique_hap_kmers:
     conda:
         config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("extract_se_reads_by_unique_hap_kmers"),
         cpus=parameters["threads"]["extract_reads_by_unique_hap_kmers"],
         time=parameters["time"]["extract_reads_by_unique_hap_kmers"],
@@ -161,7 +161,7 @@ rule extract_se_reads_from_fasta_by_unique_hap_kmers: #TODO: merge with extract_
     conda:
         config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("extract_se_reads_from_fasta_by_unique_hap_kmers"),
         cpus=parameters["threads"]["extract_reads_by_unique_hap_kmers"],
         time=parameters["time"]["extract_reads_by_unique_hap_kmers"],

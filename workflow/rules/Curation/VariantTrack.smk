@@ -24,7 +24,7 @@ rule add_basequalities_to_bam: #adds basequalities to bam generated from fasta (
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("add_basequalities_to_bam"),
         cpus=parameters["threads"]["add_basequalities_to_bam"],
         time=parameters["time"]["add_basequalities_to_bam"],
@@ -68,7 +68,7 @@ rule deepvariant: #
     conda:
         config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
     resources:
-        queue=config["queue"]["gpu"] if config["queue"]["gpu"] and config["queue"]["gpu"] and config["tool_containers"]["deepvariant"]["gpu"] else config["queue"]["cpu"],
+        queue=config["queue"]["gpu"]["name"] if config["queue"]["gpu"] and config["queue"]["gpu"] and config["tool_containers"]["deepvariant"]["gpu"] else config["queue"]["cpu"],
         node_options=parse_node_list("deepvariant"),
         cpus=parameters["threads"]["deepvariant"],
         time=parameters["time"]["deepvariant"],
@@ -116,7 +116,7 @@ rule deepvariant_filter: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         cpus=parameters["threads"]["deepvariant_filter"],
         time=parameters["time"]["deepvariant_filter"],
         mem=parameters["memory_mb"]["deepvariant_filter"]

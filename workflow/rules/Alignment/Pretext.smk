@@ -22,7 +22,7 @@ rule pretextmap: # #Pretext-map probably doesn't support long file names!!!!!!!!
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pretextmap"),
         cpus=parameters["threads"]["pretextmap"] ,
         time=parameters["time"]["pretextmap"],
@@ -66,7 +66,7 @@ rule pretextsnapshot: #Pretext-snapshot doesn't support long file names!!!!!!!!!
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pretextsnapshot"),
         cpus=parameters["threads"]["pretextsnapshot"] ,
         time=parameters["time"]["pretextsnapshot"],
@@ -160,7 +160,7 @@ rule pretext_inject_tracks:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pretext_inject_tracks"),
         cpus=parameters["threads"]["pretext_inject_tracks"] ,
         time=parameters["time"]["pretext_inject_tracks"],
@@ -391,7 +391,7 @@ rule pretext_inject_tracks:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pretext_inject_tracks"),
         cpus=parameters["threads"]["pretext_inject_tracks"] ,
         time=parameters["time"]["pretext_inject_tracks"],

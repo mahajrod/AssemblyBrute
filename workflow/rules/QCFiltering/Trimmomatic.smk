@@ -32,7 +32,7 @@ rule trimmomatic_pe:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("trimmomatic_pe"),
         cpus=parameters["threads"]["trimmomatic_pe"],
         time=parameters["time"]["trimmomatic_pe"],

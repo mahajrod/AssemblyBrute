@@ -30,7 +30,7 @@ rule tadbit:
     conda:
         config["conda"]["tadbit"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["tadbit"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("tadbit"),
         cpus=parameters["threads"]["tadbit"],
         time=parameters["time"]["tadbit"],

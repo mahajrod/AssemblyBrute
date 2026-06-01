@@ -28,7 +28,7 @@ rule miniprot:
     conda:
         config["conda"]["microchromosomes"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["microchromosomes"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("miniprot_microchromosomes"),
         cpus=parameters["threads"]["miniprot_microchromosomes"],
         time=parameters["time"]["miniprot_microchromosomes"],
@@ -67,7 +67,7 @@ rule place_microsomes_first:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("place_microsomes_first"),
         cpus=parameters["threads"]["place_microsomes_first"],
         time=parameters["time"]["place_microsomes_first"],

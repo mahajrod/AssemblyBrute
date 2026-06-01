@@ -52,7 +52,7 @@ rule bwa_map: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("bwa_map"),
         cpus=parameters["threads"]["bwa_map"] ,
         time=parameters["time"]["bwa_map"],

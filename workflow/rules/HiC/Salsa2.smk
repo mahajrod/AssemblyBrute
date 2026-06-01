@@ -33,7 +33,7 @@ rule salsa2: #
     conda:
         config["conda"]["salsa2"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["salsa2"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("salsa2"),
         cpus=parameters["threads"]["salsa2"] ,
         time=parameters["time"]["salsa2"],

@@ -27,7 +27,7 @@ rule create_higlass_track_from_bed: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_higlass_track_from_bed"),
         cpus=parameters["threads"]["create_higlass_track"] ,
         time=parameters["time"]["create_higlass_track"],
@@ -67,7 +67,7 @@ rule create_higlass_track_from_pairs: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         cpus=parameters["threads"]["create_higlass_track"] ,
         time=parameters["time"]["create_higlass_track"],
         mem=parameters["memory_mb"]["create_higlass_track"]

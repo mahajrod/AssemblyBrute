@@ -74,7 +74,7 @@ rule create_fastq_links_for_juicer:
     #conda:
     #    config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_fastq_links_for_juicer"),
         cpus=parameters["threads"]["create_fastq_links_for_juicer"] ,
         time=parameters["time"]["create_fastq_links_for_juicer"],
@@ -126,7 +126,7 @@ rule juicer: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("juicer"),
         cpus=parameters["threads"]["juicer"] ,
         time=parameters["time"]["juicer"],
@@ -200,7 +200,7 @@ rule threeddna: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("threeddna"),
         cpus=parameters["threads"]["threeddna"] ,
         time=parameters["time"]["threeddna"],
@@ -242,7 +242,7 @@ rule threeddna_create_links: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_fastq_links_for_juicera"),
         cpus=parameters["threads"]["create_fastq_links_for_juicer"] ,
         time=parameters["time"]["create_fastq_links_for_juicer"],

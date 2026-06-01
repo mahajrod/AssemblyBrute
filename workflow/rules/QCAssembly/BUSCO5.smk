@@ -17,7 +17,7 @@ rule busco5_download:
     conda:
         config["conda"]["busco"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("busco5_download"),
         cpus=parameters["threads"]["busco5_download"],
         time=parameters["time"]["busco5_download"],
@@ -51,7 +51,7 @@ rule busco5: # Downloading of busco datasets is performed by a different rule to
     conda:
         config["conda"]["busco"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("busco5"),
         cpus=parameters["threads"]["busco5"],
         time=parameters["time"]["busco5"],
@@ -104,7 +104,7 @@ rule busco5_intersect_haplotypes: # Downloading of busco datasets is performed b
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("busco5_intersect_haplotypes"),
         cpus=parameters["threads"]["busco5_intersect_haplotypes"],
         time=parameters["time"]["busco5_intersect_haplotypes"],

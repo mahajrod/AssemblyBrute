@@ -39,7 +39,7 @@ rule create_assembly_links_if_skipping_purge_dups:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_contig_links"),
         cpus=parameters["threads"]["create_links"] ,
         time=parameters["time"]["create_links"],
@@ -82,7 +82,7 @@ rule create_busco_links_if_skipping_purge_dups:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_contig_links"),
         cpus=parameters["threads"]["create_links"] ,
         time=parameters["time"]["create_links"],

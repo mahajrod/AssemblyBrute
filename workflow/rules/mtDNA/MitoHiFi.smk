@@ -15,7 +15,7 @@ rule get_recommended_mtDNA_reference: # reference is inferred by NCBI taxid
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("get_recommended_mtDNA_reference"),
         cpus=parameters["threads"]["get_recommended_mtDNA_reference"],
         time=parameters["time"]["get_recommended_mtDNA_reference"],
@@ -65,7 +65,7 @@ rule mitohifi_reads:
     conda:
         config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("mitohifi_reads"),
         cpus=parameters["threads"]["mitohifi_reads"],
         time=parameters["time"]["mitohifi_reads"],
@@ -113,3 +113,53 @@ use rule mitohifi_reads as mitohifi_combined_reads with:
         #mtDNA_fasta=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, combined}/{fileprefix}/final_mitogenome.fasta",
         #coverage_plot=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, combined}/{fileprefix}/final_mitogenome.coverage.png",
         #annotation_plot=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, combined}/{fileprefix}/final_mitogenome.annotation.png"
+"""        
+rule downsample_se_reads:
+    input:
+        se_reads=output_dict["data"] / ("fastq/{datatype}/{stage}/{fileprefix}%s" % config["fastq_extension"]),
+        forward_fastqc=output_dict["qc"] / "fastqc/{datatype}/filtered/{pairprefix}_1_fastqc.zip",
+        reverse_fastqc=output_dict["qc"] / "fastqc/{datatype}/filtered/{pairprefix}_2_fastqc.zip",
+    output:
+        forward_reads=output_dict["data"] / ("fastq/{datatype, hic|illumina}/downsampled_mitoz/{pairprefix}_1%s" % config["fastq_extension"]),
+        reverse_reads=output_dict["data"] / ("fastq/{datatype, hic|illumina}/downsampled_mitoz/{pairprefix}_2%s" % config["fastq_extension"]),
+    params:
+        max_data_gbp=0.5, # TODO set as option for mitoz
+    log:
+        log=output_dict["log"]  / "downsample_pe_reads.{datatype}.{pairprefix}.log",
+        cluster_log=output_dict["cluster_log"] / "downsample_pe_reads.{datatype}.{pairprefix}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "downsample_pe_reads.{datatype}.{pairprefix}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "downsample_pe_reads.{datatype}.{pairprefix}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"]["name"],
+        node_options=parse_node_list("downsample_pe_reads"),
+        cpus=parameters["threads"]["downsample_pe_reads"],
+        time=parameters["time"]["downsample_pe_reads"],
+        mem=parameters["memory_mb"]["downsample_pe_reads"]
+    threads: parameters["threads"]["downsample_pe_reads"]
+    shell:
+        " DATA=0; "
+        " for FILE in {input.forward_fastqc} {input.reverse_fastqc}; "
+        "   do "
+        "   TMP=(`unzip -p ${{FILE}} | grep 'Total Bases' | cut -f 2`); "
+        "   if [[ \"${{TMP[1]}}\" == 'Mbp' ]];"
+        "      then "
+        "      TMP=`echo \"scale=3; ${{TMP}} / 1000\" | bc | sed 's/^\./0./'`; "
+        "   elif [[ \"${{TMP[1]}}\" != 'Gbp' ]];"
+        "      then "
+        "      echo \"Unrecognized data unit - ${{TMP[1]}} \"; "
+        "      exit 1;"
+        "   fi;"
+        " DATA=`echo \"scale=3; ${{DATA}} + ${{TMP}}\" | bc | sed 's/^\./0./'`;  "
+        " DOWNSAMPLING_FRACTION=`echo \"scale=3; {params.max_data_gbp} / ${{DATA}} \" | bc | sed 's/^\./0./'`;  "
+        " if [[  $(echo \"${{DOWNSAMPLING_FRACTION}} < 0.8\" | bc -l) -eq 1 ]];"
+        "    then "
+        "    seqtk sample -2 -s1000 {input.forward_reads} ${{DOWNSAMPLING_FRACTION}} > {output.forward_reads} 2>{log.log}; "
+        "    seqtk sample -2 -s1000 {input.reverse_reads} ${{DOWNSAMPLING_FRACTION}} > {output.reverse_reads} 2>>{log.log}; "
+        "    else "
+        "    cp -f {input.forward_reads} {output.forward_reads} >> {log.log} 2>&1; "
+        "    cp -f {input.reverse_reads} {output.reverse_reads} >> {log.log} 2>&1; "
+        " fi; "
+"""

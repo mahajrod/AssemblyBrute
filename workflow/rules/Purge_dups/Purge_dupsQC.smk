@@ -23,7 +23,7 @@ rule minimap2_purge_dups_qc:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("minimap2_purge_dups_qc"),
         cpus=parameters["threads"]["minimap2"] ,
         time=parameters["time"]["minimap2"],
@@ -76,7 +76,7 @@ rule get_purge_dups_read_stat_qc:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("get_purge_dups_read_stat"),
         cpus=parameters["threads"]["get_purge_dups_read_stat"] ,
         time=parameters["time"]["get_purge_dups_read_stat"],
@@ -113,7 +113,7 @@ rule draw_before_after_plot:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("get_purge_dups_read_stat"),
         cpus=parameters["threads"]["get_purge_dups_read_stat"] ,
         time=parameters["time"]["get_purge_dups_read_stat"],

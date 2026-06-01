@@ -16,7 +16,7 @@ rule meryl_assembly_new: #TODO: in future use this rule for all kmer counts on a
     conda:
         config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("meryl_assembly"),
         cpus=parameters["threads"]["meryl_assembly"],
         time=parameters["time"]["meryl_assembly"],
@@ -46,7 +46,7 @@ rule meryl_get_repetitive_kmers:
     conda:
         config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("meryl_extract"),
         cpus=parameters["threads"]["meryl_extract"],
         time=parameters["time"]["meryl_extract"],
@@ -80,7 +80,7 @@ rule meryl:
     conda:
         config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("meryl"),
         cpus=parameters["threads"]["meryl"],
         time=parameters["time"]["meryl"],
@@ -108,7 +108,7 @@ rule meryl_pe:
     conda:
         config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("meryl_pe"),
         cpus=parameters["threads"]["meryl"],
         time=parameters["time"]["meryl"],
@@ -163,7 +163,7 @@ rule merge_meryl:
     conda:
         config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("merge_meryl"),
         cpus=parameters["threads"]["meryl"],
         time=parameters["time"]["meryl"],
@@ -205,7 +205,7 @@ rule merge_meryl:
     conda:
         config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("merge_meryl"),
         cpus=parameters["threads"]["meryl"],
         time=parameters["time"]["meryl"],
@@ -235,7 +235,7 @@ rule get_meryl_histo:
     conda:
         config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("get_meryl_histo"),
         cpus=parameters["threads"]["get_meryl_histo"],
         time=parameters["time"]["get_meryl_histo"],
@@ -263,7 +263,7 @@ rule meryl_extract:
     conda:
         config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("meryl_extract"),
         cpus=parameters["threads"]["meryl_extract"],
         time=parameters["time"]["meryl_extract"],

@@ -12,7 +12,7 @@ rule get_seq_len:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("get_seq_len"),
         cpus=parameters["threads"]["get_seq_len"],
         time=parameters["time"]["get_seq_len"],

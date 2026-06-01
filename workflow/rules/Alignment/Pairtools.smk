@@ -44,7 +44,7 @@ rule bwa_map: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("bwa_map"),
         cpus=parameters["threads"]["bwa_map"] ,
         time=parameters["time"]["bwa_map"],
@@ -72,7 +72,7 @@ rule pairtools_parse:
     conda:
         config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pairtools_parse"),
         cpus=parameters["threads"]["pairtools_parse"] ,
         time=parameters["time"]["pairtools_parse"],
@@ -97,7 +97,7 @@ rule pairtools_sort:
     conda:
         config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pairtools_sort"),
         cpus=parameters["threads"]["pairtools_sort"] ,
         time=parameters["time"]["pairtools_sort"],
@@ -127,7 +127,7 @@ rule pairtools_merge:
     conda:
         config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pairtools_merge"),
         cpus=parameters["threads"]["pairtools_merge"] ,
         time=parameters["time"]["pairtools_merge"],

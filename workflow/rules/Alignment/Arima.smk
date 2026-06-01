@@ -30,7 +30,7 @@ rule bwa_map: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("bwa_map"),
         cpus=parameters["threads"]["bwa_map_arima"] ,
         time=parameters["time"]["bwa_map"],
@@ -71,7 +71,7 @@ rule arima_bwa_map: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("bwa_map"),
         cpus=parameters["threads"]["bwa_map_arima"] ,
         time=parameters["time"]["bwa_map"],
@@ -101,7 +101,7 @@ rule arima_filter_five_end: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("bwa_map"),
         cpus=parameters["threads"]["arima_filter_five_end"] ,
         time=parameters["time"]["arima_filter_five_end"],
@@ -164,7 +164,7 @@ rule arima_two_read_bam_combiner:
         node_options=parse_node_list("bwa_merge_pairs"),
         time=parameters["time"]["arima_two_read_bam_combiner"],
         mem=parameters["memory_mb"]["arima_two_read_bam_combiner"] + parameters["memory_mb"]["samtools_sort"] * parameters["threads"]["samtools_sort"] + 30000,
-        queue=config["queue"]["cpu"]
+        queue=config["queue"]["cpu"]["name"]
     threads: parameters["threads"]["arima_two_read_bam_combiner"] + parameters["threads"]["samtools_sort"]
     shell:
         " TMP_PREFIX=`dirname {output.bam}`/{wildcards.pairprefix}; "

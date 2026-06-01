@@ -26,7 +26,7 @@ rule krater_from_histo:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("krater_from_histo"),
         cpus=parameters["threads"]["krater_from_histo"],
         time=parameters["time"]["krater_from_histo"],

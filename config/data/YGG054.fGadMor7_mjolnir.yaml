@@ -88,6 +88,9 @@
     "ref_scaffolding":
         "default":
             - "ragtag"
+    "polishing":
+        "default":
+            - "nextpolish2"
 
 "extended_qc_stages":
     - "purge_dups"
@@ -139,6 +142,8 @@
         - "phased_reads"
         #- "unphased_reads"
     "curation":
+        - "default"
+    "nextpolish2":
         - "default"
 
 "other_tool_option_sets": # Options set here overwrite settings from "secondary_tool_config_file". Check it for configurable option list

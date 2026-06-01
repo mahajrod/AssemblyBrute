@@ -684,6 +684,9 @@
                     "ends": 1000
             #"rapid_split":
             #    "print_split_fasta": False
+            "nextpolish2":
+                "default":
+                    "qc_datatypes": []
             "hifiasm":
                 "default":
                     "purge level": 0 # -l purge level. 0: no purging; 1: light; 2/3: aggressive [0 for trio; 3 for unzip]
@@ -3291,13 +3294,13 @@
             "fastq": []
             "draft":
                 - "draft_qc"
-    "assembly": #TODO: add bionano
+    "assembly":
         "default": # same as "full"
             "fastq":
                 - "contig"
                 - "purge_dups"
                 - "hic_scaffolding"
-            "draft": #TODO: implement
+            "draft":
                 - "purge_dups"
                 - "hic_scaffolding"
         "full":
@@ -3305,7 +3308,7 @@
                 - "contig"
                 - "purge_dups"
                 - "hic_scaffolding"
-            "draft": #TODO: implement
+            "draft":
                 - "purge_dups"
                 - "hic_scaffolding"
         "hic_scaffolding":
@@ -3313,7 +3316,7 @@
                 - "contig"
                 - "purge_dups"
                 - "hic_scaffolding"
-            "draft": #TODO: implement
+            "draft":
                 - "purge_dups"
                 - "hic_scaffolding"
         "hic_scaffolding_only":
@@ -3332,6 +3335,13 @@
             "fastq":
                 - "contig"
             "draft": []
+        "polished_contigs": # same as "full"
+            "fastq":
+                - "contig"
+                - "polishing"
+                #- "hic_scaffolding"
+            "draft":
+                - "polishing"
         "skip_hic_scaffolding":
             "fastq":
                 - "contig"

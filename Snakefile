@@ -366,7 +366,6 @@ if "check_reads" in config["stage_list"]:
 if "check_draft" in config["stage_list"]:
     results_list += [ ] # TODO: implement
 
-print(fastqc_data_type_set)
 if ("read_qc" in config["stage_list"]) and (not config["skip_read_qc"]):
     results_list += [[expand(output_dict["qc"] / "fastqc/{datatype}/{stage}/{fileprefix}_fastqc.zip",
                                datatype=[dat_type, ],
@@ -919,6 +918,52 @@ if "contig" in config["stage_list"] or "draft_qc" in config["stage_list"]:
                 if not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"]:
                     stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["main_datatypes"]
 
+if "polishing" in config["stage_list"]:
+    current_stage = "polishing"
+    stage_dict[current_stage] = {}
+    tool_list = config["stage_coretools"][current_stage]["default"]
+    stage_dict[current_stage]["parameters"] = {}
+
+    for tool in tool_list:
+        option_set_group_dict, option_set_group_assignment_dict = None, None
+        for option_set in config["coretool_option_sets"][tool]:
+            for prev_parameters in stage_dict[prev_stage]["parameters"]:
+                parameters_label = "{0}..{1}_{2}".format(prev_parameters, tool, option_set)
+                stage_dict[current_stage]["parameters"][parameters_label] = {}
+                stage_dict[current_stage]["parameters"][parameters_label]["stage_seq_type"] = "scaffold"
+                stage_dict[current_stage]["parameters"][parameters_label]["included"] = True
+                stage_dict[current_stage]["parameters"][parameters_label]["prev_stage"] = prev_stage
+                stage_dict[current_stage]["parameters"][parameters_label]["prev_parameters"] = prev_parameters
+                stage_dict[current_stage]["parameters"][parameters_label]["tool"] = tool
+                stage_dict[current_stage]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][tool][option_set]
+                stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict[current_stage]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
+
+                if (len(stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]) == 1) and (stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["use_phased_reads"]):
+                    #stage_dict["hic_scaffolding"]["parameters"][parameters_label]["included"] = False
+                    stage_dict[current_stage]["parameters"].pop(parameters_label)
+                    print(f"WARNING!!! Impossible to phase reads for {parameters_label} as input draft assembly is haploid")
+                if not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
+                    stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["qc_datatypes"]
+
+                if ("purge_dups" in config["qc_settings"]) and ("qc_datatypes" in config["qc_settings"]["purge_dups"]) and config["qc_settings"]["purge_dups"]["qc_datatypes"]:
+                    stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = config["qc_settings"]["purge_dups"]["qc_datatypes"]
+                else:
+                    if ("purge_dups_qc_datatypes" not in stage_dict[current_stage]["parameters"][parameters_label]["option_set"]) or (not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"]):
+                        stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["purge_dups_qc_datatypes"]
+
+    parameters_list = list(stage_dict[current_stage]["parameters"].keys())
+
+    results_list += [
+                    *[expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
+                           genome_prefix=[config["genome_prefix"], ],
+                           assembly_stage=["polishing", ],
+                           haplotype=stage_dict["polishing"]["parameters"][parameters_label]["haplotype_list"],
+                           parameters=[parameters_label]) for parameters_label in stage_dict["polishing"]["parameters"]],
+                    expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
+                           genome_prefix=[config["genome_prefix"], ],
+                           assembly_stage=["polishing"],),
+                    ]
+
 #for option_supergroup in ["options_affecting_error_correction"]:
             #    stage_dict["contig"]["parameters"][parameters_label][option_supergroup] = option_cluster_reverse_dict[assembler][option_supergroup][option_set]
 #print (stage_dict)
@@ -1308,6 +1353,7 @@ if "hic_scaffolding" in config["stage_list"]:
                 else:
                     if ("purge_dups_qc_datatypes" not in stage_dict[current_stage]["parameters"][parameters_label]["option_set"]) or (not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"]):
                         stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["purge_dups_qc_datatypes"]
+
 
     #for parameter_label in stage_dict["hic_scaffolding"]["parameters"].keys(): # remove ignore
     #    if not stage_dict["hic_scaffolding"]["parameters"][parameter_label]["included"]:
@@ -2079,6 +2125,7 @@ include: "workflow/rules/HiC/ReadPhasing.smk"
 include: "workflow/rules/Alignment/Index.smk"
 include: "workflow/rules/Alignment/Common.smk"
 include: "workflow/rules/Alignment/Stats.smk"
+include: "workflow/rules/Alignment/Winnowmap.smk"
 
 if "hic" in data_types:
     if (sum(list(pd.Series(["hic_scaffolding",
@@ -2103,6 +2150,8 @@ if "hic" in data_types:
     if "hic_scaffolding" in config["stage_list"]:
         include: "workflow/rules/HiC/YAHS.smk"
         include: "workflow/rules/HiC/3DDNA.smk"
+
+include: "workflow/rules/Polishing/NextPolish2.smk"
 
 include: "workflow/rules/QCAssembly/RapidCuration.smk"
 include: "workflow/rules/QCAssembly/GapTrack.smk"

@@ -34,7 +34,7 @@ rule meryl_get_repetitive_kmers:
         log_dir="{directory}/log/",
         benchmark_dir="{directory}/benchmark/"
     output:
-        repetitive_kmers=directory("{directory}/{meryl_db_prefix}.meryl.repetitive.t")
+        repetitive_kmers=directory("{directory}/{meryl_db_prefix}.meryl.repetitive")
     params:
         distinct=0.9998
     log:

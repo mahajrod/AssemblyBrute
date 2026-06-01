@@ -77,7 +77,7 @@ rule link_bwa_only_bam: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_fastq_links"),
         cpus=parameters["threads"]["create_fastq_links"] ,
         time=parameters["time"]["create_fastq_links"],

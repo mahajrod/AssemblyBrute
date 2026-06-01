@@ -446,7 +446,7 @@ rule hifiasm_hic_tetra: # TODO: add support for polyploid assemblies
     conda:
         config["conda"]["hifiasm"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["hifiasm"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("hifiasm_hic"),
         cpus=parameters["threads"]["hifiasm"],
         time=parameters["time"]["hifiasm"],
@@ -535,7 +535,7 @@ rule hifiasm_hic_ont: # TODO: add support for polyploid assemblies
     conda:
         config["conda"]["hifiasm"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["hifiasm"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("hifiasm_hic"),
         cpus=parameters["threads"]["hifiasm"],
         time=parameters["time"]["hifiasm"],
@@ -629,7 +629,7 @@ rule hifiasm_long_reads_only:
     conda:
         config["conda"]["hifiasm"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["hifiasm"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("hifiasm_hifi"),
         cpus=parameters["threads"]["hifiasm"],
         time=parameters["time"]["hifiasm"],

@@ -15,7 +15,7 @@ rule create_local_log_dir:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("gather_stage_stats"),
         cpus=parameters["threads"]["gather_stage_stats"],
         time=parameters["time"]["gather_stage_stats"],
@@ -40,7 +40,7 @@ rule create_local_benchmark_dir:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("gather_stage_stats"),
         cpus=parameters["threads"]["gather_stage_stats"],
         time=parameters["time"]["gather_stage_stats"],

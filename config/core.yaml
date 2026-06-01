@@ -3335,7 +3335,7 @@
             "fastq":
                 - "contig"
             "draft": []
-        "polished_contigs": # same as "full"
+        "polished_contig":
             "fastq":
                 - "contig"
                 - "polishing"

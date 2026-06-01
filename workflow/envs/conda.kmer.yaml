@@ -10,3 +10,4 @@
 "dependencies":
   - "meryl"
   - "merqury"
+  - "yak"

@@ -25,4 +25,19 @@ def get_memory(wildcards, attempt, start_mem, coeff=2, mode="linear"):
     else:
         raise ValueError("ERROR!!! Unknown mode for memory selection")
 
+def get_threads(threads, queue):
+    if queue in config["queue"]:
+        if "max_threads" in config["queue"][queue]:
+            if config["queue"][queue]["max_threads"] > 0:
+                return min([threads, config["queue"][queue]["max_threads"]])
+            else:
+                return threads
+        else:
+            return threads
+    else:
+        return threads
+
+
+
+
 

@@ -14,7 +14,7 @@ slurm:
   partition: "{resources.queue}"
   time: "{resources.time}"
   mem: "{resources.mem}"
-  cpus-per-task: "{resources.cpus}"
+  cpus-per-task: "{get_threads(resources.cpus, resources.queue)}"
   output: "{log.cluster_log}"
   error: "{log.cluster_err}"
   qos: normal

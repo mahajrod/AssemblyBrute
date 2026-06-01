@@ -920,9 +920,12 @@ if "contig" in config["stage_list"] or "draft_qc" in config["stage_list"]:
 
 if "polishing" in config["stage_list"]:
     current_stage = "polishing"
-    stage_dict[current_stage] = {}
+    #stage_dict[current_stage] = {}
+    prev_stage = stage_dict[current_stage]["prev_stage"]
     tool_list = config["stage_coretools"][current_stage]["default"]
     stage_dict[current_stage]["parameters"] = {}
+
+
 
     for tool in tool_list:
         option_set_group_dict, option_set_group_assignment_dict = None, None

@@ -2050,6 +2050,7 @@ include: "workflow/rules/QCFiltering/NanoPlot.smk"
 
 include: "workflow/rules/Kmer/Jellyfish.smk"
 include: "workflow/rules/Kmer/Meryl.smk"
+include: "workflow/rules/Kmer/Yak.smk"
 include: "workflow/rules/Kmer/Smudgeplot.smk"
 include: "workflow/rules/Kmer/GCplot.smk"
 include: "workflow/rules/Kmer/Genomescope.smk"

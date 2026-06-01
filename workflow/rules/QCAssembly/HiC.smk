@@ -191,7 +191,7 @@ if (sum(list(pd.Series(["hic_scaffolding",
         resources:
             queue=config["queue"]["cpu"]["name"],
             node_options=parse_node_list("bwa_map"),
-            cpus=parameters["threads"]["bwa_map"] ,
+            cpus=get_threads(parameters["threads"]["bwa_map"], "cpu"),
             time=parameters["time"]["bwa_map"],
             mem=parameters["memory_mb"]["bwa_map"]
         threads: parameters["threads"]["bwa_map"]

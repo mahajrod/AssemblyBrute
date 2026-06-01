@@ -90,7 +90,7 @@ rule bwa_cov:
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("bwa_cov"),
-        cpus=parameters["threads"]["bwa_map"] + parameters["threads"]["samtools_sort"] + parameters["threads"]["samtools_fixmate"] + parameters["threads"]["samtools_markdup"],
+        cpus=get_threads(parameters["threads"]["bwa_map"] + parameters["threads"]["samtools_sort"] + parameters["threads"]["samtools_fixmate"] + parameters["threads"]["samtools_markdup"], "cpu"),
         time=parameters["time"]["bwa_map"],
         mem=parameters["memory_mb"]["bwa_map"] + parameters["memory_mb"]["samtools_sort_per_thread"]*parameters["threads"]["samtools_sort"] + parameters["memory_mb"]["samtools_fixmate"] + parameters["memory_mb"]["samtools_markdup"],
     threads: parameters["threads"]["bwa_map"] + parameters["threads"]["samtools_sort"] + parameters["threads"]["samtools_fixmate"] + parameters["threads"]["samtools_markdup"]

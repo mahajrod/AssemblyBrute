@@ -8,4 +8,4 @@ printshellcmds: True
 show-failed-logs: False
 rerun-incomplete: True
 cluster-cancel: "scancel"
-cluster: "sbatch {resources.node_options} --qos=normal --partition={resources.queue} -t {resources.time} --mem={resources.mem} -c {get_threads(resources.cpus, resources.queue)} --parsable -o {log.cluster_log} -e {log.cluster_err}"
+cluster: "sbatch {resources.node_options} --qos=normal --partition={resources.queue} -t {resources.time} --mem={resources.mem} -c {resources.cpus} --parsable -o {log.cluster_log} -e {log.cluster_err}"

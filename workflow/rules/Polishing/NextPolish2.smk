@@ -2,15 +2,15 @@
 
 rule nextpolish2: #
     input:
-        draft_assembly=lambda wildcards: out_dir_path / "polishing/{0}/{1}.{2}.{3}.fasta".format(wildcards.prev_stage_parameters,
+        draft_assembly=lambda wildcards: out_dir_path / "{2}/{0}/{1}.{2}.{3}.fasta".format(wildcards.prev_stage_parameters,
                                                                                                  wildcards.genome_prefix,
                                                                                                  stage_dict["polishing"]["parameters"][wildcards.prev_stage_parameters + "..nextpolish2_" + wildcards.polishing_parameters]["prev_stage"],
                                                                                                  wildcards.haplotype) ,
-        winnowmap_bam=lambda wildcards: out_dir_path / "polishing/{0}/alignment/hifi/winnowmap/{1}.{2}.{3}.k15.hifi.winnowmap.bam".format(wildcards.prev_stage_parameters,
+        winnowmap_bam=lambda wildcards: out_dir_path / "{2}/{0}/alignment/hifi/winnowmap/{1}.{2}.{3}.k15.hifi.winnowmap.bam".format(wildcards.prev_stage_parameters,
                                                                                                  wildcards.genome_prefix,
                                                                                                  stage_dict["polishing"]["parameters"][wildcards.prev_stage_parameters + "..nextpolish2_" + wildcards.polishing_parameters]["prev_stage"],
                                                                                                  wildcards.haplotype) ,
-        winnowmap_bam_index=lambda wildcards: out_dir_path / "polishing/{0}/alignment/hifi/winnowmap/{1}.{2}.{3}.k15.hifi.winnowmap.bam.csi".format(wildcards.prev_stage_parameters,
+        winnowmap_bam_index=lambda wildcards: out_dir_path / "{2}/{0}/alignment/hifi/winnowmap/{1}.{2}.{3}.k15.hifi.winnowmap.bam.csi".format(wildcards.prev_stage_parameters,
                                                                                                  wildcards.genome_prefix,
                                                                                                  stage_dict["polishing"]["parameters"][wildcards.prev_stage_parameters + "..nextpolish2_" + wildcards.polishing_parameters]["prev_stage"],
                                                                                                  wildcards.haplotype) ,

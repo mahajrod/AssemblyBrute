@@ -46,7 +46,7 @@ rule gather_nanoplot_stats_per_stage:
     conda:
         config["conda"]["nanopore"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["nanopore"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("nanoplot"),
         cpus=parameters["threads"]["nanoplot"],
         time=parameters["time"]["nanoplot"],
@@ -78,7 +78,7 @@ rule gather_datatype_nanoplot_stats:
     conda:
         config["conda"]["nanopore"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["nanopore"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("nanoplot"),
         cpus=parameters["threads"]["nanoplot"],
         time=parameters["time"]["nanoplot"],

@@ -24,7 +24,7 @@ rule trf: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("trf"),
         cpus=parameters["threads"]["trf"] ,
         time=parameters["time"]["trf"],
@@ -58,7 +58,7 @@ rule copy_trf_track: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("windowmasker"),
         cpus=parameters["threads"]["windowmasker"] ,
         time=parameters["time"]["windowmasker"],

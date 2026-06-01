@@ -18,7 +18,7 @@ rule downsample_pe_reads:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("downsample_pe_reads"),
         cpus=parameters["threads"]["downsample_pe_reads"],
         time=parameters["time"]["downsample_pe_reads"],
@@ -76,7 +76,7 @@ rule mitoz:
     conda:
         config["conda"]["mitoz"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["mitoz"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("mitoz"),
         cpus=parameters["threads"]["mitoz"],
         time=parameters["time"]["mitoz"],

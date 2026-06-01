@@ -31,7 +31,7 @@ rule ragtag: #
     conda:
         config["conda"]["ragtag"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["ragtag"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("ragtag"),
         cpus=parameters["threads"]["ragtag"],
         time=parameters["time"]["ragtag"],
@@ -73,7 +73,7 @@ rule ragtag_filter: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("ragtag_filter"),
         cpus=parameters["threads"]["ragtag_filter"],
         time=parameters["time"]["ragtag_filter"],
@@ -107,7 +107,7 @@ rule ragtag_generate_filtered_fasta: #
     conda:
         config["conda"]["ragtag"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["ragtag"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("ragtag_filter"),
         cpus=parameters["threads"]["ragtag_filter"],
         time=parameters["time"]["ragtag_filter"],
@@ -142,7 +142,7 @@ rule create_links_ragtag_scaffolds:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("rename_ragtag_scaffolds"),
         cpus=parameters["threads"]["rename_ragtag_scaffolds"],
         time=parameters["time"]["rename_ragtag_scaffolds"],

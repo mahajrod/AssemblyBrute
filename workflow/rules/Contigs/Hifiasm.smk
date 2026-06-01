@@ -677,7 +677,7 @@ rule get_lowcoverage_contig_ids:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("get_lowcoverage_contig_ids"),
         cpus=parameters["threads"]["get_lowcoverage_contig_ids"],
         time=parameters["time"]["get_lowcoverage_contig_ids"],
@@ -709,7 +709,7 @@ rule filter_contigs_by_coverage:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("filter_contigs_by_coverage"),
         cpus=parameters["threads"]["filter_contigs_by_coverage"],
         time=parameters["time"]["filter_contigs_by_coverage"],
@@ -791,7 +791,7 @@ rule hifiasm_hic_4p: # TODO: add support for polyploid assemblies
     conda:
         config["conda"]["hifiasm"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["hifiasm"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("hifiasm_hic"),
         cpus=parameters["threads"]["hifiasm"],
         time=parameters["time"]["hifiasm"],

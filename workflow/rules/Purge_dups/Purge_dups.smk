@@ -115,7 +115,7 @@ rule create_quast_links_if_skipping_purge_dups:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_contig_links"),
         cpus=parameters["threads"]["create_links"] ,
         time=parameters["time"]["create_links"],
@@ -160,7 +160,7 @@ rule get_merqury_results_if_skipping_purge_dups:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_contig_links"),
         cpus=parameters["threads"]["create_links"] ,
         time=parameters["time"]["create_links"],
@@ -195,7 +195,7 @@ rule create_contig_links:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_contig_links"),
         cpus=parameters["threads"]["create_links"] ,
         time=parameters["time"]["create_links"],
@@ -229,7 +229,7 @@ rule minimap2_purge_dups_reads:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("minimap2_purge_dups_reads"),
         cpus=parameters["threads"]["minimap2"] ,
         time=parameters["time"]["minimap2"],
@@ -281,7 +281,7 @@ rule get_purge_dups_read_stat:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("get_purge_dups_read_stat"),
         cpus=parameters["threads"]["get_purge_dups_read_stat"] ,
         time=parameters["time"]["get_purge_dups_read_stat"],
@@ -316,7 +316,7 @@ rule minimap2_purge_dups_assembly:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("minimap2_purge_dups_assembly"),
         cpus=parameters["threads"]["minimap2"] ,
         time=parameters["time"]["minimap2"],
@@ -352,7 +352,7 @@ rule purge_dups: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("purge_dups"),
         cpus=parameters["threads"]["purge_dups"] ,
         time=parameters["time"]["purge_dups"],
@@ -402,7 +402,7 @@ rule get_purged_seqs: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("purge_dups"),
         cpus=parameters["threads"]["purge_dups"] ,
         time=parameters["time"]["purge_dups"],
@@ -443,7 +443,7 @@ rule filter_removed_contigs: # TODO: find what options are used in ERGA for get_
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("purge_dups"),
         cpus=parameters["threads"]["purge_dups"] ,
         time=parameters["time"]["purge_dups"],
@@ -483,7 +483,7 @@ rule crossmerge_hapdups_with_deduped_contigs: # TODO: add handling of polyploid 
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("merge_pri_hapdups_with_alt"),
         cpus=parameters["threads"]["merge_pri_hapdups_with_alt"] ,
         time=parameters["time"]["merge_pri_hapdups_with_alt"],
@@ -513,7 +513,7 @@ rule create_final_links_purge_dups:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_contig_links"),
         cpus=parameters["threads"]["create_links"] ,
         time=parameters["time"]["create_links"],
@@ -545,7 +545,7 @@ rule extract_stats_from_purge_dups_file:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("extract_stats_from_purge_dups_file"),
         cpus=parameters["threads"]["extract_stats_from_purge_dups_file"] ,
         time=parameters["time"]["extract_stats_from_purge_dups_file"],
@@ -573,7 +573,7 @@ rule extract_artefact_sequences:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("extract_artefact_sequences"),
         cpus=parameters["threads"]["extract_artefact_sequences"] ,
         time=parameters["time"]["extract_artefact_sequences"],

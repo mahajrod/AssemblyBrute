@@ -66,7 +66,7 @@ rule merge_tadbit_stats:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("merge_tadbit_stats"),
         cpus=parameters["threads"]["merge_tadbit_stats"],
         time=parameters["time"]["merge_tadbit_stats"],

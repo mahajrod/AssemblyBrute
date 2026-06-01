@@ -24,7 +24,7 @@ rule rmdup:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("rmdup"),
         cpus=parameters["threads"]["samtools_sort"] + parameters["threads"]["samtools_collate"] + parameters["threads"]["samtools_fixmate"] + parameters["threads"]["samtools_markdup"],
         time=parameters["time"]["rmdup"],
@@ -58,7 +58,7 @@ if "hic" in input_pairprefix_dict: # TODO: rewrite code to make avoid error when
         conda:
             config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
         resources:
-            queue=config["queue"]["cpu"],
+            queue=config["queue"]["cpu"]["name"],
             node_options=parse_node_list("bwa_merge_files"),
             cpus=parameters["threads"]["samtools_sort"] ,
             time=parameters["time"]["samtools_sort"],

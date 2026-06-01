@@ -262,7 +262,7 @@ rule busco5_intersect_all: # Downloading of busco datasets is performed by a dif
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("busco5_intersect_all"),
         cpus=parameters["threads"]["busco5_intersect_all"],
         time=parameters["time"]["busco5_intersect_all"],
@@ -321,7 +321,7 @@ rule create_busco_tracks:
     conda:
         config["conda"]["busco"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("busco5_intersect_all"),
         cpus=parameters["threads"]["busco5_intersect_all"],
         time=parameters["time"]["busco5_intersect_all"],
@@ -376,7 +376,7 @@ rule create_busco_tracks_for_combined_haplotype:
     conda:
         config["conda"]["busco"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("busco5_intersect_all"),
         cpus=parameters["threads"]["busco5_intersect_all"],
         time=parameters["time"]["busco5_intersect_all"],

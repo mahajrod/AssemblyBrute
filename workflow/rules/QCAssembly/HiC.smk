@@ -43,7 +43,7 @@ if (sum(list(pd.Series(["hic_scaffolding",
         conda:
             config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
         resources:
-            queue=config["queue"]["cpu"],
+            queue=config["queue"]["cpu"]["name"],
             node_options=parse_node_list("combine_haplotypes"),
             cpus=parameters["threads"]["combine_haplotypes"],
             time=parameters["time"]["combine_haplotypes"],
@@ -78,7 +78,7 @@ if (sum(list(pd.Series(["hic_scaffolding",
         conda:
             config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
         resources:
-            queue=config["queue"]["cpu"],
+            queue=config["queue"]["cpu"]["name"],
             node_options=parse_node_list("bam2bed_for_hic_map"),
             cpus=parameters["threads"]["bam2bed_for_hic_map"],
             time=parameters["time"]["bam2bed_for_hic_map"],
@@ -110,7 +110,7 @@ if (sum(list(pd.Series(["hic_scaffolding",
         conda:
             config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
         resources:
-            queue=config["queue"]["cpu"],
+            queue=config["queue"]["cpu"]["name"],
             node_options=parse_node_list("bed2pairs"),
             cpus=parameters["threads"]["bed2pairs"],
             time=parameters["time"]["bed2pairs"],
@@ -148,7 +148,7 @@ if (sum(list(pd.Series(["hic_scaffolding",
         conda:
             config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
         resources:
-            queue=config["queue"]["cpu"],
+            queue=config["queue"]["cpu"]["name"],
             node_options=parse_node_list("create_higlass_track_from_bed"),
             cpus=parameters["threads"]["create_higlass_track"] ,
             time=parameters["time"]["create_higlass_track"],
@@ -189,7 +189,7 @@ if (sum(list(pd.Series(["hic_scaffolding",
         conda:
             config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
         resources:
-            queue=config["queue"]["cpu"],
+            queue=config["queue"]["cpu"]["name"],
             node_options=parse_node_list("bwa_map"),
             cpus=parameters["threads"]["bwa_map"] ,
             time=parameters["time"]["bwa_map"],
@@ -223,7 +223,7 @@ if (sum(list(pd.Series(["hic_scaffolding",
         conda:
             config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
         resources:
-            queue=config["queue"]["cpu"],
+            queue=config["queue"]["cpu"]["name"],
             node_options=parse_node_list("rmdup"),
             cpus=parameters["threads"]["samtools_sort"] + parameters["threads"]["samtools_collate"] + parameters["threads"]["samtools_fixmate"] + parameters["threads"]["samtools_markdup"],
             time=parameters["time"]["rmdup"],

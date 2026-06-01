@@ -156,7 +156,7 @@ rule pairtools_dedup:
     conda:
         config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pairtools_dedup"),
         cpus=parameters["threads"]["pairtools_dedup"] ,
         time=parameters["time"]["pairtools_dedup"],
@@ -189,7 +189,7 @@ rule pairtools_split:
     conda:
         config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pairtools_split"),
         cpus=parameters["threads"]["pairtools_split"] + parameters["threads"]["samtools_sort"],
         time=parameters["time"]["pairtools_split"],
@@ -221,7 +221,7 @@ rule pairtools_index_pairs:
     conda:
         config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pairtools_index_pairs"),
         cpus=parameters["threads"]["pairtools_index"],
         time=parameters["time"]["pairtools_index"],

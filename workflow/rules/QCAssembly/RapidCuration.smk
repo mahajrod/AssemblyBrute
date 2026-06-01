@@ -46,7 +46,7 @@ rule create_curation_input_files_for_contigs: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_curation_input_files_for_contigs"),
         cpus=parameters["threads"]["create_curation_input_files"],
         time=parameters["time"]["create_curation_input_files"],
@@ -73,7 +73,7 @@ rule create_curation_bed_input_file: # Added as separated rule to allow turning 
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_curation_bed_input_file"),
         cpus=parameters["threads"]["create_curation_input_files"],
         time=parameters["time"]["create_curation_input_files"],
@@ -100,7 +100,7 @@ rule select_scaffolds: #
     benchmark:
         "{len_dir}/select_scaffolds.{len_prefix}.{scaffold_length}.{scaffold_length}.benchmark.txt"
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("select_scaffolds"),
         cpus=parameters["threads"]["select_scaffolds"],
         time=parameters["time"]["select_scaffolds"],
@@ -130,7 +130,7 @@ rule create_windows: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_windows"),
         cpus=parameters["threads"]["create_windows"],
         time=parameters["time"]["create_windows"],
@@ -158,7 +158,7 @@ rule create_bedgraph_track: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_bedgraph_track"),
         cpus=parameters["threads"]["create_bedgraph_track"],
         time=parameters["time"]["create_bedgraph_track"],
@@ -189,7 +189,7 @@ rule scale_create_bedgraph_track: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("scale_create_bedgraph_track"),
         cpus=parameters["threads"]["scale_create_bedgraph_track"],
         time=parameters["time"]["scale_create_bedgraph_track"],
@@ -217,7 +217,7 @@ rule liftover_contig_bedgraph: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("liftover_contig_bedgraph"),
         cpus=parameters["threads"]["liftover_contig_bedgraph"],
         time=parameters["time"]["liftover_contig_bedgraph"],
@@ -252,7 +252,7 @@ rule get_track_stats: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("get_track_stats"),
         cpus=parameters["threads"]["get_track_stats"],
         time=parameters["time"]["get_track_stats"],
@@ -304,7 +304,7 @@ rule draw_track: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("draw_track"),
         cpus=parameters["threads"]["draw_track"],
         time=parameters["time"]["draw_track"],

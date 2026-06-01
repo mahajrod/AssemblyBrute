@@ -14,7 +14,7 @@ rule blast2_2_27:
     conda:
         config["conda"]["simulate_pcr"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["simulate_pcr"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("blast"),
         cpus=parameters["threads"]["blast"] ,
         time=parameters["time"]["blast"],

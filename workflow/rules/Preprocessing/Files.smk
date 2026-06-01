@@ -17,7 +17,7 @@ rule create_fastq_links:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_fastq_links"),
         cpus=parameters["threads"]["create_fastq_links"],
         time=parameters["time"]["create_fastq_links"],
@@ -47,7 +47,7 @@ rule preprocess_hic_fastq:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("preprocess_hic_fastq"),
         cpus=parameters["threads"]["preprocess_hic_fastq"],
         time=parameters["time"]["preprocess_hic_fastq"],
@@ -83,7 +83,7 @@ rule create_fasta_links:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_fasta_links"),
         cpus=parameters["threads"]["create_fastq_links"],
         time=parameters["time"]["create_fastq_links"],
@@ -107,7 +107,7 @@ rule create_links_for_draft:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_links_for_draft"),
         cpus=parameters["threads"]["create_links_for_draft"],
         time=parameters["time"]["create_links_for_draft"],
@@ -137,7 +137,7 @@ rule create_links_for_reference:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_links_for_draft"),
         cpus=parameters["threads"]["create_links_for_draft"],
         time=parameters["time"]["create_links_for_draft"],

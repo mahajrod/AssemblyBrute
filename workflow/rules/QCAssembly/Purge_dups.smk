@@ -22,7 +22,7 @@ rule qc_minimap2_purge_dups_reads:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("minimap2_purge_dups_reads"),
         cpus=parameters["threads"]["minimap2"] ,
         time=parameters["time"]["minimap2"],
@@ -78,7 +78,7 @@ rule qc_get_purge_dups_read_stat:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("get_purge_dups_read_stat"),
         cpus=parameters["threads"]["get_purge_dups_read_stat"] ,
         time=parameters["time"]["get_purge_dups_read_stat"],
@@ -114,7 +114,7 @@ rule qc_minimap2_purge_dups_assembly:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("minimap2_purge_dups_assembly"),
         cpus=parameters["threads"]["minimap2"] ,
         time=parameters["time"]["minimap2"],
@@ -143,7 +143,7 @@ rule qc_purge_dups: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("purge_dups"),
         cpus=parameters["threads"]["purge_dups"] ,
         time=parameters["time"]["purge_dups"],
@@ -181,7 +181,7 @@ rule qc_get_purged_seqs: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("purge_dups"),
         cpus=parameters["threads"]["purge_dups"] ,
         time=parameters["time"]["purge_dups"],
@@ -224,7 +224,7 @@ rule qc_extract_stats_from_purge_dups_file:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("extract_stats_from_purge_dups_file"),
         cpus=parameters["threads"]["extract_stats_from_purge_dups_file"] ,
         time=parameters["time"]["extract_stats_from_purge_dups_file"],
@@ -253,7 +253,7 @@ rule create_purge_dups_track:
     conda:
         config["conda"]["busco"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("busco5_intersect_all"),
         cpus=parameters["threads"]["busco5_intersect_all"],
         time=parameters["time"]["busco5_intersect_all"],
@@ -298,7 +298,7 @@ rule create_purge_dups_track_for_combined_haplotype:
     conda:
         config["conda"]["busco"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("busco5_intersect_all"),
         cpus=parameters["threads"]["busco5_intersect_all"],
         time=parameters["time"]["busco5_intersect_all"],
@@ -335,7 +335,7 @@ rule qc_extract_artefact_sequences:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("extract_artefact_sequences"),
         cpus=parameters["threads"]["extract_artefact_sequences"] ,
         time=parameters["time"]["extract_artefact_sequences"],

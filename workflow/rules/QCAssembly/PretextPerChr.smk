@@ -18,7 +18,7 @@ checkpoint get_candidate_chr_from_painted_agp: # #Pretext-map probably doesn't s
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("get_candidate_chr_from_painted_agp"),
         cpus=parameters["threads"]["get_candidate_chr_from_painted_agp"] ,
         time=parameters["time"]["get_candidate_chr_from_painted_agp"],
@@ -55,7 +55,7 @@ rule pretextmap_chr: # #Pretext-map probably doesn't support long file names!!!!
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pretextmap"),
         cpus=parameters["threads"]["pretextmap"] ,
         time=parameters["time"]["pretextmap"],
@@ -107,7 +107,7 @@ if candidate_agp_filename:
         conda:
             config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
         resources:
-            queue=config["queue"]["cpu"],
+            queue=config["queue"]["cpu"]["name"],
             node_options=parse_node_list("get_precurated_scaffold_order_from_agp"),
             cpus=parameters["threads"]["get_precurated_scaffold_order_from_agp"] ,
             time=parameters["time"]["get_precurated_scaffold_order_from_agp"],
@@ -136,7 +136,7 @@ if candidate_agp_filename:
         conda:
             config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
         resources:
-            queue=config["queue"]["cpu"],
+            queue=config["queue"]["cpu"]["name"],
             node_options=parse_node_list("get_precurated_fasta"),
             cpus=parameters["threads"]["get_precurated_fasta"] ,
             time=parameters["time"]["get_precurated_fasta"],
@@ -174,7 +174,7 @@ if candidate_agp_filename:
         conda:
             config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
         resources:
-            queue=config["queue"]["cpu"],
+            queue=config["queue"]["cpu"]["name"],
             node_options=parse_node_list("get_precurated_bam"),
             cpus=parameters["threads"]["samtools_sort"] + parameters["threads"]["get_precurated_bam"],
             time=parameters["time"]["get_precurated_bam"],
@@ -222,7 +222,7 @@ if candidate_agp_filename:
         conda:
             config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
         resources:
-            queue=config["queue"]["cpu"],
+            queue=config["queue"]["cpu"]["name"],
             node_options=parse_node_list("pretextmap_chr"),
             cpus=parameters["threads"]["pretextmap_chr"] ,
             time=parameters["time"]["pretextmap_chr"],

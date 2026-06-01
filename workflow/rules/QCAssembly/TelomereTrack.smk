@@ -29,7 +29,7 @@ rule telo_finder:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("telo_finder"),
         cpus=parameters["threads"]["telo_finder"] ,
         time=parameters["time"]["telo_finder"],
@@ -88,7 +88,7 @@ rule telo_container: #TODO: add possibility to use custom telomere c
     conda:
         config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("telo_container"),
         cpus=parameters["threads"]["telo_finder"] ,
         time=parameters["time"]["telo_finder"],
@@ -195,7 +195,7 @@ rule create_telomere_track_for_pretext:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_telomere_track_for_pretext"),
         cpus=parameters["threads"]["create_telomere_track_for_pretext"] ,
         time=parameters["time"]["create_telomere_track_for_pretext"],
@@ -229,7 +229,7 @@ rule copy_telomere_track_for_pretext:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("telo_container"),
         cpus=parameters["threads"]["copy_telomere_track_for_pretext"] ,
         time=parameters["time"]["copy_telomere_track_for_pretext"],
@@ -260,7 +260,7 @@ rule collapse_overlapping_telomere_windows:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("telo_container"),
         cpus=parameters["threads"]["telo_finder"] ,
         time=parameters["time"]["telo_finder"],
@@ -310,7 +310,7 @@ rule classify_telomeric_regions_windows:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("get_telomere_warning"),
         cpus=parameters["threads"]["get_telomere_warning"] ,
         time=parameters["time"]["get_telomere_warning"],
@@ -351,7 +351,7 @@ rule get_telomere_warning:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("get_telomere_warning"),
         cpus=parameters["threads"]["get_telomere_warning"] ,
         time=parameters["time"]["get_telomere_warning"],
@@ -439,7 +439,7 @@ rule copy_telomere_files:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("get_telomere_warning"),
         cpus=parameters["threads"]["get_telomere_warning"] ,
         time=parameters["time"]["get_telomere_warning"],

@@ -15,7 +15,7 @@ rule combine_se_reads:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" %config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("combine_long_reads"),
         cpus=parameters["threads"]["combine_long_reads"],
         time=parameters["time"]["combine_long_reads"],
@@ -44,7 +44,7 @@ rule combine_paired_reads:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" %config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("combine_long_reads"),
         cpus=parameters["threads"]["combine_long_reads"],
         time=parameters["time"]["combine_long_reads"],

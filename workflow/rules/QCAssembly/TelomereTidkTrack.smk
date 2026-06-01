@@ -18,7 +18,7 @@ rule tidk_download_db:
     conda:
         config["conda"]["tidk"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["tidk"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("tidk_download_db"),
         cpus=parameters["threads"]["tidk_download_db"] ,
         time=parameters["time"]["tidk_download_db"],
@@ -53,7 +53,7 @@ rule tidk_search:
     conda:
         config["conda"]["tidk"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["tidk"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("tidk_search"),
         cpus=parameters["threads"]["tidk_search"] ,
         time=parameters["time"]["tidk_search"],
@@ -109,7 +109,7 @@ rule filter_tidk_telomere_tracks_for_pretext:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("telo_container"),
         cpus=parameters["threads"]["copy_telomere_track_for_pretext"] ,
         time=parameters["time"]["copy_telomere_track_for_pretext"],

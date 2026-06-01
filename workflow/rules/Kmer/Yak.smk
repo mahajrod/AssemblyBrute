@@ -26,7 +26,7 @@ rule yak_pe_reads:
         cpus=parameters["threads"]["yak_pe_reads"],
         time=parameters["time"]["yak_pe_reads"],
         mem=lambda wildcards, attempt: attempt * parameters["memory_mb"]["yak_pe_reads"],
-        kmer_counter=1
+        yak_kmer_counter=1
     threads:
         parameters["threads"]["yak_pe_reads"]
     shell:

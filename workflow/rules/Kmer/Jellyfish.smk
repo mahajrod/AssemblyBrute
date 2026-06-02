@@ -28,7 +28,7 @@ rule jellyfish:
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("jellyfish"),
-        cpus=parameters["threads"]["jellyfish"],
+        cpus=get_threads(parameters["threads"]["jellyfish"], "cpu"),
         time=parameters["time"]["jellyfish"],
         mem=parameters["memory_mb"]["jellyfish"],
         kmer_counter=1

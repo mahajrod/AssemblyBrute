@@ -21,7 +21,7 @@ rule kat_gcp:
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("kat_gcp"),
-        cpus=parameters["threads"]["kat_gcp"],
+        cpus=get_threads(parameters["threads"]["kat_gcp"], "cpu"),
         time=parameters["time"]["kat_gcp"],
         mem=parameters["memory_mb"]["kat_gcp"],
     threads:

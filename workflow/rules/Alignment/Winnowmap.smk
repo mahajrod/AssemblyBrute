@@ -31,7 +31,7 @@ rule winnowmap: #
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("minimap2_cov"),
-        cpus=parameters["threads"]["minimap2"] + parameters["threads"]["samtools_sort"],
+        cpus=get_threads(parameters["threads"]["minimap2"] + parameters["threads"]["samtools_sort"], "cpu"),
         time=parameters["time"]["minimap2"],
         mem=parameters["memory_mb"]["minimap2"] + (parameters["memory_mb"]["samtools_sort"] * parameters["threads"]["samtools_sort"])
     threads: parameters["threads"]["minimap2"] + parameters["threads"]["samtools_sort"]

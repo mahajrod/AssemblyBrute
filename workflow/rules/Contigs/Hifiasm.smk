@@ -68,7 +68,7 @@ rule hifiasm_correct:
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("hifiasm_correct"),
-        cpus=parameters["threads"]["hifiasm"],
+        cpus=get_threads(parameters["threads"]["hifiasm"], "cpu"),
         time=parameters["time"]["hifiasm"],
         mem=parameters["memory_mb"]["hifiasm"],
     threads:
@@ -327,7 +327,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("hifiasm_hic"),
-        cpus=parameters["threads"]["hifiasm"],
+        cpus=get_threads(parameters["threads"]["hifiasm"], "cpu"),
         time=parameters["time"]["hifiasm"],
         mem=partial(get_memory, start_mem=parameters["memory_mb"]["hifiasm"], coeff=1.4, mode="exp"), #parameters["memory_mb"]["hifiasm"]
     threads:

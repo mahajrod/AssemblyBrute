@@ -18,7 +18,7 @@ rule meryl_assembly_new: #TODO: in future use this rule for all kmer counts on a
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("meryl_assembly"),
-        cpus=parameters["threads"]["meryl_assembly"],
+        cpus=get_threads(parameters["threads"]["meryl_assembly"], "cpu"),
         time=parameters["time"]["meryl_assembly"],
         mem=lambda wildcards, attempt: attempt * parameters["memory_mb"]["meryl_assembly"],
         kmer_counter=1
@@ -82,7 +82,7 @@ rule meryl:
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("meryl"),
-        cpus=parameters["threads"]["meryl"],
+        cpus=get_threads(parameters["threads"]["meryl"], "cpu"),
         time=parameters["time"]["meryl"],
         mem=lambda wildcards, attempt: attempt * parameters["memory_mb"]["meryl"],
         kmer_counter=1
@@ -110,7 +110,7 @@ rule meryl_pe:
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("meryl_pe"),
-        cpus=parameters["threads"]["meryl"],
+        cpus=get_threads(parameters["threads"]["meryl"], "cpu"),
         time=parameters["time"]["meryl"],
         mem=lambda wildcards, attempt: attempt * parameters["memory_mb"]["meryl"],
         kmer_counter=1
@@ -207,7 +207,7 @@ rule merge_meryl:
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("merge_meryl"),
-        cpus=parameters["threads"]["meryl"],
+        cpus=get_threads(parameters["threads"]["meryl"], "cpu"),
         time=parameters["time"]["meryl"],
         mem=lambda wildcards, attempt: attempt * parameters["memory_mb"]["meryl"],
     threads:

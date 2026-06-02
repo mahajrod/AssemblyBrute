@@ -13,6 +13,7 @@
   - "blas=*=*mkl"
   - "multiqc"
   - "minimap2"
+  - "winnowmap"
   - "purge_dups"
   - "yahs>=1.2.2"
   - "quast"

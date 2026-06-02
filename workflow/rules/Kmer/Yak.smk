@@ -23,7 +23,7 @@ rule yak_pe_reads:
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("yak_pe_reads"),
-        cpus=get_threads(parameters["threads"]["yak_pe_reads"], "cpu)",
+        cpus=get_threads(parameters["threads"]["yak_pe_reads"], "cpu"),
         time=parameters["time"]["yak_pe_reads"],
         mem=lambda wildcards, attempt: attempt * parameters["memory_mb"]["yak_pe_reads"],
         yak_kmer_counter=1

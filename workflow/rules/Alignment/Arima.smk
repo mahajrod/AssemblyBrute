@@ -55,7 +55,7 @@ rule arima_bwa_map: #
                                                                                          config["fastq_extension"]
                                                                                          )
     output:
-        raw_bam=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype, hap[^./]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.raw.bam"
+        raw_bam=temp(out_dir_path  / "{assembly_stage}/{parameters}/{haplotype, hap[^./]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.raw.bam")
     params:
         id="{0}_hic".format(config["genome_prefix"]),
         bwa_tool=config["bwa_tool"],
@@ -86,7 +86,7 @@ rule arima_filter_five_end: #
         raw_bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.raw.bam",
         stats=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.raw.bam.general_stats"
     output:
-        bam=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype, hap[^./]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam"
+        bam=temp(out_dir_path  / "{assembly_stage}/{parameters}/{haplotype, hap[^./]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam")
     params:
         id="{0}_hic".format(config["genome_prefix"]),
         bwa_tool=config["bwa_tool"],
@@ -144,7 +144,7 @@ rule arima_two_read_bam_combiner:
                                                                                                                                         input_reverse_suffix_dict["hic"] if wildcards.phasing_kmer_length == "NA" else "_2")),
         reference_fai=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.fai"
     output:
-        bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, hap[^./]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.bam", # TODO: make_tem
+        bam=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype, hap[^./]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.bam"), # TODO: make_tem
     params:
         min_mapq=parameters["tool_options"]["two_read_bam_combiner"]["mapq"],
         sort_threads=parameters["threads"]["samtools_sort"],

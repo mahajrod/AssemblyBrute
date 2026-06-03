@@ -32,7 +32,7 @@ rule nextpolish2: #
     benchmark:
         out_dir_path / "polishing/{prev_stage_parameters}..nextpolish2_{polishing_parameters}/benchmark/nextpolish2.hifi.{genome_prefix}.polishing.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["nextpolish2"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["nextpolish2"]["yaml"])
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("nextpolish2"),

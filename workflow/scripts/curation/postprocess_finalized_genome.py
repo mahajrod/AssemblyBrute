@@ -128,6 +128,10 @@ curation_date = parse_date(args.date) if args.date else datetime.today()
 hap_filename_dict = get_haplotype_files(args.input_prefix, args.ploidy)
 # get output directory
 out_dir_path = Path(args.output_dir)
+try:
+    os.mkdir(out_dir_path)
+except:
+    pass
 
 if args.naming_style == "VGP":
     current_date_str = curation_date.strftime('%Y%m%d')
@@ -136,6 +140,8 @@ else:
     raise ValueError("ERROR!!! Unrecognized naming style of the output! Check help for --naming_style option.")
 
 tmp_dir_path = out_dir_path/ f"tmp_{os.urandom(30).hex()}"
+
+
 os.mkdir(tmp_dir_path)
 
 try:

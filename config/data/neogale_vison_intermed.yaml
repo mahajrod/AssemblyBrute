@@ -130,9 +130,10 @@
         - "phased_reads"
 
 "extended_qc_stages":
-    - "purge_dups"
+    #- "purge_dups"
     - "hic_scaffolding"
     - "ref_scaffolding"
+    - "draft_qc"
 
 "qc_settings":
     "windows_sets":
@@ -233,7 +234,7 @@
 "phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads
 #---------------------------------------------------------------------
 
-"mode": "finalization"                # Allowed: "preprocessing", "qc", "assembly"
+"mode": "qc"                # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "qc_draft_only"              # Allowed: "default"
 "assembly_mode": "hic_scaffolding"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
@@ -262,7 +263,7 @@
 "skip_wga": False
 "skip_higlass": True
 "skip_variantcalling": True
-"skip_hic_file": False
+"skip_hic_file": True
 "skip_krater": True
 "skip_kmer": False
 "skip_ragtag": True

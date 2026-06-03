@@ -41,7 +41,7 @@ rule nextpolish2: #
         mem=parameters["memory_mb"]["nextpolish2"]
     threads: parameters["threads"]["nextpolish2"]
     shell:
-        " nextPolish2 -r -t {threads} {input.winnowmap_bam} {input.draft_assembly} "
+        " nextPolish2  -t {threads} {input.winnowmap_bam} {input.draft_assembly} "
         "             {input.yak_db_k21} {input.yak_db_k31} > {output.polished_assembly} 2>{log.std};  "
 
 

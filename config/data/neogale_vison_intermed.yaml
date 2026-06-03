@@ -276,22 +276,7 @@
 "skip_mitoz": True
 
 "create_hic_file_during_curation": False
-#------------ Options specific for cluster ------------
-# This option have no effect if pipeline runs on local machine
-"queue":
-    "cpu": "cpuqueue"
-    "gpu": "gpuqueue" # set to null if your cluster doesn't have gpuqueue. Gpuqueue is used only for deepvariant yet
-"tool_queue":
-    "deepvariant": "gpu"  # Allowed: "gpu", "cpu". GPU queue will be used if it is set here AND if "queue": "gpu" is set , and if GPU imae of deepvariant is available
-"nodes":
-    "blacklist": []
-    "whitelist": []
-"rule_nodes":
-    "deepvariant":
-        "blacklist":
-            - "mjolnircomp05fl"
-            - "mjolnircomp06fl"
-        "whitelist": []
+
 #------------------------------------------------------
 #"adaptor_scan": True
 #"fcs_gx_scan": True

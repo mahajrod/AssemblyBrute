@@ -103,6 +103,10 @@ def parse_coretool_config_datatypes(coretool_config_dict):
             parsed_datatype_dict[datatype] = bool
         elif coretool_config_dict[datatype] == "list":
             parsed_datatype_dict[datatype] = lambda s: s.split(",")
+        elif coretool_config_dict[datatype] == "Int32":
+            parsed_datatype_dict[datatype] = np.int32
+        elif coretool_config_dict[datatype] == "Float32":
+            parsed_datatype_dict[datatype] = np.float32
         else:
-            parsed_datatype_dict[datatype] = coretool_config_dict[datatype]
+            raise ValueError(f"ERROR!!! Unrecognized datatype {coretool_config_dict[datatype]}!")
     return parsed_datatype_dict

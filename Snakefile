@@ -26,6 +26,20 @@ with open(config["main_config_file"], "r") as core_yaml_fd:
 #-------- Read secondary tools config file -------
 with open(config["secondary_tool_config_file"], "r") as secondary_tool_fd:
     copy_absent_entries(yaml.safe_load(secondary_tool_fd), config)
+
+#------- Read configs of coretools with separated configs -------
+coretool_config_dir_path = Path(config["coretool_config_dir"])
+for parameter_set in config["parameters"]:
+    for coretool in config["coretool_config_dict"]:
+        if (coretool_config_dir_path / parameter_set).exists():
+            if (coretool_config_dir_path / parameter_set / f"{coretool}.config").exists():
+                coretool_config_df = pd.read_csv(coretool_config_dir_path / parameter_set / f"{coretool}.config", sep="\t",
+                                                 header=0, index_col=0,
+                                                 dtype=parsed_datatype_dict(config["coretool_config_dict"]["coretool"]))
+                copy_absent_entries(coretool_config_df.to_dict(orient='index'),
+                                    config["parameters"][parameter_set]["tool_options"][coretool])
+                print (config["parameters"][parameter_set]["tool_options"][coretool])
+exit(0)
 #-------- Read cluster config file ---------
 with open(config["cluster_config_file"], "r") as cluster_fd:
     copy_absent_entries(yaml.safe_load(cluster_fd), config)
@@ -46,10 +60,6 @@ for resource, res_datatype in zip(["threads", "memory_mb", "time"], [int, int, s
 #---------------------------------------------
 
 #---------------------------
-
-
-
-
 #-- Initialization of path variables from config file --
 #logging.info("Initialization of path variables...")
 #---- Initialization of path variables for input----

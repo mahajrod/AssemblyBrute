@@ -1,12 +1,6 @@
 #---- Main config file ----
 "main_config_file": "config/core.yaml"      # Path to main config file relative to Snakefile
 #--------------------------
-#---- Secondary tool config file ----
-"secondary_tool_config_file": "config/core.secondary_tools.yaml"      # Path to 'secondary tool' config file relative to Snakefile
-#---- Cluster config file ----
-"cluster_config_file": "config/cluster.yaml"      # Path to 'secondary tool' config file relative to Snakefile
-#---- Skip step config file ----
-"skip_config_file": "config/skip.yaml"      # Path to 'skip' config file relative to Snakefile
 #---- Resource profile ----
 "resource_profile": "high"      # Should be present in resource directory
 #--------------------------

@@ -9,8 +9,10 @@ rule gather_stats_per_stage_parameter:
         quast_dirs=lambda wildcards: expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/quast/{genome_prefix}.{assembly_stage}.{haplotype}",
                                             haplotype=stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
                                             allow_missing=True),
-        qv_file=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{genome_prefix}.{assembly_stage}.qv" if not config["skip_kmer"] else [],
-        completeness_stats_file=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{genome_prefix}.{assembly_stage}.completeness.stats" if not config["skip_kmer"] else [],
+        qv_files=expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{merqury_datatype}/{genome_prefix}.{assembly_stage}.{datatype}.{merqury_datatype}.qv",
+                        merqury_datatype=, allow_missing=True) if not config["skip_kmer"] else [],
+        completeness_stats_files=expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{merqury_datatype}/{genome_prefix}.{assembly_stage}.{merqury_datatype}.completeness.stats",
+                       merqury_datatype=, allow_missing=True) if not config["skip_kmer"] else [],
     params:
         #busco_list=lambda wildcards: (" -b " + ",".join(expand(out_dir_path / ("%s/%s/assembly_qc/busco5/%s.%s.{haplotype}.busco5.{busco_lineage}.summary" % (wildcards.assembly_stage,
         #                                                                                                                                                      wildcards.parameters,
@@ -19,6 +21,7 @@ rule gather_stats_per_stage_parameter:
         #               busco_lineage=config["busco_lineage_list"],
         #               haplotype=haplotype_list,
         #               allow_missing=True) )) if not config["skip_busco"] else "",
+        merqury_datatypes=",".join(),
         haplotype_list=lambda wildcards: ",".join(stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"]),
         busco_lineage_list=(" -b " + ",".join(config["busco_lineage_list"])) if not config["skip_busco"] else ""
     output:
@@ -42,8 +45,8 @@ rule gather_stats_per_stage_parameter:
         parameters["threads"]["gather_stage_stats"]
     shell:
         " ./workflow/scripts/gather_qc_stats.py -q results/{wildcards.assembly_stage}/{wildcards.parameters}/assembly_qc/ "
-        " -p {wildcards.parameters} -e {wildcards.genome_prefix}.{wildcards.assembly_stage} -s {wildcards.assembly_stage} "
-        " -a {params.haplotype_list} {params.busco_lineage_list} -o {output.stats} > {log.std} 2>&1; "
+        "      -p {wildcards.parameters} -e {wildcards.genome_prefix}.{wildcards.assembly_stage} -s {wildcards.assembly_stage} "
+        "      -a {params.haplotype_list} {params.busco_lineage_list} -o {output.stats} -m {params.merqury_datatypes} > {log.std} 2>&1; "
 
 
 rule gather_stage_stats:

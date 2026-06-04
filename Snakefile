@@ -41,8 +41,8 @@ for parameter_set in config["parameters"]:
                                                  dtype=parse_coretool_config_datatypes(config["coretool_config_dict"][coretool]))
                 copy_absent_entries(coretool_config_df.to_dict(orient='index'),
                                     config["parameters"][parameter_set]["tool_options"][coretool])
-                print(config["parameters"][parameter_set]["tool_options"][coretool])
-exit(0)
+                #print(config["parameters"][parameter_set]["tool_options"][coretool])
+
 #-------- Read cluster config file ---------
 with open(config["cluster_config_file"], "r") as cluster_fd:
     copy_absent_entries(yaml.safe_load(cluster_fd), config)

@@ -33,6 +33,7 @@ for parameter_set in config["parameters"]:
     for coretool in config["coretool_config_dict"]:
         if (coretool_config_dir_path / parameter_set).exists():
             if (coretool_config_dir_path / parameter_set / f"{coretool}.config").exists():
+                print(parse_coretool_config_datatypes(config["coretool_config_dict"][coretool]))
                 coretool_config_df = pd.read_csv(coretool_config_dir_path / parameter_set / f"{coretool}.config", sep="\t",
                                                  header=0, index_col=0,
                                                  converters=parse_coretool_config_datatypes(config["coretool_config_dict"][coretool]))

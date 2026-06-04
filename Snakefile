@@ -11,6 +11,7 @@ from copy import deepcopy
 from pathlib import Path, PosixPath
 from numbers import Number # Abstract class for numeric types
 import pandas as pd
+import numpy as np
 from stone.backends.obj_c import comment_prefix
 
 #---- Include sections for functions ----

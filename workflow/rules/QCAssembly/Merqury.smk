@@ -1,6 +1,6 @@
 
 #stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"]
-
+"""
 def get_meryl_db_for_merqury(wildcards):
     if ("qc_datatypes" in config) and config["qc_datatypes"]:
         qc_datatypes = config["qc_datatypes"]
@@ -15,9 +15,29 @@ def get_meryl_db_for_merqury(wildcards):
             if datatype in config["filtered_data"]:
                 filtered_flag = True
 
-    #print(output_dict["kmer"] / "{0}/{1}/{0}.{1}.{2}.meryl".format("_".join(kmer_datatype_list),
-    #                                                                "filtered" if filtered_flag else "raw",
-    #                                                                 config["final_kmer_length"],))
+
+    return output_dict["kmer"] / "{0}/{1}/{0}.{1}.{2}.meryl".format("_".join(kmer_datatype_list),
+                                                                    "filtered" if filtered_flag else "raw",
+                                                                     config["final_kmer_length"],)
+"""
+def get_meryl_db_for_merqury(wildcards):
+    datatype_list = wildcards.datatype.split("_")
+    #if ("qc_datatypes" in config) and config["qc_datatypes"]:
+    #    qc_datatypes = config["qc_datatypes"]
+    #else:
+    #    qc_datatypes = stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["option_set"]["qc_datatypes"]
+    #print("QC datatypes: {0}\n".format('.'.join(qc_datatypes)))
+    kmer_datatype_list = []
+    filtered_flag = False
+    for datatype in datatype_list: # move it to SnakeFile
+        if datatype in input_filedict:
+            kmer_datatype_list.append(datatype)
+            if datatype in config["filtered_data"]:
+                filtered_flag = True
+        else:
+            print(f"WARNING. QC datatype {datatype} is missing in the input. Excluding it from the QC!!!")
+
+
     return output_dict["kmer"] / "{0}/{1}/{0}.{1}.{2}.meryl".format("_".join(kmer_datatype_list),
                                                                     "filtered" if filtered_flag else "raw",
                                                                      config["final_kmer_length"],)
@@ -38,21 +58,22 @@ rule merqury: # TODO: add handling for cases of haploid and polyploid genomes
                                                                                              wildcards.genome_prefix,
                                                                                              "hap2") if stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"][0] != "hap0" else [],
     output:
-        qv_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/merqury/{genome_prefix, [^/]+}.{assembly_stage}.qv",
-        completeness_stats_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/merqury/{genome_prefix, [^/]+}.{assembly_stage}.completeness.stats",
+        qv_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/merqury/{datatype}/{genome_prefix, [^/]+}.{assembly_stage}.{datatype}.qv",
+        completeness_stats_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/merqury/{datatype}/{genome_prefix, [^/]+}.{assembly_stage}.{datatype}.completeness.stats",
     params:
         #dir=lambda wildcards: out_dir_path / "{0}/{1}/assembly_qc/merqury/".format(wildcards.assembly_stage,
         #                                                                           wildcards.parameters),
-        out_prefix=lambda wildcards: "{0}.{1}".format(wildcards.genome_prefix,
-                                                      wildcards.assembly_stage)
+        out_prefix=lambda wildcards: "{0}.{1}.{2}".format(wildcards.genome_prefix,
+                                                          wildcards.assembly_stage,
+                                                          wildcards.datatype)
     log:
-        std=output_dict["log"].resolve() / "merqury.{assembly_stage}.{parameters}.{genome_prefix}.log",
-        mkdir_log=(output_dict["log"]).resolve() / "merqury.{assembly_stage}.{parameters}.{genome_prefix}.mkdir.log",
-        cd_log=(output_dict["log"]).resolve() / "merqury.{assembly_stage}.{parameters}.{genome_prefix}.cd.log",
-        cluster_log=(output_dict["cluster_log"]).resolve() / "merqury.{assembly_stage}.{parameters}.{genome_prefix}.cluster.log",
-        cluster_err=(output_dict["cluster_error"]).resolve() / "merqury.{assembly_stage}.{parameters}.{genome_prefix}.cluster.err"
+        std=output_dict["log"].resolve() / "merqury.{assembly_stage}.{parameters}.{genome_prefix}.{datatype}.log",
+        mkdir_log=(output_dict["log"]).resolve() / "merqury.{assembly_stage}.{parameters}.{genome_prefix}.{datatype}.mkdir.log",
+        cd_log=(output_dict["log"]).resolve() / "merqury.{assembly_stage}.{parameters}.{genome_prefix}.{datatype}.cd.log",
+        cluster_log=(output_dict["cluster_log"]).resolve() / "merqury.{assembly_stage}.{parameters}.{genome_prefix}.{datatype}.cluster.log",
+        cluster_err=(output_dict["cluster_error"]).resolve() / "merqury.{assembly_stage}.{parameters}.{genome_prefix}.{datatype}.cluster.err"
     benchmark:
-        output_dict["benchmark"] / "merqury.{assembly_stage}.{parameters}.{genome_prefix}.benchmark.txt"
+        output_dict["benchmark"] / "merqury.{assembly_stage}.{parameters}.{genome_prefix}.{datatype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -79,5 +100,3 @@ rule merqury: # TODO: add handling for cases of haploid and polyploid genomes
          " cd ${{OUT_DIR}}; "
          " PATH=${{MERQURY_DIR}}:${{PATH}} OMP_NUM_THREADS={threads} ${{MERQURY_SCRIPT}} ${{MERYL_DB}} "
          " ${{PRIMARY_ASSEMBLY}} ${{ALTERNATIVE_ASSEMBLY}} {params.out_prefix}  1>{log.std} 2>&1;"
-
-

@@ -88,3 +88,21 @@ def parse_node_list(rulename, grid_system="slurm"):
         print("White and black node lists are implemented only for slurm. "
               "Modify 'parse_node_list' function in 'workflow/functions/option_parsing_py' "
               "if you need such functionality for other grid systems")
+
+
+def parse_coretool_config_datatypes(coretool_config_dict):
+    parsed_datatype_dict = {}
+    for datatype in coretool_config_dict:
+        if coretool_config_dict[datatype] == "int":
+            parsed_datatype_dict[datatype] = int
+        elif coretool_config_dict[datatype] == "float":
+            parsed_datatype_dict[datatype] = float
+        elif coretool_config_dict[datatype] == "str":
+            parsed_datatype_dict[datatype] = str
+        elif coretool_config_dict[datatype] == "bool":
+            parsed_datatype_dict[datatype] = bool
+        elif coretool_config_dict[datatype] == "list":
+            parsed_datatype_dict[datatype] = lambda s: s.split(",")
+        else:
+            parsed_datatype_dict[datatype] = coretool_config_dict[datatype]
+    return parsed_datatype_dict

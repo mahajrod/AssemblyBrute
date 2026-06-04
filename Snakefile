@@ -37,7 +37,8 @@ for parameter_set in config["parameters"]:
                 print(parse_coretool_config_datatypes(config["coretool_config_dict"][coretool]))
                 coretool_config_df = pd.read_csv(coretool_config_dir_path / parameter_set / f"{coretool}.config", sep="\t",
                                                  header=0, index_col=0,
-                                                 converters=parse_coretool_config_datatypes(config["coretool_config_dict"][coretool]))
+                                                 converters=parse_coretool_config_converters(config["coretool_config_dict"][coretool]),
+                                                 dtype=parse_coretool_config_datatypes(config["coretool_config_dict"][coretool]))
                 copy_absent_entries(coretool_config_df.to_dict(orient='index'),
                                     config["parameters"][parameter_set]["tool_options"][coretool])
                 print(config["parameters"][parameter_set]["tool_options"][coretool])

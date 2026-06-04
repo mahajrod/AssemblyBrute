@@ -90,23 +90,25 @@ def parse_node_list(rulename, grid_system="slurm"):
               "if you need such functionality for other grid systems")
 
 
+def parse_coretool_config_converters(coretool_config_dict):
+    parsed_converter_dict = {}
+    for datatype in coretool_config_dict:
+        if coretool_config_dict[datatype] == "int":
+            parsed_converter_dict[datatype] = int
+        elif coretool_config_dict[datatype] == "float":
+            parsed_converter_dict[datatype] = float
+        elif coretool_config_dict[datatype] == "str":
+            parsed_converter_dict[datatype] = str
+        elif coretool_config_dict[datatype] == "bool":
+            parsed_converter_dict[datatype] = bool
+        elif coretool_config_dict[datatype] == "list":
+            parsed_converter_dict[datatype] = lambda s: s.split(",")
+    return parsed_converter_dict
+
 def parse_coretool_config_datatypes(coretool_config_dict):
     parsed_datatype_dict = {}
     for datatype in coretool_config_dict:
-        if coretool_config_dict[datatype] == "int":
-            parsed_datatype_dict[datatype] = int
-        elif coretool_config_dict[datatype] == "float":
-            parsed_datatype_dict[datatype] = float
-        elif coretool_config_dict[datatype] == "str":
-            parsed_datatype_dict[datatype] = str
-        elif coretool_config_dict[datatype] == "bool":
-            parsed_datatype_dict[datatype] = bool
-        elif coretool_config_dict[datatype] == "list":
-            parsed_datatype_dict[datatype] = lambda s: s.split(",")
-        elif coretool_config_dict[datatype] == "Int32":
-            parsed_datatype_dict[datatype] = np.int32
-        elif coretool_config_dict[datatype] == "Float32":
-            parsed_datatype_dict[datatype] = np.float32
-        else:
-            raise ValueError(f"ERROR!!! Unrecognized datatype {coretool_config_dict[datatype]}!")
+        if coretool_config_dict[datatype] in ["Int32", "Float32"]:
+            parsed_datatype_dict[datatype] = coretool_config_dict[datatype]
+
     return parsed_datatype_dict

@@ -286,7 +286,7 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         alt_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.alt.unfiltered.gfa",
 
     params:
-        purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge level"],
+        purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge_level"],
         ploidy=lambda wildcards: stage_dict["contig"]["parameters"][f"hifiasm_{wildcards.contig_options}"]["option_set"]["assembly_ploidy"], #config["ploidy"],
         cov_multiplicator=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["cov_multiplicator"],
         window_size=lambda wildcards: parse_option("window_size", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -w "),
@@ -405,7 +405,7 @@ rule hifiasm_hic_tetra: # TODO: add support for polyploid assemblies
         #                         haplotype=["hap1", "hap2", "hap3", "hap4"], allow_missing=True),
         alt_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.alt.unfiltered.gfa",
     params:
-        purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge level"],
+        purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge_level"],
         ploidy=lambda wildcards: stage_dict["contig"]["parameters"][f"hifiasm_{wildcards.contig_options}"]["option_set"]["assembly_ploidy"], #config["ploidy"],
         cov_multiplicator=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["cov_multiplicator"],
         window_size=lambda wildcards: parse_option("window_size", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -w "),
@@ -499,7 +499,7 @@ rule hifiasm_hic_ont: # TODO: add support for polyploid assemblies
         alternative_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap2.unfiltered.gfa",
         alt_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.alt.unfiltered.gfa",
     params:
-        purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge level"],
+        purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge_level"],
         ploidy=lambda wildcards: stage_dict["contig"]["parameters"][f"hifiasm_{wildcards.contig_options}"]["option_set"]["assembly_ploidy"], #config["ploidy"],
         cov_multiplicator=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["cov_multiplicator"],
         window_size=lambda wildcards: parse_option("window_size", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -w "),
@@ -590,7 +590,7 @@ rule hifiasm_long_reads_only:
         primary_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap0.unfiltered.gfa",
         alt_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.alt0.unfiltered.gfa",
     params:
-        purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge level"],
+        purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge_level"],
         ploidy=lambda wildcards: stage_dict["contig"]["parameters"][f"hifiasm_{wildcards.contig_options}"]["option_set"]["assembly_ploidy"], #config["ploidy"],
         cov_multiplicator=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["cov_multiplicator"],
         window_size=lambda wildcards: parse_option("window_size", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -w "),
@@ -753,7 +753,7 @@ rule hifiasm_hic_4p: # TODO: add support for polyploid assemblies
         alt_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.alt.unfiltered.gfa",
 
     params:
-        purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge level"],
+        purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge_level"],
         ploidy=lambda wildcards: stage_dict["contig"]["parameters"][f"hifiasm_{wildcards.contig_options}"]["option_set"]["assembly_ploidy"], #config["ploidy"],
         cov_multiplicator=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["cov_multiplicator"],
         window_size=lambda wildcards: parse_option("window_size", parameters["tool_options"]["hifiasm"][wildcards.contig_options], " -w "),

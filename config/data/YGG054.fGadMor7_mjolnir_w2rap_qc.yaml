@@ -87,7 +87,7 @@
             - "nextpolish2"
 
 "extended_qc_stages":
-    @- "purge_dups"
+    #- "purge_dups"
     - "hic_scaffolding"
     - "ref_scaffolding"
     - "contig"

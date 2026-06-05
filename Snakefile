@@ -28,8 +28,8 @@ with open(config["main_config_file"], "r") as core_yaml_fd:
 with open(config["secondary_tool_config_file"], "r") as secondary_tool_fd:
     copy_absent_entries(yaml.safe_load(secondary_tool_fd), config)
 #-------- Read database and container config file --------
-with open(config["secondary_tool_config_file"], "r") as secondary_tool_fd:
-    copy_absent_entries(yaml.safe_load(secondary_tool_fd), config)
+with open(config["databases_and_containers.yaml"], "r") as databases_and_containers_fd:
+    copy_absent_entries(yaml.safe_load(databases_and_containers_fd), config)
 
 #------- Read configs of coretools with separated configs -------
 coretool_config_dir_path = Path(config["coretool_config_dir"])

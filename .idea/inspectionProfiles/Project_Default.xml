@@ -1,0 +1,32 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="Snakefile.*" />
+          <option value="workflow.rules.Contigs.Hifiasm.parameters" />
+          <option value="workflow.rules.Contigs.Hifiasm.output_dict" />
+          <option value="workflow.rules.Contigs.Hifiasm.input_filedict" />
+          <option value="workflow.rules.Contigs.Hifiasm.input_file_prefix_dict" />
+          <option value="workflow.rules.Contigs.Hifiasm.expand" />
+          <option value="workflow.rules.Alignment.Alignment.out_dir_path" />
+          <option value="workflow.rules.Alignment.Alignment.parameters" />
+          <option value="workflow.rules.Alignment.Alignment.output_dict" />
+          <option value="workflow.rules.Alignment.Alignment.input_pairprefix_dict" />
+          <option value="workflow.rules.Alignment.Alignment.expand" />
+          <option value="workflow.rules.Alignment.Alignment.rules" />
+          <option value="workflow.rules.Alignment.Alignment.input_forward_suffix_dict" />
+          <option value="workflow.rules.Alignment.Alignment.input_reverse_suffix_dict" />
+          <option value="workflow.rules.Purge_dups.Purge_dups.out_dir_path" />
+          <option value="workflow.rules.Purge_dups.Purge_dups.*" />
+          <option value="workflow.rules.Curation.RapidCuration.*" />
+          <option value="workflow.rules.Kmer.Meryl.*" />
+          <option value="workflow.rules.QCFiltering.Porechop_ABI.parse_option_flag" />
+          <option value="workflow.rules.QCFiltering.Porechop_ABI.*" />
+          <option value="workflow.rules.Curation.CoverageTrack.*" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

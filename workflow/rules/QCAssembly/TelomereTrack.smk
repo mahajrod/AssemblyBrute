@@ -78,6 +78,7 @@ rule telo_container: #TODO: add possibility to use custom telomere c
         non_canonical_telo="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical.telomere",
         non_canonical_telo_win="{fasta_dir}/telomere/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical.telomere.windows",
     params:
+        singularity_load_str=(config["singularity_load_str"] + "; ") if config["singularity_load_mode"] else "",
         container=config["tool_containers"]["rapid_telomere"]
     log:
         std="{fasta_dir}/telo_container.{fasta_prefix}.log",
@@ -86,7 +87,7 @@ rule telo_container: #TODO: add possibility to use custom telomere c
     benchmark:
         "{fasta_dir}/telo_container.{fasta_prefix}.benchmark.txt"
     conda:
-        config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
+        config["conda"]["yggbase" if config["singularity_load_mode"] else "singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["yggbase" if config["singularity_load_mode"] else "singularity"]["yaml"])
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("telo_container"),
@@ -97,6 +98,7 @@ rule telo_container: #TODO: add possibility to use custom telomere c
     threads: parameters["threads"]["telo_finder"]
 
     shell: # TODO pack code below as script. Issue with container - it return 111 inside of 0 and snakemake breaks. Added ' || true'
+        " {params.singularity_load_str} "
         " STARTDIR=`pwd`; "
         " LOG=`realpath -s {log.std}`; "
         " echo \"Started logging...\" > ${{LOG}}; "

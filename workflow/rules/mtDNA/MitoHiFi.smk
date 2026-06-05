@@ -48,6 +48,7 @@ rule mitohifi_reads:
         #coverage_plot=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/final_mitogenome.coverage.png",
         #annotation_plot=out_dir_path / "mtDNA/{mtdna_ref}/hifi/{stage, filtered}/{fileprefix}/final_mitogenome.annotation.png"
     params:
+        singularity_load_str=(config["singularity_load_str"] + "; ") if config["singularity_load_mode"] else "",
         sif=config["tool_containers"]["mitohifi"],
         kingdom=config["kingdom"],
         genetic_code=config["mtdna_genetic_code"],
@@ -63,7 +64,7 @@ rule mitohifi_reads:
     benchmark:
         output_dict["benchmark"]  / "mitohifi_reads.{mtdna_ref}.{stage}.{fileprefix}.benchmark.txt"
     conda:
-        config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
+        config["conda"]["yggbase" if config["singularity_load_mode"] else "singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["yggbase" if config["singularity_load_mode"] else "singularity"]["yaml"])
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("mitohifi_reads"),
@@ -72,6 +73,7 @@ rule mitohifi_reads:
         mem=parameters["memory_mb"]["mitohifi_reads"]
     threads: parameters["threads"]["mitohifi_reads"]
     shell:
+        " {params.singularity_load_str} "
         " OUT_DIR=`realpath -m {output.finish_flag}`; "
         " OUT_DIR=`dirname ${{OUT_DIR}}`; "
         " HIFI_READS=`realpath {input.hifi_reads}`; "

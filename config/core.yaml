@@ -101,6 +101,8 @@
 
 "resources_dir": "config/resources/"
 #--------------------------
+#---- Databased and container config file ----
+"database_and_container_config_file": "config/databases_and_containers.yaml"
 #---- Secondary tool config file ----
 "secondary_tool_config_file": "config/core.secondary_tools.yaml"      # Path to 'secondary tool' config file relative to Snakefile
 #---- Cluster config file ----

@@ -55,6 +55,7 @@ rule deepvariant: #
         gvcf=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.g.vcf.gz",
         #paf=out_dir_path  / ("purge_dups/{assembler}/{haplotype}/%s.purge_dups.{assembler}.{haplotype}.minimap2.{fileprefix}.paf.gz" % config["genome_name"])
     params:
+        singularity_load_str=(config["singularity_load_str"] + "; ") if config["singularity_load_mode"] else "",
         sif=config["tool_containers"]["deepvariant"]["gpu"] if config["queue"]["gpu"] and config["queue"]["gpu"] and config["tool_containers"]["deepvariant"]["gpu"] else config["tool_containers"]["deepvariant"]["cpu"],
         model=lambda wildcards: parameters["tool_options"]["deepvariant"][wildcards.datatype]["model"],
         gpu_options=" --nv " if config["queue"]["gpu"] and config["queue"]["gpu"] and config["tool_containers"]["deepvariant"]["gpu"] else " " # enables nVidia support
@@ -66,7 +67,7 @@ rule deepvariant: #
     benchmark:
         output_dict["benchmark"]  / "deepvariant.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{seq_type}.{genome_prefix}.{datatype}.benchmark.txt"
     conda:
-        config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
+        config["conda"]["yggbase" if config["singularity_load_mode"] else "singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["yggbase" if config["singularity_load_mode"] else "singularity"]["yaml"])
     resources:
         queue=config["queue"]["gpu"]["name"] if config["queue"]["gpu"] and config["queue"]["gpu"] and config["tool_containers"]["deepvariant"]["gpu"] else config["queue"]["cpu"],
         node_options=parse_node_list("deepvariant"),
@@ -76,6 +77,7 @@ rule deepvariant: #
     threads: parameters["threads"]["deepvariant"]
 
     shell:
+        " {params.singularity_load_str} "
         " WORKDIR=`dirname {output.vcf}`; "
         " SIF=`realpath {params.sif}`; "
         " LOG=`realpath {log.deepvariant}`; "

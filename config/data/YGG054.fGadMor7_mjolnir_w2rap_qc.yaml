@@ -159,7 +159,7 @@
         "starting_lambda": null
         "start_shift": null
 
-"ploidy": 2
+"ploidy": 1
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
 "genome_prefix": "fGadMor7.w2rap" #"YGG048.GadMorReseq"
 "busco_lineage_list":

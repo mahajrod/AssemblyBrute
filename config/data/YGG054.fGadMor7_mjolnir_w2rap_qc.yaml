@@ -85,6 +85,11 @@
     "polishing":
         "default":
             - "nextpolish2"
+    "draft_qc":
+        "default":
+            - "assembly_qc"
+
+
 
 "extended_qc_stages":
     #- "purge_dups"

@@ -202,11 +202,7 @@
     "fcs":
         - "fcs_gx"
 
-"filtered_data":
-    - "hifi"
-    - "hic"
-    - "illumina"
-    - "nanopore"
+"filtered_data": []
 
 "final_kmer_counter": "meryl" # pipeline allows usage of different kmer counter external_tools, but only one genomesize assessment could be used
 "final_kmer_length": 21 # pipeline allows usage of different kmer length, but only one genomesize assessment could be used
@@ -225,7 +221,7 @@
 "custom_enzyme_set_is_no_motif": False
 
 "starting_point": "draft" # Allowed: "draft"
-"data_types": "" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
+"data_types": "illumina" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
 
 #-------- Options specific for starting point 'draft' ----------------
 "phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads
@@ -243,8 +239,8 @@
     - "scaffolds"
     - "contigs" # works only if precuration stage is hic_sscaffolding
 
-"skip_read_qc": False
-"skip_filter_reads": False
+"skip_read_qc": True
+"skip_filter_reads": True
 "skip_busco": False
 "skip_fcs": False
 "skip_fcs_adaptor": False

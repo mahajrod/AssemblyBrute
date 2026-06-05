@@ -259,6 +259,7 @@
 "skip_prescaf_pretext": True
 "skip_postscaf_pretext": True
 "skip_both_pretext": True
+"skip_all_pretext": True
 "skip_nanoqc": False
 "skip_nanoplot": False
 "skip_wga": False

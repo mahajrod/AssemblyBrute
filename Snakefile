@@ -121,7 +121,7 @@ for datatype in config["final_kmer_datatypes"]:
             if ("skip_kmer" in config) and (config["skip_kmer"]):
                 pass
             else:
-                raise ValueError("ERROR!!! dinal kmer datatype ({0}) is absent among input fastq-based datatypes({1})".format(datatype,
+                raise ValueError("ERROR!!! final kmer datatype ({0}) is absent among input fastq-based datatypes({1})".format(datatype,
                                                                                                                               ",".join(fastq_based_data_type_set)))
 
 #--------

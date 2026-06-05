@@ -64,7 +64,7 @@ rule mitohifi_reads:
     benchmark:
         output_dict["benchmark"]  / "mitohifi_reads.{mtdna_ref}.{stage}.{fileprefix}.benchmark.txt"
     conda:
-        config["conda"]["yggbase" if config["singularity_load_mode"] else "singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["yggbase" if config["singularity_load_mode"] else "singularity"]["yaml"])
+        singularity_conda_env
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("mitohifi_reads"),

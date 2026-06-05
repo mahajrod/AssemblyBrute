@@ -67,7 +67,7 @@ rule deepvariant: #
     benchmark:
         output_dict["benchmark"]  / "deepvariant.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{seq_type}.{genome_prefix}.{datatype}.benchmark.txt"
     conda:
-        config["conda"]["yggbase" if config["singularity_load_mode"] else "singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["yggbase" if config["singularity_load_mode"] else "singularity"]["yaml"])
+        singularity_conda_env
     resources:
         queue=config["queue"]["gpu"]["name"] if config["queue"]["gpu"] and config["queue"]["gpu"] and config["tool_containers"]["deepvariant"]["gpu"] else config["queue"]["cpu"],
         node_options=parse_node_list("deepvariant"),

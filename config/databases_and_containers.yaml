@@ -1,7 +1,8 @@
 
 "singularity_load_mode": "cluster" # Allowed 'cluster' (loads singularity as a module) and 'conda' (uses conda-based singularity installation, be sure that your system has multiple user namespaces enabled)
 "singularity_load_str": "module load singularity " # add version if necessary. Ignored if singularity_load_mode != "cluster"
-
+"singularity_load_env": "common" # conda env to use if singularity_load_mode == "cluster"
+config["singularity_load_env"]
 "tool_containers":
     "rapid_telomere":  "/maps/projects/tomg/people/xsg178/soft/rapid-curation/rapid_hic_software/runTelo.sif"
     "deepvariant":

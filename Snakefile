@@ -65,6 +65,11 @@ for resource, res_datatype in zip(["threads", "memory_mb", "time"], [int, int, s
 
 #---------------------------------------------
 
+#---- set conda environment for singularity----
+
+singularity_conda_env_title = config["singularity_load_env"] if config["singularity_load_mode"] else "singularity"
+singularity_conda_env = config["conda"][singularity_conda_env_title]["name"] if config["use_existing_envs"] else f"../../../{config['conda'][singularity_conda_env_title]['yaml']}"
+
 #---------------------------
 #-- Initialization of path variables from config file --
 #logging.info("Initialization of path variables...")

@@ -9,8 +9,6 @@ rule fcs: #
     output:
         taxonomy=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype, [^.]+}/fcs/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.taxonomy",
         summary=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype, [^.]+}/fcs/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.summary"
-        #report=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.contig.{haplotype}.{tax_id}.taxonomy.txt",
-        #summary=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.contig.{haplotype}.{tax_id}.fcs_gx_report.txt"
     params:
         singularity_load_str=(config["singularity_load_str"] + "; ") if config["singularity_load_mode"] else "",
         tax_id=config["tax_id"]
@@ -56,15 +54,6 @@ rule fcs: #
         " mv ${{REPORT%.{wildcards.database}.taxonomy}}.{params.tax_id}.{wildcards.database}_report.txt ${{SUMMARY}} >> {log.post} 2>&1; "
         " mv ${{SUMMARY%.{wildcards.database}.summary}}.{params.tax_id}.taxonomy.rpt ${{REPORT}} >> {log.post} 2>&1; "
         " rm -rf  ${{TMP_DIR}} ${{SINGULARITYENV_TMP_DIR}} ${{SINGULARITYENV_SQLITE_TMP_DIR}} >> {log.post} 2>&1; "
-
-"""
-        
-        " export FCS_DEFAULT_IMAGE={input.image}; "
-        " TMPDIR=${{TMP_DIR}} SINGULARITYENV_TMPDIR=${{SINGULARITYENV_TMP_DIR}} SINGULARITYENV_SQLITE_TMPDIR=${{SINGULARITYENV_SQLITE_TMP_DIR}} "
-        " workflow/external_tools/fcs-gx/fcs.py  screen genome --fasta {input.fasta} --out-dir `dirname {output.taxonomy}` --tax-id {params.tax_id} --gx-db {input.db} > {log.std} 2>&1 || : ; "
-        
-"""
-
 
 rule remove_fcs_contaminants: #
     priority: 5000
@@ -123,15 +112,11 @@ rule remove_fcs_contaminants: #
 rule fcs_adaptor: #
     priority: 2000
     input:
-        fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.unfiltered.fasta", #"contig/{parameters}/{genome_prefix}.contig.{haplotype}.lenfiltered.fasta",
-        #db=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["path"],
+        fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.unfiltered.fasta",
         image=lambda wildcards: config["allowed_databases"]["fcs_adaptor"][wildcards.database]["image_path"],
     output:
         report=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.report",
         report_jsonl=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.report.jsonl",
-        #summary=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.contig.{haplotype}.{database}.summary"
-        #report=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.contig.{haplotype}.{tax_id}.taxonomy.txt",
-        #summary=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.contig.{haplotype}.{tax_id}.fcs_gx_report.txt"
     params:
         singularity_load_str=(config["singularity_load_str"] + "; ") if config["singularity_load_mode"] else "",
         tax_id=config["tax_id"],

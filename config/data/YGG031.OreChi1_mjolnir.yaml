@@ -69,7 +69,7 @@
          #- "l3primary_main_nanopore_only"
          #- "l3primary_main_hifi_duplex"
          - "l3primary_no_ul"
-         - "l3primary_adaptive_nano_as_ul"
+         - "l3primary_adaptivenano_as_ul"
          #- "l1primary_no_hic"
          #- "repeat_enhanced_l1"
          #- "repeat_enhanced_l2"
@@ -173,7 +173,7 @@
 "custom_enzyme_set_is_no_motif": False
 
 "starting_point": "fastq" # Allowed: "draft"
-"data_types": "hifi,hic,simplex,illumina,adaptive_nanopore" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic" and others
+"data_types": "hifi,hic,simplex,illumina,adaptivenano" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic" and others
 
 #-------- Options specific for starting point 'draft' ----------------
 "phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads

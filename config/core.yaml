@@ -176,7 +176,7 @@
                             - "hifi"
                             - "simplex"
                             - "duplex"
-                            -  "nanopore"
+                            - "nanopore"
                             - "illumina"
                             - "bgiseq"
                             - "aviti"
@@ -2189,7 +2189,8 @@
     - "hic"
     - "lr"
     - "illumina"
-    - "ultralong-nanopore"
+    - "ultralongnano"
+    - "adaptivenano"
 
 "bam_based_data":
     - "hifi"
@@ -2198,7 +2199,8 @@
     #- "nanopore"
     - "duplex"
     - "simplex"
-    - "ultralong-nanopore"
+    - "ultralongnano"
+    - "adaptivenano"
 
 "fasta_based_data": # Datatypes that might be in fasta format. For example corrected hifi or nanopore reads
     - "hifi"
@@ -2210,7 +2212,8 @@
     #- "hic"
     #- "lr"
     - "illumina"
-    - "ultralong-nanopore"
+    - "ultralongnano"
+    - "adaptivenano"
 
 "paired_fastq_based_data":
     - "hic"
@@ -2221,7 +2224,8 @@
     - "illumina"
     - "hifi"
     - "simplex"
-    - "ultralong-nanopore"
+    - "ultralongnano"
+    - "adaptivenano"
     #- "clr"
     ##- "nanopore" # TODO: add nanopore support
 
@@ -2238,7 +2242,7 @@
     #- "nanopore"
     - "duplex"
     - "simplex"
-    - "ultralong-nanopore"
+    - "ultralongnano"
 
 "variant_calling_data":
     - "hifi"

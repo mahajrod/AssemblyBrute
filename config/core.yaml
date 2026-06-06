@@ -2325,6 +2325,15 @@
                 #- "hic_scaffolding"
             "draft":
                 - "polishing"
+        "polished_contig_hic_scaffolding":
+            "fastq":
+                - "contig"
+                - "polishing"
+                - "hic_scaffolding"
+                #- "hic_scaffolding"
+            "draft":
+                - "polishing"
+                - "hic_scaffolding"
         "skip_hic_scaffolding":
             "fastq":
                 - "contig"

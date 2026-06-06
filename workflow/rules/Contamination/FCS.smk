@@ -12,6 +12,7 @@ rule fcs: #
         #report=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.contig.{haplotype}.{tax_id}.taxonomy.txt",
         #summary=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.contig.{haplotype}.{tax_id}.fcs_gx_report.txt"
     params:
+        singularity_load_str=(config["singularity_load_str"] + "; ") if config["singularity_load_mode"] else "",
         tax_id=config["tax_id"]
     log:
         std=output_dict["log"]  / "fcs.contig.{parameters}.{genome_prefix}.{haplotype}.{database}.log",
@@ -21,7 +22,7 @@ rule fcs: #
     benchmark:
         output_dict["benchmark"]  / "fcs.contig.{parameters}.{genome_prefix}.{haplotype}.{database}.benchmark.txt"
     conda:
-        config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
+        singularity_conda_env
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("fcs"),
@@ -32,6 +33,7 @@ rule fcs: #
     threads: lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["threads"],
 
     shell: # as report(summary) might be modified manually, original version is backuped with .original extension,# || true was added as workaround to handle singularity issue with removal of rootfs after cmd
+        " {params.singularity_load_str} "
         " OUT_DIR=`dirname {output.taxonomy}`; "
         " OUT_DIR=`realpath -s ${{OUT_DIR}}`; "
         " TMP_DIR=${{OUT_DIR}}'/tmp_{wildcards.database}/'; "
@@ -73,6 +75,7 @@ rule remove_fcs_contaminants: #
         fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype, [^.]+}.fasta",
         contaminant_fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype, [^.]+}.contaminant.fasta"
     params:
+        singularity_load_str=(config["singularity_load_str"] + "; ") if config["singularity_load_mode"] else "",
         skip="skip" if config["skip_fcs"] else "filter"
     log:
         std=output_dict["log"]  / "remove_fcs_contaminants.contig.{parameters}.{genome_prefix}.{haplotype}.log",
@@ -83,7 +86,7 @@ rule remove_fcs_contaminants: #
     benchmark:
         output_dict["benchmark"]  / "remove_fcs_contaminants.contig.{parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
+        singularity_conda_env
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("remove_fcs_contaminants"),
@@ -94,6 +97,7 @@ rule remove_fcs_contaminants: #
     threads: parameters["threads"]["remove_fcs_contaminants"],
 
     shell: # || true was added as workaround to handle singularity issue with removal of rootfs after cmd
+        " {params.singularity_load_str} "
         " if [ '{params.skip}' = 'filter' ]; "
         " then "
         "       OUTDIR=`dirname {output.fasta}`; "
@@ -128,6 +132,7 @@ rule fcs_adaptor: #
         #report=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.contig.{haplotype}.{tax_id}.taxonomy.txt",
         #summary=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.contig.{haplotype}.{tax_id}.fcs_gx_report.txt"
     params:
+        singularity_load_str=(config["singularity_load_str"] + "; ") if config["singularity_load_mode"] else "",
         tax_id=config["tax_id"],
         taxonomy= lambda wildcards: " --euk " if config["allowed_databases"]["fcs_adaptor"][wildcards.database]["taxonomy"] == "eukaryota"  else " --prok "
     log:
@@ -138,7 +143,7 @@ rule fcs_adaptor: #
     benchmark:
         output_dict["benchmark"]  / "fcs_adaptor.contig.{parameters}.{genome_prefix}.{haplotype}.{database}.benchmark.txt"
     conda:
-        config["conda"]["singularity"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["singularity"]["yaml"])
+        singularity_conda_env
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("fcs_adaptor"),
@@ -149,6 +154,7 @@ rule fcs_adaptor: #
     threads: lambda wildcards: config["allowed_databases"]["fcs_adaptor"][wildcards.database]["threads"],
 
     shell:
+        " {params.singularity_load_str} "
         " OUTDIR=`dirname {output.report}`; "
         " OUTDIR=`realpath -s ${{OUTDIR}}`; "
         " TMPDIR=${{OUTDIR}}'/tmp/'; "

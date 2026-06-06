@@ -39,7 +39,7 @@
     #- "purge_dups"
     - "hic_scaffolding"
     - "ref_scaffolding"
-    - "contig"
+    #- "contig"
 
 "qc_settings":
     "windows_sets":

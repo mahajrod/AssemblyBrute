@@ -44,7 +44,7 @@ rule fcs: #
         " FCS_DB_DIR=`realpath ${{FCS_DB_DIR}}`; "
         " FASTA_DIR=`dirname {input.fasta}`; "
         " FASTA_DIR=`realpath ${{FASTA_DIR}}`; "
-        " FASTA_=`basename {input.fasta}`; "
+        " FASTA=`basename {input.fasta}`; "
         " NUM_CORES={threads}; "
         " TMPDIR=${{TMP_DIR}} SINGULARITYENV_TMPDIR=${{SINGULARITYENV_TMP_DIR}} SINGULARITYENV_SQLITE_TMPDIR=${{SINGULARITYENV_SQLITE_TMP_DIR}} "
         "   singularity exec --pid --bind ${{FCS_DB_DIR}}:/app/db/gxdb --bind ${{FASTA_DIR}}:/sample-volume/ "

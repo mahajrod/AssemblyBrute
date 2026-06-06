@@ -2124,10 +2124,11 @@
 "allowed_data_types": # No "_" is allowed in the datatype name, as it is used as separator for merged datatypes
     - "hifi"
     #- "clr"
-    #- "nanopore"
+    - "nanopore"
     - "duplex"
     - "simplex"
-    - "ultralong-nanopore"
+    - "ultralongnano"
+    - "adaptivenano"
     #- "bionano"
     - "hic"
     - "illumina"
@@ -2153,7 +2154,8 @@
     - "duplex"
     - "simplex"
     - "lqccs"
-    - "ultralong-nanopore"
+    - "ultralongnano"
+    - "adaptivenano"
 
 "genome_size_estimation_data":
     - "hifi"
@@ -2162,7 +2164,7 @@
     #- "nanopore"
     - "simplex"
     - "duplex"
-    - "ultralong-nanopore"
+    - "ultralongnano"
 
 "kraken_scan_data":
     - "hifi"
@@ -2172,7 +2174,8 @@
     - "duplex"
     - "simplex"
     - "lqccs"
-    - "ultralong-nanopore"
+    - "ultralongnano"
+    - "adaptivenano"
 
 "read_phasing_data":
     - "hic"
@@ -2243,6 +2246,7 @@
     - "duplex"
     - "simplex"
     - "ultralongnano"
+    - "adaptivenano"
 
 "variant_calling_data":
     - "hifi"

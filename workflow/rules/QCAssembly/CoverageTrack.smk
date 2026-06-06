@@ -5,12 +5,12 @@ if "purge_dups" in config["stage_list"]:
 
 rule minimap2_cov: # TODO: add nanopore support
     input:
-        fastq=lambda wildcards: ancient(expand(output_dict["data"] / ("%s/%s/%s/{fileprefix}%s" % (datatype_format_dict[wildcards.datatype],
+        fastq=lambda wildcards: expand(output_dict["data"] / ("%s/%s/%s/{fileprefix}%s" % (datatype_format_dict[wildcards.datatype],
                                                                                                  wildcards.datatype,
                                                                                                  "filtered" if wildcards.datatype in config["filtered_data"] else "raw",
                                                                                                  config[datatype_format_dict[wildcards.datatype] + "_extension"])),
                      fileprefix=input_file_prefix_dict[wildcards.datatype] if datatype_format_dict[wildcards.datatype] == "fastq" else input_fasta_file_prefix_dict[wildcards.datatype],
-                     allow_missing=True)),
+                     allow_missing=True),
         reference=ancient(out_dir_path  / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta")
     output:
         bam=out_dir_path  / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^/]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, hifi|simplex|duplex|nanopore}.bam"
@@ -41,7 +41,7 @@ rule minimap2_cov: # TODO: add nanopore support
 
     shell:
         " TMPDIR=`dirname {output.bam}`; "
-        " minimap2 {params.alignment_scheme} {params.index_size} -a -t {params.minimap_threads}  {input.reference}  "
+        " minimap2 -L {params.alignment_scheme} {params.index_size} -a -t {params.minimap_threads}  {input.reference}  "
         " {input.fastq} 2>{log.minimap2} |  samtools sort -T ${{TMPDIR}} -@ {params.sort_threads} "
         " -m {params.per_thread_sort_mem}M -o {output.bam} 2>{log.sort};"
         #" samtools index -@ {threads} {output.bam} > {log.index} 2>&1 "

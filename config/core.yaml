@@ -790,6 +790,12 @@
                     "nanopore":
                         "index_size": "4G"
                         "alignment_scheme": "map-ont"  # -x
+                    "ultralongnano":
+                        "index_size": "4G"
+                        "alignment_scheme": "map-ont"  # -x
+                    "adaptivenano":
+                        "index_size": "4G"
+                        "alignment_scheme": "map-ont"  # -x
                     "simplex":
                         "index_size": "4G"
                         "alignment_scheme": "map-ont"  # -x
@@ -1337,6 +1343,12 @@
                     "nanopore":
                         "index_size": "4G"
                         "alignment_scheme": "map-ont"  # -x
+                    "ultralongnano":
+                        "index_size": "4G"
+                        "alignment_scheme": "map-ont"  # -x
+                    "adaptivenano":
+                        "index_size": "4G"
+                        "alignment_scheme": "map-ont"  # -x
                     "duplex":
                         "index_size": "4G"
                         "alignment_scheme": "map-ont"  # -x
@@ -1444,6 +1456,12 @@
                     "nanopore":
                         "index_size": "4G"
                         "alignment_scheme": "map-ont"  # -x
+                    "ultralongnano":
+                        "index_size": "4G"
+                        "alignment_scheme": "map-ont"  # -x
+                    "adaptivenano":
+                        "index_size": "4G"
+                        "alignment_scheme": "map-ont"  # -x
                     "duplex":
                         "index_size": "4G"
                         "alignment_scheme": "map-ont"  # -x
@@ -1545,6 +1563,12 @@
                         "index_size": "4G"
                         "alignment_scheme": "map-pb"   # -x
                     "nanopore":
+                        "index_size": "4G"
+                        "alignment_scheme": "map-ont"  # -x
+                    "ultralongnano":
+                        "index_size": "4G"
+                        "alignment_scheme": "map-ont"  # -x
+                    "adaptivenano":
                         "index_size": "4G"
                         "alignment_scheme": "map-ont"  # -x
                     "duplex":
@@ -1650,6 +1674,12 @@
                     "nanopore":
                         "index_size": "4G"
                         "alignment_scheme": "map-ont"  # -x
+                    "ultralongnano":
+                        "index_size": "4G"
+                        "alignment_scheme": "map-ont"  # -x
+                    "adaptivenano":
+                        "index_size": "4G"
+                        "alignment_scheme": "map-ont"  # -x
                     "duplex":
                         "index_size": "4G"
                         "alignment_scheme": "map-ont"  # -x
@@ -1751,6 +1781,12 @@
                         "index_size": "10G"
                         "alignment_scheme": "map-pb"   # -x
                     "nanopore":
+                        "index_size": "10G"
+                        "alignment_scheme": "map-ont"  # -x
+                    "ultralongnano":
+                        "index_size": "10G"
+                        "alignment_scheme": "map-ont"  # -x
+                    "adaptivenano":
                         "index_size": "10G"
                         "alignment_scheme": "map-ont"  # -x
                     "duplex":
@@ -1856,6 +1892,12 @@
                     "nanopore":
                         "index_size": "15G"
                         "alignment_scheme": "map-ont"  # -x
+                    "ultralongnano":
+                        "index_size": "15G"
+                        "alignment_scheme": "map-ont"  # -x
+                    "adaptivenano":
+                        "index_size": "15G"
+                        "alignment_scheme": "map-ont"  # -x
                     "duplex":
                         "index_size": "15G"
                         "alignment_scheme": "map-ont"  # -x
@@ -1952,9 +1994,15 @@
                         "index_size": "30G"
                         "alignment_scheme": "map-hifi" # -x
                     "clr":
-                        "index_size": 30G"
+                        "index_size": "30G"
                         "alignment_scheme": "map-pb"   # -x
                     "nanopore":
+                        "index_size": "30G"
+                        "alignment_scheme": "map-ont"  # -x
+                    "ultralongnano":
+                        "index_size": "30G"
+                        "alignment_scheme": "map-ont"  # -x
+                    "adaptivenano":
                         "index_size": "30G"
                         "alignment_scheme": "map-ont"  # -x
                     "duplex":

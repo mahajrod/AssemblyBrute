@@ -10,9 +10,9 @@ rule gather_stats_per_stage_parameter:
                                             haplotype=stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
                                             allow_missing=True),
         qv_files=expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{merqury_datatype}/{genome_prefix}.{assembly_stage}.{datatype}.{merqury_datatype}.qv",
-                        merqury_datatype=[], allow_missing=True) if not config["skip_kmer"] else [],
+                        merqury_datatype=config["parameters"]["tool_options"]["assembly_qc"]["merqury"]["datatype_list"], allow_missing=True) if not config["skip_kmer"] else [],
         completeness_stats_files=expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{merqury_datatype}/{genome_prefix}.{assembly_stage}.{merqury_datatype}.completeness.stats",
-                       merqury_datatype=[], allow_missing=True) if not config["skip_kmer"] else [],
+                       merqury_datatype=config["parameters"]["tool_options"]["assembly_qc"]["merqury"]["datatype_list"], allow_missing=True) if not config["skip_kmer"] else [],
     params:
         #busco_list=lambda wildcards: (" -b " + ",".join(expand(out_dir_path / ("%s/%s/assembly_qc/busco5/%s.%s.{haplotype}.busco5.{busco_lineage}.summary" % (wildcards.assembly_stage,
         #                                                                                                                                                      wildcards.parameters,
@@ -21,7 +21,7 @@ rule gather_stats_per_stage_parameter:
         #               busco_lineage=config["busco_lineage_list"],
         #               haplotype=haplotype_list,
         #               allow_missing=True) )) if not config["skip_busco"] else "",
-        merqury_datatypes=",".join([]),
+        merqury_datatypes=",".join(config["parameters"]["tool_options"]["assembly_qc"]["merqury"]["datatype_list"]),
         haplotype_list=lambda wildcards: ",".join(stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"]),
         busco_lineage_list=(" -b " + ",".join(config["busco_lineage_list"])) if not config["skip_busco"] else ""
     output:

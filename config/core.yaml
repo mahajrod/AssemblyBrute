@@ -172,6 +172,14 @@
                                 max_mismatches=,
                                 three_prime_fixed_bases=
                     "coverage":
+                        "datatype_list":
+                            - "hifi"
+                            - "simplex"
+                            - "duplex"
+                            -  "nanopore"
+                            - "illumina"
+                            - "bgiseq"
+                            - "aviti"
                         "options":
                             "w1000k.s1000k":
                                 "window": 1000000
@@ -188,7 +196,20 @@
                             "w10k.s10k":
                                 "window": 10000
                                 "step":   10000
+                    "merqury":
+                        "datatype_list":
+                            - "hifi"
+                            - "simplex"
+                            - "duplex"
+                            - "illumina"
+                            - "bgiseq"
+                            - "aviti"
                     "purge_dups":
+                        "datatype_list":
+                            - "hifi"
+                            - "simplex"
+                            - "duplex"
+                            - "nanopore"
                         "cov_multiplicator": 4.5 # 4.5 *lambda
                     "trf":
                         "relative_thresholds": # median +- threshold * median

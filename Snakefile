@@ -290,9 +290,6 @@ for key in list(config["parameters"].keys()): # remove unused sets of parameters
 
 #---- set QC datypes ----
 #print(config["parameters"])
-for qc_step in "coverage", "merqury", "purge_dups":
-    print(config["parameters"][config["parameter_set"]]["tool_options"]["assembly_qc"])
-    config["parameters"][config["parameter_set"]]["tool_options"]["assembly_qc"][qc_step]["datatype_list"] = list(set(config["parameters"][config["parameter_set"]]["tool_options"]["assembly_qc"][qc_step]["datatype_list"]) & set(data_types))
 
 parameters = config["parameters"][config["parameter_set"]] # short alias for used set of parameters
 
@@ -321,6 +318,9 @@ for dat_type in genome_size_estimation_data_type_set:
 #Kraken scan datatype
 kraken_scan_data_type_set = set(data_types) & set(config["kraken_scan_data"])
 
+for qc_step in "coverage", "merqury", "purge_dups":
+    #print(config["parameters"][config["parameter_set"]]["tool_options"]["assembly_qc"])
+    parameters["tool_options"]["assembly_qc"][qc_step]["datatype_list"] = list(set(parameters["tool_options"]["assembly_qc"][qc_step]["datatype_list"]) & set(data_types))
 
 
 #----

@@ -291,7 +291,7 @@ for key in list(config["parameters"].keys()): # remove unused sets of parameters
 #---- set QC datypes ----
 print(config["parameters"])
 for qc_step in "coverage", "merqury", "purge_dups":
-    config["parameters"][config["parameter_set"]]["tool_options"]["assembly_qc"][qc_step]["datatype_list"] = list(set(config["parameters"]["tool_options"]["assembly_qc"][qc_step]["datatype_list"]) & set(data_types))
+    config["parameters"][config["parameter_set"]]["tool_options"]["assembly_qc"][qc_step]["datatype_list"] = list(set(config["parameters"][config["parameter_set"]]["tool_options"]["assembly_qc"][qc_step]["datatype_list"]) & set(data_types))
 
 parameters = config["parameters"][config["parameter_set"]] # short alias for used set of parameters
 

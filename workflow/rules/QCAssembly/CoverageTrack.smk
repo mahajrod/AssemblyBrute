@@ -3,32 +3,35 @@ ruleorder: create_bedgraph_from_coverage_table > create_bedgraph_track
 if "purge_dups" in config["stage_list"]:
     ruleorder: minimap2_cov > minimap2_purge_dups_reads
 
+wildcard_constraints:
+    longread_datatype="|".join(config["long_read_data"])
+
 rule minimap2_cov: # TODO: add nanopore support
     input:
-        fastq=lambda wildcards: expand(output_dict["data"] / ("%s/%s/%s/{fileprefix}%s" % (datatype_format_dict[wildcards.datatype],
-                                                                                                 wildcards.datatype,
-                                                                                                 "filtered" if wildcards.datatype in config["filtered_data"] else "raw",
-                                                                                                 config[datatype_format_dict[wildcards.datatype] + "_extension"])),
-                     fileprefix=input_file_prefix_dict[wildcards.datatype] if datatype_format_dict[wildcards.datatype] == "fastq" else input_fasta_file_prefix_dict[wildcards.datatype],
+        fastq=lambda wildcards: expand(output_dict["data"] / ("%s/%s/%s/{fileprefix}%s" % (datatype_format_dict[wildcards.longread_datatype],
+                                                                                                 wildcards.longread_datatype,
+                                                                                                 "filtered" if wildcards.longread_datatype in config["filtered_data"] else "raw",
+                                                                                                 config[datatype_format_dict[wildcards.longread_datatype] + "_extension"])),
+                     fileprefix=input_file_prefix_dict[wildcards.longread_datatype] if datatype_format_dict[wildcards.longread_datatype] == "fastq" else input_fasta_file_prefix_dict[wildcards.longread_datatype],
                      allow_missing=True),
         reference=ancient(out_dir_path  / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta")
     output:
-        bam=out_dir_path  / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^/]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, hifi|simplex|duplex|nanopore|adaptivenano|ultralongnano}.bam"
+        bam=out_dir_path  / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^/]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{longread_datatype}.bam"
         #paf=out_dir_path  / ("purge_dups/{assembler}/{haplotype}/%s.purge_dups.{assembler}.{haplotype}.minimap2.{fileprefix}.paf.gz" % config["genome_name"])
     params:
-        index_size=lambda wildcards: parse_option("index_size", parameters["tool_options"]["minimap2"][wildcards.datatype], " -I "),
-        alignment_scheme=lambda wildcards: parse_option("alignment_scheme", parameters["tool_options"]["minimap2"][wildcards.datatype], " -x "),
+        index_size=lambda wildcards: parse_option("index_size", parameters["tool_options"]["minimap2"][wildcards.longread_datatype], " -I "),
+        alignment_scheme=lambda wildcards: parse_option("alignment_scheme", parameters["tool_options"]["minimap2"][wildcards.longread_datatype], " -x "),
         sort_threads=parameters["threads"]["samtools_sort"],
         minimap_threads=parameters["threads"]["minimap2"],
         per_thread_sort_mem=parameters["memory_mb"]["samtools_sort"],
     log:
-        minimap2=output_dict["log"]  / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{datatype}.minimap2.log",
-        sort=output_dict["log"]  / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{datatype}.sort.log",
-        index=output_dict["log"]  / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{datatype}.index.log",
-        cluster_log=output_dict["cluster_log"] / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{datatype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{datatype}.cluster.err"
+        minimap2=output_dict["log"]  / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{longread_datatype}.minimap2.log",
+        sort=output_dict["log"]  / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{longread_datatype}.sort.log",
+        index=output_dict["log"]  / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{longread_datatype}.index.log",
+        cluster_log=output_dict["cluster_log"] / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{longread_datatype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{longread_datatype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{datatype}.benchmark.txt"
+        output_dict["benchmark"]  / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{longread_datatype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

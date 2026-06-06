@@ -75,7 +75,7 @@ for haplotype in args.haplotype_list:
 
 merqury_df_list = []
 for merqury_datatype in args.merqury_datatype_list:
-    merqury_qv_path = qc_folder_path / "merqury/{1}/{1}.{0}.qv".format(args.input_prefix, merqury_datatype)
+    merqury_qv_path = qc_folder_path / "merqury/{1}/{0}.{1}.qv".format(args.input_prefix, merqury_datatype)
     if merqury_qv_path.exists():
         merqury_qv_df = pd.read_csv(merqury_qv_path,
                                     sep="\t", index_col=0, header=None,
@@ -84,7 +84,7 @@ for merqury_datatype in args.merqury_datatype_list:
                                                      haplotype): haplotype for haplotype in args.haplotype_list},
                              inplace=True)
     else:
-        sys.stdout.write(f"WARNING!!! Merqury QV file for datatype {merqury_datatype} is absent! Skipping...")
+        sys.stdout.write(f"WARNING!!! Merqury QV file for datatype {merqury_datatype} is absent! Skipping...\n")
         merqury_qv_df = None
 
     merqury_completeness_stats_path = qc_folder_path / "merqury/{1}/{1}.{0}.completeness.stats".format(args.input_prefix, merqury_datatype)
@@ -97,7 +97,7 @@ for merqury_datatype in args.merqury_datatype_list:
                                                                haplotype): haplotype for haplotype in args.haplotype_list},
                                        inplace=True)
     else:
-        sys.stdout.write(f"WARNING!!! Merqury completeness file for datatype {merqury_datatype} is absent! Skipping...")
+        sys.stdout.write(f"WARNING!!! Merqury completeness file for datatype {merqury_datatype} is absent! Skipping...\n")
         merqury_completeness_df = None
 
     if (merqury_qv_df is None) and (merqury_completeness_df is None):

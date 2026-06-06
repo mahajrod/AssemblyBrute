@@ -9,7 +9,7 @@ rule gather_stats_per_stage_parameter:
         quast_dirs=lambda wildcards: expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/quast/{genome_prefix}.{assembly_stage}.{haplotype}",
                                             haplotype=stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
                                             allow_missing=True),
-        qv_files=expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{merqury_datatype}/{genome_prefix}.{assembly_stage}.{datatype}.{merqury_datatype}.qv",
+        qv_files=expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{merqury_datatype}/{genome_prefix}.{assembly_stage}.{merqury_datatype}.{merqury_datatype}.qv",
                         merqury_datatype=parameters["tool_options"]["assembly_qc"]["merqury"]["datatype_list"], allow_missing=True) if not config["skip_kmer"] else [],
         completeness_stats_files=expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{merqury_datatype}/{genome_prefix}.{assembly_stage}.{merqury_datatype}.completeness.stats",
                        merqury_datatype=parameters["tool_options"]["assembly_qc"]["merqury"]["datatype_list"], allow_missing=True) if not config["skip_kmer"] else [],

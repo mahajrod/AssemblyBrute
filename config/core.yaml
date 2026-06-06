@@ -2294,7 +2294,7 @@
             "draft":
                 - "purge_dups"
                 - "hic_scaffolding"
-        "hic_scaffolding":
+        "hic_scaffolding_with_purge_dups":
             "fastq":
                 - "contig"
                 - "purge_dups"
@@ -2302,7 +2302,7 @@
             "draft":
                 - "purge_dups"
                 - "hic_scaffolding"
-        "hic_scaffolding_only":
+        "hic_scaffolding":
             "fastq":
                 - "contig"
                 - "hic_scaffolding"

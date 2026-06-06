@@ -2136,11 +2136,15 @@
     - "lqccs" # Low quality circular consensuses, i.e. nonHiFi
     #- "lr"
 
+"nanopore_data_types":
+    - "nanopore"
+    - "duplex"
+    - "simplex"
+    - "ultralongnano"
+    - "adaptivenano"
+
 "fastqc_data_types":
     - "hifi"
-    #- "clr"
-    ##- "nanopore"
-    #- "bionano"
     - "hic"
     - "illumina"
     - "lqccs"
@@ -2149,8 +2153,7 @@
 
 "long_read_data":
     - "hifi"
-    - "clr"
-    #- "nanopore"
+    - "nanopore"
     - "duplex"
     - "simplex"
     - "lqccs"
@@ -2161,7 +2164,7 @@
     - "hifi"
     - "illumina"
     - "hic"
-    #- "nanopore"
+    - "nanopore"
     - "simplex"
     - "duplex"
     - "ultralongnano"
@@ -2170,7 +2173,7 @@
     - "hifi"
     - "illumina"
     - "hic"
-    #- "nanopore"
+    - "nanopore"
     - "duplex"
     - "simplex"
     - "lqccs"
@@ -2186,7 +2189,7 @@
     - "hifi"
     - "lqccs"
     #- "clr"
-    #- "nanopore"
+    - "nanopore"
     - "duplex"
     - "simplex"
     - "hic"

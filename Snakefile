@@ -111,6 +111,7 @@ fastq_based_data_type_set = set(data_types) & set(config["fastq_based_data"])
 fasta_based_data_type_set = set(data_types) & set(config["fasta_based_data"])
 fastqc_data_type_set = fastq_based_data_type_set & set(config["fastqc_data_types"])
 long_read_data_type_set = set(data_types) & set(config["long_read_data"])
+nanopore_data_type_set = set(data_types) & set(config["nanopore_data_types"])
 genome_size_estimation_data_type_set = set(config["genome_size_estimation_data"]) & fastq_based_data_type_set & set(data_types)
 coverage_track_data_type_set = set(data_types) & set(config["coverage_track_data"])
 variant_calling_data_type_set = set(data_types) & set(config["variant_calling_data"])
@@ -825,43 +826,28 @@ if ("filter_reads" in config["stage_list"]) and (not config["skip_filter_reads"]
                             ) for dat_type in set(config["paired_fastq_based_data"]) & fastq_based_data_type_set ]
 
     if not config["skip_nanoqc"]:
-        results_list += [
-
-                        *[expand(output_dict["qc"] / "nanoqc/{datatype}/{stage}/{fileprefix}",
+        results_list += [*[expand(output_dict["qc"] / "nanoqc/{datatype}/{stage}/{fileprefix}",
                                    datatype=[dat_type, ],
                                    stage=["filtered", ],
                                    fileprefix=input_file_prefix_dict[dat_type],) for dat_type in long_read_data_type_set],
-                        expand(output_dict["qc"] / "nanoqc/{datatype}/{stage}/{fileprefix}",
-                                   datatype=["nanopore", ],
-                                   stage=["trimmed", ],
-                                   fileprefix=input_file_prefix_dict["nanopore"],) if "nanopore" in long_read_data_type_set else [],
-                        expand(output_dict["qc"] / "nanoqc/{datatype}/{stage}/{fileprefix}",
-                            datatype=["simplex", ],
-                            stage=["trimmed", ],
-                            fileprefix=input_file_prefix_dict["simplex"],) if "simplex" in long_read_data_type_set else [],
-                        expand(output_dict["qc"] / "nanoqc/{datatype}/{stage}/{fileprefix}",
-                            datatype=["duplex", ],
-                            stage=["trimmed", ],
-                            fileprefix=input_file_prefix_dict["duplex"],) if "duplex" in long_read_data_type_set else [],
-
                         ]
+        if not config["skip_porechop_abi"]:
+            results_list += [*[expand(output_dict["qc"] / "nanoqc/{datatype}/{stage}/{fileprefix}",
+                                       datatype=[dat_type, ],
+                                       stage=["trimmed", ],
+                                       fileprefix=input_file_prefix_dict[dat_type],) for dat_type in nanopore_data_type_set],]
+
     if not config["skip_nanoplot"]:
         results_list += [[expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{datatype}.{stage}.NanoStats.tsv",
                                datatype=[dat_type, ],
                                stage=["filtered", ],
                                ) for dat_type in long_read_data_type_set],
-                        expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{datatype}.{stage}.NanoStats.tsv",
-                               datatype=["nanopore", ],
+                        ]
+        if not config["skip_porechop_abi"]:
+            results_list += [[expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{datatype}.{stage}.NanoStats.tsv",
+                               datatype=[dat_type, ],
                                stage=["trimmed", ],
-                               ) if "nanopore" in long_read_data_type_set else [],
-                        expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{datatype}.{stage}.NanoStats.tsv",
-                             datatype=["duplex", ],
-                             stage=["trimmed", ],
-                                ) if "duplex" in long_read_data_type_set else [],
-                        expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{datatype}.{stage}.NanoStats.tsv",
-                             datatype=["simplex", ],
-                             stage=["trimmed", ],
-                                ) if "simplex" in long_read_data_type_set else [],
+                               ) for dat_type in nanopore_data_type_set],
                         ]
 
     if config["database_set"]["kraken2"] and kraken_scan_data_type_set and (not config["skip_kraken"]):

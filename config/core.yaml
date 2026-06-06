@@ -520,6 +520,10 @@
                                 "min_mapping_quality": 0
                             "nanopore":
                                 "min_mapping_quality": 0
+                            "ultralongnano":
+                                "min_mapping_quality": 0
+                            "adaptivenano":
+                                "min_mapping_quality": 0
                             "duplex":
                                 "min_mapping_quality": 0
                             "simplex":
@@ -538,6 +542,10 @@
                                 "min_mapping_quality": 30
                             "nanopore":
                                 "min_mapping_quality": 10
+                            "ultralongnano":
+                                "min_mapping_quality": 10
+                            "adaptivenano":
+                                "min_mapping_quality": 10
                             "duplex":
                                 "min_mapping_quality": 10
                             "simplex":
@@ -555,6 +563,10 @@
                             "illumina":
                                 "min_mapping_quality": 0
                             "nanopore":
+                                "min_mapping_quality": 0
+                            "ultralongnano":
+                                "min_mapping_quality": 0
+                            "adaptivenano":
                                 "min_mapping_quality": 0
                             "duplex":
                                 "min_mapping_quality": 0

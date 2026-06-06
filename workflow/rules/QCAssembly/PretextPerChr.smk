@@ -289,7 +289,7 @@ if candidate_agp_filename:
                                                                                                                                                                                wildcards.genome_prefix,
                                                                                                                                                                                wildcards.assembly_stage,
                                                                                                                                                                                wildcards.haplotype)),
-                                    datatype=config["parameters"]["tool_options"]["assembly_qc"]["purge_dups"]["datatype_list"],
+                                    datatype=parameters["tool_options"]["assembly_qc"]["purge_dups"]["datatype_list"],
                                     artefact_type=["junk", "ovlp", "haplotig", "repeat", "highcov"],
                                     allow_missing=True) if not config["skip_purge_dups_qc"] else [],
         output:

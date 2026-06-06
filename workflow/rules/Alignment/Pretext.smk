@@ -114,7 +114,7 @@ rule pretext_inject_tracks:
                                                                                                                                                      wildcards.genome_prefix,
                                                                                                                                                      wildcards.assembly_stage,
                                                                                                                                                      wildcards.haplotype)),
-                                datatype=config["parameters"]["tool_options"]["assembly_qc"]["purge_dups"]["datatype_list"],
+                                datatype=parameters["tool_options"]["assembly_qc"]["purge_dups"]["datatype_list"],
                                 artefact_type=["junk", "ovlp", "haplotig", "repeat", "highcov"],
                                 allow_missing=True) if not config["skip_purge_dups_qc"] else [],
         log_dir="{fasta_dir}/log",
@@ -140,7 +140,7 @@ rule pretext_inject_tracks:
                                                                                                 wildcards.genome_prefix,
                                                                                                 wildcards.haplotype),
         purge_dups_artefact_list=["junk", "ovlp", "haplotig", "repeat", "highcov"],
-        purge_dups_datatype_list=config["parameters"]["tool_options"]["assembly_qc"]["purge_dups"]["datatype_list"],
+        purge_dups_datatype_list=parameters["tool_options"]["assembly_qc"]["purge_dups"]["datatype_list"],
     log:
         gap="{fasta_dir}/log/pretext_inject_tracks.{assembly_stage}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.gap.log",
         can_tel="{fasta_dir}/log/pretext_inject_tracks.{assembly_stage}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.can_tel.log",
@@ -355,7 +355,7 @@ rule pretext_inject_tracks:
                                                                                                                                                                            wildcards.genome_prefix,
                                                                                                                                                                            wildcards.assembly_stage,
                                                                                                                                                                            wildcards.haplotype)),
-                                datatype=config["parameters"]["tool_options"]["assembly_qc"]["purge_dups"]["datatype_list"],
+                                datatype=parameters["tool_options"]["assembly_qc"]["purge_dups"]["datatype_list"],
                                 artefact_type=["junk", "ovlp", "haplotig", "repeat", "highcov"],
                                 allow_missing=True) if not config["skip_purge_dups_qc"] else [],
     output:
@@ -379,7 +379,7 @@ rule pretext_inject_tracks:
                                                                                                                         wildcards.genome_prefix,
                                                                                                                         wildcards.haplotype),
         purge_dups_artefact_list=["junk", "ovlp", "haplotig", "repeat", "highcov"],
-        purge_dups_datatype_list=config["parameters"]["tool_options"]["assembly_qc"]["purge_dups"]["datatype_list"],
+        purge_dups_datatype_list=parameters["tool_options"]["assembly_qc"]["purge_dups"]["datatype_list"],
     log:
         preprocessing=output_dict["log"]  / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.preprocessing.log",
         injection=output_dict["log"]  / "pretext_inject_tracks.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{subset}.{mapq}.{res}.injection.log",

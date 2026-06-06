@@ -9,7 +9,7 @@ rule winnowmap: #
                      fileprefix=input_file_prefix_dict[wildcards.datatype] if datatype_format_dict[wildcards.datatype] == "fastq" else input_fasta_file_prefix_dict[wildcards.datatype],
                      allow_missing=True),
         reference="{directory}/{fasta_prefix}.fasta",
-        repetitive_kmers=directory("{directory}/kmer/meryl/{fasta_prefix}.{kmer_length}.meryl.repetitive"),
+        repetitive_kmers="{directory}/kmer/meryl/{fasta_prefix}.{kmer_length}.meryl.repetitive",
         log_dir="{directory}/log/",
         benchmark_dir="{directory}/benchmark/"
     output:

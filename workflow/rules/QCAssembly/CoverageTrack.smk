@@ -13,7 +13,7 @@ rule minimap2_cov: # TODO: add nanopore support
                      allow_missing=True),
         reference=ancient(out_dir_path  / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta")
     output:
-        bam=out_dir_path  / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^/]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, hifi|simplex|duplex|nanopore}.bam"
+        bam=out_dir_path  / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^/]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, hifi|simplex|duplex|nanopore|adaptivenano|ultralongnano}.bam"
         #paf=out_dir_path  / ("purge_dups/{assembler}/{haplotype}/%s.purge_dups.{assembler}.{haplotype}.minimap2.{fileprefix}.paf.gz" % config["genome_name"])
     params:
         index_size=lambda wildcards: parse_option("index_size", parameters["tool_options"]["minimap2"][wildcards.datatype], " -I "),

@@ -79,7 +79,8 @@ for merqury_datatype in args.merqury_datatype_list:
     if merqury_qv_path.exists():
         merqury_qv_df = pd.read_csv(merqury_qv_path,
                                     sep="\t", index_col=0, header=None,
-                                    names=["haplotype", "unique_kmers", "read_and_assembly_kmers", "qv", "error_rate"])
+                                    names=["haplotype", "unique_kmers", "read_and_assembly_kmers", "qv", "error_rate"]).iloc[0: len(args.haplotype_list)]
+
         merqury_qv_df.rename(index={"{0}.{1}".format(args.input_prefix,
                                                      haplotype): haplotype for haplotype in args.haplotype_list},
                              inplace=True)
@@ -87,12 +88,12 @@ for merqury_datatype in args.merqury_datatype_list:
         sys.stdout.write(f"WARNING!!! Merqury QV file for datatype {merqury_datatype} is absent! Skipping...\n")
         merqury_qv_df = None
 
-    merqury_completeness_stats_path = qc_folder_path / "merqury/{1}/{1}.{0}.completeness.stats".format(args.input_prefix, merqury_datatype)
+    merqury_completeness_stats_path = qc_folder_path / "merqury/{1}/{0}.{1}.completeness.stats".format(args.input_prefix, merqury_datatype)
     if merqury_completeness_stats_path.exists():
         merqury_completeness_df = pd.read_csv(merqury_completeness_stats_path,
                                               sep="\t", index_col=0, header=None,
                                               names=["haplotype", "kmer_set", "assembly_solid_kmers",
-                                                     "read_solid_kmers", "completeness"])
+                                                     "read_solid_kmers", "completeness"]).iloc[0: len(args.haplotype_list)]
         merqury_completeness_df.rename(index={"{0}.{1}".format(args.input_prefix,
                                                                haplotype): haplotype for haplotype in args.haplotype_list},
                                        inplace=True)

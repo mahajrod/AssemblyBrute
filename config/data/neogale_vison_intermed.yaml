@@ -160,7 +160,8 @@
     "fcs":
         - "fcs_gx"
 
-"filtered_data": []
+"filtered_data":
+    - "illumina"
 
 "final_kmer_counter": "meryl" # pipeline allows usage of different kmer counter external_tools, but only one genomesize assessment could be used
 "final_kmer_length": 21 # pipeline allows usage of different kmer length, but only one genomesize assessment could be used
@@ -178,7 +179,7 @@
 "custom_enzyme_set_is_no_motif": False
 
 "starting_point": "draft" # Allowed: "draft"
-"data_types": "hifi,hic,reference" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
+"data_types": "hifi,hic,reference,illumina" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
 
 #-------- Options specific for starting point 'draft' ----------------
 "phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads

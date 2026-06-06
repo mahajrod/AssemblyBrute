@@ -316,6 +316,7 @@ for dat_type in genome_size_estimation_data_type_set:
 kraken_scan_data_type_set = set(data_types) & set(config["kraken_scan_data"])
 
 #---- set QC datypes ----
+print(config["parameters"])
 for qc_step in "coverage", "merqury", "purge_dups":
     config["parameters"]["tool_options"]["assembly_qc"][qc_step]["datatype_list"] = list(set(config["parameters"]["tool_options"]["assembly_qc"][qc_step]["datatype_list"]) & set(data_types))
 

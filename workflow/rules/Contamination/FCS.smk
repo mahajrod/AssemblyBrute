@@ -5,7 +5,8 @@ rule fcs: #
     input:
         fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.unfiltered.fasta",
         db=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["path"],
-        image=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["image_path"],
+        image=config["tool_containers"]["fcs_gx"],
+        #image=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["image_path"],
     output:
         taxonomy=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype, [^.]+}/fcs/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.taxonomy",
         summary=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype, [^.]+}/fcs/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.summary"
@@ -59,7 +60,7 @@ rule remove_fcs_contaminants: #
     priority: 5000
     input:
         fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.unfiltered.fasta",
-        image=lambda wildcards: config["allowed_databases"]["fcs"][config["final_fcs_db"]]["image_path"],
+        image=config["tool_containers"]["fcs_gx"],
         fcs_report=(out_dir_path / ("contig/{parameters}/contamination_scan/{haplotype}/fcs/%s/{genome_prefix}.contig.{haplotype}.unfiltered.%s.summary" % (config["final_fcs_db"], config["final_fcs_db"]))) if not config["skip_fcs"] else []
     output:
         fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype, [^.]+}.fasta",
@@ -113,7 +114,7 @@ rule fcs_adaptor: #
     priority: 2000
     input:
         fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.unfiltered.fasta",
-        image=lambda wildcards: config["allowed_databases"]["fcs_adaptor"][wildcards.database]["image_path"],
+        image=config["tool_containers"]["fcs_adaptor"],
     output:
         report=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.report",
         report_jsonl=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.report.jsonl",

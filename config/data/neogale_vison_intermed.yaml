@@ -84,6 +84,7 @@
     - "hic_scaffolding"
     - "ref_scaffolding"
     - "draft_qc"
+    - "polishing"
 
 "qc_settings":
     "windows_sets":

@@ -78,6 +78,9 @@
     "samba":
         #- "unphased_reads"
         - "phased_reads"
+    "polishing":
+        "default":
+            - "nextpolish2"
 
 "extended_qc_stages":
     #- "purge_dups"

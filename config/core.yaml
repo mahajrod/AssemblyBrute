@@ -2441,6 +2441,18 @@
                 - "gap_closing"
             "draft":
                 - "gap_closing"
+        "polishing":
+            "fastq":
+                - "polishing"
+            "draft":
+                - "polishing"
+        "gap_closing_with_polishing":
+            "fastq":
+                - "gap_closing"
+                - "polishing"
+            "draft":
+                - "gap_closing"
+                - "polishing"
         "full":
             "fastq":
                 - "gap_closing"

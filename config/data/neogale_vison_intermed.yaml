@@ -189,7 +189,7 @@
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "qc_draft_only"              # Allowed: "default"
 "assembly_mode": "hic_scaffolding"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
-"finalization_mode": "gap_closing"
+"finalization_mode": "polishing"
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []

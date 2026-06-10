@@ -1,4 +1,4 @@
-from Snakefile import input_reverse_suffix_dict
+
 
 localrules: create_fastq_links, create_links_for_draft, create_fasta_links, create_links_for_reference
 ruleorder: preprocess_hic_fastq > create_fastq_links

@@ -61,22 +61,22 @@ rule meryl_get_repetitive_kmers:
 
 rule meryl:
     input:
-        lambda wildcards: output_dict["data"] / "{0}/{1}/{2}/{3}{4}".format(datatype_format_dict[wildcards.datatype],
-                                                                            wildcards.datatype,
+        lambda wildcards: output_dict["data"] / "{0}/{1}/{2}/{3}{4}".format(datatype_format_dict[wildcards.longread_datatype],
+                                                                            wildcards.longread_datatype,
                                                                             wildcards.stage,
                                                                             wildcards.fileprefix,
-                                                                            config[datatype_format_dict[wildcards.datatype] + "_extension"])
+                                                                            config[datatype_format_dict[wildcards.longread_datatype] + "_extension"])
     output:
-        db_dir=directory(output_dict["kmer"] / "{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.meryl.{fileprefix}"),
+        db_dir=directory(output_dict["kmer"] / "{longread_datatype}/{stage}/{longread_datatype}.{stage}.{kmer_length}.meryl.{fileprefix}"),
     #wildcard_constraints:
     #    fileprefix="^(?!histo).*",
     #    kmer_length="[^./]+"#, (?!^histo$)
     log:
-        std=output_dict["log"] / "meryl.{datatype}.{stage}.{fileprefix}.{kmer_length}.log",
-        cluster_log=output_dict["cluster_log"] / "meryl.{datatype}.{stage}.{fileprefix}.{kmer_length}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "meryl.{datatype}.{stage}.{fileprefix}.{kmer_length}.cluster.err"
+        std=output_dict["log"] / "meryl.{longread_datatype}.{stage}.{fileprefix}.{kmer_length}.log",
+        cluster_log=output_dict["cluster_log"] / "meryl.{longread_datatype}.{stage}.{fileprefix}.{kmer_length}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "meryl.{longread_datatype}.{stage}.{fileprefix}.{kmer_length}.cluster.err"
     benchmark:
-        output_dict["benchmark"] / "meryl.{datatype}.{stage}.{fileprefix}.{kmer_length}.benchmark.txt"
+        output_dict["benchmark"] / "meryl.{longread_datatype}.{stage}.{fileprefix}.{kmer_length}.benchmark.txt"
     conda:
         config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:

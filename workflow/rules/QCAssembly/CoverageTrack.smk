@@ -3,8 +3,8 @@ ruleorder: create_bedgraph_from_coverage_table > create_bedgraph_track
 if "purge_dups" in config["stage_list"]:
     ruleorder: minimap2_cov > minimap2_purge_dups_reads
 
-wildcard_constraints:
-    longread_datatype="|".join(config["long_read_data"])
+#wildcard_constraints:
+#    longread_datatype="|".join(config["long_read_data"])
 
 rule minimap2_cov: # TODO: add nanopore support
     input:

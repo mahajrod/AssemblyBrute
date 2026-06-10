@@ -2088,7 +2088,12 @@ if "curation" in config["stage_list"]:
             out_fd.write(str(filename) + "\n")
 #----
 
-
+#---- Global wildcard constrains ----
+wildcard_constraints:
+    se_datatype="|".join(config["se_fastq_based_data"]),
+    pe_datatype="|".join(config["paired_fastq_based_data"]),
+    longread_datatype="|".join(config["long_read_data"])
+#----
 #---- Final rule ----
 pd.Series(results_list).to_csv(config["out_dir"] + "/requested_files.tab", sep="\t", header=False, index=False)
 rule all:

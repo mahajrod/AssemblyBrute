@@ -2285,6 +2285,16 @@
     - "hic"
     - "lr"
     - "illumina"
+    - "bgiseq"
+
+"se_fastq_based_data":
+    - "hifi"
+    - "lqccs"
+    - "nanopore"
+    - "duplex"
+    - "simplex"
+    - "ultralongnano"
+    - "adaptivenano"
 
 "coverage_track_data": # Data for which a coverage track will be generated during preparations for manual curation
     - "illumina"

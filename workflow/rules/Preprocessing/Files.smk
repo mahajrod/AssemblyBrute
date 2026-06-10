@@ -1,8 +1,5 @@
-
-
-localrules: create_se_fastq_links, create_pe_fastq_links, create_links_for_draft, create_se_fasta_links, create_links_for_reference
+localrules: create_se_fastq_links, create_links_for_draft, create_se_fasta_links, create_links_for_reference
 ruleorder: preprocess_hic_fastq > create_se_fastq_links
-ruleorder: preprocess_hic_fastq > create_pe_fastq_links
 
 
 
@@ -35,18 +32,16 @@ rule create_se_fastq_links:
 rule create_pe_fastq_links:
     priority: 1000
     input:
-        input_dir_path.resolve() / ("{pe_datatype}/fastq/{pairprefix}%s" %  config["fastq_extension"])
-
+        input_dir_path.resolve() / ("{se_datatype}/fastq/{fileprefix}%s" %  config["fastq_extension"])
     output:
         #directory(output_dict["data"] / "/fastq/{datatype}/raw"),
-        forward=output_dict["data"] / ("fastq/{pe_datatype, [^/]+}/raw/{pairprefix, [^/]+}_1%s" % config["fastq_extension"]),
-        reverse=output_dict["data"] / ("fastq/{pe_datatype, [^/]+}/raw/{pairprefix, [^/]+}_2%s" % config["fastq_extension"]),
+        output_dict["data"] / ("fastq/{se_datatype, [^/]+}/raw/{fileprefix, [^/]+}%s" % config["fastq_extension"])
     log:
-        std=output_dict["log"] / "create_fastq_links.{pe_datatype}.{pairprefix}.log",
-        cluster_log=output_dict["cluster_log"] / "create_fastq_links.{pe_datatype}.{pairprefix}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_fastq_links.{pe_datatype}.{pairprefix}.cluster.err",
+        std=output_dict["log"] / "create_fastq_links.{se_datatype}.{fileprefix}.log",
+        cluster_log=output_dict["cluster_log"] / "create_fastq_links.{se_datatype}.{fileprefix}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_fastq_links.{se_datatype}.{fileprefix}.cluster.err",
     benchmark:
-        output_dict["benchmark"] / "create_fastq_links.{pe_datatype}.{pairprefix}.benchmark.txt",
+        output_dict["benchmark"] / "create_fastq_links.{se_datatype}.{fileprefix}.benchmark.txt",
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

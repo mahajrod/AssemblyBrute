@@ -33,12 +33,15 @@ rule create_pe_fastq_links:
     priority: 1000
     input:
         #input_dir_path.resolve() / ("{pe_datatype}/fastq/{pairprefix}%s" %  config["fastq_extension"])
-        forward_reads=lambda wildcards: input_dir_path.resolve() / ("{0}/fastq/{1}{2}".format(wildcards.pe_datatype,
-                                                                                        wildcards.pairprefix,
-                                                                                        input_forward_suffix_dict[wildcards.pe_datatype])),
-        reverse_reads=lambda wildcards: input_dir_path.resolve() / "{0}/fastq/{1}{2}".format(wildcards.pe_datatype,
-                                                                                        wildcards.pairprefix,
-                                                                                        input_reverse_suffix_dict[wildcards.pe_datatype])
+        forward_reads=lambda wildcards: input_dir_path.resolve() / "{0}/fastq/{1}{2}{3}".format(wildcards.pe_datatype,
+                                                                                                wildcards.pairprefix,
+                                                                                                input_forward_suffix_dict[wildcards.pe_datatype],
+                                                                                                config["fastq_extension"]),
+
+        reverse_reads=lambda wildcards: input_dir_path.resolve() / "{0}/fastq/{1}{2}{3}".format(wildcards.pe_datatype,
+                                                                                                wildcards.pairprefix,
+                                                                                                input_reverse_suffix_dict[wildcards.pe_datatype],
+                                                                                                config["fastq_extension"])
     output:
         #directory(output_dict["data"] / "/fastq/{datatype}/raw"),
         forward_reads=output_dict["data"] / ("fastq/{pe_datatype}/raw/{pairprefix, [^/]+}_1%s" % config["fastq_extension"]),

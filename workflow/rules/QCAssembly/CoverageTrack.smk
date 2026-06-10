@@ -52,24 +52,24 @@ rule minimap2_cov: # TODO: add nanopore support
 
 rule bwa_cov:
     input:
-        forward_fastqs=lambda wildcards: expand(output_dict["data"] / ("%s/%s/%s/{pairprefix}%s%s" % (datatype_format_dict[wildcards.datatype],
-                                                                                                      wildcards.datatype,
-                                                                                                      "filtered" if wildcards.datatype in config["filtered_data"] else "raw",
-                                                                                                      "_1" if wildcards.datatype in config["filtered_data"] else "1",
-                                                                                                      datatype_extension_dict[wildcards.datatype])),
+        forward_fastqs=lambda wildcards: expand(output_dict["data"] / ("%s/%s/%s/{pairprefix}%s%s" % (datatype_format_dict[wildcards.pe_datatype],
+                                                                                                      wildcards.pe_datatype,
+                                                                                                      "filtered" if wildcards.pe_datatype in config["filtered_data"] else "raw",
+                                                                                                      "_1" if wildcards.datatype in config["filtered_data"] else input_reverse_suffix_dict[wildcards.pe_datatype],
+                                                                                                      datatype_extension_dict[wildcards.pe_datatype])),
                      pairprefix=input_pairprefix_dict[wildcards.datatype],
                      allow_missing=True),
-        reverse_fastqs=lambda wildcards: expand(output_dict["data"] / ("%s/%s/%s/{pairprefix}%s%s" % (datatype_format_dict[wildcards.datatype],
-                                                                                                      wildcards.datatype,
-                                                                                                      "filtered" if wildcards.datatype in config["filtered_data"] else "raw",
-                                                                                                      "_2" if wildcards.datatype in config["filtered_data"] else "2",
-                                                                                                      datatype_extension_dict[wildcards.datatype])),
+        reverse_fastqs=lambda wildcards: expand(output_dict["data"] / ("%s/%s/%s/{pairprefix}%s%s" % (datatype_format_dict[wildcards.pe_datatype],
+                                                                                                      wildcards.pe_datatype,
+                                                                                                      "filtered" if wildcards.pe_datatype in config["filtered_data"] else "raw",
+                                                                                                      "_2" if wildcards.pe_datatype in config["filtered_data"] else input_reverse_suffix_dict[wildcards.pe_datatype],
+                                                                                                      datatype_extension_dict[wildcards.pe_datatype])),
                      pairprefix=input_pairprefix_dict[wildcards.datatype],
                      allow_missing=True),
         reference=out_dir_path  / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
         reference_index=out_dir_path  / ("{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta%s" % (".bwt" if config["bwa_tool"] == "bwa" else ".bwt.2bit.64")),
     output:
-        bam=out_dir_path  / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^/]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype, illumina}.bam"
+        bam=out_dir_path  / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, coverage}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^/]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{pe_datatype, illumina}.bam"
 
     params:
         bwa_tool=config["bwa_tool"],
@@ -80,14 +80,14 @@ rule bwa_cov:
         per_thread_sort_mem=parameters["memory_mb"]["samtools_sort_per_thread"],
         genome_prefix=config["genome_prefix"]
     log:
-        bwa=output_dict["log"]  / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{datatype}.bwa.log",
-        fixmate=output_dict["log"]  / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{datatype}.fixmate.log",
-        sort=output_dict["log"]  / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{datatype}.sort.log",
-        markdup=output_dict["log"]  / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{datatype}.markdup.log",
-        cluster_log=output_dict["cluster_log"] / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{datatype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{datatype}.cluster.err"
+        bwa=output_dict["log"]  / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{pe_datatype}.bwa.log",
+        fixmate=output_dict["log"]  / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{pe_datatype}.fixmate.log",
+        sort=output_dict["log"]  / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{pe_datatype}.sort.log",
+        markdup=output_dict["log"]  / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{pe_datatype}.markdup.log",
+        cluster_log=output_dict["cluster_log"] / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{pe_datatype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{pe_datatype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{datatype}.benchmark.txt"
+        output_dict["benchmark"]  / "minimap2_cov.{assembly_stage}.{parameters}.{track_type}.{haplotype}.{genome_prefix}.{pe_datatype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

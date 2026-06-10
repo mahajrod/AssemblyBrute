@@ -1,8 +1,9 @@
-localrules: create_se_fastq_links, create_links_for_draft, create_se_fasta_links, create_links_for_reference
-ruleorder: preprocess_hic_fastq > create_se_fastq_links
-ruleorder: preprocess_hic_fastq > create_pe_fastq_links
+localrules: create_fastq_links, create_links_for_draft, create_se_fasta_links, create_links_for_reference
+ruleorder: preprocess_hic_fastq > create_fastq_links
+#ruleorder: preprocess_hic_fastq > create_se_fastq_links
+#ruleorder: preprocess_hic_fastq > create_pe_fastq_links
 
-
+"""
 rule create_se_fastq_links:
     priority: 1000
     input:
@@ -28,7 +29,34 @@ rule create_se_fastq_links:
         parameters["threads"]["create_fastq_links"]
     shell:
          " ln -sf {input} {output} 2>{log.std} "
+"""
+rule create_fastq_links:
+    priority: 1000
+    input:
+        input_dir_path.resolve() / ("{datatype}/fastq/{fileprefix}%s" %  config["fastq_extension"])
+    output:
+        #directory(output_dict["data"] / "/fastq/{datatype}/raw"),
+        output_dict["data"] / ("fastq/{datatype}/raw/{fileprefix, [^/]+}%s" % config["fastq_extension"])
+    log:
+        std=output_dict["log"] / "create_fastq_links.{datatype}.{fileprefix}.log",
+        cluster_log=output_dict["cluster_log"] / "create_fastq_links.{datatype}.{fileprefix}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "create_fastq_links.{datatype}.{fileprefix}.cluster.err",
+    benchmark:
+        output_dict["benchmark"] / "create_fastq_links.{datatype}.{fileprefix}.benchmark.txt",
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"]["name"],
+        node_options=parse_node_list("create_fastq_links"),
+        cpus=parameters["threads"]["create_fastq_links"],
+        time=parameters["time"]["create_fastq_links"],
+        mem=parameters["memory_mb"]["create_fastq_links"],
+    threads:
+        parameters["threads"]["create_fastq_links"]
+    shell:
+         " ln -sf {input} {output} 2>{log.std} "
 
+"""
 rule create_pe_fastq_links:
     priority: 1000
     input:
@@ -44,8 +72,8 @@ rule create_pe_fastq_links:
                                                                                                 config["fastq_extension"])
     output:
         #directory(output_dict["data"] / "/fastq/{datatype}/raw"),
-        forward_reads=output_dict["data"] / ("fastq/{pe_datatype}/raw/{pairprefix, [^/]+}_1%s" % config["fastq_extension"]),
-        reverse_reads=output_dict["data"] / ("fastq/{pe_datatype}/raw/{pairprefix, [^/]+}_2%s" % config["fastq_extension"]),
+        forward_reads=output_dict["data"] / ("fastq/{pe_datatype}/raw/{pairprefix, [^/]+}_1%s" % (config["fastq_extension"])),
+        reverse_reads=output_dict["data"] / ("fastq/{pe_datatype}/raw/{pairprefix, [^/]+}_2%s" % (config["fastq_extension"])),
     log:
         std=output_dict["log"] / "create_fastq_links.{pe_datatype}.{pairprefix}.log",
         cluster_log=output_dict["cluster_log"] / "create_fastq_links.{pe_datatype}.{pairprefix}.cluster.log",
@@ -65,7 +93,7 @@ rule create_pe_fastq_links:
     shell:
          " ln -sf {input.forward_reads} {output.forward_reads} 2>{log.std}; "
          " ln -sf {input.reverse_reads} {output.reverse_reads} 2>{log.std}; "
-
+"""
 rule preprocess_hic_fastq:
     priority: 2000
     input:

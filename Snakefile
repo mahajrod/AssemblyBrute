@@ -370,7 +370,7 @@ localrules: all
 print(stage_dict)
 print(datatype_format_dict)
 print(input_file_prefix_dict)
-print(input_pair_prefix_dict)
+print(input_pairprefix_dict)
 print(input_fasta_file_prefix_dict)
 results_dict = {}
 

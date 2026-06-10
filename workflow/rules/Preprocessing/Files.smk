@@ -35,38 +35,7 @@ rule create_se_fastq_links:
     shell:
          " ln -sf {input} {output} 2>{log.std}"
 
-rule create_pe_fastq_links:
-    priority: 1000
-    input:
-        input_dir_path.resolve() / ("{pe_datatype}/fastq/{pairprefix}%s" %  config["fastq_extension"])
-        #forward=lambda wildcards: input_dir_path.resolve() / "{0}/fastq/{1}{2}".format(wildcards.pe_datatype,
-        #                                                                                wildcards.pairprefix,
-        #                                                                                input_forward_suffix_dict[wildcards.pe_datatype]),
-        #reverse=lambda wildcards: input_dir_path.resolve() / "{0}/fastq/{1}{2}".format(wildcards.pe_datatype,
-        #                                                                                wildcards.pairprefix,
-        #                                                                                input_reverse_suffix_dict[wildcards.pe_datatype])
-    output:
-        #directory(output_dict["data"] / "/fastq/{datatype}/raw"),
-        forward=output_dict["data"] / ("fastq/{pe_datatype, [^/]+}/raw/{pairprefix, [^/]+}_1%s" % config["fastq_extension"]),
-        reverse=output_dict["data"] / ("fastq/{pe_datatype, [^/]+}/raw/{pairprefix, [^/]+}_2%s" % config["fastq_extension"]),
-    log:
-        std=output_dict["log"] / "create_fastq_links.{pe_datatype}.{pairprefix}.log",
-        cluster_log=output_dict["cluster_log"] / "create_fastq_links.{pe_datatype}.{pairprefix}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_fastq_links.{pe_datatype}.{pairprefix}.cluster.err",
-    benchmark:
-        output_dict["benchmark"] / "create_fastq_links.{pe_datatype}.{pairprefix}.benchmark.txt",
-    conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
-    resources:
-        queue=config["queue"]["cpu"]["name"],
-        node_options=parse_node_list("create_fastq_links"),
-        cpus=parameters["threads"]["create_fastq_links"],
-        time=parameters["time"]["create_fastq_links"],
-        mem=parameters["memory_mb"]["create_fastq_links"],
-    threads:
-        parameters["threads"]["create_fastq_links"]
-    shell:
-         " ln -sf {input} {output} 2>{log.std}"
+
 
 rule preprocess_hic_fastq:
     priority: 2000

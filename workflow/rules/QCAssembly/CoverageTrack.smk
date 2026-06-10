@@ -55,7 +55,7 @@ rule bwa_cov:
         forward_fastqs=lambda wildcards: expand(output_dict["data"] / ("%s/%s/%s/{pairprefix}%s%s" % (datatype_format_dict[wildcards.pe_datatype],
                                                                                                       wildcards.pe_datatype,
                                                                                                       "filtered" if wildcards.pe_datatype in config["filtered_data"] else "raw",
-                                                                                                      "_1" if wildcards.datatype in config["filtered_data"] else input_reverse_suffix_dict[wildcards.pe_datatype],
+                                                                                                      "_1" if wildcards.datatype in config["filtered_data"] else input_forward_suffix_dict[wildcards.pe_datatype],
                                                                                                       datatype_extension_dict[wildcards.pe_datatype])),
                      pairprefix=input_pairprefix_dict[wildcards.datatype],
                      allow_missing=True),

@@ -1,6 +1,6 @@
 localrules: create_se_fastq_links, create_links_for_draft, create_se_fasta_links, create_links_for_reference
 ruleorder: preprocess_hic_fastq > create_se_fastq_links
-
+ruleorder: preprocess_hic_fastq > create_pe_fastq_links
 
 
 rule create_se_fastq_links:

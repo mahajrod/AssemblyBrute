@@ -9,7 +9,7 @@ rule create_se_fastq_links:
         input_dir_path.resolve() / ("{se_datatype}/fastq/{fileprefix}%s" %  config["fastq_extension"])
     output:
         #directory(output_dict["data"] / "/fastq/{datatype}/raw"),
-        output_dict["data"] / ("fastq/{se_datatype, [^/]+}/raw/{fileprefix, [^/]+}%s" % config["fastq_extension"])
+        output_dict["data"] / ("fastq/{se_datatype}/raw/{fileprefix, [^/]+}%s" % config["fastq_extension"])
     log:
         std=output_dict["log"] / "create_fastq_links.{se_datatype}.{fileprefix}.log",
         cluster_log=output_dict["cluster_log"] / "create_fastq_links.{se_datatype}.{fileprefix}.cluster.log",

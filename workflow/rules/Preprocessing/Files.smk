@@ -34,10 +34,10 @@ rule create_se_fastq_links:
 rule create_pe_fastq_links:
     priority: 1000
     input:
-        forward=lambda wildcards: input_dir_path.resolve() / "{0}/fastq/{1}{2}}".format(wildcards.pe_datatype,
+        forward=lambda wildcards: input_dir_path.resolve() / "{0}/fastq/{1}{2}".format(wildcards.pe_datatype,
                                                                                         wildcards.pairprefix,
                                                                                         input_forward_suffix_dict[wildcards.pe_datatype]),
-        reverse=lambda wildcards: input_dir_path.resolve() / "{0}/fastq/{1}{2}}".format(wildcards.pe_datatype,
+        reverse=lambda wildcards: input_dir_path.resolve() / "{0}/fastq/{1}{2}".format(wildcards.pe_datatype,
                                                                                         wildcards.pairprefix,
                                                                                         input_reverse_suffix_dict[wildcards.pe_datatype])
     output:

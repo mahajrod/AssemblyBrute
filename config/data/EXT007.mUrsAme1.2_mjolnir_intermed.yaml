@@ -222,6 +222,7 @@
 "skip_mitoz": True
 "skip_mitoz_hic": True
 "skip_mitoz_illumina": True
+"skip_purge_dups_qc": True
 
 "skip_per_lib_genome_estimation": False
 

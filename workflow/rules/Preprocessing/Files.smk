@@ -27,22 +27,22 @@ rule create_se_fastq_links:
     threads:
         parameters["threads"]["create_fastq_links"]
     shell:
-         " ln -sf {input} {output} 2>{log.std}"
+         " ln -sf {input} {output} 2>{log.std} "
 
 rule create_pe_fastq_links:
     priority: 1000
     input:
         #input_dir_path.resolve() / ("{pe_datatype}/fastq/{pairprefix}%s" %  config["fastq_extension"])
-        forward=lambda wildcards: input_dir_path.resolve() / ("%s/fastq/%s%s" % (wildcards.pe_datatype,
-                                                                                 wildcards.pairprefix,
-                                                                                 input_forward_suffix_dict[wildcards.pe_datatype])),
-        reverse=lambda wildcards: input_dir_path.resolve() / ("%s/fastq/%s%s" % (wildcards.pe_datatype,
-                                                                                 wildcards.pairprefix,
-                                                                                 input_reverse_suffix_dict[wildcards.pe_datatype])),
+        forward_reads=lambda wildcards: input_dir_path.resolve() / ("{0}/fastq/{1}{2}".format(wildcards.pe_datatype,
+                                                                                        wildcards.pairprefix,
+                                                                                        input_forward_suffix_dict[wildcards.pe_datatype])),
+        reverse_reads=lambda wildcards: input_dir_path.resolve() / "{0}/fastq/{1}{2}".format(wildcards.pe_datatype,
+                                                                                        wildcards.pairprefix,
+                                                                                        input_reverse_suffix_dict[wildcards.pe_datatype])
     output:
         #directory(output_dict["data"] / "/fastq/{datatype}/raw"),
-        forward=output_dict["data"] / ("fastq/{pe_datatype, [^/]+}/raw/{pairprefix, [^/]+}_1%s" % config["fastq_extension"]),
-        reverse=output_dict["data"] / ("fastq/{pe_datatype, [^/]+}/raw/{pairprefix, [^/]+}_2%s" % config["fastq_extension"]),
+        forward_reads=output_dict["data"] / ("fastq/{pe_datatype, [^/]+}/raw/{pairprefix, [^/]+}_1%s" % config["fastq_extension"]),
+        reverse_reads=output_dict["data"] / ("fastq/{pe_datatype, [^/]+}/raw/{pairprefix, [^/]+}_2%s" % config["fastq_extension"]),
     log:
         std=output_dict["log"] / "create_fastq_links.{pe_datatype}.{pairprefix}.log",
         cluster_log=output_dict["cluster_log"] / "create_fastq_links.{pe_datatype}.{pairprefix}.cluster.log",
@@ -60,7 +60,8 @@ rule create_pe_fastq_links:
     threads:
         parameters["threads"]["create_fastq_links"]
     shell:
-         " ln -sf {input} {output} 2>{log.std}"
+         " ln -sf {input.forward_reads} {output.forward_reads} 2>{log.std}; "
+         " ln -sf {input.reverse_reads} {output.reverse_reads} 2>{log.std}; "
 
 rule preprocess_hic_fastq:
     priority: 2000

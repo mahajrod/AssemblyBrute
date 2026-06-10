@@ -4,11 +4,7 @@ localrules: create_se_fastq_links, create_pe_fastq_links, create_links_for_draft
 ruleorder: preprocess_hic_fastq > create_se_fastq_links
 ruleorder: preprocess_hic_fastq > create_pe_fastq_links
 
-#---- Global wildcard constrains ----
-wildcard_constraints:
-    se_datatype="|".join(config["se_fastq_based_data"]),
-    pe_datatype="|".join(config["paired_fastq_based_data"]),
-    longread_datatype="|".join(config["long_read_data"])
+
 
 rule create_se_fastq_links:
     priority: 1000

@@ -41,8 +41,8 @@ rule create_pe_fastq_links:
                                                                                         input_reverse_suffix_dict[wildcards.pe_datatype])
     output:
         #directory(output_dict["data"] / "/fastq/{datatype}/raw"),
-        forward_reads=output_dict["data"] / ("fastq/{pe_datatype, [^/]+}/raw/{pairprefix, [^/]+}_1%s" % config["fastq_extension"]),
-        reverse_reads=output_dict["data"] / ("fastq/{pe_datatype, [^/]+}/raw/{pairprefix, [^/]+}_2%s" % config["fastq_extension"]),
+        forward_reads=output_dict["data"] / ("fastq/{pe_datatype}/raw/{pairprefix, [^/]+}_1%s" % config["fastq_extension"]),
+        reverse_reads=output_dict["data"] / ("fastq/{pe_datatype}/raw/{pairprefix, [^/]+}_2%s" % config["fastq_extension"]),
     log:
         std=output_dict["log"] / "create_fastq_links.{pe_datatype}.{pairprefix}.log",
         cluster_log=output_dict["cluster_log"] / "create_fastq_links.{pe_datatype}.{pairprefix}.cluster.log",

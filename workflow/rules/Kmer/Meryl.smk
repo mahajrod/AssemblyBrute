@@ -95,16 +95,22 @@ rule meryl:
 
 rule meryl_pe:
     input:
-        forward_fastq=output_dict["data"] / ("fastq/{datatype}/{stage}/{pairprefix}_1%s" % config["fastq_extension"]),
-        reverse_fastq=output_dict["data"] / ("fastq/{datatype}/{stage}/{pairprefix}_2%s" % config["fastq_extension"]),
+        forward_fastq=lambda wildcards: output_dict["data"] / "fastq/{0}/{1}/{2}{3}{4}".format(
+                                                               wildcards.pe_datatype, wildcards.stage, wildcards.pairprefix,
+                                                                     "_1" if wildcards.pe_datatype in config["filtered_data"] else input_forward_suffix_dict[wildcards.pe_datatype],
+                                                                     config["fastq_extension"]),
+        reverse_fastq=lambda wildcards: output_dict["data"] / "fastq/{0}/{1}/{2}{3}{4}".format(
+                                                               wildcards.pe_datatype, wildcards.stage, wildcards.pairprefix,
+                                                                     "_2" if wildcards.pe_datatype in config["filtered_data"] else input_reverse_suffix_dict[wildcards.pe_datatype],
+                                                                     config["fastq_extension"]),
     output:
-        db_dir=directory(output_dict["kmer"] / "{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.meryl.{pairprefix}") # , (?!^histo$)
+        db_dir=directory(output_dict["kmer"] / "{pe_datatype}/{stage}/{pe_datatype}.{stage}.{kmer_length}.meryl.{pairprefix}") # , (?!^histo$)
     log:
-        std=output_dict["log"] / "meryl.{datatype}.{stage}.{pairprefix}.{kmer_length}.log",
-        cluster_log=output_dict["cluster_log"] / "meryl.{datatype}.{stage}.{pairprefix}.{kmer_length}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "meryl.{datatype}.{stage}.{pairprefix}.{kmer_length}.cluster.err"
+        std=output_dict["log"] / "meryl.{pe_datatype}.{stage}.{pairprefix}.{kmer_length}.log",
+        cluster_log=output_dict["cluster_log"] / "meryl.{pe_datatype}.{stage}.{pairprefix}.{kmer_length}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "meryl.{pe_datatype}.{stage}.{pairprefix}.{kmer_length}.cluster.err"
     benchmark:
-        output_dict["benchmark"] / "meryl.{datatype}.{stage}.{pairprefix}.{kmer_length}.benchmark.txt"
+        output_dict["benchmark"] / "meryl.{pe_datatype}.{stage}.{pairprefix}.{kmer_length}.benchmark.txt"
     conda:
         config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:

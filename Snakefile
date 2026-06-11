@@ -1138,6 +1138,7 @@ if "purge_dups" in config["stage_list"]:
     stage_dict[current_stage]["parameters"] = {}
     for purge_dupser in purge_dupser_list:
         for option_set in config["coretool_option_sets"][purge_dupser]:
+            print(stage_dict[prev_stage]["parameters"])
             for prev_parameters in stage_dict[prev_stage]["parameters"]:
                 if purge_dupser == "hapsolo":
                     for busco_lineage in config["tool_manually_adjusted_features"]["hapsolo"]["busco_lineage_list"]:

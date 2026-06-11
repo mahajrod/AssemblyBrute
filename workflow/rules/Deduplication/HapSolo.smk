@@ -9,7 +9,7 @@ rule hapsolo:
         busco_db_dir=(out_dir_path / "download/busco5/lineages/{busco_lineage}").resolve(),
         log_dir=out_dir_path  / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/log",
     output:
-        purged_fasta=out_dir_path  / "dedup/{prev_stage_parameters}..dedup_{dedup_parameters}@{busco_lineage}/{genome_prefix}.dedup.{haplotype}.fasta",
+        purged_fasta=out_dir_path  / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/{genome_prefix}.dedup.{haplotype}.fasta",
     params:
         iterations_per_thread=lambda wildcards: stage_dict["dedup"]["parameters"][wildcards.prev_stage_parameters + "..hapsolo_" + wildcards.dedup_parameters]["option_set"]["iterations_per_thread"],
     log:

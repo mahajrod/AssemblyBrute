@@ -111,6 +111,9 @@
     "genomescope":
         "starting_lambda": 30
         "start_shift": null
+    "hapsolo":
+        "busco_lineage_list":
+            - "actinopterygii_odb10"
 
 "ploidy": 2
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2

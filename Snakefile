@@ -1139,25 +1139,32 @@ if "purge_dups" in config["stage_list"]:
     for purge_dupser in purge_dupser_list:
         for option_set in config["coretool_option_sets"][purge_dupser]:
             for prev_parameters in stage_dict[prev_stage]["parameters"]:
-                parameters_label = "{0}..{1}_{2}".format(prev_parameters, purge_dupser, option_set)
-                stage_dict[current_stage]["parameters"][parameters_label] = {}
-                stage_dict[current_stage]["parameters"][parameters_label]["included"] = True
-                stage_dict[current_stage]["parameters"][parameters_label]["prev_stage"] = prev_stage
-                stage_dict[current_stage]["parameters"][parameters_label]["prev_parameters"] = prev_parameters
-                stage_dict[current_stage]["parameters"][parameters_label]["purge_dupser"] = purge_dupser
-                stage_dict[current_stage]["parameters"][parameters_label]["stage_seq_type"] = "contig"
-                stage_dict[current_stage]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][purge_dupser][option_set]
-                stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict[current_stage]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
-                if not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["main_datatypes"]:
-                    stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["main_datatypes"] = stage_dict[stage_dict[current_stage]["prev_stage"]]["parameters"][prev_parameters]["option_set"]["main_datatypes"]
-                # not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
-                #    stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["main_datatypes"]
+                if purge_dupser == "hapsolo":
+                    for busco_lineage in config["tool_manually_adjusted_features"]["hapsolo"]["busco_lineage_list"]:
+                        parameters_label = "{0}..{1}_{2}@{3}".format(prev_parameters, purge_dupser, option_set, busco_lineage)
+                        stage_dict[current_stage]["parameters"][parameters_label] = {}
+                        stage_dict[current_stage]["parameters"][parameters_label]["included"] = True
+                        stage_dict[current_stage]["parameters"][parameters_label]["prev_stage"] = prev_stage
+                        stage_dict[current_stage]["parameters"][parameters_label]["prev_parameters"] = prev_parameters
+                        stage_dict[current_stage]["parameters"][parameters_label]["purge_dupser"] = purge_dupser
+                        stage_dict[current_stage]["parameters"][parameters_label]["stage_seq_type"] = "contig"
+                        stage_dict[current_stage]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][purge_dupser][option_set]
+                        stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict[current_stage]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
+                        if not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["main_datatypes"]:
+                            stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["main_datatypes"] = stage_dict[stage_dict[current_stage]["prev_stage"]]["parameters"][prev_parameters]["option_set"]["main_datatypes"]
 
-                #if ("purge_dups" in config["qc_settings"]) and ("qc_datatypes" in config["qc_settings"]["purge_dups"]) and config["qc_settings"]["purge_dups"]["qc_datatypes"]:
-                #    stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = config["qc_settings"]["purge_dups"]["qc_datatypes"]
-                #else:
-                #    if ("purge_dups_qc_datatypes" not in stage_dict[current_stage]["parameters"][parameters_label]["option_set"]) or (not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"]):
-                #        stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["purge_dups_qc_datatypes"]
+                else:
+                    parameters_label = "{0}..{1}_{2}".format(prev_parameters, purge_dupser, option_set)
+                    stage_dict[current_stage]["parameters"][parameters_label] = {}
+                    stage_dict[current_stage]["parameters"][parameters_label]["included"] = True
+                    stage_dict[current_stage]["parameters"][parameters_label]["prev_stage"] = prev_stage
+                    stage_dict[current_stage]["parameters"][parameters_label]["prev_parameters"] = prev_parameters
+                    stage_dict[current_stage]["parameters"][parameters_label]["purge_dupser"] = purge_dupser
+                    stage_dict[current_stage]["parameters"][parameters_label]["stage_seq_type"] = "contig"
+                    stage_dict[current_stage]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][purge_dupser][option_set]
+                    stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict[current_stage]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
+                    if not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["main_datatypes"]:
+                        stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["main_datatypes"] = stage_dict[stage_dict[current_stage]["prev_stage"]]["parameters"][prev_parameters]["option_set"]["main_datatypes"]
 
     parameters_list = list(stage_dict[current_stage]["parameters"].keys())
     results_list += [

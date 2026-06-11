@@ -1894,6 +1894,7 @@ if "dedup" in config["stage_list"]:
 
 
 #----
+#---- Global wildcard constrains ----
 wildcard_constraints:
     se_datatype="|".join(config["se_fastq_based_data"]),
     pe_datatype="|".join(config["paired_fastq_based_data"]),
@@ -1905,8 +1906,9 @@ wildcard_constraints:
     correction_options="[^/]+",
     contig_options="[^/]+",
     prev_stage_parameters="[^/]+",
-    purge_dups_parameters="[^/]+"
-
+    purge_dups_parameters="[^/]+",
+    dedup_parameters="[^/]+",
+    busco_lineage="[^/]+",
 #---- Final rule ----
 pd.Series(results_list).to_csv(config["out_dir"] + "/requested_files.tab", sep="\t", header=False, index=False)
 rule all:

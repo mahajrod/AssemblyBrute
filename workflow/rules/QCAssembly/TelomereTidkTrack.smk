@@ -34,7 +34,7 @@ rule tidk_download_db:
 
 rule tidk_search:
     input:
-        tidk_db_flag = out_dir_path / "flags/TIDK_DB_FLAG",
+        #tidk_db_flag = out_dir_path / "flags/TIDK_DB_FLAG",
         log_dir="{fasta_dir}/log/",
         fasta="{fasta_dir}/{fasta_prefix}.fasta",
         canonical_top_kmer="{fasta_dir}/telomere/{fasta_prefix}/{fasta_prefix}.canonical.top.kmer",

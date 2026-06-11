@@ -2091,7 +2091,15 @@ if "curation" in config["stage_list"]:
 wildcard_constraints:
     se_datatype="|".join(config["se_fastq_based_data"]),
     pe_datatype="|".join(config["paired_fastq_based_data"]),
-    longread_datatype="|".join(config["long_read_data"])
+    longread_datatype="|".join(config["long_read_data"]),
+    haplotype="[^./]+",
+    stage="[^/]+",
+    kmer_length="[^/]+",
+    genome_prefix="[^/]+",
+    correction_options="[^/]+",
+    contig_options="[^/]+",
+    prev_stage_parameters="[^/]+",
+    purge_dups_parameters="[^/]+"
 
 #---- Final rule ----
 pd.Series(results_list).to_csv(config["out_dir"] + "/requested_files.tab", sep="\t", header=False, index=False)

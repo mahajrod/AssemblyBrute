@@ -118,6 +118,8 @@
 "busco_lineage_list":
     - "actinopterygii_odb10"
     #- "vertebrata_odb10" #
+"hapsolo_busco_lineage_list": # []
+    - "actinopterygii_odb10"
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
 "telomere_motif": "CCCTAA"  # telomere motif at 5'-end; CCCTAA for human, place null if unknown
@@ -192,9 +194,6 @@
 "custom_preprocessing_stages": []
 "custom_qc_stages": []
 "custom_assembly_stages": []
-"curation_seq_type":
-    - "scaffolds"
-    - "contigs" # works only if precuration stage is hic_sscaffolding
 
 "skip_read_qc": False
 "skip_filter_reads": False

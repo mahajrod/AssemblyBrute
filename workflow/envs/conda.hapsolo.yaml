@@ -1,0 +1,14 @@
+#---- Bioconda config ----
+"name": "hapsolo"
+"channels":
+  - "bioconda"
+  - "conda-forge"
+  - "anaconda"
+"dependencies":
+  - "minimap2"
+  - "miniprot"
+  - "python=3.10"
+  - "pandas>=1.0"
+  - "tqdm>=4.0"
+  - "pip":
+      - "git+https://github.com/ESB-AI-Lab/HapSolo"

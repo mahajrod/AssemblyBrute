@@ -74,6 +74,9 @@
     "tidk":
         "yaml": "workflow/envs/conda.tidk.yaml"
         "name": "tidk"
+    "hapsolo":
+        "yaml": "workflow/envs/conda.hapsolo.yaml"
+        "name": "hapsolo"
 
 "coretool_config_dir": "config/coretools/"
 "coretool_config_dict": # a subset of coretools  which have a separated config file
@@ -753,6 +756,11 @@
             "nextpolish2":
                 "default":
                     "qc_datatypes": []
+            "hapsolo":
+                "default":
+                    "iterations_per_thread": 1000
+                "skipped":
+                    "iterations_per_thread": 1000
             "purge_dups":
                 "default":
                     "cov_multiplicator": 4.5 # 4.5 *lambda

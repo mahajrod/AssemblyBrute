@@ -1947,8 +1947,8 @@ include: "workflow/rules/Contamination/FCS.smk"
 include: "workflow/rules/Contamination/Kraken2.smk"
 
 include: "workflow/rules/Contigs/Hifiasm.smk"
-
 include: "workflow/rules/Contigs/Graph.smk"
+
 include: "workflow/rules/Stats/General.smk"
 
 if "purge_dups" in config["stage_list"]:
@@ -1987,7 +1987,7 @@ if "hic" in data_types:
         include: "workflow/rules/HiC/3DDNA.smk"
 
 include: "workflow/rules/Polishing/NextPolish2.smk"
-
+include: "workflow/rules/Deduplication/HapSolo.smk"
 include: "workflow/rules/QCAssembly/RapidCuration.smk"
 include: "workflow/rules/QCAssembly/GapTrack.smk"
 include: "workflow/rules/QCAssembly/WindowmaskerTrack.smk"

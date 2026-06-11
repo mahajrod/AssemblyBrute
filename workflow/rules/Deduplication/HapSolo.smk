@@ -2,7 +2,9 @@
 
 rule hapsolo:
     input:
-        input_fasta=lambda wildcards: out_dir_path  / "{0}/{1}/{2}.{0}.{3}.fasta".format(stage_dict["dedup"]["parameters"][wildcards.prev_stage_parameters + "..hapsolo_" + wildcards.dedup_parameters]["prev_stage"],
+        input_fasta=lambda wildcards: out_dir_path  / "{0}/{1}/{2}.{0}.{3}.fasta".format(stage_dict["dedup"]["parameters"]["%s..hapsolo_%s@%s" % (wildcards.prev_stage_parameters,
+                                                                                                                                                        wildcards.dedup_parameters,
+                                                                                                                                                        wildcards.busco_lineage)]["prev_stage"],
                                                                                                                            wildcards.prev_stage_parameters,
                                                                                                                            wildcards.genome_prefix,
                                                                                                                            wildcards.haplotype),
@@ -11,7 +13,9 @@ rule hapsolo:
     output:
         purged_fasta=out_dir_path  / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/{genome_prefix}.dedup.{haplotype}.fasta",
     params:
-        iterations_per_thread=lambda wildcards: stage_dict["dedup"]["parameters"][wildcards.prev_stage_parameters + "..hapsolo_" + wildcards.dedup_parameters]["option_set"]["iterations_per_thread"],
+        iterations_per_thread=lambda wildcards: stage_dict["dedup"]["parameters"]["%s..hapsolo_%s@%s" % (wildcards.prev_stage_parameters,
+                                                                                                         wildcards.dedup_parameters,
+                                                                                                         wildcards.busco_lineage)]["option_set"]["iterations_per_thread"],
     log:
         preprocess=(out_dir_path  / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/log/hapsolo.{busco_lineage}.{genome_prefix}.{haplotype}.preprocess.log").resolve(),
         align=(out_dir_path  / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/log/hapsolo.{busco_lineage}.{genome_prefix}.{haplotype}.{genome_prefix}.{haplotype}.align.log").resolve(),

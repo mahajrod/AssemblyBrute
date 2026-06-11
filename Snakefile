@@ -1760,8 +1760,8 @@ if "dedup" in config["stage_list"]:
                         stage_dict[current_stage]["parameters"][parameters_label]["stage_seq_type"] = "contig"
                         stage_dict[current_stage]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][tool][option_set]
                         stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict[current_stage]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
-                        if not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["main_datatypes"]:
-                            stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["main_datatypes"] = stage_dict[stage_dict[current_stage]["prev_stage"]]["parameters"][prev_parameters]["option_set"]["main_datatypes"]
+                        #if not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["main_datatypes"]:
+                        #    stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["main_datatypes"] = stage_dict[stage_dict[current_stage]["prev_stage"]]["parameters"][prev_parameters]["option_set"]["main_datatypes"]
 
                 else:
                     pass

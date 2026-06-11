@@ -365,8 +365,7 @@ with open(final_config_yaml, 'w') as final_config_fd, open(final_input_yaml, 'w'
 
 #-------------------------------------------
 localrules: all
-#ruleorder: create_fastq_links > fastqc
-#include: "workflow/rules/Contigs/Hifiasm.smk"
+
 print(stage_dict)
 print(datatype_format_dict)
 print(input_file_prefix_dict)
@@ -379,13 +378,6 @@ primary_haplotype = "hap1" # TODO: obsolete: remove and fix issues
 
 results_list = []
 
-"""
-# Pip dependencies are now installed azutomatically
-for conda_env in config["conda"]:
-    if "pip" in config["conda"][conda_env]:
-        results_list += [expand("results/config/pip.{conda_env}.requirements",
-                                conda_env=[conda_env])]
-"""
 
 #---- Create output filelist ----
 if "check_reads" in config["stage_list"]:
@@ -408,10 +400,6 @@ if ("read_qc" in config["stage_list"]) and (not config["skip_read_qc"]):
                      expand(output_dict["qc"] / "multiqc/{datatype}/{stage}/multiqc.{datatype}.{stage}.report.html",
                              datatype=fastqc_data_type_set ,
                              stage=["raw",]),
-                     #[expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{fileprefix}.Yield_By_Length.png",
-                     #          datatype=[dat_type, ],
-                     #          stage=["raw", ],
-                     #          fileprefix=input_file_prefix_dict[dat_type],) for dat_type in long_read_data_type_set],
                      [expand(output_dict["qc"] / "nanoplot/{datatype}/{stage}/{datatype}.{stage}.NanoStats.tsv",
                                datatype=[dat_type, ],
                                stage=["raw", ],
@@ -466,23 +454,6 @@ if "draft_qc" in config["stage_list"]:
             stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] = config["ploidy"]
             stage_dict["draft_qc"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
             stage_dict["draft_qc"]["parameters"][parameters_label]["option_set_group"] = None
-
-            #TEMP STRING!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! TODO: replace
-            #stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = ["hifi"]
-
-            #if not stage_dict["draft_qc"]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
-            #    pass # TODO: ADD!!!
-
-            #if ("purge_dups" in config["qc_settings"]) and ("qc_datatypes" in config["qc_settings"]["purge_dups"]) and config["qc_settings"]["purge_dups"]["qc_datatypes"]:
-            #    stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = config["qc_settings"]["purge_dups"]["qc_datatypes"]
-            #else:
-            #
-            #    #if not stage_dict["contig"]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
-            #    #    stage_dict["contig"]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict["contig"]["parameters"][parameters_label]["option_set"]["main_datatypes"]
-            #    if not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"]:
-            #        stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = stage_dict["contig"]["parameters"][parameters_label]["option_set"]["main_datatypes"]
-
-
 
     parameters_list = list(stage_dict["draft_qc"]["parameters"].keys())
 
@@ -546,8 +517,6 @@ if "draft_qc" in config["stage_list"]:
                                   resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
                                   mapq=parameters["tool_options"]["pretextmap"]["mapq"],
                                   ext=parameters["tool_options"]["pretextsnapshot"]["format"],
-                                  #window=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["window"],
-                                  #step = parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
                                      ) for window_step_set in config["qc_settings"]["windows_sets"]] for parameters_label in stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],
                          ]
     if (not config["skip_wga"]) and (not config["skip_draft_qc_wga"]):
@@ -594,25 +563,6 @@ if "draft_qc" in config["stage_list"]:
                                         haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
                                         ) for parameters_label in stage_dict[current_stage]["parameters"]],
                          ]
-    #TODO: remove after debugging
-    """
-    results_list += [ *[expand(out_dir_path / "{stage}/{parameters}/kmer/{genome_prefix}.{stage}.{haplotype}.{assembly_kmer_length}",
-                               stage=["draft_qc"],
-                              parameters=[parameters_label],
-                              genome_prefix=[config["genome_prefix"], ],
-                              haplotype=stage_dict["draft_qc"]["parameters"][parameters_label]["haplotype_list"],
-                              assembly_kmer_length=[31]) for parameters_label in parameters_list],
-                      *[expand(out_dir_path / "{stage}/{parameters}/fasta/{haplotype}/{assembly_kmer_length}/{datatype}/{fileprefix}.fasta.gz",
-                                stage=["draft_qc"],
-                              parameters=[parameters_label],
-                                datatype=[config["gap_closing_datatype"]],
-                                fileprefix=input_file_prefix_dict[config["gap_closing_datatype"]] if datatype_format_dict[config["gap_closing_datatype"]] == "fastq" else input_fasta_file_prefix_dict[config["gap_closing_datatype"]],
-                              genome_prefix=[config["genome_prefix"], ],
-                              haplotype=stage_dict["draft_qc"]["parameters"][parameters_label]["haplotype_list"],
-                              assembly_kmer_length=[31]) for parameters_label in parameters_list],
-
-                      ]
-    """
 
     if candidate_agp_filename:
         results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/per_chr/{genome_prefix}.{assembly_stage}.{haplotype}.NA.{candidate_chr_id}.rmdup.precurated.mapq{mapq}.{res}.tracks.pretext",
@@ -623,8 +573,6 @@ if "draft_qc" in config["stage_list"]:
                                 genome_prefix=[config["genome_prefix"], ],
                                 res=["high_res"],
                                 mapq=parameters["tool_options"]["pretextmap"]["mapq"],
-                                #window=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["window"],
-                                #step=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
                                 ) for parameter_label in stage_dict[current_stage]["parameters"] for window_step_set in config["qc_settings"]["windows_sets"]]
                          ]
 
@@ -925,14 +873,6 @@ if "contig" in config["stage_list"] or "draft_qc" in config["stage_list"]:
 
             stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
             stage_dict["contig"]["parameters"][parameters_label]["option_set_group"] = option_set_group_assignment_dict[option_set] if option_set_group_assignment_dict is not None else None
-            #if ("purge_dups" in config["qc_settings"]) and ("qc_datatypes" in config["qc_settings"]["purge_dups"]) and config["qc_settings"]["purge_dups"]["qc_datatypes"]:
-            #    stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = config["qc_settings"]["purge_dups"]["qc_datatypes"]
-            #else:
-            #
-            #    if not stage_dict["contig"]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
-            #        stage_dict["contig"]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict["contig"]["parameters"][parameters_label]["option_set"]["main_datatypes"]
-            #    if not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"]:
-            #        stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["main_datatypes"]
 
 if "polishing" in config["stage_list"]:
     current_stage = "polishing"
@@ -940,8 +880,6 @@ if "polishing" in config["stage_list"]:
     prev_stage = stage_dict[current_stage]["prev_stage"]
     tool_list = config["stage_coretools"][current_stage]["default"]
     stage_dict[current_stage]["parameters"] = {}
-
-
 
     for tool in tool_list:
         option_set_group_dict, option_set_group_assignment_dict = None, None
@@ -961,14 +899,6 @@ if "polishing" in config["stage_list"]:
                     #stage_dict["hic_scaffolding"]["parameters"][parameters_label]["included"] = False
                     stage_dict[current_stage]["parameters"].pop(parameters_label)
                     print(f"WARNING!!! Impossible to phase reads for {parameters_label} as input draft assembly is haploid")
-                #if not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
-                #    stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["qc_datatypes"]
-
-                #if ("purge_dups" in config["qc_settings"]) and ("qc_datatypes" in config["qc_settings"]["purge_dups"]) and config["qc_settings"]["purge_dups"]["qc_datatypes"]:
-                #    stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = config["qc_settings"]["purge_dups"]["qc_datatypes"]
-                #else:
-                #    if ("purge_dups_qc_datatypes" not in stage_dict[current_stage]["parameters"][parameters_label]["option_set"]) or (not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"]):
-                #        stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["purge_dups_qc_datatypes"]
 
     parameters_list = list(stage_dict[current_stage]["parameters"].keys())
 
@@ -1141,6 +1071,8 @@ if "purge_dups" in config["stage_list"]:
             print(stage_dict[prev_stage]["parameters"])
             for prev_parameters in stage_dict[prev_stage]["parameters"]:
                 if purge_dupser == "hapsolo":
+                    pass
+                    """
                     for busco_lineage in config["tool_manually_adjusted_features"]["hapsolo"]["busco_lineage_list"]:
                         parameters_label = "{0}..{1}_{2}@{3}".format(prev_parameters, purge_dupser, option_set, busco_lineage)
                         stage_dict[current_stage]["parameters"][parameters_label] = {}
@@ -1153,7 +1085,7 @@ if "purge_dups" in config["stage_list"]:
                         stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict[current_stage]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
                         if not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["main_datatypes"]:
                             stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["main_datatypes"] = stage_dict[stage_dict[current_stage]["prev_stage"]]["parameters"][prev_parameters]["option_set"]["main_datatypes"]
-
+                    """
                 else:
                     parameters_label = "{0}..{1}_{2}".format(prev_parameters, purge_dupser, option_set)
                     stage_dict[current_stage]["parameters"][parameters_label] = {}
@@ -1372,26 +1304,8 @@ if "hic_scaffolding" in config["stage_list"]:
                     #stage_dict["hic_scaffolding"]["parameters"][parameters_label]["included"] = False
                     stage_dict[current_stage]["parameters"].pop(parameters_label)
                     print(f"WARNING!!! Impossible to phase reads for {parameters_label} as input draft assembly is haploid")
-                #if not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["qc_datatypes"]:
-                #    stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["qc_datatypes"]
-
-                #if ("purge_dups" in config["qc_settings"]) and ("qc_datatypes" in config["qc_settings"]["purge_dups"]) and config["qc_settings"]["purge_dups"]["qc_datatypes"]:
-                #    stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = config["qc_settings"]["purge_dups"]["qc_datatypes"]
-                #else:
-                #    if ("purge_dups_qc_datatypes" not in stage_dict[current_stage]["parameters"][parameters_label]["option_set"]) or (not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"]):
-                #        stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["purge_dups_qc_datatypes"] = stage_dict[prev_stage]["parameters"][prev_parameters]["option_set"]["purge_dups_qc_datatypes"]
-
-
-    #for parameter_label in stage_dict["hic_scaffolding"]["parameters"].keys(): # remove ignore
-    #    if not stage_dict["hic_scaffolding"]["parameters"][parameter_label]["included"]:
-    #        stage_dict["hic_scaffolding"]["parameters"].pop(parameter_label)
 
     parameters_list = list(stage_dict[current_stage]["parameters"].keys())
-
-    #haplotype=stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"],
-    #                            parameters=[parameters_label]) for parameters_label in parameters_list]
-    # stage_dict["purge_dups"]["parameters"][parameters_label]["haplotype_list"]
-    #prev_parameters_label = stage_dict["hic_scaffolding"]["parameters"][parameters_label]["prev_parameters"]
 
     if config["other_tool_option_sets"]["mapping_pipeline"] != "juicer":
         results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam.general_stats",
@@ -1715,20 +1629,6 @@ if "ref_scaffolding" in config["stage_list"]:
                                 genome_prefix=[config["genome_prefix"], ],
                                 assembly_stage=[current_stage],),]
 
-    #results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{genome_prefix}.ref_scaffolding.{haplotype}.fasta",
-    #                        genome_prefix=[config["genome_prefix"], ],
-    #                        assembly_stage=[current_stage],
-    #                        haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
-    #                        parameters=[parameters_label]) for parameters_label in parameters_list
-    #
-    #                  ]]
-
-    #print(parameters["tool_options"]["assembly_qc"])
-
-    #out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph",
-    #out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/track_stats/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.track.stat",
-    #out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/track_stats/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.track.thresholds",
-
     results_list += [
                      [[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.png",
                                scaffold_length=config["qc_settings"]["assembly_scaffold_sets"],
@@ -1840,42 +1740,84 @@ if "ref_scaffolding" in config["stage_list"]:
                                ),
                         ]
 
-if "curation" in config["stage_list"]:
-    prev_stage = stage_dict["curation"]["prev_stage"]
-    curation_tool_list = config["stage_coretools"]["curation"]["default"]
-    stage_dict["curation"]["parameters"] = {}
-
-    for curation_tool in curation_tool_list:
-        for option_set in config["coretool_option_sets"][curation_tool]:
-            print(prev_stage)
+if "dedup" in config["stage_list"]:
+    current_stage = "dedup"
+    prev_stage = stage_dict[current_stage]["prev_stage"]
+    tool_list = config["stage_coretools"][current_stage]["default"]
+    stage_dict[current_stage]["parameters"] = {}
+    for tool in tool_list:
+        for option_set in config["coretool_option_sets"][tool]:
+            print(stage_dict[prev_stage]["parameters"])
             for prev_parameters in stage_dict[prev_stage]["parameters"]:
-                parameters_label = "{0}..{1}_{2}".format(prev_parameters, curation_tool, option_set)
-                stage_dict["curation"]["parameters"][parameters_label] = {}
-                stage_dict["curation"]["parameters"][parameters_label]["included"] = True
-                stage_dict["curation"]["parameters"][parameters_label]["curationeer"] = curation_tool
-                stage_dict["curation"]["parameters"][parameters_label]["prev_stage"] = prev_stage
-                stage_dict["curation"]["parameters"][parameters_label]["prev_parameters"] = prev_parameters
-                stage_dict["curation"]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][curation_tool][option_set] if curation_tool in parameters["tool_options"] else None
-                stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict["curation"]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
+                if tool == "hapsolo":
+                    for busco_lineage in config["tool_manually_adjusted_features"]["hapsolo"]["busco_lineage_list"]:
+                        parameters_label = "{0}..{1}_{2}@{3}".format(prev_parameters, tool, option_set, busco_lineage)
+                        stage_dict[current_stage]["parameters"][parameters_label] = {}
+                        stage_dict[current_stage]["parameters"][parameters_label]["included"] = True
+                        stage_dict[current_stage]["parameters"][parameters_label]["prev_stage"] = prev_stage
+                        stage_dict[current_stage]["parameters"][parameters_label]["prev_parameters"] = prev_parameters
+                        stage_dict[current_stage]["parameters"][parameters_label]["tool"] = tool
+                        stage_dict[current_stage]["parameters"][parameters_label]["stage_seq_type"] = "contig"
+                        stage_dict[current_stage]["parameters"][parameters_label]["option_set"] = parameters["tool_options"][tool][option_set]
+                        stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"] = stage_dict[stage_dict[current_stage]["prev_stage"]]["parameters"][prev_parameters]["haplotype_list"]
+                        if not stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["main_datatypes"]:
+                            stage_dict[current_stage]["parameters"][parameters_label]["option_set"]["main_datatypes"] = stage_dict[stage_dict[current_stage]["prev_stage"]]["parameters"][prev_parameters]["option_set"]["main_datatypes"]
 
-    parameters_list = list(stage_dict["curation"]["parameters"].keys())
-    if "scaffolds" in  config["curation_seq_type"]:
-        if not config["skip_gathering"]:
-            results_list += [[expand(out_dir_path / "curation_files/{parameters}/{haplotype}/scaffolds",
-                                             parameters=[parameter_label],
-                                             haplotype=stage_dict["curation"]["parameters"][parameter_label]["haplotype_list"],
-                                            ) for parameter_label in stage_dict["curation"]["parameters"]],
-                                     ]
-        if input_reference_filedict:
-            if not config["skip_ragtag"]:
-                results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/scaffolds/ragtag/{reference}/{genome_prefix}.{haplotype}.to.{reference}.fasta",
-                                        genome_prefix=[config["genome_prefix"], ],
-                                        assembly_stage=["curation", ],
-                                        parameters=[parameters_label],
-                                        reference=list(input_reference_filedict.keys()),
-                                        haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                        ) for parameters_label in stage_dict["curation"]["parameters"]],
-                                 ]
+                else:
+                    pass
+    parameters_list = list(stage_dict[current_stage]["parameters"].keys())
+    results_list += [
+                     *[expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
+                              genome_prefix=[config["genome_prefix"], ],
+                              assembly_stage=[current_stage],
+                              haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
+                              parameters=[parameters_label]) for parameters_label in parameters_list],
+                    *[expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
+                             genome_prefix=[config["genome_prefix"], ],
+                             assembly_stage=[current_stage],
+                             haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
+                             parameters=[parameters_label]) for parameters_label in parameters_list],
+
+                    ]
+    results_list += [
+                     [[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.png",
+                               scaffold_length=config["qc_settings"]["assembly_scaffold_sets"],
+                               threshold_type=config["qc_settings"]["threshold_types"],
+                               genome_prefix=[config["genome_prefix"], ],
+                               assembly_stage=[current_stage, ],
+                               track_type=[track_type],
+                               window=[parameters["tool_options"]["assembly_qc"][track_type]["options"][window_settings]["window"]],
+                               step=[parameters["tool_options"]["assembly_qc"][track_type]["options"][window_settings]["step"]],
+                               haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
+                               parameters=[parameters_label])
+
+                        for window_settings in config["qc_settings"]["windows_sets"]]
+                        for parameters_label in stage_dict[current_stage]["parameters"]]
+                        for track_type in ["gc"]],  #"windowmasker", "trf"
+                     [expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.canonical_telomere.win1000.step200.track.bedgraph",
+                            genome_prefix=[config["genome_prefix"], ],
+                            assembly_stage=[current_stage, ],
+                            parameters=[parameters_label],
+                            haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
+                           ) for parameters_label in stage_dict[current_stage]["parameters"]
+                     ]
+                    ]
+
+    if current_stage in config["extended_qc_stages"]:
+        results_list += [[[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.png",
+                               scaffold_length=config["qc_settings"]["assembly_scaffold_sets"],
+                               threshold_type=config["qc_settings"]["threshold_types"],
+                               genome_prefix=[config["genome_prefix"], ],
+                               assembly_stage=[current_stage, ],
+                               track_type=[track_type],
+                               window=[parameters["tool_options"]["assembly_qc"][track_type]["options"][window_settings]["window"]],
+                               step=[parameters["tool_options"]["assembly_qc"][track_type]["options"][window_settings]["step"]],
+                               haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
+                               parameters=[parameters_label])
+
+                        for window_settings in config["qc_settings"]["windows_sets"]]
+                        for parameters_label in stage_dict[current_stage]["parameters"]]
+                        for track_type in ["windowmasker"] + (["trf"] if not config["skip_trf"] else [])],]
         if not config["skip_wga"]:
             results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/wga.{query_prefix}.{query_length}.to.{target_prefix}.{target_length}.YASS.R11.soft.min_len{min_target_len}.png",
                                      query_length=config["qc_settings"]["assembly_scaffold_sets"],
@@ -1907,194 +1849,50 @@ if "curation" in config["stage_list"]:
                                                          haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]),
                                    ) for parameters_label in stage_dict[current_stage]["parameters"]],
                              ]
-        results_list += [[[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.{threshold_type}.png",
-                                threshold_type=config["qc_settings"]["threshold_types"],
-                                genome_prefix=[config["genome_prefix"], ],
-                                assembly_stage=["curation", ],
-                                track_type=[track_type],
-                                window=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["window"]],
-                                step=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["step"]],
-                                haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in  ["windowmasker", "gc"] + (["trf"] if not config["skip_trf"] else []) ],
-                         [[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.stat",
-                                seq_type=["scaffolds"],
-                                threshold_type=config["qc_settings"]["threshold_types"],
-                                genome_prefix=[config["genome_prefix"], ],
-                                assembly_stage=["curation", ],
-                                track_type=[track_type],
-                                window=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["window"]],
-                                step=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["step"]],
-                                haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ["windowmasker", "gc"] + (["trf"] if not config["skip_trf"] else []) ],
-                         [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.canonical.txt",
-                                seq_type=["scaffolds"],
-                                genome_prefix=[config["genome_prefix"], ],
-                                assembly_stage=["curation", ],
-                                haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
-                         [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.canonical_telomere.win1000.step200.track.bedgraph",
-                                seq_type=["scaffolds"],
-                                genome_prefix=[config["genome_prefix"], ],
-                                assembly_stage=["curation", ],
-                                haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
-                         [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.canonical_telomere_warning.win1000.step200.track.bedgraph",
-                                seq_type=["scaffolds"],
-                                genome_prefix=[config["genome_prefix"], ],
-                                assembly_stage=["curation", ],
-                                haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
-                         [expand(out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.{datatype}.vcf.gz",
-                                genome_prefix=[config["genome_prefix"], ],
-                                datatype=variant_calling_data_type_set,
-                                assembly_stage=["curation", ],
-                                haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]] if variant_calling_data_type_set and (not config["skip_variantcalling"]) else [],
-                         ]
+
         if coverage_track_data_type_set:
-
-            results_list += [[[expand(out_dir_path / "curation/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.{datatype}.coverage.win{window}.step{step}.png",
-                                window=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"]["options"][window_step_set]["window"],
-                                step=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"]["options"][window_step_set]["step"],
-                                genome_prefix=[config["genome_prefix"], ],
-                                assembly_stage=["curation", ],
-                                datatype=coverage_track_data_type_set,
-                                haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for window_step_set in stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"]["options"]] for parameters_label in stage_dict["curation"]["parameters"]] if coverage_track_data_type_set else [],
-                         [[expand(out_dir_path / "curation/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.{datatype}_{cov_type}_coverage.win{window}.step{step}.track.bedgraph",
-                                cov_type=["mean", "median"],
-                                window=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"]["options"][window_step_set]["window"],
-                                step=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"]["options"][window_step_set]["step"],
-                                genome_prefix=[config["genome_prefix"], ],
-                                assembly_stage=["curation", ],
-                                datatype=coverage_track_data_type_set,
-                                haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for window_step_set in stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"]["options"]] for parameters_label in stage_dict["curation"]["parameters"]] if coverage_track_data_type_set else [],
-                         ]
-        if "hic_scaffolding" in config["stage_list"]:
-            results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.canonical_telomere_warning.win1000.step200.scaled.track.bedgraph",
-                                seq_type=["scaffolds"],
-                                genome_prefix=[config["genome_prefix"], ],
-                                assembly_stage=["curation", ],
-                                haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
-                            [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.canonical_telomere.win1000.step200.scaled.track.bedgraph",
-                                seq_type=["scaffolds"],
-                                genome_prefix=[config["genome_prefix"], ],
-                                assembly_stage=["curation", ],
-                                haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
-                            [[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.scaled.track.bedgraph",
-                                seq_type=["scaffolds"],
-                                threshold_type=config["qc_settings"]["threshold_types"],
-                                genome_prefix=[config["genome_prefix"], ],
-                                assembly_stage=["curation", ],
-                                track_type=[track_type],
-                                window=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["window"]],
-                                step=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["step"]],
-                                haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ["windowmasker", "gc"] + (["trf"] if not config["skip_trf"] else []) ],
-                             ]
-            if coverage_track_data_type_set:
-                results_list += [[[expand(out_dir_path / "curation/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.{datatype}_{cov_type}_coverage.win{window}.step{step}.scaled.track.bedgraph",
-                                cov_type=["mean", "median"],
-                                window=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"]["options"][window_step_set]["window"],
-                                step=stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"]["options"][window_step_set]["step"],
-                                genome_prefix=[config["genome_prefix"], ],
-                                assembly_stage=["curation", ],
-                                datatype=coverage_track_data_type_set,
-                                haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for window_step_set in stage_dict["curation"]["parameters"][parameters_label]["option_set"]["coverage"]["options"]] for parameters_label in stage_dict["curation"]["parameters"]] if coverage_track_data_type_set else [],
-                            ]
-
-    if ("contigs" in config["curation_seq_type"]) and (prev_stage == "hic_scaffolding") :
-        results_list += [[[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.{filetype}",
-                                filetype=["stat", "assembly.bedgraph"],
-                                seq_type=["contigs"],
-                                threshold_type=config["qc_settings"]["threshold_types"],
-                                genome_prefix=[config["genome_prefix"], ],
-                                assembly_stage=["curation", ],
-                                track_type=[track_type],
-                                window=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["window"]],
-                                step=[stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"][window_settings]["step"]],
-                                haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for window_settings in stage_dict["curation"]["parameters"][parameters_label]["option_set"][track_type]["options"] ] for parameters_label in stage_dict["curation"]["parameters"]] for track_type in ["windowmasker", "gc", "gap"] + (["trf"] if not config["skip_trf"] else []) ],
-                         *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.canonical.txt",
-                                seq_type=["contigs"],
-                                genome_prefix=[config["genome_prefix"], ],
-                                assembly_stage=["curation", ],
-                                haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
-                         *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{telo_type}.win1000.step200.track.assembly.bedgraph",
-                                telo_type=["canonical_telomere", "non_canonical_telomere"],
-                                seq_type=["contigs"],
-                                genome_prefix=[config["genome_prefix"], ],
-                                assembly_stage=["curation", ],
-                                haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
-                         *[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{telo_type}.win1000.step200.track.assembly.bedgraph",
-                                telo_type=["canonical_telomere_warning", "non_canonical_telomere_warning"],
-                                seq_type=["contigs"],
-                                genome_prefix=[config["genome_prefix"], ],
-                                assembly_stage=["curation", ],
-                                haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],
-                         ]
-
-    if not config["skip_higlass"]:
-        for parameters_label in parameters_list:
-            if stage_dict["curation"]["parameters"][parameters_label]["prev_stage"] == "hic_scaffolding": # TODO: add handling for a case when "hic_scaffolding" is not a stage before the "curation"
-                results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.higlass.mcool",
-                                genome_prefix=[config["genome_prefix"], ],
-                                assembly_stage=["curation", ],
-                                haplotype=stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"],
-                                parameters=[parameters_label]) for parameters_label in stage_dict["curation"]["parameters"]],]
-
-
-    if config["create_hic_file_during_curation"]:
-        results_list += [expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pre.hic",
-                                assembly_stage=[stage_dict["curation"]["prev_stage"]],
-                                haplotype=stage_dict[prev_stage]["parameters"][stage_dict["curation"]["parameters"][current_parameter_label]["prev_parameters"]]["haplotype_list"],
-                                genome_prefix=[config["genome_prefix"], ],
-                                phasing_kmer_length=["31"] ,# [stage_dict["curation"]["parameters"][current_parameter_label]["option_set"]["phasing_kmer_length"]],
-                                parameters=[stage_dict["curation"]["parameters"][current_parameter_label]["prev_parameters"]],
-                                ) for current_parameter_label in stage_dict["curation"]["parameters"]]
-
-    if (prev_stage == "hic_scaffolding") and (not config["skip_gathering"]):
-        #for parameter_label in stage_dict["curation"]["parameters"]:
-        #    print(stage_dict["curation"]["parameters"][parameters_label])
-        #    print(stage_dict["curation"]["parameters"][parameters_label]["haplotype_list"])
-        results_list += [[expand(out_dir_path / "curation_files/{parameters}/{haplotype}/{genome_prefix}.hic_scaffolding.{haplotype}.hic",
-                                 parameters=[parameter_label],
-                                 haplotype=stage_dict["curation"]["parameters"][parameter_label]["haplotype_list"],
-                                 genome_prefix=[config["genome_prefix"], ],
-                                 ) for parameter_label in stage_dict["curation"]["parameters"]],
-                        [expand(out_dir_path / "curation_files/{parameters}/{haplotype}/contigs",
-                                parameters=[parameter_label],
-                                haplotype=stage_dict["curation"]["parameters"][parameter_label]["haplotype_list"],
-                                ) for parameter_label in stage_dict["curation"]["parameters"]],
-                         ]
-
-    if ("bird_genome" in config) and config["bird_genome"]:
-        #if "contigs" in config["curation_seq_type"]:
-        #    results_list += [[expand(out_dir_path / "curation/{parameters}/{haplotype}/contigs/{genome_prefix}.input.{haplotype}.order.tsv",
-        #                             parameters=[parameter_label],
-        #                             haplotype=stage_dict["curation"]["parameters"][parameter_label]["haplotype_list"],
-        #                             genome_prefix=[config["genome_prefix"], ],
-        #                            ) for parameter_label in stage_dict["curation"]["parameters"]],
-        #                     ]
-        if "scaffolds" in config["curation_seq_type"]:
-            results_list += [[expand(out_dir_path / "curation/{parameters}/{haplotype}/scaffolds/{genome_prefix}.input.{haplotype}.max{max_length}.candidates.microchromosomes.filtered.tsv",
-                                     parameters=[parameter_label],
-                                     haplotype=stage_dict["curation"]["parameters"][parameter_label]["haplotype_list"],
-                                     genome_prefix=[config["genome_prefix"],],
-                                     max_length=parameters["tool_options"]["microsome_detection"]["max_length"],
-                                    ) for parameter_label in stage_dict["curation"]["parameters"]],
+            results_list += [[[
+                                  expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.coverage_{settings}.{scaffold_length}.win{window}.step{step}.png",
+                                      settings=parameters["tool_options"]["mosdepth"]["options"],
+                                      scaffold_length=config["qc_settings"]["assembly_scaffold_sets"],
+                                      window=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["window"],
+                                      step=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
+                                      genome_prefix=[config["genome_prefix"], ],
+                                      assembly_stage=[current_stage, ],
+                                      datatype=coverage_track_data_type_set,
+                                      haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
+                                      parameters=[parameters_label]) for window_step_set in
+                                            config["qc_settings"]["windows_sets"]] for parameters_label in
+                                                      stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],
                              ]
 
-    with open("tmp.results_list", "w") as out_fd:
-        for filename in results_list:
-            out_fd.write(str(filename) + "\n")
+    if not config["skip_busco"]:
+        results_list += [*[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/{genome_prefix}.{assembly_stage}.{haplotype}.busco5.{busco_lineage}.tar.gz",
+                                busco_lineage=config["busco_lineage_list"],
+                                genome_prefix=[config["genome_prefix"], ],
+                                assembly_stage=[current_stage, ],
+                                haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
+                                parameters=[parameters_label]) for parameters_label in parameters_list],
+                         *[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.merged.tsv",
+                                busco_lineage=config["busco_lineage_list"],
+                                genome_prefix=[config["genome_prefix"], ],
+                                assembly_stage=[current_stage],
+                                parameters=[parameters_label]) for parameters_label in parameters_list],
+                         *[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.busco.merged.tsv",
+                                busco_lineage=config["busco_lineage_list"],
+                                genome_prefix=[config["genome_prefix"], ],
+                                assembly_stage=[current_stage],
+                                haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"],
+                                parameters=[parameters_label]) for parameters_label in parameters_list],
+                         expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/busco5/all_intersection/{genome_prefix}.{busco_lineage}.busco.merged.tsv",
+                                busco_lineage=config["busco_lineage_list"],
+                                genome_prefix=[config["genome_prefix"], ],
+                                assembly_stage=[current_stage],
+                                parameters=parameters_list
+                                ),
+                         ]
+
+
 #----
 wildcard_constraints:
     se_datatype="|".join(config["se_fastq_based_data"]),
@@ -2148,7 +1946,6 @@ include: "workflow/rules/QCAssembly/Purge_dups.smk"
 include: "workflow/rules/Contamination/FCS.smk"
 include: "workflow/rules/Contamination/Kraken2.smk"
 
-#if "hifi" in data_types:
 include: "workflow/rules/Contigs/Hifiasm.smk"
 
 include: "workflow/rules/Contigs/Graph.smk"

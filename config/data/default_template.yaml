@@ -19,8 +19,7 @@
         #"nanopore":
     "purge_dups":
         "default":
-            #- "purge_dups"
-            - "hapsolo"
+            - "purge_dups"
     "hic_scaffolding":
         "default":
             #- "salsa2" # Allowed: "salsa2", "yahs", "3d-dna"
@@ -35,6 +34,10 @@
     "polishing":
         "default":
             - "nextpolish2"
+    "dedup":
+        "default":
+            - "hapsolo"
+
 
 "extended_qc_stages":
     #- "purge_dups"

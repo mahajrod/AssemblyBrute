@@ -2423,16 +2423,16 @@
             "draft":
                 - "polishing"
                 - "hic_scaffolding"
-        "polished_contig_hic_scaffolding_purge_dups":
+        "polished_contig_hic_scaffolding_dedup":
             "fastq":
                 - "contig"
                 - "polishing"
                 - "hic_scaffolding"
-                - "purge_dups"
+                - "dedup"
             "draft":
                 - "polishing"
                 - "hic_scaffolding"
-                - "purge_dups"
+                - "dedup"
         "skip_hic_scaffolding":
             "fastq":
                 - "contig"

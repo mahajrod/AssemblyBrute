@@ -19,8 +19,7 @@
         #"nanopore":
     "purge_dups":
         "default":
-            #- "purge_dups"
-            - "hapsolo"
+            - "purge_dups"
     "hic_scaffolding":
         "default":
             #- "salsa2" # Allowed: "salsa2", "yahs", "3d-dna"
@@ -35,6 +34,9 @@
     "polishing":
         "default":
             - "nextpolish2"
+    "dedup":
+        "default":
+            - "hapsolo"
 
 "extended_qc_stages":
     #- "purge_dups"
@@ -190,7 +192,7 @@
 "mode": "assembly"                # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
-"assembly_mode": "polished_contig_hic_scaffolding_purge_dups"#"hic_scaffolding"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
+"assembly_mode": "polished_contig_hic_scaffolding_dedup"#"hic_scaffolding"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []

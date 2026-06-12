@@ -153,4 +153,4 @@ downsample_pe_reads	1	1	1	1	1	1	1	1	1
 mitoz	10	10	10	10	10	10	10	10	10
 get_meryl_histo	1	1	1	1	1	1	1	1	1
 nextpolish2	40	10	30	30	30	30	40	40	40
-hapsolo	25	10	10	15	25	25	30	30	40
+hapsolo	15	10	10	15	15	25	30	30	30

@@ -37,6 +37,7 @@ rule hapsolo:
 
     shell:
         " WORKDIR=`dirname {output.purged_fasta}`/{wildcards.genome_prefix}.dedup.{wildcards.haplotype}/hapsolo/{wildcards.busco_lineage}; "
+        " mkdir -p ${{WORKDIR}}; "
         " cp -f {input.input_fasta} ${{WORKDIR}}; "
         " INPUT_FASTA=`basename {input.input_fasta}`; "
         " INPUT_FASTA_PREFIX=${{INPUT_FASTA%.fasta}}; "

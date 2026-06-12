@@ -47,5 +47,5 @@ rule hapsolo:
         " hapsolo_cli.py align -t {threads} -i ${{INPUT_FASTA_PREFIX}}_new.fasta > {log.align} 2>&1 ; "
         " hapsolo_cli.py search -t {threads} -i ${{INPUT_FASTA_PREFIX}}_new.fasta -l {input.busco_db_dir} -o ortholog_output > {log.search} 2>&1; "
         " hapsolo_cli.py train -t {threads} -i ${{INPUT_FASTA_PREFIX}}_new.fasta --paf ${{INPUT_FASTA_PREFIX}}_new_self_align.paf.gz -b ortholog_output -n {params.iterations_per_thread} > {log.train} 2>&1; "
-        " cp asms/*_primary.fasta ../../../${{OUTPUT_FASTA}}; "
+        " cp -f  asms/*_primary.fasta ../../../${{OUTPUT_FASTA}}; "
 

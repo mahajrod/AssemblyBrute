@@ -41,7 +41,7 @@ rule hapsolo:
         " cp -f {input.input_fasta} ${{WORKDIR}}; "
         " INPUT_FASTA=`basename {input.input_fasta}`; "
         " INPUT_FASTA_PREFIX=${{INPUT_FASTA%.fasta}}; "
-        " OUTPUT_FASTA=`basename {input.input_fasta}`; "
+        " OUTPUT_FASTA=`basename {output.purged_fasta}`; "
         " cd ${{WORKDIR}}; "
         " hapsolo_cli.py preprocess -i ${{INPUT_FASTA}} > {log.preprocess} 2>&1;  "
         " hapsolo_cli.py align -t {threads} -i ${{INPUT_FASTA_PREFIX}}_new.fasta > {log.align} 2>&1 ; "

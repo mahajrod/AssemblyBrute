@@ -7,8 +7,8 @@
 "dependencies":
   - "minimap2"
   - "miniprot"
-  - "python=3.6"
+  - "python=3.10"
   - "pandas>=1.0"
-  - "tqdm>=4.0"
+  - "tqdm==4.68" # tqdm 4.72 doesn't work. Tool requirement is tqdm >=4
   - "pip":
       - "git+https://github.com/mahajrod/HapSolo/"

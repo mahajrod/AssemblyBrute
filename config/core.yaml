@@ -23,6 +23,9 @@
     "busco":
         "yaml": "workflow/envs/conda.busco5.yaml"
         "name": "busco5"
+    "busco6":
+        "yaml": "workflow/envs/conda.busco6.yaml"
+        "name": "busco6"
     "mitoz":
         "yaml": "workflow/envs/conda.mitoz.yaml"
         "name": "mitoz"

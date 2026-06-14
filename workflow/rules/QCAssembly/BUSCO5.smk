@@ -2,30 +2,30 @@ localrules: busco5_intersect_haplotypes, busco5_intersect_stages
 localrules: create_busco_tracks, create_busco_tracks_for_combined_haplotype
 ruleorder: create_busco_tracks_for_combined_haplotype > create_busco_tracks
 
-rule busco5_download:
+rule busco5_download: #
     priority: 500
     output:
-        lineage_dir=directory(out_dir_path / "download/busco5/lineages/{busco_lineage}"),
+        lineage_dir=directory(out_dir_path / "download/busco5/lineages/{busco5_lineage}"),
     params:
         busco_download_dir=out_dir_path / "download/busco5/"
     log:
-        std=output_dict["log"] / "busco5_download.{busco_lineage}.log",
-        cluster_log=output_dict["cluster_log"] / "busco5_download.{busco_lineage}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "busco5_download.{busco_lineage}.cluster.err"
+        std=output_dict["log"] / "busco5_download.{busco5_lineage}.log",
+        cluster_log=output_dict["cluster_log"] / "busco5_download.{busco5_lineage}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "busco5_download.{busco5_lineage}.cluster.err"
     benchmark:
-        output_dict["benchmark"] / "busco5_download.{busco_lineage}.benchmark.txt"
+        output_dict["benchmark"] / "busco5_download.{busco5_lineage}.benchmark.txt"
     conda:
         config["conda"]["busco"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco"]["yaml"])
     resources:
         queue=config["queue"]["cpu"]["name"],
-        node_options=parse_node_list("busco5_download"),
-        cpus=parameters["threads"]["busco5_download"],
-        time=parameters["time"]["busco5_download"],
-        mem=parameters["memory_mb"]["busco5_download"],
+        node_options=parse_node_list("busco_download"),
+        cpus=parameters["threads"]["busco_download"],
+        time=parameters["time"]["busco_download"],
+        mem=parameters["memory_mb"]["busco_download"],
     threads:
-        parameters["threads"]["busco5_download"]
+        parameters["threads"]["busco_download"]
     shell:
-         " busco --download_path {params.busco_download_dir} --download {wildcards.busco_lineage} > {log.std} 2>&1; "
+         " busco --download_path {params.busco_download_dir} --download {wildcards.busco5_lineage} > {log.std} 2>&1; "
 
 rule busco5: # Downloading of busco datasets is performed by a different rule to avoid conflict between different instances of busco5
     priority: 500

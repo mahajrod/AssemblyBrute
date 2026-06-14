@@ -1918,7 +1918,8 @@ wildcard_constraints:
     prev_stage_parameters="[^/]+",
     purge_dups_parameters="[^/]+",
     dedup_parameters="[^/]+",
-    busco_lineage="[^/]+",
+    busco5_lineage="[^/]+odb10[^/]*",
+    busco6_lineage="[^/]+odb12[^/]*"
 #---- Final rule ----
 pd.Series(results_list).to_csv(config["out_dir"] + "/requested_files.tab", sep="\t", header=False, index=False)
 rule all:
@@ -1951,6 +1952,7 @@ include: "workflow/rules/Kmer/Genomescope.smk"
 include: "workflow/rules/Kmer/Krater.smk"
 
 include: "workflow/rules/QCAssembly/BUSCO5.smk"
+include: "workflow/rules/QCAssembly/BUSCO6.smk"
 include: "workflow/rules/QCAssembly/Merqury.smk"
 include: "workflow/rules/QCAssembly/QUAST.smk"
 include: "workflow/rules/QCAssembly/General.smk"

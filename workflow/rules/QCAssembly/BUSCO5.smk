@@ -30,7 +30,7 @@ rule busco5_download: #
 rule busco5: # Downloading of busco datasets is performed by a different rule to avoid conflict between different instances of busco5
     priority: 500
     input:
-        busco_lineage=rules.busco5_download.output.lineage_dir,
+        busco_lineage=out_dir_path / "download/busco5/lineages/{busco_lineage}",
         assembly=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
     output:
         tar_gz=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/busco5/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}.busco5.{busco_lineage}.tar.gz",

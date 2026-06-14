@@ -5,7 +5,7 @@ ruleorder: create_busco_tracks_for_combined_haplotype > create_busco_tracks
 rule busco5_download:
     priority: 500
     output:
-        lineage_dir=directory((out_dir_path / "download/busco5/lineages/{busco_lineage}").resolve()),
+        lineage_dir=directory(out_dir_path / "download/busco5/lineages/{busco_lineage}"),
     params:
         busco_download_dir=out_dir_path / "download/busco5/"
     log:

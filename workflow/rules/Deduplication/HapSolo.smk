@@ -8,7 +8,7 @@ rule hapsolo:
                                                                                                                            wildcards.prev_stage_parameters,
                                                                                                                            wildcards.genome_prefix,
                                                                                                                            wildcards.haplotype),
-        busco_db_dir=(out_dir_path / "download/busco5/lineages/{busco_lineage}").resolve(),
+        busco_db_dir=out_dir_path / "download/busco5/lineages/{busco_lineage}",
         log_dir=out_dir_path  / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/log",
     output:
         purged_fasta=out_dir_path  / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/{genome_prefix}.dedup.{haplotype}.fasta",
@@ -36,6 +36,7 @@ rule hapsolo:
     threads: parameters["threads"]["hapsolo"]
 
     shell:
+        " BUSCO_DIR=`realpath {input.busco_db_dir}`; "
         " WORKDIR=`dirname {output.purged_fasta}`/{wildcards.genome_prefix}.dedup.{wildcards.haplotype}/hapsolo/{wildcards.busco_lineage}; "
         " mkdir -p ${{WORKDIR}}; "
         " cp -f {input.input_fasta} ${{WORKDIR}}; "
@@ -45,7 +46,7 @@ rule hapsolo:
         " cd ${{WORKDIR}}; "
         " hapsolo_cli.py preprocess -i ${{INPUT_FASTA}} > {log.preprocess} 2>&1;  "
         " hapsolo_cli.py align -t {threads} -i ${{INPUT_FASTA_PREFIX}}_new.fasta > {log.align} 2>&1 ; "
-        " hapsolo_cli.py search -t {threads} -i ${{INPUT_FASTA_PREFIX}}_new.fasta -l {input.busco_db_dir} -o ortholog_output > {log.search} 2>&1; "
+        " hapsolo_cli.py search -t {threads} -i ${{INPUT_FASTA_PREFIX}}_new.fasta -l ${{BUSCO_DIR}} -o ortholog_output > {log.search} 2>&1; "
         " hapsolo_cli.py train -t {threads} -i ${{INPUT_FASTA_PREFIX}}_new.fasta --paf ${{INPUT_FASTA_PREFIX}}_new_self_align.paf.gz -b ortholog_output -n {params.iterations_per_thread} > {log.train} 2>&1; "
         " cp -f  asms/*_primary.fasta ../../../${{OUTPUT_FASTA}}; "
 

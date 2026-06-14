@@ -1779,6 +1779,16 @@ if "dedup" in config["stage_list"]:
                              parameters=[parameters_label]) for parameters_label in parameters_list],
 
                     ]
+    results_list += [expand(out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats",
+                           genome_prefix=[config["genome_prefix"], ],
+                           assembly_stage=[current_stage],),
+                     *[expand(out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
+                                assembly_stage=[current_stage],
+                                parameters=[parameters_label],
+                                genome_prefix=[config["genome_prefix"], ],
+                                haplotype=stage_dict["draft_qc"]["parameters"][parameters_label]["haplotype_list"]
+                                ) for parameters_label in parameters_list],
+                     ]
     results_list += [
                      [[[expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.png",
                                scaffold_length=config["qc_settings"]["assembly_scaffold_sets"],

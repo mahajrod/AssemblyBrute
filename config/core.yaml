@@ -210,6 +210,8 @@
                             - "illumina"
                             - "bgiseq"
                             - "aviti"
+                    "hapsolo":
+                        "iterations_per_thread": 1000
                     "purge_dups":
                         "datatype_list":
                             - "hifi"
@@ -542,7 +544,7 @@
                                 "min_mapping_quality": 0
                             "hic":
                                 "min_mapping_quality": 0
-                        "hq_mapping": # default mosdepth settings
+                        "hq_mapping":
                             "blacklist_flags": 0x704 #  read unmapped (0x4), not primary alignment (0x100), read fails platform/vendor quality checks (0x200), read is PCR or optical duplicate (0x400)
                             "illumina":
                                 "min_mapping_quality": 30

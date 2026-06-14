@@ -1909,17 +1909,22 @@ wildcard_constraints:
     se_datatype="|".join(config["se_fastq_based_data"]),
     pe_datatype="|".join(config["paired_fastq_based_data"]),
     longread_datatype="|".join(config["long_read_data"]),
+    datatype="[^./]+",
     haplotype="[^./]+",
     stage="[^/]+",
+    assembly_stage="[^/]+",
     kmer_length="[^/]+",
     genome_prefix="[^/]+",
     correction_options="[^/]+",
     contig_options="[^/]+",
+    parameters="[^/]+",
     prev_stage_parameters="[^/]+",
     purge_dups_parameters="[^/]+",
     dedup_parameters="[^/]+",
     busco5_lineage="[^/]+odb10|[^/]+odb12",
-    busco6_lineage="[^/]+odb12\.[^/]*"
+    busco6_lineage="[^/]+odb12\.[^/]*",
+    window="[0-9]+",
+    step="[0-9]+",
 #---- Final rule ----
 pd.Series(results_list).to_csv(config["out_dir"] + "/requested_files.tab", sep="\t", header=False, index=False)
 rule all:

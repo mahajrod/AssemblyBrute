@@ -1786,7 +1786,7 @@ if "dedup" in config["stage_list"]:
                                 assembly_stage=[current_stage],
                                 parameters=[parameters_label],
                                 genome_prefix=[config["genome_prefix"], ],
-                                haplotype=stage_dict["draft_qc"]["parameters"][parameters_label]["haplotype_list"]
+                                haplotype=stage_dict[current_stage]["parameters"][parameters_label]["haplotype_list"]
                                 ) for parameters_label in parameters_list],
                      ]
     results_list += [

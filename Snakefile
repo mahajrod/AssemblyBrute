@@ -1918,8 +1918,8 @@ wildcard_constraints:
     prev_stage_parameters="[^/]+",
     purge_dups_parameters="[^/]+",
     dedup_parameters="[^/]+",
-    busco5_lineage="[^/]+odb10[^/]*",
-    busco6_lineage="[^/]+odb12[^/]*"
+    busco5_lineage="[^/]+odb10|[^/]+odb12",
+    busco6_lineage="[^/]+odb12\.[^/]*"
 #---- Final rule ----
 pd.Series(results_list).to_csv(config["out_dir"] + "/requested_files.tab", sep="\t", header=False, index=False)
 rule all:

@@ -116,6 +116,7 @@
     "hapsolo":
         "busco_lineage_list":
             - "actinopterygii_odb10"
+            - "actinopterygii_odb12.2"
 
 "ploidy": 2
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2

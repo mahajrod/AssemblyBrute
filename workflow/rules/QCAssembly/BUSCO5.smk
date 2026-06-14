@@ -139,7 +139,7 @@ def get_busco_table_for_all_assemblies_in_chain_per_haplotype(wildcards):
     busco_table_list = []
     parameters_dict = get_parameters_for_all_stages_in_chain(wildcards.parameters)
     for stage in parameters_dict:
-        busco_table_list += expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{busco_version}/{genome_prefix}.{assembly_stage}.{haplotype}.{busco_version}.{busco5_lineage}.full_table.tsv",
+        busco_table_list += expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{busco_version}/{genome_prefix}.{assembly_stage}.{haplotype}.{busco_version}.{busco_lineage}.full_table.tsv",
                                                assembly_stage=[stage],
                                                parameters=[parameters_dict[stage]],
                                                #haplotype=haplotype_list,
@@ -222,7 +222,7 @@ def get_busco_tables_for_all_assemblies_in_chain(wildcards):
     busco_table_list = []
     for stage in chain_stage_dict:
         for haplotype in stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"]:
-            busco_table_list += expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{busco_version}/{genome_prefix}.{assembly_stage}.{haplotype}.{busco_version}.{busco5_lineage}.full_table.tsv",
+            busco_table_list += expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{busco_version}/{genome_prefix}.{assembly_stage}.{haplotype}.{busco_version}.{busco_lineage}.full_table.tsv",
                                        assembly_stage=[stage],
                                        parameters=[chain_stage_dict[stage]],
                                        haplotype=[haplotype],

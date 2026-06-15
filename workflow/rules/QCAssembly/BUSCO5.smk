@@ -179,6 +179,7 @@ rule busco_intersect_stages:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
+        queue=config["queue"]["cpu"]["name"],
         cpus=parameters["threads"]["busco5_intersect_stages"],
         node_options=parse_node_list("busco5_intersect_stages"),
         time=parameters["time"]["busco5_intersect_stages"],

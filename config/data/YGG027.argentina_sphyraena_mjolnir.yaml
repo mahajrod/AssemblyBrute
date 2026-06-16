@@ -9,58 +9,6 @@
 "resource_profile": "high"      # Should be present in resource directory
 #--------------------------
 
-"allowed_databases":
-    "kraken2":
-        "silva":
-            "path":         "" # add path to silva database
-            "memory_mb":    10000
-            "threads":      15
-            "time":         "06:00:00"
-            "in_memory":    True
-        "rdp":
-            "path":         "" # add path to rdp database
-            "memory_mb":    10000
-            "threads":      15
-            "time":         "06:00:00"
-            "in_memory":    True
-        "greengenes":
-            "path":         "" # add path to greengenes database
-            "memory_mb":    10000
-            "threads":      15
-            "time":         "06:00:00"
-            "in_memory":    True
-        "nt":
-            "path":         "/datasets/globe_databases/kraken2/kraken2_nt/20240530/" # add path to nt database
-            "memory_mb":    1024000
-            "threads":      30
-            "time":         "03:00:00"
-            "in_memory":    True
-    "fcs":
-        "fcs_gx":
-            "path":         "/datasets/globe_databases/fcs-gx/20240912/gxdb/" # add path to fcs_gx database
-            "image_path":   "/maps/projects/tomg/people/xsg178/soft/FCS-GX/fcs-gx.sif"
-            "memory_mb":    512000 # Entire database must be in memory, it requires at least 490 Gbp
-            "threads":      30
-            "time":         "06:00:00"
-            "in_memory":    True
-    "fcs_adaptor":
-        "adaptor":
-            "path":         null # database is embedded in singularity image
-            "image_path":   "/maps/projects/tomg/people/xsg178/soft/fcsadaptor/fcs-adaptor.sif"
-            "memory_mb":    20000 #
-            "threads":      1
-            "time":         "01:00:00"
-            "in_memory":    True
-            "taxonomy":     "eukaryota"
-"final_fcs_db": "fcs_gx" # this database will be used for the filtration of the contigs if skip_fcs is False
-
-"tool_containers":
-    "rapid_telomere":       "/maps/projects/tomg/people/xsg178/soft/rapid-curation/rapid_hic_software/runTelo.sif"
-    "deepvariant":
-        "cpu": "/maps/projects/tomg/people/xsg178/soft/deepvariant/deepvariant_1.5.0.sif"
-        "gpu": null #"gpu": "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
-    "mitohifi":             "docker://ghcr.io/marcelauliano/mitohifi:master"
-
 'alternative_tmp_dir': None
 
 "stage_coretools":     #TODO: add bionano
@@ -86,9 +34,15 @@
     "ref_scaffolding":
         "default":
             - "ragtag"
+    "polishing":
+        "default":
+            - "nextpolish2"
+    "dedup":
+        "default":
+            - "hapsolo"
 
 "extended_qc_stages":
-    - "purge_dups"
+    #- "purge_dups"
     - "hic_scaffolding"
     - "ref_scaffolding"
 
@@ -98,7 +52,7 @@
         - "w1000k.s100k"
         #- "w100k.s100k"
         - "w100k.s10k"
-        #- "w10k.s10k"
+        - "w10k.s10k"
     "reference_scaffold_sets":
         - "custom"
         #- "long"
@@ -140,6 +94,11 @@
         #- "unphased_reads"
     "curation":
         - "default"
+    "nextpolish2":
+        - "default"
+    "hapsolo":
+        - "default"
+        #- "skipped"
 
 "other_tool_option_sets": # Options set here overwrite settings from "secondary_tool_config_file". Check it for configurable option list
     "mapping_pipeline":         "arima"  # Allowed: arima, bwa_only, pairtools.
@@ -149,11 +108,27 @@
         "lower_threshold": null #
         "haploid_diploid_threshold": null #
         "upper_threshold": null #
+    "hifiasm":
+        "coverage_estimator": null
+        "lambda": null
+    "krater":
+        "use_second_peak": null
+        "low_limit": null
+        "high_limit": null
+    "genomescope":
+        "starting_lambda": 30
+        "start_shift": null
+    "hapsolo":
+        "busco_lineage_list":
+            - "actinopterygii_odb10"
+            - "actinopterygii_odb12"
+            #- "actinopterygii_odb12.2"
 
 "ploidy": 2
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
 "genome_prefix": "fArgSph1"
 "busco_lineage_list":
+    - "actinopterygii_odb12"
     - "actinopterygii_odb10"
     - "vertebrata_odb10" #
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
@@ -221,10 +196,10 @@
 "phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads
 #---------------------------------------------------------------------
 
-"mode": "qc"                # Allowed: "preprocessing", "qc", "assembly"
+"mode": "assembly"                # Allowed: "preprocessing", "qc", "assembly"
 "preprocessing_mode": "default"   # Allowed: "default"
 "qc_mode": "default"              # Allowed: "default"
-"assembly_mode": "contig"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
+"assembly_mode": "contig_dedup_polish_hic_scaffolding"           # Allowed: "default", "full", "purge_dups", "contig"; custom modes could be set in config file
 
 "custom_preprocessing_stages": []
 "custom_qc_stages": []

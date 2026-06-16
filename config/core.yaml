@@ -2438,6 +2438,16 @@
                 - "polishing"
                 - "hic_scaffolding"
                 - "dedup"
+        "contig_dedup_polish_hic_scaffolding":
+            "fastq":
+                - "contig"
+                - "dedup"
+                - "polishing"
+                - "hic_scaffolding"
+            "draft":
+                - "dedup"
+                - "polishing"
+                - "hic_scaffolding"
         "skip_hic_scaffolding":
             "fastq":
                 - "contig"

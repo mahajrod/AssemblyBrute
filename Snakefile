@@ -884,7 +884,7 @@ for stage_index in range(0, len(config["stage_list"])):
 
                 stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] = ["hap{0}".format(i) for i in range(1, stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] + 1)] if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["hap0"]
                 stage_dict["contig"]["parameters"][parameters_label]["option_set_group"] = option_set_group_assignment_dict[option_set] if option_set_group_assignment_dict is not None else None
-
+    """
     if config["stage_list"][stage_index] == "polishing":
         current_stage = "polishing"
         #stage_dict[current_stage] = {}
@@ -1874,7 +1874,7 @@ for stage_index in range(0, len(config["stage_list"])):
                                     parameters=parameters_list
                                     ),
                              ]
-
+    """
 print("AAAAA")
 #----
 #---- Global wildcard constrains ----

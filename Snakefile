@@ -1875,7 +1875,6 @@ if (config["phasing_stage"] in config["stage_list"]) and (not config["skip_phasi
                                     ) if len(stage_dict[config["phasing_stage"]]["parameters"][parameters_label]["haplotype_list"]) > 1 else []) for parameters_label in list(stage_dict[config["phasing_stage"]]["parameters"].keys())],
                             ]
 
-print("AAAAA")
 #----
 #---- Global wildcard constrains ----
 wildcard_constraints:
@@ -1886,7 +1885,8 @@ wildcard_constraints:
     haplotype="[^./]+",
     stage="[^/]+",
     assembly_stage="[^/]+",
-    kmer_length="[^/]+",
+    kmer_length="[0-9]+",
+    kmer_tool="[^.]+",
     genome_prefix="[^/]+",
     correction_options="[^/]+",
     contig_options="[^/]+",

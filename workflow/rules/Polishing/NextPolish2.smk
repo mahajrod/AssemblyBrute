@@ -20,7 +20,7 @@ rule nextpolish2: #
         benchmark_dir=out_dir_path / "polishing/{prev_stage_parameters}..nextpolish2_{polishing_parameters}/benchmark/"
     output:
         #bam=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam"
-        polished_assembly=out_dir_path / "polishing/{prev_stage_parameters, [^/]+}..nextpolish2_{polishing_parameters, [^/]+}/{genome_prefix, [^/]+}.polishing.{haplotype, hap[^/]+}.fasta"
+        polished_assembly=out_dir_path / "polishing/{prev_stage_parameters}..nextpolish2_{polishing_parameters, [^/]+}/{genome_prefix}.polishing.{haplotype, hap[^/]+}.fasta"
     params:
         sort_threads=parameters["threads"]["samtools_sort"],
         minimap_threads=parameters["threads"]["minimap2"],

@@ -6,7 +6,7 @@ rule meryl_assembly_new: #TODO: in future use this rule for all kmer counts on a
         log_dir="{directory}/log/",
         benchmark_dir="{directory}/benchmark/"
     output:
-        db_dir=directory("{directory}/kmer/meryl/{fasta_prefix, [^/]+}.{kmer_length, [^/]+}.meryl/")
+        db_dir=directory("{directory}/kmer/meryl/{fasta_prefix}.{kmer_length, [^/]+}.meryl/")
     log:
         std="{directory}/log/meryl_assembly.{fasta_prefix}.{kmer_length}.meryl.log",
         cluster_log="{directory}/log/meryl_assembly.{fasta_prefix}.{kmer_length}.meryl.cluster.log",

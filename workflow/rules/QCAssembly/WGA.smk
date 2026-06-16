@@ -5,19 +5,19 @@ rule last_index: #
     input:
         masked_fasta="{fasta_dir}/repeats/{fasta_prefix}.softmasked.fasta"
     output:
-        bck="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.softmasked.YASS.R11.soft.bck",
-        prj="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.softmasked.YASS.R11.soft.prj",
-        ssp="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.softmasked.YASS.R11.soft.ssp",
-        tis="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.softmasked.YASS.R11.soft.tis",
-        des="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.softmasked.YASS.R11.soft.des",
-        sds="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.softmasked.YASS.R11.soft.sds",
-        suf="{fasta_dir}/repeats/{fasta_prefix, [^/]+}.softmasked.YASS.R11.soft.suf",
+        bck="{fasta_dir}/repeats/{fasta_prefix}.softmasked.YASS.R11.soft.bck",
+        prj="{fasta_dir}/repeats/{fasta_prefix}.softmasked.YASS.R11.soft.prj",
+        ssp="{fasta_dir}/repeats/{fasta_prefix}.softmasked.YASS.R11.soft.ssp",
+        tis="{fasta_dir}/repeats/{fasta_prefix}.softmasked.YASS.R11.soft.tis",
+        des="{fasta_dir}/repeats/{fasta_prefix}.softmasked.YASS.R11.soft.des",
+        sds="{fasta_dir}/repeats/{fasta_prefix}.softmasked.YASS.R11.soft.sds",
+        suf="{fasta_dir}/repeats/{fasta_prefix}.softmasked.YASS.R11.soft.suf",
     log:
-        index="{fasta_dir}/repeats/last_index.{fasta_prefix, [^/]+}.softmasked.index.log",
-        cluster_log="{fasta_dir}/repeats/last_index.{fasta_prefix, [^/]+}.softmasked.cluster.log",
-        cluster_err="{fasta_dir}/repeats/last_index.{fasta_prefix, [^/]+}.softmasked.cluster.err"
+        index="{fasta_dir}/repeats/last_index.{fasta_prefix}.softmasked.index.log",
+        cluster_log="{fasta_dir}/repeats/last_index.{fasta_prefix}.softmasked.cluster.log",
+        cluster_err="{fasta_dir}/repeats/last_index.{fasta_prefix}.softmasked.cluster.err"
     benchmark:
-        "{fasta_dir}/repeats/last_index.{fasta_prefix, [^/]+}.softmasked.benchmark.txt"
+        "{fasta_dir}/repeats/last_index.{fasta_prefix}.softmasked.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

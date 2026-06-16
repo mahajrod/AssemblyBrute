@@ -31,11 +31,11 @@ rule hifiasm_correct:
         #                fileprefix=input_file_prefix_dict["simplex"],
         #                allow_missing=True) if "simplex" in input_filedict else [],
     output:
-        ec_bin=output_dict["error_correction"] / "hifiasm_{correction_options, [^/]+}/{genome_prefix, [^/]+}.contig.ec.bin",
-        ec_fasta=output_dict["error_correction"] / "hifiasm_{correction_options, [^/]+}/{genome_prefix, [^/]+}.contig.ec.fasta.gz",
-        alias_ec_fasta=out_dir_path / "data/fastq/hifi/error_corrected_hifiasm_{correction_options, [^/]+}/{genome_prefix, [^/]+}.contig.ec.fasta.gz",
-        ovlp_reverse_bin=output_dict["error_correction"] / "hifiasm_{correction_options, [^/]+}/{genome_prefix, [^/]+}.contig.ovlp.reverse.bin",
-        ovlp_source_bin=output_dict["error_correction"] / "hifiasm_{correction_options, [^/]+}/{genome_prefix, [^/]+}.contig.ovlp.source.bin",
+        ec_bin=output_dict["error_correction"] / "hifiasm_{correction_options, [^/]+}/{genome_prefix}.contig.ec.bin",
+        ec_fasta=output_dict["error_correction"] / "hifiasm_{correction_options, [^/]+}/{genome_prefix}.contig.ec.fasta.gz",
+        alias_ec_fasta=out_dir_path / "data/fastq/hifi/error_corrected_hifiasm_{correction_options, [^/]+}/{genome_prefix}.contig.ec.fasta.gz",
+        ovlp_reverse_bin=output_dict["error_correction"] / "hifiasm_{correction_options, [^/]+}/{genome_prefix}.contig.ovlp.reverse.bin",
+        ovlp_source_bin=output_dict["error_correction"] / "hifiasm_{correction_options, [^/]+}/{genome_prefix}.contig.ovlp.source.bin",
     params:
         window_size=lambda wildcards: parse_option("window_size", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -w "),
         bloom_filter_bits=lambda wildcards: parse_option("bloom_filter_bits", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -f "),
@@ -172,7 +172,7 @@ rule extract_lambda_value:
     input:
         coverage_estimator_report_filename=get_coverage_estimator_report_filename
     output:
-        lambda_file=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.lambda",
+        lambda_file=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.lambda",
     log:
         std=output_dict["log"] / "extract_lambda_value.{contig_options}.{genome_prefix}.log",
         cluster_log=output_dict["cluster_log"] / "extract_lambda_value.{contig_options}.{genome_prefix}.cluster.log",
@@ -278,12 +278,12 @@ rule hifiasm_hic: # TODO: add support for polyploid assemblies
         #coverage_estimator_report_filename=get_coverage_estimator_report_filename
         lambda_file=rules.extract_lambda_value.output.lambda_file
     output:
-        hap1_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap1.p_ctg.gfa",
-        hap2_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap2.p_ctg.gfa",
-        alt_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.a_ctg.gfa",
-        hap1_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap1.unfiltered.gfa",
-        hap2_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap2.unfiltered.gfa",
-        alt_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.alt.unfiltered.gfa",
+        hap1_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.hap1.p_ctg.gfa",
+        hap2_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.hap2.p_ctg.gfa",
+        alt_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.a_ctg.gfa",
+        hap1_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hap1.unfiltered.gfa",
+        hap2_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hap2.unfiltered.gfa",
+        alt_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.alt.unfiltered.gfa",
 
     params:
         purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge_level"],
@@ -387,23 +387,23 @@ rule hifiasm_hic_tetra: # TODO: add support for polyploid assemblies
         #coverage_estimator_report_filename=get_coverage_estimator_report_filename
         lambda_file=rules.extract_lambda_value.output.lambda_file
     output:
-        primary_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap1.p_ctg.gfa",
-        alternative_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap2.p_ctg.gfa",
-        third_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap3.p_ctg.gfa",
-        forth_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap4.p_ctg.gfa",
-        #alt_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.a_ctg.gfa",
-        primary_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap1.unfiltered.gfa",
-        alternative_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap2.unfiltered.gfa",
-        third_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap3.unfiltered.gfa",
-        forth_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap4.unfiltered.gfa",
-        #alt_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.alt.unfiltered.gfa",
+        primary_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.hap1.p_ctg.gfa",
+        alternative_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.hap2.p_ctg.gfa",
+        third_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.hap3.p_ctg.gfa",
+        forth_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.hap4.p_ctg.gfa",
+        #alt_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.a_ctg.gfa",
+        primary_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hap1.unfiltered.gfa",
+        alternative_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hap2.unfiltered.gfa",
+        third_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hap3.unfiltered.gfa",
+        forth_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hap4.unfiltered.gfa",
+        #alt_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.alt.unfiltered.gfa",
 
         #contig_graph_list=expand(output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.{haplotype}.p_ctg.gfa",
         #                         haplotype=["hap1", "hap2", "hap3", "hap4",], allow_missing=True),
-        alt_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.a_ctg.gfa",
+        alt_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.a_ctg.gfa",
         #contig_graph_alias_list=expand(output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.{haplotype}.unfiltered.gfa",
         #                         haplotype=["hap1", "hap2", "hap3", "hap4"], allow_missing=True),
-        alt_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.alt.unfiltered.gfa",
+        alt_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.alt.unfiltered.gfa",
     params:
         purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge_level"],
         ploidy=lambda wildcards: stage_dict["contig"]["parameters"][f"hifiasm_{wildcards.contig_options}"]["option_set"]["assembly_ploidy"], #config["ploidy"],
@@ -492,12 +492,12 @@ rule hifiasm_hic_ont: # TODO: add support for polyploid assemblies
         hic_reverse=expand(output_dict["data"] / ("fastq/hic/filtered/{pairprefix}_2%s" % config["fastq_extension"]), pairprefix=input_pairprefix_dict["hic"]) if "hic" in input_filedict else [],
         lambda_file=rules.extract_lambda_value.output.lambda_file
     output:
-        primary_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap1.p_ctg.gfa",
-        alternative_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap2.p_ctg.gfa",
-        alt_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.a_ctg.gfa",
-        primary_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap1.unfiltered.gfa",
-        alternative_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap2.unfiltered.gfa",
-        alt_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.alt.unfiltered.gfa",
+        primary_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.hap1.p_ctg.gfa",
+        alternative_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.hap2.p_ctg.gfa",
+        alt_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.a_ctg.gfa",
+        primary_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hap1.unfiltered.gfa",
+        alternative_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hap2.unfiltered.gfa",
+        alt_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.alt.unfiltered.gfa",
     params:
         purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge_level"],
         ploidy=lambda wildcards: stage_dict["contig"]["parameters"][f"hifiasm_{wildcards.contig_options}"]["option_set"]["assembly_ploidy"], #config["ploidy"],
@@ -585,10 +585,10 @@ rule hifiasm_long_reads_only:
                                                                                                                             wildcards.genome_prefix) if not parameters["tool_options"]["hifiasm"][wildcards.contig_options]["ont_mode"] else [],
         lambda_file=rules.extract_lambda_value.output.lambda_file
     output:
-        primary_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.p_ctg.gfa",
-        alt_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.a_ctg.gfa",
-        primary_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap0.unfiltered.gfa",
-        alt_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.alt0.unfiltered.gfa",
+        primary_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.p_ctg.gfa",
+        alt_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.a_ctg.gfa",
+        primary_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hap0.unfiltered.gfa",
+        alt_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.alt0.unfiltered.gfa",
     params:
         purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge_level"],
         ploidy=lambda wildcards: stage_dict["contig"]["parameters"][f"hifiasm_{wildcards.contig_options}"]["option_set"]["assembly_ploidy"], #config["ploidy"],
@@ -665,7 +665,7 @@ rule get_lowcoverage_contig_ids:
     input:
         cov=output_dict["contig"] / "{parameters}/{genome_prefix}.contig.{haplotype}.unfiltered.gfa.cov"
     output:
-        low_cov_ids=output_dict["contig"] / "{parameters}/{genome_prefix, [^/]+}.contig.{haplotype, [^/]+}.unfiltered.gfa.lowcov.ids",
+        low_cov_ids=output_dict["contig"] / "{parameters}/{genome_prefix}.contig.{haplotype, [^/]+}.unfiltered.gfa.lowcov.ids",
     log:
         std=output_dict["log"] / "get_lowcoverage_contig_ids.{parameters}.{genome_prefix}.{haplotype}.log",
         cluster_log=output_dict["cluster_log"] / "get_lowcoverage_contig_ids.{parameters}.{genome_prefix}.{haplotype}.cluster.log",
@@ -699,7 +699,7 @@ rule filter_contigs_by_coverage:
         low_cov_ids=output_dict["contig"] / "{parameters}/{genome_prefix}.contig.{haplotype}.unfiltered.gfa.lowcov.ids",
         unfiltered_fasta=output_dict["contig"] / "{parameters}/{genome_prefix}.contig.{haplotype}.unfiltered.fasta"
     output:
-        filtered_fasta=output_dict["contig"] / "{parameters}/{genome_prefix, [^/]+}.contig.{haplotype, [^/]+}.lenfiltered.fasta",
+        filtered_fasta=output_dict["contig"] / "{parameters}/{genome_prefix}.contig.{haplotype, [^/]+}.lenfiltered.fasta",
     log:
         std=output_dict["log"] / "filter_contigs_by_coverage.{parameters}.{genome_prefix}.{haplotype}.log",
         cluster_log=output_dict["cluster_log"] / "filter_contigs_by_coverage.{parameters}.{genome_prefix}.{haplotype}.cluster.log",
@@ -741,16 +741,16 @@ rule hifiasm_hic_4p: # TODO: add support for polyploid assemblies
         #coverage_estimator_report_filename=get_coverage_estimator_report_filename
         lambda_file=rules.extract_lambda_value.output.lambda_file
     output:
-        hap1_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap1.p_ctg.gfa",
-        hap2_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap2.p_ctg.gfa",
-        hap3_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap3.p_ctg.gfa",
-        hap4_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.hap4.p_ctg.gfa",
-        alt_contig_graph=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hic.a_ctg.gfa",
-        hap1_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap1.unfiltered.gfa",
-        hap2_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap2.unfiltered.gfa",
-        hap3_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap3.unfiltered.gfa",
-        hap4_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.hap4.unfiltered.gfa",
-        alt_alias=output_dict["contig"] / "hifiasm_{contig_options, [^/]+}/{genome_prefix, [^/]+}.contig.alt.unfiltered.gfa",
+        hap1_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.hap1.p_ctg.gfa",
+        hap2_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.hap2.p_ctg.gfa",
+        hap3_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.hap3.p_ctg.gfa",
+        hap4_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.hap4.p_ctg.gfa",
+        alt_contig_graph=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hic.a_ctg.gfa",
+        hap1_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hap1.unfiltered.gfa",
+        hap2_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hap2.unfiltered.gfa",
+        hap3_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hap3.unfiltered.gfa",
+        hap4_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.hap4.unfiltered.gfa",
+        alt_alias=output_dict["contig"] / "hifiasm_{contig_options}/{genome_prefix}.contig.alt.unfiltered.gfa",
 
     params:
         purge_level=lambda wildcards: parameters["tool_options"]["hifiasm"][wildcards.contig_options]["purge_level"],

@@ -3,9 +3,9 @@ rule trf: #
     input:
         fasta="{fasta_dir}/{fasta_prefix}.fasta",
     output:
-        simple_bed="{fasta_dir}/repeats/{fasta_prefix, [^/]+}/{fasta_prefix}.trf.simple.bed",
-        bed="{fasta_dir}/repeats/{fasta_prefix, [^/]+}/{fasta_prefix}.trf.track.bed",
-        #qc_track_bed="{fasta_dir}/assembly_qc/{track_type, trf}/{fasta_prefix, [^/]+}/{fasta_prefix}.{track_type, trf}.track.bed"
+        simple_bed="{fasta_dir}/repeats/{fasta_prefix}/{fasta_prefix}.trf.simple.bed",
+        bed="{fasta_dir}/repeats/{fasta_prefix}/{fasta_prefix}.trf.track.bed",
+        #qc_track_bed="{fasta_dir}/assembly_qc/{track_type, trf}/{fasta_prefix}/{fasta_prefix}.{track_type, trf}.track.bed"
     params:
         matching_weight=parse_option("matching_weight", parameters["tool_options"]["trf"], " -m "),
         mismatching_penalty=parse_option("mismatching_penalty", parameters["tool_options"]["trf"], " -s "),

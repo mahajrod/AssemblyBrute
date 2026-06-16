@@ -9,7 +9,7 @@ rule create_se_fastq_links:
         input_dir_path.resolve() / ("{se_datatype}/fastq/{fileprefix}%s" %  config["fastq_extension"])
     output:
         #directory(output_dict["data"] / "/fastq/{datatype}/raw"),
-        output_dict["data"] / ("fastq/{se_datatype}/raw/{fileprefix, [^/]+}%s" % config["fastq_extension"])
+        output_dict["data"] / ("fastq/{se_datatype}/raw/{fileprefix}%s" % config["fastq_extension"])
     log:
         std=output_dict["log"] / "create_fastq_links.{se_datatype}.{fileprefix}.log",
         cluster_log=output_dict["cluster_log"] / "create_fastq_links.{se_datatype}.{fileprefix}.cluster.log",
@@ -35,7 +35,7 @@ rule create_fastq_links:
         input_dir_path.resolve() / ("{datatype}/fastq/{fileprefix}%s" %  config["fastq_extension"])
     output:
         #directory(output_dict["data"] / "/fastq/{datatype}/raw"),
-        output_dict["data"] / ("fastq/{datatype}/raw/{fileprefix, [^/]+}%s" % config["fastq_extension"])
+        output_dict["data"] / ("fastq/{datatype}/raw/{fileprefix}%s" % config["fastq_extension"])
     log:
         std=output_dict["log"] / "create_fastq_links.{datatype}.{fileprefix}.log",
         cluster_log=output_dict["cluster_log"] / "create_fastq_links.{datatype}.{fileprefix}.cluster.log",
@@ -61,8 +61,8 @@ rule preprocess_hic_fastq:
         input_dir_path.resolve() / ("hic/fastq/{fileprefix}%s" %  config["fastq_extension"])
     output:
         #directory(output_dict["data"] / "/fastq/{datatype}/raw"),
-        raw_link=output_dict["data"] / ("fastq/hic/raw/{fileprefix, [^/]+}%s" % config["fastq_extension"]),
-        orig_link=output_dict["data"] / ("fastq/hic/orig/{fileprefix, [^/]+}%s" %config["fastq_extension"])
+        raw_link=output_dict["data"] / ("fastq/hic/raw/{fileprefix}%s" % config["fastq_extension"]),
+        orig_link=output_dict["data"] / ("fastq/hic/orig/{fileprefix}%s" %config["fastq_extension"])
     params:
         hic_type=config["hic_enzyme_set"],
         skip_trimming='skip' if config["skip_filter_reads"] else 'trim'
@@ -101,7 +101,7 @@ rule create_fasta_links:
         input_dir_path.resolve() / ("{datatype}/fasta/{fileprefix}%s" %  config["fasta_extension"])
     output:
         #directory(output_dict["data"] / "/fastq/{datatype}/raw"),
-        output_dict["data"] / ("fasta/{datatype, [^/]+}/raw/{fileprefix, [^/]+}%s" % config["fasta_extension"])
+        output_dict["data"] / ("fasta/{datatype}/raw/{fileprefix}%s" % config["fasta_extension"])
     log:
         std=output_dict["log"] / "create_fasta_links.{datatype}.{fileprefix}.log",
         cluster_log=output_dict["cluster_log"] / "create_fasta_links.{datatype}.{fileprefix}.cluster.log",

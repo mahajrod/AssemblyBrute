@@ -30,7 +30,7 @@ if (sum(list(pd.Series(["hic_scaffolding",
                                                  haplotype=stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"] ,
                                                  allow_missing=True)
         output:
-            combined_fasta=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.combined.fasta",
+            combined_fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.combined.fasta",
         params:
             haplotype_list=lambda wildcards: stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
             out_dir=str(out_dir_path)
@@ -174,7 +174,7 @@ if (sum(list(pd.Series(["hic_scaffolding",
                                                                                                    config["fastq_extension"])) ,
         output:
             #bam=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam"
-            bam=temp(out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/{haplotype, combined|reordered}/alignment/{phasing_kmer_length, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix, [^/]+}.bwa.bam")
+            bam=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype, combined|reordered}/alignment/{phasing_kmer_length, [^/]+}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.bam")
         params:
             id="{0}_hic".format(config["genome_prefix"]),
             bwa_tool=config["bwa_tool"]
@@ -204,7 +204,7 @@ if (sum(list(pd.Series(["hic_scaffolding",
             bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.bam"
         output:
             bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, combined|reordered}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
-            #bai=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam.bai",
+            #bai=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam.bai",
         params:
             sort_threads=parameters["threads"]["samtools_sort"],
             collate_threads=parameters["threads"]["samtools_collate"],

@@ -40,8 +40,6 @@ rule kraken2: #
         memory_mapping=lambda wildcards: "" if config["allowed_databases"]["kraken2"][wildcards.database]["in_memory"] else  " --memory-mapping ",
         paired=lambda wildcards: " --paired " if wildcards.datatype in config["paired_fastq_based_data"] else "",
         compressed=get_kraken2_compression_flag_from_extension(config["fastq_extension"])
-        #forward_fastq=lambda wildcards: " <(cat {0}) ".format(" ".join(input_filedict[wildcards.datatype][::2])) if wildcards.datatype in config["paired_fastq_based_data"] else "",
-        #reverse_fastq=lambda wildcards: " <(cat {0}) ".format(" ".join(input_filedict[wildcards.datatype][1::2])) if wildcards.datatype in config["paired_fastq_based_data"] else "",
     log:
         std=output_dict["log"]  / "kraken2.{database}.{datatype}.log",
         pigz=output_dict["log"]  / "kraken2.{database}.{datatype}.pigz.log",

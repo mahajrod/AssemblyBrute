@@ -93,10 +93,10 @@ rule filter_tidk_telomere_tracks_for_pretext:
         non_canonical_telo_bedgraph="{fasta_dir}/telomere_tidk/{fasta_prefix}/{fasta_prefix}.non_canonical_tidk.bedgraph",
         log_dir="{fasta_dir}/log/",
     output:
-        canonical_telo_all_bedgraph="{fasta_dir}/assembly_qc/tracks/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_tidk.telomere.all.bedgraph",
-        non_canonical_telo_all_bedgraph="{fasta_dir}/assembly_qc/tracks/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_tidk.telomere.all.bedgraph",
-        canonical_telo_bedgraph="{fasta_dir}/assembly_qc/tracks/{fasta_prefix, [^/]+}/{fasta_prefix}.canonical_tidk.telomere.pretext.bedgraph",
-        non_canonical_telo_bedgraph="{fasta_dir}/assembly_qc/tracks/{fasta_prefix, [^/]+}/{fasta_prefix}.non_canonical_tidk.telomere.pretext.bedgraph",
+        canonical_telo_all_bedgraph="{fasta_dir}/assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.canonical_tidk.telomere.all.bedgraph",
+        non_canonical_telo_all_bedgraph="{fasta_dir}/assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.non_canonical_tidk.telomere.all.bedgraph",
+        canonical_telo_bedgraph="{fasta_dir}/assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.canonical_tidk.telomere.pretext.bedgraph",
+        non_canonical_telo_bedgraph="{fasta_dir}/assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.non_canonical_tidk.telomere.pretext.bedgraph",
     params:
         min_monomer_number=parameters["tool_options"]["assembly_qc"]["telomere_tidk_search"]["min_monomer_number"]
     log:

@@ -58,8 +58,8 @@ rule merqury: # TODO: add handling for cases of haploid and polyploid genomes
                                                                                              wildcards.genome_prefix,
                                                                                              "hap2") if stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"][0] != "hap0" else [],
     output:
-        qv_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/merqury/{datatype}/{genome_prefix, [^/]+}.{assembly_stage}.{datatype}.qv",
-        completeness_stats_file=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/merqury/{datatype}/{genome_prefix, [^/]+}.{assembly_stage}.{datatype}.completeness.stats",
+        qv_file=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{datatype}/{genome_prefix}.{assembly_stage}.{datatype}.qv",
+        completeness_stats_file=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{datatype}/{genome_prefix}.{assembly_stage}.{datatype}.completeness.stats",
     params:
         #dir=lambda wildcards: out_dir_path / "{0}/{1}/assembly_qc/merqury/".format(wildcards.assembly_stage,
         #                                                                           wildcards.parameters),

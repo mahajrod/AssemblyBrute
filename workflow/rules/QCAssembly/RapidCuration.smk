@@ -32,11 +32,11 @@ rule create_curation_input_files_for_contigs: #
                                                                                                                  stage_dict["curation"]["prev_stage"])),
         #bed=get_hic_bed_file if not config["skip_higlass"] else []
     output:
-        fasta=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/contigs/{genome_prefix, [^/]+}.input.{haplotype}.fasta",
-        len=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/contigs/{genome_prefix, [^/]+}.input.{haplotype}.len",
-        fai=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/contigs/{genome_prefix, [^/]+}.input.{haplotype}.fasta.fai",
-        transfer_agp=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/contigs/{genome_prefix, [^/]+}.input.{haplotype}.transfer.agp",
-        #bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.hic.bed" if not config["skip_higlass"] else [],
+        fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters, [^/]+}/{haplotype}/contigs/{genome_prefix}.input.{haplotype}.fasta",
+        len=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters, [^/]+}/{haplotype}/contigs/{genome_prefix}.input.{haplotype}.len",
+        fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters, [^/]+}/{haplotype}/contigs/{genome_prefix}.input.{haplotype}.fasta.fai",
+        transfer_agp=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters, [^/]+}/{haplotype}/contigs/{genome_prefix}.input.{haplotype}.transfer.agp",
+        #bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.hic.bed" if not config["skip_higlass"] else [],
     log:
         cp=output_dict["log"]  / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.contigs.{genome_prefix}.{haplotype}.cp.log",
         cluster_log=output_dict["cluster_log"] / "create_curation_input_files.{prev_stage_parameters}..{curation_parameters}.contigs.{genome_prefix}.{haplotype}.cluster.log",
@@ -63,7 +63,7 @@ rule create_curation_bed_input_file: # Added as separated rule to allow turning 
     input:
         bed=get_hic_bed_file
     output:
-        bed=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.hic.bed"
+        bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters, [^/]+}/{haplotype}/{seq_type, [^/]+}/{genome_prefix}.input.{haplotype}.hic.bed"
     log:
         cp=output_dict["log"]  / "create_bed_input_file.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cp.log",
         cluster_log=output_dict["cluster_log"] / "create_bed_input_file.{prev_stage_parameters}..{curation_parameters}.{seq_type}.{genome_prefix}.{haplotype}.cluster.log",
@@ -120,7 +120,7 @@ rule create_windows: #
     input:
         len=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
     output:
-        bed=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/{genome_prefix}.{assembly_stage}.{haplotype}.win{window, [0-9]+}.step{step, [0-9]+}.windows.bed",
+        bed=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.win{window, [0-9]+}.step{step, [0-9]+}.windows.bed",
     log:
         makewin=output_dict["log"]  / "create_windows.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.win{window}.step{step}.makewin.log",
         cluster_log=output_dict["cluster_log"] / "create_windows.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.win{window}.step{step}.cluster.log",
@@ -146,7 +146,7 @@ rule create_bedgraph_track: #
         track_bed=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type}/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.track.bed",
         windows_bed=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.win{window}.step{step}.windows.bed"
     output:
-        bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window, [0-9]+}.step{step, [0-9]+}.track.bedgraph"
+        bedgraph=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window, [0-9]+}.step{step, [0-9]+}.track.bedgraph"
     log:
         intersect=output_dict["log"]  / "create_bedgraph_track.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.intersect.log",
         awk=output_dict["log"]  / "create_bedgraph_track.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.awk.log",
@@ -177,7 +177,7 @@ rule scale_create_bedgraph_track: #
         yahs_juicer_pre_log=out_dir_path / "hic_scaffolding/{parameters}/{haplotype}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.log"
 
     output:
-        bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/scaled_tracks/{haplotype, [^./]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.{track_type}.win{window, [0-9]+}.step{step, [0-9]+}.scaled.track.bedgraph"
+        bedgraph=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/scaled_tracks/{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window, [0-9]+}.step{step, [0-9]+}.scaled.track.bedgraph"
     log:
         std=output_dict["log"]  / "scale_create_bedgraph_track.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.std.log",
         grep=output_dict["log"]  / "scale_create_bedgraph_track.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.grep.log",
@@ -205,7 +205,7 @@ rule liftover_contig_bedgraph: #
         bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/contigs/{genome_prefix}.input.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph",
         transfer_agp=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/contigs/{genome_prefix}.input.{haplotype}.transfer.agp",
     output:
-        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/contigs/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.assembly.bedgraph"
+        bedgraph=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/contigs/{genome_prefix}.input.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.assembly.bedgraph"
     params:
         sorting_mem=parameters["memory_mb"]["liftover_contig_bedgraph"]
     log:
@@ -238,9 +238,9 @@ rule get_track_stats: #
     input:
         bedgraph=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.win{window}.step{step}.track.bedgraph"
     output:
-        per_scaffold_stat=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/track_stats/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.per_scaffold.stat",
-        all_stat=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/track_stats/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.stat",
-        thresholds=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/track_stats/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.thresholds"
+        per_scaffold_stat=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/track_stats/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.per_scaffold.stat",
+        all_stat=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/track_stats/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.stat",
+        thresholds=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/track_stats/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, [^./]+}.win{window}.step{step}.track.thresholds"
     params:
         normalization=lambda wildcards: parse_option_flag("normalize_by_len", parameters["tool_options"]["assembly_qc"][wildcards.track_type], "-n")
     log:
@@ -288,7 +288,7 @@ rule draw_track: #
                                             window=[wildcards.window],
                                             step=[wildcards.step]) if wildcards.threshold_type == 'relative' else []
     output:
-        png=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/trackplots/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^./]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, [^/]+}.{scaffold_length, [^./]+}.win{window}.step{step}.{threshold_type, [^/]+}.png"
+        png=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/trackplots/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, [^/]+}.{scaffold_length, [^./]+}.win{window}.step{step}.{threshold_type, [^/]+}.png"
     params: # TODO: move parameters from "curation" to "qc" or something similar
         thresholds=lambda wildcards: parse_option("absolute_thresholds",
                                                   parameters["tool_options"]["assembly_qc"][wildcards.track_type],

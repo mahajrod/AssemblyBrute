@@ -3,8 +3,8 @@ rule miniprot:
     input:
         fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.combined.fasta"
     output:
-        miniprot_gff=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.combined.miniprot.gff",
-        candidate_tsv=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.combined.candidates.microchromosomes.tsv"
+        miniprot_gff=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.combined.miniprot.gff",
+        candidate_tsv=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.combined.candidates.microchromosomes.tsv"
     params:
         microchromosome_prot_set=config["microchromosome_prot_set"]
     log:
@@ -53,8 +53,8 @@ rule place_microsomes_first:
         #                                                                                        "combined",
         #                                                                                        )) if (wildcards.assembly_stage == "hic_scaffolding") and (wildcards.haplotype != "combined") else []
     output:
-        filtered_tsv=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.candidates.microchromosomes.filtered.tsv",
-        reordered_fasta=out_dir_path / "{assembly_stage}/{parameters, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.reordered.fasta",
+        filtered_tsv=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.candidates.microchromosomes.filtered.tsv",
+        reordered_fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.reordered.fasta",
     params:
         #assembly_option= lambda wildcards: " -a " + str(out_dir_path / "{0}/{1}/{2}.{0}.{3}.assembly".format(wildcards.assembly_stage,
         #                                                                                                    wildcards.parameters,

@@ -3,7 +3,7 @@ rule porechop_abi:
     input:
         fastq=output_dict["data"] / ("fastq/{datatype}/raw/{fileprefix}%s" % config["fastq_extension"])
     output:
-        trimmed_fastq=output_dict["data"] / ("fastq/{datatype, nanopore|simplex|duplex|ultralongnano|adaptivenano}/trimmed/{fileprefix, [^/]+}%s" % config["fastq_extension"]),
+        trimmed_fastq=output_dict["data"] / ("fastq/{datatype, nanopore|simplex|duplex|ultralongnano|adaptivenano}/trimmed/{fileprefix}%s" % config["fastq_extension"]),
     params:
          ab_initio=lambda wildcards: parse_option_flag("ab_initio", parameters["tool_options"]["porechop_abi"]["nanopore"], "--ab_initio"),
          verbosity=lambda wildcards: parse_option("verbosity", parameters["tool_options"]["porechop_abi"]["nanopore"], "-v"),
@@ -33,7 +33,7 @@ rule chopper:
         input_fastq=output_dict["data"] / ("fastq/{datatype}/%s/{fileprefix}%s" % ("trimmed" if not config["skip_porechop_abi"] else "raw",
                                                                                    config["fastq_extension"]))
     output:
-        filtered_fastq=output_dict["data"] / ("fastq/{datatype, nanopore|simplex|duplex|ultralongnano|adaptivenano}/filtered/{fileprefix, [^/]+}%s" % config["fastq_extension"]),
+        filtered_fastq=output_dict["data"] / ("fastq/{datatype, nanopore|simplex|duplex|ultralongnano|adaptivenano}/filtered/{fileprefix}%s" % config["fastq_extension"]),
     params:
          headcrop  = parse_option("headcrop",  parameters["tool_options"]["chopper"]["nanopore"], "--headcrop"),
          maxlength = parse_option("maxlength", parameters["tool_options"]["chopper"]["nanopore"], "--maxlength"),

@@ -4,9 +4,9 @@ rule nanoplot:
     input:
         fastq=output_dict["data"] / ("fastq/{datatype}/{stage}/{fileprefix}%s" % config["fastq_extension"])
     output:
-        yield_png=output_dict["qc"] / "nanoplot/{datatype, [^/]+}/{stage, [^/]+}/{fileprefix, [^/]+}.Yield_By_Length.png",
-        stats=output_dict["qc"] / "nanoplot/{datatype, [^/]+}/{stage, [^/]+}/{fileprefix, [^/]+}.NanoStats.txt",
-        pickle=output_dict["qc"] / "nanoplot/{datatype, [^/]+}/{stage, [^/]+}/{fileprefix, [^/]+}.NanoPlot-data.pickle"
+        yield_png=output_dict["qc"] / "nanoplot/{datatype}/{stage}/{fileprefix}.Yield_By_Length.png",
+        stats=output_dict["qc"] / "nanoplot/{datatype}/{stage}/{fileprefix}.NanoStats.txt",
+        pickle=output_dict["qc"] / "nanoplot/{datatype}/{stage}/{fileprefix}.NanoPlot-data.pickle"
     log:
         std=output_dict["log"]/ "nanoplot.{datatype}.{stage}.{fileprefix}.log",
         #stats=log_dir_path / "{library_id}/fastqc_merged_raw.stats.log",
@@ -33,7 +33,7 @@ rule gather_nanoplot_stats_per_stage:
         stats=lambda wildcards: expand(rules.nanoplot.output.stats,
                                        fileprefix=input_file_prefix_dict[wildcards.datatype], allow_missing=True)
     output:
-        stage_stats=output_dict["qc"] / "nanoplot/{datatype, [^/]+}/{stage, [^/]+}/{datatype}.{stage}.NanoStats.tsv",
+        stage_stats=output_dict["qc"] / "nanoplot/{datatype}/{stage}/{datatype}.{stage}.NanoStats.tsv",
     params:
         labels=lambda wildcards: ",".join(input_file_prefix_dict[wildcards.datatype])
     log:
@@ -65,7 +65,7 @@ rule gather_datatype_nanoplot_stats:
                                        stage_list=
                                       )
     output:
-        stage_stats=output_dict["qc"] / "nanoplot/{datatype, [^/]+}/{stage, [^/]+}/NanoStats.tsv",
+        stage_stats=output_dict["qc"] / "nanoplot/{datatype}/{stage}/NanoStats.tsv",
     params:
         labels=lambda wildcards: ",".join(input_file_prefix_dict[wildcards.datatype])
     log:

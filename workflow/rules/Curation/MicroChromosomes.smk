@@ -3,8 +3,8 @@ rule miniprot:
     input:
         fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta"
     output:
-        miniprot_gff=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.miniprot.gff",
-        candidate_tsv=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^.]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.candidates.microchromosomes.tsv"
+        miniprot_gff=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters, [^/]+}/{haplotype}/{seq_type, [^/]+}/{genome_prefix}.input.{haplotype}.miniprot.gff",
+        candidate_tsv=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters, [^/]+}/{haplotype}/{seq_type, [^/]+}/{genome_prefix}.input.{haplotype}.candidates.microchromosomes.tsv"
     params:
         microchromosome_prot_set=config["microchromosome_prot_set"]
     log:
@@ -51,8 +51,8 @@ rule place_microsomes_first:
                                                                                                                   wildcards.genome_prefix,
                                                                                                                   wildcards.haplotype)) if stage_dict["curation"]["prev_stage"] == "hic_scaffolding" else []
     output:
-        filtered_tsv=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.max{max_length, [^/]+}.candidates.microchromosomes.filtered.tsv",
-        reordered_fasta=out_dir_path / "curation/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{seq_type, [^/]+}/{genome_prefix, [^/]+}.input.{haplotype}.max{max_length, [^/]+}.reordered.fasta",
+        filtered_tsv=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{seq_type, [^/]+}/{genome_prefix}.input.{haplotype}.max{max_length, [^/]+}.candidates.microchromosomes.filtered.tsv",
+        reordered_fasta=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{seq_type, [^/]+}/{genome_prefix}.input.{haplotype}.max{max_length, [^/]+}.reordered.fasta",
         #reordered_assembly=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.max{max_length}.reordered.assembly"
     params:
         assembly_option= lambda wildcards: " -a " + str(out_dir_path / "hic_scaffolding/{0}/{1}.hic_scaffolding.{2}.assembly".format(wildcards.prev_stage_parameters,

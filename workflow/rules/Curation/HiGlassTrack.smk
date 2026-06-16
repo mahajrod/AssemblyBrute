@@ -5,10 +5,10 @@ rule create_higlass_track_from_bed: #
         fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.fasta.fai",
         bed=rules.create_curation_bed_input_file.output.bed
     output:
-        genome_higlass=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.higlass.genome",
-        higlass_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.higlass.bed",
-        higlass_cool=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.higlass.cool",
-        higlass_mcool=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.higlass.mcool",
+        genome_higlass=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.higlass.genome",
+        higlass_bed=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.higlass.bed",
+        higlass_cool=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.higlass.cool",
+        higlass_mcool=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.higlass.mcool",
     log:
         paste=output_dict["log"]  / "create_higlass_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.paste.log",
         cut=output_dict["log"]  / "create_higlass_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cut.log",
@@ -51,9 +51,9 @@ rule create_higlass_track_from_pairs: #
         fai=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.fasta.fai",
         pairs=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pairs.gz
     output:
-        genome_higlass=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.higlass.genome",
-        higlass_cool=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.higlass.cool",
-        higlass_mcool=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype, [^.]+}/input/{genome_prefix}.input.{haplotype}.higlass.mcool",
+        genome_higlass=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.higlass.genome",
+        higlass_cool=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.higlass.cool",
+        higlass_mcool=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.higlass.mcool",
     log:
         cut=output_dict["log"]  / "create_higlass_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cut.log",
         sort=output_dict["log"]  / "create_higlass_track.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.sort.log",

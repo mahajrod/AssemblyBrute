@@ -8,7 +8,7 @@ rule qc_minimap2_purge_dups_reads:
         assembly=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
         log_dir=out_dir_path / "{assembly_stage}/{parameters}/log/"
     output:
-        paf=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^./]+}/{datatype, [^/]+}/{genome_prefix, [^/]+}.{haplotype}.{fileprefix, [^/]+}.paf.gz"
+        paf=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^./]+}/{datatype}/{genome_prefix}.{haplotype}.{fileprefix}.paf.gz"
     params:
         index_size=lambda wildcards: parse_option("index_size", parameters["tool_options"]["minimap2"][wildcards.datatype], " -I "),
         alignment_scheme=lambda wildcards: parse_option("alignment_scheme", parameters["tool_options"]["minimap2"][wildcards.datatype], " -x "),
@@ -56,12 +56,12 @@ rule qc_get_purge_dups_read_stat:
                                                                                                                                    config["final_kmer_counter"]),
         log_dir=out_dir_path / "{assembly_stage}/{parameters}/log/"
     output:
-        pbstat=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/PB.stat",
-        pbbasecov=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/PB.base.cov",
-        cutoffs=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/cutoffs",
-        len=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/PB.base.cov.len",
-        stat=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/PB.base.cov.stat",
-        bed=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/PB.base.cov.bed"
+        pbstat=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype}/PB.stat",
+        pbbasecov=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype}/PB.base.cov",
+        cutoffs=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype}/cutoffs",
+        len=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype}/PB.base.cov.len",
+        stat=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype}/PB.base.cov.stat",
+        bed=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype}/PB.base.cov.bed"
     params:
         cov_multiplicator=parameters["tool_options"]["assembly_qc"]["purge_dups"]["cov_multiplicator"],
         calcuts_lower_threshold=parse_option("lower_threshold", config["tool_manually_adjusted_features"]["calcuts"], " -l "),
@@ -99,8 +99,8 @@ rule qc_minimap2_purge_dups_assembly:
         assembly=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
         log_dir=out_dir_path / "{assembly_stage}/{parameters}/log/"
     output:
-        split_assembly=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.split.fasta",
-        paf=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.split.minimap2.self.paf.gz"
+        split_assembly=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype}/{genome_prefix}.{assembly_stage}.{haplotype}.split.fasta",
+        paf=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype}/{genome_prefix}.{assembly_stage}.{haplotype}.split.minimap2.self.paf.gz"
     params:
         index_size=parse_option("index_size", parameters["tool_options"]["minimap2"]["self"], " -I "),
         alignment_scheme=parse_option("alignment_scheme", parameters["tool_options"]["minimap2"]["self"], " -x "),
@@ -133,7 +133,7 @@ rule qc_purge_dups: #
         self_paf=rules.qc_minimap2_purge_dups_assembly.output.paf,
         log_dir=out_dir_path / "{assembly_stage}/{parameters}/log/"
     output:
-        bed=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.dups.raw.bed",
+        bed=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype}/{genome_prefix}.{assembly_stage}.{haplotype}.dups.raw.bed",
     log:
         purge_dups=out_dir_path / "{assembly_stage}/{parameters}/log/qc_purge_dups.{assembly_stage}.{parameters}.{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.purge_dups.log",
         cluster_log=out_dir_path / "{assembly_stage}/{parameters}/log/qc_purge_dups.{assembly_stage}.{parameters}.{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.cluster.log",
@@ -159,9 +159,9 @@ rule qc_get_purged_seqs: #
         assembly=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
         log_dir=out_dir_path / "{assembly_stage}/{parameters}/log/"
     output:
-        filtered_bed=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.dups.filtered.bed",
-        purged=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.purged.fasta",
-        hapdups=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{assembly_stage}.{haplotype}.hap.fasta",
+        filtered_bed=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype}/{genome_prefix}.{assembly_stage}.{haplotype}.dups.filtered.bed",
+        purged=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype}/{genome_prefix}.{assembly_stage}.{haplotype}.purged.fasta",
+        hapdups=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype}/{genome_prefix}.{assembly_stage}.{assembly_stage}.{haplotype}.hap.fasta",
     params:
         blacklist_option=lambda wildcards: parse_option("purging_blacklist",
                                                         stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["option_set"],
@@ -207,8 +207,8 @@ rule qc_extract_stats_from_purge_dups_file:
         len=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len",
         log_dir=out_dir_path / "{assembly_stage}/{parameters}/log/",
     output:
-        extended_bed=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.dups.extended.bed",
-        stat=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype}.dups.stat",
+        extended_bed=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype}/{genome_prefix}.{assembly_stage}.{haplotype}.dups.extended.bed",
+        stat=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype, hap[^.]+}/{datatype}/{genome_prefix}.{assembly_stage}.{haplotype}.dups.stat",
         id_files=expand(out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype}/{datatype}/{genome_prefix}.{assembly_stage}.{haplotype}.dups.{artefact_type}.ids",
                         artefact_type=["junk", "ovlp", "haplotig", "repeat", "highcov"],
                         allow_missing=True),
@@ -242,8 +242,8 @@ rule create_purge_dups_track:
         extended_bed=out_dir_path / "{assembly_stage}/{parameters}/purge_dups/{haplotype}/{datatype}/{genome_prefix}.{assembly_stage}.{haplotype}.dups.{artefact_type}.extended.bed",
         log_dir=out_dir_path / "{assembly_stage}/{parameters}/log/",
     output:
-        bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.purge_dups.{datatype}.{artefact_type}.track.bedgraph",
-        bed=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, hap[^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.purge_dups.{datatype}.{artefact_type}.track.bed",
+        bedgraph=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype, hap[^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.purge_dups.{datatype}.{artefact_type}.track.bedgraph",
+        bed=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype, hap[^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.purge_dups.{datatype}.{artefact_type}.track.bed",
     log:
         log=out_dir_path / "{assembly_stage}/{parameters}/log/create_purge_dups_track.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{datatype}.{artefact_type}.single_copy.log",
         cluster_log=out_dir_path / "{assembly_stage}/{parameters}/log/create_purge_dups_track.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{datatype}.{artefact_type}.cluster.log",
@@ -280,7 +280,7 @@ rule create_purge_dups_track_for_combined_haplotype:
                                                            allow_missing=True),
         log_dir=out_dir_path / "{assembly_stage}/{parameters}/log/",
     output:
-        combined_track=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{merged_haplotype, combined|reordered}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.purge_dups.{datatype}.{artefact_type}.track.bedgraph",
+        combined_track=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{merged_haplotype, combined|reordered}/{genome_prefix}.{assembly_stage}.{merged_haplotype}.purge_dups.{datatype}.{artefact_type}.track.bedgraph",
     params:
         haplotype_list=lambda wildcards: stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
         dir_prefix=lambda wildcards: out_dir_path / ("%s/%s/assembly_qc/tracks/%s.%s" % (wildcards.assembly_stage,
@@ -325,7 +325,7 @@ rule qc_extract_artefact_sequences:
         reference=out_dir_path / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype}/{genome_prefix}.input.{haplotype}.fasta",
         len_file=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters}/{purge_stage}/{haplotype}/{genome_prefix}.input.{haplotype}.len"
     output:
-        artefact_fasta=out_dir_path  / "purge_dups/{prev_stage_parameters, [^/]+}..{purge_dups_parameters, [^/]+}/{purge_stage, [^/]+}/{haplotype, [^.]+}/{genome_prefix, [^/]+}.dups.{artefact, [^/]+}.fasta"
+        artefact_fasta=out_dir_path  / "purge_dups/{prev_stage_parameters}..{purge_dups_parameters, [^/]+}/{purge_stage, [^/]+}/{haplotype}/{genome_prefix}.dups.{artefact, [^/]+}.fasta"
     log:
         std=output_dict["log"]  / "extract_artefact_sequences.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.purge_dups.{haplotype}.{purge_stage}.{artefact}.log",
         cluster_log=output_dict["cluster_log"] / "extract_artefact_sequences.{prev_stage_parameters}.{purge_dups_parameters}.{genome_prefix}.purge_dups.{haplotype}.cluster.{purge_stage}.{artefact}.log",

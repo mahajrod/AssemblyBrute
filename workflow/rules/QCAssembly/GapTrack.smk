@@ -4,9 +4,9 @@ rule create_gap_track: #
     input:
         fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
     output:
-        gap_bed=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, gap}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.track.bed",
-        gap_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{track_type, gap}/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.track.bedgraph",
-        gap_bedgraph_alias=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, gap}.track.bedgraph",
+        gap_bed=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type, gap}/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.track.bed",
+        gap_bedgraph=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type, gap}/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.track.bedgraph",
+        gap_bedgraph_alias=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, gap}.track.bedgraph",
 
     log:
         seqtk=output_dict["log"]  / "create_gap_track.{assembly_stage}..{parameters}.{track_type}.{genome_prefix}.{haplotype}.seqtk.log",

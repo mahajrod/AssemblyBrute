@@ -8,8 +8,8 @@ rule gather_curation_files: #
                                     max_length=parameters["tool_options"]["microsome_detection"]["max_length"],
                                     allow_missing=True) if ("bird_genome" in config) and config["bird_genome"] else []
     output:
-        hic=out_dir_path / "curation_files/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.hic",
-        assembly=out_dir_path / "curation_files/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.assembly",
+        hic=out_dir_path / "curation_files/{prev_stage_parameters}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{genome_prefix}.hic_scaffolding.{haplotype}.hic",
+        assembly=out_dir_path / "curation_files/{prev_stage_parameters}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/{genome_prefix}.hic_scaffolding.{haplotype}.assembly",
     log:
         cp=output_dict["log"]  / "gather_curation_files.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cp.log",
         cluster_log=output_dict["cluster_log"] / "gather_curation_files.{prev_stage_parameters}..{curation_parameters}.{genome_prefix}.{haplotype}.cluster.log",
@@ -36,7 +36,7 @@ rule gather_curation_contig_tracks: #
         #cannonical_telo_warning_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/contigs/%s.input.{haplotype}.cannonical_telomere_warning.win1000.step200.track.bedgraph" % config["genome_prefix"],
         contig_dir=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/contigs/",
     output:
-        contig_dir=directory(out_dir_path / "curation_files/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/contigs/"),
+        contig_dir=directory(out_dir_path / "curation_files/{prev_stage_parameters}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/contigs/"),
     log:
         cp=output_dict["log"]  / "gather_curation_contig_tracks.{prev_stage_parameters}..{curation_parameters}.{haplotype}.cp.log",
         mkdir=output_dict["log"]  / "gather_curation_contig_tracks.{prev_stage_parameters}..{curation_parameters}.{haplotype}.mkdir.log",
@@ -63,7 +63,7 @@ rule gather_curation_scaffold_tracks: #
         #cannonical_telo_warning_track=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/scaffolds/%s.input.{haplotype}.cannonical_telomere_warning.win1000.step200.track.bedgraph" % config["genome_prefix"],
         scaffolds_dir=out_dir_path / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/scaffolds/",
     output:
-        scaffolds_dir=directory(out_dir_path / "curation_files/{prev_stage_parameters, [^/]+}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/scaffolds/"),
+        scaffolds_dir=directory(out_dir_path / "curation_files/{prev_stage_parameters}..{curation_parameters, [^/]+}/{haplotype, [^/]+}/scaffolds/"),
     log:
         cp=output_dict["log"]  / "gather_curation_scaffold_tracks.{prev_stage_parameters}..{curation_parameters}.{haplotype}.cp.log",
         mkdir=output_dict["log"]  / "gather_curation_scaffold_tracks.{prev_stage_parameters}..{curation_parameters}.{haplotype}.mkdir.log",

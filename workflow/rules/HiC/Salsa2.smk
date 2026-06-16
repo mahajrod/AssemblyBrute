@@ -14,11 +14,11 @@ rule salsa2: #
         #reference=out_dir_path  / ("purge_dups/{assembler}/%s.purge_dups.{assembler}.{haplotype}.fasta" % config["genome_name"]),
         #reference_fai=out_dir_path  / ("purge_dups/{assembler}/%s.purge_dups.{assembler}.{haplotype}.fai" % config["genome_name"])
     output:
-        dir=directory(out_dir_path / "hic_scaffolding/{prev_stage_parameters}..salsa2_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}"),
+        dir=directory(out_dir_path / "hic_scaffolding/{prev_stage_parameters}..salsa2_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}"),
         #dir=directory(out_dir_path  / ("hic_scaffolding/{assembler}/{haplotype}/scaffolding/%s/"  % config["genome_name"])),
-        fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..salsa2_{hic_scaffolding_parameters}/{haplotype, [^.]+}/scaffolding/{genome_prefix}/scaffolds_FINAL.fasta",
+        fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..salsa2_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}/scaffolds_FINAL.fasta",
         #fasta=out_dir_path  / ("hic_scaffolding/{assembler}/{haplotype}/scaffolding/%s/scaffolds_FINAL.fasta"  % config["genome_name"]),
-        alias=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..salsa2_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype, [^.]+}.fasta",
+        alias=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..salsa2_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype}.fasta",
         #alias=out_dir_path  / ("hic_scaffolding/{assembler}/%s.hic_scaffolding.{assembler}.{haplotype}.fasta" % config["genome_name"])
     params:
         min_contig_len=lambda wildcards: stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..salsa2_" + wildcards.hic_scaffolding_parameters]["option_set"]["min_contig_len"],

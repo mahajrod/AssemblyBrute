@@ -4,7 +4,7 @@ rule create_gc_track: #
     input:
         fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
     output:
-        gc_bedgraph=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/tracks/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^.]+}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, gc}.win{window, [0-9]+}.step{step, [0-9]+}.track.bedgraph",
+        gc_bedgraph=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, gc}.win{window}.step{step}.track.bedgraph",
     log:
         gc=output_dict["log"]  / "create_gc_track.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.win{window}.step{step}.gc.log",
         cluster_log=output_dict["cluster_log"] / "create_gc_track.{assembly_stage}.{track_type}.{parameters}.{genome_prefix}.{haplotype}.win{window}.step{step}.cluster.log",

@@ -3,7 +3,7 @@ rule meryl_assembly:
     input:
         fasta=out_dir_path / "{stage}/{parameters}/{genome_prefix}.{stage}.{haplotype}.fasta"
     output:
-        db_dir=directory(out_dir_path / "{stage}/{parameters}/kmer/{genome_prefix}.{stage}.{haplotype, [^.]+}.{assembly_kmer_length, [^.]+}")
+        db_dir=directory(out_dir_path / "{stage}/{parameters}/kmer/{genome_prefix}.{stage}.{haplotype}.{assembly_kmer_length, [^.]+}")
     log:
         std=output_dict["log"] / "meryl_assembly.{genome_prefix}.{stage}.{parameters}.{haplotype}.{assembly_kmer_length}.log",
         cluster_log=output_dict["cluster_log"] / "meryl_assembly.{genome_prefix}.{stage}.{parameters}.{haplotype}.{assembly_kmer_length}.cluster.log",
@@ -78,8 +78,8 @@ rule extract_pe_reads_by_unique_hap_kmers:
                                                                                                 "_2" if wildcards.datatype in config["filtered_data"] else input_reverse_suffix_dict[wildcards.datatype],
                                                                                                 config["fastq_extension"])),
     output:
-        forward_hap_read=out_dir_path / "{stage}/{parameters}/fastq/{haplotype, [^.]+}/{assembly_kmer_length}/{datatype, [^/]+}/{pairprefix, [^/]+}_1.fastq.gz", # TODO: change to forward_suffix
-        reverse_hap_read=out_dir_path / "{stage}/{parameters}/fastq/{haplotype, [^.]+}/{assembly_kmer_length}/{datatype, [^/]+}/{pairprefix, [^/]+}_2.fastq.gz", # TODO: change to reverse_suffix
+        forward_hap_read=out_dir_path / "{stage}/{parameters}/fastq/{haplotype}/{assembly_kmer_length}/{datatype}/{pairprefix}_1.fastq.gz", # TODO: change to forward_suffix
+        reverse_hap_read=out_dir_path / "{stage}/{parameters}/fastq/{haplotype}/{assembly_kmer_length}/{datatype}/{pairprefix}_2.fastq.gz", # TODO: change to reverse_suffix
     log:
         std=output_dict["log"] / "extract_reads_by_unique_hap_kmers.{datatype}.{stage}.{parameters}.{pairprefix}.{assembly_kmer_length}.{haplotype}.log",
         cluster_log=output_dict["cluster_log"] / "extract_reads_by_unique_hap_kmers.{datatype}.{stage}.{parameters}.{pairprefix}.{assembly_kmer_length}.{haplotype}.cluster.log",
@@ -114,7 +114,7 @@ rule extract_se_reads_by_unique_hap_kmers:
                                                                                         wildcards.fileprefix,
                                                                                         config["fastq_extension"])),
     output:
-        hap_se_read=out_dir_path / "{stage}/{parameters}/fastq/{haplotype}/{assembly_kmer_length}/{datatype, [^/]+}/{fileprefix, [^/]+}.fastq.gz",
+        hap_se_read=out_dir_path / "{stage}/{parameters}/fastq/{haplotype}/{assembly_kmer_length}/{datatype}/{fileprefix}.fastq.gz",
     log:
         std=output_dict["log"] / "extract_reads_by_unique_hap_kmers.{datatype}.{stage}.{parameters}.{fileprefix}.{assembly_kmer_length}.{haplotype}.log",
         #hap2=output_dict["log"] / "extract_reads_by_unique_hap_kmers.{stage}.{parameters}.{fileprefix}.{genome_prefix}.AK{assembly_kmer_length}.hap2.log",
@@ -150,7 +150,7 @@ rule extract_se_reads_from_fasta_by_unique_hap_kmers: #TODO: merge with extract_
                                                                                         wildcards.fileprefix,
                                                                                         config["fasta_extension"])),
     output:
-        hap_se_read=out_dir_path / "{stage}/{parameters}/fasta/{haplotype}/{assembly_kmer_length}/{datatype, [^/]+}/{fileprefix, [^/]+}.fasta.gz",
+        hap_se_read=out_dir_path / "{stage}/{parameters}/fasta/{haplotype}/{assembly_kmer_length}/{datatype}/{fileprefix}.fasta.gz",
     log:
         std=output_dict["log"] / "extract_se_reads_from_fasta_by_unique_hap_kmers.{datatype}.{stage}.{parameters}.{fileprefix}.{assembly_kmer_length}.{haplotype}.log",
         #hap2=output_dict["log"] / "extract_reads_by_unique_hap_kmers.{stage}.{parameters}.{fileprefix}.{genome_prefix}.AK{assembly_kmer_length}.hap2.log",

@@ -8,8 +8,8 @@ rule fcs: #
         image=config["tool_containers"]["fcs_gx"],
         #image=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["image_path"],
     output:
-        taxonomy=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype, [^.]+}/fcs/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.taxonomy",
-        summary=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype, [^.]+}/fcs/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.summary"
+        taxonomy=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.taxonomy",
+        summary=out_dir_path / "contig/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.summary"
     params:
         singularity_load_str=(config["singularity_load_str"] + "; ") if config["singularity_load_mode"] else "",
         tax_id=config["tax_id"]
@@ -63,8 +63,8 @@ rule remove_fcs_contaminants: #
         image=config["tool_containers"]["fcs_gx"],
         fcs_report=(out_dir_path / ("contig/{parameters}/contamination_scan/{haplotype}/fcs/%s/{genome_prefix}.contig.{haplotype}.unfiltered.%s.summary" % (config["final_fcs_db"], config["final_fcs_db"]))) if not config["skip_fcs"] else []
     output:
-        fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype, [^.]+}.fasta",
-        contaminant_fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype, [^.]+}.contaminant.fasta"
+        fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.fasta",
+        contaminant_fasta=out_dir_path / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.contaminant.fasta"
     params:
         singularity_load_str=(config["singularity_load_str"] + "; ") if config["singularity_load_mode"] else "",
         skip="skip" if config["skip_fcs"] else "filter"

@@ -40,7 +40,7 @@ def create_track_from_df(dataframe, color_dict, output_prefix=None):
     track_merged_df = pd.concat(track_dict.values())
     track_merged_df["status"] = track_merged_df["status"].replace(color_dict)
     if output_prefix:
-        track_merged_df.to_csv("{0}.busco.counts.bedgraph".format(output_prefix), sep="\t", header=False, index=False)
+        track_merged_df.to_csv("{0}.counts.bedgraph".format(output_prefix), sep="\t", header=False, index=False)
     return track_merged_df
 
 
@@ -52,7 +52,7 @@ def prepare_len_df(dataframe, output_prefix=None):
     n_buscos = len(dataframe)
     len_df = pd.DataFrame.from_dict({label: n_buscos for label in dataframe.columns}, orient='index', columns=["length"])
     len_df.index.name = "scaffold"
-    len_df.to_csv("{0}.busco.len".format(output_prefix), sep="\t", header=False, index=True)
+    len_df.to_csv("{0}.len".format(output_prefix), sep="\t", header=False, index=True)
     return len_df
 
 
@@ -84,23 +84,23 @@ busco_table_dict = {label: BUSCOtable(in_file=hap_file_dict[label]) for label in
 
 number_of_buscos = len(busco_table_dict[args.label_list[0]].records[["OG"]].drop_duplicates().reset_index(level=1, drop=True))
 
-pd.Series(args.label_list).to_csv("{0}.busco.orderlist".format(args.output_prefix), sep="\t", index=False, header=False)
+pd.Series(args.label_list).to_csv("{0}.orderlist".format(args.output_prefix), sep="\t", index=False, header=False)
 
 
 busco_legend_df = pd.DataFrame.from_dict(busco_color_dict, columns=["color"], orient="index")
-busco_legend_df.reset_index(drop=False).set_index("color").to_csv("{0}.busco.legend".format(args.output_prefix),
+busco_legend_df.reset_index(drop=False).set_index("color").to_csv("{0}.legend".format(args.output_prefix),
                                                                   sep="\t", header=False, index=True)
 
 busco_status_df_dict = {label: busco_table_dict[label].records[["OG"]].drop_duplicates().reset_index(level=1, drop=True).reset_index(drop=False).rename(columns={"status": label}).set_index("OG") for label in busco_table_dict}
 
 busco_status_df = pd.concat(busco_status_df_dict.values(), axis=1).sort_values(by=args.label_list)
-busco_status_df.to_csv("{0}.busco.merged.tsv".format(args.output_prefix), sep="\t", header=True, index=True)
+busco_status_df.to_csv("{0}.merged.tsv".format(args.output_prefix), sep="\t", header=True, index=True)
 
 count_track_merged_df = create_track_from_df(busco_status_df, busco_color_dict, output_prefix=args.output_prefix)
 busco_len_df = prepare_len_df(busco_status_df, output_prefix="{0}".format(args.output_prefix))
 
 informative_busco_status_df = get_informative_buscos(busco_status_df)
-informative_busco_status_df.to_csv("{0}.busco.informative.tsv".format(args.output_prefix), sep="\t", header=True, index=True)
+informative_busco_status_df.to_csv("{0}.informative.tsv".format(args.output_prefix), sep="\t", header=True, index=True)
 informative_len_df = prepare_len_df(informative_busco_status_df, output_prefix="{0}.informative".format(args.output_prefix))
 informative_count_track_merged_df = create_track_from_df(informative_busco_status_df, busco_color_dict,
                                                          output_prefix="{0}.informative".format(args.output_prefix))
@@ -110,11 +110,11 @@ offset = min(count_track_merged_df[count_track_merged_df["start"] == 0]["end"])
 busco_no_complete_len_df = pd.DataFrame.from_dict({label: number_of_buscos - offset for label in busco_table_dict},
                                                   orient='index', columns=["length"])
 busco_no_complete_len_df.index.name = "scaffold"
-busco_no_complete_len_df.to_csv("{0}.no_complete.busco.len".format(args.output_prefix), sep="\t",
+busco_no_complete_len_df.to_csv("{0}.no_complete.len".format(args.output_prefix), sep="\t",
                                 header=False, index=True)
 
 count_track_merged_df[["start", "end"]] = count_track_merged_df[["start", "end"]] - offset
 count_track_merged_df.loc[count_track_merged_df["start"] < 0, "start"] = 0
 no_complete_track_merged_df = count_track_merged_df = count_track_merged_df[count_track_merged_df["end"] > 0]
-no_complete_track_merged_df.to_csv("{0}.no_complete.busco.counts.bedgraph".format(args.output_prefix), sep="\t",
+no_complete_track_merged_df.to_csv("{0}.no_complete.counts.bedgraph".format(args.output_prefix), sep="\t",
                                    header=False, index=False)

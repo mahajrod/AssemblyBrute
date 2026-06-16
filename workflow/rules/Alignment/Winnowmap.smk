@@ -31,10 +31,10 @@ rule winnowmap: #
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("minimap2_cov"),
-        cpus=get_threads(parameters["threads"]["minimap2"] + parameters["threads"]["samtools_sort"], "cpu"),
-        time=parameters["time"]["minimap2"],
-        mem=parameters["memory_mb"]["minimap2"] + (parameters["memory_mb"]["samtools_sort"] * parameters["threads"]["samtools_sort"])
-    threads: parameters["threads"]["minimap2"] + parameters["threads"]["samtools_sort"]
+        cpus=get_threads(parameters["threads"]["winnowmap"] + parameters["threads"]["samtools_sort"], "cpu"),
+        time=parameters["time"]["winnowmap"],
+        mem=parameters["memory_mb"]["winnowmap"] + (parameters["memory_mb"]["samtools_sort"] * parameters["threads"]["samtools_sort"])
+    threads: parameters["threads"]["winnowmap"] + parameters["threads"]["samtools_sort"]
     shell:
         " winnowmap -t {threads} -W {input.repetitive_kmers} -ax map-pb {input.reference} {input.fastq} 2>{log.map} | "
         " samtools sort -@ {params.sort_threads}  -m {params.per_thread_sort_mem}M -o {output.bam} - 2>{log.sort}; "

@@ -80,8 +80,8 @@ rule busco_intersect_haplotypes: # Downloading of busco datasets is performed by
     params:
         haplotypes=lambda wildcards: ",".join(stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"])
     output:
-        busco_legend=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{busco_version}haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.legend",
-        busco_orderlist=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{busco_version}haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.orderlist",
+        busco_legend=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{busco_version}/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.legend",
+        busco_orderlist=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{busco_version}/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.orderlist",
         busco_merged_tsv=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{busco_version}/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.merged.tsv",
         busco_len=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{busco_version}/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.len",
         busco_counts_bedgraph=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{busco_version}/haplotype_intersection/{genome_prefix}.{assembly_stage}.{busco_lineage}.busco.counts.bedgraph",

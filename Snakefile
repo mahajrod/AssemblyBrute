@@ -1903,6 +1903,7 @@ wildcard_constraints:
     busco6_lineage="[^/]+odb12\.[^/]*",
     window="[0-9]+",
     step="[0-9]+",
+    reference="[^/]+",
 
 #---- Final rule ----
 pd.Series(results_list).to_csv(config["out_dir"] + "/requested_files.tab", sep="\t", header=False, index=False)

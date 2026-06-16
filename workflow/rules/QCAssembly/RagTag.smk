@@ -5,9 +5,9 @@ rule ragtag_qc: #
         fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
         reference_fasta=out_dir_path / "data/reference/{reference}/repeats/{reference}.softmasked.fasta"
     output:
-        ragtag_fasta=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/ragtag/{reference, [^/]+}/{genome_prefix}.{assembly_stage}.{haplotype}.to.{reference}.fasta",
-        ragtag_agp=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/ragtag/{reference, [^/]+}/{genome_prefix}.{assembly_stage}.{haplotype}.to.{reference}.agp",
-        ragtag_stats=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/ragtag/{reference, [^/]+}/{genome_prefix}.{assembly_stage}.{haplotype}.to.{reference}.stats",
+        ragtag_fasta=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/ragtag/{reference}/{genome_prefix}.{assembly_stage}.{haplotype}.to.{reference}.fasta",
+        ragtag_agp=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/ragtag/{reference}/{genome_prefix}.{assembly_stage}.{haplotype}.to.{reference}.agp",
+        ragtag_stats=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/ragtag/{reference}/{genome_prefix}.{assembly_stage}.{haplotype}.to.{reference}.stats",
     log:
         ragtag=output_dict["log"]  / "ragtag.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{reference}.ragtag.log",
         ln=output_dict["log"]  / "ragtag.{assembly_stage}.{parameters}.{genome_prefix}.{haplotype}.{reference}.ln.log",

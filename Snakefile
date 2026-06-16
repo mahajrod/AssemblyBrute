@@ -434,7 +434,7 @@ if not config["skip_mtdna"]:
                                     stage=["filtered"],
                                     pairprefix=input_pairprefix_dict["illumina"])]
 
-for stage_index in range(0, config["stage_list"]):
+for stage_index in range(0, len(config["stage_list"])):
     if config["stage_list"][stage_index] == "draft_qc":
         current_stage = "draft_qc"
         draft_file_dict = get_input_assemblies(input_dir_path / "draft/fasta", config["ploidy"], config["assembly_fasta_extension"])

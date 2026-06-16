@@ -1915,7 +1915,6 @@ rule all:
 
 #---- Include section ----
 include: "workflow/rules/General/Log.smk"
-#include: "workflow/rules/Install/Pip.smk"
 include: "workflow/rules/Preprocessing/Files.smk"
 include: "workflow/rules/Preprocessing/Combine.smk"
 include: "workflow/rules/QCFiltering/FastQC.smk"
@@ -1950,7 +1949,7 @@ include: "workflow/rules/Contigs/Graph.smk"
 
 include: "workflow/rules/Stats/General.smk"
 
-if "purge_dups" in config["stage_list"]:
+if "purge_dups" in config["stage_list"]: # TODO: resolve the conflicts that forced me to insert this if
     include: "workflow/rules/Purge_dups/Purge_dups.smk"
     include: "workflow/rules/Purge_dups/Purge_dupsQC.smk"
 
@@ -1961,7 +1960,7 @@ include: "workflow/rules/Alignment/Common.smk"
 include: "workflow/rules/Alignment/Stats.smk"
 include: "workflow/rules/Alignment/Winnowmap.smk"
 
-if "hic" in data_types:
+if "hic" in data_types: # TODO: resolve the conflicts that forced me to insert this ifs
     if (sum(list(pd.Series(["hic_scaffolding",
                         "gap_closing",
                         "draft_qc", "contig"]).isin(config["stage_list"]))) > 0) :
@@ -2003,7 +2002,6 @@ include: "workflow/rules/QCAssembly/PretextPerChr.smk"
 include: "workflow/rules/QCAssembly/RagTag.smk"
 include: "workflow/rules/mtDNA/MitoHiFi.smk"
 include: "workflow/rules/mtDNA/Mitoz.smk"
-#include: "workflow/rules/QCAssembly/VariantTrack.smk"
 
 if "gap_closing" in config["stage_list"]:
     include: "workflow/rules/Finalization/GapClosing.smk"
@@ -2011,5 +2009,3 @@ if "gap_closing" in config["stage_list"]:
 if "ref_scaffolding" in config["stage_list"]:
     include: "workflow/rules/RefScaffolding/RagTag.smk"
 
-#include: "workflow/rules/Curation/CurationFiles.smk"
-#include: "workflow/rules/Curation/MicroChromosomes.smk"

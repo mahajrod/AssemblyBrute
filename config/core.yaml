@@ -2448,6 +2448,12 @@
                 - "dedup"
                 - "polishing"
                 - "hic_scaffolding"
+        "contig_dedup":
+            "fastq":
+                - "contig"
+                - "dedup"
+            "draft":
+                - "dedup"
         "skip_hic_scaffolding":
             "fastq":
                 - "contig"

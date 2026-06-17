@@ -11,9 +11,9 @@ rule hapsolo:
         busco_db_dir=out_dir_path / "download/busco5/lineages/{busco_lineage}",
         log_dir=out_dir_path  / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/log",
     output:
-        purged_fasta=out_dir_path  / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/{genome_prefix}.dedup.{haplotype}.fasta",
-        duplication_fasta=out_dir_path  / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/{genome_prefix}.dedup.{haplotype}.dups.fasta",
-        duplication_ids=out_dir_path  / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/{genome_prefix}.dedup.{haplotype}.dups.ids",
+        purged_fasta=out_dir_path  / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/{genome_prefix}.dedup.{haplotype, hap.*}.fasta",
+        duplication_fasta=out_dir_path  / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/{genome_prefix}.dedup.{haplotype, hap.*}.dups.fasta",
+        duplication_ids=out_dir_path  / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/{genome_prefix}.dedup.{haplotype, hap.*}.dups.ids",
     params:
         iterations_per_thread=lambda wildcards: stage_dict["dedup"]["parameters"]["%s..hapsolo_%s@%s" % (wildcards.prev_stage_parameters,
                                                                                                          wildcards.dedup_parameters,

@@ -1771,6 +1771,24 @@ for stage_index in range(0, len(config["stage_list"])):
                             for window_settings in config["qc_settings"]["windows_sets"]]
                             for parameters_label in stage_dict[current_stage]["parameters"]]
                             for track_type in ["windowmasker"] + (["trf"] if not config["skip_trf"] else [])],]
+
+            results_list += [[[expand(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.NA.{haplotype}.{subset}.rmdup.mapq{mapq}.{res}.tracks.pretext",
+                                  res=["high_res"], #"default",
+                                  haplotype=["reordered" if ("bird_genome" in config) and config["bird_genome"] else "combined"],
+                                  subset=["all"] , # + (["microchr"] if ("bird_genome" in config) and config["bird_genome"] else [])
+                                  genome_prefix=[config["genome_prefix"], ],
+                                  assembly_stage=[current_stage],
+                                  parameters=stage_dict[current_stage]["parameters"],
+                                  resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
+                                  mapq=parameters["tool_options"]["pretextmap"]["mapq"],
+                                  ext=parameters["tool_options"]["pretextsnapshot"]["format"],
+                                  #window=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["window"],
+                                  #step = parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_step_set]["step"],
+                                 ) for window_step_set in config["qc_settings"]["windows_sets"]] for parameters_label in
+                                                          stage_dict[current_stage]["parameters"]] if coverage_track_data_type_set else [],
+                         ]
+
+
             if not config["skip_wga"]:
                 results_list += [[expand(out_dir_path / "{assembly_stage}/{parameters}/wga.{query_prefix}.{query_length}.to.{target_prefix}.{target_length}.YASS.R11.soft.min_len{min_target_len}.png",
                                          query_length=config["qc_settings"]["assembly_scaffold_sets"],

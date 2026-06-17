@@ -1,14 +1,15 @@
 rule get_seq_len:
     input:
-        fasta="{fasta_prefix}.fasta.fai",
+        fasta="{fasta_dir}/{fasta_prefix}.fasta.fai",
+        log_dir="{fasta_dir}/log/",
     output:
-        len_file="{fasta_prefix}.len",
+        len_file="{fasta_dir}/{fasta_prefix}.len",
     log:
-        std="{fasta_prefix}.log",
-        cluster_log="{fasta_prefix}.cluster.log",
-        cluster_err="{fasta_prefix}.cluster.err"
+        std="{fasta_dir}/log/{fasta_prefix}.log",
+        cluster_log="{fasta_dir}/log/{fasta_prefix}.cluster.log",
+        cluster_err="{fasta_dir}/log/{fasta_prefix}.cluster.err"
     benchmark:
-        "{fasta_prefix}.benchmark.txt"
+        "{fasta_dir}/log/{fasta_prefix}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

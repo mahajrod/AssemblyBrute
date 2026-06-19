@@ -18,18 +18,6 @@ rule hifiasm_correct:
     priority: 2000
     input:
         main_reads=get_main_read_filelist_for_correction,
-        #hifi=expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),
-        #            fileprefix=input_file_prefix_dict["hifi"],
-        #            allow_missing=True),
-        #nanopore=expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
-        #                fileprefix=input_file_prefix_dict["nanopore"],
-        #                allow_missing=True) if "nanopore" in input_filedict else [],
-        #duplex=expand(output_dict["data"] / ("fastq/duplex/filtered/{fileprefix}%s" % config["fastq_extension"]),
-        #                fileprefix=input_file_prefix_dict["duplex"],
-        #                allow_missing=True) if "duplex" in input_filedict else [],
-        #simplex=expand(output_dict["data"] / ("fastq/simplex/filtered/{fileprefix}%s" % config["fastq_extension"]),
-        #                fileprefix=input_file_prefix_dict["simplex"],
-        #                allow_missing=True) if "simplex" in input_filedict else [],
     output:
         ec_bin=output_dict["error_correction"] / "hifiasm_{correction_options, [^/]+}/{genome_prefix}.contig.ec.bin",
         ec_fasta=output_dict["error_correction"] / "hifiasm_{correction_options, [^/]+}/{genome_prefix}.contig.ec.fasta.gz",
@@ -47,13 +35,6 @@ rule hifiasm_correct:
         D=lambda wildcards: parse_option("D", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -D "), #" -D {0} ".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["D"]) if "D" in parameters["tool_options"]["hifiasm"][wildcards.contig_options] else "",
         N=lambda wildcards: parse_option("N", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " -N "), #" -N {0} ".format(parameters["tool_options"]["hifiasm"][wildcards.contig_options]["N"]) if "N" in parameters["tool_options"]["hifiasm"][wildcards.contig_options] else "",
         ont_assembly=lambda wildcards: parse_option_flag("ont_mode", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " --ont "),
-        #telomere_motif=lambda wildcards: parse_option("telomere_motif", config, " --telo-m ")
-        #nanopore=(" --ul " + ",".join(map(str, expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
-        #                                              fileprefix=input_file_prefix_dict["nanopore"],
-        #                                              allow_missing=True)))) if "nanopore" in input_filedict else "",
-        #ultralong_reads=lambda wildcards: get_ultralong_read_files(input_file_prefix_dict,
-        #                                                           stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set"]),
-        #ul_cut=lambda wildcards: parse_option("ul-cut", assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options'], " --ul-cut ")
     log:
         std=output_dict["log"] / "hifiasm_correct.{correction_options}.{genome_prefix}.log",
         pigz=output_dict["log"] / "hifiasm_correct.{correction_options}.{genome_prefix}.pigz.log",
@@ -566,15 +547,6 @@ rule hifiasm_long_reads_only:
     priority: 1000
     input:
         main_reads=get_main_read_filelist,
-        #hifi=expand(output_dict["data"] / ("fastq/hifi/filtered/{fileprefix}%s" % config["fastq_extension"]),
-        #            fileprefix=input_file_prefix_dict["hifi"],
-        #            allow_missing=True),
-        #nanopore=expand(output_dict["data"] / ("fastq/nanopore/filtered/{fileprefix}%s" % config["fastq_extension"]),
-        #                fileprefix=input_file_prefix_dict["nanopore"],
-        #                allow_missing=True) if "nanopore" in input_filedict else [],
-        #lqccs=expand(output_dict["data"] / ("fastq/lqccs/filtered/{fileprefix}%s" % config["fastq_extension"]),
-        #                fileprefix=input_file_prefix_dict["lqccs"],
-        #                allow_missing=True) if "lqccs" in input_filedict else [],
         ultralong_reads=lambda wildcards: get_ultralong_read_files(input_file_prefix_dict,
                                                                    stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set"]),
         ec_bin=lambda wildcards: output_dict["error_correction"] / "hifiasm_{0}/{1}.contig.ec.bin".format(stage_dict["contig"]["parameters"]["hifiasm_" + wildcards.contig_options]["option_set_group"],

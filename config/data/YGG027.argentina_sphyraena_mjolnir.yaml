@@ -120,7 +120,7 @@
         "start_shift": null
     "hapsolo":
         "busco_lineage_list":
-            - "actinopterygii_odb10"
+            #- "actinopterygii_odb10"
             - "actinopterygii_odb12"
             #- "actinopterygii_odb12.2"
 

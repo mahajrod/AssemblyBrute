@@ -49,7 +49,7 @@
 "qc_settings":
     "windows_sets":
         #- "w1000k.s1000k"
-        - "w1000k.s100k"
+        #- "w1000k.s100k"
         #- "w100k.s100k"
         - "w100k.s10k"
         - "w10k.s10k"
@@ -129,7 +129,7 @@
 "genome_prefix": "fArgSph1"
 "busco_lineage_list":
     - "actinopterygii_odb12"
-    - "actinopterygii_odb10"
+    #- "actinopterygii_odb10"
     - "vertebrata_odb10" #
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10

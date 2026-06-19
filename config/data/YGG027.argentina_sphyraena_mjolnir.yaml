@@ -136,7 +136,7 @@
 "telomere_motif": "CCCTAA"  # telomere motif at 5'-end; CCCTAA for human, place null if unknown
 "species_name": "Argentina sphyraena"
 "tax_id": 442169 # # necessary for contamination scan via FCS
-"bird_genome": True
+"bird_genome": False
 "kingdom": "animal"  # "animal", "plant" or "fungi"
 "mitoz_clade": "Chordata" #Allowed: {Chordata,Arthropoda,Echinodermata,Annelida-segmented-worms,Bryozoa,Mollusca,Nematoda,Nemertea-ribbon-worms,Porifera-sponges}
 "mtdna_genetic_code":  2 # Organism genetic code should be one from the NCBI table:

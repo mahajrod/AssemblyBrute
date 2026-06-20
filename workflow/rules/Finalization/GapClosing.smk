@@ -43,7 +43,7 @@ rule samba:
         matching_len=lambda wildcards: parse_option("matching_len", parameters["tool_options"]["samba"][wildcards.gap_closing_parameters][config["gap_closing_datatype"]], " -m ")
     log:
         samba=output_dict["log"] / "samba.gap_closing.{prev_stage_parameters}..samba_{gap_closing_parameters}.{genome_prefix}.{haplotype}.samba.log",
-        ln=output_dict["log"] / "samba.gap_closing.{prev_stage_parameters}..samba_{gap_closing_parameters}.{genome_prefix}.{haplotype}.ln.log",
+        reorder=output_dict["log"] / "samba.gap_closing.{prev_stage_parameters}..samba_{gap_closing_parameters}.{genome_prefix}.{haplotype}.reorder.log",
         cluster_log=output_dict["cluster_log"] / "samba.gap_closing.{prev_stage_parameters}..samba_{gap_closing_parameters}.{genome_prefix}.{haplotype}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "samba.gap_closing.{prev_stage_parameters}..samba_{gap_closing_parameters}.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
@@ -59,15 +59,20 @@ rule samba:
     threads:
         parameters["threads"]["samba"]
     shell:
+         " REORDER_SCRIPT=`realpath ./workflow/scripts/sequence/reorder_sequences.py`; "
          " OUTPUT_DIR=`dirname {output.fasta}`/{wildcards.haplotype}; "
          " mkdir -p ${{OUTPUT_DIR}}; "
          " INPUT_FASTA=`realpath -s {input.fasta}`; "
          " INPUT_FASTA_BASENAME=`basename {input.fasta}`; "
          " LOG_SAMBA=`realpath -s {log.samba}`; "
-         " LOG_LN=`realpath -s {log.ln}`; "
+         " LOG_REORDER=`realpath -s {log.reorder}`; "
          " INPUT_FILES='';"
          " for FILE in {input.reads}; do INPUT_FILES=\"${{INPUT_FILES}} \"`realpath -s ${{FILE}}`; done; "
          " cd ${{OUTPUT_DIR}}; "
          " close_scaffold_gaps.sh -t {threads} -q <(zcat ${{INPUT_FILES}}) {params.datatype} -r ${{INPUT_FASTA}} "
          " {params.matching_len} -v > ${{LOG_SAMBA}} 2>&1; "
-         " ln -sf {wildcards.haplotype}/${{INPUT_FASTA_BASENAME}}.split.joined.fa ../`basename {output.fasta}` > ${{LOG_LN}} 2>&1; "
+         " grep -P '^>' {wildcards.haplotype}/${{INPUT_FASTA_BASENAME}}.split.joined.fa | sed 's/>//;s/[ \t].*//' | "
+         "           sort -V > {wildcards.haplotype}/${{INPUT_FASTA_BASENAME}}.split.joined.sorted.ids;  "  
+         " ${{REORDER_SCRIPT}} -i  {wildcards.haplotype}/${{INPUT_FASTA_BASENAME}}.split.joined.fa "
+         "    -r {wildcards.haplotype}/${{INPUT_FASTA_BASENAME}}.split.joined.sorted.ids "
+         "    -o ../`basename {output.fasta}`  > ${{LOG_REORDER}} 2>&1; "

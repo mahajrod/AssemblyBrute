@@ -59,7 +59,7 @@ rule samba:
          " INPUT_FASTA_BASENAME=`basename {input.fasta}`; "
          " LOG_SAMBA=`realpath -s {log.samba}`; "
          " LOG_REORDER=`realpath -s {log.reorder}`; "
-         " INPUT_FILES='';"
+         " INPUT_FILES=''; "
          " for FILE in {input.reads}; do INPUT_FILES=\"${{INPUT_FILES}} \"`realpath -s ${{FILE}}`; done; "
          " cd ${{OUTPUT_DIR}}; "
          " close_scaffold_gaps.sh -t {threads} -q <(zcat ${{INPUT_FILES}}) {params.datatype} -r ${{INPUT_FASTA}} "

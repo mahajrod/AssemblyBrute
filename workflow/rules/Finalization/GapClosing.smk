@@ -1,4 +1,6 @@
 
+ruleorder: reorder_samba_output > maskfasta
+
 def get_read_files_for_samba(wildcards):
     phasing_kmer_length = stage_dict["gap_closing"]["parameters"][wildcards.prev_stage_parameters + "..samba_" + wildcards.gap_closing_parameters]["option_set"]["phasing_kmer_length"]
     #print("AAAAAA")

@@ -36,8 +36,8 @@ rule samba:
                                                                                   wildcards.prev_stage_parameters, wildcards.genome_prefix, wildcards.haplotype)
 
 
-    output: 
-        fasta=out_dir_path / "gap_closing/{prev_stage_parameters}..samba_{gap_closing_parameters}/{genome_prefix}.gap_closing.{haplotype, hap.*}.fasta",
+    output:
+        fasta=out_dir_path / "gap_closing/{prev_stage_parameters}..samba_{gap_closing_parameters}/{genome_prefix}.gap_closing.{haplotype, hap.*}/{genome_prefix}.gap_closing.{haplotype}.split.joined.fa" ,
     params:
         datatype=lambda wildcards: parse_option("datatype", parameters["tool_options"]["samba"][wildcards.gap_closing_parameters][config["gap_closing_datatype"]], " -d "),
         matching_len=lambda wildcards: parse_option("matching_len", parameters["tool_options"]["samba"][wildcards.gap_closing_parameters][config["gap_closing_datatype"]], " -m ")
@@ -59,8 +59,8 @@ rule samba:
     threads:
         parameters["threads"]["samba"]
     shell:
-         " REORDER_SCRIPT=`realpath ./workflow/scripts/sequence/reorder_sequences.py`; "
-         " OUTPUT_DIR=`dirname {output.fasta}`/{wildcards.haplotype}; "
+
+         " OUTPUT_DIR=`dirname {output.fasta}`/{wildcards.genome_prefix}.gap_closing.{wildcards.haplotype}; "
          " mkdir -p ${{OUTPUT_DIR}}; "
          " INPUT_FASTA=`realpath -s {input.fasta}`; "
          " INPUT_FASTA_BASENAME=`basename {input.fasta}`; "
@@ -71,8 +71,33 @@ rule samba:
          " cd ${{OUTPUT_DIR}}; "
          " close_scaffold_gaps.sh -t {threads} -q <(zcat ${{INPUT_FILES}}) {params.datatype} -r ${{INPUT_FASTA}} "
          " {params.matching_len} -v > ${{LOG_SAMBA}} 2>&1; "
-         " grep -P '^>' {wildcards.haplotype}/${{INPUT_FASTA_BASENAME}}.split.joined.fa | sed 's/>//;s/[ \t].*//' | "
-         "           sort -V > {wildcards.haplotype}/${{INPUT_FASTA_BASENAME}}.split.joined.sorted.ids;  "  
-         " ${{REORDER_SCRIPT}} -i  {wildcards.haplotype}/${{INPUT_FASTA_BASENAME}}.split.joined.fa "
-         "    -r {wildcards.haplotype}/${{INPUT_FASTA_BASENAME}}.split.joined.sorted.ids "
-         "    -o ../`basename {output.fasta}`  > ${{LOG_REORDER}} 2>&1; "
+
+rule reorder_samba_output:
+
+    priority: 500
+    input:
+        fasta=out_dir_path / "gap_closing/{prev_stage_parameters}..samba_{gap_closing_parameters}/{genome_prefix}.gap_closing.{haplotype, hap.*}/{genome_prefix}.gap_closing.{haplotype}.split.joined.fa" ,
+    output:
+        fasta=out_dir_path / "gap_closing/{prev_stage_parameters}..samba_{gap_closing_parameters}/{genome_prefix}.gap_closing.{haplotype, hap.*}.fasta" ,
+    log:
+        reorder=output_dict["log"] / "reorder_samba_output.{prev_stage_parameters}..samba_{gap_closing_parameters}.{genome_prefix}.{haplotype}.reorder.log",
+        cluster_log=output_dict["cluster_log"] / "reorder_samba_output.{prev_stage_parameters}..samba_{gap_closing_parameters}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "reorder_samba_output.{prev_stage_parameters}..samba_{gap_closing_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"] / "reorder_samba_output.{prev_stage_parameters}..samba_{gap_closing_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"]["name"],
+        node_options=parse_node_list("reorder_samba_output"),
+        cpus=parameters["threads"]["reorder_samba_output"],
+        time=parameters["time"]["reorder_samba_output"],
+        mem=parameters["memory_mb"]["reorder_samba_output"],
+    threads:
+        parameters["threads"]["reorder_samba_output"]
+    shell:
+         " INPUT_PREFIX={input.fasta}; "
+         " INPUT_PREFIX=${{INPUT_PREFIX%.fa}}; "
+         " grep -P '^>' {input.fasta} | sed 's/>//;s/[ \t].*//' | sort -V > ${{INPUT_PREFIX}}.sorted.ids;  "  
+         " ./workflow/scripts/sequence/reorder_sequences.py -i  {input.fasta} -r ${{INPUT_PREFIX}}.sorted.ids "
+         "                                                  -o {output.fasta}  > {log.reorder} 2>&1; "

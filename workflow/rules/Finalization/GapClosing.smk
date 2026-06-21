@@ -38,8 +38,7 @@ rule samba:
         datatype=lambda wildcards: parse_option("datatype", parameters["tool_options"]["samba"][wildcards.gap_closing_parameters][config["gap_closing_datatype"]], " -d "),
         matching_len=lambda wildcards: parse_option("matching_len", parameters["tool_options"]["samba"][wildcards.gap_closing_parameters][config["gap_closing_datatype"]], " -m ")
     log:
-        samba=output_dict["log"] / "samba.gap_closing.{prev_stage_parameters}..samba_{gap_closing_parameters}.{genome_prefix}.{haplotype}.samba.log",
-        reorder=output_dict["log"] / "samba.gap_closing.{prev_stage_parameters}..samba_{gap_closing_parameters}.{genome_prefix}.{haplotype}.reorder.log",
+        samba=(output_dict["log"] / "samba.gap_closing.{prev_stage_parameters}..samba_{gap_closing_parameters}.{genome_prefix}.{haplotype}.samba.log").resolve(),
         cluster_log=output_dict["cluster_log"] / "samba.gap_closing.{prev_stage_parameters}..samba_{gap_closing_parameters}.{genome_prefix}.{haplotype}.cluster.log",
         cluster_err=output_dict["cluster_error"] / "samba.gap_closing.{prev_stage_parameters}..samba_{gap_closing_parameters}.{genome_prefix}.{haplotype}.cluster.err"
     benchmark:
@@ -59,18 +58,16 @@ rule samba:
          " mkdir -p ${{OUTPUT_DIR}}; "
          " INPUT_FASTA=`realpath -s {input.fasta}`; "
          " INPUT_FASTA_BASENAME=`basename {input.fasta}`; "
-         " LOG_SAMBA=`realpath -s {log.samba}`; "
-         " LOG_REORDER=`realpath -s {log.reorder}`; "
          " INPUT_FILES=''; "
          " for FILE in {input.reads}; do INPUT_FILES=\"${{INPUT_FILES}} \"`realpath -s ${{FILE}}`; done; "
          " cd ${{OUTPUT_DIR}}; "
          " close_scaffold_gaps.sh -t {threads} -q <(zcat ${{INPUT_FILES}}) {params.datatype} -r ${{INPUT_FASTA}} "
-         " {params.matching_len} -v > ${{LOG_SAMBA}} 2>&1; "
+         "                       {params.matching_len} -v > {log.samba} 2>&1; "
 
 rule reorder_samba_output:
     priority: 500
     input:
-        fasta=out_dir_path / "gap_closing/{prev_stage_parameters}..samba_{gap_closing_parameters}/{genome_prefix}.gap_closing.{haplotype, hap.*}/{genome_prefix}.gap_closing.{haplotype}.split.joined.fa" ,
+        fasta=rules.samba.output.fasta
     output:
         fasta=out_dir_path / "gap_closing/{prev_stage_parameters}..samba_{gap_closing_parameters}/{genome_prefix}.gap_closing.{haplotype, hap.*}.fasta" ,
     log:

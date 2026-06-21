@@ -57,11 +57,15 @@ rule samba:
          " OUTPUT_DIR=`dirname {output.fasta}`/; "
          " mkdir -p ${{OUTPUT_DIR}}; "
          " INPUT_FASTA=`realpath -s {input.fasta}`; "
-         " INPUT_FASTA_BASENAME=`basename {input.fasta}`; "
+         " ln -s ${{INPUT_FASTA}} ${{OUTPUT_DIR}}; "
          " INPUT_FILES=''; "
-         " for FILE in {input.reads}; do INPUT_FILES=\"${{INPUT_FILES}} \"`realpath -s ${{FILE}}`; done; "
+         " for FILE in {input.reads}; "
+         "     do "
+         "     ln -s `realpath -s ${{FILE}}` ${{OUTPUT_DIR}}; "
+         "     INPUT_FILES=\"${{INPUT_FILES}} \"`basename ${{FILE}}`; "
+         "     done; "
          " cd ${{OUTPUT_DIR}}; "
-         " close_scaffold_gaps.sh -t {threads} -q <(zcat ${{INPUT_FILES}}) {params.datatype} -r ${{INPUT_FASTA}} "
+         " close_scaffold_gaps.sh -t {threads} -q <(zcat ${{INPUT_FILES}}) {params.datatype} -r `basename ${{INPUT_FASTA}}` "
          "                       {params.matching_len} -v > {log.samba} 2>&1; "
 
 rule reorder_samba_output:

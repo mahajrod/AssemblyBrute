@@ -3,16 +3,13 @@ ruleorder: reorder_samba_output > maskfasta
 
 def get_read_files_for_samba(wildcards):
     phasing_kmer_length = stage_dict["gap_closing"]["parameters"][wildcards.prev_stage_parameters + "..samba_" + wildcards.gap_closing_parameters]["option_set"]["phasing_kmer_length"]
-    #print("AAAAAA")
     if phasing_kmer_length == "NA":
-        #print("BBBBBB")
         filelist = expand(output_dict["data"] / ("%s/%s/raw/{fileprefix}%s" % (datatype_format_dict[config["gap_closing_datatype"]],
                                                                               config["gap_closing_datatype"],
                                                                               config[datatype_format_dict[config["gap_closing_datatype"]] + "_extension"])),
                           allow_missing=True,
                           fileprefix=input_file_prefix_dict[config["gap_closing_datatype"]] if datatype_format_dict[config["gap_closing_datatype"]] == "fastq" else input_fasta_file_prefix_dict[config["gap_closing_datatype"]])
     else:
-        #print("CCCCCCCCCC")
         filelist = expand(out_dir_path / ("%s/%s/%s/{haplotype}/%s/%s/{fileprefix}%s" % (config["phasing_stage"],
                                                                                           detect_phasing_parameters(wildcards.prev_stage_parameters + "..samba_" + wildcards.gap_closing_parameters, config["phasing_stage"], stage_separator=".."),
                                                                                           datatype_format_dict[config["gap_closing_datatype"]] ,
@@ -21,7 +18,6 @@ def get_read_files_for_samba(wildcards):
                                                                                           config[datatype_format_dict[config["gap_closing_datatype"]] + "_extension"])),
                          fileprefix=input_file_prefix_dict[config["gap_closing_datatype"]] if datatype_format_dict[config["gap_closing_datatype"]] == "fastq" else input_fasta_file_prefix_dict[config["gap_closing_datatype"]],
                          allow_missing=True)
-    #print(filelist)
 
     return filelist
 
@@ -55,18 +51,21 @@ rule samba:
         parameters["threads"]["samba"]
     shell:
          " OUTPUT_DIR=`dirname {output.fasta}`/; "
+         " OUTPUT_PREFIX=`basename {input.fasta}`; "
+         " OUTPUT_PREFIX=${{OUTPUT_PREFIX%.fasta}}; "
          " mkdir -p ${{OUTPUT_DIR}}; "
          " INPUT_FASTA=`realpath -s {input.fasta}`; "
-         " ln -s ${{INPUT_FASTA}} ${{OUTPUT_DIR}}; "
+         " ln -sf ${{INPUT_FASTA}} ${{OUTPUT_DIR}}; "
          " INPUT_FILES=''; "
          " for FILE in {input.reads}; "
          "     do "
-         "     ln -s `realpath -s ${{FILE}}` ${{OUTPUT_DIR}}; "
+         "     ln -sf `realpath -s ${{FILE}}` ${{OUTPUT_DIR}}; "
          "     INPUT_FILES=\"${{INPUT_FILES}} \"`basename ${{FILE}}`; "
          "     done; "
          " cd ${{OUTPUT_DIR}}; "
          " close_scaffold_gaps.sh -t {threads} -q <(zcat ${{INPUT_FILES}}) {params.datatype} -r `basename ${{INPUT_FASTA}}` "
          "                       {params.matching_len} -v > {log.samba} 2>&1; "
+         " ln -sf ${{OUTPUT_PREFIX}}.split.joined.fa `basename {output.fasta}`"
 
 rule reorder_samba_output:
     priority: 500

@@ -89,7 +89,7 @@ threeddna	30	10	20	30	30	40	40	40	40
 create_fastq_links_for_juicer	1	1	1	1	1	1	1	1	1
 draw_coverage_heatmap	1	1	1	1	1	1	1	1	1
 create_links_for_input_assembly	1	1	1	1	1	1	1	1	1
-samba	20	20	20	20	30	40	40	40	40
+samba	20	20	20	20	20	25	25	30	30
 select_scaffolds	1	1	1	1	1	1	1	1	1
 generate_prescaffolding_agp	1	1	1	1	1	1	1	1	1
 trf	30	30	30	30	30	30	30	30	30

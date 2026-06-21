@@ -55,7 +55,7 @@ rule samba:
     threads:
         parameters["threads"]["samba"]
     shell:
-         " OUTPUT_DIR=`dirname {output.fasta}`/{wildcards.genome_prefix}.gap_closing.{wildcards.haplotype}; "
+         " OUTPUT_DIR=`dirname {output.fasta}`/; "
          " mkdir -p ${{OUTPUT_DIR}}; "
          " INPUT_FASTA=`realpath -s {input.fasta}`; "
          " INPUT_FASTA_BASENAME=`basename {input.fasta}`; "

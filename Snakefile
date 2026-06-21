@@ -1999,6 +1999,7 @@ wildcard_constraints:
     purge_dups_parameters="[^/]+",
     dedup_parameters="[^/]+",
     hic_scaffolding_parameters="[^/]+",
+    gap_closing_parameters="[^/]+",
     busco5_lineage="[^/]+odb10|[^/]+odb12",
     busco6_lineage="[^/]+odb12\.[^/]*",
     window="[0-9]+",

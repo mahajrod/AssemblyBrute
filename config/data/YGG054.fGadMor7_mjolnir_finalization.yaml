@@ -227,6 +227,7 @@
 "skip_hic_file": True
 "skip_krater": True
 "skip_ragtag": True
+"skip_purge_dups_qc": True
 
 "skip_mtdna": True
 "skip_mitohifi_reads": True

@@ -92,4 +92,4 @@ rule reorder_samba_output:
          " INPUT_PREFIX=${{INPUT_PREFIX%.fa}}; "
          " grep -P '^>' {input.fasta} | sed 's/>//;s/[ \t].*//' | sort -V > ${{INPUT_PREFIX}}.sorted.ids;  "  
          " ./workflow/scripts/sequence/reorder_sequences.py -i  {input.fasta} -r ${{INPUT_PREFIX}}.sorted.ids "
-         "                                                  -o {output.fasta}  > {log.reorder} 2>&1; "
+         "                                                  -o {output.fasta} --by orderlist  > {log.reorder} 2>&1; "

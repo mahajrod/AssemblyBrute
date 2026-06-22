@@ -133,7 +133,7 @@
 
 "ploidy": 2
 "bwa_tool": "bwa-mem2" # Allowed: bwa, bwa-mem2
-"genome_prefix": "fGadMor7" #"YGG048.GadMorReseq"
+"genome_prefix": "fGadMor7.1" #"YGG048.GadMorReseq"
 "busco_lineage_list":
     - "actinopterygii_odb10"
     - "actinopterygii_odb12"

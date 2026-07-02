@@ -13,7 +13,7 @@ rule tadbit:
                                                                                               input_reverse_suffix_dict[wildcards.datatype],
                                                                                               config["fastq_extension"])),
     output:
-        stats=output_dict["qc"] / "tadbit/{datatype, hic}/raw/{pairprefix, [^/]+}.data.stats" ,
+        stats=output_dict["qc"] / "tadbit/{datatype, hic}/raw/{pairprefix}.data.stats" ,
         #stats=merged_raw_fastqc_dir_path / "{library_id}/{library_id}.raw.fast{}qc.stats"
     params:
         enzyme_list=",".join(config["hic_enzyme_dict"][config["hic_enzyme_set"]] if config["custom_enzyme_set"] is None else config["custom_enzyme_set"]),
@@ -30,7 +30,7 @@ rule tadbit:
     conda:
         config["conda"]["tadbit"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["tadbit"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("tadbit"),
         cpus=parameters["threads"]["tadbit"],
         time=parameters["time"]["tadbit"],
@@ -51,7 +51,7 @@ rule merge_tadbit_stats:
         stats=lambda wildcards: expand(output_dict["qc"] / ("tadbit/%s/raw/{pairprefix}.data.stats" % wildcards.datatype),
                                        pairprefix=input_pairprefix_dict[wildcards.datatype])
     output:
-        stats=output_dict["qc"] / "tadbit/{datatype, hic}/raw/{genome_prefix, [^/]+}.tadbit.stats" ,
+        stats=output_dict["qc"] / "tadbit/{datatype, hic}/raw/{genome_prefix}.tadbit.stats" ,
         #stats=merged_raw_fastqc_dir_path / "{library_id}/{library_id}.raw.fast{}qc.stats"
     #params:
     #    header_file=expand(output_dict["qc"] / "tadbit/{datatype}/raw/{pairprefix}.stats", pairprefix=input_pairprefix_dict["hic"])[0]
@@ -66,7 +66,7 @@ rule merge_tadbit_stats:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("merge_tadbit_stats"),
         cpus=parameters["threads"]["merge_tadbit_stats"],
         time=parameters["time"]["merge_tadbit_stats"],

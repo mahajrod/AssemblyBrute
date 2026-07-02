@@ -5,7 +5,7 @@ rule quast:
         assembly=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
     output:
         #summary=output_dict["assembly_qc"] /("{assembly_stage}/{assembler}/{assembly_stage}.{assembler}.hifi.hic.{haplotype}_ctg.gfa" % config["genome_name"]),
-        dir=directory(out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/quast/{genome_prefix, [^/]+}.{assembly_stage}.{haplotype, [^/]+}"),
+        dir=directory(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/quast/{genome_prefix}.{assembly_stage}.{haplotype, [^/]+}"),
 
     params:
         large_genome_flag="--large" if parameters["tool_options"]["quast"]["large_genome"] else "",
@@ -18,7 +18,7 @@ rule quast:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("quast"),
         cpus=parameters["threads"]["quast"],
         time=parameters["time"]["quast"],

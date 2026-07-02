@@ -20,9 +20,9 @@ rule gc_count:
     benchmark:
         output_dict["benchmark"] / "gc_plot.{datatype}.{stage}.{kmer_length}.L{min_coverage}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("gc_count"),
         cpus=parameters["threads"]["gc_count"],
         time=parameters["time"]["gc_count"],
@@ -30,7 +30,7 @@ rule gc_count:
     threads:
         parameters["threads"]["gc_count"]
     shell: # output: coverage\tgc\tcount\n
-         " meryl threads={threads} memory={resources.mem}m greater-than {wildcards.min_coverage} "
+         " workflow/external_tools/meryl-1.4/bin/meryl threads={threads} memory={resources.mem}m greater-than {wildcards.min_coverage} "
          " print {input.db} 2>{log.meryl} | count_kmer_gc.py 2>{log.gc_count} | "
          " sort -S30000M -T {params.tmp_dir} -k2,2n -k1,1n 2>{log.sort} | "
          " uniq -c 2>{log.uniq} |  sed 's/^\s\+//;s/ /\\t/' 2>{log.sed} | "
@@ -43,7 +43,7 @@ rule gc_plot:
                                                                                                                           config["genome_prefix"],
                                                                                                                           config["final_kmer_length"],
                                                                                                                           config["final_kmer_counter"])),
-        pip="results/config/pip.common.requirements" # added to ensure that distinctipy package was installed
+        #pip="results/config/pip.common.requirements" # Obsolete - pip packages are now listed in env filesadded to ensure that distinctipy package was installed.
     output:
         heatmap_png=output_dict["kmer"] / "{datatype}/{stage}/gcp/{datatype}.{stage}.{kmer_length}.L{min_coverage}.heatmap.png",
     params:
@@ -58,7 +58,7 @@ rule gc_plot:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("gc_plot"),
         cpus=parameters["threads"]["gc_plot"],
         time=parameters["time"]["gc_plot"],

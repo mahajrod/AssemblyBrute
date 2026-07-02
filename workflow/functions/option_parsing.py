@@ -71,6 +71,7 @@ def group_option_sets(option_set_dict, grouping_option_list):
 
 
 def parse_node_list(rulename, grid_system="slurm"):
+    #print(rulename)
     black_list = set(config["nodes"]["blacklist"])
     white_list = set(config["nodes"]["whitelist"])
     if rulename in config["rule_nodes"]:
@@ -81,9 +82,33 @@ def parse_node_list(rulename, grid_system="slurm"):
     if grid_system == "slurm":
         whitelist_option = " --nodelist={0} ".format(",".join(white_list)) if white_list else " "
         blacklist_option = " --exclude={0} ".format(",".join(black_list)) if black_list else " "
-
+        #print(whitelist_option + blacklist_option)
         return whitelist_option + blacklist_option
     else:
         print("White and black node lists are implemented only for slurm. "
               "Modify 'parse_node_list' function in 'workflow/functions/option_parsing_py' "
               "if you need such functionality for other grid systems")
+
+
+def parse_coretool_config_converters(coretool_config_dict):
+    parsed_converter_dict = {}
+    for datatype in coretool_config_dict:
+        if coretool_config_dict[datatype] == "int":
+            parsed_converter_dict[datatype] = int
+        elif coretool_config_dict[datatype] == "float":
+            parsed_converter_dict[datatype] = float
+        elif coretool_config_dict[datatype] == "str":
+            parsed_converter_dict[datatype] = str
+        #elif coretool_config_dict[datatype] == "bool":
+        #    parsed_converter_dict[datatype] = bool
+        elif coretool_config_dict[datatype] == "list":
+            parsed_converter_dict[datatype] = lambda s: s.split(",")
+    return parsed_converter_dict
+
+def parse_coretool_config_datatypes(coretool_config_dict):
+    parsed_datatype_dict = {}
+    for datatype in coretool_config_dict:
+        if coretool_config_dict[datatype] in ["Int32", "Float32", "boolean"]:
+            parsed_datatype_dict[datatype] = coretool_config_dict[datatype]
+
+    return parsed_datatype_dict

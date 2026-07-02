@@ -26,30 +26,27 @@ def get_start_shift(wildcards):
 
 rule genomescope:
     input:
-        histo=output_dict["kmer"] / "{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.histo"
+        histo="{db_dir}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.histo",
+        log="{db_dir}/log/"
     output:
-        summary=output_dict["kmer"] / "{datatype}/{stage}/genomescope/{datatype}.{stage}.{kmer_length}.{kmer_tool}/{genome_prefix}_summary.txt",
-        model=output_dict["kmer"] / "{datatype}/{stage}/genomescope/{datatype}.{stage}.{kmer_length}.{kmer_tool}/{genome_prefix}_model.txt",
+        summary="{db_dir}/genomescope/{datatype}.{stage}.{kmer_length}.{kmer_tool}/%s_summary.txt" % config["genome_prefix"],
+        model="{db_dir}/genomescope/{datatype}.{stage}.{kmer_length}.{kmer_tool}/%s_model.txt" % config["genome_prefix"],
     params:
         ploidy=config["ploidy"],
-        genome_name=lambda wildcards: wildcards.genome_prefix,
+        genome_name=config["genome_prefix"],
         #max_coverage=lambda wildcards: parameters["tool_options"][wildcards.kmer_tool][wildcards.datatype]["max_coverage"],
-        out_dir=lambda wildcards: output_dict["kmer"] / "{0}/{1}/genomescope/{0}.{1}.{2}.{3}".format(wildcards.datatype,
-                                                                                                     wildcards.stage,
-                                                                                                     wildcards.kmer_length,
-                                                                                                     wildcards.kmer_tool),
         start_shift=get_start_shift,
         starting_lambda=get_starting_lambda
     log:
-        std=output_dict["log"] / "genomescope.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.log",
-        cluster_log=output_dict["cluster_log"] / "genomescope.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "genomescope.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.cluster.err"
+        std="{db_dir}/log/genomescope.{datatype}.{stage}.{kmer_length}.{kmer_tool}.log",
+        cluster_log="{db_dir}/log/genomescope.{datatype}.{stage}.{kmer_length}.{kmer_tool}.cluster.log",
+        cluster_err="{db_dir}/log/genomescope.{datatype}.{stage}.{kmer_length}.{kmer_tool}.cluster.err"
     benchmark:
-        output_dict["benchmark"] / "genomescope.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.benchmark.txt"
+        "{db_dir}/log/genomescope.{datatype}.{stage}.{kmer_length}.{kmer_tool}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("genomescope"),
         cpus=parameters["threads"]["genomescope"],
         time=parameters["time"]["genomescope"],
@@ -57,28 +54,43 @@ rule genomescope:
     threads:
         parameters["threads"]["genomescope"]
     shell:
-         " genomescope.R {params.start_shift} {params.starting_lambda} -i {input.histo} -p {params.ploidy} -k {wildcards.kmer_length}  "
-         " -n {params.genome_name} --fitted_hist  --testing  -o {params.out_dir} > {log.std} 2>&1" # -m {params.max_coverage}
+         " OUT_DIR=`dirname {output.summary}`; "
+         " genomescope2 {params.start_shift} {params.starting_lambda} -i {input.histo} -p {params.ploidy} -k {wildcards.kmer_length}  "
+         " -n {params.genome_name} --fitted_hist  --testing  -o ${{OUT_DIR}} > {log.std} 2>&1" # -m {params.max_coverage}
+
+
+use rule genomescope as genomescope_per_lib with:
+    input:
+        histo="{db_dir}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.{read_prefix}.histo",
+        log="{db_dir}/log/"
+    output:
+        summary="{db_dir}/genomescope/{datatype}.{stage}.{kmer_length}.{kmer_tool}.{read_prefix}/%s_summary.txt" % config["genome_prefix"],
+        model="{db_dir}/genomescope/{datatype}.{stage}.{kmer_length}.{kmer_tool}.{read_prefix}/%s_model.txt" % config["genome_prefix"],
+    log:
+        std="{db_dir}/log/genomescope.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{read_prefix}.log",
+        cluster_log="{db_dir}/log/genomescope.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{read_prefix}.cluster.log",
+        cluster_err="{db_dir}/log/genomescope.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{read_prefix}.cluster.err"
+    benchmark:
+        "{db_dir}/log/genomescope.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{read_prefix}.benchmark.txt"
 
 
 rule parse_genomescope_output:
     input:
         summary=rules.genomescope.output.summary,
-        model=rules.genomescope.output.model
-        #summary=output_dict["kmer"] / ("{datatype}/{stage}/genomescope/{datatype}.{stage}.{kmer_length}.{kmer_tool}/%s_summary.txt" % config["genome_name"]),
-        #model=output_dict["kmer"] / ("{datatype}/{stage}/genomescope/{datatype}.{stage}.{kmer_length}.{kmer_tool}/%s_model.txt" % config["genome_name"])
+        model=rules.genomescope.output.model,
+        log="{db_dir}/log/"
     output:
-        output_dict["kmer"] / "{datatype}/{stage}/genomescope/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.genomescope.parameters"
+        "{db_dir}/genomescope/%s.{datatype}.{stage}.{kmer_length}.{kmer_tool}.genomescope.parameters"  % config["genome_prefix"]
     log:
-        std=output_dict["log"] / "parse_genomescope_output.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.log",
-        cluster_log=output_dict["cluster_log"] / "parse_genomescope_output.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "parse_genomescope_output.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.cluster.err"
+        std="{db_dir}/log/parse_genomescope_output.{datatype}.{stage}.{kmer_length}.{kmer_tool}.log",
+        cluster_log="{db_dir}/log/parse_genomescope_output.{datatype}.{stage}.{kmer_length}.{kmer_tool}.cluster.log",
+        cluster_err="{db_dir}/log/parse_genomescope_output.{datatype}.{stage}.{kmer_length}.{kmer_tool}.cluster.err"
     benchmark:
-        output_dict["benchmark"] / "parse_genomescope_output.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.benchmark.txt"
+        "{db_dir}/log/parse_genomescope_output.{datatype}.{stage}.{kmer_length}.{kmer_tool}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("parse_genomescope_output"),
         cpus=parameters["threads"]["parse_genomescope_output"],
         time=parameters["time"]["parse_genomescope_output"],

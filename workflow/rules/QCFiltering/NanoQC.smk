@@ -3,7 +3,7 @@ rule nanoqc:
     input:
         fastq=output_dict["data"] / ("fastq/{datatype}/{stage}/{fileprefix}%s" % config["fastq_extension"])
     output:
-        dir=directory(output_dict["qc"] / "nanoqc/{datatype, [^/]+}/{stage, [^/]+}/{fileprefix, [^/]+}")
+        dir=directory(output_dict["qc"] / "nanoqc/{datatype}/{stage}/{fileprefix}")
     log:
         std=output_dict["log"]/ "nanoqc.{datatype}.{stage}.{fileprefix}.log",
         #stats=log_dir_path / "{library_id}/fastqc_merged_raw.stats.log",
@@ -14,7 +14,7 @@ rule nanoqc:
     conda:
         config["conda"]["nanopore"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["nanopore"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("nanoqc"),
         cpus=parameters["threads"]["nanoqc"],
         time=parameters["time"]["nanoqc"],

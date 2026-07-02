@@ -4,8 +4,9 @@ rule nanoplot:
     input:
         fastq=output_dict["data"] / ("fastq/{datatype}/{stage}/{fileprefix}%s" % config["fastq_extension"])
     output:
-        yield_png=output_dict["qc"] / "nanoplot/{datatype, [^/]+}/{stage, [^/]+}/{fileprefix, [^/]+}.Yield_By_Length.png",
-        stats=output_dict["qc"] / "nanoplot/{datatype, [^/]+}/{stage, [^/]+}/{fileprefix, [^/]+}.NanoStats.txt"
+        yield_png=output_dict["qc"] / "nanoplot/{datatype}/{stage}/{fileprefix}.Yield_By_Length.png",
+        stats=output_dict["qc"] / "nanoplot/{datatype}/{stage}/{fileprefix}.NanoStats.txt",
+        pickle=output_dict["qc"] / "nanoplot/{datatype}/{stage}/{fileprefix}.NanoPlot-data.pickle"
     log:
         std=output_dict["log"]/ "nanoplot.{datatype}.{stage}.{fileprefix}.log",
         #stats=log_dir_path / "{library_id}/fastqc_merged_raw.stats.log",
@@ -16,7 +17,7 @@ rule nanoplot:
     conda:
         config["conda"]["nanopore"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["nanopore"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("nanoplot"),
         cpus=parameters["threads"]["nanoplot"],
         time=parameters["time"]["nanoplot"],
@@ -32,7 +33,7 @@ rule gather_nanoplot_stats_per_stage:
         stats=lambda wildcards: expand(rules.nanoplot.output.stats,
                                        fileprefix=input_file_prefix_dict[wildcards.datatype], allow_missing=True)
     output:
-        stage_stats=output_dict["qc"] / "nanoplot/{datatype, [^/]+}/{stage, [^/]+}/{datatype}.{stage}.NanoStats.tsv",
+        stage_stats=output_dict["qc"] / "nanoplot/{datatype}/{stage}/{datatype}.{stage}.NanoStats.tsv",
     params:
         labels=lambda wildcards: ",".join(input_file_prefix_dict[wildcards.datatype])
     log:
@@ -45,7 +46,7 @@ rule gather_nanoplot_stats_per_stage:
     conda:
         config["conda"]["nanopore"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["nanopore"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("nanoplot"),
         cpus=parameters["threads"]["nanoplot"],
         time=parameters["time"]["nanoplot"],
@@ -64,7 +65,7 @@ rule gather_datatype_nanoplot_stats:
                                        stage_list=
                                       )
     output:
-        stage_stats=output_dict["qc"] / "nanoplot/{datatype, [^/]+}/{stage, [^/]+}/NanoStats.tsv",
+        stage_stats=output_dict["qc"] / "nanoplot/{datatype}/{stage}/NanoStats.tsv",
     params:
         labels=lambda wildcards: ",".join(input_file_prefix_dict[wildcards.datatype])
     log:
@@ -77,7 +78,7 @@ rule gather_datatype_nanoplot_stats:
     conda:
         config["conda"]["nanopore"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["nanopore"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("nanoplot"),
         cpus=parameters["threads"]["nanoplot"],
         time=parameters["time"]["nanoplot"],

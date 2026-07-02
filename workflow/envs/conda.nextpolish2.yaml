@@ -1,0 +1,10 @@
+#---- Bioconda config for salsa2 ----
+
+"name": "nextpolish2"
+"channels":
+  - "bioconda"
+  - "conda-forge"
+  - "anaconda"
+"dependencies":
+  - "winnowmap"
+  - "nextpolish2"

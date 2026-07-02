@@ -1,0 +1,29 @@
+"queue":
+    "cpu":
+        "name":       "cpuqueue"
+        "max_threads":  48
+        "max_mem":    2048000
+    "gpu":
+        "name": "gpuqueue" # set to null if your cluster doesn't have gpuqueue. Gpuqueue is used only for deepvariant yet
+        "max_threads":  48
+        "max_mem":    2048000
+"tool_queue":
+    "deepvariant": "gpu"  # Allowed: "gpu", "cpu". GPU queue will be used if it is set here AND if "queue": "gpu" is set , and if GPU imae of deepvariant is available
+"nodes":
+    "blacklist": []
+    "whitelist": []
+"rule_nodes":
+    "deepvariant":
+        "blacklist":
+            - "mjolnircomp05fl"
+            - "mjolnircomp06fl"
+        "whitelist": []
+    "hifiasm_correct":
+        "blacklist": []
+        "whitelist": []
+    "hifiasm_hic":
+        "blacklist": []
+        "whitelist": []
+    "hifiasm_hifi":
+        "blacklist": []
+        "whitelist": []

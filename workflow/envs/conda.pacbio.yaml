@@ -7,3 +7,5 @@
   - "anaconda"
 "dependencies":
   - "pbccs"
+  - "pbbam"
+  - "actc"

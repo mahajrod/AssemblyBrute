@@ -4,7 +4,7 @@ rule fastqc:
         #fastq_dir=rules.create_fastq_links.output,
         fastq=output_dict["data"] / ("fastq/{datatype}/{stage}/{fileprefix}%s" % config["fastq_extension"])
     output:
-        zip=output_dict["qc"] / "fastqc/{datatype, [^/]+}/{stage, [^/]+}/{fileprefix, [^/]+}_fastqc.zip" ,
+        zip=output_dict["qc"] / "fastqc/{datatype}/{stage}/{fileprefix}_fastqc.zip" ,
         #stats=merged_raw_fastqc_dir_path / "{library_id}/{library_id}.raw.fastqc.stats"
     params:
         kmer=lambda wildcards: parse_option("kmer_length", parameters["tool_options"]["fastqc"][wildcards.datatype], " -k "),
@@ -22,7 +22,7 @@ rule fastqc:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("fastqc"),
         cpus=parameters["threads"]["fastqc"],
         time=parameters["time"]["fastqc"],

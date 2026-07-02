@@ -1,0 +1,2 @@
+primer_pair	gene	taxa	method	Z_presence	W_presence	Z_mean	Z_min	Z_max	W_mean	W_min	W_max	publication	DOI
+CHD1_1	CHD1	birds	length	Y	Y	650	550	1500	450	350	550	Fridolfsson et al,1999	doi.org/10.2307/3677252

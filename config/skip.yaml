@@ -8,14 +8,53 @@
 "skip_phasing": False
 "skip_prescaf_pretext": True
 "skip_postscaf_pretext": True
+
 "skip_both_pretext": False
+"skip_pretext_10k_1k_tracks": False
+"skip_pretext_1000k_100k_tracks": True
+"skip_pretext_coverage_tracks": False
 "skip_nanoqc": False
 "skip_nanoplot": False
 "skip_wga": False
 "skip_higlass": True
 "skip_variantcalling": True
 "skip_hic_file": False
+"skip_all_pretext": False
 "skip_krater": True
 "skip_kmer": False
 "skip_ragtag": False
-"skip_gathering": False
+"skip_gathering": True
+"skip_trf": False
+"skip_combined_hic": False
+"skip_combined_contig_hic": False
+
+"skip_draft_qc_pretext": False
+"skip_draft_qc_hic_file": False
+"skip_draft_qc_ragtag": False
+"skip_draft_qc_wga": False
+
+"skip_gap_closing_pretext": False
+"skip_gap_closing_hic_file": False
+"skip_gap_closing_ragtag": False
+"skip_gap_closing_wga": False
+
+"skip_purge_dups_qc": False
+
+"skip_mtdna": False
+"skip_mitohifi_reads": False
+"skip_mitohifi_reads_per_file": False
+"skip_mitohifi_reads_combined": False
+"skip_mitohifi_assembly": False
+
+"skip_mitoz": False
+"skip_mitoz_hic": False
+"skip_mitoz_illumina": False
+
+"skip_per_lib_genome_estimation": False
+
+# Set "skip_porechop_abi" to true if you are sure that adapters and other service sequences
+# are already trimmed in the input data.
+# Porechop still will be run, but for qc purposes.
+# The downstream analysis (starting from chopper for quality filtration) will use raw reads.
+
+"skip_porechop_abi": False

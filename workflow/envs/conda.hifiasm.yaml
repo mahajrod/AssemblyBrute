@@ -1,0 +1,11 @@
+#---- Bioconda config ----
+
+"name": "hifiasm"
+"channels":
+  - "mahajrod"
+  - "bioconda"
+  - "conda-forge"
+  - "anaconda"
+"dependencies":
+  - "hifiasm>=0.24"
+  - "gfatools"

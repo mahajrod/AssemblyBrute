@@ -1,0 +1,59 @@
+
+"singularity_load_mode": "cluster" # Allowed 'cluster' (loads singularity as a module) and 'conda' (uses conda-based singularity installation, be sure that your system has multiple user namespaces enabled)
+"singularity_load_str": "module load singularity " # add version if necessary. Ignored if singularity_load_mode != "cluster"
+"singularity_load_env": "common" # conda env to use if singularity_load_mode == "cluster"
+
+"tool_containers":
+    "rapid_telomere":  "/maps/projects/tomg/people/xsg178/soft/rapid-curation/rapid_hic_software/runTelo.sif"
+    "deepvariant":
+        "cpu":         "/maps/projects/tomg/people/xsg178/soft/deepvariant/deepvariant_1.5.0.sif"
+        "gpu":          null #"gpu": "/projects/mjolnir1/people/xsg178/soft/deepvariant/deepvariant_1.5.0-gpu.sif"
+    "mitohifi":        "docker://ghcr.io/marcelauliano/mitohifi:master"
+    "fcs_gx":          "/maps/projects/tomg/people/xsg178/soft/FCS-GX/fcs-gx.sif"
+    "fcs_adaptor":     "/maps/projects/tomg/people/xsg178/soft/fcsadaptor/fcs-adaptor.sif"
+
+"allowed_databases":
+    "kraken2":
+        "silva":
+            "path":         "" # add path to silva database
+            "memory_mb":    10000
+            "threads":      15
+            "time":         "06:00:00"
+            "in_memory":    True
+        "rdp":
+            "path":         "" # add path to rdp database
+            "memory_mb":    10000
+            "threads":      15
+            "time":         "06:00:00"
+            "in_memory":    True
+        "greengenes":
+            "path":         "" # add path to greengenes database
+            "memory_mb":    10000
+            "threads":      15
+            "time":         "06:00:00"
+            "in_memory":    True
+        "nt":
+            "path":         "/datasets/globe_databases/kraken2/kraken2_nt/20240530/" # add path to nt database
+            "memory_mb":    1024000
+            "threads":      30
+            "time":         "48:00:00"
+            "in_memory":    True
+    "fcs":
+        "fcs_gx":
+            "path":         "/datasets/globe_databases/fcs-gx/20240912/gxdb/" # add path to fcs_gx database
+            "memory_mb":    640000 # Entire database must be in memory, it requires at least 490 Gbp
+            "threads":      30
+            "time":         "24:00:00"
+            "in_memory":    True
+    "fcs_adaptor":
+        "adaptor":
+            "path":         null # database is embedded in singularity image
+            "memory_mb":    20000 #
+            "threads":      1
+            "time":         "01:00:00"
+            "in_memory":    True
+            "taxonomy":     "eukaryota"
+
+"final_fcs_db": "fcs_gx" # this database will be used for the filtration of the contigs if skip_fcs is False
+
+'alternative_tmp_dir': None

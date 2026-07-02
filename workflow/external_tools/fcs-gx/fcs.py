@@ -170,7 +170,7 @@ class RunFCS:
 
         sync_files_args = [
             GlobalStat.container_engine,
-            "run" if GlobalStat.container_engine == "docker" else "exec",
+            "run" if GlobalStat.container_engine == "docker" else "exec --pid --contain ",
             *extra_docker_arg,
         ]
 

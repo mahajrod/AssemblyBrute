@@ -5,29 +5,31 @@ rule bwa_map: #
         index=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta.ann",
         reference=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta",
 
-        forward_fastq=lambda wildcards: output_dict["data"] / "fastq/hic/raw/{0}{1}{2}".format(wildcards.pairprefix,
-                                                                                               input_forward_suffix_dict["hic"] if wildcards.phasing_kmer_length == "NA" else "_1",
+        forward_fastq=lambda wildcards: output_dict["data"] / "fastq/hic/{0}/{1}{2}{3}".format("filtered" if "hic" in config["filtered_data"] else "raw",
+                                                                                               wildcards.pairprefix,
+                                                                                               "_1" if "hic" in config["filtered_data"] else input_forward_suffix_dict["hic"],
                                                                                                config["fastq_extension"]) if wildcards.phasing_kmer_length == "NA" else \
                                 out_dir_path / "{0}/{1}/fastq/{2}/{3}/hic/{4}{5}{6}".format(config["phasing_stage"], #wildcards.assembly_stage,
                                                                                             detect_phasing_parameters(wildcards.parameters, config["phasing_stage"], stage_separator=".."), #wildcards.parameters,
                                                                                             wildcards.haplotype,
                                                                                             wildcards.phasing_kmer_length,
                                                                                             wildcards.pairprefix,
-                                                                                            input_forward_suffix_dict["hic"] if wildcards.phasing_kmer_length == "NA" else "_1",
+                                                                                            "_1",
                                                                                             config["fastq_extension"]),
-        reverse_fastq=lambda wildcards: output_dict["data"] / "fastq/hic/raw/{0}{1}{2}".format(wildcards.pairprefix,
-                                                                                               input_reverse_suffix_dict["hic"] if wildcards.phasing_kmer_length == "NA" else "_2",
+        reverse_fastq=lambda wildcards: output_dict["data"] / "fastq/hic/{0}/{1}{2}{3}".format("filtered" if "hic" in config["filtered_data"] else "raw",
+                                                                                               wildcards.pairprefix,
+                                                                                               "_2" if "hic" in config["filtered_data"] else input_reverse_suffix_dict["hic"],
                                                                                                config["fastq_extension"]) if wildcards.phasing_kmer_length == "NA" else \
                                 out_dir_path / "{0}/{1}/fastq/{2}/{3}/hic/{4}{5}{6}".format(config["phasing_stage"], #wildcards.assembly_stage,
                                                                                             detect_phasing_parameters(wildcards.parameters, config["phasing_stage"], stage_separator=".."), #wildcards.parameters,
                                                                                             wildcards.haplotype,
                                                                                             wildcards.phasing_kmer_length,
                                                                                             wildcards.pairprefix,
-                                                                                            input_reverse_suffix_dict["hic"] if wildcards.phasing_kmer_length == "NA" else "_2",
+                                                                                            "_2",
                                                                                             config["fastq_extension"]),
     output:
         #bam=out_dir_path  / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{fileprefix}.bwa.bam"
-        bam=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.bam")
+        bam=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.bam")
     params:
         id="{0}_hic".format(config["genome_prefix"]),
         bwa_tool=config["bwa_tool"]
@@ -42,9 +44,9 @@ rule bwa_map: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("bwa_map"),
-        cpus=parameters["threads"]["bwa_map"] ,
+        cpus=get_threads(parameters["threads"]["bwa_map"], "cpu"),
         time=parameters["time"]["bwa_map"],
         mem=parameters["memory_mb"]["bwa_map"]
     threads: parameters["threads"]["bwa_map"]
@@ -57,7 +59,7 @@ rule pairtools_parse:
         bam=rules.bwa_map.output.bam,
         len_file=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.len"
     output:
-        pairsam_gz=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.pairsam.gz")
+        pairsam_gz=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.pairsam.gz")
     params:
         min_mapping_quality=lambda wildcards: parse_option("min_mapping_quality", parameters["tool_options"]["pairtools_parse"], " --min-mapq "),
         max_interalign_gap=lambda wildcards: parse_option("max_interalign_gap", parameters["tool_options"]["pairtools_parse"], " --max-inter-align-gap ")
@@ -70,7 +72,7 @@ rule pairtools_parse:
     conda:
         config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pairtools_parse"),
         cpus=parameters["threads"]["pairtools_parse"] ,
         time=parameters["time"]["pairtools_parse"],
@@ -85,7 +87,7 @@ rule pairtools_sort:
     input:
         pairsam_gz=rules.pairtools_parse.output.pairsam_gz
     output:
-        sorted_pairsam_gz=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.sorted.pairsam.gz")
+        sorted_pairsam_gz=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.{pairprefix}.bwa.sorted.pairsam.gz")
     log:
         std=output_dict["log"] / "pairtools_sort.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.log",
         cluster_log=output_dict["cluster_log"] / "pairtools_sort.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.cluster.log",
@@ -95,7 +97,7 @@ rule pairtools_sort:
     conda:
         config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pairtools_sort"),
         cpus=parameters["threads"]["pairtools_sort"] ,
         time=parameters["time"]["pairtools_sort"],
@@ -113,7 +115,7 @@ rule pairtools_merge:
                            pairprefix=input_pairprefix_dict["hic"],
                            allow_missing=True)
     output:
-        merged_pairsam_gz=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.merged.pairsam.gz")
+        merged_pairsam_gz=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.merged.pairsam.gz")
     params:
         memory=int(0.5 * parameters["memory_mb"]["pairtools_merge"])
     log:
@@ -125,7 +127,7 @@ rule pairtools_merge:
     conda:
         config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pairtools_merge"),
         cpus=parameters["threads"]["pairtools_merge"] ,
         time=parameters["time"]["pairtools_merge"],
@@ -141,9 +143,9 @@ rule pairtools_dedup:
     input:
         merged_pairsam_gz=rules.pairtools_merge.output.merged_pairsam_gz
     output:
-        dedup_pairsam_gz=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.rmdup.pairsam.gz"),
-        dedup_pairsam_stats=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.rmdup.pairsam.stats",
-        dedup_pairsam_summary=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.rmdup.pairsam.summary"
+        dedup_pairsam_gz=temp(out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.rmdup.pairsam.gz"),
+        dedup_pairsam_stats=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.rmdup.pairsam.stats",
+        dedup_pairsam_summary=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.bwa.rmdup.pairsam.summary"
     log:
         std=output_dict["log"] / "pairtools_dedup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.log",
         summary=output_dict["log"] / "pairtools_dedup.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.summary.log",
@@ -154,7 +156,7 @@ rule pairtools_dedup:
     conda:
         config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pairtools_dedup"),
         cpus=parameters["threads"]["pairtools_dedup"] ,
         time=parameters["time"]["pairtools_dedup"],
@@ -169,8 +171,8 @@ rule pairtools_split:
     input:
         dedup_pairsam_gz=rules.pairtools_dedup.output.dedup_pairsam_gz
     output:
-        sorted_dedup_bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
-        pairs=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pairs.gz"
+        sorted_dedup_bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
+        pairs=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pairs.gz"
     params:
         sort_threads=parameters["threads"]["samtools_sort"],
         sort_per_thread=parameters["memory_mb"]["samtools_sort"],
@@ -187,7 +189,7 @@ rule pairtools_split:
     conda:
         config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pairtools_split"),
         cpus=parameters["threads"]["pairtools_split"] + parameters["threads"]["samtools_sort"],
         time=parameters["time"]["pairtools_split"],
@@ -208,8 +210,8 @@ rule pairtools_index_pairs:
     input:
         pairs=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pairs.gz"
     output:
-        index=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pairs.gz.px2"
-        #sorted_dedup_bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype, [^.]+}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
+        index=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.pairs.gz.px2"
+        #sorted_dedup_bam=out_dir_path / "{assembly_stage}/{parameters}/{haplotype}/alignment/{phasing_kmer_length}/{genome_prefix}.{assembly_stage}.{phasing_kmer_length}.{haplotype}.rmdup.bam",
     log:
         std=output_dict["log"] / "pairtools_index_pairs.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.std.log",
         cluster_log=output_dict["cluster_log"] / "pairtools_index_pairs.{assembly_stage}.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.cluster.log",
@@ -219,7 +221,7 @@ rule pairtools_index_pairs:
     conda:
         config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pairtools_index_pairs"),
         cpus=parameters["threads"]["pairtools_index"],
         time=parameters["time"]["pairtools_index"],

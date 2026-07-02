@@ -1,4 +1,4 @@
-localrules: create_fastq_links_for_juicer
+localrules: create_fastq_links_for_juicer, threeddna_create_links
 ruleorder: create_fastq_links_for_juicer > create_fastq_links
 #stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["option_set"]
 
@@ -12,9 +12,15 @@ def get_hic_reads_for_juicer(wildcards):
     output_forward_suffix = "_R1_001"
     output_reverse_suffix = "_R2_001"
     if stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["option_set"]["phasing_kmer_length"] == "NA":
-        forward_suffix = input_forward_suffix_dict["hic"]
-        reverse_suffix = input_reverse_suffix_dict["hic"]
-        directory = output_dict["data"] / "fastq/hic/raw/"
+
+        if "hic" in config["filtered_data"]:
+            forward_suffix = "_1"
+            reverse_suffix = "_2"
+            directory = output_dict["data"] / "fastq/hic/filtered/"
+        else:
+            forward_suffix = input_forward_suffix_dict["hic"]
+            reverse_suffix = input_reverse_suffix_dict["hic"]
+            directory = output_dict["data"] / "fastq/hic/raw/"
     else:
         forward_suffix = "_1"
         reverse_suffix = "_2"
@@ -30,7 +36,7 @@ def get_hic_reads_for_juicer(wildcards):
     output_reverse_filelist = []
 
     for pairprefix in input_pairprefix_dict["hic"]:
-        input_forward_filelist.append("{0}/{1}{2}{3}".format(directory, pairprefix, forward_suffix,config["fastq_extension"]))
+        input_forward_filelist.append("{0}/{1}{2}{3}".format(directory, pairprefix, forward_suffix, config["fastq_extension"]))
         input_reverse_filelist.append("{0}/{1}{2}{3}".format(directory, pairprefix, reverse_suffix,config["fastq_extension"]))
         output_forward_filelist.append("{0}/{1}{2}{3}".format(output_directory, pairprefix, output_forward_suffix,config["fastq_extension"]))
         output_reverse_filelist.append("{0}/{1}{2}{3}".format(output_directory, pairprefix, output_reverse_suffix,config["fastq_extension"]))
@@ -58,7 +64,7 @@ rule create_fastq_links_for_juicer:
         reverse_fastqs=lambda wildcards: get_hic_reads_for_juicer(wildcards)[1],
 
     output:
-        fastq_dir=directory(out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/fastq")
+        fastq_dir=directory(out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype}/scaffolding/fastq")
     log:
         ln=output_dict["log"]  / "create_fastq_links_for_juicer.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{haplotype}.ln.log",
         cluster_log=output_dict["cluster_log"] / "create_fastq_links_for_juicer.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{haplotype}.cluster.log",
@@ -68,7 +74,7 @@ rule create_fastq_links_for_juicer:
     #conda:
     #    config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_fastq_links_for_juicer"),
         cpus=parameters["threads"]["create_fastq_links_for_juicer"] ,
         time=parameters["time"]["create_fastq_links_for_juicer"],
@@ -105,10 +111,10 @@ rule juicer: #
         restriction_seq=config["hic_enzyme_set"]  if config["hic_enzyme_set"] not in config["no_motif_enzyme_sets"] else "none",
         fastq_extensions=config["fastq_extension"]
     output:
-        merged_no_dups=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.merged_nodups.txt",
-        merged_dedup_bam=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.merged_dedup.bam",
-        merged_inter_30=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.inter_30.txt",
-        merged_inter=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.inter.txt",
+        merged_no_dups=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.merged_nodups.txt",
+        merged_dedup_bam=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.merged_dedup.bam",
+        merged_inter_30=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.inter_30.txt",
+        merged_inter=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}.hic_scaffolding.{haplotype}.inter.txt",
     log:
         juicer=output_dict["log"]  / "juicer.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.juicer.log",
         mkdir=output_dict["log"]  / "juicer.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.mkdir.log",
@@ -120,7 +126,7 @@ rule juicer: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("juicer"),
         cpus=parameters["threads"]["juicer"] ,
         time=parameters["time"]["juicer"],
@@ -177,13 +183,13 @@ rule threeddna: #
         min_mapping_quality=lambda wildcards: parse_option("min_mapping_quality",
                                                            stage_dict["hic_scaffolding"]["parameters"][wildcards.prev_stage_parameters + "..threeddna_" + wildcards.hic_scaffolding_parameters]["option_set"], " --mapq "),
     output:
-        draft_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.input.{haplotype}.fasta",
-        rawchrom_hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.input.{haplotype}.rawchrom.hic",
-        alias_rawchrom_hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype}.hic",
-        rawchrom_assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.input.{haplotype}.rawchrom.assembly",
-        hic_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{haplotype, [^.]+}/scaffolding/{genome_prefix, [^/]+}.input.{haplotype}_HiC.fasta",
-        alias_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters, [^/]+}..threeddna_{hic_scaffolding_parameters, [^/]+}/{genome_prefix, [^/]+}.hic_scaffolding.{haplotype, [^.]+}.fasta",
-
+        draft_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, hap[^./]*}/scaffolding/{genome_prefix}.input.{haplotype}.fasta",
+        rawchrom_hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, hap[^./]*}/scaffolding/{genome_prefix}.input.{haplotype}.rawchrom.hic",
+        #alias_rawchrom_hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype, hap[^./]*}.hic",
+        rawchrom_assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, hap[^./]*}/scaffolding/{genome_prefix}.input.{haplotype}.rawchrom.assembly",
+        #alias_rawchrom_assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype, hap[^./]*}.assembly",
+        hic_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype, hap[^./]*}/scaffolding/{genome_prefix}.input.{haplotype}_HiC.fasta",
+        #alias_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype, hap[^./]*}.fasta",
     log:
         threeddna=output_dict["log"]  / "threeddna.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.threeddna.log",
         ln=output_dict["log"]  / "threeddna.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.ln.log",
@@ -194,7 +200,7 @@ rule threeddna: #
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("threeddna"),
         cpus=parameters["threads"]["threeddna"] ,
         time=parameters["time"]["threeddna"],
@@ -211,7 +217,42 @@ rule threeddna: #
         " ln -s ${{INPUT_FASTA}} {output.draft_fasta} >> ${{LN_LOG}} 2>&1; "
         " cd ${{OUTPUT_DIR}}; "
         " ${{SCRIPT}} {params.editor_repeat_coverage} {params.min_contig_length} {params.min_mapping_quality} `basename {output.draft_fasta}` `basename {input.merged_nodups}` > ${{THREEDDNA_LOG}} 2>&1; "
-        " ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}_HiC.fasta "
-        " ../../`basename {output.alias_fasta}` >> ${{LN_LOG}} 2>&1;"
-        " ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}.rawchrom.hic "
-        " ../../`basename {output.alias_rawchrom_hic}` >> ${{LN_LOG}} 2>&1"
+        #" ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}_HiC.fasta "
+        #" ../../`basename {output.alias_fasta}` >> ${{LN_LOG}} 2>&1;"
+        #" ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}.rawchrom.hic "
+        #" ../../`basename {output.alias_rawchrom_hic}` >> ${{LN_LOG}} 2>&1"
+        #" ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}.rawchrom.assembly "
+        #" ../../`basename {output.alias_rawchrom_assembly}` >> ${{LN_LOG}} 2>&1"
+
+rule threeddna_create_links: #
+    input:
+        rawchrom_hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}.input.{haplotype}.rawchrom.hic",
+        rawchrom_assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}.input.{haplotype}.rawchrom.assembly",
+        hic_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{haplotype}/scaffolding/{genome_prefix}.input.{haplotype}_HiC.fasta",
+    output:
+        alias_rawchrom_hic=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype, hap[^./]*}.hic",
+        alias_rawchrom_assembly=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype, hap[^./]*}.assembly",
+        alias_fasta=out_dir_path / "hic_scaffolding/{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}/{genome_prefix}.hic_scaffolding.{haplotype, hap[^./]*}.fasta",
+    log:
+        ln=output_dict["log"]  / "threeddna_create_links.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.ln.log",
+        cluster_log=output_dict["cluster_log"] / "threeddna_create_links.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.log",
+        cluster_err=output_dict["cluster_error"] / "threeddna_create_links.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.cluster.err"
+    benchmark:
+        output_dict["benchmark"]  / "threeddna_create_links.{prev_stage_parameters}..threeddna_{hic_scaffolding_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"]["name"],
+        node_options=parse_node_list("create_fastq_links_for_juicera"),
+        cpus=parameters["threads"]["create_fastq_links_for_juicer"] ,
+        time=parameters["time"]["create_fastq_links_for_juicer"],
+        mem=parameters["memory_mb"]["create_fastq_links_for_juicer"]
+    threads: parameters["threads"]["create_fastq_links_for_juicer"]
+    shell:
+        " OUTPUT_DIR=`dirname {output.alias_fasta}`; "
+        " LN_LOG=`realpath -s {log.ln}`; "
+        " > ${{LN_LOG}}; "
+        " cd ${{OUTPUT_DIR}}; "
+        " ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}_HiC.fasta `basename {output.alias_fasta}` >> ${{LN_LOG}} 2>&1;"
+        " ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}.rawchrom.hic `basename {output.alias_rawchrom_hic}` >> ${{LN_LOG}} 2>&1; "
+        " ln -s {wildcards.haplotype}/scaffolding/{wildcards.genome_prefix}.input.{wildcards.haplotype}.rawchrom.assembly `basename {output.alias_rawchrom_assembly}` >> ${{LN_LOG}} 2>&1; "

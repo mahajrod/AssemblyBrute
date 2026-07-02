@@ -9,8 +9,10 @@ rule gather_stats_per_stage_parameter:
         quast_dirs=lambda wildcards: expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/quast/{genome_prefix}.{assembly_stage}.{haplotype}",
                                             haplotype=stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"],
                                             allow_missing=True),
-        qv_file=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{genome_prefix}.{assembly_stage}.qv" if not config["skip_kmer"] else [],
-        completeness_stats_file=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{genome_prefix}.{assembly_stage}.completeness.stats" if not config["skip_kmer"] else [],
+        qv_files=expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{merqury_datatype}/{genome_prefix}.{assembly_stage}.{merqury_datatype}.qv",
+                        merqury_datatype=parameters["tool_options"]["assembly_qc"]["merqury"]["datatype_list"], allow_missing=True) if not config["skip_kmer"] else [],
+        completeness_stats_files=expand(out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/merqury/{merqury_datatype}/{genome_prefix}.{assembly_stage}.{merqury_datatype}.completeness.stats",
+                       merqury_datatype=parameters["tool_options"]["assembly_qc"]["merqury"]["datatype_list"], allow_missing=True) if not config["skip_kmer"] else [],
     params:
         #busco_list=lambda wildcards: (" -b " + ",".join(expand(out_dir_path / ("%s/%s/assembly_qc/busco5/%s.%s.{haplotype}.busco5.{busco_lineage}.summary" % (wildcards.assembly_stage,
         #                                                                                                                                                      wildcards.parameters,
@@ -19,10 +21,11 @@ rule gather_stats_per_stage_parameter:
         #               busco_lineage=config["busco_lineage_list"],
         #               haplotype=haplotype_list,
         #               allow_missing=True) )) if not config["skip_busco"] else "",
+        merqury_datatypes=",".join(parameters["tool_options"]["assembly_qc"]["merqury"]["datatype_list"]),
         haplotype_list=lambda wildcards: ",".join(stage_dict[wildcards.assembly_stage]["parameters"][wildcards.parameters]["haplotype_list"]),
         busco_lineage_list=(" -b " + ",".join(config["busco_lineage_list"])) if not config["skip_busco"] else ""
     output:
-        stats=out_dir_path / "{assembly_stage, [^/]+}/{parameters, [^/]+}/assembly_qc/{genome_prefix, [^/]+}.{assembly_stage}.parameter_stats"
+        stats=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{genome_prefix}.{assembly_stage}.parameter_stats"
     log:
         std=output_dict["log"]/ "gather_stats_per_stage_parameter.{genome_prefix}.{assembly_stage}.{parameters}.log",
         #stats=log_dir_path / "{library_id}/multiqc_merged_raw.stats.log",
@@ -33,7 +36,7 @@ rule gather_stats_per_stage_parameter:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("gather_stage_stats"),
         cpus=parameters["threads"]["gather_stage_stats"],
         time=parameters["time"]["gather_stage_stats"],
@@ -42,11 +45,12 @@ rule gather_stats_per_stage_parameter:
         parameters["threads"]["gather_stage_stats"]
     shell:
         " ./workflow/scripts/gather_qc_stats.py -q results/{wildcards.assembly_stage}/{wildcards.parameters}/assembly_qc/ "
-        " -p {wildcards.parameters} -e {wildcards.genome_prefix}.{wildcards.assembly_stage} -s {wildcards.assembly_stage} "
-        " -a {params.haplotype_list} {params.busco_lineage_list} -o {output.stats} > {log.std} 2>&1; "
+        "      -p {wildcards.parameters} -e {wildcards.genome_prefix}.{wildcards.assembly_stage} -s {wildcards.assembly_stage} "
+        "      -a {params.haplotype_list} {params.busco_lineage_list} -o {output.stats} -m {params.merqury_datatypes} > {log.std} 2>&1; "
 
 
 rule gather_stage_stats:
+    priority: 100000
     input:
         stats=lambda wildcards: expand(out_dir_path / ("%s/{parameters}/assembly_qc/%s.%s.parameter_stats" % (wildcards.assembly_stage,
                                                                                                     wildcards.genome_prefix,
@@ -55,7 +59,7 @@ rule gather_stage_stats:
                                        allow_missing=True)
 
     output:
-        stats=out_dir_path / "{assembly_stage, [^/]+}/{genome_prefix, [^/]+}.{assembly_stage}.stage_stats"
+        stats=out_dir_path / "{assembly_stage}/{genome_prefix}.{assembly_stage}.stage_stats"
     log:
         std=output_dict["log"]/ "gather_stage_stats.{genome_prefix}.{assembly_stage}.log",
         #stats=log_dir_path / "{library_id}/multiqc_merged_raw.stats.log",
@@ -66,7 +70,7 @@ rule gather_stage_stats:
     #conda:
     #    config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("gather_stage_stats"),
         cpus=parameters["threads"]["gather_stage_stats"],
         time=parameters["time"]["gather_stage_stats"],

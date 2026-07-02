@@ -40,7 +40,7 @@ purge_dups_bed_df = purge_dups_bed_df.merge(stat_cov_df, how="left", left_on="#s
 absent_contigs = purge_dups_bed_df.index[purge_dups_bed_df["length"].isna()]
 purge_dups_bed_df.loc[absent_contigs, "length"] = len_df["length"].loc[absent_contigs]
 for column in "mean_cov", "median_cov":
-    purge_dups_bed_df[column].fillna(0, inplace=True)
+    purge_dups_bed_df[column] = purge_dups_bed_df[column].fillna(0)
 
 purge_dups_bed_df["overlap_len"] = purge_dups_bed_df["end"] - purge_dups_bed_df["start"]
 purge_dups_bed_df["overlap_faction"] = purge_dups_bed_df["overlap_len"] / purge_dups_bed_df["length"]
@@ -65,4 +65,6 @@ for artefact in stats_df.index.unique():
 
 for artefact in artefact_set - set(stats_df.index.unique()):
     with open("{0}.{1}.ids".format(args.output_prefix, str(artefact).lower()), "w") as out_fd:
+        pass
+    with open("{0}.{1}.extended.bed".format(args.output_prefix, str(artefact).lower()), "w") as out_fd:
         pass

@@ -1,0 +1,3 @@
+primer_id	original_primer_id	primer_pair	gene	taxa	method	publication	DOI
+CHD1_1|F	2550F	CHD1_1	CHD1	birds	length	Fridolfsson et al,1999	doi.org/10.2307/3677252
+CHD1_1|R	2718R	CHD1_1	CHD1	birds	length	Fridolfsson et al,1999	doi.org/10.2307/3677252

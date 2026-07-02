@@ -7,8 +7,8 @@ rule multiqc:
                                  fileprefix=input_file_prefix_dict[wildcards.datatype],
                                  allow_missing=True)
     output:
-        dir=directory(output_dict["qc"] / "multiqc/{datatype, [^/]+}/{stage, [^/]+}/"),
-        report=output_dict["qc"] / "multiqc/{datatype, [^/]+}/{stage, [^/]+}/multiqc.{datatype}.{stage}.report.html"
+        dir=directory(output_dict["qc"] / "multiqc/{datatype}/{stage}/"),
+        report=output_dict["qc"] / "multiqc/{datatype}/{stage}/multiqc.{datatype}.{stage}.report.html"
         #stats=merged_raw_multiqc_dir_path / "{library_id}/{library_id}.raw.multiqc.stats"
     params:
         # multiqc adds report filename to outdir path and even creates additional subdirectories if necessary.
@@ -28,7 +28,7 @@ rule multiqc:
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
-        queue=config["queue"]["cpu"],
+        queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("multiqc"),
         cpus=parameters["threads"]["multiqc"],
         time=parameters["time"]["multiqc"],

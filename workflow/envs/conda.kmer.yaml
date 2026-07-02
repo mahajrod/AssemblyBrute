@@ -1,0 +1,13 @@
+#---- Bioconda config ----
+
+#TODO: check tools and versions
+"name": "kmer"
+"channels":
+  - "mahajrod"
+  - "bioconda"
+  - "conda-forge"
+  - "anaconda"
+"dependencies":
+  - "meryl"
+  - "merqury"
+  - "yak"

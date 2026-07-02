@@ -2,8 +2,11 @@
 __author__ = 'mahajrod'
 import sys
 import argparse
-import pandas as pd
+
 from pathlib import Path
+from copy import deepcopy
+
+import pandas as pd
 
 from RouToolPa.Parsers.BUSCO import BUSCOtable
 
@@ -31,6 +34,10 @@ parser.add_argument("-a", "--haplotype_list", action="store", dest="haplotype_li
                     type=lambda s: s.split(","),
                     help="Comma-separated list of qc'd haplotypes. "
                          "If absent, busco report will be ignored.")
+parser.add_argument("-m", "--merqury_datatype_list", action="store", dest="merqury_datatype_list", required=False,
+                    type=lambda s: s.split(","),
+                    help="Comma-separated list of datatypes used for merqury qc. "
+                         "If absent, merqury reports will be ignored.")
 parser.add_argument("-s", "--stage", action="store", dest="stage", required=True,
                     help="Assembly stage")
 parser.add_argument("-p", "--parameters", action="store", dest="parameters", required=True,
@@ -65,38 +72,58 @@ for haplotype in args.haplotype_list:
         #BUSCOtable(in_file=qc_folder_path / "busco5/{0}.{1}.busco5.{2}.full_table.tsv".format(args.input_prefix,
         #           haplotype,
         #           busco_db))
-merqury_qv_path = qc_folder_path / "merqury/{0}.qv".format(args.input_prefix)
-if merqury_qv_path.exists():
-    merqury_qv_df = pd.read_csv(merqury_qv_path,
-                                sep="\t", index_col=0, header=None,
-                                names=["haplotype", "unique_kmers", "read_and_assembly_kmers", "qv", "error_rate"])
-    merqury_qv_df.rename(index={"{0}.{1}".format(args.input_prefix,
-                                                 haplotype): haplotype for haplotype in args.haplotype_list},
-                         inplace=True)
-else:
-    merqury_qv_df = pd.DataFrame()
 
-merqury_completeness_stats_path = qc_folder_path / "merqury/{0}.completeness.stats".format(args.input_prefix)
-if merqury_completeness_stats_path.exists():
-    merqury_completeness_df = pd.read_csv(merqury_completeness_stats_path,
-                                          sep="\t", index_col=0, header=None,
-                                          names=["haplotype", "kmer_set", "assembly_solid_kmers",
-                                                 "read_solid_kmers", "completeness"])
-    merqury_completeness_df.rename(index={"{0}.{1}".format(args.input_prefix,
-                                                           haplotype): haplotype for haplotype in args.haplotype_list},
-                                   inplace=True)
-else:
-    merqury_completeness_df = pd.DataFrame()
+merqury_df_list = []
+for merqury_datatype in args.merqury_datatype_list:
+    merqury_qv_path = qc_folder_path / "merqury/{1}/{0}.{1}.qv".format(args.input_prefix, merqury_datatype)
+    if merqury_qv_path.exists():
+        merqury_qv_df = pd.read_csv(merqury_qv_path,
+                                    sep="\t", index_col=0, header=None,
+                                    names=["haplotype", "unique_kmers", "read_and_assembly_kmers", "qv", "error_rate"]).iloc[0: len(args.haplotype_list)]
+
+        merqury_qv_df.rename(index={"{0}.{1}".format(args.input_prefix,
+                                                     haplotype): haplotype for haplotype in args.haplotype_list},
+                             inplace=True)
+    else:
+        sys.stdout.write(f"WARNING!!! Merqury QV file for datatype {merqury_datatype} is absent! Skipping...\n")
+        merqury_qv_df = None
+
+    merqury_completeness_stats_path = qc_folder_path / "merqury/{1}/{0}.{1}.completeness.stats".format(args.input_prefix, merqury_datatype)
+    if merqury_completeness_stats_path.exists():
+        merqury_completeness_df = pd.read_csv(merqury_completeness_stats_path,
+                                              sep="\t", index_col=0, header=None,
+                                              names=["haplotype", "kmer_set", "assembly_solid_kmers",
+                                                     "read_solid_kmers", "completeness"]).iloc[0: len(args.haplotype_list)]
+        merqury_completeness_df.rename(index={"{0}.{1}".format(args.input_prefix,
+                                                               haplotype): haplotype for haplotype in args.haplotype_list},
+                                       inplace=True)
+    else:
+        sys.stdout.write(f"WARNING!!! Merqury completeness file for datatype {merqury_datatype} is absent! Skipping...\n")
+        merqury_completeness_df = None
+
+    if (merqury_qv_df is None) and (merqury_completeness_df is None):
+        continue
+    else:
+        if (merqury_qv_df is not None) and (merqury_completeness_df is not None):
+            merqury_concatenated_df = pd.concat([merqury_qv_df, merqury_completeness_df], axis=1)
+        elif merqury_qv_df is not None:
+            merqury_concatenated_df = merqury_qv_df
+        else:
+            merqury_concatenated_df = merqury_completeness_df
+        merqury_concatenated_df.rename(columns={column: merqury_datatype + "@" + column for column in list(merqury_concatenated_df.columns)},
+                                       inplace=True)
+        merqury_df_list.append(deepcopy(merqury_concatenated_df))
 
 final_df = pd.DataFrame([[stage, parameters] for stage, parameters in zip([args.stage] * len(args.haplotype_list),
                                                                           [args.parameters] * len(args.haplotype_list))],
                         index=pd.Index([haplotype for haplotype in args.haplotype_list], name="haplotype"),
                         columns=["stage", "parameters"])
 
+print(df_dict)
+print(merqury_df_list)
 final_df = pd.concat([final_df,
                       pd.concat([df_dict[haplotype]["quast"][quast_columns] for haplotype in args.haplotype_list]),
-                      merqury_qv_df.loc[args.haplotype_list] if not merqury_qv_df.empty else pd.DataFrame(),
-                      merqury_completeness_df[["assembly_solid_kmers", "read_solid_kmers", "completeness"]].loc[args.haplotype_list] if not merqury_completeness_df.empty else pd.DataFrame(),
+                      *merqury_df_list,
                       *[pd.concat([df_dict[haplotype]["busco5"][busco_db] for haplotype in args.haplotype_list]) for busco_db in args.busco_database_list]
                       ],
                      axis=1)

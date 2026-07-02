@@ -87,8 +87,8 @@
     "polishing":
         - "nextpolish2"
     "dedup":
-        #- "hapsolo"
-        - "purge_dups"
+        - "hapsolo"
+        #- "purge_dups"
     "gap_closing":
         - "samba"
     "draft_qc":
@@ -102,8 +102,8 @@
          #- "l3"
          #- "l1_no_hic"
          #- "l1_3p"
-         - "l1_no_ul"
-         - "l1_main_nano_only"
+         #- "l1_no_ul"
+         #- "l1_main_nano_only"
          #- "rep_enh_l1"
          #- "rep_enh_l2"
     "flye":

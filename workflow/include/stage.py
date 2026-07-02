@@ -327,6 +327,23 @@ class Stage:
                                         extension=[".unfiltered.gfa.cov", ".unfiltered.gfa.lencov"],
                                         parameters=[parameters_label])
 
+            if self.config["database_set"]["fcs_adaptor"] and (not self.config["skip_fcs_adaptor"]):
+                results_list += [expand(config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}/contamination_scan/fcs_adaptor/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.{database}.report",
+                                       genome_prefix=[self.config["genome_prefix"], ],
+                                       assembly_stage=[self.stage_name],
+                                       haplotype=haplotype_list,
+                                       parameters=[parameters_label],
+                                       database=self.config["database_set"]["fcs_adaptor"]),
+                                ]
+            if self.config["database_set"]["fcs"] and (not self.config["skip_fcs"]):
+                results_list += [expand(config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}/contamination_scan/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.{database}.taxonomy",
+                                        genome_prefix=[self.config["genome_prefix"], ],
+                                        assembly_stage=[self.stage_name],
+                                        haplotype=haplotype_list + (["alt" if stage_dict[self.stage_name].parameters[parameters_label]["option_set"]["assembly_ploidy"] > 1 else "alt0"] if "hifiasm" in parameters_label else []),
+                                        parameters=[parameters_label],
+                                        database=self.config["database_set"]["fcs"])
+                                ]
+
         """
         if (config["tax_id"] is None) or (not config["tax_id"]):
             sys.stderr.write("Tax id was not set, skipping contamination scan in FCS databases...\n")

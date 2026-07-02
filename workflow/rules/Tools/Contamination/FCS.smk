@@ -7,8 +7,8 @@ rule fcs: # TODO: refactor to follow new scheme of the log report and new, more 
         db=lambda wildcards: config["allowed_databases"]["fcs"][wildcards.database]["path"],
         image=config["tool_containers"]["fcs_gx"],
     output:
-        taxonomy=config["out_dir"] / "contig/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.taxonomy",
-        summary=config["out_dir"] / "contig/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.summary"
+        taxonomy=config["out_dir"] / "contig/{parameters}/{genome_prefix}.contig.{haplotype}/contamination_scan/fcs/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.taxonomy",
+        summary=config["out_dir"] / "contig/{parameters}/{genome_prefix}.contig.{haplotype}/contamination_scan/fcs/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.summary"
     params:
         singularity_load_str=(config["singularity_load_str"] + "; ") if config["singularity_load_mode"] == "cluster" else "",
         tax_id=config["tax_id"]
@@ -60,7 +60,7 @@ rule remove_fcs_contaminants: #
     input:
         fasta=config["out_dir"] / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.unfiltered.fasta",
         image=config["tool_containers"]["fcs_gx"] if not config["skip_fcs"] else [],
-        fcs_report=(config["out_dir"] / ("contig/{parameters}/contamination_scan/{haplotype}/fcs/%s/{genome_prefix}.contig.{haplotype}.unfiltered.%s.summary" % (config["final_fcs_db"], config["final_fcs_db"]))) if not config["skip_fcs"] else []
+        fcs_report=(config["out_dir"] / ("contig/{parameters}/{genome_prefix}.contig.{haplotype}/contamination_scan/fcs/%s/{genome_prefix}.contig.{haplotype}.unfiltered.%s.summary" % (config["final_fcs_db"], config["final_fcs_db"]))) if not config["skip_fcs"] else []
     output:
         fasta=config["out_dir"] / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.fasta",
         contaminant_fasta=config["out_dir"] / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.contaminant.fasta"
@@ -115,8 +115,8 @@ rule fcs_adaptor: #
         fasta=config["out_dir"] / "contig/{parameters}/{genome_prefix}.contig.{haplotype}.unfiltered.fasta",
         image=config["tool_containers"]["fcs_adaptor"],
     output:
-        report=config["out_dir"] / "contig/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.report",
-        report_jsonl=config["out_dir"] / "contig/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.report.jsonl",
+        report=config["out_dir"] / "contig/{parameters}/{genome_prefix}.contig.{haplotype}/contamination_scan/fcs_adaptor/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.report",
+        report_jsonl=config["out_dir"] / "contig/{parameters}/{genome_prefix}.contig.{haplotype}/contamination_scan/fcs_adaptor/{database}/{genome_prefix}.contig.{haplotype}.unfiltered.{database}.report.jsonl",
     params:
         singularity_load_str=(config["singularity_load_str"] + "; ") if config["singularity_load_mode"] == "cluster" else "",
         tax_id=config["tax_id"],

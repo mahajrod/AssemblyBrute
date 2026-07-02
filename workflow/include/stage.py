@@ -12,7 +12,7 @@ class Stage:
 
         self.no_fasta_stage_set = set(config["no_fasta_stage_list"])
         self.assembly_initiating_stage_set = set(config["assembly_initiating_stage_list"])
-
+        """
         if stage_name == "contig":
             for assembler in config["stage_coretools"][self.stage_name]:
                 #print(parameters["tool_options"][assembler])
@@ -25,7 +25,7 @@ class Stage:
                     option_set_group_assignment_dict = None
                     option_set_group_dict = None
                 assembler_option_set_group_dict[assembler] = option_set_group_dict
-
+        """
         if stage_name not in self.no_fasta_stage_set:
             self.logger.info(TAB + f"Requested parameters:")
             for tool in config["stage_coretools"][self.stage_name]:
@@ -87,6 +87,16 @@ class Stage:
                             if self.stage_name == "draft_qc":
                                 self.parameters[parameters_label]["option_set"]["assembly_ploidy"] = len(config["data"]["draft"]["haplotypes"])
                             elif self.stage_name == "contig":
+                                if tool == "hifiasm":
+                                    option_set_group_dict, option_set_group_assignment_dict = group_option_sets(parameters["tool_options"][tool],
+                                                                                                                config["tool_specific_features"][tool]["options_affecting_error_correction"],
+                                                                                                                tool=tool)
+                                else:
+                                    option_set_group_assignment_dict = None
+                                    option_set_group_dict = None
+
+                                assembler_option_set_group_dict[tool] = option_set_group_dict
+
                                 self.parameters[parameters_label]["option_set_group"] = option_set_group_assignment_dict[option_set] if option_set_group_assignment_dict is not None else None
 
                             else:

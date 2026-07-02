@@ -68,10 +68,10 @@
     #- "read_phasing" # this is an attached stage, it is attached to the stage set by "phasing_stage" parameter. However, if phased reads are required for any other stage, the corresponding rules will be called automatically. Uncomment it only if you need to get phased reads for all suitable datatypes.
 
 "stage_coretools":
-    "contig": # Allowed: "hifiasm". TODO: "flye", "nextdenovo"
+    "contig": # Allowed: "hifiasm". TODO: "nextdenovo"
         - "hifiasm"
         #- "flye"
-        #- "nextdenovo"
+        #- "nextdenovo" #TODO: implement
     "hic_alignment":
         - "arima"
         #- "bwa_only"

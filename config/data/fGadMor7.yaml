@@ -23,10 +23,10 @@
 #    - 'large'  < 5000 Mbp, human
 #    - 'giant'  < 15000 Mbp, large plant, shark, amphibian genomes
 #    - 'titan'  > 15000 Mbp, large plant genomes, pine trees, never tested
-"parameter_set": "micro"
+"parameter_set": "normal"
 
 #---- Data ----
-"input_datatypes": "hifi,hic,reference,draft" # TODO: add  "hifi,lr,bionano,hic", "hifi,lr,hic"  and "hifi" and others
+"input_datatypes": "hifi,hic,illumina,reference"
 "data_filtering":
     - "hifi"
     - "hic"
@@ -35,7 +35,7 @@
 
 "assembly_kmer_length":
     - 31 # kmer length to be used for phasing hic reads using assembled and purge_dupsed contigs
-"phasing_stage": "draft_qc"
+"phasing_stage": "polishing"
 #-------- Options specific for starting point 'draft' ----------------
 "phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads # TODO: check if it is obsolete
 #---------------------------------------------------------------------
@@ -55,22 +55,22 @@
     - "filter_reads" #
     - "filtered_read_qc"
     - "kmer_qc"
-    - "mtdna"
-    #- "read_contamination_scan" # TODO: test after refactoring
-    - "draft_qc"         # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
-    #- "contig"            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
-    - "hic_alignment"     # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
-    - "hic_scaffolding"   # MUST FOLLOW hic_alignment stage
-    - "dedup"             # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing for hapsolo
+    #- "mtdna"
+    - "read_contamination_scan" # TODO: test after refactoring
+    #- "draft_qc"         # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
+    - "contig"            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
     #- "polishing"        # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
+    #- "dedup"             # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing for hapsolo
+    #- "hic_alignment"     # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
+    #- "hic_scaffolding"   # MUST FOLLOW hic_alignment stage
     #- "ref_scaffolding"   # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing , at moment it requires telomere detection
     #- "gap_closing"      # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
-    - "read_phasing" # this is an attached stage, it is attached to the stage set by "phasing_stage" parameter. However, if phased reads are required for any other stage, the corresponding rules will be called automatically. Uncomment it only if you need to get phased reads for all suitable datatypes.
+    #- "read_phasing" # this is an attached stage, it is attached to the stage set by "phasing_stage" parameter. However, if phased reads are required for any other stage, the corresponding rules will be called automatically. Uncomment it only if you need to get phased reads for all suitable datatypes.
 
 "stage_coretools":
     "contig": # Allowed: "hifiasm". TODO: "nextdenovo"
         - "hifiasm"
-        #- "flye"
+        - "flye"
         #- "nextdenovo" #TODO: implement
     "hic_alignment":
         - "arima"
@@ -97,7 +97,7 @@
 "coretool_option_sets":
     "hifiasm":
          #- "l0"
-         #- "l1"
+         - "l1"
          #- "l2"
          #- "l3"
          #- "l1_no_hic"
@@ -108,8 +108,8 @@
          #- "rep_enh_l2"
     "flye":
         - "hifi"
-        - "hifi_keep_hap"
-        - "hifi_keep_hap_scaf"
+        #- "hifi_keep_hap"
+        #- "hifi_keep_hap_scaf"
         - "hifi_no_alt_contigs"
         - "hifi_no_alt_contigs_scaf"
         #- "hifi_scaff"
@@ -161,7 +161,7 @@
         "upper_threshold": null #
     "genome_assemblers":
         "coverage_estimator": null
-        "lambda": null
+        "lambda": 36
     "krater":
         "use_second_peak": null
         "low_limit": null
@@ -171,7 +171,7 @@
         "start_shift": null
     "hapsolo":
         "busco_lineage_list":
-            - "saccharomycetes_odb10"
+            - "actinopterygii_odb12"
 
 "assembly_qc_level": # wga, pretext map not refactored yet
     # Allowed levels:
@@ -183,9 +183,9 @@
     #    5 - quast, merqury, wga, assembly-based tracks, ragtag_qc, busco
     #    6 - quast, merqury, wga, assembly-based tracks, ragtag_qc, read-based and other tracks, busco, purge_dups_qc
     #    7 - quast, merqury, wga, assembly-based tracks, ragtag_qc, read-based and other tracks, busco, purge_dups_qc, pretext map, higlass mcool, .hic for combined haplotype
-    "draft_qc":        7
-    "contig":          0
-    "dedup":           7
+    "draft_qc":        0
+    "contig":          6
+    "dedup":           6
     "hic_alignment":   0 # keep it always 0, as this stage uses fastas from the previous stage. changing it to a higher value will trigger unnecessary calculations
     "hic_scaffolding": 0
     "polishing":       0
@@ -220,20 +220,20 @@
 
 "ploidy": 2
 
-"genome_prefix": "testSacMyc1"
+"genome_prefix": "fGadMor7"
 "busco_lineage_list":
-    - "saccharomycetes_odb12"
+    - "actinopterygii_odb12"
 
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
-"telomere_motif": null  # telomere motif at 5'-end; CCCTAA for human, place null if unknown
-"use_canonical_telomere": False # TODO: this parameter is used by ragtag in ref_scaffolding stage move it to manually adjusted features
-"species_name": "Saccharomyces cerevisiae"
-"tax_id": 4932 # # necessary for contamination scan via FCS
-"microchromosomes": True
+"telomere_motif": "CCCTAA"  # telomere motif at 5'-end; CCCTAA for human, place null if unknown
+"use_canonical_telomere": True # TODO: this parameter is used by ragtag in ref_scaffolding stage move it to manually adjusted features
+"species_name": "Gadus morhua"
+"tax_id": 8049 # # necessary for contamination scan via FCS
+"microchromosomes": False
 
-"kingdom": "fungi"  # "animal", "plant" or "fungi"
-"mitoz_clade": "null" # Set to 'null', if non animal genome. Allowed: {Chordata,Arthropoda,Echinodermata,Annelida-segmented-worms,Bryozoa,Mollusca,Nematoda,Nemertea-ribbon-worms,Porifera-sponges}
+"kingdom": "animal"  # "animal", "plant" or "fungi"
+"mitoz_clade": "Chordata" # Set to 'null', if non animal genome. Allowed: {Chordata,Arthropoda,Echinodermata,Annelida-segmented-worms,Bryozoa,Mollusca,Nematoda,Nemertea-ribbon-worms,Porifera-sponges}
 "mtdna_genetic_code":  2 # Organism genetic code should be one from the NCBI table:
                          #  1. The Standard Code
                          #  2. The Vertebrate MitochondrialCode
@@ -277,7 +277,7 @@
 "skip_per_lib_genome_estimation": True # change to False if you need per read library genome size estimation. It can be helpful for data origin check, but usually you don't need it
 #----
 #---- FCS filtering skips ----
-"skip_fcs": True # set True to skip FCS filtering of the contig assembly. However, usually you wish  it to be done
+"skip_fcs": False # set True to skip FCS filtering of the contig assembly. However, usually you wish  it to be done
 "skip_fcs_adaptor": False
 #----
 #---- Assembly QC skips
@@ -288,7 +288,7 @@
 "skip_assembly_tracks": False         # set True to skip all assembly-related tracks, except telomere (it is controlled by a different option)
 
 "skip_telomere": False           # set True to skip all telomere-related analysis
-"skip_telomere_container": True  # set True to skip run of telomere container
+"skip_telomere_container": False  # set True to skip run of telomere container
 "skip_telomere_tidk": False      # set True to skip TIDK search for telomere
 
 "skip_repeats": False            # set True to skip all telomere-related analysis
@@ -329,7 +329,3 @@
 "skip_mitoz_hic": False
 "skip_mitoz_illumina": False
 #----
-
-
-
-

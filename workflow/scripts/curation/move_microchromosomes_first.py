@@ -35,7 +35,7 @@ final_scaffold_df = candidate_scaffold_df[candidate_scaffold_df["scaffold_id"].i
 
 final_scaffold_df["length"] = len_df.loc[final_scaffold_df.index]["length"]
 
-final_scaffold_df.to_csv(args.output_prefix + ".candidates.microchromosomes.filtered.tsv", index=True,
+final_scaffold_df.to_csv(args.output_prefix + ".reordered.candidates.microchromosomes.filtered.tsv", index=True,
                          header=True, sep="\t")
 
 if args.assembly_file:

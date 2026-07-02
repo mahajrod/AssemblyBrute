@@ -1,8 +1,7 @@
 #---- Bioconda config ----
 
-"name": "tadbit"
+"name": "tidk"
 "channels":
-  - "mahajrod"
   - "bioconda"
   - "conda-forge"
   - "anaconda"

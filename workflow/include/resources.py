@@ -1,0 +1,34 @@
+#!/usr/bin/env python
+__author__ = "mahajrod"
+"""
+This file contains functions necessary for Snakemake file
+"""
+
+def get_memory(wildcards, attempt, start_mem, coeff=2, mode="linear"):
+    if mode == "exp":
+        if coeff <= 1:
+            raise ValueError(f"ERROR!!! Coefficient for exponential resource selection should be above 1 and not {coeff}!")
+        #print([attempt, start_mem, coeff, mode])
+        return int((coeff ** (attempt - 1)) * start_mem)
+    elif mode == "linear":
+        #print([attempt, start_mem, coeff, mode])
+        return attempt * start_mem
+    else:
+        raise ValueError("ERROR!!! Unknown mode for memory selection")
+
+def get_threads(threads, queue):
+    if queue in config["queue"]:
+        if "max_threads" in config["queue"][queue]:
+            if config["queue"][queue]["max_threads"] > 0:
+                return min([threads, config["queue"][queue]["max_threads"]])
+            else:
+                return threads
+        else:
+            return threads
+    else:
+        return threads
+
+
+
+
+

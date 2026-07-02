@@ -1,0 +1,11 @@
+option_set	assembly_ploidy	main_datatypes	input_type	polishing_iterations	read_error	keep_haplotypes	no_alt_contigs	scaffolding
+default	1	hifi	pacbio-hifi	NA	NA	False	False	False
+hifi	1	hifi	pacbio-hifi	NA	NA	False	False	False
+hifi_keep_hap	1	hifi	pacbio-hifi	NA	NA	True	False	False
+hifi_keep_hap_scaf	1	hifi	pacbio-hifi	NA	NA	True	False	True
+hifi_no_alt_contigs	1	hifi	pacbio-hifi	NA	NA	False	True	False
+hifi_no_alt_contigs_scaf	1	hifi	pacbio-hifi	NA	NA	False	True	True
+hifi_scaf	1	hifi	pacbio-hifi	NA	NA	False	False	True
+old_nano	1	nanopore	nano-raw	NA	NA	False	False	False
+nano_corr	1	nanopore	nano-corr	NA	NA	False	False	False
+nano_hq	1	nanopore,simplex,duplex	nano-hq	NA	NA	False	False	False

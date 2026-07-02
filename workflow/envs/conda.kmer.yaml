@@ -8,6 +8,10 @@
   - "conda-forge"
   - "anaconda"
 "dependencies":
-  - "meryl"
+  - "python=3.10"
+  - "meryl>=1.4"
   - "merqury"
   - "yak"
+  - "krater"
+  - pip:
+      - "distinctipy"

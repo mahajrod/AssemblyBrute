@@ -1,0 +1,28 @@
+
+rule gfa2fasta:
+    input:
+        gfa="{gfa_dir}/{gfa_prefix}.gfa",
+        log_dir=ancient("{gfa_dir}/log/")
+    output:
+        fasta="{gfa_dir}/{gfa_prefix}.fasta"
+    log:
+        std="{gfa_dir}/log/{gfa_prefix}.gfa2fasta.log",
+        cluster_log="{gfa_dir}/log/{gfa_prefix}.gfa2fasta.cluster.log",
+        cluster_err="{gfa_dir}/log/{gfa_prefix}.gfa2fasta.cluster.err"
+    benchmark:
+        "{gfa_dir}/log/{gfa_prefix}.gfa2fasta.benchmark.txt"
+    conda:
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"]["name"],
+        node_options=parse_node_list("gfa2fasta"),
+        cpus=parameters["threads"]["gfa2fasta"],
+        time=parameters["time"]["gfa2fasta"],
+        mem=parameters["memory_mb"]["gfa2fasta"],
+    threads:
+        parameters["threads"]["gfa2fasta"]
+    shell:
+         " gfatools gfa2fa {input.gfa} > {output.fasta} 2>{log.std};"
+
+
+

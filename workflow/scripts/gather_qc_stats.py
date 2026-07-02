@@ -30,12 +30,12 @@ parser.add_argument("-b", "--busco_database_list", action="store", dest="busco_d
                     type=lambda s: s.split(","),
                     help="Comma-separated list of busco databases used for QC. "
                          "If absent, busco report will be ignored.")
-parser.add_argument("-a", "--haplotype_list", action="store", dest="haplotype_list", required=True,
+parser.add_argument("-a", "--assembly_prefix_list", action="store", dest="assembly_prefix_list", required=True,
                     type=lambda s: s.split(","),
-                    help="Comma-separated list of qc'd haplotypes. "
+                    help="Comma-separated list of prefixes of qc'd assemblies. "
                          "If absent, busco report will be ignored.")
 parser.add_argument("-m", "--merqury_datatype_list", action="store", dest="merqury_datatype_list", required=False,
-                    type=lambda s: s.split(","),
+                    type=lambda s: s.split(","), default=[],
                     help="Comma-separated list of datatypes used for merqury qc. "
                          "If absent, merqury reports will be ignored.")
 parser.add_argument("-s", "--stage", action="store", dest="stage", required=True,
@@ -52,26 +52,20 @@ qc_folder_path = Path(args.qc_folder)
 if not qc_folder_path.exists():
     raise ValueError("ERROR!!! QC folder '{}' doesn't exist".format(args.qc_folder))
 
-#if args.busco_database_list:
-#    busco_path_list = list(qc_folder_path.glob("busco5/*full_table.tsv"))
-
-df_dict = {}  # {haplotype: {} for haplotype in args.haplotype_list}
+df_dict = {}
 
 quast_columns = ["# contigs (>= 0 bp)", "# contigs (>= 10000 bp)",
                  "# contigs (>= 10000 bp)", "Total length (>= 10000 bp)",
                  "Largest contig", "Largest contig", "GC (%)", "N50", "L50"]
 
-for haplotype in args.haplotype_list:
-    df_dict[haplotype] = {}
-    df_dict[haplotype]["quast"] = pd.read_csv(qc_folder_path / "quast/{0}.{1}/report.tsv".format(args.input_prefix, haplotype), sep="\t",
+for assembly_prefix in args.assembly_prefix_list:
+    df_dict[assembly_prefix] = {}
+    df_dict[assembly_prefix]["quast"] = pd.read_csv(qc_folder_path / f"quast/{assembly_prefix}/report.tsv", sep="\t",
                                               header=0, index_col=0).transpose()
-    df_dict[haplotype]["busco5"] = {}
+    df_dict[assembly_prefix]["busco5"] = {}
     for busco_db in args.busco_database_list:
-        df_dict[haplotype]["busco5"][busco_db] = pd.DataFrame([read_gene_string_from_busco_summary(qc_folder_path / "busco5/{0}.{1}.busco5.{2}.summary".format(args.input_prefix, haplotype, busco_db))],
-                                                              columns=[busco_db, ], index=pd.Index([haplotype, ]))
-        #BUSCOtable(in_file=qc_folder_path / "busco5/{0}.{1}.busco5.{2}.full_table.tsv".format(args.input_prefix,
-        #           haplotype,
-        #           busco_db))
+        df_dict[assembly_prefix]["busco5"][busco_db] = pd.DataFrame([read_gene_string_from_busco_summary(qc_folder_path / "busco5/{0}.{1}.busco5.summary".format(assembly_prefix, busco_db))],
+                                                              columns=[busco_db, ], index=pd.Index([assembly_prefix, ]))
 
 merqury_df_list = []
 for merqury_datatype in args.merqury_datatype_list:
@@ -79,11 +73,8 @@ for merqury_datatype in args.merqury_datatype_list:
     if merqury_qv_path.exists():
         merqury_qv_df = pd.read_csv(merqury_qv_path,
                                     sep="\t", index_col=0, header=None,
-                                    names=["haplotype", "unique_kmers", "read_and_assembly_kmers", "qv", "error_rate"]).iloc[0: len(args.haplotype_list)]
+                                    names=["assembly_prefix", "unique_kmers", "read_and_assembly_kmers", "qv", "error_rate"]).iloc[0: len(args.assembly_prefix_list)]
 
-        merqury_qv_df.rename(index={"{0}.{1}".format(args.input_prefix,
-                                                     haplotype): haplotype for haplotype in args.haplotype_list},
-                             inplace=True)
     else:
         sys.stdout.write(f"WARNING!!! Merqury QV file for datatype {merqury_datatype} is absent! Skipping...\n")
         merqury_qv_df = None
@@ -92,11 +83,8 @@ for merqury_datatype in args.merqury_datatype_list:
     if merqury_completeness_stats_path.exists():
         merqury_completeness_df = pd.read_csv(merqury_completeness_stats_path,
                                               sep="\t", index_col=0, header=None,
-                                              names=["haplotype", "kmer_set", "assembly_solid_kmers",
-                                                     "read_solid_kmers", "completeness"]).iloc[0: len(args.haplotype_list)]
-        merqury_completeness_df.rename(index={"{0}.{1}".format(args.input_prefix,
-                                                               haplotype): haplotype for haplotype in args.haplotype_list},
-                                       inplace=True)
+                                              names=["assembly_prefix", "kmer_set", "assembly_solid_kmers",
+                                                     "read_solid_kmers", "completeness"]).iloc[0: len(args.assembly_prefix_list)]
     else:
         sys.stdout.write(f"WARNING!!! Merqury completeness file for datatype {merqury_datatype} is absent! Skipping...\n")
         merqury_completeness_df = None
@@ -114,17 +102,15 @@ for merqury_datatype in args.merqury_datatype_list:
                                        inplace=True)
         merqury_df_list.append(deepcopy(merqury_concatenated_df))
 
-final_df = pd.DataFrame([[stage, parameters] for stage, parameters in zip([args.stage] * len(args.haplotype_list),
-                                                                          [args.parameters] * len(args.haplotype_list))],
-                        index=pd.Index([haplotype for haplotype in args.haplotype_list], name="haplotype"),
+final_df = pd.DataFrame([[stage, parameters] for stage, parameters in zip([args.stage] * len(args.assembly_prefix_list),
+                                                                          [args.parameters] * len(args.assembly_prefix_list))],
+                        index=pd.Index([assembly_prefix for assembly_prefix in args.assembly_prefix_list], name="assembly_prefix"),
                         columns=["stage", "parameters"])
 
-print(df_dict)
-print(merqury_df_list)
 final_df = pd.concat([final_df,
-                      pd.concat([df_dict[haplotype]["quast"][quast_columns] for haplotype in args.haplotype_list]),
+                      pd.concat([df_dict[assembly_prefix]["quast"][quast_columns] for assembly_prefix in args.assembly_prefix_list]),
                       *merqury_df_list,
-                      *[pd.concat([df_dict[haplotype]["busco5"][busco_db] for haplotype in args.haplotype_list]) for busco_db in args.busco_database_list]
+                      *[pd.concat([df_dict[assembly_prefix]["busco5"][busco_db] for assembly_prefix in args.assembly_prefix_list]) for busco_db in args.busco_database_list]
                       ],
                      axis=1)
 
@@ -133,5 +119,5 @@ for column in ["# contigs (>= 0 bp)", "# contigs (>= 10000 bp)",
                "Largest contig", "Largest contig", "L50"]:
     final_df[column] = final_df[column].astype("Int64")
 
-final_df.index.name = "haplotype"
+final_df.index.name = "assembly_prefix"
 final_df.to_csv(args.output, sep="\t", header=True, index=True)

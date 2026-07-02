@@ -1,0 +1,834 @@
+
+"data": # No "_" is allowed in the datatype names, as it is used as separator for merged datatypes
+    "illumina": # datatype
+        "mapped_bam": # format
+            "in_fmt": "mapped_bam"
+            "allowed_in_exts":
+                - ".bam"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": "_1"
+            "conv_rev_sfx": "_2"
+            "paired": True
+            "long_read": False
+            "nanopore": False
+            "pacbio": False
+            "fastqc": True
+            "genome_size": True
+            "kraken": True
+            "variant_call": True
+            "gap_fill": False
+            "dedup": False
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": True
+        "unmapped_bam":
+            "in_fmt": "unmapped_bam"
+            "allowed_in_exts":
+                - ".bam"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": "_1"
+            "conv_rev_sfx": "_2"
+            "paired": True
+            "long_read": False
+            "nanopore": False
+            "pacbio": False
+            "fastqc": True
+            "genome_size": True
+            "kraken": True
+            "variant_call": True
+            "gap_fill": False
+            "dedup": False
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": True
+        "fastq":
+            "in_fmt": "fastq"
+            "allowed_in_exts":
+                - ".fq.gz"
+                - ".fastq.gz"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": "_1"
+            "conv_rev_sfx": "_2"
+            "paired": True
+            "long_read": False
+            "nanopore": False
+            "pacbio": False
+            "fastqc": True
+            "genome_size": True
+            "kraken": True
+            "variant_call": True
+            "gap_fill": False
+            "dedup": False
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": True
+        "fasta":
+            "in_fmt": "fasta"
+            "allowed_in_exts":
+                - ".fa.gz"
+                - ".fasta.gz"
+            "conv_fmt": "fasta"
+            "conv_ext": ".fasta.gz"
+            "conv_fwd_sfx": "_1"
+            "conv_rev_sfx": "_2"
+            "paired": True
+            "long_read": False
+            "nanopore": False
+            "pacbio": False
+            "fastqc": False
+            "genome_size": True
+            "kraken": True
+            "variant_call": True
+            "gap_fill": False
+            "dedup": False
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": True
+    "hic": # datatype
+        "mapped_bam": # format
+            "in_fmt": "mapped_bam"
+            "allowed_in_exts":
+                - ".bam"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": "_1"
+            "conv_rev_sfx": "_2"
+            "paired": True
+            "long_read": False
+            "nanopore": False
+            "pacbio": False
+            "fastqc": True
+            "genome_size": True
+            "kraken": True
+            "variant_call": False
+            "gap_fill": False
+            "dedup": False
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": False
+            "pretext_per_hap_track": False
+        "unmapped_bam":
+            "in_fmt": "unmapped_bam"
+            "allowed_in_exts":
+                - ".bam"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": "_1"
+            "conv_rev_sfx": "_2"
+            "paired": True
+            "long_read": False
+            "nanopore": False
+            "pacbio": False
+            "fastqc": True
+            "genome_size": True
+            "kraken": True
+            "variant_call": False
+            "gap_fill": False
+            "dedup": False
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": False
+            "pretext_per_hap_track": False
+        "fastq":
+            "in_fmt": "fastq"
+            "allowed_in_exts":
+                - ".fq.gz"
+                - ".fastq.gz"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": "_1"
+            "conv_rev_sfx": "_2"
+            "paired": True
+            "long_read": False
+            "nanopore": False
+            "pacbio": False
+            "fastqc": True
+            "genome_size": True
+            "kraken": True
+            "variant_call": False
+            "gap_fill": False
+            "dedup": False
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": False
+            "pretext_per_hap_track": False
+        "fasta":
+            "in_fmt": "fasta"
+            "allowed_in_exts":
+                - ".fa.gz"
+                - ".fasta.gz"
+            "conv_fmt": "fasta"
+            "conv_ext": ".fasta.gz"
+            "conv_fwd_sfx": "_1"
+            "conv_rev_sfx": "_2"
+            "paired": True
+            "long_read": False
+            "nanopore": False
+            "pacbio": False
+            "fastqc": False
+            "genome_size": True
+            "kraken": True
+            "variant_call": False
+            "gap_fill": False
+            "dedup": False
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": False
+            "pretext_per_hap_track": False
+    "hifi":
+        "mapped_bam":
+            "in_fmt": "mapped_bam"
+            "allowed_in_exts":
+                - ".bam"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": True
+            "pacbio": True
+            "fastqc": False
+            "genome_size": True
+            "kraken": True
+            "variant_call": True
+            "gap_fill": True
+            "dedup": True
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+        "unmapped_bam":
+            "in_fmt": "unmapped_bam"
+            "allowed_in_exts":
+                - ".bam"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": True
+            "pacbio": True
+            "fastqc": False
+            "genome_size": True
+            "kraken": True
+            "variant_call": True
+            "gap_fill": True
+            "dedup": True
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+        "fastq":
+            "in_fmt": "fastq"
+            "allowed_in_exts":
+                - ".fq.gz"
+                - ".fastq.gz"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": False
+            "pacbio": True
+            "fastqc": False
+            "genome_size": True
+            "kraken": True
+            "variant_call": True
+            "gap_fill": True
+            "dedup": True
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+        "fasta":
+            "in_fmt": "fasta"
+            "allowed_in_exts":
+                - ".fa.gz"
+                - ".fasta.gz"
+            "conv_fmt": "fasta"
+            "conv_ext": ".fasta.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": False
+            "pacbio": True
+            "fastqc": False
+            "genome_size": True
+            "kraken": True
+            "variant_call": True
+            "gap_fill": True
+            "dedup": True
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+    "lqccs":
+        "mapped_bam":
+            "in_fmt": "mapped_bam"
+            "allowed_in_exts":
+                - ".bam"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": False
+            "pacbio": True
+            "fastqc": False
+            "genome_size": False
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": True
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": False
+            "pretext_per_hap_track": False
+        "unmapped_bam":
+            "in_fmt": "unmapped_bam"
+            "allowed_in_exts":
+                - ".bam"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": False
+            "pacbio": True
+            "fastqc": False
+            "genome_size": False
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": True
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": False
+            "pretext_per_hap_track": False
+        "fastq":
+            "in_fmt": "fastq"
+            "allowed_in_exts":
+                - ".fq.gz"
+                - ".fastq.gz"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": False
+            "pacbio": True
+            "fastqc": False
+            "genome_size": False
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": True
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": False
+            "pretext_per_hap_track": False
+        "fasta":
+            "in_fmt": "fasta"
+            "allowed_in_exts":
+                - ".fa.gz"
+                - ".fasta.gz"
+            "conv_fmt": "fasta"
+            "conv_ext": ".fasta.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": False
+            "pacbio": True
+            "fastqc": False
+            "genome_size": False
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": True
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": False
+            "pretext_per_hap_track": False
+    "nanopore":
+        "mapped_bam":
+            "in_fmt": "mapped_bam"
+            "allowed_in_exts":
+                - ".bam"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": True
+            "pacbio": False
+            "fastqc": False
+            "genome_size": True
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": True
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+        "unmapped_bam":
+            "in_fmt": "unmapped_bam"
+            "allowed_in_exts":
+                - ".bam"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": True
+            "pacbio": False
+            "fastqc": False
+            "genome_size": True
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": True
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+        "fastq":
+            "in_fmt": "fastq"
+            "allowed_in_exts":
+                - ".fq.gz"
+                - ".fastq.gz"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": True
+            "pacbio": False
+            "fastqc": False
+            "genome_size": True
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": True
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+        "fasta":
+            "in_fmt": "fasta"
+            "allowed_in_exts":
+                - ".fa.gz"
+                - ".fasta.gz"
+            "conv_fmt": "fasta"
+            "conv_ext": ".fasta.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": True
+            "pacbio": False
+            "fastqc": False
+            "genome_size": True
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": True
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+    "simplex":
+        "mapped_bam":
+            "in_fmt": "mapped_bam"
+            "allowed_in_exts":
+                - ".bam"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": True
+            "pacbio": False
+            "fastqc": False
+            "genome_size": True
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": True
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+        "unmapped_bam":
+            "in_fmt": "unmapped_bam"
+            "allowed_in_exts":
+                - ".bam"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": True
+            "pacbio": False
+            "fastqc": False
+            "genome_size": True
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": True
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+        "fastq":
+            "in_fmt": "fastq"
+            "allowed_in_exts":
+                - ".fq.gz"
+                - ".fastq.gz"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": True
+            "pacbio": False
+            "fastqc": False
+            "genome_size": True
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": True
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+        "fasta":
+            "in_fmt": "fasta"
+            "allowed_in_exts":
+                - ".fa.gz"
+                - ".fasta.gz"
+            "conv_fmt": "fasta"
+            "conv_ext": ".fasta.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": True
+            "pacbio": False
+            "fastqc": False
+            "genome_size": True
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": True
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+    "duplex":
+        "mapped_bam":
+            "in_fmt": "mapped_bam"
+            "allowed_in_exts":
+                - ".bam"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": True
+            "pacbio": False
+            "fastqc": False
+            "genome_size": True
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": True
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+        "unmapped_bam":
+            "in_fmt": "unmapped_bam"
+            "allowed_in_exts":
+                - ".bam"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": True
+            "pacbio": False
+            "fastqc": False
+            "genome_size": True
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": True
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+        "fastq":
+            "in_fmt": "fastq"
+            "allowed_in_exts":
+                - ".fq.gz"
+                - ".fastq.gz"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": True
+            "pacbio": False
+            "fastqc": False
+            "genome_size": True
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": True
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+        "fasta":
+            "in_fmt": "fasta"
+            "allowed_in_exts":
+                - ".fa.gz"
+                - ".fasta.gz"
+            "conv_fmt": "fasta"
+            "conv_ext": ".fasta.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": True
+            "pacbio": False
+            "fastqc": False
+            "genome_size": True
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": True
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+    "ultralongnano":
+        "mapped_bam":
+            "in_fmt": "mapped_bam"
+            "allowed_in_exts":
+                - ".bam"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": True
+            "pacbio": False
+            "fastqc": False
+            "genome_size": False
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": False
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+        "unmapped_bam":
+            "in_fmt": "unmapped_bam"
+            "allowed_in_exts":
+                - ".bam"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": True
+            "pacbio": False
+            "fastqc": False
+            "genome_size": False
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": False
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+        "fastq":
+            "in_fmt": "fastq"
+            "allowed_in_exts":
+                - ".fq.gz"
+                - ".fastq.gz"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": True
+            "pacbio": False
+            "fastqc": False
+            "genome_size": False
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": False
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+        "fasta":
+            "in_fmt": "fasta"
+            "allowed_in_exts":
+                - ".fa.gz"
+                - ".fasta.gz"
+            "conv_fmt": "fasta"
+            "conv_ext": ".fasta.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": True
+            "pacbio": False
+            "fastqc": False
+            "genome_size": False
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": False
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+    "adaptivenano":
+        "mapped_bam":
+            "in_fmt": "mapped_bam"
+            "allowed_in_exts":
+                - ".bam"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": True
+            "pacbio": False
+            "fastqc": False
+            "genome_size": False
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": False
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+        "unmapped_bam":
+            "in_fmt": "unmapped_bam"
+            "allowed_in_exts":
+                - ".bam"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": True
+            "pacbio": False
+            "fastqc": False
+            "genome_size": False
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": False
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+        "fastq":
+            "in_fmt": "fastq"
+            "allowed_in_exts":
+                - ".fq.gz"
+                - ".fastq.gz"
+            "conv_fmt": "fastq"
+            "conv_ext": ".fastq.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": True
+            "pacbio": False
+            "fastqc": False
+            "genome_size": False
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": False
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+        "fasta":
+            "in_fmt": "fasta"
+            "allowed_in_exts":
+                - ".fa.gz"
+                - ".fasta.gz"
+            "conv_fmt": "fasta"
+            "conv_ext": ".fasta.gz"
+            "conv_fwd_sfx": ""
+            "conv_rev_sfx": ""
+            "paired": False
+            "long_read": True
+            "nanopore": True
+            "pacbio": False
+            "fastqc": False
+            "genome_size": False
+            "kraken": True
+            "variant_call": False
+            "gap_fill": True
+            "dedup": False
+            "filter": True
+            "phasing": True
+            "pretext_coverage_track": True
+            "pretext_per_hap_track": False
+    "reference": # TODO: allow other input extensions later
+        "fasta":
+            "in_fmt": "fasta"
+            "allowed_in_ext": ".fasta"
+            "conv_fmt": "fasta"
+            "conv_ext": ".fasta"
+    "draft":  # TODO: allow other input extensions later
+        "fasta":
+            "in_fmt": "fasta"
+            "allowed_in_ext": ".fasta"
+            "conv_fmt": "fasta"
+            "conv_ext": ".fasta"
+

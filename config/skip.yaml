@@ -1,46 +1,60 @@
-"skip_read_qc": False
-"skip_filter_reads": False
-"skip_busco": False
-"skip_gcp": True
-"skip_fcs": False
-"skip_fcs_adaptor": False
-"skip_kraken": False
-"skip_phasing": False
-"skip_prescaf_pretext": True
-"skip_postscaf_pretext": True
-
-"skip_both_pretext": False
-"skip_pretext_10k_1k_tracks": False
-"skip_pretext_1000k_100k_tracks": True
-"skip_pretext_coverage_tracks": False
+#---- Read QC skips ----
+"skip_fastqc": False
 "skip_nanoqc": False
 "skip_nanoplot": False
-"skip_wga": False
-"skip_higlass": True
-"skip_variantcalling": True
-"skip_hic_file": False
-"skip_all_pretext": False
-"skip_krater": True
-"skip_kmer": False
-"skip_ragtag": False
-"skip_gathering": True
-"skip_trf": False
-"skip_combined_hic": False
-"skip_combined_contig_hic": False
+"skip_tadbit": False
+#----
+#---- Read filtering skips ----
+"skip_porechop_abi": True  # set False if you are not sure that adapters and other service sequences are  trimmed from your nanopore data in the input data.
+#----
+#---- Kmer qc skips ----
+"skip_per_lib_genome_estimation": True # set False if you need per read library genome size estimation. It can be helpful for data origin check, but usually you don't need it
+#----
+#---- FCS filtering skips ----
+"skip_fcs": False # Set to True to skip FCS filtering of the contig assembly
+"skip_fcs_adaptor": False
+#----
+#---- Assembly QC skips
+"skip_busco": False                     # set True, to skip BUSCO runs to speedup evaluation of the assemblies
 
-"skip_draft_qc_pretext": False
-"skip_draft_qc_hic_file": False
-"skip_draft_qc_ragtag": False
-"skip_draft_qc_wga": False
+"skip_kmer_gcp": True                  # set False to produce kmer GC plots
+"skip_kmer_smudgeplot": True           # set False to produce Smudgeplot. Keep in mind that it is an old tool and consumes enormous amount of memory (> 1Tb) even for 500 Mbp genomes
+"skip_assembly_tracks": False           # set True to skip all assembly-related tracks, except telomere (it is controlled by a different option)
 
-"skip_gap_closing_pretext": False
-"skip_gap_closing_hic_file": False
-"skip_gap_closing_ragtag": False
-"skip_gap_closing_wga": False
+"skip_telomere": False                  # set True to skip all telomere-related analysis
+"skip_telomere_container": False        # set True to skip run of telomere container
+"skip_telomere_tidk": False             # set True to skip TIDK search for telomere
 
-"skip_purge_dups_qc": False
+"skip_repeats": False                   # set True to skip all telomere-related analysis
+"skip_windowmasker": False              # set True to skip all telomere-related analysis
+"skip_trf": False                       # set True to skip all telomere-related analysis. Sometimes TRF hangs or crushes. Set True in such a case
 
-"skip_mtdna": False
+"skip_coverage_tracks": False           # set True to skip coverage tracks
+
+"skip_pretext": False                   # set True to completely skip all pretext related qc
+"skip_pretext_10k_1k_tracks": False     # set True to skip injection to the pretext maps of tracks with window size of 10 kpb and step of 1kpb. Reasonable for large genomes
+"skip_pretext_100k_10k_tracks": False  # set True to skip injection to the pretext maps of tracks with window size of 100kbp and step of 10kbp.
+"skip_pretext_1000k_100k_tracks": False # set True to skip injection to the pretext maps of tracks with window size of 1000kbp and step of 100kbp. Reasonable for small genomes
+"skip_pretext_coverage_tracks": False   # set True to skip injection to the pretext maps of all coverage tracks
+
+"skip_hic_for_combined_haplotype": True    # set False to generate .hic file for combined/reordered haplotype
+"skip_yahs_hic_file": True                  # set False to generate .hic file for yahs assembly
+"skip_higlass_mcool": True                  # set False to generate mcool file (analog of pretext map/hic, multiple resolutions) for HiGlass
+
+"skip_wga": False                       # set True to skip quick (and dirty) whole genome alignments for haplotypes and reference for all stage
+"skip_draft_qc_wga": False              # set True to skip wga for draft_qc stage only
+"skip_contig_wga": False                # set True to skip wga for contig stage only
+"skip_dedup_wga": False                 # set True to skip wga for dedup stage only
+"skip_polishing_wga": False             # set True to skip wga for polishing stage only
+"skip_hic_scaffolding_wga": False       # set True to skip wga for hic_scaffolding stage only
+"skip_gap_closing_wga": False           # set True to skip wga for gap_closing stage only
+
+"skip_purge_dups_qc": False             # set True to skip purge_dups tracks
+
+"skip_ragtag_qc": False                 # set True to skip reference-based scaffolding as QC
+#----
+
+#---- mtDNA ----
 "skip_mitohifi_reads": False
 "skip_mitohifi_reads_per_file": False
 "skip_mitohifi_reads_combined": False
@@ -49,12 +63,6 @@
 "skip_mitoz": False
 "skip_mitoz_hic": False
 "skip_mitoz_illumina": False
+#----
 
-"skip_per_lib_genome_estimation": False
 
-# Set "skip_porechop_abi" to true if you are sure that adapters and other service sequences
-# are already trimmed in the input data.
-# Porechop still will be run, but for qc purposes.
-# The downstream analysis (starting from chopper for quality filtration) will use raw reads.
-
-"skip_porechop_abi": False

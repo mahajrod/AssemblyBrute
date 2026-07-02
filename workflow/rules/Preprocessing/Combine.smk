@@ -1,17 +1,20 @@
 
 rule combine_se_reads:
     input:
-        se_reads=lambda wildcards: expand(output_dict["data"] / ("fastq/%s/filtered/{fileprefix}%s" % (wildcards.datatype,
-                                                                                                         config["fastq_extension"])),
-                          fileprefix=input_file_prefix_dict[wildcards.datatype])
+        se_reads=lambda wildcards: expand(config["out_dir"] / ("data/%s/final/{fileprefix}%s" % (wildcards.se_datatype,
+                                                                                                       config["data"][wildcards.se_datatype]["conv_ext"])),
+                          fileprefix=config["data"][wildcards.se_datatype]["conv_file_prefix_list"])
     output:
-        combined_se_reads=output_dict["data"] / ("fastq/{datatype, hifi|nanopore|simplex|duplex}/combined/{datatype}.combined%s" % config["fastq_extension"])
+        combined_se_reads=config["out_dir"] / ("data/{se_datatype}/combined/{se_datatype}.combined%s" % config["fastq_ext"])
+    params:
+        number_of_files=lambda wildcards: len(config["data"][wildcards.se_datatype]["conv_file_prefix_list"])
     log:
-        log=output_dict["log"] / "combine_long_reads.{datatype}.log",
-        cluster_log=output_dict["cluster_log"] / "combine_long_reads.{datatype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "combine_long_reads.{datatype}.err"
+        log=config["out_dir"] / "log/combine_long_reads.{se_datatype}.log",
+        cluster_log=config["out_dir"] / "log/combine_long_reads.{se_datatype}.cluster.log",
+        cluster_err=config["out_dir"] / "log/combine_long_reads.{se_datatype}.err"
+
     benchmark:
-        output_dict["benchmark"] / "combine_long_reads.{datatype}.benchmark.txt"
+        config["out_dir"] / "log/combine_long_reads.{se_datatype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" %config["conda"]["common"]["yaml"])
     resources:
@@ -22,25 +25,32 @@ rule combine_se_reads:
         mem=parameters["memory_mb"]["combine_long_reads"],
     threads: parameters["threads"]["combine_long_reads"]
     shell:
-        "cat {input.se_reads} > {output.combined_se_reads} 2>{log.log}; "
+        " if [[ {params.number_of_files} == 1 ]]; "
+        " then "
+        "     ln -sf ../final/`basename {input.se_reads}` {output.combined_se_reads} > {log.log} 2>&1; "
+        " else "
+        "     cat {input.se_reads} > {output.combined_se_reads} 2>{log.log}; "
+        " fi "
 
 rule combine_paired_reads:
     input:
-        pe_forward_reads=lambda wildcards: expand(output_dict["data"] / ("fastq/%s/filtered/{pairprefix}_1%s" % (wildcards.datatype,
-                                                                                                                 config["fastq_extension"])),
-                                                  pairprefix=input_pairprefix_dict[wildcards.datatype]),
-        pe_reverse_reads=lambda wildcards: expand(output_dict["data"] / ("fastq/%s/filtered/{pairprefix}_2%s" % (wildcards.datatype,
-                                                                                                                 config["fastq_extension"])),
-                                                  pairprefix=input_pairprefix_dict[wildcards.datatype]),
+        pe_forward_reads=lambda wildcards: expand(config["out_dir"] / ("data/%s/filtered/{pairprefix}%s%s" % (wildcards.pe_datatype,
+                                                                                                                    config["fwd_fastq_sfx"],
+                                                                                                                    config["fastq_ext"])),
+                                                  pairprefix=config["data"][wildcards.pe_datatype]["conv_pair_prefix_list"]),
+        pe_reverse_reads=lambda wildcards: expand(config["out_dir"] / ("data/%s/filtered/{pairprefix}%s%s" % (wildcards.pe_datatype,
+                                                                                                                        config["fwd_fastq_sfx"],
+                                                                                                                        config["fastq_ext"])),
+                                                  pairprefix=config["data"][wildcards.pe_datatype]["conv_pair_prefix_list"]),
     output:
-        combined_pe_forward_reads=output_dict["data"] / ("fastq/{datatype, hic|illumina}/combined/{datatype}.combined_1%s" % config["fastq_extension"]),
-        combined_pe_reverse_reads=output_dict["data"] / ("fastq/{datatype, hic|illumina}/combined/{datatype}.combined_2%s" % config["fastq_extension"]),
+        combined_pe_forward_reads=config["out_dir"] / ("data/{pe_datatype}/combined/{pe_datatype}.combined%s%s" % (config["fwd_fastq_sfx"], config["fastq_ext"])),
+        combined_pe_reverse_reads=config["out_dir"] / ("data/{pe_datatype}/combined/{pe_datatype}.combined%s%s" % (config["rev_fastq_sfx"], config["fastq_ext"])),
     log:
-        log=output_dict["log"] / "combine_long_reads.{datatype}.log",
-        cluster_log=output_dict["cluster_log"] / "combine_long_reads.{datatype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "combine_long_reads.{datatype}.err"
+        log=config["out_dir"] / "log/combine_long_reads.{pe_datatype}.log",
+        cluster_log=config["out_dir"] / "log/combine_long_reads.{pe_datatype}.cluster.log",
+        cluster_err=config["out_dir"] / "log/combine_long_reads.{pe_datatype}.err"
     benchmark:
-        output_dict["benchmark"] / "combine_long_reads.{datatype}.benchmark.txt"
+        config["out_dir"] / "log/combine_long_reads.{pe_datatype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" %config["conda"]["common"]["yaml"])
     resources:
@@ -53,4 +63,3 @@ rule combine_paired_reads:
     shell:
         "cat {input.pe_forward_reads} > {output.combined_pe_forward_reads} 2>{log.log}; "
         "cat {input.pe_reverse_reads} > {output.combined_pe_reverse_reads} 2>>{log.log}; "
-

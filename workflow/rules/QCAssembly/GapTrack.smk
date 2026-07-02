@@ -2,20 +2,20 @@
 
 rule create_gap_track: #
     input:
-        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
+        fasta="{fasta_dir}/{fasta_prefix}.fasta",
+        log_dir=ancient("{fasta_dir}/log/"),
     output:
-        gap_bed=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type, gap}/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.track.bed",
-        gap_bedgraph=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/{track_type, gap}/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type}.track.bedgraph",
-        gap_bedgraph_alias=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, gap}.track.bedgraph",
-
+        gap_bed="{fasta_dir}/assembly_qc/{track_type, gap}/{fasta_prefix}/{fasta_prefix}.{track_type}.track.bed",
+        gap_bedgraph="{fasta_dir}/assembly_qc/{track_type, gap}/{fasta_prefix}/{fasta_prefix}.{track_type}.track.bedgraph",
+        gap_bedgraph_alias="{fasta_dir}/assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.{track_type, gap}.track.bedgraph",
     log:
-        seqtk=output_dict["log"]  / "create_gap_track.{assembly_stage}..{parameters}.{track_type}.{genome_prefix}.{haplotype}.seqtk.log",
-        awk=output_dict["log"] / "create_gap_track.{assembly_stage}..{parameters}.{track_type}.{genome_prefix}.{haplotype}.awk.log",
-        cp=output_dict["log"] / "create_gap_track.{assembly_stage}..{parameters}.{track_type}.{genome_prefix}.{haplotype}.cp.log",
-        cluster_log=output_dict["cluster_log"] / "create_gap_track.{assembly_stage}..{parameters}.{track_type}.{genome_prefix}.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_gap_track.{assembly_stage}..{parameters}.{track_type}.{genome_prefix}.{haplotype}.cluster.err"
+        seqtk="{fasta_dir}/log/create_gap_track.{fasta_prefix}.{track_type}.seqtk.log",
+        awk="{fasta_dir}/log/create_gap_track.{fasta_prefix}.{track_type}.awk.log",
+        cp="{fasta_dir}/log/create_gap_track.{fasta_prefix}.{track_type}.cp.log",
+        cluster_log="{fasta_dir}/log/create_gap_track.{fasta_prefix}.{track_type}.cluster.log",
+        cluster_err="{fasta_dir}/log/create_gap_track.{fasta_prefix}.{track_type}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "create_gap_track.{assembly_stage}..{parameters}.{track_type}.{genome_prefix}.{haplotype}.benchmark.txt"
+        "{fasta_dir}/log/create_gap_track.{fasta_prefix}.{track_type}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

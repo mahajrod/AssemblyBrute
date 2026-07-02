@@ -3,11 +3,17 @@
 "conda":
     "common":
         "yaml": "workflow/envs/conda.common.yaml"
-        "name": "yggbase"
+        "name": "common"
         "pip": "workflow/envs/pip.common.requirements"
     "kmer":
         "yaml": "workflow/envs/conda.kmer.yaml"
         "name": "kmer"
+    "flye":
+        "yaml": "workflow/envs/conda.flye.yaml"
+        "name": "flye"
+    "nextdenovo":
+        "yaml": "workflow/envs/conda.nextdenovo.yaml"
+        "name": "nextdenovo"
     "hifiasm":
         "yaml": "workflow/envs/conda.hifiasm.yaml"
         "name": "hifiasm"
@@ -17,10 +23,7 @@
     "liftover":
         "yaml": "workflow/envs/conda.liftover.yaml"
         "name": "liftover"
-    "salsa2":
-        "yaml": "workflow/envs/conda.salsa2.yaml"
-        "name": "salsa2"
-    "busco":
+    "busco5":
         "yaml": "workflow/envs/conda.busco5.yaml"
         "name": "busco5"
     "busco6":
@@ -87,14 +90,12 @@
         "purge_level": "int"
         "cov_multiplicator": "float"
         "use_hic": "bool"
+        "use_parental": "bool"
         "dual_scaf": "bool"
         "assembly_ploidy": "Int32"
         "ul-cut": "int"
         "min_contig_coverage": "int"
         "ont_mode": "bool"
-        "qc_datatypes": "list"
-        "merqury_qc_datatypes": "list"
-        "purge_dups_qc_datatypes": "list"
         "lambda": "Int32"
         "main_datatypes": "list"
         "ultra_long_reads": "list"
@@ -104,6 +105,15 @@
         "sim_threshold_for_hapdup_reads": 'Float32'
         "D": "Int32"
         "N": "Int32"
+    "flye":
+        "assembly_ploidy": "Int32"
+        "main_datatypes": list
+        "input_type": "str"
+        "polishing_iterations": "Int32"
+        "read_error": "Float32"
+        "keep_haplotypes": "bool"
+        "no_alt_contigs": "bool"
+        "scaffolding": "bool"
 
 "resources_dir": "config/resources/"
 #--------------------------
@@ -113,58 +123,49 @@
 "secondary_tool_config_file": "config/core.secondary_tools.yaml"      # Path to 'secondary tool' config file relative to Snakefile
 #---- Cluster config file ----
 "cluster_config_file": "config/cluster.yaml"      # Path to 'secondary tool' config file relative to Snakefile
+#---- Datatype config file ----
+"datatype_config_file": "config/datatypes.yaml"      # Path to 'secondary tool' config file relative to Snakefile
 #---- Skip step config file ----
 "skip_config_file": "config/skip.yaml"      # Path to 'skip' config file relative to Snakefile
-
-#"threads":      "config/resources/threads.tab"
-#"memory_mb":    "config/resources/memory_mb.tab"
-#"time":         "config/resources/time.tab"
 #----
+
 #---- Directory structure config ----
 
 #---- Resources ----
 "microchromosome_prot_set": "resources/microchromosomes/MicroFinder_prot_set.v0.1.fa.gz"
-#-------------------
-#-------- References --------
-#-------- Variant filtration ---------
-#-------- Annotation --------
-
+#----
 #---- Input ----
 "input_dir": "input/"
 #----
 
+#---- Logging ----
+"init_stage_log_prefix": "initialization"
 #----
 #---- Output directory and subdirectories ----
 "out_dir": "results/"
 "tmp_dir": "results/tmp/"
-#--------- Subdirectories --------
-"first_level_subdir_list":
-  - "download"
-  - "config"
-  - "data"
-  - "qc"
-  #- "assembly_qc"
-  - "log"
-  - "benchmark"
-  - "cluster_log"
-  - "cluster_error"
-  - "preprocessing"
-  #- "basecall"
-  - "kmer"
-  - "draft"
-  - "error_correction"
-  - "contig"
-  - "purge_dups"
-  - "lr_scaffolding"
-  - "bionano_scaffolding"
-  - "hic_scaffolding"
-  - "contamination_scan"
-#--------
 
 #---- Tool parameters ----
 "parameters":
     "default":
         "tool_options":
+            "kmer_qc":
+                "default":
+                    "kmer_counter_list":
+                        - "meryl"
+                    "genome_size_estimators":
+                        - "genomescope"
+                        - "krater"
+                "all_counters":
+                    "kmer_counter_list":
+                        - "meryl"
+                        - "yak"
+                        - "jellyfish"
+                    "genome_size_estimators":
+                        - "genomescope"
+                        - "krater"
+            "draft_qc":
+                "def": {}
             "assembly_qc":
                 "default":
                     "qc_datatypes":
@@ -368,6 +369,19 @@
                 "simplex":
                     "qc_datatypes":
                         - "simplex"
+
+            "arima":
+                "def": {}
+            "bwa_only":
+                "def": {}
+            "pairtools":
+                "def": {}
+            "pore-c":
+                "def": {}
+            "cifi":
+                "def": {}
+            "juicer":
+                "def": {}
             "tadbit":
                 "default":
                     "hic":
@@ -390,7 +404,7 @@
                 "min_aln_len_10k":
                     "qc_datatypes": []
                     "min_aln_len": 10000
-            "microsome_detection":
+            "microchromosome_detection":
                 "default":
                     "max_length": 10000000
             "mitohifi":
@@ -588,7 +602,32 @@
                                 "min_mapping_quality": 0
                             "hic":
                                 "min_mapping_quality": 0
-
+            "yak":
+                "default":
+                    "illumina":
+                        "kmer_length":
+                            - 21
+                    "nanopore":
+                        "kmer_length":
+                            - 21
+                    "duplex":
+                        "kmer_length":
+                            - 21
+                    "simplex":
+                        "kmer_length":
+                            - 21
+                    "clr":
+                        "kmer_length":
+                            - 21
+                    "hifi":
+                        "kmer_length":
+                            - 21
+                    "lqccs":
+                        "kmer_length":
+                            - 21
+                    "hic":
+                        "kmer_length":
+                            - 21
             "jellyfish":
                 "default":
                     "illumina":
@@ -691,8 +730,8 @@
             "select_scaffolds":
                 "default":
                     "long":
-                        "max_len": null
                         "max_scaffolds": 200
+                        "max_len": null
                         "min_len": 1000000
                         #"min_fraction": 0.01
                     "middle":
@@ -750,6 +789,11 @@
                             - 10
                         "upper_boundary":
                             - 1500
+                    "hic":
+                        "lower_boundary":
+                            - 10
+                        "upper_boundary":
+                            - 1500
             "telo_finder":
                 "default":
                     "size": 200
@@ -759,17 +803,18 @@
             #"rapid_split":
             #    "print_split_fasta": False
             "nextpolish2":
-                "default":
+                "def":
                     "qc_datatypes": []
             "hapsolo":
-                "default":
+                "def":
                     "iterations_per_thread": 1000
-                "skipped":
+                "skip":
                     "iterations_per_thread": 1000
             "purge_dups":
-                "default":
+                "hifi":
                     "cov_multiplicator": 4.5 # 4.5 *lambda
-                    "main_datatypes": []
+                    "main_datatypes":
+                        - "hifi"
                     "qc_datatypes": []
                     "interhaplotype_transfer_blacklist":
                         - "junk"
@@ -777,19 +822,37 @@
                         - "highcov"
                     "purging_blacklist": null
                     "purging_whitelist": null
-                "skipped":
+                "nano":
                     "cov_multiplicator": 4.5 # 4.5 *lambda
-                    "main_datatypes": []
-                    "qc_datatypes": [ ]
+                    "main_datatypes":
+                        - "nanopore"
+                        - "duplex"
+                        - "simplex"
+                    "qc_datatypes": []
                     "interhaplotype_transfer_blacklist":
                         - "junk"
                         - "ovlp"
                         - "highcov"
                     "purging_blacklist": null
                     "purging_whitelist": null
-                "keep_hicov":
+                "hifi_keep_hicov":
                     "cov_multiplicator": 4.5 # 4.5 *lambda
-                    "main_datatypes": []
+                    "main_datatypes":
+                        - "hifi"
+                    "qc_datatypes": []
+                    "interhaplotype_transfer_blacklist":
+                        - "junk"
+                        - "ovlp"
+                        - "highcov"
+                    "purging_blacklist":
+                        - "highcov"
+                    "purging_whitelist": null
+                "nano_keep_hicov":
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "main_datatypes":
+                        - "nanopore"
+                        - "duplex"
+                        - "simplex"
                     "qc_datatypes": []
                     "interhaplotype_transfer_blacklist":
                         - "junk"
@@ -1005,6 +1068,17 @@
                     "resolution":
                         - 2048
                         - 4096
+            "pretextview":
+                "default":
+                    "track_ext":
+                        "gap": "gap"
+                        "telomere": "telomere"
+                        "gc": "repeat_density"
+                        "windowmasker": "repeat_density"
+                        "trf": "repeat_density"
+                        "coverage": "coverage"
+                        "busco": "gap"
+                        "purge_dups": "gap"
             "gcp":
                 "default":
                     "hifi":
@@ -1082,13 +1156,13 @@
                      "min_mapping_quality": 10
                      "phasing_kmer_length": "NA"
                      "use_phased_reads": False
-                "phased_reads":
+                "phased":
                      "qc_datatypes": []
                      "min_contig_len": 1000
                      "min_mapping_quality": 10
                      "phasing_kmer_length": 31
                      "use_phased_reads": True
-                "unphased_reads":
+                "unphased":
                      "qc_datatypes": []
                      "min_contig_len": 1000
                      "min_mapping_quality": 10
@@ -1143,84 +1217,57 @@
                     "NcoI": "CCATGCATGG"
                     "Csp6I_MseI": "TTATAA,GTATAC,GTATAA,TTATAC"
                     #"OmniC": null
-                "default":
+                "def":
                      "qc_datatypes": []
                      "min_contig_len": null
                      "min_mapping_quality": null
                      "phasing_kmer_length": "NA"
                      "use_phased_reads": False
                      "editor_repeat_coverage": null
-                "phased_reads":
+                "phased":
                      "qc_datatypes": []
                      "min_contig_len": null
                      "min_mapping_quality": null
                      "phasing_kmer_length": 31
                      "use_phased_reads": True
                      "editor_repeat_coverage": Nnull
-                "unphased_reads":
+                "unphased":
                      "qc_datatypes": []
                      "min_contig_len": null
                      "min_mapping_quality": null
                      "phasing_kmer_length": "NA"
                      "use_phased_reads": False
                      "editor_repeat_coverage": null
-                "phased_reads_editor_repcov_5":
+                "phased_repcov_5":
                      "qc_datatypes": []
                      "min_contig_len": null
                      "min_mapping_quality": null
                      "phasing_kmer_length": 31
                      "use_phased_reads": True
                      "editor_repeat_coverage": 5
-                "unphased_reads_editor_repcov_5":
+                "unphased_repcov_5":
                      "qc_datatypes": []
                      "min_contig_len": null
                      "min_mapping_quality": null
                      "phasing_kmer_length": "NA"
                      "use_phased_reads": False
                      "editor_repeat_coverage": 5
-                "phased_reads_editor_repcov_10":
+                "phased_repcov_10":
                      "qc_datatypes": []
                      "min_contig_len": null
                      "min_mapping_quality": null
                      "phasing_kmer_length": 31
                      "use_phased_reads": True
                      "editor_repeat_coverage": 10
-                "unphased_reads_editor_repcov_10":
+                "unphased_editor_10":
                      "qc_datatypes": []
                      "min_contig_len": null
                      "min_mapping_quality": null
                      "phasing_kmer_length": "NA"
                      "use_phased_reads": False
                      "editor_repeat_coverage": 10
-            "salsa2":
-                "restriction_seq":
-                    "Arima": "GATC,GANTC"
-                    "Arima4": "GATC,GANTC,CTNAG,TTAA"
-                    "OmniC": "DNASE"
-                    "MboI": "GATC"
-                "ligation_motif":
-                    "Arima": "GAATAATC,GAATACTC,GAATAGTC,GAATATTC,GAATGATC,GACTAATC,GACTACTC,GACTAGTC,GACTATTC,GACTGATC,GAGTAATC,GAGTACTC,GAGTAGTC,GAGTATTC,GAGTGATC,GATCAATC,GATCACTC,GATCAGTC,GATCATTC,GATCGATC,GATTAATC,GATTACTC,GATTAGTC,GATTATTC,GATTGATC"
-                    "HindIII": "AAGCTAGCTT"
-                    "DpnII": "GATCGATC"
-                    "MboI": "GATCGATC"
-                    "NcoI": "CCATGCATGG"
-                    "Csp6I_MseI": "TTATAA,GTATAC,GTATAA,TTATAC"
-                    "OmniC": null
-                "default":
-                     "qc_datatypes": []
-                     "min_contig_len": 1000
-                "phased_reads":
-                     "qc_datatypes": []
-                     "min_contig_len": 1000
-                     "use_phased_reads": True
-                     "phasing_kmer_length": 31
-                "unphased_reads":
-                     "qc_datatypes": []
-                     "min_contig_len": 1000
-                     "use_phased_reads": False
-                     "phasing_kmer_length": "NA"
             "samba":
-                "default":
+                "def":
                     "phasing_kmer_length": 31
                     "hifi":
                         "matching_len": 3500
@@ -1241,7 +1288,7 @@
                         - "hifi"
                     "main_datatypes":
                         - "hifi"
-                "phased_reads":
+                "phased":
                     "phasing_kmer_length": 31
                     "hifi":
                         "matching_len": 3500
@@ -1262,7 +1309,7 @@
                         - "hifi"
                     "main_datatypes":
                         - "hifi"
-                "unphased_reads":
+                "unphased":
                     "phasing_kmer_length": "NA"
                     "hifi":
                         "matching_len": 3500
@@ -1319,14 +1366,62 @@
         "tool_options":
             "jellyfish":
                 "default":
-                    "hifi":
-                        "kmer_length":
-                            - 21
-                        "hash_size": "200M"
                     "illumina":
                         "kmer_length":
                             - 21
                         "hash_size": "200M"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "nanopore":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "200M"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "duplex":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "200M"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "simplex":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "200M"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "clr":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "200M"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "hifi":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "200M"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "lqccs":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "200M"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "hic":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "200M"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
             "meryl":
                 "default":
                     "hifi":
@@ -1436,14 +1531,62 @@
         "tool_options":
             "jellyfish":
                 "default":
-                    "hifi":
-                        "kmer_length":
-                            - 21
-                        "hash_size": "2G"
                     "illumina":
                         "kmer_length":
                             - 21
                         "hash_size": "2G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "nanopore":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "2G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "duplex":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "2G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "simplex":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "2G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "clr":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "2G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "hifi":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "2G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "lqccs":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "2G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "hic":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "2G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
             #"meryl":
             #    "default":
             #        "hifi":
@@ -1549,14 +1692,62 @@
         "tool_options":
             "jellyfish":
                 "default":
-                    "hifi":
-                        "kmer_length":
-                            - 21
-                        "hash_size": "7G"
                     "illumina":
                         "kmer_length":
                             - 21
                         "hash_size": "7G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "nanopore":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "7G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "duplex":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "7G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "simplex":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "7G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "clr":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "7G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "hifi":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "7G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "lqccs":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "7G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "hic":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "7G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
             #"meryl":
             #    "default":
             #        "hifi":
@@ -1658,14 +1849,62 @@
         "tool_options":
             "jellyfish":
                 "default":
-                    "hifi":
-                        "kmer_length":
-                            - 21
-                        "hash_size": "20G"
                     "illumina":
                         "kmer_length":
                             - 21
                         "hash_size": "20G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "nanopore":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "20G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "duplex":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "20G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "simplex":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "20G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "clr":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "20G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "hifi":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "20G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "lqccs":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "20G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "hic":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "20G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
             #"meryl":
             #    "default":
             #        "hifi":
@@ -1767,14 +2006,62 @@
         "tool_options":
             "jellyfish":
                 "default":
-                    "hifi":
-                        "kmer_length":
-                            - 21
-                        "hash_size": "32G"
                     "illumina":
                         "kmer_length":
                             - 21
                         "hash_size": "32G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "nanopore":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "32G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "duplex":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "32G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "simplex":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "32G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "clr":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "32G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "hifi":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "32G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "lqccs":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "32G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "hic":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "32G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
             #"meryl":
             #    "default":
             #        "hifi":
@@ -1876,14 +2163,62 @@
         "tool_options":
             "jellyfish":
                 "default":
-                    "hifi":
-                        "kmer_length":
-                            - 21
-                        "hash_size": "64G"
                     "illumina":
                         "kmer_length":
                             - 21
-                        "hash_size": "64G"
+                        "hash_size": "40G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "nanopore":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "40G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "duplex":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "40G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "simplex":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "40G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "clr":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "40G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "hifi":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "40G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "lqccs":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "40G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "hic":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "40G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
             #"meryl":
             #    "default":
             #        "hifi":
@@ -1985,14 +2320,62 @@
         "tool_options":
             "jellyfish":
                 "default":
-                    "hifi":
-                        "kmer_length":
-                            - 21
-                        "hash_size": "128G"
                     "illumina":
                         "kmer_length":
                             - 21
-                        "hash_size": "128G"
+                        "hash_size": "80G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "nanopore":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "80G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "duplex":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "80G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "simplex":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "80G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "clr":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "80G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "hifi":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "80G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "lqccs":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "20G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "hic":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "80G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
             #"meryl":
             #    "default":
             #        "hifi":
@@ -2092,14 +2475,62 @@
         "tool_options":
             "jellyfish":
                 "default":
-                    "hifi":
-                        "kmer_length":
-                            - 21
-                        "hash_size": "160G"
                     "illumina":
                         "kmer_length":
                             - 21
-                        "hash_size": "160G"
+                        "hash_size": "120G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "nanopore":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "120G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "duplex":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "120G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "simplex":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "120G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "clr":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "120G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "hifi":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "120G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "lqccs":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "20G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
+                    "hic":
+                        "kmer_length":
+                            - 21
+                        "hash_size": "120G"
+                        "min_coverage": 1
+                        "max_coverage": 100000000
+                        "increment": 1
             #"meryl":
             #    "default":
             #        "hifi":
@@ -2190,337 +2621,45 @@
                         "use_corrected_reads": True
                         "matching_len": 10000
 
-"kmer_counter_list":
-    #- "jellyfish"
-    - "meryl"
+"fasta_ext": ".fasta.gz"
+"fastq_ext": ".fastq.gz"
+"fwd_fastq_sfx": "_1"
+"rev_fastq_sfx": "_2"
 
-"allowed_data_types": # No "_" is allowed in the datatype name, as it is used as separator for merged datatypes
-    - "hifi"
-    #- "clr"
-    - "nanopore"
-    - "duplex"
-    - "simplex"
-    - "ultralongnano"
-    - "adaptivenano"
-    #- "bionano"
-    - "hic"
-    - "illumina"
-    - "reference"
-    - "lqccs" # Low quality circular consensuses, i.e. nonHiFi
-    #- "lr"
+"allowed_stage_list":
+    - "raw_read_qc"
+    - "raw_kmer_qc"
+    - "filter_reads"
+    - "mtdna"
+    - "filtered_read_qc"
+    - "read_contamination_scan"
+    - "kmer_qc"
+    - "smudgeplot" # smudgeplot requires a lot of memory to operate on mammalian size genomes (>700 Gbp of memory). Turn this analysis on only if you are sure you have enough memory. TODO: replace smudgeplot by external_tools consuming less memory.
+    - "draft_qc"
+    - "contig"
+    - "dedup"
+    - "hic_scaffolding"
+    - "hic_alignment"
+    - "polishing"
+    - "ref_scaffolding"
+    - "gap_closing"
+    - "read_phasing"
 
-"nanopore_data_types":
-    - "nanopore"
-    - "duplex"
-    - "simplex"
-    - "ultralongnano"
-    - "adaptivenano"
+"no_fasta_stage_list":
+    - "check"
+    - "raw_read_qc"
+    - "raw_kmer_qc"
+    - "filter_reads"
+    - "filtered_read_qc"
+    - "read_contamination_scan"
+    - "gcp"
+    - "kmer_qc"
+    - "mtdna"
+    - "read_phasing"
 
-"fastqc_data_types":
-    - "hifi"
-    - "hic"
-    - "illumina"
-    - "lqccs"
-    #- "lr"
-
-
-"long_read_data":
-    - "hifi"
-    - "nanopore"
-    - "duplex"
-    - "simplex"
-    - "lqccs"
-    - "ultralongnano"
-    - "adaptivenano"
-
-"genome_size_estimation_data":
-    - "hifi"
-    - "illumina"
-    - "hic"
-    - "nanopore"
-    - "simplex"
-    - "duplex"
-    - "ultralongnano"
-
-"kraken_scan_data":
-    - "hifi"
-    - "illumina"
-    - "hic"
-    - "nanopore"
-    - "duplex"
-    - "simplex"
-    - "lqccs"
-    - "ultralongnano"
-    - "adaptivenano"
-
-"read_phasing_data":
-    - "hic"
-    #- "hifi" # optional, uncomment only when necessary
-    # - "clr"
-
-"fastq_based_data":
-    - "hifi"
-    - "lqccs"
-    #- "clr"
-    - "nanopore"
-    - "duplex"
-    - "simplex"
-    - "hic"
-    - "lr"
-    - "illumina"
-    - "ultralongnano"
-    - "adaptivenano"
-
-"bam_based_data":
-    - "hifi"
-    #- "clr"
-    - "lqccs"
-    #- "nanopore"
-    - "duplex"
-    - "simplex"
-    - "ultralongnano"
-    - "adaptivenano"
-
-"fasta_based_data": # Datatypes that might be in fasta format. For example corrected hifi or nanopore reads
-    - "hifi"
-    - "clr"
-    #- "nanopore"
-    - "duplex"
-    - "simplex"
-    - "lqccs"
-    #- "hic"
-    #- "lr"
-    - "illumina"
-    - "ultralongnano"
-    - "adaptivenano"
-
-"paired_fastq_based_data":
-    - "hic"
-    - "lr"
-    - "illumina"
-    - "bgiseq"
-
-"se_fastq_based_data":
-    - "hifi"
-    - "lqccs"
-    - "nanopore"
-    - "duplex"
-    - "simplex"
-    - "ultralongnano"
-    - "adaptivenano"
-
-"coverage_track_data": # Data for which a coverage track will be generated during preparations for manual curation
-    - "illumina"
-    - "hifi"
-    - "simplex"
-    - "ultralongnano"
-    - "adaptivenano"
-    #- "clr"
-    ##- "nanopore" # TODO: add nanopore support
-
-"purge_dups_data": # Data which might be used for purging haplotypic duplications
-    - "hifi"
-    #- "clr"
-    #- "nanopore"
-    - "duplex"
-    - "simplex"
-
-"gap_filling_data": # Data which might be used for filling gaps
-    - "hifi"
-    #- "clr"
-    #- "nanopore"
-    - "duplex"
-    - "simplex"
-    - "ultralongnano"
-    - "adaptivenano"
-
-"variant_calling_data":
-    - "hifi"
-    - "illumina"
-    #- "clr"
-    ##- "nanopore"
-
-"fastq_extension": ".fastq.gz"
-"fasta_extension": ".fasta.gz"
-"bam_extension": ".bam"
-"cmap_extension": ".cmap"
-"assembly_fasta_extension": ".fasta"
-
-"allowed_stage_list": # Dictionary containing description of stage variants
-    "preprocessing":                 # mega_stage
-        "default":                   # stage_set_name
-            "fastq":                 # starting point
-                - "check_reads"      # stage
-            "draft":                 # starting point
-                - "check_reads"      # stage
-                - "check_draft"      # stage
-    "qc":
-        "default":
-            "fastq":
-                - "read_qc"
-                - "filter_reads"
-                #- "kat" # obsolete, use gcp instead as KAT requires jellyfish database.
-                - "gcp"
-                #- "smudgeplot" # smudgeplot requires a lot of memory to operate on mammalian size genomes (>700 Gbp of memory). Turn this analysis on only if you are sure you have enough memory. TODO: replace smudgeplot by external_tools consuming less memory.
-            "draft":
-                - "read_qc"
-                - "filter_reads"
-                #- "filter_draft"
-                - "draft_qc"
-        "qc_draft_only":
-            "fastq": []
-            "draft":
-                - "draft_qc"
-    "assembly":
-        "default": # same as "full"
-            "fastq":
-                - "contig"
-                - "purge_dups"
-                - "hic_scaffolding"
-            "draft":
-                - "purge_dups"
-                - "hic_scaffolding"
-        "full":
-            "fastq":
-                - "contig"
-                - "purge_dups"
-                - "hic_scaffolding"
-            "draft":
-                - "purge_dups"
-                - "hic_scaffolding"
-        "hic_scaffolding_with_purge_dups":
-            "fastq":
-                - "contig"
-                - "purge_dups"
-                - "hic_scaffolding"
-            "draft":
-                - "purge_dups"
-                - "hic_scaffolding"
-        "hic_scaffolding":
-            "fastq":
-                - "contig"
-                - "hic_scaffolding"
-            "draft":
-                - "hic_scaffolding"
-        "purge_dups":
-            "fastq":
-                - "contig"
-                - "purge_dups"
-            "draft": #TODO: implement
-                - "purge_dups"
-        "contig":
-            "fastq":
-                - "contig"
-            "draft": []
-        "polished_contig":
-            "fastq":
-                - "contig"
-                - "polishing"
-                #- "hic_scaffolding"
-            "draft":
-                - "polishing"
-        "polished_contig_hic_scaffolding":
-            "fastq":
-                - "contig"
-                - "polishing"
-                - "hic_scaffolding"
-                #- "hic_scaffolding"
-            "draft":
-                - "polishing"
-                - "hic_scaffolding"
-        "polished_contig_hic_scaffolding_dedup":
-            "fastq":
-                - "contig"
-                - "polishing"
-                - "hic_scaffolding"
-                - "dedup"
-            "draft":
-                - "polishing"
-                - "hic_scaffolding"
-                - "dedup"
-        "contig_dedup_polish_hic_scaffolding":
-            "fastq":
-                - "contig"
-                - "dedup"
-                - "polishing"
-                - "hic_scaffolding"
-            "draft":
-                - "dedup"
-                - "polishing"
-                - "hic_scaffolding"
-        "contig_dedup":
-            "fastq":
-                - "contig"
-                - "dedup"
-            "draft":
-                - "dedup"
-        "skip_hic_scaffolding":
-            "fastq":
-                - "contig"
-                - "purge_dups"
-            "draft":
-                - "purge_dups"
-        "ref_scaffolding_skip_hic_scaffolding":
-            "fastq":
-                - "contig"
-                - "purge_dups"
-                - "ref_scaffolding"
-            "draft":
-                - "purge_dups"
-                - "ref_scaffolding"
-        "ref_scaffolding_only":
-            "fastq":
-                - "contig"
-                - "ref_scaffolding"
-            "draft":
-                - "ref_scaffolding"
-        "ref_scaffolding":
-            "fastq":
-                - "contig"
-                - "purge_dups"
-                - "hic_scaffolding"
-                - "ref_scaffolding"
-            "draft":
-                - "purge_dups"
-                - "ref_scaffolding"
-                - "hic_scaffolding"
-    "finalization":
-        "gap_closing":
-            "fastq":
-                - "gap_closing"
-            "draft":
-                - "gap_closing"
-        "polishing":
-            "fastq":
-                - "polishing"
-            "draft":
-                - "polishing"
-        "gap_closing_with_polishing":
-            "fastq":
-                - "gap_closing"
-                - "polishing"
-            "draft":
-                - "gap_closing"
-                - "polishing"
-        "full":
-            "fastq":
-                - "gap_closing"
-                - "ref_scaffolding"
-            "draft":
-                - "gap_closing"
-                - "ref_scaffolding"
-        "gap_closing_ref_scaffolding":
-            "fastq":
-                - "gap_closing"
-                - "ref_scaffolding"
-            "draft":
-                - "gap_closing"
-                - "ref_scaffolding"
-        "ref_scaffolding":
-            "fastq":
-                - "ref_scaffolding"
-            "draft":
-                - "ref_scaffolding"
+"assembly_initiating_stage_list":
+    - "draft_qc"
+    - "contig"
 
 "tool_specific_features":
     "hifiasm":
@@ -2544,6 +2683,8 @@
             - "n-perturb"       # --n-perturb
             - "f-perturb"       # --f-perturb
             - "l-misjoin"       # --l-msjoin
+    "flye": []
+    "nextdenovo": []
 
 "no_motif_enzyme_sets":
     - "OmniC"
@@ -2558,7 +2699,7 @@
         - "DpnII"
     "MboI":
         - "MboI"
-    "OmniC": []       # OmniC using nonenzyme fragmentation
+    "OmniC": []       # OmniC uses nonenzyme fragmentation
     "unknown": []
 
 "allowed_coverage_estimators":

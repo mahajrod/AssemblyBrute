@@ -2,15 +2,16 @@
 ruleorder: create_gc_track > create_bedgraph_track
 rule create_gc_track: #
     input:
-        fasta=out_dir_path / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.fasta"
+        fasta="{fasta_dir}/{fasta_prefix}.fasta",
+        log_dir=ancient("{fasta_dir}/log/"),
     output:
-        gc_bedgraph=out_dir_path / "{assembly_stage}/{parameters}/assembly_qc/tracks/{genome_prefix}.{assembly_stage}.{haplotype}/{genome_prefix}.{assembly_stage}.{haplotype}.{track_type, gc}.win{window}.step{step}.track.bedgraph",
+        gc_bedgraph="{fasta_dir}/assembly_qc/tracks/{fasta_prefix}/{fasta_prefix}.{track_type, gc}.win{window}.step{step}.track.bedgraph",
     log:
-        gc=output_dict["log"]  / "create_gc_track.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.win{window}.step{step}.gc.log",
-        cluster_log=output_dict["cluster_log"] / "create_gc_track.{assembly_stage}.{track_type}.{parameters}.{genome_prefix}.{haplotype}.win{window}.step{step}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_gc_track.{assembly_stage}.{track_type}.{parameters}.{genome_prefix}.{haplotype}.win{window}.step{step}.cluster.err"
+        gc="{fasta_dir}/log/create_gc_track.{fasta_prefix}.{track_type}.win{window}.step{step}.gc.log",
+        cluster_log="{fasta_dir}/log/create_gc_track.{fasta_prefix}.{track_type}.win{window}.step{step}.cluster.log",
+        cluster_err="{fasta_dir}/log/create_gc_track.{fasta_prefix}.{track_type}.win{window}.step{step}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "create_gc_track.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.win{window}.step{step}.benchmark.txt"
+        "{fasta_dir}/log/create_gc_track.{fasta_prefix}.{track_type}.win{window}.step{step}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -23,4 +24,4 @@ rule create_gc_track: #
 
     shell:
         " workflow/scripts/curation/count_gc_in_windows.py -i {input.fasta} "
-        " -w {wildcards.window} -s {wildcards.step} -o {output.gc_bedgraph} 2>{log.gc}; "
+        "     -w {wildcards.window} -s {wildcards.step} -o {output.gc_bedgraph} 2>{log.gc}; "

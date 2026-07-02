@@ -1,7 +1,7 @@
 #---- Bioconda config ----
 
 #TODO: check tools and versions
-"name": "yggbase"
+"name": "common"
 "channels":
   - "mahajrod"
   - "bioconda"
@@ -43,11 +43,11 @@
   - "kraken2"
   - "smudgeplot"
   - "parallel"
-  - "routoolpa>=0.116"
+  - "routoolpa==0.116"
   - "mavr>=0.113"
   - "jellyfish>=2"
   - "krater>=2.7.11"
-  - "mace>=1.1.12"
+  - "mace==1.1.35"
   - "biopython"
   - "pyfastaq"
   - "seqtk"

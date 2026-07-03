@@ -37,7 +37,7 @@ rule trimmomatic_pe:
         node_options=parse_node_list("trimmomatic_pe"),
         cpus=parameters["threads"]["trimmomatic_pe"],
         time=parameters["time"]["trimmomatic_pe"],
-        mem=parameters["memory_mb"]["trimmomatic_pe"],
+        mem= int(0.9 * parameters["memory_mb"]["trimmomatic_pe"]),
     threads:
         parameters["threads"]["trimmomatic_pe"]
     shell:

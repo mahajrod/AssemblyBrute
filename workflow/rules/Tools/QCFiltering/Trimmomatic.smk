@@ -37,7 +37,7 @@ rule trimmomatic_pe:
         node_options=parse_node_list("trimmomatic_pe"),
         cpus=parameters["threads"]["trimmomatic_pe"],
         time=parameters["time"]["trimmomatic_pe"],
-        mem= int(0.9 * parameters["memory_mb"]["trimmomatic_pe"]),
+        mem= int(0.5 * parameters["memory_mb"]["trimmomatic_pe"]), # trimmomatic (at least version 0.40) eats more memory than it is allowed by -Xmx option
     threads:
         parameters["threads"]["trimmomatic_pe"]
     shell:

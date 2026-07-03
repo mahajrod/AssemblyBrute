@@ -344,29 +344,6 @@ class Stage:
                                         database=self.config["database_set"]["fcs"])
                                 ]
 
-        """
-        if (config["tax_id"] is None) or (not config["tax_id"]):
-            sys.stderr.write("Tax id was not set, skipping contamination scan in FCS databases...\n")
-        else:
-            if config["database_set"]["fcs_adaptor"] and (not config["skip_fcs_adaptor"]):
-                results_list += [
-                                *[expand(config["out_dir"] / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs_adaptor/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.{database}.report",
-                                       genome_prefix=[config["genome_prefix"], ],
-                                       assembly_stage=["contig"],
-                                       haplotype=stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"],
-                                       parameters=[parameters_label],
-                                       database=config["database_set"]["fcs_adaptor"]) for parameters_label in parameters_list],
-                                ]
-            if config["database_set"]["fcs"] and (not config["skip_fcs"]):
-                results_list += [*[expand(config["out_dir"] / "{assembly_stage}/{parameters}/contamination_scan/{haplotype}/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.{database}.taxonomy",
-                                        genome_prefix=[config["genome_prefix"], ],
-                                        assembly_stage=["contig"],
-                                        haplotype=stage_dict["contig"]["parameters"][parameters_label]["haplotype_list"] + (["alt" if stage_dict["contig"]["parameters"][parameters_label]["option_set"]["assembly_ploidy"] > 1 else "alt0"] if stage_dict["contig"]["parameters"][parameters_label]["assembler"] == "hifiasm" else []), # TODO: modify "alt" when assemblers other than hifiasm will be added
-                                        parameters=[parameters_label],
-                                        database=config["database_set"]["fcs"]) for parameters_label in parameters_list]
-                                ]
-
-        """
         results_list += self.request_assembly_qc_files()
         return results_list
 

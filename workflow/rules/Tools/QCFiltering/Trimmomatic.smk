@@ -24,6 +24,7 @@ rule trimmomatic_pe:
         sliding_window_quality=lambda wildcards: parameters["tool_options"]["trimmomatic"][wildcards.pe_datatype]["sliding_window_quality"],
         illumina_clip=lambda wildcards: parameters["tool_options"]["trimmomatic"][wildcards.pe_datatype]["illumina_clip"],
         adapter_file=lambda wildcards: parameters["tool_options"]["trimmomatic"][wildcards.pe_datatype]["adapter_file"],
+        mem=int(0.5 * parameters["memory_mb"]["trimmomatic_pe"]) # trimmomatic (at least version 0.40) eats more memory than it is allowed by -Xmx option
     log:
         std=config["out_dir"] / "log/trimmomatic_pe.{pe_datatype}.{pairprefix}.log",
         cluster_log=config["out_dir"] / "log/trimmomatic_pe.{pe_datatype}.{pairprefix}.cluster.log",
@@ -37,11 +38,11 @@ rule trimmomatic_pe:
         node_options=parse_node_list("trimmomatic_pe"),
         cpus=parameters["threads"]["trimmomatic_pe"],
         time=parameters["time"]["trimmomatic_pe"],
-        mem= int(0.5 * parameters["memory_mb"]["trimmomatic_pe"]), # trimmomatic (at least version 0.40) eats more memory than it is allowed by -Xmx option
+        mem=parameters["memory_mb"]["trimmomatic_pe"],
     threads:
         parameters["threads"]["trimmomatic_pe"]
     shell:
-         "trimmomatic -Xmx{resources.mem}m  PE -threads {threads} -phred33 {input.forward_fastq} {input.reverse_fastq} "
+         "trimmomatic -Xmx{params.mem}m  PE -threads {threads} -phred33 {input.forward_fastq} {input.reverse_fastq} "
          "     {output.forward_fastq} {output.forward_se_fastq} {output.reverse_fastq} {output.reverse_se_fastq} "
          "     ILLUMINACLIP:{params.adapter_file}:{params.illumina_clip} "
          "     SLIDINGWINDOW:{params.sliding_window_size}:{params.sliding_window_quality} "

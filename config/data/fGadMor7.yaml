@@ -8,7 +8,7 @@
 "use_existing_envs": True # works only if --use-conda flag was set in snakemake command
 #----
 #---- Container settings ----
-"singularity_load_mode": "conda" # Allowed: "cluster" or "conda". Set to conda to use singularity installed via conda. Sometimes doesn't work due to namespace issues due to cluster settings
+"singularity_load_mode": "cluster" # Allowed: "cluster" or "conda". Set to conda to use singularity installed via conda. Sometimes doesn't work due to namespace issues due to cluster settings
 "singularity_load_str": "module load singularity " # add version if necessary. Ignored if singularity_load_mode != "cluster"
 "singularity_load_env": "common" # conda env to use if singularity_load_mode == "cluster"
 #----

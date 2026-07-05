@@ -69,11 +69,13 @@ rule busco_intersect_haplotypes: # Downloading of busco datasets is performed by
 def get_busco_table_for_all_assemblies_in_chain_per_haplotype(wildcards):
     busco_table_list = []
     parameters_dict = get_parameters_for_all_stages_in_chain(wildcards.parameters)
+    for skip_stage in config["skip_qc_fasta_stage_list"]:
+        if skip_stage in parameters_dict:
+            parameters_dict.pop(skip_stage)
     for stage in parameters_dict:
         busco_table_list += expand(config["out_dir"] / "{assembly_stage}/{parameters}/assembly_qc/{busco_version}/{genome_prefix}.{assembly_stage}.{haplotype}.{busco_lineage}.{busco_version}.full_table.tsv",
                                                assembly_stage=[stage],
                                                parameters=[parameters_dict[stage]],
-                                               #haplotype=haplotype_list,
                                                allow_missing=True,)
     return  busco_table_list
 
@@ -82,7 +84,7 @@ rule busco_intersect_stages:
     input:
         busco_tables=get_busco_table_for_all_assemblies_in_chain_per_haplotype,
     params:
-        stages=lambda wildcards: ",".join(get_parameters_for_all_stages_in_chain(wildcards.parameters)),
+        stages=lambda wildcards: ",".join(set(get_parameters_for_all_stages_in_chain(wildcards.parameters).keys()) - set(config["skip_qc_fasta_stage_list"])),
     output:
         busco_legend=config["out_dir"] / "{assembly_stage}/{parameters}/assembly_qc/{busco_version}/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.{busco_version}.legend",
         busco_orderlist=config["out_dir"] / "{assembly_stage}/{parameters}/assembly_qc/{busco_version}/stage_intersection/{genome_prefix}.{haplotype}.{busco_lineage}.{busco_version}.orderlist",
@@ -142,6 +144,9 @@ rule busco_intersect_stages:
 
 def get_labels_for_all_assemblies_in_chain(wildcards):
     chain_stage_dict = get_parameters_for_all_stages_in_chain(wildcards.parameters)
+    for skip_stage in config["skip_qc_fasta_stage_list"]:
+        if skip_stage in chain_stage_dict:
+            chain_stage_dict.pop(skip_stage)
     label_list = []
     for stage in chain_stage_dict:
         for haplotype in stage_dict[wildcards.assembly_stage].parameters[wildcards.parameters]["haplotype_list"]:
@@ -150,6 +155,9 @@ def get_labels_for_all_assemblies_in_chain(wildcards):
 
 def get_busco_tables_for_all_assemblies_in_chain(wildcards):
     chain_stage_dict = get_parameters_for_all_stages_in_chain(wildcards.parameters)
+    for skip_stage in config["skip_qc_fasta_stage_list"]:
+        if skip_stage in chain_stage_dict:
+            chain_stage_dict.pop(skip_stage)
     busco_table_list = []
     for stage in chain_stage_dict:
         for haplotype in stage_dict[wildcards.assembly_stage].parameters[wildcards.parameters]["haplotype_list"]:

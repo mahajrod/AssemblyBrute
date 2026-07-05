@@ -2657,6 +2657,9 @@
     - "mtdna"
     - "read_phasing"
 
+"skip_qc_fasta_stage_list":
+    - "hic_alignment"
+
 "assembly_initiating_stage_list":
     - "draft_qc"
     - "contig"

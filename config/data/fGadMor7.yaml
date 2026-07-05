@@ -184,10 +184,10 @@
     #    6 - quast, merqury, wga, assembly-based tracks, ragtag_qc, read-based and other tracks, busco, purge_dups_qc
     #    7 - quast, merqury, wga, assembly-based tracks, ragtag_qc, read-based and other tracks, busco, purge_dups_qc, pretext map, higlass mcool, .hic for combined haplotype
     "draft_qc":        0
-    "contig":          2
-    "dedup":           2
+    "contig":          5
+    "dedup":           5
     "hic_alignment":   0 # keep it always 0, as this stage uses fastas from the previous stage. changing it to a higher value will trigger unnecessary calculations
-    "hic_scaffolding": 0
+    "hic_scaffolding": 7
     "polishing":       0
     "ref_scaffolding": 0
     "gap_closing":     0

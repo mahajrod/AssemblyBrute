@@ -135,7 +135,7 @@
         - "def"
     "yahs":
         - "phased" # use phased reads
-        - "unphased" # use unphased reads
+        #- "unphased" # use unphased reads
     "threeddna":
         - "phased" # use phased reads
         #- "unphased" # use unphased reads

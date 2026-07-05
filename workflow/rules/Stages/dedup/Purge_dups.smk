@@ -61,6 +61,6 @@ use rule create_local_links as create_final_purge_dups_links with:
 
         log_dir=ancient(config["out_dir"] / "dedup/{parameters}/log/")
     output:
-        fasta=config["out_dir"] / "dedup/{parameters, [^/]*purge_dups[^/]*}/{genome_prefix}.dedup.{haplotype}.fasta",
+        fasta=config["out_dir"] / "dedup/{parameters, [^/]*purge_dups[^/]*}/{genome_prefix}.dedup.{haplotype, hap[^_./@]+}.fasta",
     log:
         ln=config["out_dir"] / "dedup/{parameters}/log/create_final_purge_dups_links.{parameters}.{genome_prefix}.dedup.{haplotype}.ln.log",

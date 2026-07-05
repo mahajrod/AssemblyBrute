@@ -153,6 +153,7 @@ class Stage:
     def request_files(self):
         results_list = []
         if self.stage_name not in self.no_fasta_stage_set | {"hic_alignment",}:
+            print (self.stage_name)
             results_list += self.request_common_fasta_stage_files()
 
         if self.stage_name == "raw_read_qc":

@@ -341,6 +341,7 @@ wildcard_constraints:
     gap_closing_parameters="[^/]+",
     busco5_lineage="[^/]+odb10|[^/]+odb12",
     busco6_lineage="[^/]+odb12\.[^/]*",
+    busco_lineage="[^/]*",
     window="[0-9]+",
     step="[0-9]+",
     reference="[^/]+",

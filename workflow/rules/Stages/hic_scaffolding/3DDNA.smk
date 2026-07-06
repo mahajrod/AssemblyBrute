@@ -60,6 +60,8 @@ rule threeddna: #
         " cd ${{OUTPUT_DIR}}; "
         " ${{SCRIPT}} {params.editor_repeat_coverage} {params.min_contig_length} {params.min_mapping_quality} `basename {output.draft_fasta}` `basename {input.merged_nodups}` > ${{THREEDDNA_LOG}} 2>&1; "
 
+localrules: threeddna_create_links
+
 use rule create_local_links as threeddna_create_links with: #
     input:
         rawchrom_hic=config["out_dir"] / "hic_scaffolding/{parameters}/{genome_prefix}.hic_scaffolding.{haplotype}/scaffolding/{genome_prefix}.draft.{haplotype}.rawchrom.hic",

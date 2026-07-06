@@ -1,4 +1,4 @@
-
+localrules: create_dedup_input_links
 
 use rule create_local_links as create_dedup_input_links with:
     input:

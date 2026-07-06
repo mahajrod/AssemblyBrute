@@ -1,4 +1,4 @@
-#localrules: create_links_for_yahs_files
+localrules: create_links_for_yahs_files
 #ruleorder: yahs_juicer_pre > get_seq_len
 
 rule yahs: #

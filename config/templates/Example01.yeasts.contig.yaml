@@ -59,10 +59,10 @@
     #- "read_contamination_scan" # TODO: test after refactoring
     #- "draft_qc"         # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
     - "contig"            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
-    #- "hic_alignment"     # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
-    #- "hic_scaffolding"   # MUST FOLLOW hic_alignment stage
-    #- "dedup"             # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing for hapsolo
     #- "polishing"        # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
+    - "dedup"             # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing for hapsolo
+    - "hic_alignment"     # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
+    - "hic_scaffolding"   # MUST FOLLOW hic_alignment stage
     #- "ref_scaffolding"   # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing , at moment it requires telomere detection
     #- "gap_closing"      # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
     #- "read_phasing" # this is an attached stage, it is attached to the stage set by "phasing_stage" parameter. However, if phased reads are required for any other stage, the corresponding rules will be called automatically. Uncomment it only if you need to get phased reads for all suitable datatypes.
@@ -70,7 +70,7 @@
 "stage_coretools":
     "contig": # Allowed: "hifiasm". TODO: "nextdenovo"
         - "hifiasm"
-        - "flye"
+        #- "flye"
         #- "nextdenovo" #TODO: implement
     "hic_alignment":
         - "arima"
@@ -103,15 +103,15 @@
          #- "l1_no_hic"
          #- "l1_3p"
          - "l1_no_ul"
-         - "l1_main_nano_only"
+         #- "l1_main_nano_only"
          #- "rep_enh_l1"
          #- "rep_enh_l2"
     "flye":
         - "hifi"
-        - "hifi_keep_hap"
-        - "hifi_keep_hap_scaf"
-        - "hifi_no_alt_contigs"
-        - "hifi_no_alt_contigs_scaf"
+        #- "hifi_keep_hap"
+        #- "hifi_keep_hap_scaf"
+        #- "hifi_no_alt_contigs"
+        #- "hifi_no_alt_contigs_scaf"
         #- "hifi_scaff"
         #- "old_nano"
         #- "nano_corr"
@@ -135,7 +135,7 @@
         - "def"
     "yahs":
         - "phased" # use phased reads
-        - "unphased" # use unphased reads
+        #- "unphased" # use unphased reads
     "threeddna":
         - "phased" # use phased reads
         #- "unphased" # use unphased reads
@@ -184,11 +184,11 @@
     #    6 - quast, merqury, wga, assembly-based tracks, ragtag_qc, read-based and other tracks, busco, purge_dups_qc
     #    7 - quast, merqury, wga, assembly-based tracks, ragtag_qc, read-based and other tracks, busco, purge_dups_qc, pretext map, higlass mcool, .hic for combined haplotype
     "draft_qc":        0
-    "contig":          0
-    "dedup":           0
+    "contig":          5
+    "dedup":           5
     "hic_alignment":   0 # keep it always 0, as this stage uses fastas from the previous stage. changing it to a higher value will trigger unnecessary calculations
-    "hic_scaffolding": 0
-    "polishing":       0
+    "hic_scaffolding": 5
+    "polishing":       5
     "ref_scaffolding": 0
     "gap_closing":     0
 
@@ -278,7 +278,7 @@
 #----
 #---- FCS filtering skips ----
 "skip_fcs": True # set True to skip FCS filtering of the contig assembly. However, usually you wish  it to be done
-"skip_fcs_adaptor": False
+"skip_fcs_adaptor": True
 #----
 #---- Assembly QC skips
 "skip_busco": False              # set True, to skip BUSCO runs to speedup evaluation of the assemblies

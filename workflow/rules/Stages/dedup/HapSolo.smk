@@ -1,4 +1,4 @@
-
+localrules: create_final_hapsolo_links
 
 use rule create_local_links as create_final_hapsolo_links with: # abstract rule to use via redefining
     input:

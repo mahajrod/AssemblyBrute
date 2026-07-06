@@ -649,6 +649,8 @@ class Stage:
     def request_kmer_qc_files(self, stage):
         results_list = []
         for datatype in self.config["data_feature_dict"]["genome_size"]:
+            if (datatype == "hic") and (self.config["skip_hic_genomescope"]):
+                continue
             for kmer_tool in parameters["tool_options"]["kmer_qc"]["kmer_counter_list"]:
                 results_list += [expand(self.config["out_dir"] / "kmer/{datatype}/{stage}/{analysis_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{analysis_tool}.parameters",
                                        datatype=[datatype,],

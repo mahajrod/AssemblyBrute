@@ -275,6 +275,7 @@
 #----
 #---- Kmer qc skips ----
 "skip_per_lib_genome_estimation": True # change to False if you need per read library genome size estimation. It can be helpful for data origin check, but usually you don't need it
+"skip_hic_genomescope": True # change to False if you wish to get genome size estimates from HiC data
 #----
 #---- FCS filtering skips ----
 "skip_fcs": False # set True to skip FCS filtering of the contig assembly. However, usually you wish  it to be done

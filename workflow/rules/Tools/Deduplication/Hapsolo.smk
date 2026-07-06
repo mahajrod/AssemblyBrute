@@ -28,7 +28,7 @@ rule hapsolo:
     shell:
         " BUSCO_DIR=`realpath {input.busco_db_dir}`; "
         " LOG=`realpath {log.log}`; "
-        " WORKDIR=`dirname {output.purged_fasta}; "
+        " WORKDIR=`dirname {output.purged_fasta}`; "
         " mkdir -p ${{WORKDIR}}; "
         " cp -f {input.input_fasta} ${{WORKDIR}}; "
         " INPUT_FASTA=`basename {input.input_fasta}`; "

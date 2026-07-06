@@ -1,6 +1,7 @@
 ruleorder: create_ref_links_for_hic_alignment > bwa_mem2_index
 ruleorder: create_ref_links_for_hic_alignment > ref_faidx
 ruleorder: create_ref_links_for_hic_alignment > get_seq_len
+localrules: create_ref_links_for_hic_alignment
 
 use rule create_local_links as create_ref_links_for_hic_alignment with:
     input:

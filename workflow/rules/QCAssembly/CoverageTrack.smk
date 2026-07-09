@@ -267,11 +267,11 @@ rule create_per_hap_coverage_tracks_for_merged_haplotype:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"]["name"],
-        node_options=parse_node_list("create_links"),
-        cpus=parameters["threads"]["create_links"],
-        time=parameters["time"]["create_links"],
-        mem=parameters["memory_mb"]["create_links"]
-    threads: parameters["threads"]["create_links"]
+        node_options=parse_node_list("create_per_hap_coverage_tracks_for_merged_haplotype"),
+        cpus=parameters["threads"]["create_per_hap_coverage_tracks_for_merged_haplotype"],
+        time=parameters["time"]["create_per_hap_coverage_tracks_for_merged_haplotype"],
+        mem=parameters["memory_mb"]["create_per_hap_coverage_tracks_for_merged_haplotype"]
+    threads: parameters["threads"]["create_per_hap_coverage_tracks_for_merged_haplotype"]
 
     shell:
         " sed 's/^/{wildcards.haplotype}./' {input.bedgraph} > {output.bedgraph} 2>{log.std}; "

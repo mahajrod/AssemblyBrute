@@ -304,7 +304,7 @@
 "skip_pretext_1000k_100k_tracks": True  # set True to skip injection to the pretext maps of tracks with window size of 1000kbp and step of 100kbp. Reasonable for small genomes
 "skip_pretext_coverage_tracks": False   # set True to skip injection to the pretext maps of all coverage tracks
 
-"skip_hic_for_combined_haplotype": False    # set False to generate .hic file for combined/reordered haplotype
+"skip_hic_for_combined_haplotype": True    # set False to generate .hic file for combined/reordered haplotype
 "skip_yahs_hic_file": True           # set False to generate .hic file for yahs assemblies
 "skip_higlass_mcool": True             # set False to generate mcool file (analog of pretext map/hic, multiple resolutions) for HiGlass
 

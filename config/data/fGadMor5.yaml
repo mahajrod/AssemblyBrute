@@ -210,7 +210,7 @@
     "assembly_scaffold_sets":
         # Thresholds for scaffolds are set in core config, "select_scaffolds". Values below are from "default" parameter set
         - "long"         # "max_scaffolds": 200, "max_len": null,  "min_len": 1000000
-        - "middle"       # "max_scaffolds": 200, "max_len": 40000000, "min_len": 1000000
+        #- "middle"       # "max_scaffolds": 200, "max_len": 40000000, "min_len": 1000000
         #- "short"         # "max_scaffolds": 200, "max_len": 10000000, "min_len": 1000000
         #- "very_short"    # "max_scaffolds": 200, "max_len": 5000000, "min_len": 100000
         #- "micro"         # "max_scaffolds": 200, "max_len": 1000000, "min_len": 100000

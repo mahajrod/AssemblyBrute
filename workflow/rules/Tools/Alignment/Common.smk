@@ -38,32 +38,33 @@ rule rmdup:
         "     samtools markdup -@ {params.markdup_threads} - {output.bam} > {log.markdup} 2>&1; "
 
 
-rule bam_merge_files:
-    input:
-        bams=expand("{fasta_dir}/{fasta_prefix}/alignment/{phasing_kmer_length}/{fasta_prefix}.{phasing_kmer_length}.{pairprefix}.bwa.bam",
-                    allow_missing=True,
-                    pairprefix=config["data"]["hic"]["pair_prefix_list"]),
-        reference_fai="{fasta_dir}/{fasta_prefix}.fasta.fai",
-        reference="{fasta_dir}/{fasta_prefix}.fasta",
-        log_dir=ancient("{fasta_dir}/log/"),
-    output:
-        bam=temp("{fasta_dir}/{fasta_prefix}/alignment/{phasing_kmer_length}/{fasta_prefix}.{phasing_kmer_length}.bwa.bam")
-    params:
-        sort_threads=parameters["threads"]["samtools_sort"]
-    log:
-        std="{fasta_dir}/log/bam_merge_files.{fasta_prefix}.{phasing_kmer_length}.log",
-        cluster_log="{fasta_dir}/log/bam_merge_files.{fasta_prefix}.{phasing_kmer_length}.cluster.log",
-        cluster_err="{fasta_dir}/log/bam_merge_files.{fasta_prefix}.{phasing_kmer_length}.cluster.err"
-    benchmark:
-        "{fasta_dir}/log/bam_merge_files.{fasta_prefix}.{phasing_kmer_length}.benchmark.txt"
-    conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
-    resources:
-        queue=config["queue"]["cpu"]["name"],
-        node_options=parse_node_list("bwa_merge_files"),
-        cpus=parameters["threads"]["samtools_sort"] ,
-        time=parameters["time"]["samtools_sort"],
-        mem=parameters["memory_mb"]["samtools_sort"]
-    threads: parameters["threads"]["samtools_sort"]
-    shell:
-        " samtools merge -@ {params.sort_threads} --no-PG -o {output.bam} {input.bams} >{log.std} 2>&1"
+if "hic" in config["data"]:
+    rule bam_merge_hic_files:
+        input:
+            bams=expand("{fasta_dir}/{fasta_prefix}/alignment/{phasing_kmer_length}/{fasta_prefix}.{phasing_kmer_length}.{pairprefix}.bwa.bam",
+                        allow_missing=True,
+                        pairprefix=config["data"]["hic"]["pair_prefix_list"]),
+            reference_fai="{fasta_dir}/{fasta_prefix}.fasta.fai",
+            reference="{fasta_dir}/{fasta_prefix}.fasta",
+            log_dir=ancient("{fasta_dir}/log/"),
+        output:
+            bam=temp("{fasta_dir}/{fasta_prefix}/alignment/{phasing_kmer_length}/{fasta_prefix}.{phasing_kmer_length}.bwa.bam")
+        params:
+            sort_threads=parameters["threads"]["samtools_sort"]
+        log:
+            std="{fasta_dir}/log/bam_merge_files.{fasta_prefix}.{phasing_kmer_length}.log",
+            cluster_log="{fasta_dir}/log/bam_merge_files.{fasta_prefix}.{phasing_kmer_length}.cluster.log",
+            cluster_err="{fasta_dir}/log/bam_merge_files.{fasta_prefix}.{phasing_kmer_length}.cluster.err"
+        benchmark:
+            "{fasta_dir}/log/bam_merge_files.{fasta_prefix}.{phasing_kmer_length}.benchmark.txt"
+        conda:
+            config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        resources:
+            queue=config["queue"]["cpu"]["name"],
+            node_options=parse_node_list("bwa_merge_files"),
+            cpus=parameters["threads"]["samtools_sort"] ,
+            time=parameters["time"]["samtools_sort"],
+            mem=parameters["memory_mb"]["samtools_sort"]
+        threads: parameters["threads"]["samtools_sort"]
+        shell:
+            " samtools merge -@ {params.sort_threads} --no-PG -o {output.bam} {input.bams} >{log.std} 2>&1"

@@ -26,7 +26,7 @@
 "parameter_set": "normal"
 
 #---- Data ----
-"input_datatypes": "hifi,hic,illumina"
+"input_datatypes": "hifi,illumina"
 "data_filtering":
     - "hifi"
     - "hic"
@@ -97,10 +97,10 @@
 "coretool_option_sets":
     "hifiasm":
          #- "l0"
-         - "l1"
+         #- "l1"
          #- "l2"
          #- "l3"
-         #- "l1_no_hic"
+         - "l1_no_hic"
          #- "l1_3p"
          #- "l1_no_ul"
          #- "l1_main_nano_only"

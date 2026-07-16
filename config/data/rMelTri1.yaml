@@ -23,7 +23,7 @@
 #    - 'large'  < 5000 Mbp, human
 #    - 'giant'  < 15000 Mbp, large plant, shark, amphibian genomes
 #    - 'titan'  > 15000 Mbp, large plant genomes, pine trees, never tested
-"parameter_set": "normal"
+"parameter_set": "big"
 
 #---- Data ----
 "input_datatypes": "hifi,hic"

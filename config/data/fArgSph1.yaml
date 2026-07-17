@@ -194,7 +194,7 @@
 
 "qc_settings":
     "windows_sets":
-        #- "w1000k.s1000k"
+        - "w1000k.s1000k"
         - "w1000k.s100k"
         #- "w100k.s100k"
         - "w100k.s10k"

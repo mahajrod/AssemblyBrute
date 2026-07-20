@@ -3,8 +3,8 @@
 rule get_purged_seqs: #
     input:
         raw_dups_bed=config["out_dir"] / "dedup/{parameters}/{input_fasta_prefix}/{input_fasta_prefix}/purge_dups/{datatype}/{input_fasta_prefix}.dups.raw.bed",
-        reference = config["out_dir"] / "dedup/{parameters}/{input_fasta_prefix}/{input_fasta_prefix}.fasta"
-
+        reference = config["out_dir"] / "dedup/{parameters}/{input_fasta_prefix}/{input_fasta_prefix}.fasta",
+        log_dir=ancient(config["out_dir"] / "dedup/{parameters}/log/"),
     output:
         filtered_bed=config["out_dir"] / "dedup/{parameters, [^/]*purge_dups[^/]*}/{input_fasta_prefix, [^/]*input[^/]*}/{input_fasta_prefix}/purge_dups/{datatype}/{input_fasta_prefix}.dups.filtered.bed",
         purged=config["out_dir"] / "dedup/{parameters, [^/]*purge_dups[^/]*}/{input_fasta_prefix, [^/]*input[^/]*}/{input_fasta_prefix}/purge_dups/{datatype}/{input_fasta_prefix}.purged.fasta",
@@ -19,13 +19,13 @@ rule get_purged_seqs: #
         rel_ref_path=lambda wildcards: get_relative_path(config["out_dir"] / "dedup/{0}/{1}/{1}.fasta".format(wildcards.parameters, wildcards.input_fasta_prefix),
                                                          config["out_dir"] / "dedup/{0}/{1}/{1}/purge_dups/{2}/{1}.purged.fasta".format(wildcards.parameters, wildcards.input_fasta_prefix, wildcards.datatype))
     log:
-        get_seqs=config["out_dir"] / "log/purge_dups.{parameters}.{input_fasta_prefix}.{datatype}.get_seqs.log",
-        filter=config["out_dir"] / "log/purge_dups.{parameters}.{input_fasta_prefix}.{datatype}.filter.log",
-        ln=config["out_dir"] / "log/purge_dups.{parameters}.{input_fasta_prefix}.{datatype}.ln.log",
-        cluster_log=config["out_dir"] / "log/purge_dups.{parameters}.{input_fasta_prefix}.{datatype}.cluster.log",
-        cluster_err=config["out_dir"] / "log/purge_dups.{parameters}.{input_fasta_prefix}.{datatype}.cluster.err"
+        get_seqs=config["out_dir"] / "dedup/{parameters}/log/purge_dups.{parameters}.{input_fasta_prefix}.{datatype}.get_seqs.log",
+        filter=config["out_dir"] / "dedup/{parameters}/log/purge_dups.{parameters}.{input_fasta_prefix}.{datatype}.filter.log",
+        ln=config["out_dir"] / "dedup/{parameters}/log/purge_dups.{parameters}.{input_fasta_prefix}.{datatype}.ln.log",
+        cluster_log=config["out_dir"] / "dedup/{parameters}/log/purge_dups.{parameters}.{input_fasta_prefix}.{datatype}.cluster.log",
+        cluster_err=config["out_dir"] / "dedup/{parameters}/log/purge_dups.{parameters}.{input_fasta_prefix}.{datatype}.cluster.err"
     benchmark:
-        config["out_dir"] / "log/purge_dups.{parameters}.{input_fasta_prefix}.{datatype}.benchmark.txt"
+        config["out_dir"] / "dedup/{parameters}/log/purge_dups.{parameters}.{input_fasta_prefix}.{datatype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

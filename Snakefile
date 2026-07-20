@@ -334,6 +334,7 @@ wildcard_constraints:
     gfa_prefix="[^/]*hap[^/]*|[^/]*alt[^/]*",
     gfa_dir=".*contig.*",
     parameters="[^/]+",
+    parameters_prefix="[^/]+",
     prev_stage_parameters="[^/]+",
     purge_dups_parameters="[^/]+",
     dedup_parameters="[^/]+",
@@ -458,6 +459,7 @@ if "dedup" in stage_dict:
     include: "workflow/rules/Stages/dedup/Common.smk"
     include: "workflow/rules/Stages/dedup/HapSolo.smk"       # TODO: test
     include: "workflow/rules/Stages/dedup/Purge_dups.smk"
+    include: "workflow/rules/Stages/dedup/ComboPurge.smk"    # TODO: test
 
 if "ref_scaffolding" in stage_dict:
     pass

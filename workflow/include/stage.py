@@ -38,7 +38,7 @@ class Stage:
                         parameters["tool_options"][tool][option_set]["assembly_ploidy"] = ploidy
                         parameters_label_list.append("{0}_{1}@p{2}".format(tool, option_set, ploidy))
                     elif self.stage_name == "dedup":
-                        if tool == "hapsolo":
+                        if tool in ["hapsolo", "combo_purge"]:
                             for busco_lineage in config["tool_manually_adjusted_features"]["hapsolo"]["busco_lineage_list"]:
                                 for prev_parameters in stage_dict[self.prev_stage].parameters:
                                     parameters_label_list.append("{0}..{1}_{2}@{3}".format(prev_parameters, tool, option_set, busco_lineage)),

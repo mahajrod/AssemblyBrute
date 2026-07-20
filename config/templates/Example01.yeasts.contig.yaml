@@ -89,6 +89,7 @@
     "dedup":
         #- "hapsolo"
         - "purge_dups"
+        #- "combo_purge"
     "gap_closing":
         - "samba"
     "draft_qc":
@@ -117,9 +118,17 @@
         #- "nano_corr"
         #- "nano_hq"
     "purge_dups":
-        - "hifi"
+        #- "hifi"
         #- "nano"
-        #- "hifi_keep_hicov"
+        - "hifi_keep_hicov"
+        #- "nano_keep_hicov"
+    "hapsolo":
+        - "def"
+        #- "skip" # TODO: not implemented yet
+    "combo_purge":
+        #- "hifi"
+        #- "nano"
+        - "hifi_keep_hicov"
         #- "nano_keep_hicov"
     "arima":
         - "def"
@@ -140,9 +149,6 @@
         - "phased" # use phased reads
         #- "unphased" # use unphased reads
     "nextpolish2":
-        - "def"
-        #- "skip" # TODO: not implemented yet
-    "hapsolo":
         - "def"
         #- "skip" # TODO: not implemented yet
     "draft_qc":
@@ -170,7 +176,7 @@
         "starting_lambda": null
         "start_shift": null
     "hapsolo":
-        "busco_lineage_list":
+        "busco_lineage_list": # this parameter is used by both hapsolo and combo_purge (combination of hapsolo and purge_dups)
             - "saccharomycetes_odb10"
 
 "assembly_qc_level": # wga, pretext map not refactored yet

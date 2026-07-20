@@ -816,10 +816,10 @@
                     "main_datatypes":
                         - "hifi"
                     "qc_datatypes": []
-                    "interhaplotype_transfer_blacklist":
-                        - "junk"
-                        - "ovlp"
-                        - "highcov"
+                    #"interhaplotype_transfer_blacklist":
+                    #    - "junk"
+                    #    - "ovlp"
+                    #    - "highcov"
                     "purging_blacklist": null
                     "purging_whitelist": null
                 "nano":
@@ -829,10 +829,10 @@
                         - "duplex"
                         - "simplex"
                     "qc_datatypes": []
-                    "interhaplotype_transfer_blacklist":
-                        - "junk"
-                        - "ovlp"
-                        - "highcov"
+                    #"interhaplotype_transfer_blacklist":
+                    #    - "junk"
+                    #    - "ovlp"
+                    #    - "highcov"
                     "purging_blacklist": null
                     "purging_whitelist": null
                 "hifi_keep_hicov":
@@ -840,10 +840,10 @@
                     "main_datatypes":
                         - "hifi"
                     "qc_datatypes": []
-                    "interhaplotype_transfer_blacklist":
-                        - "junk"
-                        - "ovlp"
-                        - "highcov"
+                    #"interhaplotype_transfer_blacklist":
+                    #    - "junk"
+                    #    - "ovlp"
+                    #    - "highcov"
                     "purging_blacklist":
                         - "highcov"
                     "purging_whitelist": null
@@ -854,10 +854,61 @@
                         - "duplex"
                         - "simplex"
                     "qc_datatypes": []
-                    "interhaplotype_transfer_blacklist":
-                        - "junk"
-                        - "ovlp"
+                    #"interhaplotype_transfer_blacklist":
+                    #    - "junk"
+                    #    - "ovlp"
+                    #    - "highcov"
+                    "purging_blacklist":
                         - "highcov"
+                    "purging_whitelist": null
+            "combo_purge":
+                "hifi":
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "main_datatypes":
+                        - "hifi"
+                    "qc_datatypes": []
+                    #"interhaplotype_transfer_blacklist":
+                    #    - "junk"
+                    #    - "ovlp"
+                    #    - "highcov"
+                    "purging_blacklist": null
+                    "purging_whitelist": null
+                "nano":
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "main_datatypes":
+                        - "nanopore"
+                        - "duplex"
+                        - "simplex"
+                    "qc_datatypes": []
+                    #"interhaplotype_transfer_blacklist":
+                    #    - "junk"
+                    #    - "ovlp"
+                    #    - "highcov"
+                    "purging_blacklist": null
+                    "purging_whitelist": null
+                "hifi_keep_hicov":
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "main_datatypes":
+                        - "hifi"
+                    "qc_datatypes": []
+                    #"interhaplotype_transfer_blacklist":
+                    #    - "junk"
+                    #    - "ovlp"
+                    #    - "highcov"
+                    "purging_blacklist":
+                        - "highcov"
+                    "purging_whitelist": null
+                "nano_keep_hicov":
+                    "cov_multiplicator": 4.5 # 4.5 *lambda
+                    "main_datatypes":
+                        - "nanopore"
+                        - "duplex"
+                        - "simplex"
+                    "qc_datatypes": []
+                    #"interhaplotype_transfer_blacklist":
+                    #    - "junk"
+                    #    - "ovlp"
+                    #    - "highcov"
                     "purging_blacklist":
                         - "highcov"
                     "purging_whitelist": null

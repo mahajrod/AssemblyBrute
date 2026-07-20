@@ -5,13 +5,13 @@ use rule create_local_links as create_final_hapsolo_links with: # abstract rule 
         purged_fasta=config["out_dir"] / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/{genome_prefix}.input.{haplotype}/{genome_prefix}.input.{haplotype}/hapsolo_qc/{busco_lineage}/{genome_prefix}.input.{haplotype}.purged.fasta",
         duplication_fasta=config["out_dir"] / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/{genome_prefix}.input.{haplotype}/{genome_prefix}.input.{haplotype}/hapsolo_qc/{busco_lineage}/{genome_prefix}.input.{haplotype}.dups.fasta",
         duplication_ids=config["out_dir"] / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/{genome_prefix}.input.{haplotype}/{genome_prefix}.input.{haplotype}/hapsolo_qc/{busco_lineage}/{genome_prefix}.input.{haplotype}.dups.ids",
-        log_dir=ancient(config["out_dir"] / "log/")
+        log_dir=ancient(config["out_dir"] / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/log/")
     output:
         purged_fasta=config["out_dir"]  / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/{genome_prefix}.dedup.{haplotype, hap[^_./@]+}.fasta",
         duplication_fasta=config["out_dir"]  / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/{genome_prefix}.dedup.{haplotype, hap[^_./@]+}.dups.fasta",
         duplication_ids=config["out_dir"]  / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/{genome_prefix}.dedup.{haplotype, hap[^_./@]+}.dups.ids",
     log:
-        ln=config["out_dir"] / "log/create_hapsolo_input_links.{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}.{genome_prefix}.dedup.{haplotype}.ln.log",
+        ln=config["out_dir"] / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/log/create_hapsolo_input_links.{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}.{genome_prefix}.dedup.{haplotype}.ln.log",
 
 
 """

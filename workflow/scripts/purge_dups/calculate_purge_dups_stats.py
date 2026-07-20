@@ -42,7 +42,7 @@ purge_dups_bed_df.loc[absent_contigs, "length"] = len_df["length"].loc[absent_co
 for column in "mean_cov", "median_cov":
     purge_dups_bed_df[column] = purge_dups_bed_df[column].fillna(0)
 
-purge_dups_bed_df["overlap_len"] = purge_dups_bed_df["end"] - purge_dups_bed_df["start"]
+purge_dups_bed_df["overlap_len"] = purge_dups_bed_df["end"] - purge_dups_bed_df["start"] + 1 # coordinate system in purge_dups bed is 1-based
 purge_dups_bed_df["overlap_faction"] = purge_dups_bed_df["overlap_len"] / purge_dups_bed_df["length"]
 purge_dups_bed_df.to_csv("{}.extended.bed".format(args.output_prefix), sep="\t", index=True, header=True)
 stats_df = purge_dups_bed_df[["overlap_len", "type"]].groupby(by="type").agg(["count", "sum"])

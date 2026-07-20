@@ -64,7 +64,7 @@ rule combined_dedup: #rule for combined deduplication using both purge_dups and 
 
 use rule create_local_links as create_final_combined_dedup_links with:
     input:
-        fasta=lambda wildcards: config["out_dir"] / ("dedup/{parameters}/{genome_prefix}.input.{haplotype}/{genome_prefix}.input.{haplotype}/combined_dedup/%s.%s/{genome_prefix}.input.{haplotype}.purged.fasta" % ("_".join(stage_dict["dedup"].parameters[wildcards.parameters]["option_set"]["main_datatypes"]),
+        fasta=lambda wildcards: config["out_dir"] / ("dedup/{parameters}/{genome_prefix}.input.{haplotype}/{genome_prefix}.input.{haplotype}/combo_purge/%s.%s/{genome_prefix}.input.{haplotype}.purged.fasta" % ("_".join(stage_dict["dedup"].parameters[wildcards.parameters]["option_set"]["main_datatypes"]),
                                                                                                                                                                                                                      wildcards.parameters.split("@")[-1])),
 
         log_dir=ancient(config["out_dir"] / "dedup/{parameters}/log/")

@@ -65,15 +65,15 @@ else:
     filtered_df = dups_bed_df
 
 print("Filtering purge_dups bed by scaffolds...")
-if (not args.scaffold_whitelist_sr.empty()) and (not args.scaffold_blacklist_sr.empty()):
+if (not args.scaffold_whitelist_sr.empty) and (not args.scaffold_blacklist_sr.empty):
     print("\tBoth whitelist and blacklist are set for filtering by scaffolds...")
     allowed_set = set(args.scaffold_whitelist_sr) - set(args.scaffold_blacklist_sr)
     filtered_df = filtered_df[filtered_df.index.isin(allowed_set)]
-elif not args.scaffold_whitelist_sr.empty():
+elif not args.scaffold_whitelist_sr.empty:
     print("\tOnly whitelist is set for filtering by scaffolds...")
     allowed_set = set(args.scaffold_whitelist_sr)
     filtered_df = filtered_df[filtered_df.index.isin(allowed_set)]
-elif not args.scaffold_blacklist_sr.empty():
+elif not args.scaffold_blacklist_sr.empty:
     print("\tOnly blacklist is set for filtering by scaffolds...")
     blocked_set = set(args.scaffold_blacklist_sr)
     filtered_df = dups_bed_df[~filtered_df.index.isin(blocked_set)]

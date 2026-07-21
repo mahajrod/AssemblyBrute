@@ -3,7 +3,7 @@ localrules: create_final_combined_dedup_links
 rule combined_dedup: #rule for combined deduplication using both purge_dups and hapsolo. Only contigs marked by both tools will be removed
     input:
         raw_purge_dups_bed=config["out_dir"] / "dedup/{parameters_prefix}@{busco_lineage}/{input_fasta_prefix}/{input_fasta_prefix}/purge_dups/{datatype}/{input_fasta_prefix}.dups.raw.bed",
-        hapsolo_duplication_ids=config["out_dir"] / "dedup/{parameters_prefix}@{busco_lineage}/{input_fasta_prefix}/{input_fasta_prefix}/hapsolo_qc/{busco_lineage}/{input_fasta_prefix}.dups.ids",
+        hapsolo_duplication_ids=config["out_dir"] / "dedup/{parameters_prefix}@{busco_lineage}/{input_fasta_prefix}/{input_fasta_prefix}/hapsolo/{busco_lineage}/{input_fasta_prefix}.dups.ids",
         reference=config["out_dir"] / "dedup/{parameters_prefix}@{busco_lineage}/{input_fasta_prefix}/{input_fasta_prefix}.fasta",
         log_dir=ancient(config["out_dir"] / "dedup/{parameters_prefix}@{busco_lineage}/log/"),
     output:

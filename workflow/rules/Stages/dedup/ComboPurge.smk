@@ -1,4 +1,4 @@
-
+localrules: create_final_combined_dedup_links
 
 rule combined_dedup: #rule for combined deduplication using both purge_dups and hapsolo. Only contigs marked by both tools will be removed
     input:

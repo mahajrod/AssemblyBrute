@@ -178,6 +178,7 @@
     "hapsolo":
         "busco_lineage_list": # this parameter is used by both hapsolo and combo_purge (combination of hapsolo and purge_dups)
             - "actinopterygii_odb12"
+            - "vertebrata_odb12"
 
 "assembly_qc_level": # wga, pretext map not refactored yet
     # Allowed levels:
@@ -190,7 +191,7 @@
     #    6 - quast, merqury, wga, assembly-based tracks, ragtag_qc, read-based and other tracks, busco, purge_dups_qc
     #    7 - quast, merqury, wga, assembly-based tracks, ragtag_qc, read-based and other tracks, busco, purge_dups_qc, pretext map, higlass mcool, .hic for combined haplotype
     "draft_qc":        0
-    "contig":          0
+    "contig":          5
     "dedup":           5
     "hic_alignment":   0 # keep it always 0, as this stage uses fastas from the previous stage. changing it to a higher value will trigger unnecessary calculations
     "hic_scaffolding": 7

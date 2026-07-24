@@ -2,7 +2,6 @@
 #TODO: check tools and versions
 "name": "nanopore"
 "channels":
-  - "mahajrod"
   - "bioconda"
   - "conda-forge"
   - "anaconda"

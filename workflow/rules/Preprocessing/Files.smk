@@ -1,179 +1,66 @@
-localrules: create_fastq_links, create_links_for_draft, create_fasta_links, create_links_for_reference
-ruleorder: preprocess_hic_fastq > create_fastq_links
 
 
-"""
-rule create_se_fastq_links:
-    priority: 1000
+localrules: create_se_fastq_link, create_pe_fastq_links, create_fasta_link, create_links_for_reference, create_link_for_draft
+
+
+use rule create_local_links as create_se_fastq_link with:
     input:
-        input_dir_path.resolve() / ("{se_datatype}/fastq/{fileprefix}%s" %  config["fastq_extension"])
+        fastq=lambda wildcards: config["data"][wildcards.se_datatype]["in_dir"] / ("{fileprefix}%s" % config["data"][wildcards.se_datatype]["in_ext"]),
+        log_dir=ancient(config["out_dir"] / "log/")
     output:
-        #directory(output_dict["data"] / "/fastq/{datatype}/raw"),
-        output_dict["data"] / ("fastq/{se_datatype}/raw/{fileprefix}%s" % config["fastq_extension"])
+        fastq=config["out_dir"] / ("data/{se_datatype}/raw/{fileprefix}%s" % config["fastq_ext"])
     log:
-        std=output_dict["log"] / "create_fastq_links.{se_datatype}.{fileprefix}.log",
-        cluster_log=output_dict["cluster_log"] / "create_fastq_links.{se_datatype}.{fileprefix}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_fastq_links.{se_datatype}.{fileprefix}.cluster.err",
-    benchmark:
-        output_dict["benchmark"] / "create_fastq_links.{se_datatype}.{fileprefix}.benchmark.txt",
-    conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
-    resources:
-        queue=config["queue"]["cpu"]["name"],
-        node_options=parse_node_list("create_fastq_links"),
-        cpus=parameters["threads"]["create_fastq_links"],
-        time=parameters["time"]["create_fastq_links"],
-        mem=parameters["memory_mb"]["create_fastq_links"],
-    threads:
-        parameters["threads"]["create_fastq_links"]
-    shell:
-         " ln -sf {input} {output} 2>{log.std} "
-"""
-rule create_fastq_links:
-    priority: 1000
+        ln=config["out_dir"] / "log/create_se_fastq_links.{se_datatype}.{fileprefix}.ln.log",
+
+
+use rule create_local_links as create_pe_fastq_links with: # abstract rule to use via redefining
     input:
-        input_dir_path.resolve() / ("{datatype}/fastq/{fileprefix}%s" %  config["fastq_extension"])
+        forward_fastq=lambda wildcards: config["data"][wildcards.pe_datatype]["in_dir"] / ("{pairprefix}%s%s" % (config["data"][wildcards.pe_datatype]["in_fwd_sfx"],
+                                                                                                          config["data"][wildcards.pe_datatype]["in_ext"])),
+        reverse_fastq=lambda wildcards: config["data"][wildcards.pe_datatype]["in_dir"] / ("{pairprefix}%s%s" % (config["data"][wildcards.pe_datatype]["in_rev_sfx"],
+                                                                                                                  config["data"][wildcards.pe_datatype]["in_ext"])),
+        log_dir=ancient(config["out_dir"] / "log/")
     output:
-        #directory(output_dict["data"] / "/fastq/{datatype}/raw"),
-        output_dict["data"] / ("fastq/{datatype}/raw/{fileprefix}%s" % config["fastq_extension"])
+        forward_fastq=config["out_dir"] / ("data/{pe_datatype}/raw/{pairprefix}%s%s" % (config["fwd_fastq_sfx"],
+                                                                                        config["fastq_ext"])),
+        reverse_fastq=config["out_dir"] / ("data/{pe_datatype}/raw/{pairprefix}%s%s" % (config["rev_fastq_sfx"],
+                                                                                        config["fastq_ext"])),
     log:
-        std=output_dict["log"] / "create_fastq_links.{datatype}.{fileprefix}.log",
-        cluster_log=output_dict["cluster_log"] / "create_fastq_links.{datatype}.{fileprefix}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_fastq_links.{datatype}.{fileprefix}.cluster.err",
-    benchmark:
-        output_dict["benchmark"] / "create_fastq_links.{datatype}.{fileprefix}.benchmark.txt",
-    conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
-    resources:
-        queue=config["queue"]["cpu"]["name"],
-        node_options=parse_node_list("create_fastq_links"),
-        cpus=parameters["threads"]["create_fastq_links"],
-        time=parameters["time"]["create_fastq_links"],
-        mem=parameters["memory_mb"]["create_fastq_links"],
-    threads:
-        parameters["threads"]["create_fastq_links"]
-    shell:
-         " ln -sf {input} {output} 2>{log.std} "
+        ln=config["out_dir"] / "log/create_pe_fastq_links.{pe_datatype}.{pairprefix}.ln.log",
 
-rule preprocess_hic_fastq:
-    priority: 2000
+
+
+use rule create_local_links as create_fasta_link with:
     input:
-        input_dir_path.resolve() / ("hic/fastq/{fileprefix}%s" %  config["fastq_extension"])
+        fasta=input_dir_path / ("{datatype}/fasta/{fileprefix}%s" %  config["fasta_ext"]),
+        log_dir=ancient(config["out_dir"] / "log/")
     output:
-        #directory(output_dict["data"] / "/fastq/{datatype}/raw"),
-        raw_link=output_dict["data"] / ("fastq/hic/raw/{fileprefix}%s" % config["fastq_extension"]),
-        orig_link=output_dict["data"] / ("fastq/hic/orig/{fileprefix}%s" %config["fastq_extension"])
-    params:
-        hic_type=config["hic_enzyme_set"],
-        skip_trimming='skip' if config["skip_filter_reads"] else 'trim'
+        fasta=config["out_dir"] / ("data/{datatype}/raw/{fileprefix}%s" % config["fasta_ext"])
     log:
-        std=output_dict["log"] / "preprocess_hic_fastq.{fileprefix}.log",
-        cluster_log=output_dict["cluster_log"] / "preprocess_hic_fastq.{fileprefix}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "preprocess_hic_fastq.{fileprefix}.cluster.err",
-    benchmark:
-        output_dict["benchmark"] / "preprocess_hic_fastq.{fileprefix}.benchmark.txt",
-    conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
-    resources:
-        queue=config["queue"]["cpu"]["name"],
-        node_options=parse_node_list("preprocess_hic_fastq"),
-        cpus=parameters["threads"]["preprocess_hic_fastq"],
-        time=parameters["time"]["preprocess_hic_fastq"],
-        mem=parameters["memory_mb"]["preprocess_hic_fastq"],
-    threads:
-        parameters["threads"]["preprocess_hic_fastq"]
-    shell:
-         " echo 'Creating links for original Hi-C files...' > {log.std}; "
-         " ln -sf {input} {output.orig_link} 2>>{log.std}; "
-         " if [ '{params.hic_type}' = 'Arima' -a '{params.skip_trimming}' = 'trim' ]; "
-         " then "
-         "      echo 'Input is Arima Hi-C! Trimming first 8 bp from both forward and reverse reads...' >> {log.std}; "
-         "      zcat {input} | fastx_trimmer -f 8 | pigz -p {threads} > {output.raw_link} 2>>{log.std}; "
-         " else "
-         "     echo 'Input is not Arima Hi-C! Trimming skipped...' >> {log.std}; "
-         "      ln -sf {input} {output.raw_link} 2>>{log.std}; "
-         " fi; "
+        ln=config["out_dir"] / "log/create_fasta_links.{datatype}.{fileprefix}.log",
 
 
-rule create_fasta_links:
-    priority: 1000
+use rule create_local_links as create_link_for_draft with:
     input:
-        input_dir_path.resolve() / ("{datatype}/fasta/{fileprefix}%s" %  config["fasta_extension"])
+        draft=lambda wildcards: input_dir_path / "draft/fasta/{0}".format(config["data"]["draft"]["haplotypes"][wildcards.haplotype]),
+        log_dir=ancient(config["out_dir"] / "log/")
     output:
-        #directory(output_dict["data"] / "/fastq/{datatype}/raw"),
-        output_dict["data"] / ("fasta/{datatype}/raw/{fileprefix}%s" % config["fasta_extension"])
+        draft=config["out_dir"] / "draft_qc/{parameters}/{genome_prefix}.draft_qc.{haplotype, hap.*}.fasta"
     log:
-        std=output_dict["log"] / "create_fasta_links.{datatype}.{fileprefix}.log",
-        cluster_log=output_dict["cluster_log"] / "create_fasta_links.{datatype}.{fileprefix}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_fasta_links.{datatype}.{fileprefix}.cluster.err",
-    benchmark:
-        output_dict["benchmark"] / "create_fasta_links.{datatype}.{fileprefix}.benchmark.txt",
-    conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
-    resources:
-        queue=config["queue"]["cpu"]["name"],
-        node_options=parse_node_list("create_fasta_links"),
-        cpus=parameters["threads"]["create_fastq_links"],
-        time=parameters["time"]["create_fastq_links"],
-        mem=parameters["memory_mb"]["create_fastq_links"],
-    threads:
-        parameters["threads"]["create_fastq_links"]
-    shell:
-         " ln -sf {input} {output} 2>{log.std}"
+        ln=config["out_dir"] / "log/create_links_for_draft.{genome_prefix}.{parameters}.draft_qc.{haplotype}.ln.log",
 
-rule create_links_for_draft:
+use rule create_local_links as create_links_for_reference with: # abstract rule to use via redefining
     input:
-        lambda wildcards: input_dir_path.resolve() / "draft/fasta/{0}".format(draft_file_dict[wildcards.haplotype])
+        fasta=lambda wildcards: config["data"]["reference"]["ref_dict"][wildcards.ref_name]["fasta"],
+        syn=lambda wildcards: config["data"]["reference"]["ref_dict"][wildcards.ref_name]["syn"],
+        whitelist=lambda wildcards: config["data"]["reference"]["ref_dict"][wildcards.ref_name]["whitelist"],
+        orderlist=lambda wildcards: config["data"]["reference"]["ref_dict"][wildcards.ref_name]["orderlist"],
+        log_dir=ancient(config["out_dir"] / "log/")
     output:
-        out_dir_path / "draft_qc/{parameters}/{genome_prefix}.draft_qc.{haplotype, hap.*}.fasta"
+        fasta=config["out_dir"] / "data/reference/{ref_name}/{ref_name}.fasta",
+        syn=config["out_dir"] / "data/reference/{ref_name}/{ref_name}.syn",
+        whitelist=config["out_dir"] / "data/reference/{ref_name}/{ref_name}.custom.whitelist",
+        orderlist=config["out_dir"] / "data/reference/{ref_name}/{ref_name}.custom.orderlist",
     log:
-        ln=output_dict["log"]  / "create_links_for_draft.{genome_prefix}.{parameters}.draft_qc.{haplotype}.ln.log",
-        cluster_log=output_dict["cluster_log"] / "create_links_for_draft.{genome_prefix}.{parameters}.draft_qc.{haplotype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_links_for_draft.{genome_prefix}.{parameters}.draft_qc.{haplotype}.cluster.err"
-    benchmark:
-        output_dict["benchmark"]  / "create_links_for_draft.{genome_prefix}.{parameters}.draft_qc.{haplotype}.benchmark.txt"
-    conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
-    resources:
-        queue=config["queue"]["cpu"]["name"],
-        node_options=parse_node_list("create_links_for_draft"),
-        cpus=parameters["threads"]["create_links_for_draft"],
-        time=parameters["time"]["create_links_for_draft"],
-        mem=parameters["memory_mb"]["create_links_for_draft"]
-    threads: parameters["threads"]["create_links_for_draft"]
+        ln=config["out_dir"] / "log/create_links_for_reference.{ref_name}.ln.log",
 
-    shell:
-        " ln -sf {input} {output} 2>{log.ln}; "
-
-rule create_links_for_reference:
-    input:
-        fasta=lambda wildcards: input_reference_filedict[wildcards.ref_name]["fasta"].resolve(),
-        syn=lambda wildcards: input_reference_filedict[wildcards.ref_name]["syn"].resolve(),
-        whitelist=lambda wildcards: input_reference_filedict[wildcards.ref_name]["whitelist"].resolve(),
-        orderlist=lambda wildcards: input_reference_filedict[wildcards.ref_name]["orderlist"].resolve(),
-    output:
-        fasta=out_dir_path / "data/reference/{ref_name}/{ref_name}.fasta",
-        syn=out_dir_path / "data/reference/{ref_name}/{ref_name}.syn",
-        whitelist=out_dir_path / "data/reference/{ref_name}/{ref_name}.custom.whitelist",
-        orderlist=out_dir_path / "data/reference/{ref_name}/{ref_name}.custom.orderlist",
-    log:
-        ln=output_dict["log"]  / "create_links_for_reference.{ref_name}.ln.log",
-        cluster_log=output_dict["cluster_log"] / "create_links_for_reference.{ref_name}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "create_links_for_reference.{ref_name}.err"
-    benchmark:
-        output_dict["benchmark"]  / "create_links_for_reference.{ref_name}.benchmark.txt"
-    conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
-    resources:
-        queue=config["queue"]["cpu"]["name"],
-        node_options=parse_node_list("create_links_for_draft"),
-        cpus=parameters["threads"]["create_links_for_draft"],
-        time=parameters["time"]["create_links_for_draft"],
-        mem=parameters["memory_mb"]["create_links_for_draft"]
-    threads: parameters["threads"]["create_links_for_draft"]
-
-    shell:
-        " ln -sf {input.fasta} {output.fasta} 2>{log.ln}; "
-        " ln -sf {input.syn} {output.syn} 2>>{log.ln}; "
-        " ln -sf {input.whitelist} {output.whitelist} 2>>{log.ln}; "
-        " ln -sf {input.orderlist} {output.orderlist} 2>>{log.ln}; "

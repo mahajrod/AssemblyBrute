@@ -3,24 +3,24 @@ if "purge_dups" in config["stage_list"]:
 
 rule add_basequalities_to_bam: #adds basequalities to bam generated from fasta (for deepvariant)
     input:
-        bam=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.bam",
-        bai=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.bam.bai",
-        #reference=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.fasta"
+        bam=config["out_dir"]   / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.bam",
+        bai=config["out_dir"]   / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.bam.bai",
+        #reference=config["out_dir"]   / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.fasta"
     output:
-        bam=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.with_qual.bam",
-        bai=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.with_qual.bam.bai",
+        bam=config["out_dir"]   / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.with_qual.bam",
+        bai=config["out_dir"]   / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.with_qual.bam.bai",
     params:
         dataformat=lambda wildcards: datatype_format_dict[wildcards.datatype]
     log:
-        view1=output_dict["log"]  / "add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.view1.log",
-        add=output_dict["log"]  / "add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.add.log",
-        view2=output_dict["log"]  / "add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.view2.log",
-        index=output_dict["log"]  / "add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.index.log",
-        ln=output_dict["log"]  / "add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.ln.log",
-        cluster_log=output_dict["cluster_log"] / "add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.cluster.err"
+        view1=config["out_dir"] / "log/add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.view1.log",
+        add=config["out_dir"] / "log/add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.add.log",
+        view2=config["out_dir"] / "log/add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.view2.log",
+        index=config["out_dir"] / "log/add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.index.log",
+        ln=config["out_dir"] / "log/add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.ln.log",
+        cluster_log=config["out_dir"] / "log/add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.cluster.log",
+        cluster_err=config["out_dir"] / "log/add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.benchmark.txt"
+        config["out_dir"] / "log/add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -49,23 +49,23 @@ rule deepvariant: #
     input:
         bam=rules.add_basequalities_to_bam.output.bam,
         bai=rules.add_basequalities_to_bam.output.bai,
-        reference=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta"
+        reference=config["out_dir"]   / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.fasta"
     output:
-        vcf=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.vcf.gz",
-        gvcf=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.g.vcf.gz",
-        #paf=out_dir_path  / ("purge_dups/{assembler}/{haplotype}/%s.purge_dups.{assembler}.{haplotype}.minimap2.{fileprefix}.paf.gz" % config["genome_name"])
+        vcf=config["out_dir"]   / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.vcf.gz",
+        gvcf=config["out_dir"]   / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/{seq_type}/{genome_prefix}.input.{haplotype}.{datatype}.g.vcf.gz",
+        #paf=config["out_dir"]   / ("purge_dups/{assembler}/{haplotype}/%s.purge_dups.{assembler}.{haplotype}.minimap2.{fileprefix}.paf.gz" % config["genome_name"])
     params:
-        singularity_load_str=(config["singularity_load_str"] + "; ") if config["singularity_load_mode"] else "",
+        singularity_load_str=(config["singularity_load_str"] + "; ") if config["singularity_load_mode"] == "cluster" else "",
         sif=config["tool_containers"]["deepvariant"]["gpu"] if config["queue"]["gpu"] and config["queue"]["gpu"] and config["tool_containers"]["deepvariant"]["gpu"] else config["tool_containers"]["deepvariant"]["cpu"],
         model=lambda wildcards: parameters["tool_options"]["deepvariant"][wildcards.datatype]["model"],
         gpu_options=" --nv " if config["queue"]["gpu"] and config["queue"]["gpu"] and config["tool_containers"]["deepvariant"]["gpu"] else " " # enables nVidia support
         #tmp_dir=config["alternative_tmp_dir"],
     log:
-        deepvariant=output_dict["log"]  / "deepvariant.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.deepvariant.log",
-        cluster_log=output_dict["cluster_log"] / "deepvariant.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "deepvariant.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.cluster.err"
+        deepvariant=config["out_dir"] / "log/deepvariant.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.deepvariant.log",
+        cluster_log=config["out_dir"] / "log/deepvariant.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.cluster.log",
+        cluster_err=config["out_dir"] / "log/deepvariant.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "deepvariant.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{seq_type}.{genome_prefix}.{datatype}.benchmark.txt"
+        config["out_dir"] / "log/deepvariant.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{seq_type}.{genome_prefix}.{datatype}.benchmark.txt"
     conda:
         singularity_conda_env
     resources:
@@ -106,15 +106,15 @@ rule deepvariant: #
 """
 rule deepvariant_filter: #
     input:
-        vcf=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.vcf.gz",
+        vcf=config["out_dir"]  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.vcf.gz",
     output:
-        vcf=out_dir_path  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.filtered.vcf.gz",
+        vcf=config["out_dir"]  / "curation/{prev_stage_parameters}..{curation_parameters}/{haplotype}/input/{genome_prefix}.input.{haplotype}.{datatype}.filtered.vcf.gz",
     log:
-        filter=output_dict["log"]  / "deepvariant_filter.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{genome_prefix}.{datatype}.filter.log",
-        cluster_log=output_dict["cluster_log"] / "deepvariant_filter.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{genome_prefix}.{datatype}.cluster.log",
-        cluster_err=output_dict["cluster_error"] / "deepvariant_filter.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{genome_prefix}.{datatype}.cluster.err"
+        filter=config["out_dir"] / "log/deepvariant_filter.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{genome_prefix}.{datatype}.filter.log",
+        cluster_log=config["out_dir"] / "log/deepvariant_filter.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{genome_prefix}.{datatype}.cluster.log",
+        cluster_err=config["out_dir"] / "log/deepvariant_filter.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{genome_prefix}.{datatype}.cluster.err"
     benchmark:
-        output_dict["benchmark"]  / "deepvariant_filter.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{genome_prefix}.{datatype}.benchmark.txt"
+        config["out_dir"] / "log/deepvariant_filter.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{genome_prefix}.{datatype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:

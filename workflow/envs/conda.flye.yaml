@@ -1,0 +1,9 @@
+#---- Bioconda config ----
+
+"name": "flye"
+"channels":
+  - "bioconda"
+  - "conda-forge"
+  - "anaconda"
+"dependencies":
+  - "flye>=2.9"

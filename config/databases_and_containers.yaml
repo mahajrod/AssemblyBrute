@@ -34,8 +34,8 @@
             "in_memory":    True
         "nt":
             "path":         "/datasets/globe_databases/kraken2/kraken2_nt/20240530/" # add path to nt database
-            "memory_mb":    1024000
-            "threads":      30
+            "memory_mb":    1124000
+            "threads":      40
             "time":         "48:00:00"
             "in_memory":    True
     "fcs":

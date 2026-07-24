@@ -3,9 +3,11 @@
 #TODO: check tools and versions
 "name": "tadbit"
 "channels":
-  - "mahajrod"
   - "bioconda"
   - "conda-forge"
   - "anaconda"
 "dependencies":
   - "tadbit"
+  - "python=3.10"
+  - "numpy"
+  - "matplotlib"

@@ -3,7 +3,6 @@
 #TODO: check tools and versions
 "name": "microchromosomes"
 "channels":
-  - "mahajrod"
   - "bioconda"
   - "conda-forge"
   - "anaconda"

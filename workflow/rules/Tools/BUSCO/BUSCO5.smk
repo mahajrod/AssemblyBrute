@@ -69,7 +69,7 @@ rule busco5_8_odb12: # Downloading of busco datasets is performed by a different
          " tar cf - ${{BUSCO_DIR}} | pigz -p {threads} > {output.tar_gz} 2>{log.pigz} ;"
          " rm -r ${{BUSCO_DIR}}; "
 
-use rule busco5_8_odb12 as rule busco5_6_odb10 with: #BUSCO 5.8.3 returns strange results for vertebrata_odb10
+use rule busco5_8_odb12 as busco5_6_odb10 with: #BUSCO 5.8.3 returns strange results for vertebrata_odb10
     output:
         tar_gz="{fasta_dir}/assembly_qc/busco5/{fasta_prefix}.{busco5_lineage, .*odb10.*}.busco5.tar.gz",
         summary="{fasta_dir}/assembly_qc/busco5/{fasta_prefix}.{busco5_lineage, .*odb10.*}.busco5.summary",

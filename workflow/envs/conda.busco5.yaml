@@ -6,6 +6,6 @@
   - "conda-forge"
   - "anaconda"
 "dependencies":
-  - "python>=3"
+  - "python=3.11"
   - "busco=5.8.3"
   - "pytz"

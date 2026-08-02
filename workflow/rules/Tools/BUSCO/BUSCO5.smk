@@ -13,7 +13,7 @@ rule busco5_download: #
     benchmark:
         config["out_dir"] / "log/busco5_download.{busco5_lineage}.benchmark.txt"
     conda:
-        config["conda"]["busco5"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco5"]["yaml"])
+        config["conda"]["busco5.8"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco5.8"]["yaml"])
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("busco_download"),

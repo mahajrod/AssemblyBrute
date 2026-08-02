@@ -23,9 +23,12 @@
     "liftover":
         "yaml": "workflow/envs/conda.liftover.yaml"
         "name": "liftover"
-    "busco5":
-        "yaml": "workflow/envs/conda.busco5.yaml"
-        "name": "busco5"
+    "busco5.6":
+        "yaml": "workflow/envs/conda.busco5.6.yaml"
+        "name": "busco5.6"
+    "busco5.8":
+        "yaml": "workflow/envs/conda.busco5.8.yaml"
+        "name": "busco5.8"
     "busco6":
         "yaml": "workflow/envs/conda.busco6.yaml"
         "name": "busco6"

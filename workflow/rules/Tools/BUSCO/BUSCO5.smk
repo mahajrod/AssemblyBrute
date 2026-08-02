@@ -76,5 +76,7 @@ use rule busco5_8_odb12 as busco5_6_odb10 with: #BUSCO 5.8.3 returns strange res
         summary_json="{fasta_dir}/assembly_qc/busco5/{fasta_prefix}.{busco5_lineage, .*odb10.*}.busco5.summary.json",
         busco_table="{fasta_dir}/assembly_qc/busco5/{fasta_prefix}.{busco5_lineage, .*odb10.*}.busco5.full_table.tsv",
         missing_busco_ids="{fasta_dir}/assembly_qc/busco5/{fasta_prefix}.{busco5_lineage, .*odb10.*}.busco5.missing.ids",
+    params:
+        gene_predictor="--{0}".format(parameters["tool_options"]["busco"]["gene_predictor"]) if parameters["tool_options"]["busco"]["gene_predictor"] == "augustus" else "", # BUSCO5.6 has only --augustus option. metaeuk is enabled by default
     conda:
         config["conda"]["busco5.6"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco5.6"]["yaml"])

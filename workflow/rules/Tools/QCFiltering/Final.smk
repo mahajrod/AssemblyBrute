@@ -1,5 +1,5 @@
 
-localrules: create_final_links
+localrules: create_final_fastq_links, create_final_fasta_links
 
 use rule create_local_links as create_final_fastq_links with:
     input:

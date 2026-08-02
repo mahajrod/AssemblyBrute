@@ -33,7 +33,7 @@ class Stage:
                     parameters_label_list = []
                     if self.stage_name == "draft_qc": #in self.assembly_initiating_stage_set:
                         parameters_label_list.append("{0}_{1}".format(tool, option_set))
-                    if self.stage_name == "contig":
+                    elif self.stage_name == "contig":
                         ploidy = self.detect_ploidy_for_contig_stage(tool, option_set)
                         parameters["tool_options"][tool][option_set]["assembly_ploidy"] = ploidy
                         parameters_label_list.append("{0}_{1}@p{2}".format(tool, option_set, ploidy))

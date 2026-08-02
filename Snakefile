@@ -246,7 +246,7 @@ for tool in config["other_tool_option_sets"]: # select active set of option for 
 
 for datatype in config["final_kmer_datatypes"]:
     if datatype not in config["data_feature_dict"]["fastq"]:
-        raise ValueError(f"ERROR!!! final kmer datatype ({datatype}) is absent among input fastq-based datatypes({','.join(data_feature_dict['fastq'])})")
+        raise ValueError(f"ERROR!!! final kmer datatype ({datatype}) is absent among input fastq-based datatypes({','.join(config['data_feature_dict']['fastq'])})")
 
 #check if final_kmer_tool is present in "kmer_counter_list"
 if config["final_kmer_counter"] not in parameters["tool_options"]["kmer_qc"]["kmer_counter_list"]:

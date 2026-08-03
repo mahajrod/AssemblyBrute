@@ -7,8 +7,11 @@ rule ragtag: #
         log_dir=ancient("{fasta_dir}/log/"),
     output:
         ragtag_fasta="{fasta_dir}/{fasta_prefix}/ragtag/{reference}/{fasta_prefix}.to.{reference}.fasta",
+        alias_ragtag_fasta="{fasta_dir}/{fasta_prefix}/ragtag/{reference}/ragtag.scaffold.fasta",
         ragtag_agp="{fasta_dir}/{fasta_prefix}/ragtag/{reference}/{fasta_prefix}.to.{reference}.agp",
+        alias_ragtag_agp="{fasta_dir}/{fasta_prefix}/ragtag/{reference}/ragtag.scaffold.agp",
         ragtag_stats="{fasta_dir}/{fasta_prefix}/ragtag/{reference}/{fasta_prefix}.to.{reference}.stats",
+        alias_stats="{fasta_dir}/{fasta_prefix}/ragtag/{reference}/ragtag.scaffold.stats",
     log:
         ragtag="{fasta_dir}/log/ragtag.{fasta_prefix}.{reference}.ragtag.log",
         ln="{fasta_dir}/log/ragtag.{fasta_prefix}.{reference}.ln.log",

@@ -33,5 +33,5 @@ rule trim_hic: # trims arima hic files from 5', but creates links to raw files i
          "     zcat {input} | fastx_trimmer -f 8 | pigz -p {threads} > {output.fastq} 2>>{log.std}; "
          " else "
          "     echo 'Input is not Arima Hi-C! Trimming skipped...' >> {log.std}; "
-         "     ln -sf {input} {output.fastq} 2>>{log.std}; "
+         "     ln -sf {params.rel_path} {output.fastq} 2>>{log.std}; "
          " fi; "

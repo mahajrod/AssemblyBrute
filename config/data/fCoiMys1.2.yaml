@@ -26,7 +26,7 @@
 "parameter_set": "normal"
 
 #---- Data ----
-"input_datatypes": "hifi,hic,illumina,reference"
+"input_datatypes": "hifi,hic,reference"
 "data_filtering":
     - "hifi"
     - "hic"
@@ -44,8 +44,8 @@
 "final_kmer_length": 21 # pipeline allows usage of different kmer length, but only one genomesize assessment could be used
 
 "final_kmer_datatypes":
-    #- "hifi"
-    - "illumina"
+    - "hifi"
+    #- "illumina"
 
 #----
 #---- Stage settings ----
@@ -58,7 +58,7 @@
     #- "mtdna"
     #- "read_contamination_scan" # TODO: test after refactoring
     #- "draft_qc"         # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
-    #- "contig"            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
+    - "contig"            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
     #- "polishing"        # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
     #- "dedup"             # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing for hapsolo
     #- "hic_alignment"     # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
@@ -161,7 +161,7 @@
         "upper_threshold": null #
     "genome_assemblers":
         "coverage_estimator": null
-        "lambda": null
+        "lambda": 24
     "krater":
         "use_second_peak": null
         "low_limit": null

@@ -7,6 +7,9 @@ rule trim_hic: # trims arima hic files from 5', but creates links to raw files i
         fastq=config["out_dir"] / ("data/hic/trimmed/{fileprefix}%s" % config["fastq_ext"])
     params:
         hic_type=config["hic_enzyme_set"],
+        rel_path=lambda wildcards: get_relative_path(config["out_dir"] / ("data/hic/raw/%s%s" % (wildcards.fileprefix, config["fastq_ext"])),
+                                                     config["out_dir"] / ("data/hic/trimmed/%s%s" % (wildcards.fileprefix, config["fastq_ext"]))
+                                                     )
     log:
         std=config["out_dir"] / "log/trim_hic.{fileprefix}.log",
         cluster_log=config["out_dir"] / "log/trim_hic.{fileprefix}.cluster.log",

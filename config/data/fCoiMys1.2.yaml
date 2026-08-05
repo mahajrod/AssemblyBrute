@@ -26,7 +26,7 @@
 "parameter_set": "normal"
 
 #---- Data ----
-"input_datatypes": "hifi,hic,reference"
+"input_datatypes": "hifi,hic,reference,illumina"
 "data_filtering":
     - "hifi"
     - "hic"
@@ -55,14 +55,14 @@
     - "filter_reads" #
     #- "filtered_read_qc"
     - "kmer_qc"
-    #- "mtdna"
+    - "mtdna"
     #- "read_contamination_scan" # TODO: test after refactoring
     #- "draft_qc"         # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
     - "contig"            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
-    #- "polishing"        # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
+    - "polishing"        # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
     #- "dedup"             # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing for hapsolo
-    #- "hic_alignment"     # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
-    #- "hic_scaffolding"   # MUST FOLLOW hic_alignment stage
+    - "hic_alignment"     # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
+    - "hic_scaffolding"   # MUST FOLLOW hic_alignment stage
     #- "ref_scaffolding"   # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing , at moment it requires telomere detection
     #- "gap_closing"      # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
     #- "read_phasing" # this is an attached stage, it is attached to the stage set by "phasing_stage" parameter. However, if phased reads are required for any other stage, the corresponding rules will be called automatically. Uncomment it only if you need to get phased reads for all suitable datatypes.
@@ -325,12 +325,12 @@
 "skip_ragtag_qc": False
 #----
 #---- mtDNA ----
-"skip_mitohifi_reads": True
+"skip_mitohifi_reads": False
 "skip_mitohifi_reads_per_file": False
 "skip_mitohifi_reads_combined": False
 "skip_mitohifi_assembly": False
 
-"skip_mitoz": True
+"skip_mitoz": False
 "skip_mitoz_hic": False
 "skip_mitoz_illumina": False
 #----

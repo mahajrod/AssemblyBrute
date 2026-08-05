@@ -1,5 +1,5 @@
 localrules: create_fastq_links_for_juicer
-ruleorder: create_fastq_links_for_juicer > create_final_links
+#ruleorder: create_fastq_links_for_juicer > create_final_links
 
 use rule create_local_links as create_fastq_links_for_juicer with:
     input:

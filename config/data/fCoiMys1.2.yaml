@@ -50,10 +50,10 @@
 #----
 #---- Stage settings ----
 "stage_list": # 'draft_qc' and 'contig' are mutually exclusive stages
-    #- "raw_read_qc" # comment this stage if you wish to skip quality control of the raw data
+    - "raw_read_qc" # comment this stage if you wish to skip quality control of the raw data
     #- "raw_kmer_qc" # runs kmer counting and genome size estimation from raw reads. Usually you don't need it
     - "filter_reads" #
-    #- "filtered_read_qc"
+    - "filtered_read_qc"
     - "kmer_qc"
     - "mtdna"
     #- "read_contamination_scan" # TODO: test after refactoring

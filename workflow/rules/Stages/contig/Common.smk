@@ -1,28 +1,6 @@
 
 localrules: extract_lambda_value
 
-def get_main_read_filelist_for_correction(wildcards):
-    read_filelist = []
-    for main_datatype in assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options']["main_datatypes"]:
-        if main_datatype not in config["data"]:
-            continue
-        read_filelist += expand(config["out_dir"]/ "data/{datatype}/final/{fileprefix}{extension}",
-                                fileprefix=config["data"][main_datatype]["conv_file_prefix_list"],
-                                extension=[config["data"][main_datatype]["conv_ext"]],
-                                datatype=[main_datatype,],
-                                allow_missing=True)
-    return read_filelist
-
-def get_ultralong_read_files(option_set):
-    read_filelist = []
-    for ultralong_read_type in option_set["ultra_long_reads"]:
-        if ultralong_read_type in config["data"]:
-            read_filelist += expand(config["out_dir"] / "data/{datatype}/final/{fileprefix}{extension}",
-                                    datatype=[ultralong_read_type,],
-                                    fileprefix=config["data"][ultralong_read_type]["conv_file_prefix_list"],
-                                    extension=[config["data"][ultralong_read_type]["conv_ext"]])
-    return read_filelist
-
 def get_coverage_estimator(wildcards):
     coverage_estimator = stage_dict["contig"].parameters[wildcards.parameters]["option_set"]["coverage_estimator"]
     if "genome_assemblers" in config["tool_manually_adjusted_features"]:
@@ -122,15 +100,52 @@ rule extract_lambda_value:
             log_fd.write("Lambda:\t%.2f\n" % lambda_value)
             out_fd.write("%.2f\n" % lambda_value)
 
-def get_main_read_filelist(wildcards):
+#def get_main_read_filelist(wildcards):
+#    read_filelist = []
+#    for datatype in stage_dict["contig"].parameters[wildcards.parameters]["option_set"]["main_datatypes"]:
+#        if datatype not in config["data"]:
+#            continue
+#        read_filelist += expand(config["out_dir"]/ "data/{datatype}/final/{fileprefix}{extension}",
+#                                fileprefix=config["data"][datatype]["conv_file_prefix_list"],
+#                                datatype=[datatype,],
+#                                extension=[config["data"][datatype]["conv_ext"]],
+#                                allow_missing=True)
+#
+#    return read_filelist
+
+def get_main_read_filelist_for_correction(wildcards):
     read_filelist = []
-    for datatype in stage_dict["contig"].parameters[wildcards.parameters]["option_set"]["main_datatypes"]:
-        if datatype not in config["data"]:
+    for main_datatype in assembler_option_set_group_dict["hifiasm"][wildcards.correction_options]['grouping_options']["main_datatypes"]:
+        if main_datatype not in config["data"]:
             continue
         read_filelist += expand(config["out_dir"]/ "data/{datatype}/final/{fileprefix}{extension}",
-                                fileprefix=config["data"][datatype]["conv_file_prefix_list"],
-                                datatype=[datatype,],
-                                extension=[config["data"][datatype]["conv_ext"]],
+                                fileprefix=config["data"][main_datatype]["conv_file_prefix_list"],
+                                extension=[config["data"][main_datatype]["conv_ext"]],
+                                datatype=[main_datatype,],
                                 allow_missing=True)
-
     return read_filelist
+
+def get_read_filelist(wildcards, option_set_entry):
+    read_filelist = []
+    for datatype in stage_dict["contig"].parameters[wildcards.parameters]["option_set"][option_set_entry]:
+        if datatype in config["data"]:
+            read_filelist += expand(config["out_dir"]/ "data/{datatype}/final/{fileprefix}{extension}",
+                                    fileprefix=config["data"][datatype]["conv_file_prefix_list"],
+                                    datatype=[datatype,],
+                                    extension=[config["data"][datatype]["conv_ext"]],
+                                    allow_missing=True)
+
+get_main_read_filelist = partial(get_read_filelist, option_set_entry="main_datatypes")
+get_ultralong_read_filelist = partial(get_read_filelist, option_set_entry="ultra_long_reads")
+get_hifi_read_filelist = partial(get_read_filelist, option_set_entry="hifi_datatypes")
+get_nano_read_filelist = partial(get_read_filelist, option_set_entry="nano_datatypes")
+
+#def get_ultralong_read_files(option_set):
+#    read_filelist = []
+#    for ultralong_read_type in option_set["ultra_long_reads"]:
+#        if ultralong_read_type in config["data"]:
+#            read_filelist += expand(config["out_dir"] / "data/{datatype}/final/{fileprefix}{extension}",
+#                                    datatype=[ultralong_read_type,],
+#                                    fileprefix=config["data"][ultralong_read_type]["conv_file_prefix_list"],
+#                                    extension=[config["data"][ultralong_read_type]["conv_ext"]])
+#    return read_filelist

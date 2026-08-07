@@ -3,8 +3,8 @@
 rule verkko_phasing:
     priority: 1000
     input:
-        main_reads=get_main_read_filelist,
-        nano_reads=lambda wildcards: get_ultralong_read_files(stage_dict["contig"].parameters[wildcards.parameters]["option_set"]),
+        hifi_reads=get_hifi_read_filelist,
+        nano_reads=get_nano_read_filelist,
         hic_forward=lambda wildcards: expand(config["out_dir"] / "data/hic/final/{pairprefix}{forward_suffix}{extension}",
                                              forward_suffix=[config["data"]["hic"]["conv_fwd_sfx"], ],
                                              pairprefix=config["data"]["hic"]["pair_prefix_list"],
@@ -18,7 +18,8 @@ rule verkko_phasing:
         hap1_fasta=config["out_dir"] / "contig/{parameters, verkko[^/]*@p2}/{genome_prefix}.contig.hap1.fasta",
         hap2_fasta=config["out_dir"] / "contig/{parameters, verkko[^/]*@p2}/{genome_prefix}.contig.hap2.fasta",
     params:
-        nano_reads=lambda wildcards: " --nano %s " % " ".join(get_ultralong_read_files(stage_dict["contig"].parameters[wildcards.parameters]["option_set"])),
+        hifi_reads=lambda wildcards: " --hifi %s " % " ".join(get_hifi_read_filelist(wildcards)),
+        nano_reads=lambda wildcards: " --nano %s " % " ".join(get_nano_read_filelist(wildcards)),
         haplo_divergence=lambda wildcards: parse_option("polishing_iterations", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --haplo-divergence "),
         uneven_cov=lambda wildcards: parse_option_flag("uneven_cov", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --uneven-depth "),
         no_rdna_tangle=lambda wildcards: parse_option_flag("no_rdna_tangle", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --no-rdna-tangle "),
@@ -44,8 +45,7 @@ rule verkko_phasing:
          " verkko {params.haplo_divergence} {params.uneven_cov} {params.no_rdna_tangle} {params.no_nano} "
          "        {params.no_correction} "
          "        -d results/verkko/ "
-         "        {params.nano_reads} "
-         "        --hifi {input.main_reads}  "
+         "        {params.nano_reads} {params.hifi_reads} "
          "        --hic1 {input.hic_forward} --hic2 {input.hic_reverse} "
          "        --local --local-cpus 16 > {log.std} 2>&1;"
          " ln -sf assembly.fasta `basename {output.consensus_fasta}`; "
@@ -55,12 +55,13 @@ rule verkko_phasing:
 rule verkko_no_phasing:
     priority: 1000
     input:
-        main_reads=get_main_read_filelist,
-        nano_reads=lambda wildcards: get_ultralong_read_files(stage_dict["contig"].parameters[wildcards.parameters]["option_set"]),
+        hifi_reads=get_hifi_read_filelist,
+        nano_reads=get_nano_read_filelist,
     output:
         hap0_fasta=config["out_dir"] / "contig/{parameters, verkko[^/]*@p1}/{genome_prefix}.contig.hap0.fasta",
     params:
-        nano_reads=lambda wildcards: " --nano %s " % " ".join(get_ultralong_read_files(stage_dict["contig"].parameters[wildcards.parameters]["option_set"])),
+        hifi_reads=lambda wildcards: " --hifi %s " % " ".join(get_hifi_read_filelist(wildcards)),
+        nano_reads=lambda wildcards: " --nano %s " % " ".join(get_nano_read_filelist(wildcards)),
         haplo_divergence=lambda wildcards: parse_option("polishing_iterations", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --haplo-divergence "),
         uneven_cov=lambda wildcards: parse_option_flag("uneven_cov", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --uneven-depth "),
         no_rdna_tangle=lambda wildcards: parse_option_flag("no_rdna_tangle", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --no-rdna-tangle "),
@@ -86,7 +87,6 @@ rule verkko_no_phasing:
          " verkko {params.haplo_divergence} {params.uneven_cov} {params.no_rdna_tangle} {params.no_nano} "
          "        {params.no_correction} "
          "        -d results/verkko/ "
-         "        --hifi {input.main_reads}  "
-         "        {params.nano_reads} "
-         "        --local --local-cpus 16 > {log.std} 2>&1;"
+         "        {params.hifi_reads} {params.nano_reads} "
+         "        --local --local-cpus 16 > {log.std} 2>&1; "
          " ln -sf assembly.fasta `basename {output.hap0_fasta}`; "

@@ -1,6 +1,9 @@
-option_set	no_correction	no_nano	no_rdna_tangle	uneven_cov	haplo_divergence	use_hic	use_parental
-default	False	False	False	False	NA	True	True
-no_phasing	False	False	False	False	NA	False	False
-no_hic	False	False	False	False	NA	False	True
-no_trio	False	False	False	False	NA	True	False
-precorr_reads	True	False	False	False	NA	True	True
+option_set	no_correction	no_nano	no_rdna_tangle	uneven_cov	haplo_divergence	use_hic	use_parental	hifi_datatypes	nano_datatypes
+default	False	False	False	False	NA	True	True	hifi,duplex	simplex,nanopore,ultralongnano,adaptivenano
+no_hifi	False	False	False	False	NA	True	True	duplex	simplex,nanopore,ultralongnano,adaptivenano
+no_duplex	False	False	False	False	NA	True	True	hifi	simplex,nanopore,ultralongnano,adaptivenano
+no_hifi_duplex	False	False	False	False	NA	True	True	NA	simplex,nanopore,ultralongnano,adaptivenano
+no_phasing	False	False	False	False	NA	False	False	hifi,duplex	simplex,nanopore,ultralongnano,adaptivenano
+no_hic	False	False	False	False	NA	False	True	hifi,duplex	simplex,nanopore,ultralongnano,adaptivenano
+no_trio	False	False	False	False	NA	True	False	hifi,duplex	simplex,nanopore,ultralongnano,adaptivenano
+precorr_reads	True	False	False	False	NA	True	True	hifi,duplex	simplex,nanopore,ultralongnano,adaptivenano

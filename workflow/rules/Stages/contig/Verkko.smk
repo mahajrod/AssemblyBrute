@@ -1,4 +1,5 @@
-
+ruleorder: verkko_phasing > gfa2fasta
+ruleorder: verkko_no_phasing > gfa2fasta
 
 rule verkko_phasing:
     priority: 1000

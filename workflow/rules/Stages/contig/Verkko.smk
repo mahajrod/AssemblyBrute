@@ -45,7 +45,7 @@ rule verkko_phasing:
     shell:
          " verkko {params.haplo_divergence} {params.uneven_cov} {params.no_rdna_tangle} {params.no_nano} "
          "        {params.no_correction} {params.telomere_motif} "
-         "        -d `basename {output.consensus_fasta}` "
+         "        -d `dirname {output.consensus_fasta}` "
          "        {params.nano_reads} {params.hifi_reads} "
          "        --hic1 {input.hic_forward} --hic2 {input.hic_reverse} "
          "        --local --local-cpus 16 > {log.std} 2>&1;"
@@ -89,7 +89,7 @@ rule verkko_no_phasing:
     shell:
          " verkko {params.haplo_divergence} {params.uneven_cov} {params.no_rdna_tangle} {params.no_nano} "
          "        {params.no_correction} {params.telomere_motif} "
-         "        -d `basename {output.hap0_fasta}` "
+         "        -d `dirname {output.hap0_fasta}` "
          "        {params.hifi_reads} {params.nano_reads} "
          "        --local --local-cpus 16 > {log.std} 2>&1; "
          " ln -sf assembly.fasta {output.hap0_fasta}; "

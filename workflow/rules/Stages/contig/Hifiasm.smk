@@ -64,7 +64,7 @@ rule hifiasm_hic_2p:
     priority: 1000
     input:
         main_reads=get_main_read_filelist,
-        ultralong_reads=lambda wildcards: get_ultralong_read_files(stage_dict["contig"].parameters[wildcards.parameters]["option_set"]),
+        ultralong_reads=get_ultralong_read_filelist,
         hic_forward=lambda wildcards: expand(config["out_dir"] / "data/hic/final/{pairprefix}{forward_suffix}{extension}",
                                              forward_suffix=[config["data"]["hic"]["conv_fwd_sfx"], ],
                                              pairprefix=config["data"]["hic"]["pair_prefix_list"],
@@ -108,16 +108,12 @@ rule hifiasm_hic_2p:
         hic_forward=lambda wildcards: (" --h1 " + ",".join(map(str, expand(config["out_dir"] / "data/hic/final/{pairprefix}{forward_suffix}{extension}",
                                                          forward_suffix=[config["data"]["hic"]["conv_fwd_sfx"], ],
                                                          pairprefix=config["data"]["hic"]["pair_prefix_list"],
-                                                         extension=[config["data"]["hic"]["conv_ext"]] )))) if stage_dict["contig"].parameters[wildcards.parameters]["option_set"]["use_hic"] else [], #in case of multiple hic libraries files in the list MUST be COMMA-separated
+                                                         extension=[config["data"]["hic"]["conv_ext"]] )))) if stage_dict["contig"].parameters[wildcards.parameters]["option_set"]["use_hic"] and ("hic" in config["data"]) else [], #in case of multiple hic libraries files in the list MUST be COMMA-separated
         hic_reverse=lambda wildcards: (" --h2 " + ",".join(map(str, expand(config["out_dir"] / "data/hic/final/{pairprefix}{reverse_suffix}{extension}",
                                                          reverse_suffix=[config["data"]["hic"]["conv_rev_sfx"], ],
                                                          pairprefix=config["data"]["hic"]["pair_prefix_list"],
-                                                         extension=[config["data"]["hic"]["conv_ext"]] )))) if stage_dict["contig"].parameters[wildcards.parameters]["option_set"]["use_hic"] else [],
-        ultralong_reads=lambda wildcards: (" --ul " + ",".join(map(str,
-                                                                   get_ultralong_read_files(stage_dict["contig"].parameters[wildcards.parameters]["option_set"])
-                                                                   )
-                                                              )
-                                           ) if get_ultralong_read_files(stage_dict["contig"].parameters[wildcards.parameters]["option_set"]) else "",
+                                                         extension=[config["data"]["hic"]["conv_ext"]] )))) if stage_dict["contig"].parameters[wildcards.parameters]["option_set"]["use_hic"] and ("hic" in config["data"]) else [],
+        ultralong_reads=lambda wildcards: (" --ul " + ",".join(map(str, get_ultralong_read_filelist(wildcards)))) if get_ultralong_read_filelist(wildcards) else "",
         telomere_motif= lambda wildcards: parse_option("telomere_motif", config, " --telo-m ") if stage_dict["contig"].parameters[wildcards.parameters]["option_set"]["use_telomere"] else "",
 
         ul_cut=lambda wildcards: parse_option("ul-cut", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --ul-cut "),
@@ -198,7 +194,7 @@ use rule hifiasm_hic_2p as hifiasm_hic_6p with:
 use rule hifiasm_hic_2p as hifiasm_long_reads_only with:
     input:
         main_reads=get_main_read_filelist,
-        ultralong_reads=lambda wildcards: get_ultralong_read_files(stage_dict["contig"].parameters[wildcards.parameters]["option_set"]),
+        ultralong_reads=get_ultralong_read_files,
         hic_forward=[],
         hic_reverse=[],
         ec_bin=lambda wildcards: config["out_dir"] / "error_correction/hifiasm_{0}@{2}_mode/{1}.contig.ec.bin".format(stage_dict["contig"].parameters[wildcards.parameters]["option_set_group"],

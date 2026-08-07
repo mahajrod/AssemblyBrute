@@ -25,6 +25,7 @@ rule verkko_phasing:
         no_rdna_tangle=lambda wildcards: parse_option_flag("no_rdna_tangle", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --no-rdna-tangle "),
         no_nano=lambda wildcards: parse_option_flag("no_nano", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --no-nano "),
         no_correction=lambda wildcards: parse_option_flag("no_correction", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --no-correction "),
+        telomere_motif= lambda wildcards: parse_option("telomere_motif", config, " --telomere-motif ") if stage_dict["contig"].parameters[wildcards.parameters]["option_set"]["use_telomere"] else "",
     log:
         std=config["out_dir"] / "log/verkko.{parameters}.{genome_prefix}.log",
         cluster_log=config["out_dir"] / "log/verkko.{parameters}.{genome_prefix}.cluster.log",
@@ -43,7 +44,7 @@ rule verkko_phasing:
         parameters["threads"]["verkko"]
     shell:
          " verkko {params.haplo_divergence} {params.uneven_cov} {params.no_rdna_tangle} {params.no_nano} "
-         "        {params.no_correction} "
+         "        {params.no_correction} {params.telomere_motif} "
          "        -d results/verkko/ "
          "        {params.nano_reads} {params.hifi_reads} "
          "        --hic1 {input.hic_forward} --hic2 {input.hic_reverse} "
@@ -67,6 +68,8 @@ rule verkko_no_phasing:
         no_rdna_tangle=lambda wildcards: parse_option_flag("no_rdna_tangle", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --no-rdna-tangle "),
         no_nano=lambda wildcards: parse_option_flag("no_nano", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --no-nano "),
         no_correction=lambda wildcards: parse_option_flag("no_correction", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --no-correction "),
+        telomere_motif= lambda wildcards: parse_option("telomere_motif",config," --telomere-motif ") if stage_dict["contig"].parameters[wildcards.parameters]["option_set"]["use_telomere"] else "",
+
     log:
         std=config["out_dir"] / "log/verkko.{parameters}.{genome_prefix}.log",
         cluster_log=config["out_dir"] / "log/verkko.{parameters}.{genome_prefix}.cluster.log",
@@ -85,7 +88,7 @@ rule verkko_no_phasing:
         parameters["threads"]["verkko"]
     shell:
          " verkko {params.haplo_divergence} {params.uneven_cov} {params.no_rdna_tangle} {params.no_nano} "
-         "        {params.no_correction} "
+         "        {params.no_correction} {params.telomere_motif} "
          "        -d results/verkko/ "
          "        {params.hifi_reads} {params.nano_reads} "
          "        --local --local-cpus 16 > {log.std} 2>&1; "

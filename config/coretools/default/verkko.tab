@@ -1,9 +1,12 @@
-option_set	no_correction	no_nano	no_rdna_tangle	uneven_cov	haplo_divergence	use_hic	use_parental	hifi_datatypes	nano_datatypes
-default	False	False	False	False	NA	True	True	hifi,duplex	simplex,nanopore,ultralongnano,adaptivenano
-no_hifi	False	False	False	False	NA	True	True	duplex	simplex,nanopore,ultralongnano,adaptivenano
-no_duplex	False	False	False	False	NA	True	True	hifi	simplex,nanopore,ultralongnano,adaptivenano
-no_hifi_duplex	False	False	False	False	NA	True	True	NA	simplex,nanopore,ultralongnano,adaptivenano
-no_phasing	False	False	False	False	NA	False	False	hifi,duplex	simplex,nanopore,ultralongnano,adaptivenano
-no_hic	False	False	False	False	NA	False	True	hifi,duplex	simplex,nanopore,ultralongnano,adaptivenano
-no_trio	False	False	False	False	NA	True	False	hifi,duplex	simplex,nanopore,ultralongnano,adaptivenano
-precorr_reads	True	False	False	False	NA	True	True	hifi,duplex	simplex,nanopore,ultralongnano,adaptivenano
+option_set	no_correction	no_nano	no_rdna_tangle	uneven_cov	haplo_divergence	use_hic	use_parental	hifi_datatypes	nano_datatypes	use_telomere
+default	False	False	False	False	NA	True	True	hifi,duplex	simplex,nanopore,ultralongnano,adaptivenano	True
+no_hifi	False	False	False	False	NA	True	True	duplex	simplex,nanopore,ultralongnano,adaptivenano	True
+no_duplex	False	False	False	False	NA	True	True	hifi	simplex,nanopore,ultralongnano,adaptivenano	True
+no_hifi_duplex	False	False	False	False	NA	True	True	NA	simplex,nanopore,ultralongnano,adaptivenano	True
+no_phasing	False	False	False	False	NA	False	False	hifi,duplex	simplex,nanopore,ultralongnano,adaptivenano	True
+no_hic	False	False	False	False	NA	False	True	hifi,duplex	simplex,nanopore,ultralongnano,adaptivenano	True
+no_trio	False	False	False	False	NA	True	False	hifi,duplex	simplex,nanopore,ultralongnano,adaptivenano	True
+precorr_reads	True	False	False	False	NA	True	True	hifi,duplex	simplex,nanopore,ultralongnano,adaptivenano	True
+hap_div_0.1	False	False	False	False	0.1	True	True	hifi,duplex	simplex,nanopore,ultralongnano,adaptivenano	True
+hap_div_0.15	False	False	False	False	0.15	True	True	hifi,duplex	simplex,nanopore,ultralongnano,adaptivenano	True
+hap_div_0.2	False	False	False	False	0.2	True	True	hifi,duplex	simplex,nanopore,ultralongnano,adaptivenano	True

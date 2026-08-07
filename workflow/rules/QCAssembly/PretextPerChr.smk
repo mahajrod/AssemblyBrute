@@ -112,7 +112,7 @@ if candidate_agp_filename:
             map="{bam_dir}/per_chr/{bam_prefix}.{candidate_chr_id}.rmdup.precurated.mapq{mapq}.{pretext_res}.pretext"
 
         params:
-            resolution = lambda wildcards: " --highRes" if wildcards.pretext_res == "high_res" else "",
+            resolution = lambda wildcards: " --ultraRes" if wildcards.pretext_res == "ultra_res" else " --highRes" if wildcards.pretext_res == "high_res" else "",
             sortby=parse_option("sortby", parameters["tool_options"]["pretextmap"], " --sortby "),
             sortorder=parse_option("sortorder", parameters["tool_options"]["pretextmap"], " --sortorder "),
         log:

@@ -12,7 +12,7 @@
     "quast":                    "default"   # Allowed: default
     "minimap2":                 "default"   # Allowed: default
     "two_read_bam_combiner":    "default"   # Allowed: default
-    "pretextmap":               "default"   # Allowed: default
+    "pretextmap":               "default"   # Allowed: "default" (high_res and ultra_res), "low_res_only", "high_res_only" and  "ultra_res_only"
     "pretextsnapshot":          "default"   # Allowed: default
     "gcp":                      "default"   # Allowed: default
     "kat":                      "default"   # Allowed: default

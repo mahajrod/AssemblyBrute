@@ -583,28 +583,25 @@ class Stage:
                                      ]
                     # request pretext map for a whole genome
                     results_list += [expand(self.config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.{haplotype}.NA.{subset}.rmdup.mapq{mapq}.{res}.tracks.pretext",
-                                              res=["high_res"],
+                                              res=parameters["tool_options"]["pretextmap"]["res"],
                                               haplotype=["reordered" if ("microchromosomes" in self.config) and self.config["microchromosomes"] else "combined"],
                                               subset=["all"],
                                               genome_prefix=[self.config["genome_prefix"], ],
                                               assembly_stage=[self.stage_name],
                                               parameters=[parameters_label,],
-                                              resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
                                               mapq=parameters["tool_options"]["pretextmap"]["mapq"],)
                                      ]
 
                     if candidate_chr_id_list:
                         # request pretext map for curation units (if provided)
                         results_list += [expand(self.config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}/alignment/NA/per_chr/{genome_prefix}.{assembly_stage}.{haplotype}.NA.{subset}.rmdup.precurated.mapq{mapq}.{res}.tracks.pretext",
-                                              res=["high_res"],
+                                              res=parameters["tool_options"]["pretextmap"]["res"],
                                               haplotype=["reordered" if ("microchromosomes" in self.config) and self.config["microchromosomes"] else "combined"],
                                               subset=candidate_chr_id_list,
                                               genome_prefix=[self.config["genome_prefix"], ],
                                               assembly_stage=[self.stage_name],
                                               parameters=[parameters_label,],
-                                              resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
-                                              mapq=parameters["tool_options"]["pretextmap"]["mapq"],
-                                              ext=parameters["tool_options"]["pretextsnapshot"]["format"])
+                                              mapq=parameters["tool_options"]["pretextmap"]["mapq"])
                                      ]
         return results_list
 

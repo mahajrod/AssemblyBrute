@@ -1114,6 +1114,48 @@
                             "max_len": null
                         "microchr":
                             "max_len": 20000000
+                    "res":
+                        - "high_res"
+                        - "ultra_res"
+                "high_res_only":
+                    "mapq":
+                        #- 1
+                        - 0
+                    "sortby": "nosort" # Allowed: "length", "name", "nosort"
+                    "sortorder": null # Allowed: "ascend", "descend", null
+                    "subsets":
+                        "all":
+                            "max_len": null
+                        "microchr":
+                            "max_len": 20000000
+                    "res":
+                        - "high_res"
+                "ultra_res_only":
+                    "mapq":
+                        #- 1
+                        - 0
+                    "sortby": "nosort" # Allowed: "length", "name", "nosort"
+                    "sortorder": null # Allowed: "ascend", "descend", null
+                    "subsets":
+                        "all":
+                            "max_len": null
+                        "microchr":
+                            "max_len": 20000000
+                    "res":
+                        - "ultra_res"
+                "low_res_only":
+                    "mapq":
+                        #- 1
+                        - 0
+                    "sortby": "nosort" # Allowed: "length", "name", "nosort"
+                    "sortorder": null # Allowed: "ascend", "descend", null
+                    "subsets":
+                        "all":
+                            "max_len": null
+                        "microchr":
+                            "max_len": 20000000
+                    "res":
+                        - "low_res"
             "pretextsnapshot":
                 "default":
                     "sequences": "=full"

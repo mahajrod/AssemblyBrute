@@ -8,7 +8,7 @@ rule pretextmap: # #Pretext-map probably doesn't support long file names!!!!!!!!
         map="{fasta_dir}/{fasta_prefix}/alignment/{phasing_kmer_length}/{fasta_prefix}.{phasing_kmer_length}.{subset, all}.rmdup.mapq{mapq}.{pretext_res}.pretext",
         filtered_out="{fasta_dir}/{fasta_prefix}/alignment/{phasing_kmer_length}/{fasta_prefix}.{phasing_kmer_length}.{subset, all}.rmdup.mapq{mapq}.{pretext_res}.filtered_out.ids"
     params:
-        resolution=lambda wildcards: " --highRes" if wildcards.pretext_res == "high_res" else "",
+        resolution = lambda wildcards: " --ultraRes" if wildcards.pretext_res == "ultra_res" else " --highRes" if wildcards.pretext_res == "high_res" else "",
         max_len=lambda wildcards: parameters["tool_options"]["pretextmap"]["subsets"][wildcards.subset]["max_len"],
         sortby=parse_option("sortby", parameters["tool_options"]["pretextmap"], " --sortby "),
         sortorder=parse_option("sortorder", parameters["tool_options"]["pretextmap"], " --sortorder "),

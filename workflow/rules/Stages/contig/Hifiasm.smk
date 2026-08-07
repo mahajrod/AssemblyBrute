@@ -257,7 +257,7 @@ rule get_length_and_coverage_from_hifiasm_graph:
         gfa="{gfa_dir}/{gfa_prefix}.gfa",
         log_dir=ancient("{gfa_dir}/log/")
     output:
-        cov="{gfa_dir}/{gfa_prefix}.gfa.cov",
+        cov="{gfa_dir, .*hifiasm.*}/{gfa_prefix}.gfa.cov",
         len_cov="{gfa_dir}/{gfa_prefix}.gfa.lencov",
 
     log:

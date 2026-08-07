@@ -1,5 +1,4 @@
-ruleorder: verkko_phasing > gfa2fasta
-ruleorder: verkko_no_phasing > gfa2fasta
+
 
 rule verkko_phasing:
     priority: 1000
@@ -15,9 +14,9 @@ rule verkko_phasing:
                                              pairprefix=config["data"]["hic"]["pair_prefix_list"],
                                              extension=[config["data"]["hic"]["conv_ext"]]) if stage_dict["contig"].parameters[wildcards.parameters]["option_set"]["use_hic"] else [],
     output:
-        consensus_fasta=config["out_dir"] / "contig/{parameters, verkko[^/]*@p2}/{genome_prefix}.contig.consensus.fasta",
-        hap1_fasta=config["out_dir"] / "contig/{parameters, verkko[^/]*@p2}/{genome_prefix}.contig.hap1.fasta",
-        hap2_fasta=config["out_dir"] / "contig/{parameters, verkko[^/]*@p2}/{genome_prefix}.contig.hap2.fasta",
+        consensus_fasta=config["out_dir"] / "contig/{parameters, verkko[^/]*@p2}/{genome_prefix}.contig.consensus.unfiltered.fasta",
+        hap1_fasta=config["out_dir"] / "contig/{parameters, verkko[^/]*@p2}/{genome_prefix}.contig.hap1.unfiltered.fasta",
+        hap2_fasta=config["out_dir"] / "contig/{parameters, verkko[^/]*@p2}/{genome_prefix}.contig.hap2.unfiltered.fasta",
     params:
         hifi_reads=lambda wildcards: " --hifi %s " % " ".join(get_hifi_read_filelist(wildcards)),
         nano_reads=lambda wildcards: " --nano %s " % " ".join(get_nano_read_filelist(wildcards)),
@@ -60,7 +59,7 @@ rule verkko_no_phasing:
         hifi_reads=get_hifi_read_filelist,
         nano_reads=get_nano_read_filelist,
     output:
-        hap0_fasta=config["out_dir"] / "contig/{parameters, verkko[^/]*@p1}/{genome_prefix}.contig.hap0.fasta",
+        hap0_fasta=config["out_dir"] / "contig/{parameters, verkko[^/]*@p1}/{genome_prefix}.contig.hap0.unfiltered.fasta",
     params:
         hifi_reads=lambda wildcards: " --hifi %s " % " ".join(get_hifi_read_filelist(wildcards)),
         nano_reads=lambda wildcards: " --nano %s " % " ".join(get_nano_read_filelist(wildcards)),

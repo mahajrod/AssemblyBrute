@@ -194,7 +194,7 @@ use rule hifiasm_hic_2p as hifiasm_hic_6p with:
 use rule hifiasm_hic_2p as hifiasm_long_reads_only with:
     input:
         main_reads=get_main_read_filelist,
-        ultralong_reads=get_ultralong_read_files,
+        ultralong_reads=get_ultralong_read_filelist,
         hic_forward=[],
         hic_reverse=[],
         ec_bin=lambda wildcards: config["out_dir"] / "error_correction/hifiasm_{0}@{2}_mode/{1}.contig.ec.bin".format(stage_dict["contig"].parameters[wildcards.parameters]["option_set_group"],

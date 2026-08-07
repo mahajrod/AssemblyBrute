@@ -70,6 +70,7 @@
 "stage_coretools":
     "contig": # Allowed: "hifiasm". TODO: "nextdenovo"
         - "hifiasm"
+        - "verkko"
         #- "flye"
         #- "nextdenovo" #TODO: implement
     "hic_alignment":
@@ -116,6 +117,15 @@
         #- "old_nano"
         #- "nano_corr"
         #- "nano_hq"
+    "verkko":
+        - "default"
+        #- "no_phasing"
+        #- "no_hic"
+        #- "no_trio"
+        #- "precorr_reads"
+        #- "hap_div_0.1"
+        #- "hap_div_0.15"
+        #- "hap_div_0.2"
     "purge_dups":
         - "hifi"
         #- "nano"

@@ -18,8 +18,8 @@ rule verkko_phasing:
         hap1_fasta=config["out_dir"] / "contig/{parameters, verkko[^/]*@p2}/{genome_prefix}.contig.hap1.unfiltered.fasta",
         hap2_fasta=config["out_dir"] / "contig/{parameters, verkko[^/]*@p2}/{genome_prefix}.contig.hap2.unfiltered.fasta",
     params:
-        hifi_reads=lambda wildcards: " --hifi %s " % " ".join(get_hifi_read_filelist(wildcards)),
-        nano_reads=lambda wildcards: " --nano %s " % " ".join(get_nano_read_filelist(wildcards)),
+        hifi_reads=lambda wildcards: " --hifi %s " % " ".join(get_hifi_read_filelist(wildcards)) if get_hifi_read_filelist(wildcards) else "",
+        nano_reads=lambda wildcards: " --nano %s " % " ".join(get_nano_read_filelist(wildcards)) if get_nano_read_filelist(wildcards) else "",
         haplo_divergence=lambda wildcards: parse_option("polishing_iterations", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --haplo-divergence "),
         uneven_cov=lambda wildcards: parse_option_flag("uneven_cov", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --uneven-depth "),
         no_rdna_tangle=lambda wildcards: parse_option_flag("no_rdna_tangle", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --no-rdna-tangle "),
@@ -61,8 +61,8 @@ rule verkko_no_phasing:
     output:
         hap0_fasta=config["out_dir"] / "contig/{parameters, verkko[^/]*@p1}/{genome_prefix}.contig.hap0.unfiltered.fasta",
     params:
-        hifi_reads=lambda wildcards: " --hifi %s " % " ".join(get_hifi_read_filelist(wildcards)),
-        nano_reads=lambda wildcards: " --nano %s " % " ".join(get_nano_read_filelist(wildcards)),
+        hifi_reads=lambda wildcards: " --hifi %s " % " ".join(get_hifi_read_filelist(wildcards)) if get_hifi_read_filelist(wildcards) else "",
+        nano_reads=lambda wildcards: " --nano %s " % " ".join(get_nano_read_filelist(wildcards)) if get_nano_read_filelist(wildcards) else "",
         haplo_divergence=lambda wildcards: parse_option("polishing_iterations", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --haplo-divergence "),
         uneven_cov=lambda wildcards: parse_option_flag("uneven_cov", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --uneven-depth "),
         no_rdna_tangle=lambda wildcards: parse_option_flag("no_rdna_tangle", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --no-rdna-tangle "),

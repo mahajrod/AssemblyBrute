@@ -26,6 +26,7 @@ rule verkko_phasing:
         no_nano=lambda wildcards: parse_option_flag("no_nano", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --no-nano "),
         no_correction=lambda wildcards: parse_option_flag("no_correction", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --no-correction "),
         telomere_motif= lambda wildcards: parse_option("telomere_motif", config, " --telomere-motif ") if stage_dict["contig"].parameters[wildcards.parameters]["option_set"]["use_telomere"] else "",
+        local_mem_gb=int(float(parameters["memory_mb"]["verkko"]) * 0.95 / 1024)
     log:
         std=config["out_dir"] / "log/verkko.{parameters}.{genome_prefix}.log",
         cluster_log=config["out_dir"] / "log/verkko.{parameters}.{genome_prefix}.cluster.log",
@@ -48,7 +49,7 @@ rule verkko_phasing:
          "        -d `dirname {output.consensus_fasta}` "
          "        {params.nano_reads} {params.hifi_reads} "
          "        --hic1 {input.hic_forward} --hic2 {input.hic_reverse} "
-         "        --local --local-cpus 16 > {log.std} 2>&1;"
+         "        --local --local-cpus {threads} --local-memory {params.local_mem_gb} > {log.std} 2>&1;"
          " ln -sf assembly.fasta {output.consensus_fasta}; "
          " ln -sf assembly.haplotype1.fasta {output.hap1_fasta}; "
          " ln -sf assembly.haplotype1.fasta {output.hap2_fasta}; "
@@ -69,7 +70,7 @@ rule verkko_no_phasing:
         no_nano=lambda wildcards: parse_option_flag("no_nano", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --no-nano "),
         no_correction=lambda wildcards: parse_option_flag("no_correction", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --no-correction "),
         telomere_motif= lambda wildcards: parse_option("telomere_motif",config," --telomere-motif ") if stage_dict["contig"].parameters[wildcards.parameters]["option_set"]["use_telomere"] else "",
-
+        local_mem_gb=int(float(parameters["memory_mb"]["verkko"]) * 0.95 / 1024)
     log:
         std=config["out_dir"] / "log/verkko.{parameters}.{genome_prefix}.log",
         cluster_log=config["out_dir"] / "log/verkko.{parameters}.{genome_prefix}.cluster.log",
@@ -91,5 +92,5 @@ rule verkko_no_phasing:
          "        {params.no_correction} {params.telomere_motif} "
          "        -d `dirname {output.hap0_fasta}` "
          "        {params.hifi_reads} {params.nano_reads} "
-         "        --local --local-cpus 16 > {log.std} 2>&1; "
+         "        --local --local-cpus {threads} --local-memory {params.local_mem_gb}  > {log.std} 2>&1; "
          " ln -sf assembly.fasta {output.hap0_fasta}; "

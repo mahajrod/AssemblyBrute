@@ -134,6 +134,7 @@ def get_read_filelist(wildcards, option_set_entry):
                                     datatype=[datatype,],
                                     extension=[config["data"][datatype]["conv_ext"]],
                                     allow_missing=True)
+    return read_filelist
 
 get_main_read_filelist = partial(get_read_filelist, option_set_entry="main_datatypes")
 get_ultralong_read_filelist = partial(get_read_filelist, option_set_entry="ultra_long_reads")

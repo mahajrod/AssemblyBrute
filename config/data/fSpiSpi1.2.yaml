@@ -68,8 +68,9 @@
     #- "read_phasing" # this is an attached stage, it is attached to the stage set by "phasing_stage" parameter. However, if phased reads are required for any other stage, the corresponding rules will be called automatically. Uncomment it only if you need to get phased reads for all suitable datatypes.
 
 "stage_coretools":
-    "contig": # Allowed: "hifiasm". TODO: "nextdenovo"
+    "contig": # Allowed: "hifiasm".
         - "hifiasm"
+        #- "verkko" TODO: test.
         #- "flye"
         #- "nextdenovo" #TODO: implement
     "hic_alignment":
@@ -117,6 +118,12 @@
         #- "old_nano"
         #- "nano_corr"
         #- "nano_hq"
+    "verkko":
+        - "default"
+        #- "no_phasing"
+        #- "no_hic"
+        #- "no_trio"
+        #- "precorr_reads"
     "purge_dups":
         - "hifi"
         #- "nano"

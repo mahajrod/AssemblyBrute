@@ -17,6 +17,9 @@
     "hifiasm":
         "yaml": "workflow/envs/conda.hifiasm.yaml"
         "name": "hifiasm"
+    "verkko":
+        "yaml": "workflow/envs/conda.verkko.yaml"
+        "name": "verkko"
     "pairtools":
         "yaml": "workflow/envs/conda.pairtools.yaml"
         "name": "pairtools"
@@ -117,6 +120,14 @@
         "keep_haplotypes": "bool"
         "no_alt_contigs": "bool"
         "scaffolding": "bool"
+    "verkko":
+        "no_correction": "bool"
+        "no_nano": "bool"
+        "no_rdna_tangle": "bool"
+        "uneven_cov": "bool"
+        "haplo_divergence": "Float32"
+        "use_hic": "bool"
+        "use_parental": "bool"
 
 "resources_dir": "config/resources/"
 #--------------------------

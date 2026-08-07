@@ -1,0 +1,6 @@
+option_set	no_correction	no_nano	no_rdna_tangle	uneven_cov	haplo_divergence	use_hic	use_parental
+default	False	False	False	False	NA	True	True
+no_phasing	False	False	False	False	NA	False	False
+no_hic	False	False	False	False	NA	False	True
+no_trio	False	False	False	False	NA	True	False
+precorr_reads	True	False	False	False	NA	True	True

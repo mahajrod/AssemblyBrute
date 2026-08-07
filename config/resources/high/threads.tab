@@ -20,6 +20,7 @@ genomescope	1	1	1	1	1	1	1	1	1
 parse_genomescope_output	1	1	1	1	1	1	1	1	1
 hifiasm	48	12	24	36	48	48	48	48	48
 flye	48	12	24	36	48	48	48	48	48
+verkko	48	12	24	36	48	48	48	48	48
 nextdenovo	48	12	24	36	48	48	48	48	48
 gfa2fasta	1	1	1	1	1	1	1	1	1
 get_coverage_from_hifiasm_graph	1	1	1	1	1	1	1	1	1

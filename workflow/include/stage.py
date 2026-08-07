@@ -118,7 +118,7 @@ class Stage:
 
     def detect_ploidy_for_contig_stage(self, tool, option_set):
         found_dict = {}
-        if tool == "hifiasm":
+        if tool in ["hifiasm", "verkko"]:
             for datatype in "hic", "parental":
                 if parameters["tool_options"][tool][option_set][f"use_{datatype}"]:
                     #self.logger.info(TAB * 3 + f"Parameter set allows usage of phasing datatype {datatype}...")

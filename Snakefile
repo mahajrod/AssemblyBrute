@@ -357,7 +357,7 @@ wildcard_constraints:
     mapq="[0-9]+",
     min_mapq="[0-9]+",
     resolution="[0-9]+",
-    pretext_res="default|high_res",
+    pretext_res="default|low_res|high_res|ultra_res",
     track_type="[^./]+",
     threshold_type="[^/]+"
 

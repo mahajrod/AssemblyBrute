@@ -49,9 +49,9 @@ rule verkko_phasing:
          "        {params.nano_reads} {params.hifi_reads} "
          "        --hic1 {input.hic_forward} --hic2 {input.hic_reverse} "
          "        --local --local-cpus 16 > {log.std} 2>&1;"
-         " ln -sf assembly.fasta `basename {output.consensus_fasta}`; "
-         " ln -sf assembly.haplotype1.fasta `basename {output.hap1_fasta}`; "
-         " ln -sf assembly.haplotype1.fasta `basename {output.hap2_fasta}`; "
+         " ln -sf assembly.fasta {output.consensus_fasta}; "
+         " ln -sf assembly.haplotype1.fasta {output.hap1_fasta}; "
+         " ln -sf assembly.haplotype1.fasta {output.hap2_fasta}; "
 
 rule verkko_no_phasing:
     priority: 1000
@@ -92,4 +92,4 @@ rule verkko_no_phasing:
          "        -d results/verkko/ "
          "        {params.hifi_reads} {params.nano_reads} "
          "        --local --local-cpus 16 > {log.std} 2>&1; "
-         " ln -sf assembly.fasta `basename {output.hap0_fasta}`; "
+         " ln -sf assembly.fasta {output.hap0_fasta}; "

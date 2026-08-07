@@ -7,3 +7,4 @@
   - "anaconda"
 "dependencies":
   - "verkko"
+  - "pytz"

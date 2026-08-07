@@ -396,6 +396,7 @@ include: "workflow/rules/Tools/Kmer/Krater.smk"       # DONE
 
 include: "workflow/rules/Stages/contig/Common.smk" # DONE
 include: "workflow/rules/Stages/contig/Hifiasm.smk" # DONE
+include: "workflow/rules/Stages/contig/Verkko.smk" # TEST
 #include: "workflow/rules/Stages/contig/NextDenovo.smk" # DONE
 include: "workflow/rules/Stages/contig/Flye.smk" # DONE
 include: "workflow/rules/Tools/Graph/GFA.smk" # DONE

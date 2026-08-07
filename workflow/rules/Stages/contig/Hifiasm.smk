@@ -220,7 +220,7 @@ use rule create_local_links as create_primary_gfa_link with:
         gfa=config["out_dir"] / "contig/{parameters}/{genome_prefix}.contig.hic.{haplotype}.p_ctg.gfa",
         log_dir=ancient(config["out_dir"] / "contig/{parameters}/log")
     output:
-        gfa=config["out_dir"] / "contig/{parameters}/{genome_prefix}.contig.{haplotype, hap[^/]+}.unfiltered.gfa"
+        gfa=config["out_dir"] / "contig/{parameters}/{genome_prefix, hifiasm[^/]*}.contig.{haplotype, hap[^/]+}.unfiltered.gfa"
     log:
         ln=config["out_dir"] / "contig/{parameters}/log/create_gfa_links.{parameters}.{genome_prefix}.contig.{haplotype}.ln.log",
 
@@ -229,7 +229,7 @@ use rule create_local_links as create_alt_gfa_link with:
         gfa=config["out_dir"] / "contig/{parameters}/{genome_prefix}.contig.hic.a_ctg.gfa",
         log_dir=ancient(config["out_dir"] / "contig/{parameters}/log")
     output:
-        gfa=config["out_dir"] / "contig/{parameters}/{genome_prefix}.contig.alt.unfiltered.gfa"
+        gfa=config["out_dir"] / "contig/{parameters}/{genome_prefix, hifiasm[^/]*}.contig.alt.unfiltered.gfa"
     log:
         ln=config["out_dir"] / "contig/{parameters}/log/create_gfa_links.{parameters}.{genome_prefix}.contig.alt.ln.log",
 

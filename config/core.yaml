@@ -270,6 +270,9 @@
                             "w10k.s10k":
                                 "window": 10000
                                 "step":   10000
+                            "w10k.s1k":
+                                "window": 10000
+                                "step":   1000
                     "windowmasker":
                         "relative_thresholds": # median +- threshold * median
                             - 0.05
@@ -300,6 +303,9 @@
                             "w10k.s10k":
                                 "window": 10000
                                 "step":   10000
+                            "w10k.s1k":
+                                "window": 10000
+                                "step":   1000
                     "gap":
                         "normalize_by_len": True
                         "relative_thresholds": # median +- threshold * median
@@ -330,6 +336,9 @@
                             "w10k.s10k":
                                 "window": 10000
                                 "step":   10000
+                            "w10k.s1k":
+                                "window": 10000
+                                "step":   1000
                     "gc":
                         "relative_thresholds": # median +- threshold * median
                             - 0.05
@@ -360,6 +369,9 @@
                             "w10k.s10k":
                                 "window": 10000
                                 "step":   10000
+                            "w10k.s1k":
+                                "window": 10000
+                                "step":   1000
                         #"w10k.s1k":
                         #    "window": 10000
                         #    "step":   1000
@@ -988,9 +1000,9 @@
                             "w10k.s10k":
                                 "window": 10000
                                 "step":   10000
-                        #"w10k.s1k":
-                        #    "window": 10000
-                        #    "step":   1000
+                            "w10k.s1k":
+                                "window": 10000
+                                "step":   1000
                     "trf":
                         "relative_thresholds": # median +- threshold * median
                             - 0.05
@@ -1021,6 +1033,9 @@
                             "w10k.s10k":
                                 "window": 10000
                                 "step":   10000
+                            "w10k.s1k":
+                                "window": 10000
+                                "step":   1000
                     "windowmasker":
                         "relative_thresholds": # median +- threshold * median
                             - 0.05
@@ -1051,6 +1066,9 @@
                             "w10k.s10k":
                                 "window": 10000
                                 "step":   10000
+                            "w10k.s1k":
+                                "window": 10000
+                                "step":   1000
                     "gap":
                         "normalize_by_len": True
                         "relative_thresholds": # median +- threshold * median

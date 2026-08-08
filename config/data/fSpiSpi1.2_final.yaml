@@ -26,7 +26,7 @@
 "parameter_set": "normal"
 
 #---- Data ----
-"input_datatypes": "hifi,hic,illumina,reference"
+"input_datatypes": "hifi,hic,illumina,reference,draft"
 "data_filtering": []
 
 "assembly_kmer_length":

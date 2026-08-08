@@ -30,7 +30,7 @@ rule samba:
         fasta=lambda wildcards: config["out_dir"] / "{0}/{1}/{2}.{0}.{3}.fasta".format(stage_dict["gap_closing"].prev_stage,
                                                                                        wildcards.prev_stage_parameters, wildcards.genome_prefix, wildcards.haplotype)
     output:
-        fasta=config["out_dir"] / "gap_closing/{prev_stage_parameters}..samba_{gap_closing_parameters}/{genome_prefix}.gap_closing.{haplotype, hap[^/]*}/samba/{genome_prefix}.gap_closing.{haplotype}.fasta" ,
+        fasta=config["out_dir"] / "gap_closing/{prev_stage_parameters}..samba_{gap_closing_parameters}/{genome_prefix}.gap_closing.{haplotype, hap[0-9]+}/samba/{genome_prefix}.gap_closing.{haplotype}.fasta" ,
     params:
         datatype=lambda wildcards: parse_option("datatype", parameters["tool_options"]["samba"][wildcards.gap_closing_parameters][config["gap_closing_datatype"]], " -d "),
         matching_len=lambda wildcards: parse_option("matching_len", parameters["tool_options"]["samba"][wildcards.gap_closing_parameters][config["gap_closing_datatype"]], " -m ")
@@ -71,7 +71,7 @@ rule reorder_samba_output:
     input:
         fasta=rules.samba.output.fasta
     output:
-        fasta=config["out_dir"] / "gap_closing/{prev_stage_parameters}..samba_{gap_closing_parameters}/{genome_prefix}.gap_closing.{haplotype, hap.*}.fasta" ,
+        fasta=config["out_dir"] / "gap_closing/{prev_stage_parameters}..samba_{gap_closing_parameters}/{genome_prefix}.gap_closing.{haplotype, hap[0-9]+}.fasta" ,
     log:
         reorder=config["out_dir"] / "log/reorder_samba_output.{prev_stage_parameters}..samba_{gap_closing_parameters}.{genome_prefix}.{haplotype}.reorder.log",
         cluster_log=config["out_dir"] / "log/reorder_samba_output.{prev_stage_parameters}..samba_{gap_closing_parameters}.{genome_prefix}.{haplotype}.cluster.log",

@@ -45,7 +45,7 @@ use rule create_local_links as create_link_for_draft with:
         draft=lambda wildcards: input_dir_path / "draft/fasta/{0}".format(config["data"]["draft"]["haplotypes"][wildcards.haplotype]),
         log_dir=ancient(config["out_dir"] / "log/")
     output:
-        draft=config["out_dir"] / "draft_qc/{parameters}/{genome_prefix}.draft_qc.{haplotype, hap.*}.fasta"
+        draft=config["out_dir"] / "draft_qc/{parameters}/{genome_prefix}.draft_qc.{haplotype, hap[^/]*}.fasta"
     log:
         ln=config["out_dir"] / "log/create_links_for_draft.{genome_prefix}.{parameters}.draft_qc.{haplotype}.ln.log",
 

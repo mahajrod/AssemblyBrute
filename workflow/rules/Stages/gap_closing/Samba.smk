@@ -64,7 +64,7 @@ rule samba:
          " cd ${{OUTPUT_DIR}}; "
          " close_scaffold_gaps.sh -t {threads} -q <(zcat ${{INPUT_FILES}}) {params.datatype} -r `basename ${{INPUT_FASTA}}` "
          "     {params.matching_len} -v > {log.samba} 2>&1; "
-         " ln -sf `basename {input.fasta}`.split.joined.fa `basename {output.fasta}`"
+         " ln -sf `basename {input.fasta}`.split.joined.fa `basename {output.fasta}` >> {log.samba} 2>&1; "
 
 rule reorder_samba_output:
     priority: 500

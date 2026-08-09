@@ -26,7 +26,7 @@
 "parameter_set": "normal"
 
 #---- Data ----
-"input_datatypes": "hifi,hic,illumina,reference"
+"input_datatypes": "hifi,hic,illumina,reference,draft"
 "data_filtering": []
 
 "assembly_kmer_length":
@@ -52,7 +52,7 @@
     #- "filtered_read_qc"
     #- "kmer_qc"
     #- "mtdna"
-    - "read_contamination_scan" # TODO: test after refactoring
+    #- "read_contamination_scan" # TODO: test after refactoring
     - "draft_qc"         # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
     #- "contig"            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
     #- "polishing"        # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
@@ -60,7 +60,7 @@
     #- "hic_alignment"     # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
     #- "hic_scaffolding"   # MUST FOLLOW hic_alignment stage
     #- "ref_scaffolding"   # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing , at moment it requires telomere detection
-    - "gap_closing"      # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
+    #- "gap_closing"      # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
     #- "read_phasing" # this is an attached stage, it is attached to the stage set by "phasing_stage" parameter. However, if phased reads are required for any other stage, the corresponding rules will be called automatically. Uncomment it only if you need to get phased reads for all suitable datatypes.
 
 "stage_coretools":
@@ -179,7 +179,7 @@
     #    5 - quast, merqury, wga, assembly-based tracks, ragtag_qc, busco
     #    6 - quast, merqury, wga, assembly-based tracks, ragtag_qc, read-based and other tracks, busco, purge_dups_qc
     #    7 - quast, merqury, wga, assembly-based tracks, ragtag_qc, read-based and other tracks, busco, purge_dups_qc, pretext map, higlass mcool, .hic for combined haplotype
-    "draft_qc":        5
+    "draft_qc":        4
     "contig":          5
     "dedup":           5
     "hic_alignment":   0 # keep it always 0, as this stage uses fastas from the previous stage. changing it to a higher value will trigger unnecessary calculations
@@ -192,9 +192,9 @@
     "windows_sets":
         #- "w1000k.s1000k"
         - "w1000k.s100k"
-        #- "w100k.s100k"
+        - "w100k.s100k"
         - "w100k.s10k"
-        #- "w10k.s10k"
+        #- "w10k.s1k"
     "reference_scaffold_sets":
         # Thresholds for scaffolds are set in core config, "select_scaffolds". Values below are from "default" parameter set
         - "custom" # scaffolds are selected by the reference's whitelist
@@ -219,6 +219,9 @@
 "genome_prefix": "fGadMor7"
 "busco_lineage_list":
     - "actinopterygii_odb12"
+    - "actinopterygii_odb10"
+    - "vertebrata_odb10"
+    - "vertebrata_odb12"
 
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
@@ -297,7 +300,7 @@
 "skip_pretext": False                   # set True to completely skip all pretext related qc
 "skip_pretext_10k_1k_tracks": False     # set True to skip injection to the pretext maps of tracks with window size of 10 kpb and step of 1kpb. Reasonable for large genomes
 "skip_pretext_100k_10k_tracks": False  # set True to skip injection to the pretext maps of tracks with window size of 100kbp and step of 10kbp.
-"skip_pretext_1000k_100k_tracks": True  # set True to skip injection to the pretext maps of tracks with window size of 1000kbp and step of 100kbp. Reasonable for small genomes
+"skip_pretext_1000k_100k_tracks": False  # set True to skip injection to the pretext maps of tracks with window size of 1000kbp and step of 100kbp. Reasonable for small genomes
 "skip_pretext_coverage_tracks": False   # set True to skip injection to the pretext maps of all coverage tracks
 
 "skip_hic_for_combined_haplotype": True    # set False to generate .hic file for combined/reordered haplotype

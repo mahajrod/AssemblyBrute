@@ -322,7 +322,7 @@
 "skip_pretext": False                   # set True to completely skip all pretext related qc
 "skip_pretext_10k_1k_tracks": False     # set True to skip injection to the pretext maps of tracks with window size of 10 kpb and step of 1kpb. Reasonable for large genomes
 "skip_pretext_100k_10k_tracks": False  # set True to skip injection to the pretext maps of tracks with window size of 100kbp and step of 10kbp.
-"skip_pretext_1000k_100k_tracks": True  # set True to skip injection to the pretext maps of tracks with window size of 1000kbp and step of 100kbp. Reasonable for small genomes
+"skip_pretext_1000k_100k_tracks": False # set True to skip injection to the pretext maps of tracks with window size of 1000kbp and step of 100kbp. Reasonable for small genomes
 "skip_pretext_coverage_tracks": False   # set True to skip injection to the pretext maps of all coverage tracks
 
 "skip_hic_for_combined_haplotype": True    # set False to generate .hic file for combined/reordered haplotype

@@ -60,7 +60,7 @@
     #- "draft_qc"         # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
     - "contig"            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
     - "polishing"        # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
-    - "dedup"             # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing for hapsolo
+    #- "dedup"             # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing for hapsolo
     - "hic_alignment"     # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
     - "hic_scaffolding"   # MUST FOLLOW hic_alignment stage
     #- "ref_scaffolding"   # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing , at moment it requires telomere detection

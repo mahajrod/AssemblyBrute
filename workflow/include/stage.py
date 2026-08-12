@@ -339,7 +339,9 @@ class Stage:
                 results_list += [expand(config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}/contamination_scan/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.{database}.taxonomy",
                                         genome_prefix=[self.config["genome_prefix"], ],
                                         assembly_stage=[self.stage_name],
-                                        haplotype=haplotype_list + (["alt" if stage_dict[self.stage_name].parameters[parameters_label]["option_set"]["assembly_ploidy"] > 1 else "alt0"] if "hifiasm" in parameters_label else []),
+                                        haplotype=haplotype_list \
+                                                  + ((["alt"] if stage_dict[self.stage_name].parameters[parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["alt0"]) if "hifiasm" in parameters_label else []) \
+                                                  + ((["unassigned"] if stage_dict[self.stage_name].parameters[parameters_label]["option_set"]["assembly_ploidy"] > 1 else []) if "verkko" in parameters_label else []) ,
                                         parameters=[parameters_label],
                                         database=self.config["database_set"]["fcs"])
                                 ]
@@ -613,6 +615,14 @@ class Stage:
                                     datatype=[datatype,],
                                     extension=[self.config["data"][datatype]["conv_ext"]],
                                     fileprefix=self.config["data"][datatype]["conv_file_prefix_list"])]
+        for datatype in self.config["track_data_feature_dict"]:
+            for track_name in self.config["track_data_feature_dict"][datatype]["filter"]:
+                results_list += [expand(self.config["out_dir"] / "track_data/{datatype}/{track_name}/filtered/{fileprefix}{extension}",
+                                        track_name=[track_name],
+                                        datatype=[datatype,],
+                                        extension=[self.config["track_data"][datatype][track_name]["conv_ext"]],
+                                        fileprefix=self.config["track_data"][datatype][track_name]["conv_file_prefix_list"])]
+
 
         return results_list
 
@@ -727,17 +737,40 @@ class Stage:
                              expand(self.config["out_dir"] / "qc/multiqc/{datatype}/{stage}/multiqc.{datatype}.{stage}.report.html",
                              datatype=self.config["data_feature_dict"]["fastqc"],
                              stage=[stage,]),]
+            for datatype in self.config["track_data_feature_dict"]:
+                 for track_name in self.config["track_data_feature_dict"][datatype]["fastqc"]:
+                     results_list += [expand(self.config["out_dir"] / "track_qc/fastqc/{fastqc_datatype}/{track_name}/{stage}/{fileprefix}_fastqc.zip",
+                                             fastqc_datatype=[datatype, ],
+                                             track_name=[track_name, ],
+                                             stage=[stage, ],
+                                             fileprefix=self.config["track_data"][datatype][track_name]["conv_file_prefix_list"])]
         if not self.config["skip_nanoplot"]:
             results_list += [expand(self.config["out_dir"] / "qc/nanoplot/{datatype}/{stage}/{datatype}.{stage}.NanoStats.tsv",
                                datatype=self.config["data_feature_dict"]["long_read"],
                                stage=[stage, ],
                                )]
+            for datatype in self.config["track_data_feature_dict"]:
+                 for track_name in self.config["track_data_feature_dict"][datatype]["long_read"]:
+                     results_list += [expand(self.config["out_dir"] / f"track_qc/nanoplot/{datatype}/{track_name}/{stage}/{datatype}.{track_name}.{stage}.NanoStats.tsv",
+                                      datatype=[datatype,],
+                                      track_name=[track_name,],
+                                      stage=[stage, ],
+                                      )]
         if not self.config["skip_nanoqc"]:
              results_list += [[expand(self.config["out_dir"] / "qc/nanoqc/{datatype}/{stage}/{fileprefix}",
                                datatype=[dat_type, ],
                                stage=[stage, ],
                                fileprefix=self.config["data"][dat_type]["conv_file_prefix_list"]) for dat_type in self.config["data_feature_dict"]["long_read"]]
                              ]
+             for datatype in self.config["track_data_feature_dict"]:
+                 for track_name in self.config["track_data_feature_dict"][datatype]["long_read"]:
+                     results_list += [[expand(self.config["out_dir"] / "track_qc/nanoqc/{datatype}/{track_name}/{stage}/{fileprefix}",
+                                       datatype=[datatype, ],
+                                       track_name=[track_name],
+                                       stage=[stage, ],
+                                       fileprefix=self.config["track_data"][datatype][track_name]["conv_file_prefix_list"]) ]
+                                     ]
+
         if not self.config["skip_tadbit"]:
             if ("hic" in self.config["data"]) and ((self.config["hic_enzyme_set"] == "custom") or self.config["hic_enzyme_dict"][self.config["hic_enzyme_set"]]):
                 results_list += [expand(self.config["out_dir"] / "qc/tadbit/hic/{stage}/{genome_prefix}.tadbit.stats",

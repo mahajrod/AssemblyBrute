@@ -136,9 +136,12 @@ for datatype in list(config["data"].keys()):
     for filepath in config["data"][datatype]["in_file_list"]:
         brute_logger.info(TAB * 3 + str(filepath))
 
+config["track_data_feature_dict"] = {}
+
+config["track_data"] = {}
 if "track_data" in config["input_datatypes"]: # parse data that will be used to create additional tracks for pretextview. It is not used for assembly itself
     brute_logger.info(TAB + f"Checking track data...")
-    config["track_data"] = {}
+
     for datatype in list(config["data_parameters"].keys()):
 
         datatype_dir = input_dir_path / "track_data" / datatype
@@ -152,6 +155,11 @@ if "track_data" in config["input_datatypes"]: # parse data that will be used to 
             continue
         brute_logger.info(TAB * 2 + f"Checking {datatype} track data...")
         config["track_data"][datatype] = {}
+        config["track_data_feature_dict"][datatype] = {feature: set() for feature in ["paired", "fastq", "fasta", "fastqc",
+                                                                                      "long_read", "nanopore", "pacbio",
+                                                                                      "genome_size", "variant_call", "gap_fill",
+                                                                                      "kraken", "filter", "phasing", "pretext_coverage_track",
+                                                                                      "pretext_per_hap_track"]}
         for track_dir in track_dir_list:
             track_name = track_dir.name
             brute_logger.info(TAB * 3 + f"Found track {track_name}...")
@@ -208,16 +216,16 @@ if "track_data" in config["input_datatypes"]: # parse data that will be used to 
             config["track_data"][datatype][track_name]["filtered_dir"] = config["out_dir"] / "track_data" / datatype / track_name / "filtered"
             config["track_data"][datatype][track_name]["final_dir"] = config["out_dir"] / "track_data" / datatype / track_name / "final"
 
-            """
-            if config["data"][datatype]["conv_fmt"] == "fastq":
-                config["data_feature_dict"]["fastq"].add(datatype)
-            if config["data"][datatype]["conv_fmt"] == "fasta":
-                config["data_feature_dict"]["fasta"].add(datatype)
+
+            if config["track_data"][datatype][track_name]["conv_fmt"] == "fastq":
+                config["track_data_feature_dict"][datatype]["fastq"].add(track_name)
+            if config["data_data"][datatype][track_name]["conv_fmt"] == "fasta":
+                config["track_data_feature_dict"][datatype]["fasta"].add(track_name)
             for feature in ("paired", "fastqc", "long_read", "nanopore", "pacbio", "genome_size", "variant_call", "gap_fill",
                             "kraken", "filter", "phasing", "pretext_coverage_track", "pretext_per_hap_track"):
-                if config["data"][datatype][feature]:
-                    config["data_feature_dict"][feature].add(datatype)
-            """
+                if config["track_data"][datatype][track_name][feature]:
+                    config["track_data_feature_dict"][datatype][feature].add(track_name)
+
             brute_logger.info(TAB * 4 + f"Input extension: {config['track_data'][datatype][track_name]['in_ext']}")
             brute_logger.info(TAB * 4 + f"Input files: {config['track_data'][datatype][track_name]['num_files']}")
             brute_logger.info(TAB * 4 + "Files:")

@@ -19,11 +19,11 @@ rule cutadapt:
         forward_five_prime_adapters= lambda wildcards: (" -g " + " -g ".join(parameters["tool_options"]["cutadapt"][wildcards.pacbio_datatype]["forward_five_prime_adapter_list"])) if ("forward_five_prime_adapter_list" in parameters["tool_options"]["cutadapt"][wildcards.pacbio_datatype]) and parameters["tool_options"]["cutadapt"][wildcards.pacbio_datatype]["forward_five_prime_adapter_list"] else "",
         reverse_five_prime_adapters= lambda wildcards: (" -G " + " -G ".join(parameters["tool_options"]["cutadapt"][wildcards.pacbio_datatype]["reverse_five_prime_adapter_list"])) if ("reverse_five_prime_adapter_list" in parameters["tool_options"]["cutadapt"][wildcards.pacbio_datatype]) and parameters["tool_options"]["cutadapt"][wildcards.pacbio_datatype]["reverse_five_prime_adapter_list" ] else "",
     log:
-        std=config["out_dir"] / "log/cutadapt_pacbio.{pacbio_datatype}.{fileprefix}.log",
-        cluster_log=config["out_dir"] / "log/cutadapt_pacbio.hifi.{pacbio_datatype}.{fileprefix}.cluster.log",
-        cluster_err=config["out_dir"] / "log/cutadapt_pacbio.hifi.{pacbio_datatype}.{fileprefix}.cluster.log"
+        std=config["out_dir"] / "log/cutadapt.{pacbio_datatype}.{fileprefix}.log",
+        cluster_log=config["out_dir"] / "log/cutadapt.hifi.{pacbio_datatype}.{fileprefix}.cluster.log",
+        cluster_err=config["out_dir"] / "log/cutadapt.hifi.{pacbio_datatype}.{fileprefix}.cluster.log"
     benchmark:
-        config["out_dir"] / "log/cutadapt_pacbio.hifi.{pacbio_datatype}.{fileprefix}.benchmark.txt"
+        config["out_dir"] / "log/cutadapt.hifi.{pacbio_datatype}.{fileprefix}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -40,3 +40,16 @@ rule cutadapt:
          "     {params.forward_five_prime_adapters} {params.reverse_five_prime_adapters} "
          "     {params.forward_three_prime_adapters} {params.reverse_three_prime_adapters} "
          "     {params.check_read_rc} {params.discard_trimmed} -o {output.fastq} {input.fastq} > {output.stats} 2>{log.std}; "
+
+use rule cutadapt as cutadapt_track_data with:
+    input:
+        fastq=config["out_dir"] / ("track_data/{pacbio_datatype}/{track_name}/raw/{fileprefix}%s" % config["fastq_ext"])
+    output:
+        fastq=config["out_dir"] / ("track_data/{pacbio_datatype}/{track_name}/filtered/{fileprefix}%s" % config["fastq_ext"]),
+        stats=config["out_dir"] / "track_data/{pacbio_datatype}/{track_name}/filtered/{fileprefix}.cutadapt.stats"
+    log:
+        std=config["out_dir"] / "log/cutadapt_track_data.{pacbio_datatype}.{track_name}.{fileprefix}.log",
+        cluster_log=config["out_dir"] / "log/cutadapt_track_data.hifi.{pacbio_datatype}.{track_name}.{fileprefix}.cluster.log",
+        cluster_err=config["out_dir"] / "log/cutadapt_track_data.hifi.{pacbio_datatype}.{track_name}.{fileprefix}.cluster.log"
+    benchmark:
+        config["out_dir"] / "log/cutadapt_track_data.hifi.{pacbio_datatype}.{track_name}.{fileprefix}.benchmark.txt"

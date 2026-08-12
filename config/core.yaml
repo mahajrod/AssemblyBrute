@@ -2756,6 +2756,8 @@
 "fastq_ext": ".fastq.gz"
 "fwd_fastq_sfx": "_1"
 "rev_fastq_sfx": "_2"
+"fwd_fasta_sfx": "_1"
+"rev_fasta_sfx": "_2"
 
 "allowed_stage_list":
     - "raw_read_qc"

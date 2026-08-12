@@ -137,12 +137,15 @@ if "track_data" in config["input_datatypes"]: # parse data that will be used to 
     brute_logger.dbg_scr(TAB + f"Checking track data...")
     config["track_data"] = {}
     for datatype in list(config["data"].keys()):
-        brute_logger.dbg_scr(TAB * 2 + f"Checking f{datatype} track data...")
+        print(datatype)
+        brute_logger.info(TAB * 2 + f"Checking f{datatype} track data...")
         datatype_dir = input_dir_path / "track_data" / datatype
         track_dir_list = datatype_dir.glob("*")
         for track_dir in track_dir_list:
             if track_dir.is_dir():
+
                 print(track_dir)
+
                 input = detect_input_type(datatype, track_dir)
                 if not input:
                     continue

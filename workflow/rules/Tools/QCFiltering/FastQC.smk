@@ -29,16 +29,16 @@ rule fastqc:
         " fastqc {params.nogroup} --memory {resources.mem} {params.kmer} -t {threads} "
         "     -o ${{OUTDIR}} {input.fastq} 1>{log.std} 2>&1; "
 
-use rule fastqc as fastqc_track_data with:
+use rule fastqc as fastqc_ext_data with:
     input:
         fastq=config["out_dir"] / ("ext_data/{fastqc_datatype}/{track_name}/{stage}/{fileprefix}%s" % config["fastq_ext"])
     output:
         zip=config["out_dir"] / "ext_qc/fastqc/{fastqc_datatype}/{track_name}/{stage}/{fileprefix}_fastqc.zip"
     log:
-        std=config["out_dir"] / "log/fastqc_track_data.{fastqc_datatype}.{track_name}.{stage}.{fileprefix}.log",
-        cluster_log=config["out_dir"] / "log/fastqc_track_data.{fastqc_datatype}.{track_name}.{stage}.{fileprefix}.cluster.log",
-        cluster_err=config["out_dir"] / "log/fastqc_track_data.{fastqc_datatype}.{track_name}.{stage}.{fileprefix}.cluster.err"
+        std=config["out_dir"] / "log/fastqc_ext_data.{fastqc_datatype}.{track_name}.{stage}.{fileprefix}.log",
+        cluster_log=config["out_dir"] / "log/fastqc_ext_data.{fastqc_datatype}.{track_name}.{stage}.{fileprefix}.cluster.log",
+        cluster_err=config["out_dir"] / "log/fastqc_ext_data.{fastqc_datatype}.{track_name}.{stage}.{fileprefix}.cluster.err"
     benchmark:
-        config["out_dir"] / "log/fastqc_track_data.{fastqc_datatype}.{track_name}.{stage}.{fileprefix}.benchmark.txt"
+        config["out_dir"] / "log/fastqc_ext_data.{fastqc_datatype}.{track_name}.{stage}.{fileprefix}.benchmark.txt"
 
 

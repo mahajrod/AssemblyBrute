@@ -48,7 +48,7 @@ rule trimmomatic_pe:
          "     SLIDINGWINDOW:{params.sliding_window_size}:{params.sliding_window_quality} "
          "     MINLEN:{params.min_read_length} > {output.stats} 2>{log.std}; "
 
-use rule trimmomatic_pe as trimmomatic_pe_track_data with:
+use rule trimmomatic_pe as trimmomatic_pe_ext_data with:
     input:
         forward_fastq=lambda wildcards: config["out_dir"] / ("ext_data/{0}/{5}/{1}/{2}{3}{4}".format(wildcards.pe_datatype,
                                                                                                        "raw" if wildcards.pe_datatype != "hic" else "trimmed",
@@ -69,8 +69,8 @@ use rule trimmomatic_pe as trimmomatic_pe_track_data with:
         reverse_se_fastq=config["out_dir"] / ("ext_data/{pe_datatype}/{track_name}/filtered/{pairprefix}_2.se%s" % config["fastq_ext"]),
         stats=config["out_dir"] / "ext_data/{pe_datatype}/{track_name}/filtered/{pairprefix}.trimmomatic.stats"
     log:
-        std=config["out_dir"] / "log/trimmomatic_pe_track_data.{pe_datatype}.{track_name}.{pairprefix}.log",
-        cluster_log=config["out_dir"] / "log/trimmomatic_pe_track_data.{pe_datatype}.{track_name}.{pairprefix}.cluster.log",
-        cluster_err=config["out_dir"] / "log/trimmomatic_pe_track_data.{pe_datatype}.{track_name}.{pairprefix}.cluster.log"
+        std=config["out_dir"] / "log/trimmomatic_pe_ext_data.{pe_datatype}.{track_name}.{pairprefix}.log",
+        cluster_log=config["out_dir"] / "log/trimmomatic_pe_ext_data.{pe_datatype}.{track_name}.{pairprefix}.cluster.log",
+        cluster_err=config["out_dir"] / "log/trimmomatic_pe_ext_data.{pe_datatype}.{track_name}.{pairprefix}.cluster.log"
     benchmark:
-        config["out_dir"] / "log/trimmomatic_pe_track_data.{pe_datatype}.{track_name}.{pairprefix}.benchmark.txt"
+        config["out_dir"] / "log/trimmomatic_pe_ext_data.{pe_datatype}.{track_name}.{pairprefix}.benchmark.txt"

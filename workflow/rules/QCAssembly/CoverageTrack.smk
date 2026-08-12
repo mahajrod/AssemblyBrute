@@ -58,13 +58,13 @@ use rule minimap2_cov as minimap2_cov_ext_data with:
     output:
         bam="{fasta_dir}/{fasta_prefix}/alignment/{fasta_prefix}.ext@{longread_datatype}@{track_name}.bam"
     log:
-        minimap2="{fasta_dir}/log/minimap2_cov_track_data.{fasta_prefix}.{longread_datatype}.{track_name}.minimap2.log",
-        sort="{fasta_dir}/log/minimap2_cov_track_data.{fasta_prefix}.{longread_datatype}.{track_name}.sort.log",
-        index="{fasta_dir}/log/minimap2_cov_track_data.{fasta_prefix}.{longread_datatype}.{track_name}.index.log",
-        cluster_log="{fasta_dir}/log/minimap2_cov_track_data.{fasta_prefix}.{longread_datatype}.{track_name}.cluster.log",
-        cluster_err="{fasta_dir}/log/minimap2_cov_track_data.{fasta_prefix}.{longread_datatype}.{track_name}.cluster.err"
+        minimap2="{fasta_dir}/log/minimap2_cov_ext_data.{fasta_prefix}.{longread_datatype}.{track_name}.minimap2.log",
+        sort="{fasta_dir}/log/minimap2_cov_ext_data.{fasta_prefix}.{longread_datatype}.{track_name}.sort.log",
+        index="{fasta_dir}/log/minimap2_cov_ext_data.{fasta_prefix}.{longread_datatype}.{track_name}.index.log",
+        cluster_log="{fasta_dir}/log/minimap2_cov_ext_data.{fasta_prefix}.{longread_datatype}.{track_name}.cluster.log",
+        cluster_err="{fasta_dir}/log/minimap2_cov_ext_data.{fasta_prefix}.{longread_datatype}.{track_name}.cluster.err"
     benchmark:
-        "{fasta_dir}/log/minimap2_cov_track_data.{fasta_prefix}.{longread_datatype}.{track_name}.benchmark.txt"
+        "{fasta_dir}/log/minimap2_cov_ext_data.{fasta_prefix}.{longread_datatype}.{track_name}.benchmark.txt"
 
 rule bwa_cov:
     input:
@@ -118,7 +118,7 @@ rule bwa_cov:
         "     samtools sort -T {{TMP_PREFIX}} -@ {params.sort_threads} -m {params.per_thread_sort_mem}M 2>{log.sort} | "
         "     samtools markdup -@ {params.markdup_threads} - {output.bam} 2>{log.markdup}"
 
-use rule bwa_cov as bwa_cov_track_data with:
+use rule bwa_cov as bwa_cov_ext_data with:
     input:
         forward_fastqs=lambda wildcards: expand(config["out_dir"] / ("ext_data/%s/%s/final/{pairprefix}%s%s" % (wildcards.pe_datatype, wildcards.track_name,
                                                                                                                    config["ext_data"][wildcards.pe_datatype][wildcards.track_name]["conv_fwd_sfx"],
@@ -127,8 +127,8 @@ use rule bwa_cov as bwa_cov_track_data with:
                      allow_missing=True),
         reverse_fastqs=lambda wildcards: expand(config["out_dir"] / ("ext_data/%s/%s/final/{pairprefix}%s%s" % (wildcards.pe_datatype, wildcards.track_name,
                                                                                                                config["ext_data"][wildcards.pe_datatype][wildcards.track_name]["conv_rev_sfx"],
-                                                                                                               config["track_data"][wildcards.pe_datatype][wildcards.track_name]["conv_ext"])),
-                     pairprefix=config["track_data"][wildcards.pe_datatype][wildcards.track_name]["pair_prefix_list"],
+                                                                                                               config["ext_data"][wildcards.pe_datatype][wildcards.track_name]["conv_ext"])),
+                     pairprefix=config["ext_data"][wildcards.pe_datatype][wildcards.track_name]["pair_prefix_list"],
                      allow_missing=True),
         reference="{fasta_dir}/{fasta_prefix}.fasta",
         reference_index="{fasta_dir}/{fasta_prefix}.fasta.bwt.2bit.64",
@@ -136,14 +136,14 @@ use rule bwa_cov as bwa_cov_track_data with:
     output:
         bam="{fasta_dir}/{fasta_prefix}/alignment/{fasta_prefix}.ext@{pe_datatype, illumina}@{track_name}.bam"
     log:
-        bwa="{fasta_dir}/log/bwa_cov_track_data.{fasta_prefix}.{pe_datatype}.{track_name}.bwa.log",
-        fixmate="{fasta_dir}/log/bwa_cov_track_data.{fasta_prefix}.{pe_datatype}.{track_name}.fixmate.log",
-        sort="{fasta_dir}/log/bwa_cov_track_data.{fasta_prefix}.{pe_datatype}.{track_name}.sort.log",
-        markdup="{fasta_dir}/log/bwa_cov_track_data.{fasta_prefix}.{pe_datatype}.{track_name}.markdup.log",
-        cluster_log="{fasta_dir}/log/bwa_cov_track_data.{fasta_prefix}.{pe_datatype}.{track_name}.cluster.log",
-        cluster_err="{fasta_dir}/log/bwa_cov_track_data.{fasta_prefix}.{pe_datatype}.{track_name}.cluster.err"
+        bwa="{fasta_dir}/log/bwa_cov_ext_data.{fasta_prefix}.{pe_datatype}.{track_name}.bwa.log",
+        fixmate="{fasta_dir}/log/bwa_cov_ext_data.{fasta_prefix}.{pe_datatype}.{track_name}.fixmate.log",
+        sort="{fasta_dir}/log/bwa_cov_ext_data.{fasta_prefix}.{pe_datatype}.{track_name}.sort.log",
+        markdup="{fasta_dir}/log/bwa_cov_ext_data.{fasta_prefix}.{pe_datatype}.{track_name}.markdup.log",
+        cluster_log="{fasta_dir}/log/bwa_cov_ext_data.{fasta_prefix}.{pe_datatype}.{track_name}.cluster.log",
+        cluster_err="{fasta_dir}/log/bwa_cov_ext_data.{fasta_prefix}.{pe_datatype}.{track_name}.cluster.err"
     benchmark:
-        "{fasta_dir}/log/bwa_cov_track_data.{fasta_prefix}.{pe_datatype}.{track_name}.benchmark.txt"
+        "{fasta_dir}/log/bwa_cov_ext_data.{fasta_prefix}.{pe_datatype}.{track_name}.benchmark.txt"
 
 rule calculate_coverage:
     input:

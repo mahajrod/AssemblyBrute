@@ -43,10 +43,10 @@ rule cutadapt:
 
 use rule cutadapt as cutadapt_track_data with:
     input:
-        fastq=config["out_dir"] / ("ext_track_data/{pacbio_datatype}/{track_name}/raw/{fileprefix}%s" % config["fastq_ext"])
+        fastq=config["out_dir"] / ("ext_data/{pacbio_datatype}/{track_name}/raw/{fileprefix}%s" % config["fastq_ext"])
     output:
-        fastq=config["out_dir"] / ("ext_track_data/{pacbio_datatype}/{track_name}/filtered/{fileprefix}%s" % config["fastq_ext"]),
-        stats=config["out_dir"] / "ext_track_data/{pacbio_datatype}/{track_name}/filtered/{fileprefix}.cutadapt.stats"
+        fastq=config["out_dir"] / ("ext_data/{pacbio_datatype}/{track_name}/filtered/{fileprefix}%s" % config["fastq_ext"]),
+        stats=config["out_dir"] / "ext_data/{pacbio_datatype}/{track_name}/filtered/{fileprefix}.cutadapt.stats"
     log:
         std=config["out_dir"] / "log/cutadapt_track_data.{pacbio_datatype}.{track_name}.{fileprefix}.log",
         cluster_log=config["out_dir"] / "log/cutadapt_track_data.hifi.{pacbio_datatype}.{track_name}.{fileprefix}.cluster.log",

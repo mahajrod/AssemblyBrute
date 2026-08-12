@@ -31,9 +31,9 @@ rule fastqc:
 
 use rule fastqc as fastqc_track_data with:
     input:
-        fastq=config["out_dir"] / ("ext_track_data/{fastqc_datatype}/{track_name}/{stage}/{fileprefix}%s" % config["fastq_ext"])
+        fastq=config["out_dir"] / ("ext_data/{fastqc_datatype}/{track_name}/{stage}/{fileprefix}%s" % config["fastq_ext"])
     output:
-        zip=config["out_dir"] / "ext_track_qc/fastqc/{fastqc_datatype}/{track_name}/{stage}/{fileprefix}_fastqc.zip"
+        zip=config["out_dir"] / "ext_qc/fastqc/{fastqc_datatype}/{track_name}/{stage}/{fileprefix}_fastqc.zip"
     log:
         std=config["out_dir"] / "log/fastqc_track_data.{fastqc_datatype}.{track_name}.{stage}.{fileprefix}.log",
         cluster_log=config["out_dir"] / "log/fastqc_track_data.{fastqc_datatype}.{track_name}.{stage}.{fileprefix}.cluster.log",

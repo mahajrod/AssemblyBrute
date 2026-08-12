@@ -29,11 +29,11 @@ rule nanoplot:
 
 use rule nanoplot as nanoplot_track_data with:
     input:
-        fastq=config["out_dir"] / ("ext_track_data/{longread_datatype}/{track_name}/{stage}/{fileprefix}%s" % config["fastq_ext"])
+        fastq=config["out_dir"] / ("ext_data/{longread_datatype}/{track_name}/{stage}/{fileprefix}%s" % config["fastq_ext"])
     output:
-        yield_png=config["out_dir"] / "ext_track_qc/nanoplot/{longread_datatype}/{track_name}/{stage}/{fileprefix}.Yield_By_Length.png",
-        stats=config["out_dir"] / "ext_track_qc/nanoplot/{longread_datatype}/{track_name}/{stage}/{fileprefix}.NanoStats.txt",
-        pickle=config["out_dir"] / "ext_track_qc/nanoplot/{longread_datatype}/{track_name}/{stage}/{fileprefix}.NanoPlot-data.pickle"
+        yield_png=config["out_dir"] / "ext_qc/nanoplot/{longread_datatype}/{track_name}/{stage}/{fileprefix}.Yield_By_Length.png",
+        stats=config["out_dir"] / "ext_qc/nanoplot/{longread_datatype}/{track_name}/{stage}/{fileprefix}.NanoStats.txt",
+        pickle=config["out_dir"] / "ext_qc/nanoplot/{longread_datatype}/{track_name}/{stage}/{fileprefix}.NanoPlot-data.pickle"
     log:
         std=config["out_dir"] / "log/nanoplot_track_data.{longread_datatype}.{track_name}.{stage}.{fileprefix}.log",
         cluster_log=config["out_dir"] / "log/nanoplot_track_data.{longread_datatype}.{track_name}.{stage}.{fileprefix}.cluster.log",
@@ -72,11 +72,11 @@ rule gather_nanoplot_stats_per_stage:
 use rule gather_nanoplot_stats_per_stage as gather_nanoplot_stats_per_stage_track_data with:
     input:
         stats=lambda wildcards: expand(rules.nanoplot_track_data.output.stats,
-                                       fileprefix=config["ext_track_data"][wildcards.longread_datatype][wildcards.track_name]["conv_file_prefix_list"], allow_missing=True)
+                                       fileprefix=config["ext_data"][wildcards.longread_datatype][wildcards.track_name]["conv_file_prefix_list"], allow_missing=True)
     output:
-        stage_stats=config["out_dir"] / "ext_track_qc/nanoplot/{longread_datatype}/{track_name}/{stage}/{longread_datatype}.{track_name}.{stage}.NanoStats.tsv",
+        stage_stats=config["out_dir"] / "ext_qc/nanoplot/{longread_datatype}/{track_name}/{stage}/{longread_datatype}.{track_name}.{stage}.NanoStats.tsv",
     params:
-        labels=lambda wildcards: ",".join(config["ext_track_data"][wildcards.longread_datatype][wildcards.track_name]["file_prefix_list"])
+        labels=lambda wildcards: ",".join(config["ext_data"][wildcards.longread_datatype][wildcards.track_name]["file_prefix_list"])
     log:
         std=config["out_dir"] / "log/gather_nanoplot_stats_per_stage_track_data.{longread_datatype}.{track_name}.{stage}.log",
         cluster_log=config["out_dir"] / "log/gather_nanoplot_stats_per_stage_track_data.{longread_datatype}.{track_name}.{stage}.cluster.log",

@@ -18,10 +18,10 @@ use rule create_local_links as create_se_fastq_links with:
 
 use rule create_local_links as create_track_se_fastq_links with:
     input:
-        fastq=lambda wildcards: config["ext_track_data"][wildcards.se_datatype][wildcards.track_name]["in_dir"] / ("{fileprefix}%s" % config["ext_track_data"][wildcards.se_datatype][wildcards.track_name]["in_ext"]),
+        fastq=lambda wildcards: config["ext_data"][wildcards.se_datatype][wildcards.track_name]["in_dir"] / ("{fileprefix}%s" % config["ext_data"][wildcards.se_datatype][wildcards.track_name]["in_ext"]),
         log_dir=ancient(config["out_dir"] / "log/")
     output:
-        fastq=config["out_dir"] / ("ext_track_data/{se_datatype}/{track_name}/raw/{fileprefix}%s" % config["fastq_ext"])
+        fastq=config["out_dir"] / ("ext_data/{se_datatype}/{track_name}/raw/{fileprefix}%s" % config["fastq_ext"])
     log:
         ln=config["out_dir"] / "log/create_track_se_fastq_links.{se_datatype}.{track_name}.{fileprefix}.ln.log",
 
@@ -42,22 +42,22 @@ use rule create_local_links as create_pe_fastq_links with: # abstract rule to us
 
 use rule create_local_links as create_track_pe_fastq_links with: # abstract rule to use via redefining
     input:
-        forward_fastq=lambda wildcards: config["ext_track_data"][wildcards.pe_datatype][wildcards.track_name]["in_dir"] / ("{pairprefix}%s%s" % (config["ext_track_data"][wildcards.pe_datatype][wildcards.track_name]["in_fwd_sfx"],
-                                                                                                                                             config["ext_track_data"][wildcards.pe_datatype][wildcards.track_name]["in_ext"])),
-        reverse_fastq=lambda wildcards: config["ext_track_data"][wildcards.pe_datatype][wildcards.track_name]["in_dir"] / ("{pairprefix}%s%s" % (config["ext_track_data"][wildcards.pe_datatype][wildcards.track_name]["in_rev_sfx"],
-                                                                                                                                             config["ext_track_data"][wildcards.pe_datatype][wildcards.track_name]["in_ext"])),
+        forward_fastq=lambda wildcards: config["ext_data"][wildcards.pe_datatype][wildcards.track_name]["in_dir"] / ("{pairprefix}%s%s" % (config["ext_data"][wildcards.pe_datatype][wildcards.track_name]["in_fwd_sfx"],
+                                                                                                                                             config["ext_data"][wildcards.pe_datatype][wildcards.track_name]["in_ext"])),
+        reverse_fastq=lambda wildcards: config["ext_data"][wildcards.pe_datatype][wildcards.track_name]["in_dir"] / ("{pairprefix}%s%s" % (config["ext_data"][wildcards.pe_datatype][wildcards.track_name]["in_rev_sfx"],
+                                                                                                                                             config["ext_data"][wildcards.pe_datatype][wildcards.track_name]["in_ext"])),
         log_dir=ancient(config["out_dir"] / "log/")
     output:
-        forward_fastq=config["out_dir"] / ("ext_track_data/{pe_datatype}/{track_name}/raw/{pairprefix}%s%s" % (config["fwd_fastq_sfx"],
+        forward_fastq=config["out_dir"] / ("ext_data/{pe_datatype}/{track_name}/raw/{pairprefix}%s%s" % (config["fwd_fastq_sfx"],
                                                                                         config["fastq_ext"])),
-        reverse_fastq=config["out_dir"] / ("ext_track_data/{pe_datatype}/{track_name}/raw/{pairprefix}%s%s" % (config["rev_fastq_sfx"],
+        reverse_fastq=config["out_dir"] / ("ext_data/{pe_datatype}/{track_name}/raw/{pairprefix}%s%s" % (config["rev_fastq_sfx"],
                                                                                         config["fastq_ext"])),
     log:
         ln=config["out_dir"] / "log/create_track_pe_fastq_links.{pe_datatype}.{track_name}.{pairprefix}.ln.log",
 
 use rule create_local_links as create_se_fasta_links with:
     input:
-        fasta=lambda wildcards: config["data"][wildcards.se_datatype]["in_dir"] / ("{fileprefix}%s" % config["ext_track_data"][wildcards.se_datatype]["in_ext"]),
+        fasta=lambda wildcards: config["data"][wildcards.se_datatype]["in_dir"] / ("{fileprefix}%s" % config["ext_data"][wildcards.se_datatype]["in_ext"]),
         #fasta=input_dir_path / ("{se_datatype}/fasta/{fileprefix}%s" %  config["fasta_ext"]),
         log_dir=ancient(config["out_dir"] / "log/")
     output:

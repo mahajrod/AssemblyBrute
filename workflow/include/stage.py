@@ -387,8 +387,8 @@ class Stage:
             return results_list
 
         external_track_datatype_set = set()
-        for datatype in self.config["ext_track_data"]:
-            for track_name in self.config["ext_track_data"][datatype]:
+        for datatype in self.config["ext_data"]:
+            for track_name in self.config["ext_data"][datatype]:
                 external_track_datatype_set.add(f"ext@{datatype}@{track_name}")
         print(external_track_datatype_set)
 
@@ -621,8 +621,8 @@ class Stage:
                                     datatype=[datatype,],
                                     extension=[self.config["data"][datatype]["conv_ext"]],
                                     fileprefix=self.config["data"][datatype]["conv_file_prefix_list"])]
-        for datatype in self.config["ext_track_data_feature_dict"]:
-            for track_name in self.config["ext_track_data_feature_dict"][datatype]["filter"]:
+        for datatype in self.config["ext_data_feature_dict"]:
+            for track_name in self.config["ext_data_feature_dict"][datatype]["filter"]:
                 results_list += [expand(self.config["out_dir"] / "track_data/{datatype}/{track_name}/filtered/{fileprefix}{extension}",
                                         track_name=[track_name],
                                         datatype=[datatype,],
@@ -743,9 +743,9 @@ class Stage:
                              expand(self.config["out_dir"] / "qc/multiqc/{datatype}/{stage}/multiqc.{datatype}.{stage}.report.html",
                              datatype=self.config["data_feature_dict"]["fastqc"],
                              stage=[stage,]),]
-            for datatype in self.config["ext_track_data_feature_dict"]:
-                 for track_name in self.config["ext_track_data_feature_dict"][datatype]["fastqc"]:
-                     results_list += [expand(self.config["out_dir"] / "ext_track_qc/fastqc/{fastqc_datatype}/{track_name}/{stage}/{fileprefix}_fastqc.zip",
+            for datatype in self.config["ext_data_feature_dict"]:
+                 for track_name in self.config["ext_data_feature_dict"][datatype]["fastqc"]:
+                     results_list += [expand(self.config["out_dir"] / "ext_qc/fastqc/{fastqc_datatype}/{track_name}/{stage}/{fileprefix}_fastqc.zip",
                                              fastqc_datatype=[datatype, ],
                                              track_name=[track_name, ],
                                              stage=[stage, ],
@@ -755,9 +755,9 @@ class Stage:
                                datatype=self.config["data_feature_dict"]["long_read"],
                                stage=[stage, ],
                                )]
-            for datatype in self.config["ext_track_data_feature_dict"]:
-                 for track_name in self.config["ext_track_data_feature_dict"][datatype]["long_read"]:
-                     results_list += [expand(self.config["out_dir"] / f"ext_track_qc/nanoplot/{datatype}/{track_name}/{stage}/{datatype}.{track_name}.{stage}.NanoStats.tsv",
+            for datatype in self.config["ext_data_feature_dict"]:
+                 for track_name in self.config["ext_data_feature_dict"][datatype]["long_read"]:
+                     results_list += [expand(self.config["out_dir"] / f"ext_qc/nanoplot/{datatype}/{track_name}/{stage}/{datatype}.{track_name}.{stage}.NanoStats.tsv",
                                       datatype=[datatype,],
                                       track_name=[track_name,],
                                       stage=[stage, ],
@@ -768,9 +768,9 @@ class Stage:
                                stage=[stage, ],
                                fileprefix=self.config["data"][dat_type]["conv_file_prefix_list"]) for dat_type in self.config["data_feature_dict"]["long_read"]]
                              ]
-             for datatype in self.config["ext_track_data_feature_dict"]:
-                 for track_name in self.config["ext_track_data_feature_dict"][datatype]["long_read"]:
-                     results_list += [[expand(self.config["out_dir"] / "ext_track_qc/nanoqc/{datatype}/{track_name}/{stage}/{fileprefix}",
+             for datatype in self.config["ext_data_feature_dict"]:
+                 for track_name in self.config["ext_data_feature_dict"][datatype]["long_read"]:
+                     results_list += [[expand(self.config["out_dir"] / "ext_qc/nanoqc/{datatype}/{track_name}/{stage}/{fileprefix}",
                                        datatype=[datatype, ],
                                        track_name=[track_name],
                                        stage=[stage, ],

@@ -47,11 +47,11 @@ rule minimap2_cov:
         "     samtools sort -T ${{TMPDIR}} -@ {params.sort_threads} "
         "     -m {params.per_thread_sort_mem}M -o {output.bam} 2>{log.sort};"
 
-use rule minimap2_cov as minimap2_cov_ext_track_data with:
+use rule minimap2_cov as minimap2_cov_ext_data with:
     input:
-        fastq=lambda wildcards: expand(config["out_dir"] / ("ext_track_data/%s/%s/final/{fileprefix}%s" % (wildcards.longread_datatype, wildcards.track_name,
-                                                                                                       config["ext_track_data"][wildcards.longread_datatype][wildcards.track_name]["conv_ext"])),
-                     fileprefix=config["ext_track_data"][wildcards.longread_datatype][wildcards.track_name]["conv_file_prefix_list"],
+        fastq=lambda wildcards: expand(config["out_dir"] / ("ext_data/%s/%s/final/{fileprefix}%s" % (wildcards.longread_datatype, wildcards.track_name,
+                                                                                                       config["ext_data"][wildcards.longread_datatype][wildcards.track_name]["conv_ext"])),
+                     fileprefix=config["ext_data"][wildcards.longread_datatype][wildcards.track_name]["conv_file_prefix_list"],
                      allow_missing=True),
         reference="{fasta_dir}/{fasta_prefix}.fasta",
         log_dir=ancient("{fasta_dir}/log/"),
@@ -120,13 +120,13 @@ rule bwa_cov:
 
 use rule bwa_cov as bwa_cov_track_data with:
     input:
-        forward_fastqs=lambda wildcards: expand(config["out_dir"] / ("ext_track_data/%s/%s/final/{pairprefix}%s%s" % (wildcards.pe_datatype, wildcards.track_name,
-                                                                                                                   config["ext_track_data"][wildcards.pe_datatype][wildcards.track_name]["conv_fwd_sfx"],
-                                                                                                                   config["ext_track_data"][wildcards.pe_datatype][wildcards.track_name]["conv_ext"])),
-                     pairprefix=config["ext_track_data"][wildcards.pe_datatype][wildcards.track_name]["pair_prefix_list"],
+        forward_fastqs=lambda wildcards: expand(config["out_dir"] / ("ext_data/%s/%s/final/{pairprefix}%s%s" % (wildcards.pe_datatype, wildcards.track_name,
+                                                                                                                   config["ext_data"][wildcards.pe_datatype][wildcards.track_name]["conv_fwd_sfx"],
+                                                                                                                   config["ext_data"][wildcards.pe_datatype][wildcards.track_name]["conv_ext"])),
+                     pairprefix=config["ext_data"][wildcards.pe_datatype][wildcards.track_name]["pair_prefix_list"],
                      allow_missing=True),
-        reverse_fastqs=lambda wildcards: expand(config["out_dir"] / ("ext_track_data/%s/%s/final/{pairprefix}%s%s" % (wildcards.pe_datatype, wildcards.track_name,
-                                                                                                               config["ext_track_data"][wildcards.pe_datatype][wildcards.track_name]["conv_rev_sfx"],
+        reverse_fastqs=lambda wildcards: expand(config["out_dir"] / ("ext_data/%s/%s/final/{pairprefix}%s%s" % (wildcards.pe_datatype, wildcards.track_name,
+                                                                                                               config["ext_data"][wildcards.pe_datatype][wildcards.track_name]["conv_rev_sfx"],
                                                                                                                config["track_data"][wildcards.pe_datatype][wildcards.track_name]["conv_ext"])),
                      pairprefix=config["track_data"][wildcards.pe_datatype][wildcards.track_name]["pair_prefix_list"],
                      allow_missing=True),

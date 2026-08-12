@@ -26,7 +26,7 @@
 "parameter_set": "normal"
 
 #---- Data ----
-"input_datatypes": "hifi,hic,reference,illumina,track_data"
+"input_datatypes": "hifi,hic,reference,illumina,ext_data"
 "data_filtering":
     - "hifi"
     - "hic"

@@ -143,9 +143,7 @@ if "track_data" in config["input_datatypes"]: # parse data that will be used to 
         track_dir_list = datatype_dir.glob("*")
         for track_dir in track_dir_list:
             if track_dir.is_dir():
-
                 print(track_dir)
-
                 input = detect_input_type(datatype, track_dir)
                 if not input:
                     continue

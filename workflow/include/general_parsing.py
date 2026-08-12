@@ -51,6 +51,8 @@ def detect_input_type(datatype, datatype_dir):
     for allowed_input_type in config["data"][datatype]:
         filedict = {}
         input_dir_path = datatype_dir_path / allowed_input_type
+        print(datatype)
+        print(allowed_input_type)
         print(config["data"][datatype][allowed_input_type])
         print(config["data"][datatype][allowed_input_type]["allowed_in_exts"])
         for extension in config["data"][datatype][allowed_input_type]["allowed_in_exts"]:

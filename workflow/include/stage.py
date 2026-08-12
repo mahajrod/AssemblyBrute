@@ -389,7 +389,7 @@ class Stage:
         external_track_datatype_set = set()
         for datatype in self.config["track_data"]:
             for track_name in self.config["track_data"][datatype]:
-                external_track_datatype_set.add(f"{datatype}_{track_name}")
+                external_track_datatype_set.add(f"{datatype}@{track_name}")
 
 
         for parameters_label in self.parameters:

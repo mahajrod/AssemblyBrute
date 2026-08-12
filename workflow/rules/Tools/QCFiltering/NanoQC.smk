@@ -25,9 +25,9 @@ rule nanoqc:
 
 use rule nanoqc as nanoqc_track_data with:
     input:
-        fastq=config["out_dir"] / ("track_data/{longread_datatype}/{track_name}/{stage}/{fileprefix}%s" % config["fastq_ext"])
+        fastq=config["out_dir"] / ("ext_track_data/{longread_datatype}/{track_name}/{stage}/{fileprefix}%s" % config["fastq_ext"])
     output:
-        dir=directory(config["out_dir"] / "track_qc/nanoqc/{longread_datatype}/{track_name}/{stage}/{fileprefix}")
+        dir=directory(config["out_dir"] / "ext_track_qc/nanoqc/{longread_datatype}/{track_name}/{stage}/{fileprefix}")
     log:
         std=config["out_dir"] / "log/nanoqc_track_data.{longread_datatype}.{track_name}.{stage}.{fileprefix}.log",
         cluster_log=config["out_dir"] / "log/nanoqc_track_data.{longread_datatype}.{track_name}.{stage}.{fileprefix}.cluster.log",

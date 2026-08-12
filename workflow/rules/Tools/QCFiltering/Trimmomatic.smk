@@ -50,24 +50,24 @@ rule trimmomatic_pe:
 
 use rule trimmomatic_pe as trimmomatic_pe_track_data with:
     input:
-        forward_fastq=lambda wildcards: config["out_dir"] / ("track_data/{0}/{5}/{1}/{2}{3}{4}".format(wildcards.pe_datatype,
+        forward_fastq=lambda wildcards: config["out_dir"] / ("ext_track_data/{0}/{5}/{1}/{2}{3}{4}".format(wildcards.pe_datatype,
                                                                                                        "raw" if wildcards.pe_datatype != "hic" else "trimmed",
                                                                                                         wildcards.pairprefix,
                                                                                                         config["fwd_fastq_sfx"],
                                                                                                         config["fastq_ext"],
                                                                                                         wildcards.track_name)),
-        reverse_fastq=lambda wildcards: config["out_dir"] / ("track_data/{0}/{5}/{1}/{2}{3}{4}".format(wildcards.pe_datatype,
+        reverse_fastq=lambda wildcards: config["out_dir"] / ("ext_track_data/{0}/{5}/{1}/{2}{3}{4}".format(wildcards.pe_datatype,
                                                                                                        "raw" if wildcards.pe_datatype != "hic" else "trimmed",
                                                                                                        wildcards.pairprefix,
                                                                                                        config["rev_fastq_sfx"],
                                                                                                        config["fastq_ext"],
                                                                                                        wildcards.track_name)),
     output:
-        forward_fastq=config["out_dir"] / ("track_data/{pe_datatype}/{track_name}/filtered/{pairprefix}_1%s" % config["fastq_ext"]),
-        forward_se_fastq=config["out_dir"] / ("track_data/{pe_datatype}/{track_name}/filtered/{pairprefix}_1.se%s" % config["fastq_ext"]),
-        reverse_fastq=config["out_dir"] / ("track_data/{pe_datatype}/{track_name}/filtered/{pairprefix}_2%s" % config["fastq_ext"]),
-        reverse_se_fastq=config["out_dir"] / ("track_data/{pe_datatype}/{track_name}/filtered/{pairprefix}_2.se%s" % config["fastq_ext"]),
-        stats=config["out_dir"] / "track_data/{pe_datatype}/{track_name}/filtered/{pairprefix}.trimmomatic.stats"
+        forward_fastq=config["out_dir"] / ("ext_track_data/{pe_datatype}/{track_name}/filtered/{pairprefix}_1%s" % config["fastq_ext"]),
+        forward_se_fastq=config["out_dir"] / ("ext_track_data/{pe_datatype}/{track_name}/filtered/{pairprefix}_1.se%s" % config["fastq_ext"]),
+        reverse_fastq=config["out_dir"] / ("ext_track_data/{pe_datatype}/{track_name}/filtered/{pairprefix}_2%s" % config["fastq_ext"]),
+        reverse_se_fastq=config["out_dir"] / ("ext_track_data/{pe_datatype}/{track_name}/filtered/{pairprefix}_2.se%s" % config["fastq_ext"]),
+        stats=config["out_dir"] / "ext_track_data/{pe_datatype}/{track_name}/filtered/{pairprefix}.trimmomatic.stats"
     log:
         std=config["out_dir"] / "log/trimmomatic_pe_track_data.{pe_datatype}.{track_name}.{pairprefix}.log",
         cluster_log=config["out_dir"] / "log/trimmomatic_pe_track_data.{pe_datatype}.{track_name}.{pairprefix}.cluster.log",

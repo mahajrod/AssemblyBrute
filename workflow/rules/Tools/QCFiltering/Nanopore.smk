@@ -29,9 +29,9 @@ rule porechop_abi:
 
 use rule porechop_abi as porechop_abi_track_data with:
     input:
-        fastq=config["out_dir"] / ("track_data/{nanopore_datatype}/{track_name}/raw/{fileprefix}%s" % config["fastq_ext"])
+        fastq=config["out_dir"] / ("ext_track_data/{nanopore_datatype}/{track_name}/raw/{fileprefix}%s" % config["fastq_ext"])
     output:
-        trimmed_fastq=config["out_dir"] / ("track_data/{nanopore_datatype}/{track_name}/trimmed/{fileprefix}%s" % config["fastq_ext"]),
+        trimmed_fastq=config["out_dir"] / ("ext_track_data/{nanopore_datatype}/{track_name}/trimmed/{fileprefix}%s" % config["fastq_ext"]),
     log:
         porechop_abi=config["out_dir"] / "log/porechop_abi_track_data.{nanopore_datatype}.{track_name}.trimmed.{fileprefix}.porechop_abi.log",
         cluster_log=config["out_dir"] / "log/porechop_abi_track_data.{nanopore_datatype}.{track_name}.trimmed.{fileprefix}.cluster.log",
@@ -77,10 +77,10 @@ rule chopper:
 
 use rule chopper as chopper_track_data with:
     input:
-        input_fastq=config["out_dir"] / ("track_data/{nanopore_datatype}/{track_name}/%s/{fileprefix}%s" % ("trimmed" if not config["skip_porechop_abi"] else "raw",
+        input_fastq=config["out_dir"] / ("ext_track_data/{nanopore_datatype}/{track_name}/%s/{fileprefix}%s" % ("trimmed" if not config["skip_porechop_abi"] else "raw",
                                                                                    config["fastq_ext"]))
     output:
-        filtered_fastq=config["out_dir"] / ("track_data/{nanopore_datatype}/{track_name}/filtered/{fileprefix}%s" % config["fastq_ext"]),
+        filtered_fastq=config["out_dir"] / ("ext_track_data/{nanopore_datatype}/{track_name}/filtered/{fileprefix}%s" % config["fastq_ext"]),
     log:
         zcat=config["out_dir"] / "log/chopper_track_data.{nanopore_datatype}.{track_name}.filtered.{fileprefix}.zcat.log",
         chopper=config["out_dir"] / "log/chopper_track_data.{nanopore_datatype}.{track_name}.filtered.{fileprefix}.chopper.log",

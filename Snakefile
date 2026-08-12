@@ -154,12 +154,12 @@ if "track_data" in config["input_datatypes"]: # parse data that will be used to 
         config["track_data"][datatype] = {}
         for track_dir in track_dir_list:
             track_name = track_dir.name
-            brute_logger.info(TAB * 3 + f" Found track {track_name}...")
+            brute_logger.info(TAB * 3 + f"Found track {track_name}...")
             input = detect_input_type(datatype, track_dir)
 
             input_format = list(input.keys())[0]
 
-            config["track_data"][datatype][track_name] = config["data_parameters"][datatype][input_format]
+            config["track_data"][datatype][track_name] = deepcopy(config["data_parameters"][datatype][input_format])
             config["track_data"][datatype][track_name].pop("allowed_in_exts")
             config["track_data"][datatype][track_name]["in_ext"] = list(input[input_format].keys())[0]
             config["track_data"][datatype][track_name]["in_dir"] = track_dir / input_format
@@ -218,11 +218,11 @@ if "track_data" in config["input_datatypes"]: # parse data that will be used to 
                 if config["data"][datatype][feature]:
                     config["data_feature_dict"][feature].add(datatype)
             """
-            brute_logger.info(TAB * 2 + f"Input extension: {config['track_data'][datatype][track_name]['in_ext']}")
-            brute_logger.info(TAB * 2 + f"Input files: {config['track_data'][datatype][track_name]['num_files']}")
-            brute_logger.info(TAB * 2 + "Files:")
+            brute_logger.info(TAB * 4 + f"Input extension: {config['track_data'][datatype][track_name]['in_ext']}")
+            brute_logger.info(TAB * 4 + f"Input files: {config['track_data'][datatype][track_name]['num_files']}")
+            brute_logger.info(TAB * 4 + "Files:")
             for filepath in config["track_data"][datatype][track_name]["in_file_list"]:
-                brute_logger.info(TAB * 3 + str(filepath))
+                brute_logger.info(TAB * 5 + str(filepath))
 
 
 if "reference" in config["data"]:

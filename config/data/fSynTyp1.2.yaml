@@ -70,7 +70,7 @@
 "stage_coretools":
     "contig": # Allowed: "hifiasm".
         - "hifiasm"
-        - "verkko" #TODO: test.
+        #- "verkko" #TODO: test.
         #- "flye"
         #- "nextdenovo" #TODO: implement
     "hic_alignment":

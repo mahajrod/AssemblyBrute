@@ -17,6 +17,7 @@ rule verkko_phasing:
         consensus_fasta=config["out_dir"] / "contig/{parameters, verkko[^/]*@p2}/{genome_prefix}.contig.consensus.unfiltered.fasta",
         hap1_fasta=config["out_dir"] / "contig/{parameters, verkko[^/]*@p2}/{genome_prefix}.contig.hap1.unfiltered.fasta",
         hap2_fasta=config["out_dir"] / "contig/{parameters, verkko[^/]*@p2}/{genome_prefix}.contig.hap2.unfiltered.fasta",
+        unassigned_fasta=config["out_dir"] / "contig/{parameters, verkko[^/]*@p2}/{genome_prefix}.contig.unassigned.unfiltered.fasta",
     params:
         hifi_reads=lambda wildcards: " --hifi %s " % " ".join(get_hifi_read_filelist(wildcards)) if get_hifi_read_filelist(wildcards) else "",
         nano_reads=lambda wildcards: " --nano %s " % " ".join(get_nano_read_filelist(wildcards)) if get_nano_read_filelist(wildcards) else "",
@@ -53,6 +54,7 @@ rule verkko_phasing:
          " ln -sf assembly.fasta {output.consensus_fasta}; "
          " ln -sf assembly.haplotype1.fasta {output.hap1_fasta}; "
          " ln -sf assembly.haplotype1.fasta {output.hap2_fasta}; "
+         " ln -sf assembly.unassigned.fasta {output.unassigned_fasta}; "
 
 rule verkko_no_phasing:
     priority: 1000

@@ -140,21 +140,89 @@ if "track_data" in config["input_datatypes"]: # parse data that will be used to 
     brute_logger.dbg_scr(TAB + f"Checking track data...")
     config["track_data"] = {}
     for datatype in list(config["data_parameters"].keys()):
-        print(datatype)
-        brute_logger.info(TAB * 2 + f"Checking {datatype} track data...")
+
         datatype_dir = input_dir_path / "track_data" / datatype
         track_dir_list = []
         for track_dir in datatype_dir.glob("*"):
             if track_dir.is_dir():
                 track_dir_list.append(track_dir)
         if not track_dir_list:
-            brute_logger.info(TAB * 3 + f"{datatype} track data was not found...")
+            brute_logger.dbg_scr(TAB * 2 + f"Checking {datatype} track data...")
+            brute_logger.dbg_scr(TAB * 3 + f"{datatype} track data was not found...")
             continue
+        brute_logger.info(TAB * 2 + f"Checking {datatype} track data...")
+        config["track_data"][datatype] = {}
         for track_dir in track_dir_list:
             track_name = track_dir.name
-            brute_logger.info(TAB * 3 + f" Found {datatype} track {track_name}...")
+            brute_logger.info(TAB * 3 + f" Found track {track_name}...")
             input = detect_input_type(datatype, track_dir)
 
+            input_format = list(input.keys())[0]
+
+            config["track_data"][datatype][track_name] = config["data_parameters"][datatype][input_format]
+            config["track_data"][datatype][track_name].pop("allowed_in_exts")
+            config["track_data"][datatype][track_name]["in_ext"] = list(input[input_format].keys())[0]
+            config["track_data"][datatype][track_name]["in_dir"] = track_dir / input_format
+            config["track_data"][datatype][track_name]["in_file_list"] = input[input_format][config["track_data"][datatype][track_name]["in_ext"]]
+            config["track_data"][datatype][track_name]["num_files"] = len(config["data"][datatype]["in_file_list"])
+            config["track_data"][datatype][track_name]["file_prefix_list"] = list(map(lambda s: str(s.name)[:-len(config["track_data"][datatype][track_name]["in_ext"])],
+                                                                config["track_data"][datatype][track_name]["in_file_list"]))
+
+            if config["track_data"][datatype][track_name]["paired"]:
+                config["track_data"][datatype][track_name]["pair_prefix_list"] = []
+                config["track_data"][datatype][track_name]["conv_file_prefix_list"] = []
+                if (config["track_data"][datatype][track_name]["num_files"] % 2) != 0:
+                    raise ValueError(f"ERROR!!! {datatype} fastq files seems to be unpaired or misrecognized")
+                for forward, reverse in zip(config["track_data"][datatype][track_name]["in_file_list"][::2],
+                                            config["track_data"][datatype][track_name]["in_file_list"][1::2]):
+                    if p_distance(str(forward), str(reverse), len(str(forward))) > 1:
+                        raise ValueError(f"ERROR!!! {datatype} forward and reverse read files differ by more than one symbol:\n\t{forward}\n\t{reverse}")
+                config["track_data"][datatype][track_name]["in_fwd_sfx"] = set()
+                config["track_data"][datatype][track_name]["in_rev_sfx"] = set()
+                # detect pairprefix, forward_and_reverse_suffixes for paired data
+                for forward_prefix, reverse_prefix in zip(config["track_data"][datatype][track_name]["file_prefix_list"][::2],
+                                                          config["track_data"][datatype][track_name]["file_prefix_list"][1::2]):
+                    common_prefix, forward_suffix, reverse_suffix = get_common_prefix_ans_suffixes(forward_prefix, reverse_prefix)
+                    config["track_data"][datatype][track_name]["pair_prefix_list"].append(common_prefix)
+                    config["track_data"][datatype][track_name]["in_fwd_sfx"].add(forward_suffix)
+                    config["track_data"][datatype][track_name]["in_rev_sfx"].add(reverse_suffix)
+                if (len(config["track_data"][datatype][track_name]["in_fwd_sfx"]) > 1) or (len(config["track_data"][datatype][track_name]["in_rev_sfx"]) > 1):
+                    raise ValueError(f"ERROR!!! Multiple different suffixes in {datatype} filenames!")
+
+                config["track_data"][datatype][track_name]["in_fwd_sfx"] = list(config["track_data"][datatype][track_name]["in_fwd_sfx"])[0]
+                config["track_data"][datatype][track_name]["in_rev_sfx"] = list(config["track_data"][datatype][track_name]["in_rev_sfx"])[0]
+
+                for pairprefix in config["track_data"][datatype][track_name]["pair_prefix_list"]:
+                    config["track_data"][datatype][track_name]["conv_file_prefix_list"].append(pairprefix + config["track_data"][datatype][track_name]["conv_fwd_sfx"])
+                    config["track_data"][datatype][track_name]["conv_file_prefix_list"].append(pairprefix + config["track_data"][datatype][track_name]["conv_rev_sfx"])
+            else: # register prefixes of files for se data to simplify dealing with wildcards
+                config["track_data"][datatype][track_name]["pair_prefix_list"] = config["track_data"][datatype][track_name]["file_prefix_list"]
+                config["track_data"][datatype][track_name]["conv_file_prefix_list"] = config["track_data"][datatype][track_name]["file_prefix_list"]
+
+            # check datatype specific filtering requests
+            config["track_data"][datatype][track_name]["filter"] = False if datatype not in config["data_filtering"] else (config["track_data"][datatype][track_name]["filter"] & True)
+
+            # create output dirnames
+            config["track_data"][datatype][track_name]["raw_dir"] = config["out_dir"] / "track_data" / datatype / track_name / "raw"
+            config["track_data"][datatype][track_name]["trimmed_dir"] = config["out_dir"] / "track_data" / datatype / track_name / "trimmed"
+            config["track_data"][datatype][track_name]["filtered_dir"] = config["out_dir"] / "track_data" / datatype / track_name / "filtered"
+            config["track_data"][datatype][track_name]["final_dir"] = config["out_dir"] / "track_data" / datatype / track_name / "final"
+
+            """
+            if config["data"][datatype]["conv_fmt"] == "fastq":
+                config["data_feature_dict"]["fastq"].add(datatype)
+            if config["data"][datatype]["conv_fmt"] == "fasta":
+                config["data_feature_dict"]["fasta"].add(datatype)
+            for feature in ("paired", "fastqc", "long_read", "nanopore", "pacbio", "genome_size", "variant_call", "gap_fill",
+                            "kraken", "filter", "phasing", "pretext_coverage_track", "pretext_per_hap_track"):
+                if config["data"][datatype][feature]:
+                    config["data_feature_dict"][feature].add(datatype)
+            """
+            brute_logger.info(TAB * 2 + f"Input extension: {config['track_data'][datatype][track_name]['in_ext']}")
+            brute_logger.info(TAB * 2 + f"Input files: {config['track_data'][datatype][track_name]['num_files']}")
+            brute_logger.info(TAB * 2 + "Files:")
+            for filepath in config["track_data"][datatype][track_name]["in_file_list"]:
+                brute_logger.info(TAB * 3 + str(filepath))
 
 
 if "reference" in config["data"]:

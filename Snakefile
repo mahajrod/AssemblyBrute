@@ -56,7 +56,7 @@ config["data_feature_dict"] = {feature: set() for feature in ["paired", "fastq",
 
 brute_logger.info(f"Checking input files...")
 
-config["data"] = deepcopy(config["data_description"])
+config["data"] = deepcopy(config["data_parameters"])
 
 for datatype in list(config["data"].keys()):
     if datatype not in config["input_datatypes"]:
@@ -139,7 +139,7 @@ for datatype in list(config["data"].keys()):
 if "track_data" in config["input_datatypes"]: # parse data that will be used to create additional tracks for pretextview. It is not used for assembly itself
     brute_logger.dbg_scr(TAB + f"Checking track data...")
     config["track_data"] = {}
-    for datatype in list(config["data"].keys()):
+    for datatype in list(config["data_parameters"].keys()):
         print(datatype)
         brute_logger.info(TAB * 2 + f"Checking f{datatype} track data...")
         datatype_dir = input_dir_path / "track_data" / datatype

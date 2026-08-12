@@ -150,10 +150,10 @@ if "ext_data" in config["input_datatypes"]: # parse data that will be used to cr
             if track_dir.is_dir():
                 track_dir_list.append(track_dir)
         if not track_dir_list:
-            brute_logger.dbg_scr(TAB * 2 + f"Checking {datatype} track data...")
-            brute_logger.dbg_scr(TAB * 3 + f"{datatype} track data was not found...")
+            brute_logger.dbg_scr(TAB * 2 + f"Checking external {datatype} data...")
+            brute_logger.dbg_scr(TAB * 3 + f"External {datatype} data was not found...")
             continue
-        brute_logger.info(TAB * 2 + f"Checking {datatype} track data...")
+        brute_logger.info(TAB * 2 + f"Checking external{datatype} data...")
         config["ext_data"][datatype] = {}
         config["ext_data_feature_dict"][datatype] = {feature: set() for feature in ["paired", "fastq", "fasta", "fastqc",
                                                                                       "long_read", "nanopore", "pacbio",
@@ -162,7 +162,7 @@ if "ext_data" in config["input_datatypes"]: # parse data that will be used to cr
                                                                                       "pretext_per_hap_track"]}
         for track_dir in track_dir_list:
             track_name = track_dir.name
-            brute_logger.info(TAB * 3 + f"Found track {track_name}...")
+            brute_logger.info(TAB * 3 + f"Found external dataset {track_name}...")
             input = detect_input_type(datatype, track_dir)
 
             input_format = list(input.keys())[0]

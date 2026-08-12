@@ -57,6 +57,14 @@ use rule minimap2_cov as minimap2_cov_track_data with:
         log_dir=ancient("{fasta_dir}/log/"),
     output:
         bam="{fasta_dir}/{fasta_prefix}/track_data/alignment/{fasta_prefix}.{longread_datatype}.{track_name}.bam"
+    log:
+        minimap2="{fasta_dir}/log/minimap2_cov_track_data.{fasta_prefix}.{longread_datatype}.{track_name}.minimap2.log",
+        sort="{fasta_dir}/log/minimap2_cov_track_data.{fasta_prefix}.{longread_datatype}.{track_name}.sort.log",
+        index="{fasta_dir}/log/minimap2_cov_track_data.{fasta_prefix}.{longread_datatype}.{track_name}.index.log",
+        cluster_log="{fasta_dir}/log/minimap2_cov_track_data.{fasta_prefix}.{longread_datatype}.{track_name}.cluster.log",
+        cluster_err="{fasta_dir}/log/minimap2_cov_track_data.{fasta_prefix}.{longread_datatype}.{track_name}.cluster.err"
+    benchmark:
+        "{fasta_dir}/log/minimap2_cov_track_data.{fasta_prefix}.{longread_datatype}.{track_name}.benchmark.txt"
 
 rule bwa_cov:
     input:
@@ -84,14 +92,14 @@ rule bwa_cov:
         per_thread_sort_mem=parameters["memory_mb"]["samtools_sort_per_thread"],
         genome_prefix=config["genome_prefix"]
     log:
-        bwa="{fasta_dir}/log/minimap2_cov.{fasta_prefix}.{pe_datatype}.bwa.log",
-        fixmate="{fasta_dir}/log/minimap2_cov.{fasta_prefix}.{pe_datatype}.fixmate.log",
-        sort="{fasta_dir}/log/minimap2_cov.{fasta_prefix}.{pe_datatype}.sort.log",
-        markdup="{fasta_dir}/log/minimap2_cov.{fasta_prefix}.{pe_datatype}.markdup.log",
-        cluster_log="{fasta_dir}/log/minimap2_cov.{fasta_prefix}.{pe_datatype}.cluster.log",
-        cluster_err="{fasta_dir}/log/minimap2_cov.{fasta_prefix}.{pe_datatype}.cluster.err"
+        bwa="{fasta_dir}/log/bwa_cov.{fasta_prefix}.{pe_datatype}.bwa.log",
+        fixmate="{fasta_dir}/log/bwa_cov.{fasta_prefix}.{pe_datatype}.fixmate.log",
+        sort="{fasta_dir}/log/bwa_cov.{fasta_prefix}.{pe_datatype}.sort.log",
+        markdup="{fasta_dir}/log/bwa_cov.{fasta_prefix}.{pe_datatype}.markdup.log",
+        cluster_log="{fasta_dir}/log/bwa_cov.{fasta_prefix}.{pe_datatype}.cluster.log",
+        cluster_err="{fasta_dir}/log/bwa_cov.{fasta_prefix}.{pe_datatype}.cluster.err"
     benchmark:
-        "{fasta_dir}/log/minimap2_cov.{fasta_prefix}.{pe_datatype}.benchmark.txt"
+        "{fasta_dir}/log/bwa_cov.{fasta_prefix}.{pe_datatype}.benchmark.txt"
     conda:
         config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
@@ -127,6 +135,15 @@ use rule bwa_cov as bwa_cov_track_data with:
         log_dir=ancient("{fasta_dir}/log/"),
     output:
         bam="{fasta_dir}/{fasta_prefix}/track_data/alignment/{fasta_prefix}.{pe_datatype, illumina}.{track_name}.bam"
+    log:
+        bwa="{fasta_dir}/log/bwa_cov_track_data.{fasta_prefix}.{pe_datatype}.{track_name}.bwa.log",
+        fixmate="{fasta_dir}/log/bwa_cov_track_data.{fasta_prefix}.{pe_datatype}.{track_name}.fixmate.log",
+        sort="{fasta_dir}/log/bwa_cov_track_data.{fasta_prefix}.{pe_datatype}.{track_name}.sort.log",
+        markdup="{fasta_dir}/log/bwa_cov_track_data.{fasta_prefix}.{pe_datatype}.{track_name}.markdup.log",
+        cluster_log="{fasta_dir}/log/bwa_cov_track_data.{fasta_prefix}.{pe_datatype}.{track_name}.cluster.log",
+        cluster_err="{fasta_dir}/log/bwa_cov_track_data.{fasta_prefix}.{pe_datatype}.{track_name}.cluster.err"
+    benchmark:
+        "{fasta_dir}/log/bwa_cov_track_data.{fasta_prefix}.{pe_datatype}.{track_name}.benchmark.txt"
 
 rule calculate_coverage:
     input:

@@ -1,0 +1,1 @@
+Directory to contain illumina reads for additional tracks. Create a directory (its name will be used as a track_name) with subdirectory named according tyo the filetype (fastq or fasta) and put files inside it

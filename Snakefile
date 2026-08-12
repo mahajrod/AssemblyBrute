@@ -62,7 +62,7 @@ for datatype in list(config["data"].keys()):
         brute_logger.dbg_scr(TAB + f"Skipping input {datatype} files (absent in the main config)...")
         continue
     if datatype in ["reference", "draft"]:
-        #thisa datatypes are parsed later
+        #this datatypes are parsed later
         continue
     # parsing input filenames
     brute_logger.info(TAB + f"Checking input {datatype} files...")
@@ -132,6 +132,19 @@ for datatype in list(config["data"].keys()):
     brute_logger.info(TAB * 2 + "Files:")
     for filepath in config["data"][datatype]["in_file_list"]:
         brute_logger.info(TAB * 3 + str(filepath))
+
+if "track_data" in config["input_datatypes"]: # parse data that will be used to create additional tracks for pretextview. It is not used for assembly itself
+    config["track_data"] = {}
+    for datatype in list(config["data"].keys()):
+        datatype_dir = input_dir_path / "track_data" / datatype
+        track_dir_list = datatype_dir.glob("*")
+        for track_dir in track_dir_list:
+            if track_dir.is_dir():
+                input = detect_input_type(datatype, track_dir)
+                if not input:
+                    continue
+                print(input)
+
 
 if "reference" in config["data"]:
     brute_logger.info(TAB + f"Checking input reference files...")

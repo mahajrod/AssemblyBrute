@@ -1,5 +1,5 @@
 
-"data": # No "_" is allowed in the datatype names, as it is used as separator for merged datatypes
+"data_description": # No "_" is allowed in the datatype names, as it is used as separator for merged datatypes
     "illumina": # datatype
         "mapped_bam": # format
             "in_fmt": "mapped_bam"

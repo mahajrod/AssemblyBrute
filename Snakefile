@@ -55,6 +55,9 @@ config["data_feature_dict"] = {feature: set() for feature in ["paired", "fastq",
                                                               "pretext_per_hap_track"]}
 
 brute_logger.info(f"Checking input files...")
+
+config["data"] = deepcopy(config["data_description"])
+
 for datatype in list(config["data"].keys()):
     if datatype not in config["input_datatypes"]:
         # remove absent datatypes

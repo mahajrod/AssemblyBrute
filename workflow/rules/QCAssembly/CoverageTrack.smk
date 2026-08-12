@@ -123,7 +123,7 @@ use rule bwa_cov as bwa_cov_track_data with:
         forward_fastqs=lambda wildcards: expand(config["out_dir"] / ("track_data/%s/%s/final/{pairprefix}%s%s" % (wildcards.pe_datatype, wildcards.track_name,
                                                                                                                    config["track_data"][wildcards.pe_datatype][wildcards.track_name]["conv_fwd_sfx"],
                                                                                                                    config["track_data"][wildcards.pe_datatype][wildcards.track_name]["conv_ext"])),
-                     pairprefix=config["data"][wildcards.pe_datatype]["pair_prefix_list"],
+                     pairprefix=config["track_data"][wildcards.pe_datatype][wildcards.track_name]["pair_prefix_list"],
                      allow_missing=True),
         reverse_fastqs=lambda wildcards: expand(config["out_dir"] / ("track_data/%s/%s/final/{pairprefix}%s%s" % (wildcards.pe_datatype, wildcards.track_name,
                                                                                                                config["track_data"][wildcards.pe_datatype][wildcards.track_name]["conv_rev_sfx"],

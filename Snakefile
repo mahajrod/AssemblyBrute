@@ -140,7 +140,7 @@ config["ext_data_feature_dict"] = {}
 
 config["ext_data"] = {}
 if "ext_data" in config["input_datatypes"]: # parse data that will be used to create additional tracks for pretextview. It is not used for assembly itself
-    brute_logger.info(TAB + f"Checking track data...")
+    brute_logger.info(TAB + f"Checking external data...")
 
     for datatype in list(config["data_parameters"].keys()):
 

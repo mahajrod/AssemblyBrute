@@ -49,7 +49,7 @@ def select_tracks(wildcards):
                 track_ext_dict[f"{datatype}_all_nodup_mean"] = parameters["tool_options"]["pretextview"]["track_ext"]["coverage"]
         for datatype in config["ext_data_feature_dict"]:
             for track_name in config["ext_data_feature_dict"][datatype]["pretext_coverage_track"]:
-                if track_name in config["data_feature_dict"][datatype]["pretext_per_hap_track"]:
+                if track_name in config["ext_data_feature_dict"][datatype]["pretext_per_hap_track"]:
                     #Inject per haplotype tracks, i.e. tracks calculated for each haplotype individually and later labeled for merged haplotype
                     for haplotype in haplotype_list:
                         track_type_dict[f"{haplotype}@ext@{datatype}@{track_name}_all_nodup_mean"] = f"{haplotype}@ext@{datatype}@{track_name}_all_nodup_reads_mean_coverage"

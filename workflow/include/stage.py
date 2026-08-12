@@ -386,6 +386,12 @@ class Stage:
         if self.config["assembly_qc_level"][self.stage_name] == 0: # skip all the qc
             return results_list
 
+        external_track_datatype_set = set()
+        for datatype in self.config["track_data"]:
+            for track_name in self.config["track_data"][datatype]:
+                external_track_datatype_set.add(f"{datatype}_{track_name}")
+
+
         for parameters_label in self.parameters:
             if self.config["assembly_qc_level"][self.stage_name] >= 1:
                 #---- Request stage stat gathering ----
@@ -543,7 +549,7 @@ class Stage:
                                                   step=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_settings]["step"],
                                                   genome_prefix=[self.config["genome_prefix"], ],
                                                   assembly_stage=[self.stage_name, ],
-                                                  datatype=set(parameters["tool_options"]["assembly_qc"]["coverage"]["datatype_list"]) & set(self.config["data"]),
+                                                  datatype=(set(parameters["tool_options"]["assembly_qc"]["coverage"]["datatype_list"]) & set(self.config["data"])) | external_track_datatype_set,
                                                   haplotype=self.parameters[parameters_label]["haplotype_list"],
                                                   parameters=[parameters_label]),
                                          ]

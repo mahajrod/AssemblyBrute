@@ -390,7 +390,6 @@ class Stage:
         for datatype in self.config["ext_data"]:
             for track_name in self.config["ext_data"][datatype]:
                 external_track_datatype_set.add(f"ext@{datatype}@{track_name}")
-        print(external_track_datatype_set)
 
         for parameters_label in self.parameters:
             if self.config["assembly_qc_level"][self.stage_name] >= 1:

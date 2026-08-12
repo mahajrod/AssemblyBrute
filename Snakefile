@@ -137,7 +137,7 @@ for datatype in list(config["data"].keys()):
         brute_logger.info(TAB * 3 + str(filepath))
 
 if "track_data" in config["input_datatypes"]: # parse data that will be used to create additional tracks for pretextview. It is not used for assembly itself
-    brute_logger.dbg_scr(TAB + f"Checking track data...")
+    brute_logger.info(TAB + f"Checking track data...")
     config["track_data"] = {}
     for datatype in list(config["data_parameters"].keys()):
 

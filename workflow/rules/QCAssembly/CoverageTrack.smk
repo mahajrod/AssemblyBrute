@@ -50,7 +50,7 @@ rule minimap2_cov:
 use rule minimap2_cov as minimap2_cov_track_data with:
     input:
         fastq=lambda wildcards: expand(config["out_dir"] / ("track_data/%s/%s/final/{fileprefix}%s" % (wildcards.longread_datatype, wildcards.track_name,
-                                                                                                       config["data"][wildcards.longread_datatype]["conv_ext"])),
+                                                                                                       config["track_data"][wildcards.longread_datatype][wildcards.track_name]["conv_ext"])),
                      fileprefix=config["track_data"][wildcards.longread_datatype][wildcards.track_name]["conv_file_prefix_list"],
                      allow_missing=True),
         reference="{fasta_dir}/{fasta_prefix}.fasta",
@@ -121,13 +121,13 @@ rule bwa_cov:
 use rule bwa_cov as bwa_cov_track_data with:
     input:
         forward_fastqs=lambda wildcards: expand(config["out_dir"] / ("track_data/%s/%s/final/{pairprefix}%s%s" % (wildcards.pe_datatype, wildcards.track_name,
-                                                                                                                   config["track_data"][wildcards.pe_datatype]["conv_fwd_sfx"],
-                                                                                                                   config["track_data"][wildcards.pe_datatype]["conv_ext"])),
+                                                                                                                   config["track_data"][wildcards.pe_datatype][wildcards.track_name]["conv_fwd_sfx"],
+                                                                                                                   config["track_data"][wildcards.pe_datatype][wildcards.track_name]["conv_ext"])),
                      pairprefix=config["data"][wildcards.pe_datatype]["pair_prefix_list"],
                      allow_missing=True),
         reverse_fastqs=lambda wildcards: expand(config["out_dir"] / ("track_data/%s/%s/final/{pairprefix}%s%s" % (wildcards.pe_datatype, wildcards.track_name,
-                                                                                                               config["track_data"][wildcards.pe_datatype]["conv_rev_sfx"],
-                                                                                                               config["track_data"][wildcards.pe_datatype]["conv_ext"])),
+                                                                                                               config["track_data"][wildcards.pe_datatype][wildcards.track_name]["conv_rev_sfx"],
+                                                                                                               config["track_data"][wildcards.pe_datatype][wildcards.track_name]["conv_ext"])),
                      pairprefix=config["track_data"][wildcards.pe_datatype][wildcards.track_name]["pair_prefix_list"],
                      allow_missing=True),
         reference="{fasta_dir}/{fasta_prefix}.fasta",

@@ -141,7 +141,7 @@ if "track_data" in config["input_datatypes"]: # parse data that will be used to 
     config["track_data"] = {}
     for datatype in list(config["data_parameters"].keys()):
         print(datatype)
-        brute_logger.info(TAB * 2 + f"Checking f{datatype} track data...")
+        brute_logger.info(TAB * 2 + f"Checking {datatype} track data...")
         datatype_dir = input_dir_path / "track_data" / datatype
         track_dir_list = datatype_dir.glob("*")
         for track_dir in track_dir_list:

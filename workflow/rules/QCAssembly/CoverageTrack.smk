@@ -56,7 +56,7 @@ use rule minimap2_cov as minimap2_cov_track_data with:
         reference="{fasta_dir}/{fasta_prefix}.fasta",
         log_dir=ancient("{fasta_dir}/log/"),
     output:
-        bam="{fasta_dir}/{fasta_prefix}/track_data/alignment/{fasta_prefix}.{longread_datatype}_{track_name}.bam"
+        bam="{fasta_dir}/{fasta_prefix}/alignment/{fasta_prefix}.{longread_datatype}_{track_name}.bam"
     log:
         minimap2="{fasta_dir}/log/minimap2_cov_track_data.{fasta_prefix}.{longread_datatype}.{track_name}.minimap2.log",
         sort="{fasta_dir}/log/minimap2_cov_track_data.{fasta_prefix}.{longread_datatype}.{track_name}.sort.log",
@@ -134,7 +134,7 @@ use rule bwa_cov as bwa_cov_track_data with:
         reference_index="{fasta_dir}/{fasta_prefix}.fasta.bwt.2bit.64",
         log_dir=ancient("{fasta_dir}/log/"),
     output:
-        bam="{fasta_dir}/{fasta_prefix}/track_data/alignment/{fasta_prefix}.{pe_datatype, illumina}_{track_name}.bam"
+        bam="{fasta_dir}/{fasta_prefix}/alignment/{fasta_prefix}.{pe_datatype, illumina}_{track_name}.bam"
     log:
         bwa="{fasta_dir}/log/bwa_cov_track_data.{fasta_prefix}.{pe_datatype}.{track_name}.bwa.log",
         fixmate="{fasta_dir}/log/bwa_cov_track_data.{fasta_prefix}.{pe_datatype}.{track_name}.fixmate.log",

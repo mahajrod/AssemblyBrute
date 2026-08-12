@@ -386,10 +386,10 @@ class Stage:
         if self.config["assembly_qc_level"][self.stage_name] == 0: # skip all the qc
             return results_list
 
-        external_track_datatype_set = set()
+        external_datatype_set = set()
         for datatype in self.config["ext_data"]:
             for track_name in self.config["ext_data"][datatype]:
-                external_track_datatype_set.add(f"ext@{datatype}@{track_name}")
+                external_datatype_set.add(f"ext@{datatype}@{track_name}")
 
         for parameters_label in self.parameters:
             if self.config["assembly_qc_level"][self.stage_name] >= 1:
@@ -548,7 +548,7 @@ class Stage:
                                                   step=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_settings]["step"],
                                                   genome_prefix=[self.config["genome_prefix"], ],
                                                   assembly_stage=[self.stage_name, ],
-                                                  datatype=(set(parameters["tool_options"]["assembly_qc"]["coverage"]["datatype_list"]) & set(self.config["data"])) | external_track_datatype_set,
+                                                  datatype=(set(parameters["tool_options"]["assembly_qc"]["coverage"]["datatype_list"]) & set(self.config["data"])) | external_datatype_set,
                                                   haplotype=self.parameters[parameters_label]["haplotype_list"],
                                                   parameters=[parameters_label]),
                                          ]
@@ -622,11 +622,11 @@ class Stage:
                                     fileprefix=self.config["data"][datatype]["conv_file_prefix_list"])]
         for datatype in self.config["ext_data_feature_dict"]:
             for track_name in self.config["ext_data_feature_dict"][datatype]["filter"]:
-                results_list += [expand(self.config["out_dir"] / "track_data/{datatype}/{track_name}/filtered/{fileprefix}{extension}",
+                results_list += [expand(self.config["out_dir"] / "ext_data/{datatype}/{track_name}/filtered/{fileprefix}{extension}",
                                         track_name=[track_name],
                                         datatype=[datatype,],
-                                        extension=[self.config["track_data"][datatype][track_name]["conv_ext"]],
-                                        fileprefix=self.config["track_data"][datatype][track_name]["conv_file_prefix_list"])]
+                                        extension=[self.config["ext_data"][datatype][track_name]["conv_ext"]],
+                                        fileprefix=self.config["ext_data"][datatype][track_name]["conv_file_prefix_list"])]
 
 
         return results_list
@@ -748,7 +748,7 @@ class Stage:
                                              fastqc_datatype=[datatype, ],
                                              track_name=[track_name, ],
                                              stage=[stage, ],
-                                             fileprefix=self.config["track_data"][datatype][track_name]["conv_file_prefix_list"])]
+                                             fileprefix=self.config["ext_data"][datatype][track_name]["conv_file_prefix_list"])]
         if not self.config["skip_nanoplot"]:
             results_list += [expand(self.config["out_dir"] / "qc/nanoplot/{datatype}/{stage}/{datatype}.{stage}.NanoStats.tsv",
                                datatype=self.config["data_feature_dict"]["long_read"],
@@ -773,7 +773,7 @@ class Stage:
                                        datatype=[datatype, ],
                                        track_name=[track_name],
                                        stage=[stage, ],
-                                       fileprefix=self.config["track_data"][datatype][track_name]["conv_file_prefix_list"]) ]
+                                       fileprefix=self.config["ext_data"][datatype][track_name]["conv_file_prefix_list"]) ]
                                      ]
 
         if not self.config["skip_tadbit"]:

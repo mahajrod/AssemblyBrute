@@ -219,7 +219,7 @@ if "track_data" in config["input_datatypes"]: # parse data that will be used to 
 
             if config["track_data"][datatype][track_name]["conv_fmt"] == "fastq":
                 config["track_data_feature_dict"][datatype]["fastq"].add(track_name)
-            if config["data_data"][datatype][track_name]["conv_fmt"] == "fasta":
+            if config["track_data"][datatype][track_name]["conv_fmt"] == "fasta":
                 config["track_data_feature_dict"][datatype]["fasta"].add(track_name)
             for feature in ("paired", "fastqc", "long_read", "nanopore", "pacbio", "genome_size", "variant_call", "gap_fill",
                             "kraken", "filter", "phasing", "pretext_coverage_track", "pretext_per_hap_track"):

@@ -153,7 +153,7 @@ rule calculate_coverage:
     output:
         per_base="{bam_dir}/{bam_prefix}.{datatype}.{cov_settings}.per-base.bed.gz"
     params:
-        min_mapq= lambda wildcards: parse_option("min_mapping_quality", parameters["tool_options"]["mosdepth"]["options"][wildcards.cov_settings][wildcards.datatype.split("@")[1]], " -Q ", none_value=0), # external tracks have following datatypes "ext@{datatype}@{track_name}"
+        min_mapq= lambda wildcards: parse_option("min_mapping_quality", parameters["tool_options"]["mosdepth"]["options"][wildcards.cov_settings][wildcards.datatype.split("@")[1 if "@" in wildcards.datatype else 0]], " -Q ", none_value=0), # external tracks have following datatypes "ext@{datatype}@{track_name}"
         blacklist_flags= lambda wildcards: parse_option("blacklist_flags", parameters["tool_options"]["mosdepth"]["options"][wildcards.cov_settings], " -F "),
     log:
         std="{bam_dir}/log/calculate_coverage.{bam_prefix}.{datatype}.{cov_settings}.log",

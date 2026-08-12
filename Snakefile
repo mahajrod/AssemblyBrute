@@ -143,14 +143,18 @@ if "track_data" in config["input_datatypes"]: # parse data that will be used to 
         print(datatype)
         brute_logger.info(TAB * 2 + f"Checking {datatype} track data...")
         datatype_dir = input_dir_path / "track_data" / datatype
-        track_dir_list = datatype_dir.glob("*")
-        for track_dir in track_dir_list:
+        track_dir_list = []
+        for track_dir in datatype_dir.glob("*"):
             if track_dir.is_dir():
-                print(track_dir)
-                input = detect_input_type(datatype, track_dir)
-                if not input:
-                    continue
-                print(input)
+                track_dir_list.append(track_dir)
+        if not track_dir_list:
+            brute_logger.info(TAB * 3 + f"{datatype} track data was not found...")
+            continue
+        for track_dir in track_dir_list:
+            track_name = track_dir.name
+            brute_logger.info(TAB * 3 + f" Found {datatype} track {track_name}...")
+            input = detect_input_type(datatype, track_dir)
+
 
 
 if "reference" in config["data"]:

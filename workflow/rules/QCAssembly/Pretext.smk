@@ -54,6 +54,9 @@ def select_tracks(wildcards):
                     for haplotype in haplotype_list:
                         track_type_dict[f"{haplotype}@ext@{datatype}@{track_name}_all_nodup_mean"] = f"{haplotype}@ext@{datatype}@{track_name}_all_nodup_reads_mean_coverage"
                         track_ext_dict[f"{haplotype}@ext@{datatype}@{track_name}_all_nodup_mean"] = parameters["tool_options"]["pretextview"]["track_ext"]["coverage"]
+
+                        track_type_dict[f"{haplotype}@ext@{datatype}@{track_name}_hq_mapping_mean"] = f"{haplotype}@ext@{datatype}@{track_name}_hq_mapping_mean_coverage"
+                        track_ext_dict[f"{haplotype}@ext@{datatype}@{track_name}_hq_mapping_mean"] = parameters["tool_options"]["pretextview"]["track_ext"]["coverage"]
                 else:
                     track_type_dict[f"ext@{datatype}@{track_name}_all_nodup_mean"] = f"ext@{datatype}@{track_name}_all_nodup_reads_mean_coverage"
                     track_ext_dict[f"ext@{datatype}@{track_name}_all_nodup_mean"] = parameters["tool_options"]["pretextview"]["track_ext"]["coverage"]

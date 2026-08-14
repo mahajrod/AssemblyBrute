@@ -57,7 +57,7 @@ use rule create_local_links as create_track_pe_fastq_links with: # abstract rule
 
 use rule create_local_links as create_se_fasta_links with:
     input:
-        fasta=lambda wildcards: config["data"][wildcards.se_datatype]["in_dir"] / ("{fileprefix}%s" % config["ext_data"][wildcards.se_datatype]["in_ext"]),
+        fasta=lambda wildcards: config["data"][wildcards.se_datatype]["in_dir"] / ("{fileprefix}%s" % config["data"][wildcards.se_datatype]["in_ext"]),
         #fasta=input_dir_path / ("{se_datatype}/fasta/{fileprefix}%s" %  config["fasta_ext"]),
         log_dir=ancient(config["out_dir"] / "log/")
     output:

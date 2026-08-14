@@ -226,7 +226,7 @@
 
 "ploidy": 2
 
-"genome_prefix": "fCoMys1.2"
+"genome_prefix": "fCoiMys1.2"
 "busco_lineage_list":
     - "actinopterygii_odb12"
     - "actinopterygii_odb10"

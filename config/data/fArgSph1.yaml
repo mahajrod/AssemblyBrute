@@ -200,11 +200,9 @@
 
 "qc_settings":
     "windows_sets":
-        - "w1000k.s1000k"
         - "w1000k.s100k"
-        #- "w100k.s100k"
         - "w100k.s10k"
-        #- "w10k.s10k"
+        - "w10k.s1k"
     "reference_scaffold_sets":
         # Thresholds for scaffolds are set in core config, "select_scaffolds". Values below are from "default" parameter set
         - "custom" # scaffolds are selected by the reference's whitelist

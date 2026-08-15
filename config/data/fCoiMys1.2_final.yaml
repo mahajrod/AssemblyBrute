@@ -26,7 +26,7 @@
 "parameter_set": "normal"
 
 #---- Data ----
-"input_datatypes": "hifi,hic,reference,illumina,draft"
+"input_datatypes": "hifi,hic,reference,illumina,draft,ext_data"
 "data_filtering": []
 
 "assembly_kmer_length":
@@ -189,12 +189,12 @@
     #    5 - quast, merqury, wga, assembly-based tracks, ragtag_qc, busco
     #    6 - quast, merqury, wga, assembly-based tracks, ragtag_qc, read-based and other tracks, busco, purge_dups_qc
     #    7 - quast, merqury, wga, assembly-based tracks, ragtag_qc, read-based and other tracks, busco, purge_dups_qc, pretext map, higlass mcool, .hic for combined haplotype
-    "draft_qc":        7
+    "draft_qc":        5
     "contig":          5
     "dedup":           5
     "hic_alignment":   0 # keep it always 0, as this stage uses fastas from the previous stage. changing it to a higher value will trigger unnecessary calculations
     "hic_scaffolding": 7
-    "polishing":      5
+    "polishing":       5
     "ref_scaffolding": 0
     "gap_closing":     7
 

@@ -70,7 +70,7 @@
 "stage_coretools":
     "contig": # Allowed: "hifiasm". TODO: "nextdenovo"
         - "hifiasm"
-        - "flye"
+        #- "flye"
         #- "nextdenovo" #TODO: implement
     "hic_alignment":
         - "arima"
@@ -87,7 +87,8 @@
     "polishing":
         - "nextpolish2"
     "dedup":
-        - "hapsolo"
+        #- "hapsolo"
+        - "combo_purge"
         #- "purge_dups"
     "gap_closing":
         - "samba"
@@ -145,6 +146,11 @@
     "hapsolo":
         - "def"
         #- "skip" # TODO: not implemented yet
+    "combo_purge":
+        #- "hifi"
+        #- "nano"
+        - "hifi_keep_hicov"
+        #- "nano_keep_hicov"
     "draft_qc":
         - "def"
     "samba":
@@ -198,7 +204,7 @@
         - "w1000k.s100k"
         #- "w100k.s100k"
         - "w100k.s10k"
-        #- "w10k.s10k"
+        - "w10k.s1k"
     "reference_scaffold_sets":
         # Thresholds for scaffolds are set in core config, "select_scaffolds". Values below are from "default" parameter set
         - "custom" # scaffolds are selected by the reference's whitelist
@@ -222,7 +228,7 @@
 
 "genome_prefix": "rMelTri1"
 "busco_lineage_list":
-    #- "vertebrata_odb12"
+    - "vertebrata_odb12"
     - "sauropsida_odb12"
     - "vertebrata_odb10"
     #- "sauropsida_odb10"
@@ -303,7 +309,7 @@
 "skip_pretext": False                   # set True to completely skip all pretext related qc
 "skip_pretext_10k_1k_tracks": False     # set True to skip injection to the pretext maps of tracks with window size of 10 kpb and step of 1kpb. Reasonable for large genomes
 "skip_pretext_100k_10k_tracks": False  # set True to skip injection to the pretext maps of tracks with window size of 100kbp and step of 10kbp.
-"skip_pretext_1000k_100k_tracks": True  # set True to skip injection to the pretext maps of tracks with window size of 1000kbp and step of 100kbp. Reasonable for small genomes
+"skip_pretext_1000k_100k_tracks": False  # set True to skip injection to the pretext maps of tracks with window size of 1000kbp and step of 100kbp. Reasonable for small genomes
 "skip_pretext_coverage_tracks": False   # set True to skip injection to the pretext maps of all coverage tracks
 
 "skip_hic_for_combined_haplotype": True    # set False to generate .hic file for combined/reordered haplotype

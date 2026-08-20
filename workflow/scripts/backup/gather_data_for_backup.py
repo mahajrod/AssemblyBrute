@@ -29,28 +29,22 @@ def backup_stage_files(stage_name, results_path, backup_path, file_pattern_list)
                         print(f"\t\tCopying {filepath}...")
                         os.system(f"cp -rL {filepath} {backup_stage_option_dir_path}")
 
-                assembly_qc_dir_path = stage_option_dir_path / "assembly_qc/"
-                if assembly_qc_dir_path.exists:
-                    backup_assembly_qc_stage_option_dir_path = backup_stage_option_dir_path / "assembly_qc/"
-                    os.makedirs(backup_assembly_qc_stage_option_dir_path, exist_ok=True)
+                for common_dir in "assembly_qc", "wga":
+                    common_dir_path = stage_option_dir_path / common_dir
+                    if common_dir_path.exists:
+                        backup_common_dir_stage_option_dir_path = backup_stage_option_dir_path / "assembly_qc/"
+                        os.makedirs(backup_common_dir_stage_option_dir_path, exist_ok=True)
+                        print(f"\t\tCopying {common_dir_path}...")
+                        os.system(f"cp -rL {common_dir_path} {backup_common_dir_stage_option_dir_path}")
 
-                    for filepath in assembly_qc_dir_path.glob("*") :
-                        #print(filepath.name)
-                        if filepath.name == "merqury":
-                            print("\t\tCopying merqury files...")
-                            backup_merqury_qc_path = backup_assembly_qc_stage_option_dir_path / "merqury/"
-                            os.makedirs(backup_merqury_qc_path, exist_ok=True)
-                            for merqury_filepath in filepath.glob("*"):
-                                if merqury_filepath.name[-6:] == ".fasta":
-                                    continue
-                                if merqury_filepath.name[-6:] == ".meryl":
-                                    continue
-                                print(f"\t\t\tCopying {merqury_filepath}...")
-                                os.system(f"cp -rL {merqury_filepath} {backup_merqury_qc_path}")
+                for hap_pattern in ".hap", ".reordered", ".combined":
+                    for hap_dir in stage_option_dir_path.glob(f"*{hap_pattern}"):
+                        if hap_dir.is_dir():
+                            hap_dir_name = hap_dir.name
+                            backup_hap_dir_path = backup_stage_option_dir_path / hap_dir_name
+                            os.makedirs(backup_hap_dir_path, exist_ok=True)
 
-                        else:
-                            print(f"\t\tCopying {filepath}...")
-                            os.system(f"cp -rL {filepath} {backup_assembly_qc_stage_option_dir_path}")
+
                 for set_type in "reordered", "combined":
                     set_type_path = stage_option_dir_path / set_type
                     if set_type_path.exists:
@@ -132,24 +126,25 @@ print("Backuping corrected hifi reads data...")
 
 error_correction_read_dir_path = results_dir_path / "error_correction/"
 if error_correction_read_dir_path.exists():
-    hifi_read_dir_path = backup_dir_path / "data/hifi/"
-    os.makedirs(hifi_read_dir_path, exist_ok=True)
+    error_correction_read_backup_dir_path = backup_dir_path / "error_correction/"
+    os.makedirs(error_correction_read_backup_dir_path, exist_ok=True)
     print(f"\tCopying {error_correction_read_dir_path }...")
-    os.system(f"cp -rL {error_correction_read_dir_path } {hifi_read_dir_path}")
+    os.system(f"cp -rL {error_correction_read_dir_path } {error_correction_read_backup_dir_path}")
 
 else:
     print("\tError correction read dir was not found, skipping...")
 
 backup_stage_files("contig", results_dir_path, backup_dir_path,
                 ["*.fasta", ".fai", "*.gfa", "*.bed", "*.len", "*.cov", "*.lencov", "*.ids", "telomere"])
-backup_stage_files("purge_dups", results_dir_path, backup_dir_path,
-                ["*.fasta", ".fai", "*.bed", "*.len", "*.assembly", "*.agp", "*.ids", "telomere",
-                              "*.png", "*.svg"])
+backup_stage_files("dedup", results_dir_path, backup_dir_path,
+                ["*.fasta", ".fai", "*.bed", "*.len", "*.assembly", "*.agp", "*.ids", "telomere", "*.png", "*.svg"])
+backup_stage_files("polishing", results_dir_path, backup_dir_path,
+                ["*.fasta", ".fai", "*.bed", "*.len", "*.assembly", "*.agp", "*.ids", "telomere", "*.png", "*.svg"])
+backup_stage_files("huc_alignment", results_dir_path, backup_dir_path,
+                ["*.fasta", ".fai", "*.bed", "*.len", "*.assembly", "*.agp", "*.ids", "telomere", "*.png", "*.svg"])
 backup_stage_files("hic_scaffolding", results_dir_path, backup_dir_path,
-                ["*.fasta", ".fai", "*.bed", "*.len", "*.assembly", "*.agp", "*.ids", "*.hic", "telomere",
-                              "*.tab.gz", "*.png", "*.svg"])
+                ["*.fasta", ".fai", "*.bed", "*.len", "*.assembly", "*.agp", "*.ids", "*.hic", "telomere", "*.tab.gz", "*.png", "*.svg"])
 for stage in "draft_qc", "gap_closing", "ref_scaffolding":
     backup_stage_files(stage, results_dir_path, backup_dir_path,
-                    ["*.fasta", ".fai", "*.bed", "*.len", "*.assembly", "*.agp", "*.ids", "telomere",
-                                  "*.png", "*.svg", "*.tab.gz"])
+                    ["*.fasta", ".fai", "*.bed", "*.len", "*.assembly", "*.agp", "*.ids", "telomere", "*.png", "*.svg", "*.tab.gz"])
 

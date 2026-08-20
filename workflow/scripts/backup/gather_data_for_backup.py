@@ -6,19 +6,19 @@ from pathlib import Path
 
 
 def backup_stage_files(stage_name, results_path, backup_path, file_pattern_list):
-    print(f"Backuping data from the {stage_name} stage...")
+    print(f"Backuping data from the {stage_name} stage ...")
     stage_dir_path = results_path / stage_name    # Example: results/gap_closing/
     if stage_dir_path.exists():
         backup_stage_dir_path = backup_path / stage_name
         os.makedirs(backup_stage_dir_path, exist_ok=True)
         stat_file_path_list = list(stage_dir_path.glob("*.stage_stats"))
         for filename in stat_file_path_list:
-            print(f"\tCopying {filename}...")
+            print(f"\tCopying {filename} ...")
             os.system(f"cp -rL {filename} {backup_stage_dir_path}")
 
         for stage_option_dir_path in stage_dir_path.glob("*"): # Example: results/gap_closing/draft_qc_def..samba_phased/
             if stage_option_dir_path.is_dir():
-                print(f"\tCopying files for {stage_option_dir_path}...")
+                print(f"\tCopying files for {stage_option_dir_path} ...")
 
                 stage_option = stage_option_dir_path.name
                 backup_stage_option_dir_path = backup_stage_dir_path / stage_option
@@ -26,17 +26,15 @@ def backup_stage_files(stage_name, results_path, backup_path, file_pattern_list)
 
                 for pattern in file_pattern_list:
                     for filepath in stage_option_dir_path.glob(pattern):
-                        print(f"\t\tCopying {filepath}...")
+                        print(f"\t\tCopying {filepath} ...")
                         os.system(f"cp -rL {filepath} {backup_stage_option_dir_path}")
 
                 for common_dir in "assembly_qc", "wga":
-                    print("AAAA")
                     common_dir_path = stage_option_dir_path / common_dir
-                    print(common_dir_path)
                     if common_dir_path.exists():
                         backup_common_dir_stage_option_dir_path = backup_stage_option_dir_path / "assembly_qc/"
                         os.makedirs(backup_common_dir_stage_option_dir_path, exist_ok=True)
-                        print(f"\t\tCopying {common_dir_path}...")
+                        print(f"\t\tCopying {common_dir_path} ...")
                         os.system(f"cp -rL {common_dir_path} {backup_common_dir_stage_option_dir_path}")
 
                 for hap_pattern in ".hap*", ".reordered", ".combined":
@@ -45,10 +43,10 @@ def backup_stage_files(stage_name, results_path, backup_path, file_pattern_list)
                             hap_dir_name = hap_dir.name
                             backup_hap_dir_path = backup_stage_option_dir_path / hap_dir_name
                             os.makedirs(backup_hap_dir_path, exist_ok=True)
-                            print(f"\t\tCopying {backup_hap_dir_path}...")
+                            print(f"\t\tCopying {backup_hap_dir_path} ...")
                             for analysis_dir_path in backup_hap_dir_path.glob(f"*"):
                                 analysis_dir_name = analysis_dir_path.name
-                                print(f"\t\t\tCopying files for {analysis_dir_name} dataset...")
+                                print(f"\t\t\tCopying files for {analysis_dir_name} dataset ...")
                                 backup_analysis_dir_path = backup_hap_dir_path / analysis_dir_name
                                 if analysis_dir_name == "alignment": # maybe do a selective copying in future
                                     os.system(f"cp -rL {analysis_dir_path} {backup_analysis_dir_path}")

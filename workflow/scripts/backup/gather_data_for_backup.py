@@ -48,7 +48,8 @@ def backup_stage_files(stage_name, results_path, backup_path, file_pattern_list)
                             print(backup_hap_dir_path)
                             os.makedirs(backup_hap_dir_path, exist_ok=True)
                             print(f"\t\tCopying {backup_hap_dir_path} ...")
-                            for analysis_dir_path in backup_hap_dir_path.glob(f"*"):
+                            for analysis_dir_path in backup_hap_dir_path.glob("*"):
+                                print("CCCCCCCCC")
                                 analysis_dir_name = analysis_dir_path.name
                                 print(f"\t\t\tCopying files for {analysis_dir_name} dataset ...")
                                 backup_analysis_dir_path = backup_hap_dir_path / analysis_dir_name

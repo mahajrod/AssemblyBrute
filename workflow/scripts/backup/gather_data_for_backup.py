@@ -147,7 +147,7 @@ backup_stage_files("dedup", results_dir_path, backup_dir_path,
                 ["*.fasta", ".fai", "*.bed", "*.bedgraph", "*.len", "*.assembly", "*.agp", "*.ids", "telomere", "*.png", "*.svg"])
 backup_stage_files("polishing", results_dir_path, backup_dir_path,
                 ["*.fasta", ".fai", "*.bed", "*.bedgraph", "*.len", "*.assembly", "*.agp", "*.ids", "telomere", "*.png", "*.svg"])
-backup_stage_files("huc_alignment", results_dir_path, backup_dir_path,
+backup_stage_files("hic_alignment", results_dir_path, backup_dir_path,
                 ["*.fasta", ".fai", "*.bed", "*.bedgraph", "*.len", "*.assembly", "*.agp", "*.ids", "telomere", "*.png", "*.svg"])
 backup_stage_files("hic_scaffolding", results_dir_path, backup_dir_path,
                 ["*.fasta", ".fai", "*.bed", "*.bedgraph", "*.len", "*.assembly", "*.agp", "*.ids", "*.hic", "telomere", "*.tab.gz", "*.png", "*.svg"])

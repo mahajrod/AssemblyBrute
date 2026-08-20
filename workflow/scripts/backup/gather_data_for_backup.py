@@ -38,10 +38,14 @@ def backup_stage_files(stage_name, results_path, backup_path, file_pattern_list)
                         os.system(f"cp -rL {common_dir_path} {backup_common_dir_stage_option_dir_path}")
 
                 for hap_pattern in ".hap*", ".reordered", ".combined":
+                    print("AAAAAAA")
                     for hap_dir in stage_option_dir_path.glob(f"*{hap_pattern}"):
+                        print(hap_dir)
                         if hap_dir.is_dir():
                             hap_dir_name = hap_dir.name
                             backup_hap_dir_path = backup_stage_option_dir_path / hap_dir_name
+                            print("BBBBBB")
+                            print(backup_hap_dir_path)
                             os.makedirs(backup_hap_dir_path, exist_ok=True)
                             print(f"\t\tCopying {backup_hap_dir_path} ...")
                             for analysis_dir_path in backup_hap_dir_path.glob(f"*"):

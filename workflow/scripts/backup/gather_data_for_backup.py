@@ -33,7 +33,7 @@ def backup_stage_files(stage_name, results_path, backup_path, file_pattern_list)
                     print("AAAA")
                     common_dir_path = stage_option_dir_path / common_dir
                     print(common_dir_path)
-                    if common_dir_path.exists:
+                    if common_dir_path.exists():
                         backup_common_dir_stage_option_dir_path = backup_stage_option_dir_path / "assembly_qc/"
                         os.makedirs(backup_common_dir_stage_option_dir_path, exist_ok=True)
                         print(f"\t\tCopying {common_dir_path}...")
@@ -46,14 +46,14 @@ def backup_stage_files(stage_name, results_path, backup_path, file_pattern_list)
                             backup_hap_dir_path = backup_stage_option_dir_path / hap_dir_name
                             os.makedirs(backup_hap_dir_path, exist_ok=True)
                             print(f"\t\tCopying {backup_hap_dir_path}...")
-                        for analysis_dir_path in backup_hap_dir_path.glob(f"*"):
-                            analysis_dir_name = analysis_dir_path.name
-                            print(f"\t\t\tCopying files for {analysis_dir_name} dataset...")
-                            backup_analysis_dir_path = backup_hap_dir_path / analysis_dir_name
-                            if analysis_dir_name == "alignment": # maybe do a selective copying in future
-                                os.system(f"cp -rL {analysis_dir_path} {backup_analysis_dir_path}")
-                            else:
-                                os.system(f"cp -rL {analysis_dir_path} {backup_analysis_dir_path}")
+                            for analysis_dir_path in backup_hap_dir_path.glob(f"*"):
+                                analysis_dir_name = analysis_dir_path.name
+                                print(f"\t\t\tCopying files for {analysis_dir_name} dataset...")
+                                backup_analysis_dir_path = backup_hap_dir_path / analysis_dir_name
+                                if analysis_dir_name == "alignment": # maybe do a selective copying in future
+                                    os.system(f"cp -rL {analysis_dir_path} {backup_analysis_dir_path}")
+                                else:
+                                    os.system(f"cp -rL {analysis_dir_path} {backup_analysis_dir_path}")
 
                 #for set_type in "reordered", "combined":
                 #    set_type_path = stage_option_dir_path / set_type

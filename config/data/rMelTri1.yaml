@@ -178,6 +178,7 @@
     "hapsolo":
         "busco_lineage_list":
             - "sauropsida_odb12"
+            - "vertebrata_odb12"
 
 "assembly_qc_level": # wga, pretext map not refactored yet
     # Allowed levels:

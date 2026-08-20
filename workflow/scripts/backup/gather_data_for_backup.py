@@ -43,18 +43,25 @@ def backup_stage_files(stage_name, results_path, backup_path, file_pattern_list)
                             hap_dir_name = hap_dir.name
                             backup_hap_dir_path = backup_stage_option_dir_path / hap_dir_name
                             os.makedirs(backup_hap_dir_path, exist_ok=True)
+                        for analysis_dir_path in backup_hap_dir_path.glob(f"*"):
+                            analysis_dir_name = analysis_dir_path.name
+                            print(f"\t\t\tCopying files for {analysis_dir_name} dataset...")
+                            backup_analysis_dir_path = backup_hap_dir_path / analysis_dir_name
+                            if analysis_dir_name == "alignment": # maybe do a selective copying in future
+                                os.system(f"cp -rL {analysis_dir_path} {backup_analysis_dir_path}")
+                            else:
+                                os.system(f"cp -rL {analysis_dir_path} {backup_analysis_dir_path}")
 
-
-                for set_type in "reordered", "combined":
-                    set_type_path = stage_option_dir_path / set_type
-                    if set_type_path.exists:
-                        print(f"\t\tCopying files for {set_type} dataset...")
-                        backup_set_type_stage_option_dir_path = backup_stage_option_dir_path / set_type
-                        os.makedirs(backup_set_type_stage_option_dir_path, exist_ok=True)
-                        for pattern in "*.png", "*.svg", "per_chr", "*.pretext", ".rmdup.bam", ".rmdup.bam.csi", ".rmdup.bam.bai", ".assembly", ".agp", ".bed", ".syn":
-                            for filepath in (set_type_path / "alignment/NA/").glob(pattern):
-                                print(f"\t\t\tCopying {filepath}...")
-                                os.system(f"cp -rL {filepath} {backup_set_type_stage_option_dir_path}")
+                #for set_type in "reordered", "combined":
+                #    set_type_path = stage_option_dir_path / set_type
+                #    if set_type_path.exists:
+                #        print(f"\t\tCopying files for {set_type} dataset...")
+                #        backup_set_type_stage_option_dir_path = backup_stage_option_dir_path / set_type
+                #        os.makedirs(backup_set_type_stage_option_dir_path, exist_ok=True)
+                #        for pattern in "*.png", "*.svg", "per_chr", "*.pretext", ".rmdup.bam", ".rmdup.bam.csi", ".rmdup.bam.bai", ".assembly", ".agp", ".bed", ".syn":
+                #            for filepath in (set_type_path / "alignment/NA/").glob(pattern):
+                #                print(f"\t\t\tCopying {filepath}...")
+                #                os.system(f"cp -rL {filepath} {backup_set_type_stage_option_dir_path}")
     else:
         print(f"\t{stage_name} dir was not found, skipping...")
 
@@ -135,16 +142,16 @@ else:
     print("\tError correction read dir was not found, skipping...")
 
 backup_stage_files("contig", results_dir_path, backup_dir_path,
-                ["*.fasta", ".fai", "*.gfa", "*.bed", "*.len", "*.cov", "*.lencov", "*.ids", "telomere"])
+                ["*.fasta", ".fai", "*.gfa", "*.bed","*.bedgraph", "*.len", "*.cov", "*.lencov", "*.ids", "telomere"])
 backup_stage_files("dedup", results_dir_path, backup_dir_path,
-                ["*.fasta", ".fai", "*.bed", "*.len", "*.assembly", "*.agp", "*.ids", "telomere", "*.png", "*.svg"])
+                ["*.fasta", ".fai", "*.bed", "*.bedgraph", "*.len", "*.assembly", "*.agp", "*.ids", "telomere", "*.png", "*.svg"])
 backup_stage_files("polishing", results_dir_path, backup_dir_path,
-                ["*.fasta", ".fai", "*.bed", "*.len", "*.assembly", "*.agp", "*.ids", "telomere", "*.png", "*.svg"])
+                ["*.fasta", ".fai", "*.bed", "*.bedgraph", "*.len", "*.assembly", "*.agp", "*.ids", "telomere", "*.png", "*.svg"])
 backup_stage_files("huc_alignment", results_dir_path, backup_dir_path,
-                ["*.fasta", ".fai", "*.bed", "*.len", "*.assembly", "*.agp", "*.ids", "telomere", "*.png", "*.svg"])
+                ["*.fasta", ".fai", "*.bed", "*.bedgraph", "*.len", "*.assembly", "*.agp", "*.ids", "telomere", "*.png", "*.svg"])
 backup_stage_files("hic_scaffolding", results_dir_path, backup_dir_path,
-                ["*.fasta", ".fai", "*.bed", "*.len", "*.assembly", "*.agp", "*.ids", "*.hic", "telomere", "*.tab.gz", "*.png", "*.svg"])
+                ["*.fasta", ".fai", "*.bed", "*.bedgraph", "*.len", "*.assembly", "*.agp", "*.ids", "*.hic", "telomere", "*.tab.gz", "*.png", "*.svg"])
 for stage in "draft_qc", "gap_closing", "ref_scaffolding":
     backup_stage_files(stage, results_dir_path, backup_dir_path,
-                    ["*.fasta", ".fai", "*.bed", "*.len", "*.assembly", "*.agp", "*.ids", "telomere", "*.png", "*.svg", "*.tab.gz"])
+                    ["*.fasta", ".fai", "*.bed", "*.bedgraph", "*.len", "*.assembly", "*.agp", "*.ids", "telomere", "*.png", "*.svg", "*.tab.gz"])
 

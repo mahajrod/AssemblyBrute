@@ -7,7 +7,7 @@ from pathlib import Path
 
 def backup_stage_files(stage_name, results_path, backup_path, file_pattern_list):
     print(f"Backuping data from the {stage_name} stage...")
-    stage_dir_path = results_path / stage_name
+    stage_dir_path = results_path / stage_name    # Example: results/gap_closing/
     if stage_dir_path.exists():
         backup_stage_dir_path = backup_path / stage_name
         os.makedirs(backup_stage_dir_path, exist_ok=True)
@@ -16,7 +16,7 @@ def backup_stage_files(stage_name, results_path, backup_path, file_pattern_list)
             print(f"\tCopying {filename}...")
             os.system(f"cp -rL {filename} {backup_stage_dir_path}")
 
-        for stage_option_dir_path in stage_dir_path.glob("*"):
+        for stage_option_dir_path in stage_dir_path.glob("*"): # Example: results/gap_closing/draft_qc_def..samba_phased/
             if stage_option_dir_path.is_dir():
                 print(f"\tCopying files for {stage_option_dir_path}...")
 
@@ -30,19 +30,22 @@ def backup_stage_files(stage_name, results_path, backup_path, file_pattern_list)
                         os.system(f"cp -rL {filepath} {backup_stage_option_dir_path}")
 
                 for common_dir in "assembly_qc", "wga":
+                    print("AAAA")
                     common_dir_path = stage_option_dir_path / common_dir
+                    print(common_dir_path)
                     if common_dir_path.exists:
                         backup_common_dir_stage_option_dir_path = backup_stage_option_dir_path / "assembly_qc/"
                         os.makedirs(backup_common_dir_stage_option_dir_path, exist_ok=True)
                         print(f"\t\tCopying {common_dir_path}...")
                         os.system(f"cp -rL {common_dir_path} {backup_common_dir_stage_option_dir_path}")
 
-                for hap_pattern in ".hap", ".reordered", ".combined":
+                for hap_pattern in ".hap*", ".reordered", ".combined":
                     for hap_dir in stage_option_dir_path.glob(f"*{hap_pattern}"):
                         if hap_dir.is_dir():
                             hap_dir_name = hap_dir.name
                             backup_hap_dir_path = backup_stage_option_dir_path / hap_dir_name
                             os.makedirs(backup_hap_dir_path, exist_ok=True)
+                            print(f"\t\tCopying {backup_hap_dir_path}...")
                         for analysis_dir_path in backup_hap_dir_path.glob(f"*"):
                             analysis_dir_name = analysis_dir_path.name
                             print(f"\t\t\tCopying files for {analysis_dir_name} dataset...")

@@ -96,9 +96,9 @@ print("Backuping kmer data...")
 if kmer_dir_path.exists():
     for folder_path in kmer_dir_path.glob("*"):
         kmer_datatype = folder_path.name
-        filtered_kmer_dir_path = kmer_dir_path / kmer_datatype / "filtered/"
+        filtered_kmer_dir_path = kmer_dir_path / kmer_datatype / "final/"
 
-        backup_kmer_datatype_path = backup_dir_path / "kmer/" / kmer_datatype / "filtered/"
+        backup_kmer_datatype_path = backup_dir_path / "kmer/" / kmer_datatype / "final/"
         os.makedirs(backup_kmer_datatype_path, exist_ok=True)
         print(filtered_kmer_dir_path)
         histo_file_path = list(filtered_kmer_dir_path.glob("*.histo"))

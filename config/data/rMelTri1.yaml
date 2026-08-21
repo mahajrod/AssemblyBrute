@@ -89,7 +89,7 @@
     "dedup":
         #- "hapsolo"
         - "combo_purge"
-        #- "purge_dups"
+        - "purge_dups"
     "gap_closing":
         - "samba"
     "draft_qc":
@@ -118,9 +118,9 @@
         #- "nano_corr"
         #- "nano_hq"
     "purge_dups":
-        - "hifi"
+        #- "hifi"
         #- "nano"
-        #- "hifi_keep_hicov"
+        - "hifi_keep_hicov"
         #- "nano_keep_hicov"
     "arima":
         - "def"

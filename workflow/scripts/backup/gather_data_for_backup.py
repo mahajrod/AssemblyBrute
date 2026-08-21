@@ -114,7 +114,7 @@ if kmer_dir_path.exists():
             os.system(f"cp -rL {genomescope_dir_path} {backup_kmer_datatype_path}")
 else:
     print("\tKmer data not found, skipping...")
-
+"""
 # backup contamination scan
 print("Backuping contamination scan data...")
 contamination_scan_dir_path = results_dir_path / "contamination_scan/kraken2/"
@@ -156,3 +156,4 @@ for stage in "draft_qc", "gap_closing", "ref_scaffolding":
     backup_stage_files(stage, results_dir_path, backup_dir_path,
                     ["*.fasta", ".fai", "*.bed", "*.bedgraph", "*.len", "*.assembly", "*.agp", "*.ids", "telomere", "*.png", "*.svg", "*.tab.gz"])
 
+"""

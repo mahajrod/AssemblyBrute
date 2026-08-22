@@ -55,10 +55,10 @@
     - "filter_reads" #
     - "filtered_read_qc"
     - "kmer_qc"
-    #- "mtdna"
-    #- "read_contamination_scan" # TODO: test after refactoring
+    - "mtdna"
+    - "read_contamination_scan" # TODO: test after refactoring
     #- "draft_qc"         # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
-    #- "contig"            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
+    - "contig"            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
     #- "polishing"        # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
     #- "dedup"             # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing for hapsolo
     #- "hic_alignment"     # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
@@ -161,7 +161,7 @@
         "upper_threshold": null #
     "genome_assemblers":
         "coverage_estimator": null
-        "lambda": 36
+        "lambda": 40
     "krater":
         "use_second_peak": null
         "low_limit": null
@@ -184,7 +184,7 @@
     #    6 - quast, merqury, wga, assembly-based tracks, ragtag_qc, read-based and other tracks, busco, purge_dups_qc
     #    7 - quast, merqury, wga, assembly-based tracks, ragtag_qc, read-based and other tracks, busco, purge_dups_qc, pretext map, higlass mcool, .hic for combined haplotype
     "draft_qc":        0
-    "contig":          5
+    "contig":          7
     "dedup":           5
     "hic_alignment":   0 # keep it always 0, as this stage uses fastas from the previous stage. changing it to a higher value will trigger unnecessary calculations
     "hic_scaffolding": 7
@@ -196,9 +196,9 @@
     "windows_sets":
         #- "w1000k.s1000k"
         - "w1000k.s100k"
-        - "w100k.s100k"
+        - "w100k.s10k"
         #- "w100k.s10k"
-        #- "w10k.s10k"
+        - "w10k.s1k"
     "reference_scaffold_sets":
         # Thresholds for scaffolds are set in core config, "select_scaffolds". Values below are from "default" parameter set
         - "custom" # scaffolds are selected by the reference's whitelist
@@ -220,12 +220,14 @@
 
 "ploidy": 2
 
-"genome_prefix": "fGadMor6"
+"genome_prefix": "fGadMor6.1"
 "busco_lineage_list":
     - "actinopterygii_odb12"
+    - "vertebrata_odb12"
 
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
-#                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
+#                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10,
+#                           actinopterygii_odb12, vertebrata_odb12
 "telomere_motif": "CCCTAA"  # telomere motif at 5'-end; CCCTAA for human, place null if unknown
 "use_canonical_telomere": True # TODO: this parameter is used by ragtag in ref_scaffolding stage move it to manually adjusted features
 "species_name": "Gadus morhua"
@@ -301,7 +303,7 @@
 "skip_pretext": False                   # set True to completely skip all pretext related qc
 "skip_pretext_10k_1k_tracks": False     # set True to skip injection to the pretext maps of tracks with window size of 10 kpb and step of 1kpb. Reasonable for large genomes
 "skip_pretext_100k_10k_tracks": False  # set True to skip injection to the pretext maps of tracks with window size of 100kbp and step of 10kbp.
-"skip_pretext_1000k_100k_tracks": True  # set True to skip injection to the pretext maps of tracks with window size of 1000kbp and step of 100kbp. Reasonable for small genomes
+"skip_pretext_1000k_100k_tracks": False  # set True to skip injection to the pretext maps of tracks with window size of 1000kbp and step of 100kbp. Reasonable for small genomes
 "skip_pretext_coverage_tracks": False   # set True to skip injection to the pretext maps of all coverage tracks
 
 "skip_hic_for_combined_haplotype": True    # set False to generate .hic file for combined/reordered haplotype

@@ -100,23 +100,20 @@ if kmer_dir_path.exists():
 
         backup_kmer_datatype_path = backup_dir_path / "kmer/" / kmer_datatype / "final/"
         os.makedirs(backup_kmer_datatype_path, exist_ok=True)
-        print(filtered_kmer_dir_path)
         histo_file_path = list(filtered_kmer_dir_path.glob("*.histo"))
-        print(histo_file_path)
         if histo_file_path:
             histo_file_path = histo_file_path[0]
             print(f"\tCopying {histo_file_path}...")
             os.system(f"cp -rL {histo_file_path} {backup_kmer_datatype_path}")
 
         genomescope_dir_path = list(filtered_kmer_dir_path.glob("genomescope"))
-        print(genomescope_dir_path)
         if genomescope_dir_path:
             genomescope_dir_path = genomescope_dir_path[0]
             print(f"\tCopying {genomescope_dir_path}...")
             os.system(f"cp -rL {genomescope_dir_path} {backup_kmer_datatype_path}")
 else:
     print("\tKmer data not found, skipping...")
-"""
+
 # backup contamination scan
 print("Backuping contamination scan data...")
 contamination_scan_dir_path = results_dir_path / "contamination_scan/kraken2/"
@@ -158,4 +155,3 @@ for stage in "draft_qc", "gap_closing", "ref_scaffolding":
     backup_stage_files(stage, results_dir_path, backup_dir_path,
                     ["*.fasta", ".fai", "*.bed", "*.bedgraph", "*.len", "*.assembly", "*.agp", "*.ids", "telomere", "*.png", "*.svg", "*.tab.gz"])
 
-"""

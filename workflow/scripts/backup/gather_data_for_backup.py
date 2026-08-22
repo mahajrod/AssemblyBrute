@@ -72,7 +72,6 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-r", "--results_dir", action="store", dest="results_dir", required=True,
                     help="Directory containing results of the pipeline")
 
-
 args = parser.parse_args()
 
 results_dir_path = Path(args.results_dir)

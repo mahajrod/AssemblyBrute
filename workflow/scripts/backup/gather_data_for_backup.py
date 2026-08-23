@@ -32,10 +32,20 @@ def backup_stage_files(stage_name, results_path, backup_path, file_pattern_list)
                 for common_dir in "assembly_qc", "wga":
                     common_dir_path = stage_option_dir_path / common_dir
                     if common_dir_path.exists():
-                        backup_common_dir_stage_option_dir_path = backup_stage_option_dir_path / "assembly_qc/"
-                        os.makedirs(backup_common_dir_stage_option_dir_path, exist_ok=True)
-                        print(f"\t\tCopying {common_dir_path}/ ...")
-                        os.system(f"cp -rL {common_dir_path} {backup_common_dir_stage_option_dir_path}")
+                        if common_dir in ["assembly_qc",]:
+                            backup_assembly_qc_option_dir_path = backup_stage_option_dir_path / "assembly_qc/"
+                            os.makedirs(backup_assembly_qc_option_dir_path, exist_ok=True)
+                            for assembly_qc_dir_path in common_dir_path.glob(f"*"):
+
+                                print(f"\t\tCopying {assembly_qc_dir_path}/ ...")
+                                os.system(f"cp -rL {assembly_qc_dir_path} {backup_assembly_qc_option_dir_path}")
+                                if assembly_qc_dir_path == "merqury":
+                                    os.system(f"rm -r {backup_assembly_qc_option_dir_path}/assembly_qc/merqury/*/*.meryl")
+                        else:
+                        #backup_common_dir_stage_option_dir_path = backup_stage_option_dir_path / "assembly_qc/"
+                        #os.makedirs(backup_common_dir_stage_option_dir_path, exist_ok=True)
+                            print(f"\t\tCopying {common_dir_path}/ ...")
+                            os.system(f"cp -rL {common_dir_path} {backup_stage_option_dir_path}")
 
                 for hap_pattern in ".hap*", ".reordered", ".combined":
                     for hap_dir_path in stage_option_dir_path.glob(f"*{hap_pattern}"):
@@ -50,6 +60,8 @@ def backup_stage_files(stage_name, results_path, backup_path, file_pattern_list)
                                 backup_analysis_dir_path = backup_hap_dir_path / analysis_dir_name
                                 if analysis_dir_name == "alignment": # maybe do a selective copying in future
                                     os.system(f"cp -rL {analysis_dir_path} {backup_analysis_dir_path}")
+                                elif analysis_dir_name in ["kmer", "reads"]:
+                                    continue
                                 else:
                                     os.system(f"cp -rL {analysis_dir_path} {backup_analysis_dir_path}")
 

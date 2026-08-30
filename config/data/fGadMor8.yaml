@@ -26,7 +26,7 @@
 "parameter_set": "normal"
 
 #---- Data ----
-"input_datatypes": "hifi,hic,illumina"
+"input_datatypes": "hifi,illumina,hic"
 "data_filtering":
     - "hifi"
     - "hic"
@@ -59,10 +59,10 @@
     - "read_contamination_scan" # TODO: test after refactoring
     #- "draft_qc"         # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
     - "contig"            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
-    #- "polishing"        # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
-    #- "dedup"             # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing for hapsolo
-    #- "hic_alignment"     # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
-    #- "hic_scaffolding"   # MUST FOLLOW hic_alignment stage
+    - "polishing"        # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
+    - "dedup"             # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing for hapsolo
+    - "hic_alignment"     # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
+    - "hic_scaffolding"   # MUST FOLLOW hic_alignment stage
     #- "ref_scaffolding"   # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing , at moment it requires telomere detection
     #- "gap_closing"      # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
     #- "read_phasing" # this is an attached stage, it is attached to the stage set by "phasing_stage" parameter. However, if phased reads are required for any other stage, the corresponding rules will be called automatically. Uncomment it only if you need to get phased reads for all suitable datatypes.
@@ -87,7 +87,8 @@
     "polishing":
         - "nextpolish2"
     "dedup":
-        - "hapsolo"
+        #- "hapsolo"
+        - "combo_purge"
         #- "purge_dups"
     "gap_closing":
         - "samba"
@@ -97,10 +98,10 @@
 "coretool_option_sets":
     "hifiasm":
          #- "l0"
-         - "l1"
+         #- "l1"
          #- "l2"
          #- "l3"
-         #- "l1_no_hic"
+         - "l1_no_hic"
          #- "l1_3p"
          #- "l1_no_ul"
          #- "l1_main_nano_only"
@@ -134,8 +135,8 @@
     "cifi":
         - "def"
     "yahs":
-        - "phased" # use phased reads
-        #- "unphased" # use unphased reads
+        #- "phased" # use phased reads
+        - "unphased" # use unphased reads
     "threeddna":
         - "phased" # use phased reads
         #- "unphased" # use unphased reads
@@ -145,6 +146,11 @@
     "hapsolo":
         - "def"
         #- "skip" # TODO: not implemented yet
+    "combo_purge":
+        #- "hifi"
+        #- "nano"
+        - "hifi_keep_hicov"
+        #- "nano_keep_hicov"
     "draft_qc":
         - "def"
     "samba":
@@ -161,7 +167,7 @@
         "upper_threshold": null #
     "genome_assemblers":
         "coverage_estimator": null
-        "lambda": 41
+        "lambda": 40
     "krater":
         "use_second_peak": null
         "low_limit": null
@@ -184,11 +190,11 @@
     #    6 - quast, merqury, wga, assembly-based tracks, ragtag_qc, read-based and other tracks, busco, purge_dups_qc
     #    7 - quast, merqury, wga, assembly-based tracks, ragtag_qc, read-based and other tracks, busco, purge_dups_qc, pretext map, higlass mcool, .hic for combined haplotype
     "draft_qc":        0
-    "contig":          5
+    "contig":          7
     "dedup":           5
     "hic_alignment":   0 # keep it always 0, as this stage uses fastas from the previous stage. changing it to a higher value will trigger unnecessary calculations
     "hic_scaffolding": 7
-    "polishing":       5
+    "polishing":      5
     "ref_scaffolding": 0
     "gap_closing":     0
 
@@ -196,9 +202,9 @@
     "windows_sets":
         #- "w1000k.s1000k"
         - "w1000k.s100k"
-        #- "w100k.s100k"
         - "w100k.s10k"
-        #- "w10k.s10k"
+        #- "w100k.s10k"
+        - "w10k.s1k"
     "reference_scaffold_sets":
         # Thresholds for scaffolds are set in core config, "select_scaffolds". Values below are from "default" parameter set
         - "custom" # scaffolds are selected by the reference's whitelist
@@ -220,12 +226,14 @@
 
 "ploidy": 2
 
-"genome_prefix": "fGadMor5"
+"genome_prefix": "fGadMor8.1"
 "busco_lineage_list":
     - "actinopterygii_odb12"
+    - "vertebrata_odb12"
 
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
-#                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
+#                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10,
+#                           actinopterygii_odb12, vertebrata_odb12
 "telomere_motif": "CCCTAA"  # telomere motif at 5'-end; CCCTAA for human, place null if unknown
 "use_canonical_telomere": True # TODO: this parameter is used by ragtag in ref_scaffolding stage move it to manually adjusted features
 "species_name": "Gadus morhua"
@@ -301,10 +309,10 @@
 "skip_pretext": False                   # set True to completely skip all pretext related qc
 "skip_pretext_10k_1k_tracks": False     # set True to skip injection to the pretext maps of tracks with window size of 10 kpb and step of 1kpb. Reasonable for large genomes
 "skip_pretext_100k_10k_tracks": False  # set True to skip injection to the pretext maps of tracks with window size of 100kbp and step of 10kbp.
-"skip_pretext_1000k_100k_tracks": True  # set True to skip injection to the pretext maps of tracks with window size of 1000kbp and step of 100kbp. Reasonable for small genomes
+"skip_pretext_1000k_100k_tracks": False  # set True to skip injection to the pretext maps of tracks with window size of 1000kbp and step of 100kbp. Reasonable for small genomes
 "skip_pretext_coverage_tracks": False   # set True to skip injection to the pretext maps of all coverage tracks
 
-"skip_hic_for_combined_haplotype": True   # set False to generate .hic file for combined/reordered haplotype
+"skip_hic_for_combined_haplotype": True    # set False to generate .hic file for combined/reordered haplotype
 "skip_yahs_hic_file": True           # set False to generate .hic file for yahs assemblies
 "skip_higlass_mcool": True             # set False to generate mcool file (analog of pretext map/hic, multiple resolutions) for HiGlass
 

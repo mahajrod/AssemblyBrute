@@ -274,7 +274,7 @@
 "skip_porechop_abi": True # set False if your nanopore data was not adapter trimmed. Usually, if basecalling was done using Dorado, adapters are already trimmed
 #----
 #---- Kmer qc skips ----
-"skip_per_lib_genome_estimation": True # change to False if you need per read library genome size estimation. It can be helpful for data origin check, but usually you don't need it
+"skip_per_lib_genome_estimation": False # change to False if you need per read library genome size estimation. It can be helpful for data origin check, but usually you don't need it
 "skip_hic_genomescope": True # change to False if you wish to get genome size estimates from HiC data
 #----
 #---- FCS filtering skips ----

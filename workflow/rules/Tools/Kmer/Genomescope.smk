@@ -1,4 +1,4 @@
-localrules: parse_genomescope_output
+localrules: parse_genomescope_output, parse_genomescope_output_per_lib
 
 def get_starting_lambda(wildcards):
     if "genomescope" in config["tool_manually_adjusted_features"]:

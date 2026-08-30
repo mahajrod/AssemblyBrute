@@ -135,8 +135,8 @@
     "cifi":
         - "def"
     "yahs":
-        - "phased" # use phased reads
-        #- "unphased" # use unphased reads
+        #- "phased" # use phased reads
+        - "unphased" # use unphased reads
     "threeddna":
         - "phased" # use phased reads
         #- "unphased" # use unphased reads

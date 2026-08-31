@@ -13,5 +13,6 @@
   - "merqury"
   - "yak"
   - "krater"
+  - "fastk"
   - pip:
       - "distinctipy"

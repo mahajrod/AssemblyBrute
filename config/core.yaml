@@ -1535,7 +1535,7 @@
                 "default":
                     "min_target_len":
                         - 1000
-                        - 10000
+                        #- 10000
             "deepvariant":
                 "default":
                     "illumina":

@@ -673,6 +673,18 @@ class Stage:
                                        kmer_tool=[kmer_tool,],
                                        kmer_length=parameters["tool_options"][kmer_tool][datatype]["kmer_length"],
                                      )]
+                if "kmer_ploidy_test_list" in self.config:
+                    if self.config["kmer_ploidy_test_list"]:
+                        results_list += [expand(self.config["out_dir"] / "kmer/{datatype}/{stage}/{analysis_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.p{ploidy}.{analysis_tool}.parameters",
+                                        datatype=[datatype,],
+                                        genome_prefix=[self.config["genome_prefix"], ],
+                                        ploidy=self.config["kmer_ploidy_test_list"],
+                                        analysis_tool=["genomescope"],
+                                        stage=[stage,],
+                                        kmer_tool=[kmer_tool,],
+                                        kmer_length=parameters["tool_options"][kmer_tool][datatype]["kmer_length"],
+                                        )]
+
 
             if not self.config["skip_per_lib_genome_estimation"]: # per lib estimation is possible only for meryl kmer counter, as other for other kmer counter per-lib databases are not calculated
                 kmer_tool = "meryl"

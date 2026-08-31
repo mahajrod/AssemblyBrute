@@ -58,6 +58,21 @@ rule genomescope:
          " genomescope2 {params.start_shift} {params.starting_lambda} -i {input.histo} -p {params.ploidy} -k {wildcards.kmer_length}  "
          "     -n {params.genome_name} --fitted_hist  --testing  -o ${{OUT_DIR}} > {log.std} 2>&1" # -m {params.max_coverage}
 
+use rule genomescope as genomescope_ploidy_test with:
+    output:
+        summary="{db_dir}/genomescope/{datatype}.{stage}.{kmer_length}.{kmer_tool}@p{ploidy}/%s_summary.txt" % config["genome_prefix"],
+        model="{db_dir}/genomescope/{datatype}.{stage}.{kmer_length}.{kmer_tool}@p{ploidy}/%s_model.txt" % config["genome_prefix"],
+    params:
+        ploidy=lambda wildcards: wildcards.ploidy,
+        genome_name=config["genome_prefix"],
+        start_shift=get_start_shift,
+        starting_lambda=get_starting_lambda
+    log:
+        std="{db_dir}/log/genomescope_ploidy_test.{datatype}.{stage}.{kmer_length}.{kmer_tool}.p{ploidy}.log",
+        cluster_log="{db_dir}/log/genomescope_ploidy_test.{datatype}.{stage}.{kmer_length}.{kmer_tool}.p{ploidy}.cluster.log",
+        cluster_err="{db_dir}/log/genomescope_ploidy_test.{datatype}.{stage}.{kmer_length}.{kmer_tool}.p{ploidy}.cluster.err"
+    benchmark:
+        "{db_dir}/log/genomescope_ploidy_test.{datatype}.{stage}.{kmer_length}.{kmer_tool}.p{ploidy}.benchmark.txt"
 
 use rule genomescope as genomescope_per_lib with:
     input:
@@ -115,3 +130,17 @@ use rule parse_genomescope_output as parse_genomescope_output_per_lib with:
         cluster_err="{db_dir}/log/parse_genomescope_output.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{read_prefix}.cluster.err"
     benchmark:
         "{db_dir}/log/parse_genomescope_output.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{read_prefix}.benchmark.txt"
+
+use rule parse_genomescope_output as parse_genomescope_output_ploidy_test with:
+    input:
+        summary=rules.genomescope_ploidy_test.output.summary,
+        model=rules.genomescope_ploidy_test.output.model,
+        log="{db_dir}/log/"
+    output:
+        "{db_dir}/genomescope/%s.{datatype}.{stage}.{kmer_length}.{kmer_tool}.p{ploidy}.genomescope.parameters"  % config["genome_prefix"]
+    log:
+        std="{db_dir}/log/parse_genomescope_output.{datatype}.{stage}.{kmer_length}.{kmer_tool}.p{ploidy}.log",
+        cluster_log="{db_dir}/log/parse_genomescope_output.{datatype}.{stage}.{kmer_length}.{kmer_tool}.p{ploidy}.cluster.log",
+        cluster_err="{db_dir}/log/parse_genomescope_output.{datatype}.{stage}.{kmer_length}.{kmer_tool}.p{ploidy}.cluster.err"
+    benchmark:
+        "{db_dir}/log/parse_genomescope_output.{datatype}.{stage}.{kmer_length}.{kmer_tool}.p{ploidy}.benchmark.txt"

@@ -304,7 +304,7 @@ elif len(candidate_agp_filename) == 1:
     for curation_unit in chr_component_series.index.unique():
         brute_logger.info(TAB + f"- {curation_unit}:")
         for scaffold_id in chr_component_series[curation_unit]:
-            brute_logger.info(TAB * 2 + "- " + scaffold_id)
+            brute_logger.dbg_scr(TAB * 2 + "- " + scaffold_id)
         chr_component_series[[curation_unit]].to_csv(f"{candidate_output_prefix}.{curation_unit}.components.ids",sep="\t",header=False,index=False)
         chr_black_list_series = chr_component_series[~chr_component_series.isin(chr_component_series[[curation_unit]])]
         chr_black_list_series.to_csv(f"{candidate_output_prefix}.{curation_unit}.pretext.blacklist",sep="\t",header=False,index=False)

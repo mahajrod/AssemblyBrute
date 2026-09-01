@@ -284,7 +284,7 @@ elif len(candidate_agp_filename) == 1:
     brute_logger.info("Detected AGP file with curation units:")
     brute_logger.info(TAB + str(candidate_agp_filename))
 
-    candidate_output_dir = config["out_dict"]["data"] / "candidate_chr/"
+    candidate_output_dir = config["out_dir"] / "data/candidate_chr/"
     if not candidate_output_dir.exists():
         os.system(f" mkdir -p {str(candidate_output_dir)}")
     candidate_output_prefix = candidate_output_dir / "candidate"

@@ -1,0 +1,334 @@
+#---- Main config file ----
+"main_config_file": "config/core.yaml"      # Path to main config file relative to Snakefile
+#--------------------------
+#---- Resource profile ----
+"resource_profile": "high"      # Should be present in resource directory
+#--------------------------
+#---- Conda settings ----
+"use_existing_envs": True # works only if --use-conda flag was set in snakemake command
+#----
+#---- Container settings ----
+"singularity_load_mode": "cluster" # Allowed: "cluster" or "conda". Set to conda to use singularity installed via conda. Sometimes doesn't work due to namespace issues due to cluster settings
+"singularity_load_str": "module load singularity " # add version if necessary. Ignored if singularity_load_mode != "cluster"
+"singularity_load_env": "common" # conda env to use if singularity_load_mode == "cluster"
+#----
+# "parameter_set":
+# Choice of genome-size based set of parameters: threads, memory, running time and other tool options.
+# Allowed:
+#    - 'micro'  < 15 Mbp
+#    - 'mini'   < 150 Mbp
+#    - 'small'  < 500 Mbp, drosophilla, tetraodon, many other small fish
+#    - 'normal' < 1500 Mbp, most of the birds
+#    - 'big'    < 2500 Mbp, most of the mammals
+#    - 'large'  < 5000 Mbp, human
+#    - 'giant'  < 15000 Mbp, large plant, shark, amphibian genomes
+#    - 'titan'  > 15000 Mbp, large plant genomes, pine trees, never tested
+"parameter_set": "normal"
+
+#---- Data ----
+"input_datatypes": "hifi,hic,reference"
+"data_filtering":
+    - "hifi"
+    - "hic"
+    - "illumina"
+    - "nanopore"
+
+"assembly_kmer_length":
+    - 31 # kmer length to be used for phasing hic reads using assembled and purge_dupsed contigs
+"phasing_stage": "contig"
+#-------- Options specific for starting point 'draft' ----------------
+"phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads # TODO: check if it is obsolete
+#---------------------------------------------------------------------
+
+"final_kmer_counter": "meryl" # pipeline allows usage of different kmer counter external_tools, but only one genomesize assessment could be used
+"final_kmer_length": 21 # pipeline allows usage of different kmer length, but only one genomesize assessment could be used
+
+"final_kmer_datatypes":
+    - "hifi"
+    #- "illumina"
+
+#----
+#---- Stage settings ----
+"stage_list": # 'draft_qc' and 'contig' are mutually exclusive stages
+    #- "raw_read_qc" # comment this stage if you wish to skip quality control of the raw data
+    #- "raw_kmer_qc" # runs kmer counting and genome size estimation from raw reads. Usually you don't need it
+    - "filter_reads" #
+    - "filtered_read_qc"
+    - "kmer_qc"
+    #- "mtdna"
+    - "read_contamination_scan" # TODO: test after refactoring
+    #- "draft_qc"         # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
+    - "contig"            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
+    #- "polishing"        # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
+    #- "dedup"             # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing for hapsolo
+    - "hic_alignment"     # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
+    - "hic_scaffolding"   # MUST FOLLOW hic_alignment stage
+    #- "ref_scaffolding"   # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing , at moment it requires telomere detection
+    #- "gap_closing"      # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
+    #- "read_phasing" # this is an attached stage, it is attached to the stage set by "phasing_stage" parameter. However, if phased reads are required for any other stage, the corresponding rules will be called automatically. Uncomment it only if you need to get phased reads for all suitable datatypes.
+
+"stage_coretools":
+    "contig": # Allowed: "hifiasm". TODO: "nextdenovo"
+        - "hifiasm"
+        #- "flye"
+        #- "nextdenovo" #TODO: implement
+    "hic_alignment":
+        - "arima"
+        #- "bwa_only"
+        #- "pairtools"
+        #- "juicer"
+        #- "pore-c"
+        #- "cifi"
+    "hic_scaffolding": # Allowed: "yahs", "3d-dna"
+        - "yahs"
+        #- "threeddna"
+    "ref_scaffolding":
+        - "ragtag"
+    "polishing":
+        - "nextpolish2"
+    "dedup":
+        - "hapsolo"
+        #- "purge_dups"
+    "gap_closing":
+        - "samba"
+    "draft_qc":
+        - "draft_qc"
+
+"coretool_option_sets":
+    "hifiasm":
+         #- "l0"
+         - "l1"
+         #- "l2"
+         #- "l3"
+         #- "l1_no_hic"
+         #- "l1_3p"
+         #- "l1_no_ul"
+         #- "l1_main_nano_only"
+         #- "rep_enh_l1"
+         #- "rep_enh_l2"
+    "flye":
+        - "hifi"
+        #- "hifi_keep_hap"
+        #- "hifi_keep_hap_scaf"
+        #- "hifi_no_alt_contigs"
+        #- "hifi_no_alt_contigs_scaf"
+        #- "hifi_scaff"
+        #- "old_nano"
+        #- "nano_corr"
+        #- "nano_hq"
+    "purge_dups":
+        - "hifi"
+        #- "nano"
+        #- "hifi_keep_hicov"
+        #- "nano_keep_hicov"
+    "arima":
+        - "def"
+    "bwa_only":
+        - "def"
+    "pairtools":
+        - "def"
+    "juicer":
+        - "def"
+    "pore-c":
+        - "def"
+    "cifi":
+        - "def"
+    "yahs":
+        - "phased" # use phased reads
+        #- "unphased" # use unphased reads
+    "threeddna":
+        - "phased" # use phased reads
+        #- "unphased" # use unphased reads
+    "nextpolish2":
+        - "def"
+        #- "skip" # TODO: not implemented yet
+    "hapsolo":
+        - "def"
+        #- "skip" # TODO: not implemented yet
+    "draft_qc":
+        - "def"
+    "samba":
+        - "phased" # use phased reads
+        #- "unphased" # use unphased reads
+
+"other_tool_option_sets": # Options set here overwrite settings from "secondary_tool_config_file". Check it for configurable option list
+    "kmer_qc":                  "default"
+
+"tool_manually_adjusted_features":
+    "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions
+        "lower_threshold": null #
+        "haploid_diploid_threshold": null #
+        "upper_threshold": null #
+    "genome_assemblers":
+        "coverage_estimator": null
+        "lambda": null
+    "krater":
+        "use_second_peak": null
+        "low_limit": null
+        "high_limit": null
+    "genomescope":
+        "starting_lambda": null
+        "start_shift": null
+    "hapsolo":
+        "busco_lineage_list":
+            - "actinopterygii_odb12"
+
+"assembly_qc_level": # wga, pretext map not refactored yet
+    # Allowed levels:
+    #    0 - no qc at all,
+    #    1 - quast only,
+    #    2 - quast and merqury,
+    #    3 - quast, merqury, assembly-based tracks # TODO: add hapsolo_qc
+    #    4 - quast, merqury, wga, assembly-based tracks, ragtag_qc
+    #    5 - quast, merqury, wga, assembly-based tracks, ragtag_qc, busco
+    #    6 - quast, merqury, wga, assembly-based tracks, ragtag_qc, read-based and other tracks, busco, purge_dups_qc
+    #    7 - quast, merqury, wga, assembly-based tracks, ragtag_qc, read-based and other tracks, busco, purge_dups_qc, pretext map, higlass mcool, .hic for combined haplotype
+    "draft_qc":        0
+    "contig":          5
+    "dedup":           5
+    "hic_alignment":   0 # keep it always 0, as this stage uses fastas from the previous stage. changing it to a higher value will trigger unnecessary calculations
+    "hic_scaffolding": 7
+    "polishing":      5
+    "ref_scaffolding": 0
+    "gap_closing":     0
+
+"qc_settings":
+    "windows_sets":
+        #- "w1000k.s1000k"
+        - "w1000k.s100k"
+        #- "w100k.s100k"
+        - "w100k.s10k"
+        #- "w10k.s10k"
+    "reference_scaffold_sets":
+        # Thresholds for scaffolds are set in core config, "select_scaffolds". Values below are from "default" parameter set
+        - "custom" # scaffolds are selected by the reference's whitelist
+        #- "long"         # "max_scaffolds": 200, "max_len": null,  "min_len": 1000000
+        #- "middle"       # "max_scaffolds": 200, "max_len": 40000000, "min_len": 1000000
+        #- "short"         # "max_scaffolds": 200, "max_len": 10000000, "min_len": 1000000
+        #- "very_short"    # "max_scaffolds": 200, "max_len": 5000000, "min_len": 100000
+        #- "micro"         # "max_scaffolds": 200, "max_len": 1000000, "min_len": 100000
+    "assembly_scaffold_sets":
+        # Thresholds for scaffolds are set in core config, "select_scaffolds". Values below are from "default" parameter set
+        - "long"         # "max_scaffolds": 200, "max_len": null,  "min_len": 1000000
+        #- "middle"       # "max_scaffolds": 200, "max_len": 40000000, "min_len": 1000000
+        #- "short"         # "max_scaffolds": 200, "max_len": 10000000, "min_len": 1000000
+        #- "very_short"    # "max_scaffolds": 200, "max_len": 5000000, "min_len": 100000
+        #- "micro"         # "max_scaffolds": 200, "max_len": 1000000, "min_len": 100000
+    "threshold_types":
+        - "absolute"
+        - "relative"
+
+"ploidy": 2
+
+"genome_prefix": "fSynPic1.2"
+"busco_lineage_list":
+    - "actinopterygii_odb12"
+    - "vertebrata_odb10"
+    - "vertebrata_odb12"
+
+#Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
+#                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
+"telomere_motif": "CCCTAA"  # telomere motif at 5'-end; CCCTAA for human, place null if unknown
+"use_canonical_telomere": True # TODO: this parameter is used by ragtag in ref_scaffolding stage move it to manually adjusted features
+"species_name": "Synchiropus picturatus"
+"tax_id": 586865 # # necessary for contamination scan via FCS
+"microchromosomes": False
+
+"kingdom": "animal"  # "animal", "plant" or "fungi"
+"mitoz_clade": "Chordata" # Set to 'null', if non animal genome. Allowed: {Chordata,Arthropoda,Echinodermata,Annelida-segmented-worms,Bryozoa,Mollusca,Nematoda,Nemertea-ribbon-worms,Porifera-sponges}
+"mtdna_genetic_code":  2 # Organism genetic code should be one from the NCBI table:
+                         #  1. The Standard Code
+                         #  2. The Vertebrate MitochondrialCode
+                         #  3.  The Yeast Mitochondrial Code
+                         #  4.  The Mold,Protozoan, and Coelenterate Mitochondrial Code and the Mycoplasma/Spiroplasma Code
+                         #  5.  The Invertebrate Mitochondrial Code
+                         #  6.  The Ciliate, Dasycladacean and Hexamita Nuclear Code
+                         #  9.  The Echinoderm and Flatworm Mitochondrial Code
+                         # 10. The Euplotid Nuclear Code
+                         # 11. The Bacterial, Archaeal and Plant Plastid Code
+                         # 12. The Alternative Yeast Nuclear Code
+                         # 13. The Ascidian Mitochondrial Code
+                         # 14. The Alternative Flatworm Mitochondrial Code
+                         # 16. Chlorophycean Mitochondrial Code
+                         # 21. Trematode Mitochondrial Code
+                         # 22. Scenedesmus obliquus Mitochondrial Code
+                         # 23. Thraustochytrium Mitochondrial Code
+                         # 24. Pterobranchia Mitochondrial Code
+                         # 25. Candidate Division SR1 and Gracilibacteria Code
+
+"database_set":
+    "kraken2":
+        - "nt"                      # configure corresponding entry in "allowed_databases"
+    "fcs_adaptor":
+        - "adaptor"
+    "fcs":
+        - "fcs_gx"
+
+#"contig_datatype": "hifi"
+"gap_closing_datatype": "hifi"
+"hic_enzyme_set": "Arima"
+"custom_enzyme_set": null # None
+"custom_enzyme_set_is_no_motif": False
+
+
+#---- Commonly used skips ----
+#---- Read filtering skips ----
+"skip_porechop_abi": True # set False if your nanopore data was not adapter trimmed. Usually, if basecalling was done using Dorado, adapters are already trimmed
+#----
+#---- Kmer qc skips ----
+"skip_per_lib_genome_estimation": True # change to False if you need per read library genome size estimation. It can be helpful for data origin check, but usually you don't need it
+"skip_hic_genomescope": True # change to False if you wish to get genome size estimates from HiC data
+#----
+#---- FCS filtering skips ----
+"skip_fcs": False # set True to skip FCS filtering of the contig assembly. However, usually you wish  it to be done
+"skip_fcs_adaptor": False
+#----
+#---- Assembly QC skips
+"skip_busco": False              # set True, to skip BUSCO runs to speedup evaluation of the assemblies
+
+"skip_kmer_gcp": True                  # set False to produce kmer GC plots # TODO: issues with draw_gc_plot.py script from KrATER, fix it
+"skip_kmer_smudgeplot": True           # set False to produce Smudgeplot. Keep in mind that it is an old tool and consumes enormous amount of memory (> 1Tb) even for 500 Mbp genomes # TODO: issues with rules, fix it
+"skip_assembly_tracks": False         # set True to skip all assembly-related tracks, except telomere (it is controlled by a different option)
+
+"skip_telomere": False           # set True to skip all telomere-related analysis
+"skip_telomere_container": False  # set True to skip run of telomere container
+"skip_telomere_tidk": False      # set True to skip TIDK search for telomere
+
+"skip_repeats": False            # set True to skip all telomere-related analysis
+"skip_windowmasker": False       # set True to skip all telomere-related analysis
+"skip_trf": False                # set True to skip all telomere-related analysis. Sometimes TRF hangs or crushes. Set True in such a case
+
+"skip_coverage_tracks": False             # set True to skip coverage tracks
+
+"skip_pretext": False                   # set True to completely skip all pretext related qc
+"skip_pretext_10k_1k_tracks": False     # set True to skip injection to the pretext maps of tracks with window size of 10 kpb and step of 1kpb. Reasonable for large genomes
+"skip_pretext_100k_10k_tracks": False  # set True to skip injection to the pretext maps of tracks with window size of 100kbp and step of 10kbp.
+"skip_pretext_1000k_100k_tracks": True  # set True to skip injection to the pretext maps of tracks with window size of 1000kbp and step of 100kbp. Reasonable for small genomes
+"skip_pretext_coverage_tracks": False   # set True to skip injection to the pretext maps of all coverage tracks
+
+"skip_hic_for_combined_haplotype": True    # set False to generate .hic file for combined/reordered haplotype
+"skip_yahs_hic_file": True           # set False to generate .hic file for yahs assemblies
+"skip_higlass_mcool": True             # set False to generate mcool file (analog of pretext map/hic, multiple resolutions) for HiGlass
+
+"skip_wga": False                       # set True to skip quick (and dirty) whole genome alignments for haplotypes and reference for all stage
+"skip_draft_qc_wga": False              # set True to skip wga for draft_qc stage only
+"skip_contig_wga": False                # set True to skip wga for contig stage only
+"skip_dedup_wga": False                 # set True to skip wga for dedup stage only
+"skip_polishing_wga": False             # set True to skip wga for polishing stage only
+"skip_hic_scaffolding_wga": False       # set True to skip wga for hic_scaffolding stage only
+"skip_gap_closing_wga": False           # set True to skip wga for gap_closing stage only
+
+"skip_purge_dups_qc": False
+
+"skip_ragtag_qc": False
+#----
+#---- mtDNA ----
+"skip_mitohifi_reads": False
+"skip_mitohifi_reads_per_file": True
+"skip_mitohifi_reads_combined": False
+"skip_mitohifi_assembly": False
+
+"skip_mitoz": False
+"skip_mitoz_hic": True
+"skip_mitoz_illumina": False
+#----

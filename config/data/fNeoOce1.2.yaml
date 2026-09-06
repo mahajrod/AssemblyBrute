@@ -161,7 +161,13 @@
         "upper_threshold": null #
     "genome_assemblers":
         "coverage_estimator": null
-        "lambda": null
+        "lambda":
+            "p1": null
+            "p2": null
+            "p3": null
+            "p4": null
+            "p5": null
+            "p6": null
     "krater":
         "use_second_peak": null
         "low_limit": null

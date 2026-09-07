@@ -145,9 +145,13 @@ rule hifiasm_hic_2p:
          "     ln -sf ../../../{input.ovlp_reverse_bin} ${{OUT_DIR}} 1>>{log.std} 2>&1; "
          "     ln -sf ../../../{input.ovlp_source_bin} ${{OUT_DIR}} 1>>{log.std} 2>&1; "
          "     fi; "
-         " LAMBDA=`head -n 1 {input.lambda_file}` 1>>{log.std} 2>&1;  "
-         " COV_UPPER_BOUNDARY=`echo \"{params.cov_multiplicator}*${{LAMBDA}}\" | bc` >>{log.std} 2>&1;  "
+         " COV_UPPER_BOUNDARY=`echo \"{params.cov_multiplicator}*{params.ploidy}*${{LAMBDA}}\" | bc` >>{log.std} 2>&1;  "
          " COV_UPPER_BOUNDARY=${{COV_UPPER_BOUNDARY%.*}}; "
+         " LAMBDA=`head -n 1 {input.lambda_file}` 1>>{log.std} 2>&1;  "
+         " echo -e \"Lambda\t${{LAMBDA}}\"; "
+         " echo -e \"Assembly ploidy\t{params.ploidy}\"; "
+         " echo -e \"Coverage multiplicator\t{params.cov_multiplicator}\"; "
+         " echo -e \"Coverage deduplication upper threshold\t${{COV_UPPER_BOUNDARY}}\"; "
          " hifiasm {params.window_size} {params.bloom_filter_bits} {params.ont_assembly} "
          "     {params.rounds_of_error_correction} {params.length_of_adapters} {params.max_kocc} {params.hg_size}"
          "     {params.kmer_length} {params.D} {params.N} {params.ignore_bin} {params.sim_threshold_for_hapdup_reads} "
@@ -189,6 +193,29 @@ use rule hifiasm_hic_2p as hifiasm_hic_6p with:
         hap4_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap4.p_ctg.gfa",
         hap5_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap5.p_ctg.gfa",
         hap6_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap6.p_ctg.gfa",
+        alt_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.a_ctg.gfa",
+
+use rule hifiasm_hic_2p as hifiasm_hic_7p with:
+    output:
+        hap1_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap1.p_ctg.gfa",
+        hap2_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap2.p_ctg.gfa",
+        hap3_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap3.p_ctg.gfa",
+        hap4_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap4.p_ctg.gfa",
+        hap5_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap5.p_ctg.gfa",
+        hap6_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap6.p_ctg.gfa",
+        hap7_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap7.p_ctg.gfa",
+        alt_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.a_ctg.gfa",
+
+use rule hifiasm_hic_2p as hifiasm_hic_8p with:
+    output:
+        hap1_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap1.p_ctg.gfa",
+        hap2_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap2.p_ctg.gfa",
+        hap3_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap3.p_ctg.gfa",
+        hap4_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap4.p_ctg.gfa",
+        hap5_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap5.p_ctg.gfa",
+        hap6_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap6.p_ctg.gfa",
+        hap7_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap7.p_ctg.gfa",
+        hap8_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap8.p_ctg.gfa",
         alt_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.a_ctg.gfa",
 
 use rule hifiasm_hic_2p as hifiasm_long_reads_only with:

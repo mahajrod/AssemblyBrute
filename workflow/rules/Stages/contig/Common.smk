@@ -24,11 +24,14 @@ def get_coverage_estimator_report_filename(wildcards):
 
     return report_filename
 
+
 rule extract_lambda_value:
     input:
         coverage_estimator_report_filename=get_coverage_estimator_report_filename
     output:
         lambda_file=config["out_dir"]/ "contig/{parameters}/{genome_prefix}.lambda",
+    params:
+        ploidy=lambda wildcards: get_assembly_ploidy(wildcards.parameters)
     log:
         std=config["out_dir"] / "log/extract_lambda_value.{parameters}.{genome_prefix}.log",
         cluster_log=config["out_dir"] / "log/extract_lambda_value.{parameters}.{genome_prefix}.cluster.log",
@@ -50,18 +53,18 @@ rule extract_lambda_value:
                 if "lambda" in config["tool_manually_adjusted_features"]["genome_assemblers"]:
                     if config["tool_manually_adjusted_features"]["genome_assemblers"]["lambda"] is not None:
                         if isinstance(config["tool_manually_adjusted_features"]["genome_assemblers"]["lambda"], Number):
-                            lambda_value = config["tool_manually_adjusted_features"]["genome_assemblers"]["lambda"]
-                            print("Using a preset lambda value ({0}) for contig assembly hifiasm_{1} ...".format(config["tool_manually_adjusted_features"]["genome_assemblers"]["lambda"],
+                            lambda_value = config["tool_manually_adjusted_features"]["genome_assemblers"]["lambda"][f"p{params.ploidy}"]
+                            print("Using a preset lambda value ({0}) for contig assembly {1} ...".format(config["tool_manually_adjusted_features"]["genome_assemblers"]["lambda"][f"p{params.ploidy}"],
                                                                                                                  wildcards.parameters))
-                            log_fd.write("Using the preset lambda value ({0}) for contig assembly hifiasm_{1} ...\n".format(lambda_value,
-                                                                                                                            wildcards.parameters))
+                            log_fd.write("Using the preset lambda value ({0}) for contig assembly {1} ...\n".format(lambda_value,
+                                                                                                                    wildcards.parameters))
 
                             log_fd.write("Report file:\tIgnored\n")
                             log_fd.write("Lambda:\t%.2f\n" % lambda_value)
                             out_fd.write("%.2f\n" % lambda_value)
                             return lambda_value
                         else:
-                            message = "ERROR!!! Preset lambda value is not a number! Check value in contig['tool_manually_adjusted_features']['hifiasm']['lambda'] ..."
+                            message = f'ERROR!!! Preset lambda value is not a number! Check value in config["tool_manually_adjusted_features"]["genome_assemblers"]["lambda"][f"p{params.ploidy}"] ...'
                             log_fd.write(message + "\n")
                             raise ValueError(message)
 

@@ -27,15 +27,11 @@
 
 #---- Data ----
 "input_datatypes": "hifi,hic,reference"
-"data_filtering":
-    - "hifi"
-    - "hic"
-    - "illumina"
-    - "nanopore"
+"data_filtering": []
 
 "assembly_kmer_length":
     - 31 # kmer length to be used for phasing hic reads using assembled and purge_dupsed contigs
-"phasing_stage": "contig"
+"phasing_stage": "draft_qc"
 #-------- Options specific for starting point 'draft' ----------------
 "phasing_kmer_length": 31 # set 'NA' if you wish to use unphased reads # TODO: check if it is obsolete
 #---------------------------------------------------------------------
@@ -52,17 +48,17 @@
 "stage_list": # 'draft_qc' and 'contig' are mutually exclusive stages
     #- "raw_read_qc" # comment this stage if you wish to skip quality control of the raw data
     #- "raw_kmer_qc" # runs kmer counting and genome size estimation from raw reads. Usually you don't need it
-    - "filter_reads" #
-    - "filtered_read_qc"
-    - "kmer_qc"
-    - "mtdna"
+    #- "filter_reads" #
+    #- "filtered_read_qc"
+    #- "kmer_qc"
+    #- "mtdna"
     #- "read_contamination_scan" # TODO: test after refactoring
-    #- "draft_qc"         # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
-    - "contig"            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
+    - "draft_qc"         # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
+    #- "contig"            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
     #- "polishing"        # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
     #- "dedup"             # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing for hapsolo
-    - "hic_alignment"     # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
-    - "hic_scaffolding"   # MUST FOLLOW hic_alignment stage
+    #- "hic_alignment"     # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
+    #- "hic_scaffolding"   # MUST FOLLOW hic_alignment stage
     #- "ref_scaffolding"   # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing , at moment it requires telomere detection
     #- "gap_closing"      # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
     #- "read_phasing" # this is an attached stage, it is attached to the stage set by "phasing_stage" parameter. However, if phased reads are required for any other stage, the corresponding rules will be called automatically. Uncomment it only if you need to get phased reads for all suitable datatypes.
@@ -191,7 +187,7 @@
     #    5 - quast, merqury, wga, assembly-based tracks, ragtag_qc, busco
     #    6 - quast, merqury, wga, assembly-based tracks, ragtag_qc, read-based and other tracks, busco, purge_dups_qc
     #    7 - quast, merqury, wga, assembly-based tracks, ragtag_qc, read-based and other tracks, busco, purge_dups_qc, pretext map, higlass mcool, .hic for combined haplotype
-    "draft_qc":        0
+    "draft_qc":        4
     "contig":          5
     "dedup":           5
     "hic_alignment":   0 # keep it always 0, as this stage uses fastas from the previous stage. changing it to a higher value will trigger unnecessary calculations

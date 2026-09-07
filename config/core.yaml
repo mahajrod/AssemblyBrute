@@ -2872,6 +2872,7 @@
             - "ul-cut"                          # --ul-cut
             - "main_datatypes"
             - "ont_mode"
+            - "assembly_ploidy"                 # --n-hap
         "options_affecting_hic_phasing":
             - "seed"            # --seed
             - "s-base"          # --s-base

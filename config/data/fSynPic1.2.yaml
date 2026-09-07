@@ -55,8 +55,8 @@
     - "filter_reads" #
     - "filtered_read_qc"
     - "kmer_qc"
-    #- "mtdna"
-    #- "read_contamination_scan" # TODO: test after refactoring
+    - "mtdna"
+    - "read_contamination_scan" # TODO: test after refactoring
     #- "draft_qc"         # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
     - "contig"            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
     #- "polishing"        # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
@@ -223,6 +223,7 @@
 "genome_prefix": "fSynPic1.2"
 "busco_lineage_list":
     - "actinopterygii_odb12"
+    - "actinopterygii_odb10"
     - "vertebrata_odb10"
     - "vertebrata_odb12"
 

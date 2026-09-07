@@ -104,8 +104,8 @@ def get_prev_stage_parameters(parameters):
     return "..".join(parameters.split("..")[:-1])
 
 def get_assembly_ploidy(parameters):
-    print(parameters)
-    return int(parameters.split("..")[0].split(["@"])[1][1:])
+    #print(parameters)
+    return int(parameters.split("..")[0].split("@")[1][1:])
 
 def get_relative_path(target: str or Path, link: str or Path):
     link_path = Path(link)

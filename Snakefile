@@ -426,6 +426,7 @@ wildcard_constraints:
     stage="[^/]+",
     assembly_stage="[^/]+",
     kmer_length="[0-9]+",
+    min_kmer_count="[0-9]+",
     kmer_tool="[^.]+",
     meryl_db=".*meryl.*",
     phasing_kmer_length="[^./]+", # can be an int number or 'NA' in case of no phasing
@@ -472,7 +473,7 @@ rule all:
 include: "workflow/rules/General/Log.smk" # DONE
 include: "workflow/rules/General/Links.smk" # DONE
 include: "workflow/rules/Preprocessing/Files.smk" # DONE
-include: "workflow/rules/Preprocessing/Combine.smk" # DONE # TODO: probably not well tested
+include: "workflow/rules/Preprocessing/Combine.smk" # DONE
 include: "workflow/rules/Tools/QCFiltering/FastQC.smk" # DONE
 include: "workflow/rules/Tools/QCFiltering/MultiQC.smk" # DONE
 include: "workflow/rules/Tools/QCFiltering/NanoQC.smk" # DONE
@@ -488,6 +489,7 @@ include: "workflow/rules/Tools/Contamination/Kraken2.smk"  # TODO: refactored, b
 
 include: "workflow/rules/Tools/Kmer/Jellyfish.smk" # DONE
 include: "workflow/rules/Tools/Kmer/Meryl.smk"    # DONE
+include: "workflow/rules/Tools/Kmer/FastK.smk"    #
 include: "workflow/rules/Tools/Kmer/Yak.smk"      # DONE
 include: "workflow/rules/Tools/Kmer/Smudgeplot.smk" # TODO: refactor
 include: "workflow/rules/Tools/Kmer/GCplot.smk"     # TODO: refactor

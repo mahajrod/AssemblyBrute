@@ -9,6 +9,8 @@ chopper	8	8	8	8	8	8	8	8	8
 jellyfish	30	10	20	30	30	40	48	48	48
 meryl	30	10	20	30	40	48	48	48	48
 meryl_extract	10	10	10	10	10	10	10	10	10
+fastk	30	10	20	30	40	40	40	40	40
+fastk_histo	1	1	1	1	1	1	1	1	1
 yak_reads	30	10	20	30	40	40	40	40	40
 gc_count	10	10	10	10	10	10	10	10	10
 gc_plot	1	1	1	1	1	1	1	1	1

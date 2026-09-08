@@ -767,49 +767,41 @@
                             - 21
                             #- 31
                             #- 41 #very RAM hungry option
-                        "min_kmer_count":
-                            - 1
+                        "min_kmer_count": 1
                     "clr":
                         "kmer_length":
                             - 21
-                        "min_kmer_count":
-                            - 1
+                        "min_kmer_count": 1
                     "lqccs":
                         "kmer_length":
                             - 21
-                        "min_kmer_count":
-                            - 1
+                        "min_kmer_count": 1
                     "illumina":
                         "kmer_length":
                             - 21
                             #- 31
                             #- 41 #very RAM hungry option
-                        "min_kmer_count":
-                            - 1
+                        "min_kmer_count": 1
                     "hic":
                         "kmer_length":
                             - 21
-                        "min_kmer_count":
-                            - 1
+                        "min_kmer_count": 1
                     "nanopore":
                         "kmer_length":
                             - 21
                             #- 31
                             #- 41 #very RAM hungry option
-                        "min_kmer_count":
-                            - 1
+                        "min_kmer_count": 1
                     "duplex":
                         "kmer_length":
                             - 21
                             #- 31
                             #- 41 #very RAM hungry option
-                        "min_kmer_count":
-                            - 1
+                        "min_kmer_count": 1
                     "simplex":
                         "kmer_length":
                             - 21
-                        "min_kmer_count":
-                            - 1
+                        "min_kmer_count": 1
                     "ultralong-nanopore":
                         "kmer_length":
                             - 19
@@ -817,8 +809,7 @@
                             #- 15
                             #- 31
                             #- 41 #very RAM hungry option
-                        "min_kmer_count":
-                            - 1
+                        "min_kmer_count": 1
             "select_scaffolds":
                 "default":
                     "long":

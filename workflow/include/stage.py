@@ -746,7 +746,6 @@ class Stage:
                                               min_kmer_count=[4],
                                               )
                                     ]
-        print (results_list)
         return results_list
 
     def request_read_contamination_scan_files(self):

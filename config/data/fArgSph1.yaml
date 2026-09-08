@@ -302,7 +302,7 @@
 "skip_busco": False              # set True, to skip BUSCO runs to speedup evaluation of the assemblies
 
 "skip_kmer_gcp": True                  # set False to produce kmer GC plots # TODO: issues with draw_gc_plot.py script from KrATER, fix it
-"skip_kmer_smudgeplot": True           # set False to produce Smudgeplot. Keep in mind that it is an old tool and consumes enormous amount of memory (> 1Tb) even for 500 Mbp genomes # TODO: issues with rules, fix it
+"skip_kmer_smudgeplot": False           # set False to produce Smudgeplot. Keep in mind that it is an old tool and consumes enormous amount of memory (> 1Tb) even for 500 Mbp genomes # TODO: issues with rules, fix it
 "skip_assembly_tracks": False         # set True to skip all assembly-related tracks, except telomere (it is controlled by a different option)
 
 "skip_telomere": False           # set True to skip all telomere-related analysis

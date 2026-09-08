@@ -483,26 +483,26 @@ include: "workflow/rules/Tools/QCFiltering/TADbit.smk" # DONE
 include: "workflow/rules/Tools/QCFiltering/Cutadapt.smk" # DONE
 include: "workflow/rules/Tools/QCFiltering/HiCTrim.smk" # DONE
 include: "workflow/rules/Tools/QCFiltering/Trimmomatic.smk" # DONE
-include: "workflow/rules/Tools/QCFiltering/Final.smk" # DONE     # TODO: probably not well tested
-include: "workflow/rules/Tools/QCFiltering/Nanopore.smk"    # TODO: refactored, but not tested
-include: "workflow/rules/Tools/Contamination/Kraken2.smk"  # TODO: refactored, but not tested
+include: "workflow/rules/Tools/QCFiltering/Final.smk" # DONE     # DONE
+include: "workflow/rules/Tools/QCFiltering/Nanopore.smk"    # DONE
+include: "workflow/rules/Tools/Contamination/Kraken2.smk"  # DONE
 
 include: "workflow/rules/Tools/Kmer/Jellyfish.smk" # DONE
 include: "workflow/rules/Tools/Kmer/Meryl.smk"    # DONE
 include: "workflow/rules/Tools/Kmer/FastK.smk"    #
 include: "workflow/rules/Tools/Kmer/Yak.smk"      # DONE
-include: "workflow/rules/Tools/Kmer/Smudgeplot.smk" # TODO: refactor
+include: "workflow/rules/Tools/Kmer/Smudgeplot.smk" # TODO: test
 include: "workflow/rules/Tools/Kmer/GCplot.smk"     # TODO: refactor
 include: "workflow/rules/Tools/Kmer/Genomescope.smk"  # DONE
 include: "workflow/rules/Tools/Kmer/Krater.smk"       # DONE
 
 include: "workflow/rules/Stages/contig/Common.smk" # DONE
 include: "workflow/rules/Stages/contig/Hifiasm.smk" # DONE
-include: "workflow/rules/Stages/contig/Verkko.smk" # TEST
-#include: "workflow/rules/Stages/contig/NextDenovo.smk" # DONE
+include: "workflow/rules/Stages/contig/Verkko.smk" # Partly done
+#include: "workflow/rules/Stages/contig/NextDenovo.smk" #
 include: "workflow/rules/Stages/contig/Flye.smk" # DONE
 include: "workflow/rules/Tools/Graph/GFA.smk" # DONE
-include: "workflow/rules/Tools/Contamination/FCS.smk" # TODO: after refactoring, only a case with skip_fcs=True was tested so far
+include: "workflow/rules/Tools/Contamination/FCS.smk" # DONE
 
 include: "workflow/rules/Tools/General/Sequence.smk" # DONE
 include: "workflow/rules/Stats/General.smk" # DONE
@@ -515,7 +515,7 @@ include: "workflow/rules/QCAssembly/GCTrack.smk" # DONE
 include: "workflow/rules/QCAssembly/SangerTelomereTrack.smk" # DONE
 include: "workflow/rules/Tools/Telomere/SangerTelomere.smk" # DONE
 include: "workflow/rules/QCAssembly/TelomereTidkTrack.smk"  # DONE
-include: "workflow/rules/Tools/Telomere/Tidk.smk" # DONE   # TODO: not well tested
+include: "workflow/rules/Tools/Telomere/Tidk.smk" # DONE
 
 include: "workflow/rules/QCAssembly/Curation.smk" # DONE     # TODO: probably not well tested
 include: "workflow/rules/QCAssembly/GapTrack.smk" # DONE
@@ -532,8 +532,8 @@ include: "workflow/rules/QCAssembly/CombineHaplotypes.smk" # DONE # TODO: be rea
 include: "workflow/rules/QCAssembly/MicroChromosomes.smk" # DONE
 include: "workflow/rules/QCAssembly/HiCmap.smk" # DONE
 include: "workflow/rules/QCAssembly/HiGlass.smk" # DONE
-include: "workflow/rules/QCAssembly/Pretext.smk" # DONE # TODO: probably not well tested
-include: "workflow/rules/Tools/HiC/Pretext.smk" # DONE # TODO: probably not well tested
+include: "workflow/rules/QCAssembly/Pretext.smk" # DONE d
+include: "workflow/rules/Tools/HiC/Pretext.smk" # DONE
 include: "workflow/rules/QCAssembly/PretextPerChr.smk" # DONE # TODO: probably not well tested
 
 include: "workflow/rules/Tools/Repeats/Masking.smk" # DONE
@@ -542,9 +542,9 @@ include: "workflow/rules/Tools/WGA/LAST.smk"     # DONE
 include: "workflow/rules/Stages/read_phasing/ReadPhasing.smk" # DONE
 
 include: "workflow/rules/Tools/Alignment/Index.smk" # DONE
-include: "workflow/rules/Tools/Alignment/Common.smk" # DONE # TODO: probably not well tested
+include: "workflow/rules/Tools/Alignment/Common.smk" # DONE
 include: "workflow/rules/Tools/Alignment/Stats.smk" # DONE
-include: "workflow/rules/Tools/Alignment/PostAlignment.smk" # TODO: finish refactoring
+include: "workflow/rules/Tools/Alignment/PostAlignment.smk" # DONE
 
 if "hic_alignment" in stage_dict:
     include: "workflow/rules/Stages/hic_alignment/Common.smk" # DONE
@@ -557,12 +557,12 @@ if "hic_scaffolding" in stage_dict:
     include: "workflow/rules/Stages/hic_scaffolding/YAHS.smk"
     include: "workflow/rules/Stages/hic_scaffolding/3DDNA.smk" # DONE
 
-include: "workflow/rules/Tools/Deduplication/Hapsolo.smk"     # TODO: test
+include: "workflow/rules/Tools/Deduplication/Hapsolo.smk"      # DONE
 if "dedup" in stage_dict:
     include: "workflow/rules/Stages/dedup/Common.smk"
-    include: "workflow/rules/Stages/dedup/HapSolo.smk"       # TODO: test
+    include: "workflow/rules/Stages/dedup/HapSolo.smk"        # DONE
     include: "workflow/rules/Stages/dedup/Purge_dups.smk"
-    include: "workflow/rules/Stages/dedup/ComboPurge.smk"    # TODO: test
+    include: "workflow/rules/Stages/dedup/ComboPurge.smk"     # DONE
 
 if "ref_scaffolding" in stage_dict:
     pass
@@ -572,12 +572,12 @@ if "gap_closing" in config["stage_list"]:
     include: "workflow/rules/Stages/gap_closing/Samba.smk" # TODO: test refactored code on big genomes
 
 if "polishing" in stage_dict:
-    include: "workflow/rules/Stages/polishing/NextPolish2.smk" # TODO: test
+    include: "workflow/rules/Stages/polishing/NextPolish2.smk"  # DONE
 
 include: "workflow/rules/Tools/Conversion/Bam2bed.smk" # TODO: not tested
-include: "workflow/rules/Tools/Alignment/Winnowmap.smk" # TODO: not tested
+include: "workflow/rules/Tools/Alignment/Winnowmap.smk"  # DONE
 include: "workflow/rules/Stages/mtdna/MitoHiFi.smk" # DONE
-include: "workflow/rules/Stages/mtdna/Mitoz.smk"    # TODO: check code
+include: "workflow/rules/Stages/mtdna/Mitoz.smk"    # DONE
 
 """
 

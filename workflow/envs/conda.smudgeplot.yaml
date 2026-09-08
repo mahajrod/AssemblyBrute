@@ -1,0 +1,12 @@
+#---- Bioconda config ----
+
+#TODO: check tools and versions
+"name": "smudgeplot"
+"channels":
+  - "mahajrod"
+  - "bioconda"
+  - "conda-forge"
+  - "anaconda"
+"dependencies":
+  - "smudgeplot>=0.5"
+  - "fastk"

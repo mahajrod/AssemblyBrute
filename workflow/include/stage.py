@@ -169,6 +169,8 @@ class Stage:
             results_list += self.request_mtdna_files()
         if self.stage_name == "kmer_qc":
             results_list += self.request_kmer_qc_files(stage="final")
+        if self.stage_name == "ploidy_check":
+            results_list += self.request_ploidy_check_files()
         if self.stage_name == "contig":
             results_list += self.request_contig_files()
         if self.stage_name == "hic_alignment":
@@ -697,6 +699,7 @@ class Stage:
                                            read_prefix=self.config["data"][datatype]["pair_prefix_list"] if datatype in self.config["data_feature_dict"]["paired"] else self.config["data"][datatype]["conv_file_prefix_list"],
                                            kmer_length=parameters["tool_options"][kmer_tool][datatype]["kmer_length"],
                                         )]
+
         # TODO: issues with draw_gc_plot.py script from KrATER, fix it later
         """ 
         if not self.config["skip_kmer_gcp"]:
@@ -708,31 +711,42 @@ class Stage:
                                         min_coverage=parameters["tool_options"]["gcp"][datatype]["min_coverage"],
                                        )]
         """
+        return results_list
 
+    def request_ploidy_check_files(self):
+        results_list = []
 
+        for datatype in self.config["data_feature_dict"]["genome_size"]:
+            if (datatype == "hic") and (self.config["skip_hic_genomescope"]):
+                continue
+            for kmer_tool in parameters["tool_options"]["kmer_qc"]["kmer_counter_list"]:
+                if "kmer_ploidy_test_list" in self.config:
+                    if self.config["kmer_ploidy_test_list"]:
+                        results_list += [expand(self.config["out_dir"] / "kmer/{datatype}/{stage}/{analysis_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.p{ploidy}.{analysis_tool}.parameters",
+                                        datatype=[datatype,],
+                                        genome_prefix=[self.config["genome_prefix"], ],
+                                        ploidy=self.config["kmer_ploidy_test_list"],
+                                        analysis_tool=["genomescope"],
+                                        stage=["final",],
+                                        kmer_tool=[kmer_tool,],
+                                        kmer_length=parameters["tool_options"][kmer_tool][datatype]["kmer_length"],
+                                        )]
         if not self.config["skip_kmer_smudgeplot"]:
             for datatype in self.config["data_feature_dict"]["genome_size"]:
-                for kmer_tool in parameters["tool_options"]["kmer_qc"]["kmer_counter_list"]:
-                    results_list += [expand(self.config["out_dir"]/ "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}_warnings.txt",
-                                               lower_boundary=parameters["tool_options"]["smudgeplot"][datatype]["lower_boundary"],
-                                               upper_boundary=parameters["tool_options"]["smudgeplot"][datatype]["upper_boundary"],
+                    results_list += [expand(self.config["out_dir"]/ "kmer/{datatype}/{stage}/smudgeplot/{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}/smudgeplot_hetmers_centralities.txt",
                                                datatype=[datatype,],
                                                stage=["final",],
-                                               kmer_tool=[kmer_tool,],  
-                                               kmer_length=parameters["tool_options"][kmer_tool][datatype]["kmer_length"],
+                                               kmer_length=parameters["tool_options"]["smudgeplot"][datatype]["kmer_length"],
+                                               min_kmer_count=[4],
                                                ),
-                                    expand(config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.smudgeplot.boundaries",
+                                    expand(config["out_dir"] / "kmer/{datatype}/{stage}/smudgeplot/{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}/smudgeplot.boundaries",
                                               datatype=[datatype,],
                                               stage=["final",],
-                                              kmer_tool=[kmer_tool,],
-                                              kmer_length=parameters["tool_options"][kmer_tool][datatype]["kmer_length"],
+                                              kmer_length=parameters["tool_options"]["smudgeplot"][datatype]["kmer_length"],
+                                              min_kmer_count=[4],
                                               )
                                     ]
-
-        #----
-
-
-
+        print (results_list)
         return results_list
 
     def request_read_contamination_scan_files(self):

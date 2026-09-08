@@ -64,8 +64,9 @@ pretextsnapshot	4	4	4	4	4	4	4	4	4
 pretext_inject_tracks	4	4	4	4	4	4	4	4	4
 salsa2	10	10	10	10	10	10	20	20	20
 yahs	5	5	5	5	5	5	5	5	5
-smudgeplot_hetkmers	1	1	1	1	1	1	1	1	1
-smudgeplot_plot	1	1	1	1	1	1	1	1	1
+smudgeplot_assess	1	1	1	1	1	1	1	1	1
+smudgeplot_hetmers	30	10	20	30	30	40	40	40	40
+smudgeplot	1	1	1	1	1	1	1	1	1
 compress_kmer	10	10	10	10	10	10	10	10	10
 get_seq_len	1	1	1	1	1	1	1	1	1
 gather_stage_stats	1	1	1	1	1	1	1	1	1

@@ -55,6 +55,7 @@
     - "filter_reads" #
     - "filtered_read_qc"
     - "kmer_qc"
+    - "ploidy_check"
     #- "mtdna"
     - "read_contamination_scan" # TODO: test after refactoring
     #- "draft_qc"         # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
@@ -167,7 +168,13 @@
         "upper_threshold": null #
     "genome_assemblers":
         "coverage_estimator": null
-        "lambda": null
+        "lambda": # depends on the assumed ploidy of the organism.
+            "p1": null
+            "p2": 24.4
+            "p3": null
+            "p4": 12.2
+            "p5": null
+            "p6": null
     "krater":
         "use_second_peak": null
         "low_limit": null

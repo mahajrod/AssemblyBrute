@@ -8,6 +8,9 @@
     "kmer":
         "yaml": "workflow/envs/conda.kmer.yaml"
         "name": "kmer"
+    "smudgeplot":
+        "yaml": "workflow/envs/conda.smudgeplot.yaml"
+        "name": "smudgeplot"
     "flye":
         "yaml": "workflow/envs/conda.flye.yaml"
         "name": "flye"
@@ -838,45 +841,29 @@
             "smudgeplot":
                 "default":
                     "hifi":
-                        "lower_boundary":
-                            - 10
-                        "upper_boundary":
-                            - 1500
+                        "kmer_length":
+                            - 21
                     "clr":
-                        "lower_boundary":
-                            - 10
-                        "upper_boundary":
-                            - 1500
+                        "kmer_length":
+                            - 21
                     "lqccs":
-                        "lower_boundary":
-                            - 10
-                        "upper_boundary":
-                            - 1500
+                        "kmer_length":
+                            - 21
                     "nanopore":
-                        "lower_boundary":
-                            - 10
-                        "upper_boundary":
-                            - 1500
+                        "kmer_length":
+                            - 21
                     "duplex":
-                        "lower_boundary":
-                            - 10
-                        "upper_boundary":
-                            - 1500
+                        "kmer_length":
+                            - 21
                     "simplex":
-                        "lower_boundary":
-                            - 10
-                        "upper_boundary":
-                            - 1500
+                        "kmer_length":
+                            - 21
                     "illumina":
-                        "lower_boundary":
-                            - 10
-                        "upper_boundary":
-                            - 1500
+                        "kmer_length":
+                            - 21
                     "hic":
-                        "lower_boundary":
-                            - 10
-                        "upper_boundary":
-                            - 1500
+                        "kmer_length":
+                            - 21
             "telo_finder":
                 "default":
                     "size": 200
@@ -2818,6 +2805,7 @@
     - "filtered_read_qc"
     - "read_contamination_scan"
     - "kmer_qc"
+    - "ploidy_check"
     - "smudgeplot" # smudgeplot requires a lot of memory to operate on mammalian size genomes (>700 Gbp of memory). Turn this analysis on only if you are sure you have enough memory. TODO: replace smudgeplot by external_tools consuming less memory.
     - "draft_qc"
     - "contig"
@@ -2838,6 +2826,7 @@
     - "read_contamination_scan"
     - "gcp"
     - "kmer_qc"
+    - "ploidy_check"
     - "mtdna"
     - "read_phasing"
 

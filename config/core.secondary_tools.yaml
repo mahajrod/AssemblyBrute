@@ -7,7 +7,7 @@
     "jellyfish":                "default"   # Allowed: default
     "meryl":                    "default"   # Allowed: default
     "yak":                      "default"   # Allowed: default
-    "fastk":                      "default"   # Allowed: default
+    "fastk":                    "default"   # Allowed: default
     "smudgeplot":               "default"   # Allowed: default
     "telo_finder":              "default"   # Allowed: default
     "quast":                    "default"   # Allowed: default

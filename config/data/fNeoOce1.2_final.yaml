@@ -223,6 +223,10 @@
         - "relative"
 
 "ploidy": 2
+"kmer_ploidy_test_list": # [] # requests genomescope runs with ploidies from this list
+    - 2
+    - 3
+    - 4
 
 "genome_prefix": "fNeoOce1.2"
 "busco_lineage_list":

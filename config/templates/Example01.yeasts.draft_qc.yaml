@@ -55,6 +55,7 @@
     - "filter_reads" #
     - "filtered_read_qc"
     - "kmer_qc"
+    #- "ploidy_check"
     - "mtdna"
     #- "read_contamination_scan" # TODO: test after refactoring
     - "draft_qc"         # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
@@ -225,6 +226,11 @@
         - "relative"
 
 "ploidy": 2
+"kmer_ploidy_test_list": # [] # requests genomoscope runs with ploidies from this list
+    - 1
+    - 2
+    - 3
+    - 4
 
 "genome_prefix": "testSacMyc1"
 "busco_lineage_list":

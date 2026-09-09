@@ -183,8 +183,9 @@ rule merge_fastk:
          "      INPUT_DB_ARRAY=(\"${{INPUT_DB_ARRAY[@]/%/fastk_db.ktab}}\"); "
          "      TMP_DIR={output.db}/tmp_`basename {output.db}`; "
          "      mkdir -p {output.db} ${{TMP_DIR}}; "
-         "      Fastmerge -t -T{threads} ${{INPUT_DB_ARRAY}} {output.db}/fastk_db.ktab > {log.std} 2>&1; "
-         "      Fastmerge -h -T{threads} ${{INPUT_DB_ARRAY}} {output.db}/fastk_db.hist > {log.std} 2>&1; "
+         "      echo \"${{INPUT_DB_ARRAY}}\" > {log.std}"
+         "      Fastmerge -t -T{threads} ${{INPUT_DB_ARRAY}} {output.db}/fastk_db.ktab >> {log.std} 2>&1; "
+         "      Fastmerge -h -T{threads} ${{INPUT_DB_ARRAY}} {output.db}/fastk_db.hist >> {log.std} 2>&1; "
          "      rm -r ${{TMP_DIR}}; "
          " fi; "
 

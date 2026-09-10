@@ -675,12 +675,12 @@ class Stage:
                                        kmer_tool=[kmer_tool,],
                                        kmer_length=parameters["tool_options"][kmer_tool][datatype]["kmer_length"],
                                      )]
-                if "kmer_ploidy_test_list" in self.config:
-                    if self.config["kmer_ploidy_test_list"]:
+                if "ploidy_test_list" in self.config:
+                    if self.config["ploidy_test_list"]:
                         results_list += [expand(self.config["out_dir"] / "kmer/{datatype}/{stage}/{analysis_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.p{ploidy}.{analysis_tool}.parameters",
                                         datatype=[datatype,],
                                         genome_prefix=[self.config["genome_prefix"], ],
-                                        ploidy=self.config["kmer_ploidy_test_list"],
+                                        ploidy=self.config["ploidy_test_list"],
                                         analysis_tool=["genomescope"],
                                         stage=[stage,],
                                         kmer_tool=[kmer_tool,],
@@ -716,21 +716,36 @@ class Stage:
     def request_ploidy_check_files(self):
         results_list = []
 
+        if "ploidy_test_list" in self.config:
+            if self.config["ploidy_test_list"]:
+                ploidy_test_set = set(self.config["ploidy_test_list"]) & set([self.config["ploidy"]])
+            else:
+                ploidy_test_set = set([self.config["ploidy"]])
+        else:
+            ploidy_test_set = set([self.config["ploidy"]])
+
         for datatype in self.config["data_feature_dict"]["genome_size"]:
             if (datatype == "hic") and (self.config["skip_hic_genomescope"]):
                 continue
             for kmer_tool in parameters["tool_options"]["kmer_qc"]["kmer_counter_list"]:
-                if "kmer_ploidy_test_list" in self.config:
-                    if self.config["kmer_ploidy_test_list"]:
-                        results_list += [expand(self.config["out_dir"] / "kmer/{datatype}/{stage}/{analysis_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.p{ploidy}.{analysis_tool}.parameters",
-                                        datatype=[datatype,],
-                                        genome_prefix=[self.config["genome_prefix"], ],
-                                        ploidy=self.config["kmer_ploidy_test_list"],
-                                        analysis_tool=["genomescope"],
-                                        stage=["final",],
-                                        kmer_tool=[kmer_tool,],
-                                        kmer_length=parameters["tool_options"][kmer_tool][datatype]["kmer_length"],
-                                        )]
+                if "kmer_test_list" in self.config:
+                    if self.config["kmer_test_list"]:
+                        kmer_test_set = set(self.config["kmer_test_list"]) & set(parameters["tool_options"][kmer_tool][datatype]["kmer_length"])
+                    else:
+                        kmer_test_set = set([self.config["kmer_test_list"]])
+                else:
+                    kmer_test_set = set([self.config["kmer_test_list"]])
+
+                results_list += [expand(self.config["out_dir"] / "kmer/{datatype}/{stage}/{analysis_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.p{ploidy}.{analysis_tool}.parameters",
+                                 datatype=[datatype,],
+                                 genome_prefix=[self.config["genome_prefix"], ],
+                                 ploidy=ploidy_test_set,
+                                 analysis_tool=["genomescope"],
+                                 stage=["final",],
+                                 kmer_tool=[kmer_tool,],
+                                 kmer_length=kmer_test_set,
+                                 )]
+                  
         if not self.config["skip_kmer_smudgeplot"]:
             for datatype in self.config["data_feature_dict"]["genome_size"]:
                     results_list += [expand(self.config["out_dir"]/ "kmer/{datatype}/{stage}/smudgeplot/{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}/smudgeplot_hetmers_centralities.txt",

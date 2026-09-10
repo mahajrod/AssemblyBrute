@@ -230,10 +230,15 @@
         - "relative"
 
 "ploidy": 2
-"kmer_ploidy_test_list": # [] # requests genomoscope runs with ploidies from this list
+"ploidy_test_list": # [] # requests genomoscope runs with ploidies from this list
     - 2
     - 3
     - 4
+
+"kmer_test_list":
+    - 21
+    - 31
+    - 41
 
 "genome_prefix": "fArgSph1"
 "busco_lineage_list":

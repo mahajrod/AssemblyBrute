@@ -737,7 +737,7 @@ class Stage:
                     kmer_test_set = set(parameters["tool_options"][kmer_tool][datatype]["kmer_length"])
 
                 print(kmer_test_set)
-                print(ploidy_test_setS)
+                print(ploidy_test_set)
                 results_list += [expand(self.config["out_dir"] / "kmer/{datatype}/{stage}/{analysis_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.p{ploidy}.{analysis_tool}.parameters",
                                  datatype=[datatype,],
                                  genome_prefix=[self.config["genome_prefix"], ],

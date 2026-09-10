@@ -861,6 +861,8 @@
                     "illumina":
                         "kmer_length":
                             - 21
+                            - 31
+                            - 41
                     "hic":
                         "kmer_length":
                             - 21

@@ -432,7 +432,8 @@ wildcard_constraints:
     phasing_kmer_length="[^./]+", # can be an int number or 'NA' in case of no phasing
     genome_prefix="[^/]+",
     correction_options="[^/]+",
-    gfa_prefix="[^/]*hap[^/]*|[^/]*alt[^/]*",
+    #gfa_prefix="[^/]*hap[^/]*|[^/]*alt[^/]*",
+    gfa_prefix="[^/]*",
     gfa_dir=".*contig.*",
     parameters="[^/]+",
     parameters_prefix="[^/]+",

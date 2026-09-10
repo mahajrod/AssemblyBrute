@@ -724,10 +724,11 @@ class Stage:
         else:
             ploidy_test_set = set([self.config["ploidy"]])
 
+        self.logger.info(TAB + f"Datatypes:")
         for datatype in self.config["data_feature_dict"]["genome_size"]:
             if (datatype == "hic") and (self.config["skip_hic_genomescope"]):
                 continue
-            self.logger.info(TAB * 1 + f"{datatype}:")
+            self.logger.info(TAB * 2 + f"{datatype}:")
             for kmer_tool in parameters["tool_options"]["kmer_qc"]["kmer_counter_list"]:
                 if "kmer_test_list" in self.config:
                     if self.config["kmer_test_list"]:
@@ -737,8 +738,8 @@ class Stage:
                 else:
                     kmer_test_set = set(parameters["tool_options"][kmer_tool][datatype]["kmer_length"])
 
-                self.logger.info(TAB * 2 + f"Checking ploidies: {', '.join(map(str, ploidy_test_set))}")
-                self.logger.info(TAB * 2 + f"Checking kmer length: {', '.join(map(str, kmer_test_set))}")
+                self.logger.info(TAB * 3 + f"Checking ploidies: {', '.join(map(str, ploidy_test_set))}")
+                self.logger.info(TAB * 3 + f"Checking kmer length: {', '.join(map(str, kmer_test_set))}")
 
 
                 results_list += [expand(self.config["out_dir"] / "kmer/{datatype}/{stage}/{analysis_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.p{ploidy}.{analysis_tool}.parameters",

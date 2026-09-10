@@ -304,8 +304,8 @@
 "skip_fcs_adaptor": False
 #----
 #---- Assebly graph vizualizatiom ----
-"skip_odgi": True
-"skip_odgi_viz": True
+"skip_odgi": False
+"skip_odgi_viz": False
 #----
 #---- Assembly QC skips
 "skip_busco": False              # set True, to skip BUSCO runs to speedup evaluation of the assemblies

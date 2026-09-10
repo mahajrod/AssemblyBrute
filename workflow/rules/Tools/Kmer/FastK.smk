@@ -15,7 +15,7 @@ rule fastk: # Fastmerge falls with segmentation fault, so the db is calculated f
         get_files_for_fastk
 
     output:
-        db=directory(config["out_dir"] / "kmer/{se_datatype}/{stage}/{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}/"),
+        db=directory(config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}/"),
         #ktab=config["out_dir"] / "kmer/{se_datatype}/{stage}/{se_datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}.{fileprefix}/fastk_db.ktab",
     log:
         std=config["out_dir"] / "log/fastk_se.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.log",

@@ -737,8 +737,8 @@ class Stage:
                 else:
                     kmer_test_set = set(parameters["tool_options"][kmer_tool][datatype]["kmer_length"])
 
-                self.logger.info(TAB * 3 + f"Checking ploidies: {', '.join(map(str, ploidy_test_set))}:")
-                self.logger.info(TAB * 3 + f"Checking kmer length: {', '.join(map(str, kmer_test_set))}:")
+                self.logger.info(TAB * 3 + f"Checking ploidies: {', '.join(map(str, ploidy_test_set))}")
+                self.logger.info(TAB * 3 + f"Checking kmer length: {', '.join(map(str, kmer_test_set))}")
 
 
                 results_list += [expand(self.config["out_dir"] / "kmer/{datatype}/{stage}/{analysis_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.p{ploidy}.{analysis_tool}.parameters",

@@ -185,7 +185,7 @@ rule merge_fastk:
          "      mkdir -p {output.db} ${{TMP_DIR}}; "
          "      echo -e \"Input databases:\\n\\t${{INPUT_DB_ARRAY[@]}}\" > {log.std}; "
          "      echo -e \"Creating merged database...\" >> {log.std}; "
-         "      Fastmerge -ht -P${{TMP_DIR}} -T{threads} {output.db}/fastk_db ${{INPUT_DB_ARRAY}}  >> {log.std} 2>&1; "
+         "      Fastmerge -ht -P${{TMP_DIR}} -T{threads} {output.db}/fastk_db ${{INPUT_DB_ARRAY[@]}}  >> {log.std} 2>&1; "
          "      rm -r ${{TMP_DIR}}; "
          " fi; "
 

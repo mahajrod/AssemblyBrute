@@ -727,7 +727,7 @@ class Stage:
         for datatype in self.config["data_feature_dict"]["genome_size"]:
             if (datatype == "hic") and (self.config["skip_hic_genomescope"]):
                 continue
-            self.logger.info(TAB * 2 + f"Datatype {datatype}:")
+            self.logger.info(TAB * 2 + f"{datatype}:")
             for kmer_tool in parameters["tool_options"]["kmer_qc"]["kmer_counter_list"]:
                 if "kmer_test_list" in self.config:
                     if self.config["kmer_test_list"]:

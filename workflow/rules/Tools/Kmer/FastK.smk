@@ -10,19 +10,19 @@ def get_files_for_fastk(wildcards):
 
     return file_list
 
-rule fastk:
+rule fastk: # Fastmerge falls with segmentation fault, so the db is calculated for all files simalteneously
     input:
         get_files_for_fastk
 
     output:
-        db=directory(config["out_dir"] / "kmer/{se_datatype}/{stage}/{se_datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}/"),
+        db=directory(config["out_dir"] / "kmer/{se_datatype}/{stage}/{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}/"),
         #ktab=config["out_dir"] / "kmer/{se_datatype}/{stage}/{se_datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}.{fileprefix}/fastk_db.ktab",
     log:
-        std=config["out_dir"] / "log/fastk_se.{se_datatype}.{stage}.{kmer_length}.min{min_kmer_count}.log",
-        cluster_log=config["out_dir"] / "log/fastk_se.{se_datatype}.{stage}.{kmer_length}.min{min_kmer_count}.cluster.log",
-        cluster_err=config["out_dir"] / "log/fastk_se.{se_datatype}.{stage}.{kmer_length}.min{min_kmer_count}.cluster.err"
+        std=config["out_dir"] / "log/fastk_se.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.log",
+        cluster_log=config["out_dir"] / "log/fastk_se.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.cluster.log",
+        cluster_err=config["out_dir"] / "log/fastk_se.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.cluster.err"
     benchmark:
-        config["out_dir"] / "log/fastk_se.{se_datatype}.{stage}.{kmer_length}.min{min_kmer_count}.benchmark.txt"
+        config["out_dir"] / "log/fastk_se.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.benchmark.txt"
     conda:
         config["conda"]["smudgeplot"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["smudgeplot"]["yaml"])
     resources:

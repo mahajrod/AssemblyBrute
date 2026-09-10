@@ -87,7 +87,9 @@ rule hifiasm_hic_2p:
         hap1_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.hap1.p_ctg.gfa",
         hap2_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.hap2.p_ctg.gfa",
         alt_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.a_ctg.gfa",
-
+        primary_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.p_ctg.gfa",
+        noseq_alt_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.a_ctg.noseq.gfa",
+        noseq_primary_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.p_ctg.noseq.gfa",
     params:
         output_prefix=lambda wildcards: config["out_dir"] / "contig/{0}/{1}.contig".format(wildcards.parameters, wildcards.genome_prefix),
         purge_level=lambda wildcards: stage_dict["contig"].parameters[wildcards.parameters]["option_set"]["purge_level"],
@@ -167,6 +169,9 @@ use rule hifiasm_hic_2p as hifiasm_hic_3p with:
         hap2_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p3}/{genome_prefix}.contig.hic.hap2.p_ctg.gfa",
         hap3_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p3}/{genome_prefix}.contig.hic.hap3.p_ctg.gfa",
         alt_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p3}/{genome_prefix}.contig.hic.a_ctg.gfa",
+        primary_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.p_ctg.gfa",
+        noseq_alt_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.a_ctg.noseq.gfa",
+        noseq_primary_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.p_ctg.noseq.gfa",
 
 use rule hifiasm_hic_2p as hifiasm_hic_4p with:
     output:
@@ -175,6 +180,9 @@ use rule hifiasm_hic_2p as hifiasm_hic_4p with:
         hap3_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p4}/{genome_prefix}.contig.hic.hap3.p_ctg.gfa",
         hap4_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p4}/{genome_prefix}.contig.hic.hap4.p_ctg.gfa",
         alt_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p4}/{genome_prefix}.contig.hic.a_ctg.gfa",
+        primary_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.p_ctg.gfa",
+        noseq_alt_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.a_ctg.noseq.gfa",
+        noseq_primary_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.p_ctg.noseq.gfa",
 
 use rule hifiasm_hic_2p as hifiasm_hic_5p with:
     output:
@@ -184,6 +192,9 @@ use rule hifiasm_hic_2p as hifiasm_hic_5p with:
         hap4_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p5}/{genome_prefix}.contig.hic.hap4.p_ctg.gfa",
         hap5_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p5}/{genome_prefix}.contig.hic.hap5.p_ctg.gfa",
         alt_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p5}/{genome_prefix}.contig.hic.a_ctg.gfa",
+        primary_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.p_ctg.gfa",
+        noseq_alt_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.a_ctg.noseq.gfa",
+        noseq_primary_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.p_ctg.noseq.gfa",
 
 use rule hifiasm_hic_2p as hifiasm_hic_6p with:
     output:
@@ -194,6 +205,9 @@ use rule hifiasm_hic_2p as hifiasm_hic_6p with:
         hap5_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap5.p_ctg.gfa",
         hap6_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap6.p_ctg.gfa",
         alt_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.a_ctg.gfa",
+        primary_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.p_ctg.gfa",
+        noseq_alt_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.a_ctg.noseq.gfa",
+        noseq_primary_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.p_ctg.noseq.gfa",
 
 use rule hifiasm_hic_2p as hifiasm_hic_7p with:
     output:
@@ -205,6 +219,9 @@ use rule hifiasm_hic_2p as hifiasm_hic_7p with:
         hap6_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap6.p_ctg.gfa",
         hap7_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap7.p_ctg.gfa",
         alt_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.a_ctg.gfa",
+        primary_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.p_ctg.gfa",
+        noseq_alt_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.a_ctg.noseq.gfa",
+        noseq_primary_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.p_ctg.noseq.gfa",
 
 use rule hifiasm_hic_2p as hifiasm_hic_8p with:
     output:
@@ -217,6 +234,9 @@ use rule hifiasm_hic_2p as hifiasm_hic_8p with:
         hap7_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap7.p_ctg.gfa",
         hap8_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.hap8.p_ctg.gfa",
         alt_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p6}/{genome_prefix}.contig.hic.a_ctg.gfa",
+        primary_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.p_ctg.gfa",
+        noseq_alt_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.a_ctg.noseq.gfa",
+        noseq_primary_contig_graph=config["out_dir"] / "contig/{parameters, hifiasm_[^/]*@p2}/{genome_prefix}.contig.hic.p_ctg.noseq.gfa",
 
 use rule hifiasm_hic_2p as hifiasm_long_reads_only with:
     input:

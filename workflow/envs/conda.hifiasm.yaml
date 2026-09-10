@@ -8,3 +8,5 @@
 "dependencies":
   - "hifiasm>=0.24"
   - "gfatools"
+  - "odgi"
+  - "bandage"

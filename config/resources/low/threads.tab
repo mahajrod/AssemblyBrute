@@ -25,6 +25,9 @@ flye	48	12	24	36	48	48	48	48	48
 verkko	48	12	24	36	48	48	48	48	48
 nextdenovo	48	12	24	36	48	48	48	48	48
 gfa2fasta	1	1	1	1	1	1	1	1	1
+gfa2og	4	4	4	4	4	4	4	4	4
+og_sort_1d	10	4	4	10	10	10	10	10	10
+og_viz_1d	10	4	4	10	10	10	10	10	10
 get_coverage_from_hifiasm_graph	1	1	1	1	1	1	1	1	1
 get_read_bed_from_hifiasm_graph	1	1	1	1	1	1	1	1	1
 busco_download	1	1	1	1	1	1	1	1	1

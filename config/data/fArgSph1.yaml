@@ -303,6 +303,10 @@
 "skip_fcs": False # set True to skip FCS filtering of the contig assembly. However, usually you wish  it to be done
 "skip_fcs_adaptor": False
 #----
+#---- Assebly graph vizualizatiom ----
+"skip_odgi": True
+"skip_odgi_viz": True
+#----
 #---- Assembly QC skips
 "skip_busco": False              # set True, to skip BUSCO runs to speedup evaluation of the assemblies
 

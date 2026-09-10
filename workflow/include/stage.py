@@ -329,6 +329,24 @@ class Stage:
                                         extension=[".unfiltered.gfa.cov", ".unfiltered.gfa.lencov"],
                                         parameters=[parameters_label])
 
+                if not self.config["skip_odgi"]:
+
+                    if len(haplotype_list) == 1:
+                        suffix_list = [".p", ".a"]
+                    else:
+                        suffix_list = [".hic.p", ".hic.a"] + [f".hic.{haplotype}.p" for haplotype in haplotype_list]
+                    results_list += expand(self.config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}{suffix}_ctg.noseq.og",
+                                        genome_prefix=[self.config["genome_prefix"],],
+                                        assembly_stage=["contig",],
+                                        suffix=suffix_list,
+                                        parameters=[parameters_label])
+                    if not self.config["skip_odgi_viz"]:
+                        results_list += expand(self.config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}{suffix}_ctg.noseq.sorted_1d.png",
+                                        genome_prefix=[self.config["genome_prefix"],],
+                                        assembly_stage=["contig",],
+                                        suffix=suffix_list,
+                                        parameters=[parameters_label])
+
             if self.config["database_set"]["fcs_adaptor"] and (not self.config["skip_fcs_adaptor"]):
                 results_list += [expand(config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}/contamination_scan/fcs_adaptor/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.{database}.report",
                                        genome_prefix=[self.config["genome_prefix"], ],

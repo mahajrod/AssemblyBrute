@@ -51,8 +51,8 @@ rule extract_lambda_value:
             coverage_estimator = get_coverage_estimator(wildcards)
             if "genome_assemblers" in config["tool_manually_adjusted_features"]:
                 if "lambda" in config["tool_manually_adjusted_features"]["genome_assemblers"]:
-                    if config["tool_manually_adjusted_features"]["genome_assemblers"]["lambda"] is not None:
-                        if isinstance(config["tool_manually_adjusted_features"]["genome_assemblers"]["lambda"], Number):
+                    if config["tool_manually_adjusted_features"]["genome_assemblers"]["lambda"][f"p{params.ploidy}"] is not None:
+                        if isinstance(config["tool_manually_adjusted_features"]["genome_assemblers"]["lambda"][f"p{params.ploidy}"], Number):
                             lambda_value = config["tool_manually_adjusted_features"]["genome_assemblers"]["lambda"][f"p{params.ploidy}"]
                             print("Using a preset lambda value ({0}) for contig assembly {1} ...".format(config["tool_manually_adjusted_features"]["genome_assemblers"]["lambda"][f"p{params.ploidy}"],
                                                                                                                  wildcards.parameters))

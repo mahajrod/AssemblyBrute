@@ -328,7 +328,7 @@ class Stage:
                                         haplotype=haplotype_list,
                                         extension=[".unfiltered.gfa.cov", ".unfiltered.gfa.lencov"],
                                         parameters=[parameters_label])
-
+                """ ODGI is not compartible with hifiasm graphs. Open them (*.noseq.gfa) directly in Bandage
                 if not self.config["skip_odgi"]:
 
                     if len(haplotype_list) == 1:
@@ -346,6 +346,7 @@ class Stage:
                                         assembly_stage=["contig",],
                                         suffix=suffix_list,
                                         parameters=[parameters_label])
+                """
 
             if self.config["database_set"]["fcs_adaptor"] and (not self.config["skip_fcs_adaptor"]):
                 results_list += [expand(config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}/contamination_scan/fcs_adaptor/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.{database}.report",

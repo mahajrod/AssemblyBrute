@@ -432,8 +432,8 @@ wildcard_constraints:
     phasing_kmer_length="[^./]+", # can be an int number or 'NA' in case of no phasing
     genome_prefix="[^/]+",
     correction_options="[^/]+",
-    #gfa_prefix="[^/]*hap[^/]*|[^/]*alt[^/]*",
-    gfa_prefix="[^/]*",
+    gfa_prefix="[^/]*hap[^/]*|[^/]*alt[^/]*",
+    #gfa_prefix="[^/]*",
     gfa_dir=".*contig.*",
     parameters="[^/]+",
     parameters_prefix="[^/]+",
@@ -499,7 +499,7 @@ include: "workflow/rules/Tools/Kmer/Krater.smk"       # DONE
 
 include: "workflow/rules/Stages/contig/Common.smk" # DONE
 include: "workflow/rules/Stages/contig/Hifiasm.smk" # DONE
-include: "workflow/rules/Tools/Graph/ODGI.smk"
+#include: "workflow/rules/Tools/Graph/ODGI.smk" # ODGI is incompatible with hifiasm graphs
 include: "workflow/rules/Stages/contig/Verkko.smk" # Partly done
 #include: "workflow/rules/Stages/contig/NextDenovo.smk" #
 include: "workflow/rules/Stages/contig/Flye.smk" # DONE

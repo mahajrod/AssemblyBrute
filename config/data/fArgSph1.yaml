@@ -180,7 +180,7 @@
         "low_limit": null
         "high_limit": null
     "genomescope":
-        "starting_lambda": 30
+        "starting_lambda": null
         "start_shift": null
     "hapsolo":
         "busco_lineage_list": # this parameter is used by both hapsolo and combo_purge (combination of hapsolo and purge_dups)
@@ -229,7 +229,7 @@
         - "absolute"
         - "relative"
 
-"ploidy": 2
+"ploidy": 4
 "ploidy_test_list": # [] # requests genomoscope runs with ploidies from this list
     - 2
     - 3

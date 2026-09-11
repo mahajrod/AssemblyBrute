@@ -25,7 +25,7 @@ rule gather_stats_per_stage_parameter:
         merqury_datatypes=lambda  wildcards: ("-m " + ",".join(parameters["tool_options"]["assembly_qc"]["merqury"]["datatype_list"])) if config["assembly_qc_level"][wildcards.assembly_stage] >= 1 else "",
         assembly_prefix_list=lambda wildcards: ",".join(map(lambda haplotype: f"{wildcards.genome_prefix}.{wildcards.assembly_stage}.{haplotype}",
                                                             stage_dict[wildcards.assembly_stage].parameters[wildcards.parameters]["haplotype_list"])),
-        busco_lineage_list=lambda  wildcards: (" -b " + ",".join(config["busco_lineage_list"])) if (not config["skip_busco"]) and (config["assembly_qc_level"][wildcards.assembly_stage] > 4) else ""
+        busco_lineage_list=lambda  wildcards: (" -b " + ",".join(config["busco_lineage_list"])) if (not config["skip_busco"]) and (config["assembly_qc_level"][wildcards.assembly_stage] >= 5) else ""
     output:
         stats=config["out_dir"]  / "{assembly_stage}/{parameters}/assembly_qc/{genome_prefix}.{assembly_stage}.parameter_stats"
     log:

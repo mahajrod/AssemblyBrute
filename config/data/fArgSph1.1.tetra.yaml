@@ -241,7 +241,7 @@
     - 31
     - 41
 
-"genome_prefix": "fArgSph1"
+"genome_prefix": "fArgSph1.1.tetra"
 "busco_lineage_list":
     - "actinopterygii_odb12"
     - "vertebrata_odb10"

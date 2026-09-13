@@ -26,7 +26,7 @@
 "parameter_set": "normal"
 
 #---- Data ----
-"input_datatypes": "hifi,hic,reference"
+"input_datatypes": "hifi,hic,illumina,reference"
 "data_filtering":
     - "hifi"
     - "hic"
@@ -225,11 +225,12 @@
     - 3
     - 4
 
-"genome_prefix": "fCanLup3.2"
+"genome_prefix": "mCanLup3.2"
 "busco_lineage_list":
     - "carnivora_odb12"
-    - "vertebrata_odb10"
     - "vertebrata_odb12"
+    - "vertebrata_odb10"
+
 
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
 #                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10

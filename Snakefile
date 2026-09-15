@@ -249,7 +249,7 @@ if "reference" in config["data"]:
                 raise ValueError(f"ERROR!!! There is more than one {filetype} file for reference {genome}")
             print(config["data"]["reference"]["ref_dict"][genome])
             if (filetype == "syn") and (not config["data"]["reference"]["ref_dict"][genome]["syn"]):
-                syn_filename = ".".join(config['data']['reference']['ref_dict'][genome]['whitelist'].split(".")[:-1]) + ".syn"
+                syn_filename = ".".join(str(config['data']['reference']['ref_dict'][genome]['whitelist']).split(".")[:-1]) + ".syn"
                 create_syn_cmd = f"sed s/\\(.*\\)/\\1\\t\\1/ {config['data']['reference']['ref_dict'][genome]['whitelist']} > {syn_filename}"
                 config["data"]["reference"]["ref_dict"][genome][filetype] = syn_filename
 

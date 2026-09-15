@@ -242,14 +242,21 @@ if "reference" in config["data"]:
             config["data"]["reference"]["ref_dict"][filename.name] = {}
     for genome in config["data"]["reference"]["ref_dict"]:
         brute_logger.info(TAB * 2 + f"Checking reference {genome}...")
-        for filetype in "fasta", "syn", "whitelist", "orderlist":
+        for filetype in "fasta", "whitelist", "orderlist", "syn":
             config["data"]["reference"]["ref_dict"][genome][filetype] = list((config["data"]["reference"]["in_dir"] / genome).glob(f"*.{filetype}"))
 
             if len(config["data"]["reference"]["ref_dict"][genome][filetype]) > 1:
                 raise ValueError(f"ERROR!!! There is more than one {filetype} file for reference {genome}")
             print(config["data"]["reference"]["ref_dict"][genome])
             print(config["data"]["reference"]["ref_dict"][genome][filetype])
-            config["data"]["reference"]["ref_dict"][genome][filetype] = config["data"]["reference"]["ref_dict"][genome][filetype][0]
+            if "syn" not in config["data"]["reference"]["ref_dict"][genome]:
+                syn_filename = ".".join(config['data']['reference']['ref_dict'][genome]['whitelist'].split(".")[:-1]) + ".syn"
+                create_syn_cmd = f"sed s/\\(.*\\)/\\1\\t\\1/ {config['data']['reference']['ref_dict'][genome]['whitelist']} > {syn_filename}"
+                config["data"]["reference"]["ref_dict"][genome][filetype] = syn_filename
+
+            else:
+                config["data"]["reference"]["ref_dict"][genome][filetype] = config["data"]["reference"]["ref_dict"][genome][filetype][0]
+            print(config["data"]["reference"]["ref_dict"][genome][filetype])
             brute_logger.info(TAB * 3 + f"Detected {filetype}:")
             brute_logger.info(TAB * 4 + f"{config['data']['reference']['ref_dict'][genome][filetype]}")
 

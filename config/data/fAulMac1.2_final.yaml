@@ -225,7 +225,7 @@
         - "absolute"
         - "relative"
 
-"ploidy": 4
+"ploidy": 2
 "ploidy_test_list": # [] # requests genomoscope runs with ploidies from this list
     - 2
     - 3

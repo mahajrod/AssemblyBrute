@@ -233,7 +233,7 @@ if "ext_data" in config["input_datatypes"]: # parse data that will be used to cr
                 brute_logger.info(TAB * 5 + str(filepath))
 
 
-if "reference" in config["data"]:
+if "reference" in config["data"]: # REQUIRED FILE: *.fasta, *.whitelist and *.orderlist
     brute_logger.info(TAB + f"Checking input reference files...")
     config["data"]["reference"]["in_dir"] = input_dir_path / "reference"
     config["data"]["reference"]["ref_dict"] = {}
@@ -247,8 +247,8 @@ if "reference" in config["data"]:
 
             if len(config["data"]["reference"]["ref_dict"][genome][filetype]) > 1:
                 raise ValueError(f"ERROR!!! There is more than one {filetype} file for reference {genome}")
-            print(config["data"]["reference"]["ref_dict"][genome])
-            if (filetype == "syn") and (not config["data"]["reference"]["ref_dict"][genome]["syn"]):
+
+            if (filetype == "syn") and (not config["data"]["reference"]["ref_dict"][genome]["syn"]): # create syn file from the whitelist if it is absent
                 syn_filename = ".".join(str(config['data']['reference']['ref_dict'][genome]['whitelist']).split(".")[:-1]) + ".syn"
                 create_syn_cmd = f"sed 's/\\(.*\\)/\\1\\t\\1/' {config['data']['reference']['ref_dict'][genome]['whitelist']} > {syn_filename}"
                 os.system(create_syn_cmd)

@@ -248,7 +248,7 @@
 "telomere_motif": "CCCTAA"  # telomere motif at 5'-end; CCCTAA for human, place null if unknown
 "use_canonical_telomere": True # TODO: this parameter is used by ragtag in ref_scaffolding stage move it to manually adjusted features
 "species_name": "Aulostomus maculatus"
-"tax_id": 150449# # necessary for contamination scan via FCS
+"tax_id": 150449 # necessary for contamination scan via FCS
 "microchromosomes": False
 
 "kingdom": "animal"  # "animal", "plant" or "fungi"

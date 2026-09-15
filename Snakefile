@@ -250,7 +250,7 @@ if "reference" in config["data"]:
             print(config["data"]["reference"]["ref_dict"][genome])
             if (filetype == "syn") and (not config["data"]["reference"]["ref_dict"][genome]["syn"]):
                 syn_filename = ".".join(str(config['data']['reference']['ref_dict'][genome]['whitelist']).split(".")[:-1]) + ".syn"
-                create_syn_cmd = f"sed s/\\(.*\\)/\\1\\t\\1/ {config['data']['reference']['ref_dict'][genome]['whitelist']} > {syn_filename}"
+                create_syn_cmd = f"sed 's/\\(.*\\)/\\1\\t\\1/' {config['data']['reference']['ref_dict'][genome]['whitelist']} > {syn_filename}"
                 os.system(create_syn_cmd)
                 config["data"]["reference"]["ref_dict"][genome][filetype] = syn_filename
 

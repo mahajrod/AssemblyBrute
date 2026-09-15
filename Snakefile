@@ -248,6 +248,7 @@ if "reference" in config["data"]:
             if len(config["data"]["reference"]["ref_dict"][genome][filetype]) > 1:
                 raise ValueError(f"ERROR!!! There is more than one {filetype} file for reference {genome}")
             print(config["data"]["reference"]["ref_dict"][genome])
+            print(config["data"]["reference"]["ref_dict"][genome][filetype])
             config["data"]["reference"]["ref_dict"][genome][filetype] = config["data"]["reference"]["ref_dict"][genome][filetype][0]
             brute_logger.info(TAB * 3 + f"Detected {filetype}:")
             brute_logger.info(TAB * 4 + f"{config['data']['reference']['ref_dict'][genome][filetype]}")

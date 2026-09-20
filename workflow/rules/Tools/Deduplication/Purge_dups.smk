@@ -204,7 +204,7 @@ rule create_purge_dups_track:
     benchmark:
         "{fasta_dir}/log/create_purge_dups_track.{fasta_prefix}.{datatype}.{artefact_type}.benchmark.txt"
     conda:
-        config["conda"]["busco5"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco5"]["yaml"])
+        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("busco5_intersect_all"),

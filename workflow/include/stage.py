@@ -33,7 +33,7 @@ class Stage:
                     parameters_label_list = []
                     if self.stage_name == "draft_qc": #in self.assembly_initiating_stage_set:
                         parameters_label_list.append("{0}_{1}".format(tool, option_set))
-                    if self.stage_name == "contig":
+                    elif self.stage_name == "contig":
                         ploidy = self.detect_ploidy_for_contig_stage(tool, option_set)
                         parameters["tool_options"][tool][option_set]["assembly_ploidy"] = ploidy
                         parameters_label_list.append("{0}_{1}@p{2}".format(tool, option_set, ploidy))
@@ -118,7 +118,7 @@ class Stage:
 
     def detect_ploidy_for_contig_stage(self, tool, option_set):
         found_dict = {}
-        if tool == "hifiasm":
+        if tool in ["hifiasm", "verkko"]:
             for datatype in "hic", "parental":
                 if parameters["tool_options"][tool][option_set][f"use_{datatype}"]:
                     #self.logger.info(TAB * 3 + f"Parameter set allows usage of phasing datatype {datatype}...")
@@ -169,6 +169,8 @@ class Stage:
             results_list += self.request_mtdna_files()
         if self.stage_name == "kmer_qc":
             results_list += self.request_kmer_qc_files(stage="final")
+        if self.stage_name == "ploidy_check":
+            results_list += self.request_ploidy_check_files()
         if self.stage_name == "contig":
             results_list += self.request_contig_files()
         if self.stage_name == "hic_alignment":
@@ -326,6 +328,25 @@ class Stage:
                                         haplotype=haplotype_list,
                                         extension=[".unfiltered.gfa.cov", ".unfiltered.gfa.lencov"],
                                         parameters=[parameters_label])
+                """ ODGI is not compartible with hifiasm graphs. Open them (*.noseq.gfa) directly in Bandage
+                if not self.config["skip_odgi"]:
+
+                    if len(haplotype_list) == 1:
+                        suffix_list = [".p", ".a"]
+                    else:
+                        suffix_list = [".hic.p", ".hic.a"] + [f".hic.{haplotype}.p" for haplotype in haplotype_list]
+                    results_list += expand(self.config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}{suffix}_ctg.noseq.og",
+                                        genome_prefix=[self.config["genome_prefix"],],
+                                        assembly_stage=["contig",],
+                                        suffix=suffix_list,
+                                        parameters=[parameters_label])
+                    if not self.config["skip_odgi_viz"]:
+                        results_list += expand(self.config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}{suffix}_ctg.noseq.sorted_1d.png",
+                                        genome_prefix=[self.config["genome_prefix"],],
+                                        assembly_stage=["contig",],
+                                        suffix=suffix_list,
+                                        parameters=[parameters_label])
+                """
 
             if self.config["database_set"]["fcs_adaptor"] and (not self.config["skip_fcs_adaptor"]):
                 results_list += [expand(config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}/contamination_scan/fcs_adaptor/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.{database}.report",
@@ -339,7 +360,9 @@ class Stage:
                 results_list += [expand(config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}/contamination_scan/fcs/{database}/{genome_prefix}.{assembly_stage}.{haplotype}.unfiltered.{database}.taxonomy",
                                         genome_prefix=[self.config["genome_prefix"], ],
                                         assembly_stage=[self.stage_name],
-                                        haplotype=haplotype_list + (["alt" if stage_dict[self.stage_name].parameters[parameters_label]["option_set"]["assembly_ploidy"] > 1 else "alt0"] if "hifiasm" in parameters_label else []),
+                                        haplotype=haplotype_list \
+                                                  + ((["alt"] if stage_dict[self.stage_name].parameters[parameters_label]["option_set"]["assembly_ploidy"] > 1 else ["alt0"]) if "hifiasm" in parameters_label else []) \
+                                                  + ((["unassigned"] if stage_dict[self.stage_name].parameters[parameters_label]["option_set"]["assembly_ploidy"] > 1 else []) if "verkko" in parameters_label else []) ,
                                         parameters=[parameters_label],
                                         database=self.config["database_set"]["fcs"])
                                 ]
@@ -383,6 +406,11 @@ class Stage:
         results_list = []
         if self.config["assembly_qc_level"][self.stage_name] == 0: # skip all the qc
             return results_list
+
+        external_datatype_set = set()
+        for datatype in self.config["ext_data"]:
+            for track_name in self.config["ext_data"][datatype]:
+                external_datatype_set.add(f"ext@{datatype}@{track_name}")
 
         for parameters_label in self.parameters:
             if self.config["assembly_qc_level"][self.stage_name] >= 1:
@@ -541,7 +569,7 @@ class Stage:
                                                   step=parameters["tool_options"]["assembly_qc"]["coverage"]["options"][window_settings]["step"],
                                                   genome_prefix=[self.config["genome_prefix"], ],
                                                   assembly_stage=[self.stage_name, ],
-                                                  datatype=set(parameters["tool_options"]["assembly_qc"]["coverage"]["datatype_list"]) & set(self.config["data"]),
+                                                  datatype=(set(parameters["tool_options"]["assembly_qc"]["coverage"]["datatype_list"]) & set(self.config["data"])) | external_datatype_set,
                                                   haplotype=self.parameters[parameters_label]["haplotype_list"],
                                                   parameters=[parameters_label]),
                                          ]
@@ -558,54 +586,52 @@ class Stage:
                 #----
 
             if self.config["assembly_qc_level"][self.stage_name] >= 7:
-                if not self.config["skip_higlass_mcool"]:
-                    results_list += [expand(self.config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.{haplotype}.NA.rmdup.higlass.mcool",
-                                              haplotype=["reordered" if ("microchromosomes" in self.config) and self.config["microchromosomes"] else "combined"],
-                                              genome_prefix=[self.config["genome_prefix"], ],
-                                              assembly_stage=[self.stage_name],
-                                              parameters=[parameters_label,],)
-                                     ]
-                if not self.config["skip_hic_for_combined_haplotype"]:
-                    results_list += [expand(self.config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.{haplotype}.NA.rmdup.pre.mapq{min_mapq}.hic",
-                                              min_mapq=[0],
-                                              haplotype=["reordered" if ("microchromosomes" in self.config) and self.config["microchromosomes"] else "combined"],
-                                              genome_prefix=[self.config["genome_prefix"], ],
-                                              assembly_stage=[self.stage_name],
-                                              parameters=[parameters_label,],)
-                                     ]
+                if "hic" in self.config["data"]:
+                    if not self.config["skip_higlass_mcool"]:
+                        results_list += [expand(self.config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.{haplotype}.NA.rmdup.higlass.mcool",
+                                                  haplotype=["reordered" if ("microchromosomes" in self.config) and self.config["microchromosomes"] else "combined"],
+                                                  genome_prefix=[self.config["genome_prefix"], ],
+                                                  assembly_stage=[self.stage_name],
+                                                  parameters=[parameters_label,],)
+                                         ]
+                    if not self.config["skip_hic_for_combined_haplotype"]:
+                        results_list += [expand(self.config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.{haplotype}.NA.rmdup.pre.mapq{min_mapq}.hic",
+                                                  min_mapq=[0],
+                                                  haplotype=["reordered" if ("microchromosomes" in self.config) and self.config["microchromosomes"] else "combined"],
+                                                  genome_prefix=[self.config["genome_prefix"], ],
+                                                  assembly_stage=[self.stage_name],
+                                                  parameters=[parameters_label,],)
+                                         ]
 
-                if not self.config["skip_pretext"]:
-                    results_list += [expand(self.config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.pretext.track.info",
-                                              haplotype=["reordered" if ("microchromosomes" in self.config) and self.config["microchromosomes"] else "combined"],
-                                              genome_prefix=[self.config["genome_prefix"], ],
-                                              assembly_stage=[self.stage_name],
-                                              parameters=[parameters_label,],)
-                                     ]
-                    # request pretext map for a whole genome
-                    results_list += [expand(self.config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.{haplotype}.NA.{subset}.rmdup.mapq{mapq}.{res}.tracks.pretext",
-                                              res=["high_res"],
-                                              haplotype=["reordered" if ("microchromosomes" in self.config) and self.config["microchromosomes"] else "combined"],
-                                              subset=["all"],
-                                              genome_prefix=[self.config["genome_prefix"], ],
-                                              assembly_stage=[self.stage_name],
-                                              parameters=[parameters_label,],
-                                              resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
-                                              mapq=parameters["tool_options"]["pretextmap"]["mapq"],)
-                                     ]
+                    if not self.config["skip_pretext"]:
+                        results_list += [expand(self.config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}.pretext.track.info",
+                                                  haplotype=["reordered" if ("microchromosomes" in self.config) and self.config["microchromosomes"] else "combined"],
+                                                  genome_prefix=[self.config["genome_prefix"], ],
+                                                  assembly_stage=[self.stage_name],
+                                                  parameters=[parameters_label,],)
+                                         ]
+                        # request pretext map for a whole genome
+                        results_list += [expand(self.config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}/alignment/NA/{genome_prefix}.{assembly_stage}.{haplotype}.NA.{subset}.rmdup.mapq{mapq}.{res}.tracks.pretext",
+                                                  res=parameters["tool_options"]["pretextmap"]["res"],
+                                                  haplotype=["reordered" if ("microchromosomes" in self.config) and self.config["microchromosomes"] else "combined"],
+                                                  subset=["all"],
+                                                  genome_prefix=[self.config["genome_prefix"], ],
+                                                  assembly_stage=[self.stage_name],
+                                                  parameters=[parameters_label,],
+                                                  mapq=parameters["tool_options"]["pretextmap"]["mapq"],)
+                                         ]
 
-                    if candidate_chr_id_list:
-                        # request pretext map for curation units (if provided)
-                        results_list += [expand(self.config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}/alignment/NA/per_chr/{genome_prefix}.{assembly_stage}.{haplotype}.NA.{subset}.rmdup.precurated.mapq{mapq}.{res}.tracks.pretext",
-                                              res=["high_res"],
-                                              haplotype=["reordered" if ("microchromosomes" in self.config) and self.config["microchromosomes"] else "combined"],
-                                              subset=candidate_chr_id_list,
-                                              genome_prefix=[self.config["genome_prefix"], ],
-                                              assembly_stage=[self.stage_name],
-                                              parameters=[parameters_label,],
-                                              resolution=parameters["tool_options"]["pretextsnapshot"]["resolution"],
-                                              mapq=parameters["tool_options"]["pretextmap"]["mapq"],
-                                              ext=parameters["tool_options"]["pretextsnapshot"]["format"])
-                                     ]
+                        if candidate_chr_id_list and (self.stage_name == "hic_scaffolding"):
+                            # request pretext map for curation units (if provided)
+                            results_list += [expand(self.config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}/alignment/NA/per_chr/{genome_prefix}.{assembly_stage}.{haplotype}.NA.{subset}.rmdup.precurated.mapq{mapq}.{res}.tracks.pretext",
+                                                  res=parameters["tool_options"]["pretextmap"]["res"],
+                                                  haplotype=["reordered" if ("microchromosomes" in self.config) and self.config["microchromosomes"] else "combined"],
+                                                  subset=candidate_chr_id_list,
+                                                  genome_prefix=[self.config["genome_prefix"], ],
+                                                  assembly_stage=[self.stage_name],
+                                                  parameters=[parameters_label,],
+                                                  mapq=parameters["tool_options"]["pretextmap"]["mapq"])
+                                        ]
         return results_list
 
     def request_filter_reads_files(self):
@@ -616,6 +642,14 @@ class Stage:
                                     datatype=[datatype,],
                                     extension=[self.config["data"][datatype]["conv_ext"]],
                                     fileprefix=self.config["data"][datatype]["conv_file_prefix_list"])]
+        for datatype in self.config["ext_data_feature_dict"]:
+            for track_name in self.config["ext_data_feature_dict"][datatype]["filter"]:
+                results_list += [expand(self.config["out_dir"] / "ext_data/{datatype}/{track_name}/filtered/{fileprefix}{extension}",
+                                        track_name=[track_name],
+                                        datatype=[datatype,],
+                                        extension=[self.config["ext_data"][datatype][track_name]["conv_ext"]],
+                                        fileprefix=self.config["ext_data"][datatype][track_name]["conv_file_prefix_list"])]
+
 
         return results_list
 
@@ -660,6 +694,18 @@ class Stage:
                                        kmer_tool=[kmer_tool,],
                                        kmer_length=parameters["tool_options"][kmer_tool][datatype]["kmer_length"],
                                      )]
+                if "ploidy_test_list" in self.config:
+                    if self.config["ploidy_test_list"]:
+                        results_list += [expand(self.config["out_dir"] / "kmer/{datatype}/{stage}/{analysis_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.p{ploidy}.{analysis_tool}.parameters",
+                                        datatype=[datatype,],
+                                        genome_prefix=[self.config["genome_prefix"], ],
+                                        ploidy=self.config["ploidy_test_list"],
+                                        analysis_tool=["genomescope"],
+                                        stage=[stage,],
+                                        kmer_tool=[kmer_tool,],
+                                        kmer_length=parameters["tool_options"][kmer_tool][datatype]["kmer_length"],
+                                        )]
+
 
             if not self.config["skip_per_lib_genome_estimation"]: # per lib estimation is possible only for meryl kmer counter, as other for other kmer counter per-lib databases are not calculated
                 kmer_tool = "meryl"
@@ -672,6 +718,7 @@ class Stage:
                                            read_prefix=self.config["data"][datatype]["pair_prefix_list"] if datatype in self.config["data_feature_dict"]["paired"] else self.config["data"][datatype]["conv_file_prefix_list"],
                                            kmer_length=parameters["tool_options"][kmer_tool][datatype]["kmer_length"],
                                         )]
+
         # TODO: issues with draw_gc_plot.py script from KrATER, fix it later
         """ 
         if not self.config["skip_kmer_gcp"]:
@@ -683,31 +730,61 @@ class Stage:
                                         min_coverage=parameters["tool_options"]["gcp"][datatype]["min_coverage"],
                                        )]
         """
+        return results_list
 
+    def request_ploidy_check_files(self):
+        results_list = []
 
+        if "ploidy_test_list" in self.config:
+            if self.config["ploidy_test_list"]:
+                ploidy_test_set = set(self.config["ploidy_test_list"]) | set([self.config["ploidy"]])
+            else:
+                ploidy_test_set = set([self.config["ploidy"]])
+        else:
+            ploidy_test_set = set([self.config["ploidy"]])
+
+        self.logger.info(TAB + f"Datatypes:")
+        for datatype in self.config["data_feature_dict"]["genome_size"]:
+            if (datatype == "hic") and (self.config["skip_hic_genomescope"]):
+                continue
+            self.logger.info(TAB * 2 + f"{datatype}:")
+            for kmer_tool in parameters["tool_options"]["kmer_qc"]["kmer_counter_list"]:
+                if "kmer_test_list" in self.config:
+                    if self.config["kmer_test_list"]:
+                        kmer_test_set = set(self.config["kmer_test_list"]) | set(parameters["tool_options"][kmer_tool][datatype]["kmer_length"])
+                    else:
+                        kmer_test_set = set(parameters["tool_options"][kmer_tool][datatype]["kmer_length"])
+                else:
+                    kmer_test_set = set(parameters["tool_options"][kmer_tool][datatype]["kmer_length"])
+
+                self.logger.info(TAB * 3 + f"Checking ploidies: {', '.join(map(str, ploidy_test_set))}")
+                self.logger.info(TAB * 3 + f"Checking kmer length: {', '.join(map(str, kmer_test_set))}")
+
+                results_list += [expand(self.config["out_dir"] / "kmer/{datatype}/{stage}/{analysis_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.p{ploidy}.{analysis_tool}.parameters",
+                                 datatype=[datatype,],
+                                 genome_prefix=[self.config["genome_prefix"], ],
+                                 ploidy=ploidy_test_set,
+                                 analysis_tool=["genomescope"],
+                                 stage=["final",],
+                                 kmer_tool=[kmer_tool,],
+                                 kmer_length=kmer_test_set,
+                                 )]
+                  
         if not self.config["skip_kmer_smudgeplot"]:
             for datatype in self.config["data_feature_dict"]["genome_size"]:
-                for kmer_tool in parameters["tool_options"]["kmer_qc"]["kmer_counter_list"]:
-                    results_list += [expand(self.config["out_dir"]/ "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}_warnings.txt",
-                                               lower_boundary=parameters["tool_options"]["smudgeplot"][datatype]["lower_boundary"],
-                                               upper_boundary=parameters["tool_options"]["smudgeplot"][datatype]["upper_boundary"],
+                    results_list += [expand(self.config["out_dir"]/ "kmer/{datatype}/{stage}/smudgeplot/{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}/smudgeplot_hetmers_centralities.txt",
                                                datatype=[datatype,],
                                                stage=["final",],
-                                               kmer_tool=[kmer_tool,],  
-                                               kmer_length=parameters["tool_options"][kmer_tool][datatype]["kmer_length"],
+                                               kmer_length=parameters["tool_options"]["smudgeplot"][datatype]["kmer_length"],
+                                               min_kmer_count=[4],
                                                ),
-                                    expand(config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.smudgeplot.boundaries",
+                                    expand(config["out_dir"] / "kmer/{datatype}/{stage}/smudgeplot/{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}/smudgeplot.boundaries",
                                               datatype=[datatype,],
                                               stage=["final",],
-                                              kmer_tool=[kmer_tool,],
-                                              kmer_length=parameters["tool_options"][kmer_tool][datatype]["kmer_length"],
+                                              kmer_length=parameters["tool_options"]["smudgeplot"][datatype]["kmer_length"],
+                                              min_kmer_count=[4],
                                               )
                                     ]
-
-        #----
-
-
-
         return results_list
 
     def request_read_contamination_scan_files(self):
@@ -730,17 +807,40 @@ class Stage:
                              expand(self.config["out_dir"] / "qc/multiqc/{datatype}/{stage}/multiqc.{datatype}.{stage}.report.html",
                              datatype=self.config["data_feature_dict"]["fastqc"],
                              stage=[stage,]),]
+            for datatype in self.config["ext_data_feature_dict"]:
+                 for track_name in self.config["ext_data_feature_dict"][datatype]["fastqc"]:
+                     results_list += [expand(self.config["out_dir"] / "ext_qc/fastqc/{fastqc_datatype}/{track_name}/{stage}/{fileprefix}_fastqc.zip",
+                                             fastqc_datatype=[datatype, ],
+                                             track_name=[track_name, ],
+                                             stage=[stage, ],
+                                             fileprefix=self.config["ext_data"][datatype][track_name]["conv_file_prefix_list"])]
         if not self.config["skip_nanoplot"]:
             results_list += [expand(self.config["out_dir"] / "qc/nanoplot/{datatype}/{stage}/{datatype}.{stage}.NanoStats.tsv",
                                datatype=self.config["data_feature_dict"]["long_read"],
                                stage=[stage, ],
                                )]
+            for datatype in self.config["ext_data_feature_dict"]:
+                 for track_name in self.config["ext_data_feature_dict"][datatype]["long_read"]:
+                     results_list += [expand(self.config["out_dir"] / f"ext_qc/nanoplot/{datatype}/{track_name}/{stage}/{datatype}.{track_name}.{stage}.NanoStats.tsv",
+                                      datatype=[datatype,],
+                                      track_name=[track_name,],
+                                      stage=[stage, ],
+                                      )]
         if not self.config["skip_nanoqc"]:
              results_list += [[expand(self.config["out_dir"] / "qc/nanoqc/{datatype}/{stage}/{fileprefix}",
                                datatype=[dat_type, ],
                                stage=[stage, ],
                                fileprefix=self.config["data"][dat_type]["conv_file_prefix_list"]) for dat_type in self.config["data_feature_dict"]["long_read"]]
                              ]
+             for datatype in self.config["ext_data_feature_dict"]:
+                 for track_name in self.config["ext_data_feature_dict"][datatype]["long_read"]:
+                     results_list += [[expand(self.config["out_dir"] / "ext_qc/nanoqc/{datatype}/{track_name}/{stage}/{fileprefix}",
+                                       datatype=[datatype, ],
+                                       track_name=[track_name],
+                                       stage=[stage, ],
+                                       fileprefix=self.config["ext_data"][datatype][track_name]["conv_file_prefix_list"]) ]
+                                     ]
+
         if not self.config["skip_tadbit"]:
             if ("hic" in self.config["data"]) and ((self.config["hic_enzyme_set"] == "custom") or self.config["hic_enzyme_dict"][self.config["hic_enzyme_set"]]):
                 results_list += [expand(self.config["out_dir"] / "qc/tadbit/hic/{stage}/{genome_prefix}.tadbit.stats",

@@ -1,4 +1,4 @@
-
+localrules: create_final_purge_dups_links
 
 rule get_purged_seqs: #
     input:

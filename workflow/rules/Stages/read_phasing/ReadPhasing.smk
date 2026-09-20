@@ -57,15 +57,6 @@ use rule merge_meryl as merge_alien_kmers with:
 rule extract_pe_reads_by_unique_hap_kmers:
     input:
         alien_kmer_db_dir=config["out_dir"] / "{stage}/{parameters}/{genome_prefix}.{stage}.{haplotype}/kmer/meryl/{genome_prefix}.{stage}.{haplotype}.{assembly_kmer_length}.alien.unique.meryl",
-        #rest_hap_db_dirs=lambda wildcards: expand(config["out_dir"]  / ("%s/%s/%s.%s.{haplotype}/kmer/meryl/%s.%s.{haplotype}.%s.unique.meryl" % (wildcards.stage,
-        #                                                                                                                                          wildcards.parameters,
-        #                                                                                                                                          wildcards.genome_prefix,
-        #                                                                                                                                          wildcards.stage,
-        #                                                                                                                                          wildcards.genome_prefix,
-        #                                                                                                                                          wildcards.stage,
-        #                                                                                                                                          wildcards.assembly_kmer_length)),
-        #                                         haplotype=set(stage_dict[wildcards.stage].parameters[wildcards.parameters]["haplotype_list"]) - {wildcards.haplotype},
-        #                                         allow_missing=True),
         forward_read=lambda wildcards: config["out_dir"]  / ("data/{0}/{1}/{2}{3}{4}".format(wildcards.datatype,
                                                                                                 "final",
                                                                                                 wildcards.pairprefix,
@@ -103,15 +94,6 @@ rule extract_pe_reads_by_unique_hap_kmers:
 rule extract_se_reads_by_unique_hap_kmers:
     input:
         alien_kmer_db_dir=config["out_dir"] / "{stage}/{parameters}/{genome_prefix}.{stage}.{haplotype}/kmer/meryl/{genome_prefix}.{stage}.{haplotype}.{assembly_kmer_length}.alien.unique.meryl",
-        #rest_hap_db_dirs=lambda wildcards: expand(config["out_dir"]  / ("%s/%s/%s.%s.{haplotype}/kmer/meryl/%s.%s.{haplotype}.%s.unique.meryl" % (wildcards.stage,
-        #                                                                                                                                          wildcards.parameters,
-        #                                                                                                                                          wildcards.genome_prefix,
-        #                                                                                                                                          wildcards.stage,
-        #                                                                                                                                          wildcards.genome_prefix,
-        #                                                                                                                                          wildcards.stage,
-        #                                                                                                                                          wildcards.assembly_kmer_length)),
-        #                                         haplotype=set(stage_dict[wildcards.stage].parameters[wildcards.parameters]["haplotype_list"]) - {wildcards.haplotype},
-        #                                         allow_missing=True),
         se_read=lambda wildcards: config["out_dir"]  / ("data/{0}/{1}/{2}{3}".format(wildcards.datatype,
                                                                                      "final",
                                                                                      wildcards.fileprefix,
@@ -137,6 +119,17 @@ rule extract_se_reads_by_unique_hap_kmers:
     shell:
          " meryl-lookup -exclude -sequence {input.se_read} "
          "     -mers {input.alien_kmer_db_dir} -output {output.hap_se_read} > {log.std} 2>&1;"
+
+use rule extract_se_reads_by_unique_hap_kmers as extract_se_fasta_reads_by_unique_hap_kmers with:
+    input:
+        alien_kmer_db_dir=config["out_dir"] / "{stage}/{parameters}/{genome_prefix}.{stage}.{haplotype}/kmer/meryl/{genome_prefix}.{stage}.{haplotype}.{assembly_kmer_length}.alien.unique.meryl",
+        se_read=lambda wildcards: config["out_dir"]  / ("data/{0}/{1}/{2}{3}".format(wildcards.datatype,
+                                                                                     "final",
+                                                                                     wildcards.fileprefix,
+                                                                                     config["data"][wildcards.datatype]["conv_ext"])),
+    output:
+        hap_se_read=config["out_dir"] / "{stage}/{parameters}/{genome_prefix}.{stage}.{haplotype}/reads/{datatype}/{assembly_kmer_length}/{fileprefix}.fasta.gz",
+
 
 """
 rule extract_se_reads_from_fasta_by_unique_hap_kmers: #TODO: merge with extract_se_reads_by_unique_hap_kmers:

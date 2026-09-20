@@ -259,7 +259,7 @@ rule create_busco_tracks:
     benchmark:
         "{fasta_dir}/log/create_busco_tracks.{fasta_prefix}.{busco_lineage}.{busco_version}.benchmark.txt"
     conda:
-        config["conda"]["busco5"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco5"]["yaml"])
+        config["conda"]["busco5.8"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco5.8"]["yaml"])
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("busco5_intersect_all"),
@@ -315,7 +315,7 @@ rule create_busco_tracks_for_combined_haplotype:
     benchmark:
         config["out_dir"] / "log/busco5.{assembly_stage}.{parameters}.{genome_prefix}.{merged_haplotype}.{busco_lineage}.{busco_version}.benchmark.txt"
     conda:
-        config["conda"]["busco5"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco5"]["yaml"])
+        config["conda"]["busco5.8"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco5.8"]["yaml"])
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("busco5_intersect_all"),

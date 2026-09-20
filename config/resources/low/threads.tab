@@ -9,6 +9,8 @@ chopper	8	8	8	8	8	8	8	8	8
 jellyfish	30	10	20	30	30	40	48	48	48
 meryl	30	10	20	30	40	48	48	48	48
 meryl_extract	10	10	10	10	10	10	10	10	10
+fastk	30	10	20	30	40	40	40	40	40
+fastk_histo	1	1	1	1	1	1	1	1	1
 yak_reads	30	10	20	30	40	40	40	40	40
 gc_count	10	10	10	10	10	10	10	10	10
 gc_plot	1	1	1	1	1	1	1	1	1
@@ -20,8 +22,12 @@ genomescope	1	1	1	1	1	1	1	1	1
 parse_genomescope_output	1	1	1	1	1	1	1	1	1
 hifiasm	48	12	24	36	48	48	48	48	48
 flye	48	12	24	36	48	48	48	48	48
+verkko	48	12	24	36	48	48	48	48	48
 nextdenovo	48	12	24	36	48	48	48	48	48
 gfa2fasta	1	1	1	1	1	1	1	1	1
+gfa2og	4	4	4	4	4	4	4	4	4
+og_sort_1d	10	4	4	10	10	10	10	10	10
+og_viz_1d	10	4	4	10	10	10	10	10	10
 get_coverage_from_hifiasm_graph	1	1	1	1	1	1	1	1	1
 get_read_bed_from_hifiasm_graph	1	1	1	1	1	1	1	1	1
 busco_download	1	1	1	1	1	1	1	1	1
@@ -61,8 +67,9 @@ pretextsnapshot	4	4	4	4	4	4	4	4	4
 pretext_inject_tracks	4	4	4	4	4	4	4	4	4
 salsa2	10	10	10	10	10	10	20	20	20
 yahs	5	5	5	5	5	5	5	5	5
-smudgeplot_hetkmers	1	1	1	1	1	1	1	1	1
-smudgeplot_plot	1	1	1	1	1	1	1	1	1
+smudgeplot_assess	1	1	1	1	1	1	1	1	1
+smudgeplot_hetmers	30	10	20	30	30	40	40	40	40
+smudgeplot	1	1	1	1	1	1	1	1	1
 compress_kmer	10	10	10	10	10	10	10	10	10
 get_seq_len	1	1	1	1	1	1	1	1	1
 gather_stage_stats	1	1	1	1	1	1	1	1	1

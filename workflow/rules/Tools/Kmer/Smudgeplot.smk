@@ -1,124 +1,98 @@
+
+# here a FastK based version of the smudgeplot is used
+
 localrules: smudgeplot_assess
 
 rule smudgeplot_assess:
     input:
-        histo=config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.histo"
+        fastk_histo=config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}.histo",
     output:
-        boundaries=config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.smudgeplot.boundaries",
+        boundaries=config["out_dir"] / "kmer/{datatype}/{stage}/smudgeplot/{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}/smudgeplot.boundaries",
     log:
-        upper=config["out_dir"] / "log/smudgeplot_assess.{datatype}.{stage}.{kmer_length}.{kmer_tool}.upper.log",
-        lower=config["out_dir"] / "log/smudgeplot_assess.{datatype}.{stage}.{kmer_length}.{kmer_tool}.lower.log",
-        cluster_log=config["out_dir"] / "log/smudgeplot_assess.{datatype}.{stage}.{kmer_length}.{kmer_tool}.cluster.log",
-        cluster_err=config["out_dir"] / "log/smudgeplot_assess.{datatype}.{stage}.{kmer_length}.{kmer_tool}.cluster.err"
+        upper=config["out_dir"] / "log/smudgeplot_assess.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.upper.log",
+        lower=config["out_dir"] / "log/smudgeplot_assess.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.lower.log",
+        cluster_log=config["out_dir"] / "log/smudgeplot_assess.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.cluster.log",
+        cluster_err=config["out_dir"] / "log/smudgeplot_assess.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.cluster.err"
     benchmark:
-        config["out_dir"] / "log/smudgeplot_assess.{datatype}.{stage}.{kmer_length}.{kmer_tool}.benchmark.txt"
+        config["out_dir"] / "log/smudgeplot_assess.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["smudgeplot"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["smudgeplot"]["yaml"])
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("smudgeplot_assess"),
-        cpus=parameters["threads"]["smudgeplot_plot"],
-        time=parameters["time"]["smudgeplot_plot"],
-        mem=parameters["memory_mb"]["smudgeplot_plot"],
+        cpus=parameters["threads"]["smudgeplot_assess"],
+        time=parameters["time"]["smudgeplot_assess"],
+        mem=parameters["memory_mb"]["smudgeplot_assess"],
     threads:
-        parameters["threads"]["smudgeplot_plot"]
+        parameters["threads"]["smudgeplot_assess"]
     shell:
-         " LOWER_BOUNDARY=`smudgeplot.py cutoff {input.histo} L 2>{log.lower}`; "
-         " UPPER_BOUNDARY=`smudgeplot.py cutoff {input.histo} U 2>{log.upper}`; "
-         " echo -e \"low_boundary\tupper_boundary\n${{LOWER_BOUNDARY}}\t${{UPPER_BOUNDARY}}\n\" > {output.boundaries}"
+         " LOWER_BOUNDARY=`smudgeplot cutoff {input.fastk_histo} L 2>{log.lower}`; "
+         " UPPER_BOUNDARY=`smudgeplot cutoff {input.fastk_histo} U 2>{log.upper}`; "
+         " echo -e \"low_boundary\tupper_boundary\n${{LOWER_BOUNDARY}}\t${{UPPER_BOUNDARY}}\" > {output.boundaries}"
 
-rule smudgeplot_hetkmers:
+rule smudgeplot_hetmers:
     input:
-        kmer=config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.subset.kmer",
+        fastk_db=config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}/",
+        boundaries=config["out_dir"] / "kmer/{datatype}/{stage}/smudgeplot/{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}/smudgeplot.boundaries"
     output:
-        coverages=config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}_coverages.tsv",
-        sequences=config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}_sequences.tsv",
+        smu_file=config["out_dir"] / "kmer/{datatype}/{stage}/smudgeplot/{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}/smudgeplot_hetmers.smu",
     log:
-        hetkmers=config["out_dir"] / "log/smudgeplot.{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.hetkmers.log",
-        cluster_log=config["out_dir"] / "log/smudgeplot.{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.cluster.log",
-        cluster_err=config["out_dir"] / "log/smudgeplot.{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.cluster.err"
+        std=config["out_dir"] / "log/smudgeplot_hetmers.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.std.log",
+        cluster_log=config["out_dir"] / "log/smudgeplot_hetmers.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.cluster.log",
+        cluster_err=config["out_dir"] / "log/smudgeplot_hetmers.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}..cluster.err"
     benchmark:
-        config["out_dir"] / "log/smudgeplot.{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.benchmark.txt"
+        config["out_dir"] / "log/smudgeplot_hetmers.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["smudgeplot"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["smudgeplot"]["yaml"])
     resources:
         queue=config["queue"]["cpu"]["name"],
-        node_options=parse_node_list("smudgeplot_hetkmers"),
-        cpus=parameters["threads"]["smudgeplot_hetkmers"],
-        time=parameters["time"]["smudgeplot_hetkmers"],
-        mem=parameters["memory_mb"]["smudgeplot_hetkmers"],
+        node_options=parse_node_list("smudgeplot_hetmers"),
+        cpus=parameters["threads"]["smudgeplot_hetmers"],
+        time=parameters["time"]["smudgeplot_hetmers"],
+        mem=parameters["memory_mb"]["smudgeplot_hetmers"],
         smudgeplot_hetkmers=1
     threads:
-        parameters["threads"]["smudgeplot_hetkmers"]
+        parameters["threads"]["smudgeplot_hetmers"]
     shell:
-         " COV_OUT={output.coverages}; "
-         " PREFIX=${{COV_OUT%_coverages.tsv}}; "
-         #" HAPLOID_COVERAGE=`awk 'NR==2 {{print 2 * $2}}' {input.genomescope_report}`; "
-         " smudgeplot.py hetkmers -o ${{PREFIX}} {input.kmer} > {log.hetkmers} 2>&1; "
-         #" smudgeplot.py plot -k {wildcards.kmer_length} -n ${{HAPLOID_COVERAGE}}  -o ${{PREFIX}} {output.coverages} > {log.plot} 2>&1; "
+         " OUT_DIR=`dirname {output.smu_file}`; "
+         " OUT_PREFIX={output.smu_file}; "
+         " OUT_PREFIX=${{OUT_PREFIX%.smu}}; "
+         " TMP_DIR=${{OUT_DIR}}/tmp/; "
+         " mkdir -p ${{TMP_DIR}}; "
+         " smudgeplot hetmers -L `cut -f 1 {input.boundaries} | sed -n 2p` -t {threads} -o ${{OUT_PREFIX}} "
+         "      --verbose -tmp ${{TMP_DIR}}  {input.fastk_db}/fastk_db.ktab > {log.std} 2>&1; "
+         " rm -r ${{TMP_DIR}}; "
 
-rule smudgeplot_plot: # in some cases smudgeplot could fail in geneeration of image. It's not crucial analysis, so better to continue pipeline execution. Because of it warning file was set as output
+rule smudgeplot:
     input:
-        coverages=config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}_coverages.tsv",
-        genomescope_report=config["out_dir"] / ("kmer/{datatype}/{stage}/genomescope/%s.%s.final.%s.%s.genomescope.parameters" % (config["genome_prefix"],
-                                                                                                                                  "_".join(config["final_kmer_datatypes"]),
-                                                                                                                                  config["final_kmer_length"],
-                                                                                                                                  config["final_kmer_counter"])),
+        smu_file=config["out_dir"] / "kmer/{datatype}/{stage}/smudgeplot/{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}/smudgeplot_hetmers.smu",
+        boundaries=config["out_dir"] / "kmer/{datatype}/{stage}/smudgeplot/{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}/smudgeplot.boundaries"
     output:
-        warnings=config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}_warnings.txt",
-        warnings_no_priors=config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.no_priors_warnings.txt",
-        #smudgeplot=config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}_smudgeplot.png",
-        #summary=config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}_summary_table.tsv",
-        #smudgeplot_no_priors=config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.no_priors_smudgeplot.png",
-        #summary_no_priors=config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.no_priors_summary_table.tsv"
+        centralities_file=config["out_dir"] / "kmer/{datatype}/{stage}/smudgeplot/{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}/smudgeplot_hetmers_centralities.txt"
     log:
-        plot=config["out_dir"] / "log/smudgeplot.{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.plot.log",
-        cluster_log=config["out_dir"] / "log/smudgeplot.{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.cluster.log",
-        cluster_err=config["out_dir"] / "log/smudgeplot.{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.cluster.err"
+        plot=config["out_dir"] / "log/smudgeplot.{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}.plot.log",
+        cluster_log=config["out_dir"] / "log/smudgeplot.{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}.cluster.log",
+        cluster_err=config["out_dir"] / "log/smudgeplot.{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}.cluster.err"
     benchmark:
-        config["out_dir"] / "log/smudgeplot.{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.benchmark.txt"
+        config["out_dir"] / "log/smudgeplot.{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        config["conda"]["smudgeplot"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["smudgeplot"]["yaml"])
     resources:
         queue=config["queue"]["cpu"]["name"],
-        node_options=parse_node_list("smudgeplot_plot"),
-        cpus=parameters["threads"]["smudgeplot_plot"],
-        time=parameters["time"]["smudgeplot_plot"],
-        mem=parameters["memory_mb"]["smudgeplot_plot"],
+        node_options=parse_node_list("smudgeplot"),
+        cpus=parameters["threads"]["smudgeplot"],
+        time=parameters["time"]["smudgeplot"],
+        mem=parameters["memory_mb"]["smudgeplot"],
     threads:
-        parameters["threads"]["smudgeplot_plot"]
+        parameters["threads"]["smudgeplot"]
     shell:
-         " WARNINGS={output.warnings}; "
-         " PREFIX=${{WARNINGS%_warnings.txt}}; "
-         " HAPLOID_COVERAGE=`awk 'NR==2 {{print $2}}' {input.genomescope_report}`; "
-         " smudgeplot.py plot -k {wildcards.kmer_length} -n ${{HAPLOID_COVERAGE}}  -o ${{PREFIX}} {input.coverages} > {log.plot} 2>&1; "
-         " WARNINGS_NO_PRIORS={output.warnings_no_priors}; "
-         " PREFIX_NO_PRIORS=${{WARNINGS_NO_PRIORS%_warnings.txt}}; "
-         " smudgeplot.py plot -k {wildcards.kmer_length} -o ${{PREFIX_NO_PRIORS}} {input.coverages} > {log.plot} 2>&1; "
+         " OUT_PREFIX={output.centralities_file}; "
+         " OUT_PREFIX=${{OUT_PREFIX%_centralities.txt}}; "
+         " smudgeplot all -t {wildcards.datatype}.{wildcards.stage}.{wildcards.kmer_length}.fastk_min{wildcards.min_kmer_count} "
+         "      -cov_min `cut -f 1 {input.boundaries} | sed -n 2p` "
+         "      -cov_max `cut -f 2 {input.boundaries} | sed -n 2p` "
+         "      -ylim `cut -f 2 {input.boundaries} | sed -n 2p` "
+         "      -o ${{OUT_PREFIX}} {input.smu_file} > {log.plot} 2>&1; "
 
 
-rule compress_kmer:
-    input:
-        kmer=config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.subset.kmer",
-        summary=config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}_summary_table.tsv"
-    output:
-        kmer_gz=config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.subset.kmer.gz"
-    log:
-        std=config["out_dir"] / "log/compress_kmer.{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.log",
-        cluster_log=config["out_dir"] / "log/compress_kmer{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.cluster.log",
-        cluster_err=config["out_dir"] / "log/compress_kmer.{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.cluster.err"
-    benchmark:
-        config["out_dir"] / "log/compress_kmer.{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.benchmark.txt"
-    conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
-    resources:
-        queue=config["queue"]["cpu"]["name"],
-        node_options=parse_node_list("compress_kmer"),
-        cpus=parameters["threads"]["compress_kmer"],
-        time=parameters["time"]["compress_kmer"],
-        mem=parameters["memory_mb"]["compress_kmer"],
-        smudgeplot=1
-    threads:
-        parameters["threads"]["compress_kmer"]
-    shell:
-         " pigz -p 10 {input.kmer} > {log.std} 2>&1; "
+

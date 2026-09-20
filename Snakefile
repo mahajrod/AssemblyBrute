@@ -55,6 +55,9 @@ config["data_feature_dict"] = {feature: set() for feature in ["paired", "fastq",
                                                               "pretext_per_hap_track"]}
 
 brute_logger.info(f"Checking input files...")
+
+config["data"] = deepcopy(config["data_parameters"])
+
 for datatype in list(config["data"].keys()):
     if datatype not in config["input_datatypes"]:
         # remove absent datatypes
@@ -62,7 +65,7 @@ for datatype in list(config["data"].keys()):
         brute_logger.dbg_scr(TAB + f"Skipping input {datatype} files (absent in the main config)...")
         continue
     if datatype in ["reference", "draft"]:
-        #thisa datatypes are parsed later
+        #this datatypes are parsed later
         continue
     # parsing input filenames
     brute_logger.info(TAB + f"Checking input {datatype} files...")
@@ -133,7 +136,104 @@ for datatype in list(config["data"].keys()):
     for filepath in config["data"][datatype]["in_file_list"]:
         brute_logger.info(TAB * 3 + str(filepath))
 
-if "reference" in config["data"]:
+config["ext_data_feature_dict"] = {}
+
+config["ext_data"] = {}
+if "ext_data" in config["input_datatypes"]: # parse data that will be used to create additional tracks for pretextview. It is not used for assembly itself
+    brute_logger.info(TAB + f"Checking external data...")
+
+    for datatype in list(config["data_parameters"].keys()):
+
+        datatype_dir = input_dir_path / "ext_data" / datatype
+        track_dir_list = []
+        for track_dir in datatype_dir.glob("*"):
+            if track_dir.is_dir():
+                track_dir_list.append(track_dir)
+        if not track_dir_list:
+            brute_logger.dbg_scr(TAB * 2 + f"Checking external {datatype} data...")
+            brute_logger.dbg_scr(TAB * 3 + f"External {datatype} data was not found...")
+            continue
+        brute_logger.info(TAB * 2 + f"Checking external{datatype} data...")
+        config["ext_data"][datatype] = {}
+        config["ext_data_feature_dict"][datatype] = {feature: set() for feature in ["paired", "fastq", "fasta", "fastqc",
+                                                                                      "long_read", "nanopore", "pacbio",
+                                                                                      "genome_size", "variant_call", "gap_fill",
+                                                                                      "kraken", "filter", "phasing", "pretext_coverage_track",
+                                                                                      "pretext_per_hap_track"]}
+        for track_dir in track_dir_list:
+            track_name = track_dir.name
+            brute_logger.info(TAB * 3 + f"Found external dataset {track_name}...")
+            input = detect_input_type(datatype, track_dir)
+
+            input_format = list(input.keys())[0]
+
+            config["ext_data"][datatype][track_name] = deepcopy(config["data_parameters"][datatype][input_format])
+            config["ext_data"][datatype][track_name].pop("allowed_in_exts")
+            config["ext_data"][datatype][track_name]["in_ext"] = list(input[input_format].keys())[0]
+            config["ext_data"][datatype][track_name]["in_dir"] = track_dir / input_format
+            config["ext_data"][datatype][track_name]["in_file_list"] = input[input_format][config["ext_data"][datatype][track_name]["in_ext"]]
+            config["ext_data"][datatype][track_name]["num_files"] = len(config["data"][datatype]["in_file_list"])
+            config["ext_data"][datatype][track_name]["file_prefix_list"] = list(map(lambda s: str(s.name)[:-len(config["ext_data"][datatype][track_name]["in_ext"])],
+                                                                config["ext_data"][datatype][track_name]["in_file_list"]))
+
+            if config["ext_data"][datatype][track_name]["paired"]:
+                config["ext_data"][datatype][track_name]["pair_prefix_list"] = []
+                config["ext_data"][datatype][track_name]["conv_file_prefix_list"] = []
+                if (config["ext_data"][datatype][track_name]["num_files"] % 2) != 0:
+                    raise ValueError(f"ERROR!!! {datatype} fastq files seems to be unpaired or misrecognized")
+                for forward, reverse in zip(config["ext_data"][datatype][track_name]["in_file_list"][::2],
+                                            config["ext_data"][datatype][track_name]["in_file_list"][1::2]):
+                    if p_distance(str(forward), str(reverse), len(str(forward))) > 1:
+                        raise ValueError(f"ERROR!!! {datatype} forward and reverse read files differ by more than one symbol:\n\t{forward}\n\t{reverse}")
+                config["ext_data"][datatype][track_name]["in_fwd_sfx"] = set()
+                config["ext_data"][datatype][track_name]["in_rev_sfx"] = set()
+                # detect pairprefix, forward_and_reverse_suffixes for paired data
+                for forward_prefix, reverse_prefix in zip(config["ext_data"][datatype][track_name]["file_prefix_list"][::2],
+                                                          config["ext_data"][datatype][track_name]["file_prefix_list"][1::2]):
+                    common_prefix, forward_suffix, reverse_suffix = get_common_prefix_ans_suffixes(forward_prefix, reverse_prefix)
+                    config["ext_data"][datatype][track_name]["pair_prefix_list"].append(common_prefix)
+                    config["ext_data"][datatype][track_name]["in_fwd_sfx"].add(forward_suffix)
+                    config["ext_data"][datatype][track_name]["in_rev_sfx"].add(reverse_suffix)
+                if (len(config["ext_data"][datatype][track_name]["in_fwd_sfx"]) > 1) or (len(config["ext_data"][datatype][track_name]["in_rev_sfx"]) > 1):
+                    raise ValueError(f"ERROR!!! Multiple different suffixes in {datatype} filenames!")
+
+                config["ext_data"][datatype][track_name]["in_fwd_sfx"] = list(config["ext_data"][datatype][track_name]["in_fwd_sfx"])[0]
+                config["ext_data"][datatype][track_name]["in_rev_sfx"] = list(config["ext_data"][datatype][track_name]["in_rev_sfx"])[0]
+
+                for pairprefix in config["ext_data"][datatype][track_name]["pair_prefix_list"]:
+                    config["ext_data"][datatype][track_name]["conv_file_prefix_list"].append(pairprefix + config["ext_data"][datatype][track_name]["conv_fwd_sfx"])
+                    config["ext_data"][datatype][track_name]["conv_file_prefix_list"].append(pairprefix + config["ext_data"][datatype][track_name]["conv_rev_sfx"])
+            else: # register prefixes of files for se data to simplify dealing with wildcards
+                config["ext_data"][datatype][track_name]["pair_prefix_list"] = config["ext_data"][datatype][track_name]["file_prefix_list"]
+                config["ext_data"][datatype][track_name]["conv_file_prefix_list"] = config["ext_data"][datatype][track_name]["file_prefix_list"]
+
+            # check datatype specific filtering requests
+            config["ext_data"][datatype][track_name]["filter"] = False if datatype not in config["data_filtering"] else (config["ext_data"][datatype][track_name]["filter"] & True)
+
+            # create output dirnames
+            config["ext_data"][datatype][track_name]["raw_dir"] = config["out_dir"] / "ext_data" / datatype / track_name / "raw"
+            config["ext_data"][datatype][track_name]["trimmed_dir"] = config["out_dir"] / "ext_data" / datatype / track_name / "trimmed"
+            config["ext_data"][datatype][track_name]["filtered_dir"] = config["out_dir"] / "ext_data" / datatype / track_name / "filtered"
+            config["ext_data"][datatype][track_name]["final_dir"] = config["out_dir"] / "ext_data" / datatype / track_name / "final"
+
+
+            if config["ext_data"][datatype][track_name]["conv_fmt"] == "fastq":
+                config["ext_data_feature_dict"][datatype]["fastq"].add(track_name)
+            if config["ext_data"][datatype][track_name]["conv_fmt"] == "fasta":
+                config["ext_data_feature_dict"][datatype]["fasta"].add(track_name)
+            for feature in ("paired", "fastqc", "long_read", "nanopore", "pacbio", "genome_size", "variant_call", "gap_fill",
+                            "kraken", "filter", "phasing", "pretext_coverage_track", "pretext_per_hap_track"):
+                if config["ext_data"][datatype][track_name][feature]:
+                    config["ext_data_feature_dict"][datatype][feature].add(track_name)
+
+            brute_logger.info(TAB * 4 + f"Input extension: {config['ext_data'][datatype][track_name]['in_ext']}")
+            brute_logger.info(TAB * 4 + f"Input files: {config['ext_data'][datatype][track_name]['num_files']}")
+            brute_logger.info(TAB * 4 + "Files:")
+            for filepath in config["ext_data"][datatype][track_name]["in_file_list"]:
+                brute_logger.info(TAB * 5 + str(filepath))
+
+
+if "reference" in config["data"]: # REQUIRED FILE: *.fasta, *.whitelist and *.orderlist
     brute_logger.info(TAB + f"Checking input reference files...")
     config["data"]["reference"]["in_dir"] = input_dir_path / "reference"
     config["data"]["reference"]["ref_dict"] = {}
@@ -142,13 +242,21 @@ if "reference" in config["data"]:
             config["data"]["reference"]["ref_dict"][filename.name] = {}
     for genome in config["data"]["reference"]["ref_dict"]:
         brute_logger.info(TAB * 2 + f"Checking reference {genome}...")
-        for filetype in "fasta", "syn", "whitelist", "orderlist":
+        for filetype in "fasta", "whitelist", "orderlist", "syn":
             config["data"]["reference"]["ref_dict"][genome][filetype] = list((config["data"]["reference"]["in_dir"] / genome).glob(f"*.{filetype}"))
 
             if len(config["data"]["reference"]["ref_dict"][genome][filetype]) > 1:
                 raise ValueError(f"ERROR!!! There is more than one {filetype} file for reference {genome}")
 
-            config["data"]["reference"]["ref_dict"][genome][filetype] = config["data"]["reference"]["ref_dict"][genome][filetype][0]
+            if (filetype == "syn") and (not config["data"]["reference"]["ref_dict"][genome]["syn"]): # create syn file from the whitelist if it is absent
+                syn_filename = ".".join(str(config['data']['reference']['ref_dict'][genome]['whitelist']).split(".")[:-1]) + ".syn"
+                create_syn_cmd = f"sed 's/\\(.*\\)/\\1\\t\\1/' {config['data']['reference']['ref_dict'][genome]['whitelist']} > {syn_filename}"
+                os.system(create_syn_cmd)
+                config["data"]["reference"]["ref_dict"][genome][filetype] = syn_filename
+
+            else:
+                config["data"]["reference"]["ref_dict"][genome][filetype] = config["data"]["reference"]["ref_dict"][genome][filetype][0]
+            print(config["data"]["reference"]["ref_dict"][genome][filetype])
             brute_logger.info(TAB * 3 + f"Detected {filetype}:")
             brute_logger.info(TAB * 4 + f"{config['data']['reference']['ref_dict'][genome][filetype]}")
 
@@ -184,7 +292,7 @@ elif len(candidate_agp_filename) == 1:
     brute_logger.info("Detected AGP file with curation units:")
     brute_logger.info(TAB + str(candidate_agp_filename))
 
-    candidate_output_dir = config["out_dict"]["data"] / "candidate_chr/"
+    candidate_output_dir = config["out_dir"] / "data/candidate_chr/"
     if not candidate_output_dir.exists():
         os.system(f" mkdir -p {str(candidate_output_dir)}")
     candidate_output_prefix = candidate_output_dir / "candidate"
@@ -202,9 +310,9 @@ elif len(candidate_agp_filename) == 1:
     candidate_chr_id_list = list(chr_component_series.index)
     brute_logger.info("Curation units:")
     for curation_unit in chr_component_series.index.unique():
-        brute_logger.info(TAB + f"- {curation_unit}:")
+        brute_logger.info(TAB + f"- {curation_unit}")
         for scaffold_id in chr_component_series[curation_unit]:
-            brute_logger.info(TAB * 2 + "- " + scaffold_id)
+            brute_logger.dbg_scr(TAB * 2 + "- " + scaffold_id)
         chr_component_series[[curation_unit]].to_csv(f"{candidate_output_prefix}.{curation_unit}.components.ids",sep="\t",header=False,index=False)
         chr_black_list_series = chr_component_series[~chr_component_series.isin(chr_component_series[[curation_unit]])]
         chr_black_list_series.to_csv(f"{candidate_output_prefix}.{curation_unit}.pretext.blacklist",sep="\t",header=False,index=False)
@@ -245,8 +353,8 @@ for tool in config["other_tool_option_sets"]: # select active set of option for 
 # TODO: check if it is possible to optimize code below
 
 for datatype in config["final_kmer_datatypes"]:
-    if datatype not in config["data_feature_dict"]["fastq"]:
-        raise ValueError(f"ERROR!!! final kmer datatype ({datatype}) is absent among input fastq-based datatypes({','.join(data_feature_dict['fastq'])})")
+    if (datatype not in config["data_feature_dict"]["fastq"]) and (datatype not in config["data_feature_dict"]["fasta"]):
+        raise ValueError(f"ERROR!!! final kmer datatype ({datatype}) is absent among input fastq-based({','.join(config['data_feature_dict']['fastq'])}) and fasta-based({','.join(config['data_feature_dict']['fasta'])}) datatypes")
 
 #check if final_kmer_tool is present in "kmer_counter_list"
 if config["final_kmer_counter"] not in parameters["tool_options"]["kmer_qc"]["kmer_counter_list"]:
@@ -326,12 +434,14 @@ wildcard_constraints:
     stage="[^/]+",
     assembly_stage="[^/]+",
     kmer_length="[0-9]+",
+    min_kmer_count="[0-9]+",
     kmer_tool="[^.]+",
     meryl_db=".*meryl.*",
     phasing_kmer_length="[^./]+", # can be an int number or 'NA' in case of no phasing
     genome_prefix="[^/]+",
     correction_options="[^/]+",
     gfa_prefix="[^/]*hap[^/]*|[^/]*alt[^/]*",
+    #gfa_prefix="[^/]*",
     gfa_dir=".*contig.*",
     parameters="[^/]+",
     parameters_prefix="[^/]+",
@@ -357,7 +467,7 @@ wildcard_constraints:
     mapq="[0-9]+",
     min_mapq="[0-9]+",
     resolution="[0-9]+",
-    pretext_res="default|high_res",
+    pretext_res="default|low_res|high_res|ultra_res",
     track_type="[^./]+",
     threshold_type="[^/]+"
 
@@ -372,7 +482,7 @@ rule all:
 include: "workflow/rules/General/Log.smk" # DONE
 include: "workflow/rules/General/Links.smk" # DONE
 include: "workflow/rules/Preprocessing/Files.smk" # DONE
-include: "workflow/rules/Preprocessing/Combine.smk" # DONE # TODO: probably not well tested
+include: "workflow/rules/Preprocessing/Combine.smk" # DONE
 include: "workflow/rules/Tools/QCFiltering/FastQC.smk" # DONE
 include: "workflow/rules/Tools/QCFiltering/MultiQC.smk" # DONE
 include: "workflow/rules/Tools/QCFiltering/NanoQC.smk" # DONE
@@ -382,24 +492,27 @@ include: "workflow/rules/Tools/QCFiltering/TADbit.smk" # DONE
 include: "workflow/rules/Tools/QCFiltering/Cutadapt.smk" # DONE
 include: "workflow/rules/Tools/QCFiltering/HiCTrim.smk" # DONE
 include: "workflow/rules/Tools/QCFiltering/Trimmomatic.smk" # DONE
-include: "workflow/rules/Tools/QCFiltering/Final.smk" # DONE     # TODO: probably not well tested
-include: "workflow/rules/Tools/QCFiltering/Nanopore.smk"    # TODO: refactored, but not tested
-include: "workflow/rules/Tools/Contamination/Kraken2.smk"  # TODO: refactored, but not tested
+include: "workflow/rules/Tools/QCFiltering/Final.smk" # DONE     # DONE
+include: "workflow/rules/Tools/QCFiltering/Nanopore.smk"    # DONE
+include: "workflow/rules/Tools/Contamination/Kraken2.smk"  # DONE
 
 include: "workflow/rules/Tools/Kmer/Jellyfish.smk" # DONE
 include: "workflow/rules/Tools/Kmer/Meryl.smk"    # DONE
+include: "workflow/rules/Tools/Kmer/FastK.smk"    #
 include: "workflow/rules/Tools/Kmer/Yak.smk"      # DONE
-include: "workflow/rules/Tools/Kmer/Smudgeplot.smk" # TODO: refactor
+include: "workflow/rules/Tools/Kmer/Smudgeplot.smk" # TODO: test
 include: "workflow/rules/Tools/Kmer/GCplot.smk"     # TODO: refactor
 include: "workflow/rules/Tools/Kmer/Genomescope.smk"  # DONE
 include: "workflow/rules/Tools/Kmer/Krater.smk"       # DONE
 
 include: "workflow/rules/Stages/contig/Common.smk" # DONE
 include: "workflow/rules/Stages/contig/Hifiasm.smk" # DONE
-#include: "workflow/rules/Stages/contig/NextDenovo.smk" # DONE
+#include: "workflow/rules/Tools/Graph/ODGI.smk" # ODGI is incompatible with hifiasm graphs
+include: "workflow/rules/Stages/contig/Verkko.smk" # Partly done
+#include: "workflow/rules/Stages/contig/NextDenovo.smk" #
 include: "workflow/rules/Stages/contig/Flye.smk" # DONE
 include: "workflow/rules/Tools/Graph/GFA.smk" # DONE
-include: "workflow/rules/Tools/Contamination/FCS.smk" # TODO: after refactoring, only a case with skip_fcs=True was tested so far
+include: "workflow/rules/Tools/Contamination/FCS.smk" # DONE
 
 include: "workflow/rules/Tools/General/Sequence.smk" # DONE
 include: "workflow/rules/Stats/General.smk" # DONE
@@ -412,7 +525,7 @@ include: "workflow/rules/QCAssembly/GCTrack.smk" # DONE
 include: "workflow/rules/QCAssembly/SangerTelomereTrack.smk" # DONE
 include: "workflow/rules/Tools/Telomere/SangerTelomere.smk" # DONE
 include: "workflow/rules/QCAssembly/TelomereTidkTrack.smk"  # DONE
-include: "workflow/rules/Tools/Telomere/Tidk.smk" # DONE   # TODO: not well tested
+include: "workflow/rules/Tools/Telomere/Tidk.smk" # DONE
 
 include: "workflow/rules/QCAssembly/Curation.smk" # DONE     # TODO: probably not well tested
 include: "workflow/rules/QCAssembly/GapTrack.smk" # DONE
@@ -429,8 +542,8 @@ include: "workflow/rules/QCAssembly/CombineHaplotypes.smk" # DONE # TODO: be rea
 include: "workflow/rules/QCAssembly/MicroChromosomes.smk" # DONE
 include: "workflow/rules/QCAssembly/HiCmap.smk" # DONE
 include: "workflow/rules/QCAssembly/HiGlass.smk" # DONE
-include: "workflow/rules/QCAssembly/Pretext.smk" # DONE # TODO: probably not well tested
-include: "workflow/rules/Tools/HiC/Pretext.smk" # DONE # TODO: probably not well tested
+include: "workflow/rules/QCAssembly/Pretext.smk" # DONE d
+include: "workflow/rules/Tools/HiC/Pretext.smk" # DONE
 include: "workflow/rules/QCAssembly/PretextPerChr.smk" # DONE # TODO: probably not well tested
 
 include: "workflow/rules/Tools/Repeats/Masking.smk" # DONE
@@ -439,9 +552,9 @@ include: "workflow/rules/Tools/WGA/LAST.smk"     # DONE
 include: "workflow/rules/Stages/read_phasing/ReadPhasing.smk" # DONE
 
 include: "workflow/rules/Tools/Alignment/Index.smk" # DONE
-include: "workflow/rules/Tools/Alignment/Common.smk" # DONE # TODO: probably not well tested
+include: "workflow/rules/Tools/Alignment/Common.smk" # DONE
 include: "workflow/rules/Tools/Alignment/Stats.smk" # DONE
-include: "workflow/rules/Tools/Alignment/PostAlignment.smk" # TODO: finish refactoring
+include: "workflow/rules/Tools/Alignment/PostAlignment.smk" # DONE
 
 if "hic_alignment" in stage_dict:
     include: "workflow/rules/Stages/hic_alignment/Common.smk" # DONE
@@ -454,12 +567,12 @@ if "hic_scaffolding" in stage_dict:
     include: "workflow/rules/Stages/hic_scaffolding/YAHS.smk"
     include: "workflow/rules/Stages/hic_scaffolding/3DDNA.smk" # DONE
 
-include: "workflow/rules/Tools/Deduplication/Hapsolo.smk"     # TODO: test
+include: "workflow/rules/Tools/Deduplication/Hapsolo.smk"      # DONE
 if "dedup" in stage_dict:
     include: "workflow/rules/Stages/dedup/Common.smk"
-    include: "workflow/rules/Stages/dedup/HapSolo.smk"       # TODO: test
+    include: "workflow/rules/Stages/dedup/HapSolo.smk"        # DONE
     include: "workflow/rules/Stages/dedup/Purge_dups.smk"
-    include: "workflow/rules/Stages/dedup/ComboPurge.smk"    # TODO: test
+    include: "workflow/rules/Stages/dedup/ComboPurge.smk"     # DONE
 
 if "ref_scaffolding" in stage_dict:
     pass
@@ -469,12 +582,12 @@ if "gap_closing" in config["stage_list"]:
     include: "workflow/rules/Stages/gap_closing/Samba.smk" # TODO: test refactored code on big genomes
 
 if "polishing" in stage_dict:
-    include: "workflow/rules/Stages/polishing/NextPolish2.smk" # TODO: test
+    include: "workflow/rules/Stages/polishing/NextPolish2.smk"  # DONE
 
 include: "workflow/rules/Tools/Conversion/Bam2bed.smk" # TODO: not tested
-include: "workflow/rules/Tools/Alignment/Winnowmap.smk" # TODO: not tested
+include: "workflow/rules/Tools/Alignment/Winnowmap.smk"  # DONE
 include: "workflow/rules/Stages/mtdna/MitoHiFi.smk" # DONE
-include: "workflow/rules/Stages/mtdna/Mitoz.smk"    # TODO: check code
+include: "workflow/rules/Stages/mtdna/Mitoz.smk"    # DONE
 
 """
 

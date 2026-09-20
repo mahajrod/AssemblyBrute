@@ -1,0 +1,255 @@
+
+def get_files_for_fastk(wildcards):
+    file_list = []
+    for datatype in wildcards.datatype.split("_"):
+        file_list += expand(config["out_dir"] / ("data/%s/%s/{fileprefix}%s" % (datatype,
+                                                                                          wildcards.stage,
+                                                                                          config["data"][wildcards.datatype]["conv_ext"])),
+                            fileprefix=config["data"][wildcards.datatype]["conv_file_prefix_list"],
+                            allow_missing=True)
+
+    return file_list
+
+rule fastk: # Fastmerge falls with segmentation fault, so the db is calculated for all files simalteneously
+    input:
+        get_files_for_fastk
+
+    output:
+        db=directory(config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}/"),
+        #ktab=config["out_dir"] / "kmer/{se_datatype}/{stage}/{se_datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}.{fileprefix}/fastk_db.ktab",
+    log:
+        std=config["out_dir"] / "log/fastk_se.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.log",
+        cluster_log=config["out_dir"] / "log/fastk_se.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.cluster.log",
+        cluster_err=config["out_dir"] / "log/fastk_se.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.cluster.err"
+    benchmark:
+        config["out_dir"] / "log/fastk_se.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.benchmark.txt"
+    conda:
+        config["conda"]["smudgeplot"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["smudgeplot"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"]["name"],
+        node_options=parse_node_list("fastk"),
+        cpus=get_threads(parameters["threads"]["fastk"], "cpu"),
+        time=parameters["time"]["fastk"],
+        mem=lambda wildcards, attempt: attempt * parameters["memory_mb"]["fastk"],
+        kmer_counter=1
+    threads:
+        parameters["threads"]["fastk"]
+    shell:
+         " MEM_GB=`echo '{resources.mem}/1024' | bc`; "
+         " TMP_DIR={output.db}/tmp_`basename {output.db}`; "
+         " mkdir -p {output.db} ${{TMP_DIR}}; "
+         " FastK -v -t{wildcards.min_kmer_count} -k{wildcards.kmer_length} -M${{MEM_GB}} -T{threads} "
+         "       -P${{TMP_DIR}} -N{output.db}/fastk_db {input}  > {log.std} 2>&1; "
+         " rm -r ${{TMP_DIR}}; "
+
+
+rule get_fastk_histo:
+    input:
+        db="{fastk_dir}/{fastk_db_prefix}.fastk_min{min_kmer_count}/",
+        log_dir=ancient("{fastk_dir}/log/")
+    output:
+        histo="{fastk_dir}/{fastk_db_prefix}.fastk_min{min_kmer_count}.histo"
+
+    log:
+        histo_log="{fastk_dir}/log/get_fastk_histo.{fastk_db_prefix}.fastk_min{min_kmer_count}.log",
+        cluster_log="{fastk_dir}/log/get_fastk_histo.{fastk_db_prefix}.fastk_min{min_kmer_count}.cluster.log",
+        cluster_err="{fastk_dir}/log/get_fastk_histo.{fastk_db_prefix}.fastk_min{min_kmer_count}.cluster.err"
+    benchmark:
+        "{fastk_dir}/log/get_fastk_histo.{fastk_db_prefix}.fastk_min{min_kmer_count}.benchmark.txt"
+    conda:
+        config["conda"]["smudgeplot"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["smudgeplot"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"]["name"],
+        node_options=parse_node_list("fastk_histo"),
+        cpus=parameters["threads"]["fastk_histo"],
+        time=parameters["time"]["fastk_histo"],
+        mem=parameters["memory_mb"]["fastk_histo"],
+    threads:
+        parameters["threads"]["fastk_histo"]
+    shell:
+         " Histex -G -h32637 {input.db}/fastk_db.hist > {output.histo} 2>{log.histo_log}"
+
+
+"""
+rule fastk_se:
+    input:
+        lambda wildcards: config["out_dir"] / "data/{0}/{1}/{2}{3}".format(wildcards.se_datatype,
+                                                                               wildcards.stage,
+                                                                               wildcards.fileprefix,
+                                                                               config["data"][wildcards.se_datatype]["conv_ext"])
+
+    output:
+        db=directory(config["out_dir"] / "kmer/{se_datatype}/{stage}/{se_datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}.{fileprefix}/"),
+        #ktab=config["out_dir"] / "kmer/{se_datatype}/{stage}/{se_datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}.{fileprefix}/fastk_db.ktab",
+    log:
+        std=config["out_dir"] / "log/fastk_se.{se_datatype}.{stage}.{fileprefix}.{kmer_length}.min{min_kmer_count}.log",
+        cluster_log=config["out_dir"] / "log/fastk_se.{se_datatype}.{stage}.{fileprefix}.{kmer_length}.min{min_kmer_count}.cluster.log",
+        cluster_err=config["out_dir"] / "log/fastk_se.{se_datatype}.{stage}.{fileprefix}.{kmer_length}.min{min_kmer_count}.cluster.err"
+    benchmark:
+        config["out_dir"] / "log/fastk_se.{se_datatype}.{stage}.{fileprefix}.{kmer_length}.min{min_kmer_count}.benchmark.txt"
+    conda:
+        config["conda"]["smudgeplot"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["smudgeplot"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"]["name"],
+        node_options=parse_node_list("fastk"),
+        cpus=get_threads(parameters["threads"]["fastk"], "cpu"),
+        time=parameters["time"]["fastk"],
+        mem=lambda wildcards, attempt: attempt * parameters["memory_mb"]["fastk"],
+        kmer_counter=1
+    threads:
+        parameters["threads"]["fastk"]
+    shell:
+         " MEM_GB=`echo '{resources.mem}/1024' | bc`; "
+         " TMP_DIR={output.db}/tmp_`basename {output.db}`; "
+         " mkdir -p {output.db} ${{TMP_DIR}}; "
+         " FastK -v -t{wildcards.min_kmer_count} -k{wildcards.kmer_length} -M${{MEM_GB}} -T{threads} "
+         "       -P${{TMP_DIR}} -N{output.db}/fastk_db {input}  > {log.std} 2>&1; "
+         " rm -r ${{TMP_DIR}}; "
+
+
+
+rule fastk_pe:
+    input:
+        forward_fastq=lambda wildcards: config["out_dir"] / "data/{0}/{1}/{2}{3}{4}".format(wildcards.pe_datatype,
+                                                                                                wildcards.stage,
+                                                                                                wildcards.pairprefix,
+                                                                                                config["data"][wildcards.pe_datatype]["conv_fwd_sfx"],
+                                                                                                config["data"][wildcards.pe_datatype]["conv_ext"]),
+        reverse_fastq=lambda wildcards: config["out_dir"] / "data/{0}/{1}/{2}{3}{4}".format(wildcards.pe_datatype,
+                                                                                                wildcards.stage,
+                                                                                                wildcards.pairprefix,
+                                                                                                config["data"][wildcards.pe_datatype]["conv_rev_sfx"],
+                                                                                                config["data"][wildcards.pe_datatype]["conv_ext"]),
+    output:
+        db=directory(config["out_dir"] / "kmer/{pe_datatype}/{stage}/{pe_datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}.{pairprefix}/"),
+        #ktab=config["out_dir"] / "kmer/{pe_datatype}/{stage}/{pe_datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}.{pairprefix}/fastk_db.ktab"
+    log:
+        std=config["out_dir"] / "log/fastk_pe.{pe_datatype}.{stage}.{pairprefix}.{kmer_length}.min{min_kmer_count}.log",
+        cluster_log=config["out_dir"] / "log/fastk_pe.{pe_datatype}.{stage}.{pairprefix}.{kmer_length}.min{min_kmer_count}.cluster.log",
+        cluster_err=config["out_dir"] / "log/fastk_pe.{pe_datatype}.{stage}.{pairprefix}.{kmer_length}.min{min_kmer_count}.cluster.err"
+    benchmark:
+        config["out_dir"] / "log/fastk_pe.{pe_datatype}.{stage}.{pairprefix}.{kmer_length}.min{min_kmer_count}.benchmark.txt"
+    conda:
+        config["conda"]["smudgeplot"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["smudgeplot"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"]["name"],
+        node_options=parse_node_list("fastk"),
+        cpus=get_threads(parameters["threads"]["fastk"], "cpu"),
+        time=parameters["time"]["fastk"],
+        mem=lambda wildcards, attempt: attempt * parameters["memory_mb"]["fastk"],
+        kmer_counter=1
+    threads:
+        parameters["threads"]["fastk"]
+    shell:
+         " MEM_GB=`echo '{resources.mem}/1024' | bc`; "
+         " TMP_DIR={output.db}/tmp_`basename {output.db}`; "
+         " mkdir -p {output.db} ${{TMP_DIR}}; "
+         " FastK -v -t{wildcards.min_kmer_count} -k{wildcards.kmer_length} -M${{MEM_GB}} -T{threads} "
+         "       -P${{TMP_DIR}} -N{output.db}/fastk_db {input}  > {log.std} 2>&1; "
+         " rm -r ${{TMP_DIR}}; "
+
+def get_fastk_dbs_for_merging(wildcards):
+    db_list = []
+    for datatype in wildcards.datatype.split("_"):
+        if datatype in config["data_feature_dict"]["paired"]:
+            db_list += expand(rules.fastk_pe.output.db,
+                              pairprefix=config["data"][datatype]["pair_prefix_list"],
+                              pe_datatype=[datatype,],
+                              allow_missing=True)
+        else:
+            db_list += expand(rules.fastk_se.output.db,
+                              fileprefix=config["data"][datatype]["conv_file_prefix_list"], # for se_reads "conv_file_prefix_list" and "file_prefix_list" are the same
+                              se_datatype=[datatype,],
+                              allow_missing=True)
+
+    return db_list
+
+rule merge_fastk:
+    input: get_fastk_dbs_for_merging
+    output:
+        db=directory(config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}/"),
+        #ktab=config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}/fastk_db.ktab",
+    log:
+        std=config["out_dir"] / "log/merge_fastk.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.std.log",
+        cluster_log=config["out_dir"] / "log/merge_fastk.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.cluster.log",
+        cluster_err=config["out_dir"] / "log/merge_fastk.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.cluster.err"
+    benchmark:
+        config["out_dir"] / "log/merge_fastk.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.benchmark.txt"
+    conda:
+        config["conda"]["smudgeplot"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["smudgeplot"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"]["name"],
+        node_options=parse_node_list("fastk"),
+        cpus=get_threads(parameters["threads"]["fastk"], "cpu"),
+        time=parameters["time"]["fastk"],
+        mem=lambda wildcards, attempt: attempt * parameters["memory_mb"]["fastk"],
+        kmer_counter=1
+    threads:
+        parameters["threads"]["fastk"]
+    shell: # Fastmerge return an error is input is a single database
+         " INPUT_DB_ARRAY=({input}); "
+         " if [ ${{#INPUT_DB_ARRAY[@]}} == '1' ] ;"
+         " then "
+         "     INPUT_DB_DIR=`dirname {input}`; "
+         "     ln -sf `basename {input}` {output.db}; "
+         " else "
+         "      INPUT_DB_ARRAY=(\"${{INPUT_DB_ARRAY[@]/%/\/fastk_db.ktab}}\"); "
+         "      TMP_DIR={output.db}/tmp_`basename {output.db}`; "
+         "      mkdir -p {output.db} ${{TMP_DIR}}; "
+         "      echo -e \"Input databases:\\n\\t${{INPUT_DB_ARRAY[@]}}\" > {log.std}; "
+         "      echo -e \"Creating merged database...\" >> {log.std}; "
+         "      Fastmerge -ht -P${{TMP_DIR}} -T{threads} {output.db}/fastk_db ${{INPUT_DB_ARRAY[@]}}  >> {log.std} 2>&1; "
+         "      rm -r ${{TMP_DIR}}; "
+         " fi; "
+
+
+
+rule get_fastk_histo:
+    input:
+        db="{fastk_dir}/{fastk_db_prefix}.fastk_min{min_kmer_count}/",
+        log_dir=ancient("{fastk_dir}/log/")
+    output:
+        histo="{fastk_dir}/{fastk_db_prefix}.fastk_min{min_kmer_count}.histo"
+
+    log:
+        histo_log="{fastk_dir}/log/get_fastk_histo.{fastk_db_prefix}.fastk_min{min_kmer_count}.log",
+        cluster_log="{fastk_dir}/log/get_fastk_histo.{fastk_db_prefix}.fastk_min{min_kmer_count}.cluster.log",
+        cluster_err="{fastk_dir}/log/get_fastk_histo.{fastk_db_prefix}.fastk_min{min_kmer_count}.cluster.err"
+    benchmark:
+        "{fastk_dir}/log/get_fastk_histo.{fastk_db_prefix}.fastk_min{min_kmer_count}.benchmark.txt"
+    conda:
+        config["conda"]["smudgeplot"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["smudgeplot"]["yaml"])
+    resources:
+        queue=config["queue"]["cpu"]["name"],
+        node_options=parse_node_list("fastk_histo"),
+        cpus=parameters["threads"]["fastk_histo"],
+        time=parameters["time"]["fastk_histo"],
+        mem=parameters["memory_mb"]["fastk_histo"],
+    threads:
+        parameters["threads"]["fastk_histo"]
+    shell:
+         " Histex -G -h32637 {input.db}/fastk_db.hist > {output.histo} 2>{log.histo_log}"
+
+
+
+use rule create_local_links as create_final_fastk_db_link with:
+    input:
+        input=lambda wildcards: config["out_dir"] / ("kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.fastk_min%s/" % (parameters["tool_options"]["fastk"][wildcards.datatype]["min_kmer_count"])),
+        log_dir=ancient(config["out_dir"] / "kmer/log/")
+    output:
+        input=config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.fastk"
+    log:
+        ln=config["out_dir"] / "kmer/create_final_fastk_db_link.{datatype}.{stage}.{stage}.{kmer_length}.fastk.ln.log",
+
+
+
+use rule create_local_links as create_final_fastk_histo_link with:
+    input:
+        input=lambda wildcards: config["out_dir"] / ("kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.fastk_min%s.histo" % (parameters["tool_options"]["fastk"][wildcards.datatype]["min_kmer_count"])),
+        log_dir=ancient(config["out_dir"] / "kmer/log/")
+    output:
+        input=config["out_dir"] / "kmer/{datatype}/{stage}/{datatype}.{stage}.{kmer_length}.fastk.histo"
+    log:
+        ln=config["out_dir"] / "kmer/create_final_fastk_histo_link.{datatype}.{stage}.{stage}.{kmer_length}.fastk.ln.log",
+
+"""

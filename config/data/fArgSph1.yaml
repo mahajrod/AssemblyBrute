@@ -55,14 +55,15 @@
     - "filter_reads" #
     - "filtered_read_qc"
     - "kmer_qc"
+    #- "ploidy_check"
     #- "mtdna"
-    - "read_contamination_scan" # TODO: test after refactoring
+    #- "read_contamination_scan" # TODO: test after refactoring
     #- "draft_qc"         # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
-    - "contig"            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
-    - "polishing"        # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
-    - "dedup"             # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing for hapsolo
-    - "hic_alignment"     # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
-    - "hic_scaffolding"   # MUST FOLLOW hic_alignment stage
+    #- "contig"            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
+    #- "polishing"        # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
+    #- "dedup"             # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing for hapsolo
+    #- "hic_alignment"     # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
+    #- "hic_scaffolding"   # MUST FOLLOW hic_alignment stage
     #- "ref_scaffolding"   # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing , at moment it requires telomere detection
     #- "gap_closing"      # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
     #- "read_phasing" # this is an attached stage, it is attached to the stage set by "phasing_stage" parameter. However, if phased reads are required for any other stage, the corresponding rules will be called automatically. Uncomment it only if you need to get phased reads for all suitable datatypes.
@@ -101,8 +102,8 @@
          - "l1"
          #- "l2"
          #- "l3"
-         #- "l1_no_hic"
-         #- "l1_3p"
+         - "l1_no_hic"
+         - "l1_4p"
          #- "l1_no_ul"
          #- "l1_main_nano_only"
          #- "rep_enh_l1"
@@ -143,8 +144,8 @@
     "cifi":
         - "def"
     "yahs":
-        - "phased" # use phased reads
-        #- "unphased" # use unphased reads
+        #- "phased" # use phased reads
+        - "unphased" # use unphased reads
     "threeddna":
         - "phased" # use phased reads
         #- "unphased" # use unphased reads
@@ -167,18 +168,23 @@
         "upper_threshold": null #
     "genome_assemblers":
         "coverage_estimator": null
-        "lambda": null
+        "lambda": # depends on the assumed ploidy of the organism.
+            "p1": null
+            "p2": 24.4
+            "p3": null
+            "p4": 12.2
+            "p5": null
+            "p6": null
     "krater":
         "use_second_peak": null
         "low_limit": null
         "high_limit": null
     "genomescope":
-        "starting_lambda": 30
+        "starting_lambda": null
         "start_shift": null
     "hapsolo":
         "busco_lineage_list": # this parameter is used by both hapsolo and combo_purge (combination of hapsolo and purge_dups)
             - "actinopterygii_odb12"
-            - "vertebrata_odb12"
 
 "assembly_qc_level": # wga, pretext map not refactored yet
     # Allowed levels:
@@ -201,11 +207,9 @@
 
 "qc_settings":
     "windows_sets":
-        - "w1000k.s1000k"
         - "w1000k.s100k"
-        #- "w100k.s100k"
         - "w100k.s10k"
-        #- "w10k.s10k"
+        - "w10k.s1k"
     "reference_scaffold_sets":
         # Thresholds for scaffolds are set in core config, "select_scaffolds". Values below are from "default" parameter set
         - "custom" # scaffolds are selected by the reference's whitelist
@@ -225,7 +229,16 @@
         - "absolute"
         - "relative"
 
-"ploidy": 2
+"ploidy": 4
+"ploidy_test_list": # [] # requests genomoscope runs with ploidies from this list
+    - 2
+    - 3
+    - 4
+
+"kmer_test_list":
+    - 21
+    - 31
+    - 41
 
 "genome_prefix": "fArgSph1"
 "busco_lineage_list":
@@ -294,7 +307,7 @@
 "skip_busco": False              # set True, to skip BUSCO runs to speedup evaluation of the assemblies
 
 "skip_kmer_gcp": True                  # set False to produce kmer GC plots # TODO: issues with draw_gc_plot.py script from KrATER, fix it
-"skip_kmer_smudgeplot": True           # set False to produce Smudgeplot. Keep in mind that it is an old tool and consumes enormous amount of memory (> 1Tb) even for 500 Mbp genomes # TODO: issues with rules, fix it
+"skip_kmer_smudgeplot": False           # set False to produce Smudgeplot. Keep in mind that it is an old tool and consumes enormous amount of memory (> 1Tb) even for 500 Mbp genomes # TODO: issues with rules, fix it
 "skip_assembly_tracks": False         # set True to skip all assembly-related tracks, except telomere (it is controlled by a different option)
 
 "skip_telomere": False           # set True to skip all telomere-related analysis
@@ -310,7 +323,7 @@
 "skip_pretext": False                   # set True to completely skip all pretext related qc
 "skip_pretext_10k_1k_tracks": False     # set True to skip injection to the pretext maps of tracks with window size of 10 kpb and step of 1kpb. Reasonable for large genomes
 "skip_pretext_100k_10k_tracks": False  # set True to skip injection to the pretext maps of tracks with window size of 100kbp and step of 10kbp.
-"skip_pretext_1000k_100k_tracks": True  # set True to skip injection to the pretext maps of tracks with window size of 1000kbp and step of 100kbp. Reasonable for small genomes
+"skip_pretext_1000k_100k_tracks": False  # set True to skip injection to the pretext maps of tracks with window size of 1000kbp and step of 100kbp. Reasonable for small genomes
 "skip_pretext_coverage_tracks": False   # set True to skip injection to the pretext maps of all coverage tracks
 
 "skip_hic_for_combined_haplotype": True    # set False to generate .hic file for combined/reordered haplotype

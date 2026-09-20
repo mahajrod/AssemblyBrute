@@ -55,14 +55,15 @@
     - "filter_reads" #
     - "filtered_read_qc"
     - "kmer_qc"
+    #- "ploidy_check"
     #- "mtdna"
     - "read_contamination_scan" # TODO: test after refactoring
     #- "draft_qc"         # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
     - "contig"            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
     #- "polishing"        # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
     - "dedup"             # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing for hapsolo
-    #- "hic_alignment"     # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
-    #- "hic_scaffolding"   # MUST FOLLOW hic_alignment stage
+    - "hic_alignment"     # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
+    - "hic_scaffolding"   # MUST FOLLOW hic_alignment stage
     #- "ref_scaffolding"   # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing , at moment it requires telomere detection
     #- "gap_closing"      # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
     #- "read_phasing" # this is an attached stage, it is attached to the stage set by "phasing_stage" parameter. However, if phased reads are required for any other stage, the corresponding rules will be called automatically. Uncomment it only if you need to get phased reads for all suitable datatypes.
@@ -70,7 +71,7 @@
 "stage_coretools":
     "contig": # Allowed: "hifiasm". TODO: "nextdenovo"
         - "hifiasm"
-        - "flye"
+        #- "flye"
         #- "nextdenovo" #TODO: implement
     "hic_alignment":
         - "arima"
@@ -87,8 +88,9 @@
     "polishing":
         - "nextpolish2"
     "dedup":
-        - "hapsolo"
-        #- "purge_dups"
+        #- "hapsolo"
+        #- "combo_purge"
+        - "purge_dups"
     "gap_closing":
         - "samba"
     "draft_qc":
@@ -117,9 +119,9 @@
         #- "nano_corr"
         #- "nano_hq"
     "purge_dups":
-        - "hifi"
+        #- "hifi"
         #- "nano"
-        #- "hifi_keep_hicov"
+        - "hifi_keep_hicov"
         #- "nano_keep_hicov"
     "arima":
         - "def"
@@ -145,6 +147,11 @@
     "hapsolo":
         - "def"
         #- "skip" # TODO: not implemented yet
+    "combo_purge":
+        #- "hifi"
+        #- "nano"
+        - "hifi_keep_hicov"
+        #- "nano_keep_hicov"
     "draft_qc":
         - "def"
     "samba":
@@ -172,6 +179,7 @@
     "hapsolo":
         "busco_lineage_list":
             - "sauropsida_odb12"
+            - "vertebrata_odb12"
 
 "assembly_qc_level": # wga, pretext map not refactored yet
     # Allowed levels:
@@ -198,7 +206,7 @@
         - "w1000k.s100k"
         #- "w100k.s100k"
         - "w100k.s10k"
-        #- "w10k.s10k"
+        - "w10k.s1k"
     "reference_scaffold_sets":
         # Thresholds for scaffolds are set in core config, "select_scaffolds". Values below are from "default" parameter set
         - "custom" # scaffolds are selected by the reference's whitelist
@@ -219,10 +227,14 @@
         - "relative"
 
 "ploidy": 2
+"kmer_ploidy_test_list": # [] # requests genomescope runs with ploidies from this list
+    - 2
+    - 3
+    - 4
 
 "genome_prefix": "rMelTri1"
 "busco_lineage_list":
-    #- "vertebrata_odb12"
+    - "vertebrata_odb12"
     - "sauropsida_odb12"
     - "vertebrata_odb10"
     #- "sauropsida_odb10"
@@ -303,7 +315,7 @@
 "skip_pretext": False                   # set True to completely skip all pretext related qc
 "skip_pretext_10k_1k_tracks": False     # set True to skip injection to the pretext maps of tracks with window size of 10 kpb and step of 1kpb. Reasonable for large genomes
 "skip_pretext_100k_10k_tracks": False  # set True to skip injection to the pretext maps of tracks with window size of 100kbp and step of 10kbp.
-"skip_pretext_1000k_100k_tracks": True  # set True to skip injection to the pretext maps of tracks with window size of 1000kbp and step of 100kbp. Reasonable for small genomes
+"skip_pretext_1000k_100k_tracks": False  # set True to skip injection to the pretext maps of tracks with window size of 1000kbp and step of 100kbp. Reasonable for small genomes
 "skip_pretext_coverage_tracks": False   # set True to skip injection to the pretext maps of all coverage tracks
 
 "skip_hic_for_combined_haplotype": True    # set False to generate .hic file for combined/reordered haplotype

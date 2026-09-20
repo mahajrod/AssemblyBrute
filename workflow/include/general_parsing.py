@@ -48,17 +48,17 @@ def get_number_of_stages_in_chain(wildcards):
 def detect_input_type(datatype, datatype_dir):
     datatype_dir_path = datatype_dir if isinstance(datatype_dir, PosixPath) else Path(datatype_dir)
     input_filedict = {}
-    for allowed_input_type in config["data"][datatype]:
+    for allowed_input_type in config["data_parameters"][datatype]:
         filedict = {}
         input_dir_path = datatype_dir_path / allowed_input_type
-        for extension in config["data"][datatype][allowed_input_type]["allowed_in_exts"]:
+        for extension in config["data_parameters"][datatype][allowed_input_type]["allowed_in_exts"]:
             files = sorted(list(input_dir_path.glob("*{0}".format(extension))))
             if files:
                 filedict[extension] = deepcopy(files)
         if len(filedict) > 1:
             raise ValueError("ERROR!!! Input files for {0} data have different extensions: {1}. ".format(datatype, ",".join(filedict.keys())) +
                              "It might be a sign of incorrect data. Rename files to have same extension. " +
-                             "Allowed extensions: {0}".format(",".join(config["data"][datatype][allowed_input_type]["allowed_in_exts"])))
+                             "Allowed extensions: {0}".format(",".join(config["data_parameters"][datatype][allowed_input_type]["allowed_in_exts"])))
         if filedict:
             input_filedict[allowed_input_type] = deepcopy(filedict)
 
@@ -66,7 +66,7 @@ def detect_input_type(datatype, datatype_dir):
         raise ValueError("ERROR!!! Input files for {0} data are of different type: {1} ".format(datatype,
                                                                                                 ",".join(input_filedict.keys())) +
                          "It might be a sign of incorrect data. Convert all data to the same format."
-                         "Allowed formats: {0}".format(",".join(config["data"][datatype])))
+                         "Allowed formats: {0}".format(",".join(config["data_parameters"][datatype])))
     if len(input_filedict) == 0:
         raise ValueError(f"ERROR!!! Input files for {datatype} data are absent! Add data or remove it from the main config file...")
 
@@ -102,6 +102,10 @@ def parse_stage_parameters_from_path(path):
 
 def get_prev_stage_parameters(parameters):
     return "..".join(parameters.split("..")[:-1])
+
+def get_assembly_ploidy(parameters):
+    #print(parameters)
+    return int(parameters.split("..")[0].split("@")[1][1:])
 
 def get_relative_path(target: str or Path, link: str or Path):
     link_path = Path(link)

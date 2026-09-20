@@ -13,5 +13,6 @@
   - "merqury"
   - "yak"
   - "krater"
+  #- "fastk" # use fastk from the smudgeplot env
   - pip:
       - "distinctipy"

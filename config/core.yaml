@@ -8,6 +8,9 @@
     "kmer":
         "yaml": "workflow/envs/conda.kmer.yaml"
         "name": "kmer"
+    "smudgeplot":
+        "yaml": "workflow/envs/conda.smudgeplot.yaml"
+        "name": "smudgeplot"
     "flye":
         "yaml": "workflow/envs/conda.flye.yaml"
         "name": "flye"
@@ -17,15 +20,21 @@
     "hifiasm":
         "yaml": "workflow/envs/conda.hifiasm.yaml"
         "name": "hifiasm"
+    "verkko":
+        "yaml": "workflow/envs/conda.verkko.yaml"
+        "name": "verkko"
     "pairtools":
         "yaml": "workflow/envs/conda.pairtools.yaml"
         "name": "pairtools"
     "liftover":
         "yaml": "workflow/envs/conda.liftover.yaml"
         "name": "liftover"
-    "busco5":
-        "yaml": "workflow/envs/conda.busco5.yaml"
-        "name": "busco5"
+    "busco5.6":
+        "yaml": "workflow/envs/conda.busco5.6.yaml"
+        "name": "busco5.6"
+    "busco5.8":
+        "yaml": "workflow/envs/conda.busco5.8.yaml"
+        "name": "busco5.8"
     "busco6":
         "yaml": "workflow/envs/conda.busco6.yaml"
         "name": "busco6"
@@ -114,6 +123,17 @@
         "keep_haplotypes": "bool"
         "no_alt_contigs": "bool"
         "scaffolding": "bool"
+    "verkko":
+        "no_correction": "bool"
+        "no_nano": "bool"
+        "no_rdna_tangle": "bool"
+        "uneven_cov": "bool"
+        "haplo_divergence": "Float32"
+        "use_hic": "bool"
+        "use_parental": "bool"
+        "hifi_datatypes": "list"
+        "nano_datatypes": "list"
+        "use_telomere": "bool"
 
 "resources_dir": "config/resources/"
 #--------------------------
@@ -161,6 +181,7 @@
                         - "meryl"
                         - "yak"
                         - "jellyfish"
+                        - "fastk"
                     "genome_size_estimators":
                         - "genomescope"
                         - "krater"
@@ -203,6 +224,9 @@
                             "w10k.s10k":
                                 "window": 10000
                                 "step":   10000
+                            "w10k.s1k":
+                                "window": 10000
+                                "step":   1000
                     "merqury":
                         "datatype_list":
                             - "hifi"
@@ -250,6 +274,9 @@
                             "w10k.s10k":
                                 "window": 10000
                                 "step":   10000
+                            "w10k.s1k":
+                                "window": 10000
+                                "step":   1000
                     "windowmasker":
                         "relative_thresholds": # median +- threshold * median
                             - 0.05
@@ -280,6 +307,9 @@
                             "w10k.s10k":
                                 "window": 10000
                                 "step":   10000
+                            "w10k.s1k":
+                                "window": 10000
+                                "step":   1000
                     "gap":
                         "normalize_by_len": True
                         "relative_thresholds": # median +- threshold * median
@@ -310,6 +340,9 @@
                             "w10k.s10k":
                                 "window": 10000
                                 "step":   10000
+                            "w10k.s1k":
+                                "window": 10000
+                                "step":   1000
                     "gc":
                         "relative_thresholds": # median +- threshold * median
                             - 0.05
@@ -340,6 +373,9 @@
                             "w10k.s10k":
                                 "window": 10000
                                 "step":   10000
+                            "w10k.s1k":
+                                "window": 10000
+                                "step":   1000
                         #"w10k.s1k":
                         #    "window": 10000
                         #    "step":   1000
@@ -727,6 +763,56 @@
                             #- 15
                             #- 31
                             #- 41 #very RAM hungry option
+            "fastk":
+                "default":
+                    "hifi":
+                        "kmer_length":
+                            - 21
+                            #- 31
+                            #- 41 #very RAM hungry option
+                        "min_kmer_count": 1
+                    "clr":
+                        "kmer_length":
+                            - 21
+                        "min_kmer_count": 1
+                    "lqccs":
+                        "kmer_length":
+                            - 21
+                        "min_kmer_count": 1
+                    "illumina":
+                        "kmer_length":
+                            - 21
+                            #- 31
+                            #- 41 #very RAM hungry option
+                        "min_kmer_count": 1
+                    "hic":
+                        "kmer_length":
+                            - 21
+                        "min_kmer_count": 1
+                    "nanopore":
+                        "kmer_length":
+                            - 21
+                            #- 31
+                            #- 41 #very RAM hungry option
+                        "min_kmer_count": 1
+                    "duplex":
+                        "kmer_length":
+                            - 21
+                            #- 31
+                            #- 41 #very RAM hungry option
+                        "min_kmer_count": 1
+                    "simplex":
+                        "kmer_length":
+                            - 21
+                        "min_kmer_count": 1
+                    "ultralong-nanopore":
+                        "kmer_length":
+                            - 19
+                            - 21
+                            #- 15
+                            #- 31
+                            #- 41 #very RAM hungry option
+                        "min_kmer_count": 1
             "select_scaffolds":
                 "default":
                     "long":
@@ -755,45 +841,31 @@
             "smudgeplot":
                 "default":
                     "hifi":
-                        "lower_boundary":
-                            - 10
-                        "upper_boundary":
-                            - 1500
+                        "kmer_length":
+                            - 21
                     "clr":
-                        "lower_boundary":
-                            - 10
-                        "upper_boundary":
-                            - 1500
+                        "kmer_length":
+                            - 21
                     "lqccs":
-                        "lower_boundary":
-                            - 10
-                        "upper_boundary":
-                            - 1500
+                        "kmer_length":
+                            - 21
                     "nanopore":
-                        "lower_boundary":
-                            - 10
-                        "upper_boundary":
-                            - 1500
+                        "kmer_length":
+                            - 21
                     "duplex":
-                        "lower_boundary":
-                            - 10
-                        "upper_boundary":
-                            - 1500
+                        "kmer_length":
+                            - 21
                     "simplex":
-                        "lower_boundary":
-                            - 10
-                        "upper_boundary":
-                            - 1500
+                        "kmer_length":
+                            - 21
                     "illumina":
-                        "lower_boundary":
-                            - 10
-                        "upper_boundary":
-                            - 1500
+                        "kmer_length":
+                            - 21
+                            - 31
+                            - 41
                     "hic":
-                        "lower_boundary":
-                            - 10
-                        "upper_boundary":
-                            - 1500
+                        "kmer_length":
+                            - 21
             "telo_finder":
                 "default":
                     "size": 200
@@ -968,9 +1040,9 @@
                             "w10k.s10k":
                                 "window": 10000
                                 "step":   10000
-                        #"w10k.s1k":
-                        #    "window": 10000
-                        #    "step":   1000
+                            "w10k.s1k":
+                                "window": 10000
+                                "step":   1000
                     "trf":
                         "relative_thresholds": # median +- threshold * median
                             - 0.05
@@ -1001,6 +1073,9 @@
                             "w10k.s10k":
                                 "window": 10000
                                 "step":   10000
+                            "w10k.s1k":
+                                "window": 10000
+                                "step":   1000
                     "windowmasker":
                         "relative_thresholds": # median +- threshold * median
                             - 0.05
@@ -1031,6 +1106,9 @@
                             "w10k.s10k":
                                 "window": 10000
                                 "step":   10000
+                            "w10k.s1k":
+                                "window": 10000
+                                "step":   1000
                     "gap":
                         "normalize_by_len": True
                         "relative_thresholds": # median +- threshold * median
@@ -1111,6 +1189,48 @@
                             "max_len": null
                         "microchr":
                             "max_len": 20000000
+                    "res":
+                        - "high_res"
+                        - "ultra_res"
+                "high_res_only":
+                    "mapq":
+                        #- 1
+                        - 0
+                    "sortby": "nosort" # Allowed: "length", "name", "nosort"
+                    "sortorder": null # Allowed: "ascend", "descend", null
+                    "subsets":
+                        "all":
+                            "max_len": null
+                        "microchr":
+                            "max_len": 20000000
+                    "res":
+                        - "high_res"
+                "ultra_res_only":
+                    "mapq":
+                        #- 1
+                        - 0
+                    "sortby": "nosort" # Allowed: "length", "name", "nosort"
+                    "sortorder": null # Allowed: "ascend", "descend", null
+                    "subsets":
+                        "all":
+                            "max_len": null
+                        "microchr":
+                            "max_len": 20000000
+                    "res":
+                        - "ultra_res"
+                "low_res_only":
+                    "mapq":
+                        #- 1
+                        - 0
+                    "sortby": "nosort" # Allowed: "length", "name", "nosort"
+                    "sortorder": null # Allowed: "ascend", "descend", null
+                    "subsets":
+                        "all":
+                            "max_len": null
+                        "microchr":
+                            "max_len": 20000000
+                    "res":
+                        - "low_res"
             "pretextsnapshot":
                 "default":
                     "sequences": "=full"
@@ -1395,7 +1515,7 @@
                 "default":
                     "min_target_len":
                         - 1000
-                        - 10000
+                        #- 10000
             "deepvariant":
                 "default":
                     "illumina":
@@ -2676,6 +2796,8 @@
 "fastq_ext": ".fastq.gz"
 "fwd_fastq_sfx": "_1"
 "rev_fastq_sfx": "_2"
+"fwd_fasta_sfx": "_1"
+"rev_fasta_sfx": "_2"
 
 "allowed_stage_list":
     - "raw_read_qc"
@@ -2685,6 +2807,7 @@
     - "filtered_read_qc"
     - "read_contamination_scan"
     - "kmer_qc"
+    - "ploidy_check"
     - "smudgeplot" # smudgeplot requires a lot of memory to operate on mammalian size genomes (>700 Gbp of memory). Turn this analysis on only if you are sure you have enough memory. TODO: replace smudgeplot by external_tools consuming less memory.
     - "draft_qc"
     - "contig"
@@ -2705,6 +2828,7 @@
     - "read_contamination_scan"
     - "gcp"
     - "kmer_qc"
+    - "ploidy_check"
     - "mtdna"
     - "read_phasing"
 
@@ -2730,6 +2854,7 @@
             - "ul-cut"                          # --ul-cut
             - "main_datatypes"
             - "ont_mode"
+            - "assembly_ploidy"                 # --n-hap
         "options_affecting_hic_phasing":
             - "seed"            # --seed
             - "s-base"          # --s-base

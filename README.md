@@ -41,6 +41,7 @@ Attached stages:
 
 # Implemented tools
 **Contig assembly**:
+
 | Assembler |                  Datatypes                  | Status |
 |:---------:|:-------------------------------------------:|:------:|
 |  hifiasm  | hifi/nanopore (+ ultra long reads)\textsuperscript{*} (+ Hi-C) |   v    |

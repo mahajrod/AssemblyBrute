@@ -124,7 +124,7 @@ III. Adjust config files.
 ```
 Some of the options (all nonested options from default.yaml) could also be set via command line. See examples before
 
-IV. Run pipeline directly
+IV. Run pipeline
 
 # Examples
 

@@ -7,34 +7,34 @@ It is based on VGP-pipeline and Rapid curation but with multiple additions for Q
 # Dependencies
 
 If you wish to run it using conda via snakemake, then you will need:
-- conda or mamba
-- snakemake
-- FCS database and FCS_GX singularity container      # optional
-- FCS_adapter singularity container                  # optional
-- Kraken databases                                   # optional
-- RapidCuration singularity containers               # this dependency will be excluded soon
+ - conda or mamba
+ - snakemake
+ - FCS database and FCS_GX singularity container      # optional
+ - FCS_adapter singularity container                  # optional
+ - Kraken databases                                   # optional
+ - RapidCuration singularity containers               # this dependency will be excluded soon
 
 # Stages of the pipeline
 
 **Preprocessing stages**:
-    - "raw_read_qc" # comment this stage if you wish to skip quality control of the raw data
-    - "raw_kmer_qc" # runs kmer counting and genome size estimation from raw reads. Usually you don't need it
-    - "filter_reads" #
-    - "filtered_read_qc"
-    - "kmer_qc"
-    - "ploidy_check"
-    - "mtdna"
-    - "read_contamination_scan"
+ - _raw_read_qc_      # comment this stage if you wish to skip quality control of the raw data
+ - _raw_kmer_qc_      # runs kmer counting and genome size estimation from raw reads. Usually you don't need it
+ - _filter_reads_     
+ - _filtered_read_qc_
+ - _kmer_qc_
+ - _ploidy_check_
+ - _mtdna_
+ - _read_contamination_scan_
 
-Main stages:
-    - "draft_qc"          # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
-    - "contig"            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
-    - "polishing"         # OPTIONAL. MUST NOT PRECEDE 'contig' or 'draft_qc' stages
-    - "dedup"             # OPTIONAL. MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing for hapsolo
-    - "hic_alignment"     # OPTIONAL. MUST NOT PRECEDE 'contig' or 'draft_qc' stages
-    - "hic_scaffolding"   # OPTIONAL. MUST FOLLOW hic_alignment stage
-    - "ref_scaffolding"   # OPTIONAL. MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing , at moment it requires telomere detection
-    - "gap_closing"       # OPTIONAL. MUST NOT PRECEDE 'contig' or 'draft_qc' stages
+**Main stages**:
+ - "draft_qc"          # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
+ - "contig"            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
+ - "polishing"         # OPTIONAL. MUST NOT PRECEDE 'contig' or 'draft_qc' stages
+ - "dedup"             # OPTIONAL. MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing for hapsolo
+ - "hic_alignment"     # OPTIONAL. MUST NOT PRECEDE 'contig' or 'draft_qc' stages
+ - "hic_scaffolding"   # OPTIONAL. MUST FOLLOW hic_alignment stage
+ - "ref_scaffolding"   # OPTIONAL. MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing , at moment it requires telomere detection
+ - "gap_closing"       # OPTIONAL. MUST NOT PRECEDE 'contig' or 'draft_qc' stages
 
 Attached stages:
     - "read_phasing" # this is an attached stage, it is attached to the stage set by "phasing_stage" parameter. However, if phased reads are required for any other stage, the corresponding rules will be called automatically. Uncomment it only if you need to get phased reads for all suitable datatypes.

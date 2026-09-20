@@ -117,26 +117,21 @@ AssemblyBrute/
             
 ```
 
-III. Modify config files. I recommend to copy *default.yaml* and do all modifications in this copy.
+III. Adjust config files.
 ```commandline
-config/
-    default.yaml   <----- modify this file, add paths to databases, set tax_id, ploidy, etc
-    core.yaml      <----- modify this file only if you know what you are doing. In most case you don't need it
+**To be written**
 ```
 Some of the options (all nonested options from default.yaml) could also be set via command line. See examples before
 
-IV. Run pipeline directly or via wrapper script (**Not written yet**). See examples below
+IV. Run pipeline directly
 
 # Examples
 
 ```commandline
-snakemake --cores 60  --configfile config/default.yaml --printshellcmds --latency-wait 30   --config mode="assembly" "assembly_mode"="hic_scaffolding" "parameter_set"="normal" "busco_lineage_list"='["vertebrata_odb10","actinopterygii_odb10"]' "data_types"="hifi,hic" "tax_id"=206126 "use_existing_envs"=False --latency-wait 30 --use-conda --rerun-incomplete --res fcs=1 fcs_adaptor=1 mem=800000 kmer_counter=1  telosif=1
-```
-```commandline
-#Stage by stage (recommended)
-
-
-
-
-
+snakemake --profile profile/slurm/ \
+          --configfile config/data/fSynTyp1.2.yaml --printshellcmds \
+          --latency-wait 120 --use-conda  \
+          --res fcx=1 fcs_adaptor=1 \
+          --rerun-incomplete -k```
+Running main stages one by one is recommended.
 ```

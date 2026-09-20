@@ -47,9 +47,10 @@ Attached stages:
 |:---------:|:-------------------------------------------------------:|:------:|
 |  hifiasm  | hifi/nanopore (+ ultra long reads)<sup>*</sup> (+ Hi-C) |   v    |
 |   flye2   |                      hifi/nanopore                      |   v    | 
-|  verkko   |                 hifi/nanopore (+ Hi-C)                  |   v    |
+|  verkko   |           hifi/nanopore<sup>**</sup> (+ Hi-C)           |   v    |
 
-<sup>*</sup> - Brackets indicate an optional datatype  
+<sup>*</sup> - brackets indicate an optional datatype  
+<sup>**</sup> - can use both hifi and nanopore simultaneously 
 
 **Polishing**:
  - NextPolish2
@@ -81,18 +82,39 @@ git clone https://github.com/mahajrod/AssemblyBrute
 
 ```
 
-II. Place you fastqs in corresponding folders in the input directory:
+II. Place you fastq or fasta file in corresponding folders in the input directory:
 ```commandline
 AssemblyBrute/
     input/
         hic/
             fastq/
+            fasta/
         hifi/
             fastq/
+            fasta/
         nanopore/
             fastq/
+            fasta/
+        simplex/
+            fastq/
+            fasta/
+        duplex/
+            fastq/
+            fasta/
+        ultralongnano/
+            fastq/
+            fasta/
+        adaptivenano/
+            fastq/
+            fasta/     
         illumina/
             fastq/
+            fasta/
+        draft/
+            fasta/
+        reference/
+            \<reference name\>/
+            
 ```
 
 III. Modify config files. I recommend to copy *default.yaml* and do all modifications in this copy.

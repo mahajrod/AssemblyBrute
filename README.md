@@ -113,7 +113,7 @@ AssemblyBrute/
         draft/
             fasta/
         reference/
-            &lt; reference name &gt;/
+            <reference name>/
             
 ```
 

@@ -27,7 +27,7 @@ If you wish to run it using conda via snakemake, then you will need:
   - _read_contamination_scan_
 
 **Main stages**:
-  - _draft_qc_          **#** SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
+  - _draft_qc_          # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
   - _contig_            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
   - _polishing_         # OPTIONAL. MUST NOT PRECEDE 'contig' or 'draft_qc' stages
   - _dedup_             # OPTIONAL. MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing for hapsolo
@@ -43,12 +43,13 @@ Attached stages:
 # Implemented tools
 **Contig assembly**:
 
-| Assembler |                  Datatypes                  | Status |
-|:---------:|:-------------------------------------------:|:------:|
-|  hifiasm  | hifi/nanopore (+ ultra long reads)\textsuperscript{*} (+ Hi-C) |   v    |
-|   flye2   |                hifi/nanopore                |   v    | 
-|  verkko   |            hifi/nanopore (+ Hi-C)            |   v    |
-\textsuperscript{*} Brackets indicate an optional datatype  
+| Assembler |                        Datatypes                        | Status |
+|:---------:|:-------------------------------------------------------:|:------:|
+|  hifiasm  | hifi/nanopore (+ ultra long reads)<sup>*</sup> (+ Hi-C) |   v    |
+|   flye2   |                      hifi/nanopore                      |   v    | 
+|  verkko   |                 hifi/nanopore (+ Hi-C)                  |   v    |
+
+<sup>*</sup> - Brackets indicate an optional datatype  
 
 **Polishing**:
  - NextPolish2

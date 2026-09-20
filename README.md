@@ -132,6 +132,8 @@ snakemake --profile profile/slurm/ \
           --configfile config/data/fSynTyp1.2.yaml --printshellcmds \
           --latency-wait 120 --use-conda  \
           --res fcx=1 fcs_adaptor=1 \
-          --rerun-incomplete -k```
-Running main stages one by one is recommended.
+          --rerun-incomplete -k
 ```
+
+Running main stages one by one is recommended.
+

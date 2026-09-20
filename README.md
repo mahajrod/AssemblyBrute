@@ -113,8 +113,9 @@ AssemblyBrute/
         draft/
             fasta/
         reference/
-            <reference name>/
-            
+            <reference 1>/
+            <reference 2>/
+            <reference 3>/
 ```
 
 III. Adjust config files.

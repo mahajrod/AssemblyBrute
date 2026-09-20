@@ -15,8 +15,8 @@ If you wish to run it using conda via snakemake, then you will need:
 - RapidCuration singularity containers               # this dependency will be excluded soon
 
 # Stages of the pipeline
-Preprocessing stages:
 
+**Preprocessing stages**:
     - "raw_read_qc" # comment this stage if you wish to skip quality control of the raw data
     - "raw_kmer_qc" # runs kmer counting and genome size estimation from raw reads. Usually you don't need it
     - "filter_reads" #

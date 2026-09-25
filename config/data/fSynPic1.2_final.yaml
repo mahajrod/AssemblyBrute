@@ -322,7 +322,7 @@
 "skip_hic_scaffolding_wga": False       # set True to skip wga for hic_scaffolding stage only
 "skip_gap_closing_wga": False           # set True to skip wga for gap_closing stage only
 
-"skip_purge_dups_qc": False
+"skip_purge_dups_qc": True
 
 "skip_ragtag_qc": False
 #----

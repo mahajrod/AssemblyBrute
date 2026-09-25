@@ -26,8 +26,9 @@
 "parameter_set": "normal"
 
 #---- Data ----
-"input_datatypes": "hifi,hic,illumina,reference,draft"
+"input_datatypes": "hifi,illumina,hic,draft,reference"
 "data_filtering": []
+
 
 "assembly_kmer_length":
     - 31 # kmer length to be used for phasing hic reads using assembled and purge_dupsed contigs
@@ -60,13 +61,12 @@
     #- "hic_alignment"     # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
     #- "hic_scaffolding"   # MUST FOLLOW hic_alignment stage
     #- "ref_scaffolding"   # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing , at moment it requires telomere detection
-    - "gap_closing"      # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
+    #- "gap_closing"      # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
     #- "read_phasing" # this is an attached stage, it is attached to the stage set by "phasing_stage" parameter. However, if phased reads are required for any other stage, the corresponding rules will be called automatically. Uncomment it only if you need to get phased reads for all suitable datatypes.
 
 "stage_coretools":
-    "contig": # Allowed: "hifiasm".
+    "contig": # Allowed: "hifiasm". TODO: "nextdenovo"
         - "hifiasm"
-        - "verkko" #TODO: test.
         #- "flye"
         #- "nextdenovo" #TODO: implement
     "hic_alignment":
@@ -95,10 +95,10 @@
 "coretool_option_sets":
     "hifiasm":
          #- "l0"
-         - "l1"
+         #- "l1"
          #- "l2"
          #- "l3"
-         #- "l1_no_hic"
+         - "l1_no_hic"
          #- "l1_3p"
          #- "l1_no_ul"
          #- "l1_main_nano_only"
@@ -114,15 +114,6 @@
         #- "old_nano"
         #- "nano_corr"
         #- "nano_hq"
-    "verkko":
-        - "default"
-        #- "no_phasing"
-        #- "no_hic"
-        #- "no_trio"
-        #- "precorr_reads"
-        #- "hap_div_0.1"
-        #- "hap_div_0.15"
-        #- "hap_div_0.2"
     "purge_dups":
         - "hifi"
         #- "nano"
@@ -141,8 +132,8 @@
     "cifi":
         - "def"
     "yahs":
-        - "phased" # use phased reads
-        #- "unphased" # use unphased reads
+        #- "phased" # use phased reads
+        - "unphased" # use unphased reads
     "threeddna":
         - "phased" # use phased reads
         #- "unphased" # use unphased reads
@@ -195,23 +186,22 @@
     #    5 - quast, merqury, wga, assembly-based tracks, ragtag_qc, busco
     #    6 - quast, merqury, wga, assembly-based tracks, ragtag_qc, read-based and other tracks, busco, purge_dups_qc
     #    7 - quast, merqury, wga, assembly-based tracks, ragtag_qc, read-based and other tracks, busco, purge_dups_qc, pretext map, higlass mcool, .hic for combined haplotype
-    "draft_qc":        5
-    "contig":          5
+    "draft_qc":        7
+    "contig":          7
     "dedup":           5
     "hic_alignment":   0 # keep it always 0, as this stage uses fastas from the previous stage. changing it to a higher value will trigger unnecessary calculations
     "hic_scaffolding": 7
     "polishing":      5
     "ref_scaffolding": 0
-    "gap_closing":     7
+    "gap_closing":     0
 
 "qc_settings":
     "windows_sets":
         #- "w1000k.s1000k"
         - "w1000k.s100k"
-        #- "w100k.s100k"
         - "w100k.s10k"
-        #- "w10k.s10k"
-        -  "w10k.s1k"
+        #- "w100k.s10k"
+        - "w10k.s1k"
     "reference_scaffold_sets":
         # Thresholds for scaffolds are set in core config, "select_scaffolds". Values below are from "default" parameter set
         - "custom" # scaffolds are selected by the reference's whitelist
@@ -231,26 +221,24 @@
         - "absolute"
         - "relative"
 
-"ploidy": 2
+"ploidy": 1
 "kmer_ploidy_test_list": # [] # requests genomescope runs with ploidies from this list
     - 2
     - 3
     - 4
 
-"genome_prefix": "fSpiSpi1.2"
+"genome_prefix": "fGadMor5.1"
 "busco_lineage_list":
     - "actinopterygii_odb12"
-    - "actinopterygii_odb10"
-    - "vertebrata_odb10"
     - "vertebrata_odb12"
 
-
 #Often used BUSCO lineages: mammalia_odb10, vertebrata_odb10, laurasiatheria_odb10, carnivora_odb10,
-#                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10
+#                           actinopterygii_odb10, saccharomycetes_odb10, sauropsida_odb10, aves_odb10,
+#                           actinopterygii_odb12, vertebrata_odb12
 "telomere_motif": "CCCTAA"  # telomere motif at 5'-end; CCCTAA for human, place null if unknown
 "use_canonical_telomere": True # TODO: this parameter is used by ragtag in ref_scaffolding stage move it to manually adjusted features
-"species_name": "Spinachia spinachia"
-"tax_id": 206126 # # necessary for contamination scan via FCS
+"species_name": "Gadus morhua"
+"tax_id": 8049 # # necessary for contamination scan via FCS
 "microchromosomes": False
 
 "kingdom": "animal"  # "animal", "plant" or "fungi"
@@ -285,11 +273,9 @@
 
 #"contig_datatype": "hifi"
 "gap_closing_datatype": "hifi"
-
 "hic_enzyme_set": "Arima"
 "custom_enzyme_set": null # None
 "custom_enzyme_set_is_no_motif": False
-
 
 
 #---- Commonly used skips ----
@@ -324,7 +310,7 @@
 "skip_pretext": False                   # set True to completely skip all pretext related qc
 "skip_pretext_10k_1k_tracks": False     # set True to skip injection to the pretext maps of tracks with window size of 10 kpb and step of 1kpb. Reasonable for large genomes
 "skip_pretext_100k_10k_tracks": False  # set True to skip injection to the pretext maps of tracks with window size of 100kbp and step of 10kbp.
-"skip_pretext_1000k_100k_tracks": False # set True to skip injection to the pretext maps of tracks with window size of 1000kbp and step of 100kbp. Reasonable for small genomes
+"skip_pretext_1000k_100k_tracks": False  # set True to skip injection to the pretext maps of tracks with window size of 1000kbp and step of 100kbp. Reasonable for small genomes
 "skip_pretext_coverage_tracks": False   # set True to skip injection to the pretext maps of all coverage tracks
 
 "skip_hic_for_combined_haplotype": True    # set False to generate .hic file for combined/reordered haplotype
@@ -339,17 +325,17 @@
 "skip_hic_scaffolding_wga": False       # set True to skip wga for hic_scaffolding stage only
 "skip_gap_closing_wga": False           # set True to skip wga for gap_closing stage only
 
-"skip_purge_dups_qc": True
+"skip_purge_dups_qc": False
 
 "skip_ragtag_qc": False
 #----
 #---- mtDNA ----
-"skip_mitohifi_reads": True
+"skip_mitohifi_reads": False
 "skip_mitohifi_reads_per_file": False
 "skip_mitohifi_reads_combined": False
 "skip_mitohifi_assembly": False
 
-"skip_mitoz": True
+"skip_mitoz": False
 "skip_mitoz_hic": False
 "skip_mitoz_illumina": False
 #----

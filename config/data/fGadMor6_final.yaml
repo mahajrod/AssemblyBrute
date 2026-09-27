@@ -151,8 +151,8 @@
     "draft_qc":
         - "def"
     "samba":
-        - "phased" # use phased reads
-        #- "unphased" # use unphased reads
+        #- "phased" # use phased reads
+        - "unphased" # use unphased reads
 
 "other_tool_option_sets": # Options set here overwrite settings from "secondary_tool_config_file". Check it for configurable option list
     "kmer_qc":                  "default"

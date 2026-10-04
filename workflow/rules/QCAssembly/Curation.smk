@@ -71,7 +71,7 @@ rule create_bedgraph_track: #
         windows_bed="{len_dir}/{len_prefix}.win{window}.step{step}.windows.bed",
         log_dir=ancient("{len_dir}/log/")
     output:
-        bedgraph="{len_dir}/assembly_qc/tracks/{len_prefix}/{len_prefix}.{track_type, (?![^./]*cov)[^./]*}}.win{window}.step{step}.track.bedgraph"
+        bedgraph="{len_dir}/assembly_qc/tracks/{len_prefix}/{len_prefix}.{track_type, (?!.*cov)[^./]*}}.win{window}.step{step}.track.bedgraph"
     log:
         intersect="{len_dir}/log/create_bedgraph_track.{len_prefix}.{track_type}.win{window}.step{step}.intersect.log",
         awk="{len_dir}/log/create_bedgraph_track.{len_prefix}.{track_type}.win{window}.step{step}.awk.log",

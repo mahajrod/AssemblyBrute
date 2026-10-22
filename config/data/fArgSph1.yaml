@@ -54,7 +54,7 @@
     #- "raw_kmer_qc" # runs kmer counting and genome size estimation from raw reads. Usually you don't need it
     - "filter_reads" #
     - "filtered_read_qc"
-    - "kmer_qc"
+    #- "kmer_qc"
     #- "ploidy_check"
     - "mtdna"
     #- "read_contamination_scan" # TODO: test after refactoring

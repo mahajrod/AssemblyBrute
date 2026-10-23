@@ -152,6 +152,14 @@ if error_correction_read_dir_path.exists():
 else:
     print("\tError correction read dir was not found, skipping...")
 
+print("Backuping mtDNA data...")
+mtDNA_dir_path = results_dir_path / "mtDNA/"
+if mtDNA_dir_path.exists():
+    mtDNA_backup_dir_path = backup_dir_path / "mtDNA/"
+    os.makedirs(mtDNA_backup_dir_path, exist_ok=True)
+    print(f"\tCopying {mtDNA_dir_path}...")
+    os.system(f"cp -rL {mtDNA_dir_path} {mtDNA_backup_dir_path}")
+
 backup_stage_files("contig", results_dir_path, backup_dir_path,
                 ["*.fasta", ".fai", "*.gfa", "*.bed","*.bedgraph", "*.len", "*.cov", "*.lencov", "*.ids", "telomere"])
 backup_stage_files("dedup", results_dir_path, backup_dir_path,

@@ -228,7 +228,7 @@
     - 3
     - 4
 
-"genome_prefix": "rMelTri1"
+"genome_prefix": "rMelTri1.1"
 "busco_lineage_list":
     - "vertebrata_odb12"
     - "sauropsida_odb12"

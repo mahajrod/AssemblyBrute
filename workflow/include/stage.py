@@ -621,7 +621,7 @@ class Stage:
                                                   mapq=parameters["tool_options"]["pretextmap"]["mapq"],)
                                          ]
 
-                        if candidate_chr_id_list and (self.stage_name == "hic_scaffolding"):
+                        if candidate_chr_id_list and (self.stage_name in ["hic_scaffolding", "draft_qc"]):
                             # request pretext map for curation units (if provided)
                             results_list += [expand(self.config["out_dir"] / "{assembly_stage}/{parameters}/{genome_prefix}.{assembly_stage}.{haplotype}/alignment/NA/per_chr/{genome_prefix}.{assembly_stage}.{haplotype}.NA.{subset}.rmdup.precurated.mapq{mapq}.{res}.tracks.pretext",
                                                   res=parameters["tool_options"]["pretextmap"]["res"],

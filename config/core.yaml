@@ -820,6 +820,10 @@
                         "max_len": null
                         "min_len": 1000000
                         #"min_fraction": 0.01
+                    "intermediate":
+                        "max_scaffolds": 200
+                        "max_len": 100000000
+                        "min_len": 1000000
                     "middle":
                         "max_scaffolds": 200
                         "max_len": 40000000

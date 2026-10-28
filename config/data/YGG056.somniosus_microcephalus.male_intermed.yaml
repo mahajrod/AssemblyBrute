@@ -184,9 +184,9 @@
     "dedup":           5
     "hic_alignment":   0 # keep it always 0, as this stage uses fastas from the previous stage. changing it to a higher value will trigger unnecessary calculations
     "hic_scaffolding": 7
-    "polishing":       5
+    "polishing":       4
     "ref_scaffolding": 0
-    "gap_closing":     7
+    "gap_closing":     4
 
 "qc_settings":
     "windows_sets":

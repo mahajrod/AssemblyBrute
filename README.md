@@ -1,7 +1,13 @@
-# AssemblyBrute - Pipeline to "brute force" and evaluate de novo genome assemblies
+<p align="center">
+  <h1 align="center">AssemblyBrute - Pipeline to "brute force" and evaluate de novo genome assemblies</h1>
+</p>
 
-It allows to generate multiple assemblies (using different tools and different parameters for them) from a single command
-It is based on VGP-pipeline and Rapid curation but with multiple additions for QC, evaluation and curation.
+<p align="center">
+  <i>Generation of multiple assemblies using different tools and different parameters from a single config file</i>
+</p>
+
+
+Core of AssemblyBrute is based on principles of VGP-pipeline and Rapid curation but with additional stages and multiple additions for QC, evaluation and curation.
 
 <p align="center">
     <img src="images/readme/Fig1.AssemblyBrutePipelineOverview.png" width="600"><br>

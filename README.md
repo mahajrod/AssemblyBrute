@@ -7,6 +7,8 @@
 </p>
 
 Core of AssemblyBrute is based on principles of VGP-pipeline and Rapid curation but with additional stages and multiple additions for QC, evaluation and curation.
+
+
 Features of AssemblyBrute:
  - designed to bruteforce assembly process
  - flexible with optional stages
@@ -35,6 +37,10 @@ If you wish to run it using conda via snakemake, then you will need:
   - FCS_adapter singularity container                  # optional
   - Kraken databases                                   # optional
   - RapidCuration singularity containers               # this dependency will be excluded soon
+
+
+The other option is to preconfigure all the required environments from _workflow/envs/_ .
+
 
 # Stages of the pipeline
 

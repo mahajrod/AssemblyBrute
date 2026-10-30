@@ -3,6 +3,15 @@
 It allows to generate multiple assemblies (using different tools and different parameters for them) from a single command
 It is based on VGP-pipeline and Rapid curation but with multiple additions for QC, evaluation and curation.
 
+<p align="center">
+    <img src="images/readme/Fig1.AssemblyBrutePipelineOverview.png" width="600"><br>
+<em><b>Figure 1</b>: Overview of the AssemblyBrute pipeline </em>
+</p>
+
+<p align="center">
+    <img src="images/readme/Fig2.Multiple_drafts.png" width="600"><br>
+<em><b>Figure 2</b>: Main pricnciple of the AsssemblyBrute: one config - multiple assemblies </em>
+</p>
 
 # Dependencies
 

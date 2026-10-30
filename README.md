@@ -6,8 +6,14 @@
   <i>Generation of multiple assemblies using different tools and different parameters from a single config file</i>
 </p>
 
-
 Core of AssemblyBrute is based on principles of VGP-pipeline and Rapid curation but with additional stages and multiple additions for QC, evaluation and curation.
+Features of AssemblyBrute:
+ - designed to bruteforce assembly process
+ - flexible with optional stages
+ - integrates multiple coretools for each stage
+ - contains various option presets for each coretools
+ - fine tunable QC at each stage
+ - can process polyploid genomes
 
 <p align="center">
     <img src="images/readme/Fig1.AssemblyBrutePipelineOverview.png" width="600"><br>
@@ -19,11 +25,12 @@ Core of AssemblyBrute is based on principles of VGP-pipeline and Rapid curation 
 <em><b>Figure 2</b>: Main pricnciple of the AsssemblyBrute: one config - multiple assemblies </em>
 </p>
 
+
 # Dependencies
 
 If you wish to run it using conda via snakemake, then you will need:
   - conda or mamba
-  - snakemake
+  - snakemake v7 (tested using 7.32.4)
   - FCS database and FCS_GX singularity container      # optional
   - FCS_adapter singularity container                  # optional
   - Kraken databases                                   # optional

@@ -469,7 +469,8 @@ wildcard_constraints:
     resolution="[0-9]+",
     pretext_res="default|low_res|high_res|ultra_res",
     track_type="[^./]+",
-    threshold_type="[^/]+"
+    threshold_type="[^/]+",
+    bam_dir="(?!.*/assembly_qc).*", # there cant be a bam file inside assembly_qc folder
 
 #---- Final rule ----
 pd.Series(results_list).to_csv(config["out_dir"] / "requested_files.tab", sep="\t", header=False, index=False)

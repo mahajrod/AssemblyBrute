@@ -154,6 +154,7 @@
 
 "other_tool_option_sets": # Options set here overwrite settings from "secondary_tool_config_file". Check it for configurable option list
     "kmer_qc":                  "default"
+    "pretextmap":               "all_res"
 
 "tool_manually_adjusted_features":
     "calcuts": # I recommend to check cutoffs created by calcuts after purge_dups step and adjust them according to distributions

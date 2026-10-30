@@ -23,7 +23,7 @@
 #    - 'large'  < 5000 Mbp, human
 #    - 'giant'  < 15000 Mbp, large plant, shark, amphibian genomes
 #    - 'titan'  > 15000 Mbp, large plant genomes, pine trees, never tested
-"parameter_set": "large"
+"parameter_set": "giant"
 
 #---- Data ----
 "input_datatypes": "hifi,hic,illumina,reference,draft"
@@ -55,12 +55,12 @@
     #- "read_contamination_scan" # TODO: test after refactoring
     - "draft_qc"         # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
     #- "contig"            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
-    #- "polishing"        # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
     #- "dedup"             # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing for hapsolo
     #- "hic_alignment"     # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
     #- "hic_scaffolding"   # MUST FOLLOW hic_alignment stage
     #- "ref_scaffolding"   # MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing , at moment it requires telomere detection
-    #- "gap_closing"      # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
+    - "gap_closing"      # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
+    - "polishing"        # MUST NOT PRECEDE 'contig' or 'draft_qc' stages
     #- "read_phasing" # this is an attached stage, it is attached to the stage set by "phasing_stage" parameter. However, if phased reads are required for any other stage, the corresponding rules will be called automatically. Uncomment it only if you need to get phased reads for all suitable datatypes.
 
 "stage_coretools":
@@ -184,7 +184,7 @@
     "dedup":           5
     "hic_alignment":   0 # keep it always 0, as this stage uses fastas from the previous stage. changing it to a higher value will trigger unnecessary calculations
     "hic_scaffolding": 7
-    "polishing":       5
+    "polishing":       7
     "ref_scaffolding": 0
     "gap_closing":     7
 
@@ -199,6 +199,7 @@
         # Thresholds for scaffolds are set in core config, "select_scaffolds". Values below are from "default" parameter set
         - "custom" # scaffolds are selected by the reference's whitelist
         #- "long"         # "max_scaffolds": 200, "max_len": null,  "min_len": 1000000
+        - "intermediate" # "max_scaffolds": 200, "max_len": 100000000,  "min_len": 1000000
         #- "middle"       # "max_scaffolds": 200, "max_len": 40000000, "min_len": 1000000
         #- "short"         # "max_scaffolds": 200, "max_len": 10000000, "min_len": 1000000
         #- "very_short"    # "max_scaffolds": 200, "max_len": 5000000, "min_len": 100000
@@ -206,6 +207,7 @@
     "assembly_scaffold_sets":
         # Thresholds for scaffolds are set in core config, "select_scaffolds". Values below are from "default" parameter set
         - "long"         # "max_scaffolds": 200, "max_len": null,  "min_len": 1000000
+        - "intermediate" # "max_scaffolds": 200, "max_len": 100000000,  "min_len": 1000000
         #- "middle"       # "max_scaffolds": 200, "max_len": 40000000, "min_len": 1000000
         #- "short"         # "max_scaffolds": 200, "max_len": 10000000, "min_len": 1000000
         #- "very_short"    # "max_scaffolds": 200, "max_len": 5000000, "min_len": 100000

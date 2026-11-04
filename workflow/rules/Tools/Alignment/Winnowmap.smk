@@ -16,7 +16,7 @@ rule winnowmap: #
         minimap_threads=parameters["threads"]["minimap2"],
         per_thread_sort_mem=parameters["memory_mb"]["samtools_sort"],
         index_size=lambda wildcards: parse_option("index_size", parameters["tool_options"]["minimap2"][wildcards.datatype], " -I "),
-        alignment_scheme=lambda wildcards: parse_option("alignment_scheme", parameters["tool_options"]["minimap2"][wildcards.datatype], " -x "),
+        #alignment_scheme=lambda wildcards: parse_option("alignment_scheme", parameters["tool_options"]["minimap2"][wildcards.datatype], " -x "),
     log:
         map="{fasta_dir}/log/winnowmap.{datatype}.{fasta_prefix}.{kmer_length}.{datatype}.map.log",
         sort="{fasta_dir}/log/winnowmap.{datatype}.{fasta_prefix}.{kmer_length}.{datatype}.sort.log",
@@ -34,6 +34,6 @@ rule winnowmap: #
         mem=parameters["memory_mb"]["winnowmap"] + (parameters["memory_mb"]["samtools_sort"] * parameters["threads"]["samtools_sort"])
     threads: parameters["threads"]["winnowmap"] + parameters["threads"]["samtools_sort"]
     shell:
-        " winnowmap {params.index_size} {params.alignment_scheme} -a -t {threads} -W {input.repetitive_kmers} "
+        " winnowmap {params.index_size} -x map-pb -a -t {threads} -W {input.repetitive_kmers} "
         "     {input.reference} {input.fastq} 2>{log.map} | "
         "     samtools sort -@ {params.sort_threads}  -m {params.per_thread_sort_mem}M -o {output.bam} - 2>{log.sort}; "

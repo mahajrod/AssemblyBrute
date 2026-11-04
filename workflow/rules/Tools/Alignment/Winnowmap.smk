@@ -35,5 +35,5 @@ rule winnowmap: #
     threads: parameters["threads"]["winnowmap"] + parameters["threads"]["samtools_sort"]
     shell:
         " winnowmap {params.index_size} {params.alignment_scheme} -a -t {threads} -W {input.repetitive_kmers} "
-        "     -x map-pb {input.reference} {input.fastq} 2>{log.map} | "
+        "     {input.reference} {input.fastq} 2>{log.map} | "
         "     samtools sort -@ {params.sort_threads}  -m {params.per_thread_sort_mem}M -o {output.bam} - 2>{log.sort}; "

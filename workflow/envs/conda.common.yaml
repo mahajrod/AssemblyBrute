@@ -9,7 +9,7 @@
   - "anaconda"
 "dependencies":
   - "python=3.9"
-  - "fastqc>=0.11"
+  - "fastqc=0.12.1"
   - "blas=*=*mkl"
   - "multiqc"
   - "minimap2"

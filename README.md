@@ -10,6 +10,7 @@ Core of AssemblyBrute is based on principles of VGP-pipeline and Rapid curation 
 
 
 Features of AssemblyBrute:
+
  - designed to bruteforce assembly process
  - flexible with optional stages
  - integrates multiple coretools for each stage
@@ -28,141 +29,51 @@ Features of AssemblyBrute:
 </p>
 
 
-# Dependencies
+# Documentation
 
-If you wish to run it using conda via snakemake, then you will need:
-  - conda or mamba
-  - snakemake v7 (tested using 7.32.4)
-  - FCS database and FCS_GX singularity container      # optional
-  - FCS_adapter singularity container                  # optional
-  - Kraken databases                                   # optional
-  - RapidCuration singularity containers               # this dependency will be excluded soon
+Start with the [documentation index](docs/README.md) and the
+[test-data examples](docs/examples/README.md). The guide covers:
 
+- [Installation](docs/installation.md) and [input preparation](docs/inputs.md).
+- [Configuration](docs/configuration.md), [stage ordering](docs/stages.md), and
+  [local/Slurm execution](docs/running.md).
+- [Outputs](docs/outputs.md), [focused recipes](docs/recipes.md),
+  and [troubleshooting](docs/troubleshooting.md).
 
-The other option is to preconfigure all the required environments from _workflow/envs/_ .
+# Run an example
 
+If you wish to run it using Conda via Snakemake, then you will need:
 
-# Stages of the pipeline
+- Conda or Mamba.
+- Snakemake v7 (tested using 7.32.4).
+- FCS database and FCS_GX Singularity container (optional).
+- FCS_adapter Singularity container (optional).
+- Kraken databases (optional).
+- RapidCuration Singularity containers (this dependency will be excluded soon).
 
-**Preprocessing stages**:
-  - _raw_read_qc_      # comment this stage if you wish to skip quality control of the raw data
-  - _raw_kmer_qc_      # runs kmer counting and genome size estimation from raw reads. Usually you don't need it
-  - _filter_reads_     
-  - _filtered_read_qc_
-  - _kmer_qc_
-  - _ploidy_check_
-  - _mtdna_
-  - _read_contamination_scan_
+Complete [installation](docs/installation.md), prepare your inputs, and save a
+project configuration as `config/data/local.yaml`. The
+[example catalog](docs/examples/README.md) provides complete configurations and
+dataset-specific commands. Inspect your job graph from the repository root:
 
-**Main stages**:
-  - _draft_qc_          # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
-  - _contig_            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
-  - _polishing_         # OPTIONAL. MUST NOT PRECEDE 'contig' or 'draft_qc' stages
-  - _dedup_             # OPTIONAL. MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing for hapsolo
-  - _hic_alignment_     # OPTIONAL. MUST NOT PRECEDE 'contig' or 'draft_qc' stages
-  - _hic_scaffolding_   # OPTIONAL. MUST FOLLOW hic_alignment stage
-  - _ref_scaffolding_   # OPTIONAL. MUST NOT PRECEDE 'contig' or 'draft_qc' stages # TODO: do more testing , at moment it requires telomere detection
-  - _gap_closing_       # OPTIONAL. MUST NOT PRECEDE 'contig' or 'draft_qc' stages
-
-Attached stages:
-  - _read_phasing_ # this is an attached stage, it is attached to the stage set by "phasing_stage" parameter. However, if phased reads are required for any other stage, the corresponding rules will be called automatically. Uncomment it only if you need to get phased reads for all suitable datatypes.
-
-
-# Implemented tools
-**Contig assembly**:
-
-| Assembler |                        Datatypes                        | Status |
-|:---------:|:-------------------------------------------------------:|:------:|
-|  hifiasm  | hifi/nanopore (+ ultra long reads)<sup>*</sup> (+ Hi-C) |   v    |
-|   flye2   |                      hifi/nanopore                      |   v    | 
-|  verkko   |           hifi/nanopore<sup>**</sup> (+ Hi-C)           |   v    |
-
-<sup>*</sup> - brackets indicate an optional datatype  
-<sup>**</sup> - can use both hifi and nanopore simultaneously 
-
-**Polishing**:
- - NextPolish2
-
-**Deduplication**:
- - purge_dups
- - hapsolo
- - combination of purge_dups and hapsolo
-
-**Hi-C Aligners**:
- - Arima mapping pipeline
- - Pairtools
- - Juicer
-
-**HiC scaffolding**:
- - YaHS
- - 3D-DNA
-
-**Gap closing**:
- - SAMBA
-
-**Reference-based scaffolding**:
- - RagTag
-
-# Usage
-I. Clone this repository
-```commandline
-git clone https://github.com/mahajrod/AssemblyBrute 
-
+```bash
+snakemake --configfile config/data/local.yaml \
+  --cores 8 --use-conda --conda-frontend conda --dry-run --printshellcmds
 ```
 
-II. Place you fastq or fasta file in corresponding folders in the input directory:
-```commandline
-AssemblyBrute/
-    input/
-        hic/
-            fastq/
-            fasta/
-        hifi/
-            fastq/
-            fasta/
-        nanopore/
-            fastq/
-            fasta/
-        simplex/
-            fastq/
-            fasta/
-        duplex/
-            fastq/
-            fasta/
-        ultralongnano/
-            fastq/
-            fasta/
-        adaptivenano/
-            fastq/
-            fasta/     
-        illumina/
-            fastq/
-            fasta/
-        draft/
-            fasta/
-        reference/
-            <reference 1>/
-            <reference 2>/
-            <reference 3>/
-```
+Set separate input/output directories for each dataset. Selected stages may
+require additional environments, databases, containers, or scheduler settings.
 
-III. Adjust config files.
-```commandline
-**To be written**
-```
-Some of the options (all nonested options from default.yaml) could also be set via command line. See examples before
+# Workflow support
 
-IV. Run pipeline
+Validation varies by tool, stage, and configuration. Consult the
+[support matrix](docs/stages.md#tool-support) before
+selecting tools or stages, and the [example catalog](docs/examples/README.md)
+for dataset-specific commands and validation status.
 
-# Examples
+Pipeline-specific errors and workarounds are described in
+[troubleshooting](docs/troubleshooting.md).
 
-```commandline
-snakemake --profile profile/slurm/ \
-          --configfile config/data/fSynTyp1.2.yaml --printshellcmds \
-          --latency-wait 120 --use-conda  \
-          --res fcx=1 fcs_adaptor=1 \
-          --rerun-incomplete -k
-```
-
-Running main stages one by one is recommended.
+Historical R Markdown manuals and assets are preserved under
+[docs/old/](docs/old/); use the current Markdown guide for setup and execution.
 

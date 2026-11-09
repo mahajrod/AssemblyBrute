@@ -565,3 +565,132 @@ real input root. Two `DESCRIPTION` markers preserve its new draft input layout.
 No packages were installed, no sequencing data were downloaded, and no scientific
 jobs were executed. Workflow source hashes were unchanged. Local checks and logs
 are under `.snakemake/scam5-unified-check/`.
+
+## Synthetic half-coverage stage tests
+
+On 2026-11-09, synthetic reads were regenerated with seed 42 at approximately
+half their previous coverage: 182 HiFi-like reads (40.14×), 1,379 Illumina pairs
+(50.02×), and 1,000 artificial Hi-C pairs (36.27×). The two-sequence, 8,271 bp
+source FASTA and its draft copy were preserved. Its SHA-256 is
+`a48ed79fc7eda3dceb7178d39dd57adba3dc70d3527c2a9856f0dc7936524e39`.
+
+Checks validated all FASTQ records, mate names, source coordinates/strands,
+substitution counts, GATC anchors, counts/coverage, checksums, overwrite
+protection, and byte-for-byte regeneration. The generator now preserves existing
+`DESCRIPTION` markers, allowing generation into a cloned input directory layout.
+
+Six configurations under `config/templates/synthetic/` cover read QC, all k-mer
+counters, ploidy checking, contig assembly, draft QC, and Hi-C scaffolding. All
+passed with Snakemake 7.32.4 in named and YAML environment modes: 12 checks using
+`--use-conda --dry-run`, with `--printshellcmds` or `--list-conda-envs`.
+Assertions checked dataset paths, identical requested targets between modes,
+all four counters, GenomeScope models 1–4, Smudgeplot, and primary draft/scaffold
+outputs. Workflow source and existing dataset configurations were unchanged.
+
+Local checks and logs are under `.snakemake/synthetic-half-check/`. No packages
+were installed, no scientific jobs were executed, and assembly completeness or
+successful model fitting on this tiny reference has not been established.
+
+## Diploid synthetic replacement
+
+On 2026-11-09, the canonical `test_data/synthetic/` inputs were replaced with two
+simulated haplotypes at seed 42. Haplotype 1 matches the supplied reference;
+haplotype 2 carries 83 fixed SNPs (1.0035% divergence), independently of the
+0.001 sequencing substitution probability. The generator defaults to
+`--heterozygosity 0.01`; `0` retains the single-haplotype mode.
+
+The new reads comprise 177 HiFi-like reads, 1,380 Illumina pairs, and 1,000
+artificial Hi-C pairs. Coverage is 40.38× HiFi and 50.05× WGS relative to the
+single-haplotype reference span, or approximately 20×/25× per haplotype.
+Both mates of each pair derive from the same haplotype. Two draft FASTAs and
+`variants.tsv` record the haplotypes and exact SNP truth.
+
+Checks validated all reads against their haplotype sequences, SNP positions,
+mate geometry, GATC anchors, sequencing error counts, coverage, and checksums.
+There are 1,373 distinct one-substitution allelic 21-mer pairs in the reference
+haplotypes; both alleles of 1,310 pairs occur at least 10 times in the raw WGS
+reads. These counts establish allelic input signal, not successful Smudgeplot
+inference. Default diploid generation is byte-reproducible; explicit
+single-haplotype generation matches the preceding dataset's data and manifest.
+
+All six project configurations now use the canonical input/output roots and
+`ploidy: 2`. Contig assembly includes Hi-C; YaHS selects `phased`. Twelve
+Snakemake 7.32.4 DAG checks passed in named and YAML Conda modes, including both
+haplotype outputs for contig assembly, draft QC, and scaffolding. Workflow rules
+and the other datasets' configurations were unchanged.
+
+Previous inputs and results are archived locally under
+`.snakemake/synthetic-replacement-backup/`; archived result links resolve to the
+archived inputs/results. Source `synthetic.fasta` is unchanged. Checks and logs
+are under `.snakemake/synthetic-current-diploid-check/`.
+No packages were installed and no scientific tools were executed for this check;
+Smudgeplot completion on the replacement data remains unverified.
+
+## One-megabase synthetic reference
+
+On 2026-11-09, the synthetic reference was enlarged to 1,000,000 bp to exceed
+the fixed `noise_filter=1000` used by `smudgeplot all` 0.5.3. The original
+8,271 bp reference is preserved as `test_data/synthetic/seed.fasta`. Its two
+records remain prefixes of sequences extended to 749,003 and 250,997 bp with
+independent DNA sampled from each seed record's base frequencies (seed 43).
+The new reference SHA-256 is
+`8801f148891f4d3e8bc9a0642e8da7bfc63f1282d328af401191fb9e4f73cb16`.
+
+Read/haplotype seed 42 gives 10,000 SNPs between haplotypes, 19,995 HiFi-like
+reads, 166,668 WGS pairs, and 120,000 artificial Hi-C pairs. Total coverage is
+40.004× HiFi, 50.0004× WGS, and 36× Hi-C relative to the single-haplotype span.
+The five compressed FASTQ files occupy 41,225,422 bytes. Sequencing substitution
+probability remains 0.001. Hi-C pair counts now scale with genome length; cis
+contacts use log-distance sampling and nearest GATC anchors, avoiding a full
+anchor-weight scan for every pair.
+
+Checks validated the preserved seed prefixes, all SNPs and reads, mate geometry,
+haplotype identity, sequencing error counts, GATC anchors, coverage, and hashes.
+Direct counting against known alleles found 230,266 distinct one-substitution
+31-mer pairs; 226,944 had both alleles observed at least 10 times in raw WGS.
+The largest raw allelic coverage bin, (19, 20), contains 3,880 distinct pairs,
+exceeding 1000 without relying on sequencing errors. This is an input-data
+check, not a Smudgeplot inference result.
+
+All six existing synthetic configurations passed DAG checks in named and YAML
+Conda modes (12 checks). Original workflow rules, core settings, and project
+configurations were unchanged. Smaller regeneration checks confirmed byte
+reproducibility, rejection of undersized genomes, preservation of existing
+seed/description files, and protection against overwriting generated outputs.
+
+Canonical inputs remain under `test_data/synthetic/`; previous inputs/results
+are archived under `.snakemake/synthetic-1mb-backup/` with repaired result links.
+Local checks and logs are under `.snakemake/synthetic-1mb-check/`. No packages
+were installed and no FastK, Smudgeplot, assembly, or other scientific tools
+were executed during this validation.
+
+## Self-contained synthetic reference
+
+On 2026-11-09, the synthetic generator was changed to require only an output
+directory and numeric parameters. It generates independent random chromosomes
+`chr1` (750,000 bp) and `chr2` (250,000 bp) at target GC 40%, using reference seed
+43 derived from `--seed 42`. No FASTA input is read. Reference and draft FASTAs
+are wrapped at 60 bases per line. The reference SHA-256 is
+`cf5a95f05e8b2a3297db2e3d9c878233f6e1a9212f34e4192add2a9ddce2f6de`.
+
+Read/haplotype seed 42 and heterozygosity 0.01 produce 10,000 SNPs, 20,023
+HiFi-like reads, 166,668 WGS pairs, and 120,000 artificial Hi-C pairs. Total
+coverage is 40.003× HiFi, 50.0004× WGS, and 36× Hi-C; compressed FASTQ occupies
+41,302,791 bytes. All reads, SNPs, pairing, sequencing error counts, haplotype
+origins, GATC anchors, coverage, and checksums were validated. Direct raw-WGS
+counting found 230,384 distinct allelic 31-mer pairs, with 226,812 supported by
+at least 10 observations of both alleles. The largest coverage bin (19, 20)
+contains 3,878 pairs, above the threshold of 1000.
+
+Small independent generations confirmed byte reproducibility without input
+files, preservation of existing DESCRIPTION markers, overwrite protection,
+parameter validation, and the optional single-haplotype mode. All six existing
+project configurations passed DAG checks in both Conda modes (12 checks).
+Workflow rules, core settings, and project configurations were unchanged.
+
+Canonical inputs are under `test_data/synthetic/`; `seed.fasta` is absent and
+its Git-ignore exception was removed. Only DESCRIPTION markers are eligible
+under the input root. Previous inputs, including the edited seed file, and
+results were preserved in `.snakemake/synthetic-selfcontained-backup/` with
+repaired result links. Local checks are under
+`.snakemake/synthetic-selfcontained-check/`. No scientific tools were executed.

@@ -1,0 +1,1 @@
+Self-contained synthetic read fixtures; seed 42. Regenerate with: python workflow/scripts/generate_synthetic_reads.py OUTPUT_DIR --chromosome-lengths 750000 250000 --gc-content 0.4 --seed 42 --heterozygosity 0.01. See manifest.json and truth.tsv.gz in the dataset root. Hi-C contacts are a toy GATC model, not experimental contact evidence. Sequence files are ignored by Git.

@@ -3,7 +3,7 @@
 ## Project Structure & Module Organization
 AssemblyBrute builds and evaluates de novo genome assemblies using Snakemake. `Snakefile` orchestrates the workflow; `workflow/rules/` groups rules by stage and tool. Shared Python helpers live in `workflow/include/`, standalone Python/Bash/AWK utilities in `workflow/scripts/`, and Conda definitions in `workflow/envs/`. Treat `workflow/external_tools/` as bundled upstream software.
 
-Standalone examples live in `config/templates/<dataset>/`; `docs/examples/README.md` indexes datasets and test commands. Shared defaults and resource tables are in `config/core.yaml` and `config/resources/`; scheduler profiles are in `profile/`. Test inputs use `test_data/<dataset>/<datatype>/<format>/`, with outputs in `results/<dataset>/`. Only `DESCRIPTION` markers under `test_data/` are trackable; data are ignored. Documentation and illustrations live in `docs/` and `images/`.
+Standalone examples live in `config/templates/<dataset>/`; `docs/examples/README.md` indexes datasets and test commands. Shared defaults and resource tables are in `config/core.yaml` and `config/resources/`; scheduler profiles are in `profile/`. Test inputs use `test_data/<dataset>/<datatype>/<format>/`, with outputs in `results/<dataset>/`. Under `test_data/`, only `DESCRIPTION` markers are trackable; generated data and results are ignored. Documentation and illustrations live in `docs/` and `images/`.
 
 ## Build, Test, and Development Commands
 Use Linux and Snakemake 7.32.4. Templates select existing named Conda environments with `use_existing_envs: true`; `false` selects YAML specifications relative to the main `Snakefile`. Run from the repository root; there is no separate build step. Fresh Conda solves remain unverified.

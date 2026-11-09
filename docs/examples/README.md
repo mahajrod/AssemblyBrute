@@ -7,23 +7,25 @@ and expected outputs. Start with [installation](../installation.md).
 | --- | --- | --- |
 | [Yeast stage tests](yeast.md) | Existing HiFi + Hi-C fixtures; six separate configurations, outputs under `results/yeast/`. | All six DAGs checked; namespaced workflows not executed. |
 | [Scam5](scam5.md) | Six common stage tests plus two WGS assembly scenarios, outputs under `results/scam5/`. About 7.38 GB compressed for all five read files. | All eight DAGs checked with local reads; draft QC used a synthetic FASTA. No scientific jobs executed during validation. |
+| [Synthetic stage tests](synthetic.md) | Six diploid stage configurations with a self-contained 1 Mb reference and 10,000 SNPs between haplotypes; approximately 40× HiFi, 50× WGS, and 36× artificial Hi-C total. Outputs under `results/synthetic/`. | Allelic frequency threshold and all six DAGs checked in both Conda modes; scientific workflows not executed. |
 
-Both datasets provide `read_qc.yaml`, `all_kmer_counters.yaml`,
+All three datasets provide `read_qc.yaml`, `all_kmer_counters.yaml`,
 `ploidy_check.yaml`, `contig.yaml`, `draft_qc.yaml`, and `hic_scaffolding.yaml`.
 Scam5 also provides `illumina_qc.yaml` and `combined.yaml`.
 
-The six yeast stage tests and Scam5 are opt-in integration datasets;
-neither is downloaded by ordinary repository checks. Other input technologies
-will need their own datasets and validation records.
+The datasets are opt-in: repository checks neither download reads nor generate
+synthetic inputs. Other input technologies need their own datasets and validation
+records.
 
 ## Keep sequencing data outside Git
 
 Commit descriptions, small project configurations, and measured
 validation summaries. Keep FASTQ/BAM files, subsets, and generated assemblies out
-of commits. Public archives host the source data; prepare each dataset once and
-reuse its reads across scenarios.
+of commits. Obtain public reads from their source archives or regenerate synthetic
+inputs from the script and its parameters; reuse prepared inputs across scenarios.
 Each test-data directory contains a tracked `DESCRIPTION` file to preserve its
-structure on GitHub. Other files and symlinks under `test_data/` remain ignored.
+structure on GitHub. Other files and symlinks under `test_data/`, along with
+generated `results/`, remain ignored.
 No Git LFS or additional data-versioning service is needed for these public
 archive-backed examples: record run accessions and file identities in the dataset
 description.
@@ -41,7 +43,7 @@ The current yeast templates use `test_data/yeast/` and write to
 `input_dir` to reads stored elsewhere. Explicit project/CLI path settings override
 core defaults. Set `out_dir` and `tmp_dir` together for each dataset.
 
-The test-data root contains `yeast/` and `scam5/`, each retaining the usual
+The test-data root contains `yeast/`, `scam5/`, and `synthetic/`, retaining the usual
 datatype/format layout. Supply the DNA FASTQ files listed in each guide;
 draft-QC scenarios also require prepared FASTAs under `draft/fasta/`.
 

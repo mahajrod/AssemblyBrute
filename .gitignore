@@ -11,3 +11,6 @@ input/**/*.fastq.gz
 /test_data/**
 !/test_data/**/
 !/test_data/**/DESCRIPTION
+
+# Generated workflow outputs
+/results/

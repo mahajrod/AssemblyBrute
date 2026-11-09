@@ -1,0 +1,1 @@
+Scam5 HiFi run SRR35179663. Expected file: SRR35179663_subreads.fastq.gz. The publication identifies these reads as HiFi despite the archive filename. Supply the file locally; it is not tracked in Git.

@@ -1,0 +1,13 @@
+# pycache
+__pycache__/
+
+# Snakemake dir
+.snakemake/
+
+# genomes dir
+input/**/*.fasta.gz
+input/**/*.fastq.gz
+
+/test_data/**
+!/test_data/**/
+!/test_data/**/DESCRIPTION

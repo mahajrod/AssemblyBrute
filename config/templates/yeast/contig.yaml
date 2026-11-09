@@ -1,0 +1,186 @@
+# Run from the repository root:
+# snakemake --configfile config/templates/yeast/contig.yaml --use-conda -c 8
+main_config_file: config/core.yaml
+input_dir: test_data/yeast/
+out_dir: results/yeast/
+tmp_dir: results/yeast/tmp/
+resource_profile: high
+use_existing_envs: true
+singularity_load_mode: conda
+singularity_load_str: 'module load singularity '
+singularity_load_env: common
+parameter_set: micro
+input_datatypes: hifi,hic
+data_filtering:
+- hifi
+- hic
+assembly_kmer_length:
+- 31
+phasing_stage: contig
+phasing_kmer_length: 31
+final_kmer_counter: meryl
+final_kmer_length: 21
+final_kmer_datatypes:
+- hifi
+stage_list:
+- raw_read_qc
+- filter_reads
+- contig
+stage_coretools:
+  contig:
+  - hifiasm
+  hic_alignment:
+  - arima
+  hic_scaffolding:
+  - yahs
+  ref_scaffolding:
+  - ragtag
+  polishing:
+  - nextpolish2
+  dedup:
+  - purge_dups
+  gap_closing:
+  - samba
+  draft_qc:
+  - draft_qc
+coretool_option_sets:
+  hifiasm:
+  - l1_no_ul
+  flye:
+  - hifi
+  purge_dups:
+  - hifi_keep_hicov
+  hapsolo:
+  - def
+  combo_purge:
+  - hifi_keep_hicov
+  arima:
+  - def
+  bwa_only:
+  - def
+  pairtools:
+  - def
+  juicer:
+  - def
+  pore-c:
+  - def
+  cifi:
+  - def
+  yahs:
+  - phased
+  threeddna:
+  - phased
+  nextpolish2:
+  - def
+  draft_qc:
+  - def
+  samba:
+  - phased
+other_tool_option_sets:
+  kmer_qc: default
+tool_manually_adjusted_features:
+  calcuts:
+    lower_threshold: null
+    haploid_diploid_threshold: null
+    upper_threshold: null
+  genome_assemblers:
+    coverage_estimator: null
+    lambda:
+      p1: null
+      p2: null
+      p3: null
+      p4: null
+      p5: null
+      p6: null
+  krater:
+    use_second_peak: null
+    low_limit: null
+    high_limit: null
+  genomescope:
+    starting_lambda: null
+    start_shift: null
+  hapsolo:
+    busco_lineage_list:
+    - saccharomycetes_odb10
+assembly_qc_level:
+  draft_qc: 0
+  contig: 5
+  dedup: 5
+  hic_alignment: 0
+  hic_scaffolding: 5
+  polishing: 5
+  ref_scaffolding: 0
+  gap_closing: 0
+qc_settings:
+  windows_sets:
+  - w10k.s10k
+  reference_scaffold_sets:
+  - custom
+  assembly_scaffold_sets:
+  - very_short
+  threshold_types:
+  - absolute
+  - relative
+ploidy: 2
+genome_prefix: testSacMyc1
+busco_lineage_list:
+- saccharomycetes_odb12
+telomere_motif: null
+use_canonical_telomere: false
+species_name: Saccharomyces cerevisiae
+tax_id: 4932
+microchromosomes: true
+kingdom: fungi
+mitoz_clade: 'null'
+mtdna_genetic_code: 3
+database_set:
+  kraken2:
+  - nt
+  fcs_adaptor:
+  - adaptor
+  fcs:
+  - fcs_gx
+gap_closing_datatype: hifi
+hic_enzyme_set: Arima
+custom_enzyme_set: null
+custom_enzyme_set_is_no_motif: false
+skip_porechop_abi: true
+skip_per_lib_genome_estimation: true
+skip_hic_genomescope: true
+skip_fcs: true
+skip_fcs_adaptor: true
+skip_busco: true
+skip_kmer_gcp: true
+skip_kmer_smudgeplot: true
+skip_assembly_tracks: false
+skip_telomere: false
+skip_telomere_container: true
+skip_telomere_tidk: false
+skip_repeats: false
+skip_windowmasker: false
+skip_trf: false
+skip_coverage_tracks: false
+skip_pretext: false
+skip_pretext_10k_1k_tracks: false
+skip_pretext_100k_10k_tracks: false
+skip_pretext_1000k_100k_tracks: true
+skip_pretext_coverage_tracks: false
+skip_hic_for_combined_haplotype: false
+skip_yahs_hic_file: true
+skip_higlass_mcool: true
+skip_wga: false
+skip_draft_qc_wga: false
+skip_contig_wga: false
+skip_dedup_wga: false
+skip_polishing_wga: false
+skip_hic_scaffolding_wga: false
+skip_gap_closing_wga: false
+skip_purge_dups_qc: false
+skip_ragtag_qc: false
+skip_mitohifi_reads: true
+skip_mitohifi_reads_per_file: true
+skip_mitohifi_reads_combined: true
+skip_mitohifi_assembly: true
+skip_mitoz: true
+skip_mitoz_hic: true
+skip_mitoz_illumina: true

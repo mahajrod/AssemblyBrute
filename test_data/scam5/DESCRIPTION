@@ -1,0 +1,1 @@
+Sinodiscula camellicola Scam5 fixtures for config/templates/scam5/. Input root: test_data/scam5/. Outputs: results/scam5/. Supply the DNA reads described in docs/examples/scam5.md; RNA-seq is not used.

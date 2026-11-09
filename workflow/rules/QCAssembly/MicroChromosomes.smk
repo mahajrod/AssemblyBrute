@@ -27,7 +27,7 @@ rule miniprot:
     benchmark:
         "{fasta_dir}/log/miniprot.{fasta_prefix}.combined.benchmark.txt"
     conda:
-        config["conda"]["microchromosomes"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["microchromosomes"]["yaml"])
+        get_conda_env("microchromosomes")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("miniprot_microchromosomes"),
@@ -60,7 +60,7 @@ rule place_microchromosomes_first:
     benchmark:
         "{fasta_dir}/log/place_microchromosomes_first.{fasta_prefix_part}.combined.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("place_microchromosomes_first"),

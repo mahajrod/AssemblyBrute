@@ -20,7 +20,7 @@ rule create_telomere_track_for_pretext:
     benchmark:
         "{fasta_dir}/log/create_telomere_track_for_pretext.{fasta_prefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_telomere_track_for_pretext"),
@@ -52,7 +52,7 @@ rule copy_telomere_track_for_pretext:
     benchmark:
         "{fasta_dir}/log/copy_telomere_track_for_pretext.{fasta_prefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("telo_container"),
@@ -121,7 +121,7 @@ rule copy_telomere_files:
     benchmark:
         "{fasta_dir}/log/create_telomere_links.{fasta_prefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("get_telomere_warning"),

@@ -16,7 +16,7 @@ rule smudgeplot_assess:
     benchmark:
         config["out_dir"] / "log/smudgeplot_assess.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.benchmark.txt"
     conda:
-        config["conda"]["smudgeplot"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["smudgeplot"]["yaml"])
+        get_conda_env("smudgeplot")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("smudgeplot_assess"),
@@ -43,7 +43,7 @@ rule smudgeplot_hetmers:
     benchmark:
         config["out_dir"] / "log/smudgeplot_hetmers.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.benchmark.txt"
     conda:
-        config["conda"]["smudgeplot"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["smudgeplot"]["yaml"])
+        get_conda_env("smudgeplot")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("smudgeplot_hetmers"),
@@ -76,7 +76,7 @@ rule smudgeplot:
     benchmark:
         config["out_dir"] / "log/smudgeplot.{datatype}.{stage}.{kmer_length}.fastk_min{min_kmer_count}.benchmark.txt"
     conda:
-        config["conda"]["smudgeplot"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["smudgeplot"]["yaml"])
+        get_conda_env("smudgeplot")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("smudgeplot"),

@@ -14,7 +14,7 @@ rule bam_stats:
     benchmark:
         "{bam_dir}/log/bam_stats.{bam_prefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("bam_stats"),

@@ -21,7 +21,7 @@ rule pretextmap: # #Pretext-map probably doesn't support long file names!!!!!!!!
     benchmark:
         "{fasta_dir}/log/pretextmap.{fasta_prefix}.{phasing_kmer_length}.{subset}.{mapq}.{pretext_res}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pretextmap"),
@@ -66,7 +66,7 @@ rule pretextsnapshot: #Pretext-snapshot doesn't support long file names!!!!!!!!!
     benchmark:
         "{fasta_dir}/log/pretextsnapshot.{fasta_prefix}.{phasing_kmer_length}.{subset}.{mapq}.{ext}.{resolution}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pretextsnapshot"),

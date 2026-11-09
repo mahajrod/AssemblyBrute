@@ -17,7 +17,7 @@ rule gc_count:
     benchmark:
         config["out_dir"] / "gc_plot.{datatype}.{stage}.{kmer_length}.L{min_coverage}.benchmark.txt"
     conda:
-        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
+        get_conda_env("kmer")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("gc_count"),
@@ -52,7 +52,7 @@ rule gc_plot:
     benchmark:
         config["out_dir"] / "log/gc_plot.{datatype}.{stage}.{kmer_length}.L{min_coverage}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("gc_plot"),

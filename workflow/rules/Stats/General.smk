@@ -35,7 +35,7 @@ rule gather_stats_per_stage_parameter:
     benchmark:
         config["out_dir"] / "log/gather_stats_per_stage_parameter.{genome_prefix}.{assembly_stage}.{parameters}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("gather_stage_stats"),
@@ -45,7 +45,7 @@ rule gather_stats_per_stage_parameter:
     threads:
         parameters["threads"]["gather_stage_stats"]
     shell:
-        " ./workflow/scripts/gather_qc_stats.py -q results/{wildcards.assembly_stage}/{wildcards.parameters}/assembly_qc/ "
+        " ./workflow/scripts/gather_qc_stats.py -q {config[out_dir]}/{wildcards.assembly_stage}/{wildcards.parameters}/assembly_qc/ "
         "     -p {wildcards.parameters} -e {wildcards.genome_prefix}.{wildcards.assembly_stage} -s {wildcards.assembly_stage} "
         "     -a {params.assembly_prefix_list} {params.busco_lineage_list} -o {output.stats} {params.merqury_datatypes} > {log.std} 2>&1; "
 
@@ -68,7 +68,7 @@ rule gather_stage_stats:
     benchmark:
         config["out_dir"] / "log/gather_stage_stats.{genome_prefix}.{assembly_stage}.benchmark.txt"
     #conda:
-    #    config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+    #    get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("gather_stage_stats"),

@@ -16,7 +16,7 @@ rule bwa_mem2_index:
     benchmark:
         "{fasta_dir}/log/{fasta_prefix}.bwa_index.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("bwa_index"),
@@ -41,7 +41,7 @@ rule ref_faidx:
     benchmark:
         "{fasta_dir}/log/ref_faidx.{fasta_prefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("ref_faidx"),
@@ -66,7 +66,7 @@ rule ref_dict:
     benchmark:
         "{fasta_dir}/log/{fasta_prefix}.ref_dict.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("ref_dict"),
@@ -91,7 +91,7 @@ rule index_bam:
     benchmark:
         "{bam_dir}/log/index_bam.{bam_prefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("index_bam"),
@@ -115,7 +115,7 @@ rule index_bam_csi:
     benchmark:
         "{bam_dir}/log/index_bam.{bam_prefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("index_bam"),

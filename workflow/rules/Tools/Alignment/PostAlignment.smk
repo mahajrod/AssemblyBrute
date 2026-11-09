@@ -15,7 +15,7 @@ rule generate_site_positions: #
     benchmark:
         "{fasta_dir}/log/generate_site_positions.{fasta_prefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("generate_site_positions"),
@@ -42,7 +42,7 @@ rule generate_prescaffolding_agp:
     benchmark:
         "{fasta_dir}/log/generate_prescaffolding_agp.benchmark.{fasta_prefix}.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("generate_prescaffolding_agp"),
@@ -80,7 +80,7 @@ rule yahs_juicer_pre_prescaffolding: #
     benchmark:
         "{fasta_dir}/log/yahs_juicer_pre_prescaffolding.{fasta_prefix}.{phasing_kmer_length}.mapq{min_mapq}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("yahs_juicer_pre_prescaffolding"),
@@ -119,7 +119,7 @@ rule juicer_tools_pre_prescaffolding: #
     benchmark:
         "{fasta_dir}/log/juicer_tools_pre_prescaffolding.{fasta_prefix}.{phasing_kmer_length}.mapq{min_mapq}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("juicer_tools_pre_prescaffolding"),

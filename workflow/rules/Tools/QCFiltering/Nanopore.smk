@@ -14,7 +14,7 @@ rule porechop_abi:
     benchmark:
         config["out_dir"] / "log/porechop_abi.{nanopore_datatype}.trimmed.{fileprefix}.benchmark.txt"
     conda:
-        config["conda"]["nanopore"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["nanopore"]["yaml"])
+        get_conda_env("nanopore")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("porechop_abi"),
@@ -60,7 +60,7 @@ rule chopper:
     benchmark:
         config["out_dir"] / "log/chopper.{nanopore_datatype}.filtered.{fileprefix}.benchmark.txt"
     conda:
-        config["conda"]["nanopore"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["nanopore"]["yaml"])
+        get_conda_env("nanopore")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("chopper"),

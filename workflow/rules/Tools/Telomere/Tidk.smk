@@ -15,7 +15,7 @@ rule tidk_download_db:
     benchmark:
         config["out_dir"] / "benchmark/tidk_download_db.benchmark.txt",
     conda:
-        config["conda"]["tidk"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["tidk"]["yaml"])
+        get_conda_env("tidk")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("tidk_download_db"),
@@ -47,7 +47,7 @@ rule tidk_search:
     benchmark:
         "{fasta_dir}/log/tidk_search.{fasta_prefix}.win{window}.step{window}.benchmark.txt"
     conda:
-        config["conda"]["tidk"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["tidk"]["yaml"])
+        get_conda_env("tidk")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("tidk_search"),

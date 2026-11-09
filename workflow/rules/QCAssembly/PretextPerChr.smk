@@ -18,7 +18,7 @@ if candidate_agp_filename:
         benchmark:
             "{fasta_dir}/log/get_precurated_scaffold_order_from_agp.{fasta_prefix}.benchmark.txt"
         conda:
-            config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+            get_conda_env("common")
         resources:
             queue=config["queue"]["cpu"]["name"],
             node_options=parse_node_list("get_precurated_scaffold_order_from_agp"),
@@ -46,7 +46,7 @@ if candidate_agp_filename:
         benchmark:
             "{fasta_dir}/log/get_precurated_fasta.{fasta_prefix}.benchmark.txt"
         conda:
-            config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+            get_conda_env("common")
         resources:
             queue=config["queue"]["cpu"]["name"],
             node_options=parse_node_list("get_precurated_fasta"),
@@ -82,7 +82,7 @@ if candidate_agp_filename:
         benchmark:
             "{fasta_dir}/log/get_precurated_fasta.{fasta_prefix}.{phasing_kmer_length}.benchmark.txt"
         conda:
-            config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+            get_conda_env("common")
         resources:
             queue=config["queue"]["cpu"]["name"],
             node_options=parse_node_list("get_precurated_bam"),
@@ -128,7 +128,7 @@ if candidate_agp_filename:
         benchmark:
             "{bam_dir}/per_chr/log/pretextmap_chr.{bam_prefix}.{candidate_chr_id}.{mapq}.{pretext_res}.benchmark.txt"
         conda:
-            config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+            get_conda_env("common")
         resources:
             queue=config["queue"]["cpu"]["name"],
             node_options=parse_node_list("pretextmap_chr"),

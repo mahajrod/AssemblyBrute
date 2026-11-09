@@ -17,7 +17,7 @@ rule nextdenovo: # TODO: implement
     benchmark:
         config["out_dir"] / "log/hifiasm.{parameters}.{genome_prefix}.benchmark.txt"
     conda:
-        config["conda"]["nextdenovo"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["nextdenovo"]["yaml"])
+        get_conda_env("nextdenovo")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("nextdenovo_hic"),

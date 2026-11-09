@@ -40,7 +40,7 @@ rule yahs: #
     benchmark:
         config["out_dir"]  / "log/yahs.{parameters}.{genome_prefix}.hic_scaffolding.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("yahs"),
@@ -76,7 +76,7 @@ rule yahs_juicer_pre: #
     benchmark:
         config["out_dir"]  / "hic_scaffolding/{parameters}/log/yahs_juicer_pre.{genome_prefix}.hic.scaffolding.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("yahs_juicer_pre"),
@@ -113,7 +113,7 @@ rule juicer_tools_pre: #
     benchmark:
         config["out_dir"]  / "hic_scaffolding/{parameters}/log/yahs_juicer_pre.{parameters}.{genome_prefix}.hic.scaffolding.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("juicer_tools_pre"),
@@ -174,7 +174,7 @@ rule extract_yahs_contigs: #
     benchmark:
         config["out_dir"]  / "hic_scaffolding/{parameters}/log/extract_yahs_contigs.{parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("extract_yahs_contigs"),
@@ -200,7 +200,7 @@ rule create_transfer_agp: #
     benchmark:
         config["out_dir"]  / "hic_scaffolding/{parameters}/log/create_transfer_agp.{parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_transfer_agp"),

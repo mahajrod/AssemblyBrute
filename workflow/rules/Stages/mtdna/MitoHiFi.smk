@@ -13,7 +13,7 @@ rule get_recommended_mtDNA_reference: # reference is inferred by NCBI taxid
     benchmark:
         config["out_dir"] / "log/get_recommended_mtDNA_reference.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("get_recommended_mtDNA_reference"),
@@ -125,7 +125,7 @@ rule downsample_se_reads:
     benchmark:
         config["out_dir"] / "log/downsample_pe_reads.{datatype}.{pairprefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("downsample_pe_reads"),

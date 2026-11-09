@@ -24,7 +24,7 @@ rule fastk: # Fastmerge falls with segmentation fault, so the db is calculated f
     benchmark:
         config["out_dir"] / "log/fastk_se.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.benchmark.txt"
     conda:
-        config["conda"]["smudgeplot"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["smudgeplot"]["yaml"])
+        get_conda_env("smudgeplot")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("fastk"),
@@ -57,7 +57,7 @@ rule get_fastk_histo:
     benchmark:
         "{fastk_dir}/log/get_fastk_histo.{fastk_db_prefix}.fastk_min{min_kmer_count}.benchmark.txt"
     conda:
-        config["conda"]["smudgeplot"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["smudgeplot"]["yaml"])
+        get_conda_env("smudgeplot")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("fastk_histo"),
@@ -88,7 +88,7 @@ rule fastk_se:
     benchmark:
         config["out_dir"] / "log/fastk_se.{se_datatype}.{stage}.{fileprefix}.{kmer_length}.min{min_kmer_count}.benchmark.txt"
     conda:
-        config["conda"]["smudgeplot"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["smudgeplot"]["yaml"])
+        get_conda_env("smudgeplot")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("fastk"),
@@ -130,7 +130,7 @@ rule fastk_pe:
     benchmark:
         config["out_dir"] / "log/fastk_pe.{pe_datatype}.{stage}.{pairprefix}.{kmer_length}.min{min_kmer_count}.benchmark.txt"
     conda:
-        config["conda"]["smudgeplot"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["smudgeplot"]["yaml"])
+        get_conda_env("smudgeplot")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("fastk"),
@@ -176,7 +176,7 @@ rule merge_fastk:
     benchmark:
         config["out_dir"] / "log/merge_fastk.{datatype}.{stage}.{kmer_length}.min{min_kmer_count}.benchmark.txt"
     conda:
-        config["conda"]["smudgeplot"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["smudgeplot"]["yaml"])
+        get_conda_env("smudgeplot")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("fastk"),
@@ -218,7 +218,7 @@ rule get_fastk_histo:
     benchmark:
         "{fastk_dir}/log/get_fastk_histo.{fastk_db_prefix}.fastk_min{min_kmer_count}.benchmark.txt"
     conda:
-        config["conda"]["smudgeplot"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["smudgeplot"]["yaml"])
+        get_conda_env("smudgeplot")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("fastk_histo"),

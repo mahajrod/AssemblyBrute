@@ -14,7 +14,7 @@ rule windowmasker: #
     benchmark:
         "{fasta_dir}/log/windowmasker.{fasta_prefix}.windowmasker.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("windowmasker"),

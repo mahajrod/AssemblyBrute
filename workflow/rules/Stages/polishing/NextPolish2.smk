@@ -30,7 +30,7 @@ rule nextpolish2: #
     benchmark:
         config["out_dir"] / "polishing/{parameters}/log/nextpolish2.hifi.{parameters}.{genome_prefix}.polishing.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["nextpolish2"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["nextpolish2"]["yaml"])
+        get_conda_env("nextpolish2")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("nextpolish2"),

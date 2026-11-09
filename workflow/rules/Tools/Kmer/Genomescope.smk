@@ -26,7 +26,7 @@ def get_start_shift(wildcards):
 
 rule genomescope:
     input:
-        histo="{db_dir}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.histo",
+        histo=get_kmer_histo,
         log="{db_dir}/log/"
     output:
         summary="{db_dir}/genomescope/{datatype}.{stage}.{kmer_length}.{kmer_tool}/%s_summary.txt" % config["genome_prefix"],
@@ -44,7 +44,7 @@ rule genomescope:
     benchmark:
         "{db_dir}/log/genomescope.{datatype}.{stage}.{kmer_length}.{kmer_tool}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("genomescope"),
@@ -103,7 +103,7 @@ rule parse_genomescope_output:
     benchmark:
         "{db_dir}/log/parse_genomescope_output.{datatype}.{stage}.{kmer_length}.{kmer_tool}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("parse_genomescope_output"),

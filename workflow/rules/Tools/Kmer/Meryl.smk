@@ -13,7 +13,7 @@ rule meryl_assembly:
     benchmark:
         "{fasta_dir}/log/meryl_assembly.{fasta_prefix}.{kmer_length}.benchmark.txt"
     conda:
-        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
+        get_conda_env("kmer")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("meryl_assembly"),
@@ -42,7 +42,7 @@ rule meryl_get_repetitive_kmers:
     benchmark:
         "{directory}/log/meryl_get_repetitive_kmers.{meryl_db_prefix}.meryl.benchmark.txt"
     conda:
-        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
+        get_conda_env("kmer")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("meryl_extract"),
@@ -73,7 +73,7 @@ rule meryl_se:
     benchmark:
         config["out_dir"] / "log/meryl.{se_datatype}.{stage}.{fileprefix}.{kmer_length}.benchmark.txt"
     conda:
-        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
+        get_conda_env("kmer")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("meryl"),
@@ -109,7 +109,7 @@ rule meryl_pe:
     benchmark:
         config["out_dir"] / "log/meryl.{pe_datatype}.{stage}.{pairprefix}.{kmer_length}.benchmark.txt"
     conda:
-        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
+        get_conda_env("kmer")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("meryl_pe"),
@@ -150,7 +150,7 @@ rule merge_meryl:
     benchmark:
         config["out_dir"] / "log/merge_meryl.{datatype}.{stage}.{kmer_length}.benchmark.txt"
     conda:
-        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
+        get_conda_env("kmer")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("merge_meryl"),
@@ -176,7 +176,7 @@ rule get_meryl_histo:
     benchmark:
         "{meryl_dir}/log/get_meryl_histo.{meryl_db}.benchmark.txt"
     conda:
-        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
+        get_conda_env("kmer")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("get_meryl_histo"),
@@ -203,7 +203,7 @@ rule meryl_extract:
     benchmark:
         config["out_dir"] / "log/meryl_extract.{datatype}.{stage}.{kmer_length}.L{min_lower_boundary}.U{max_upper_boundary}.benchmark.txt"
     conda:
-        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
+        get_conda_env("kmer")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("meryl_extract"),
@@ -237,7 +237,7 @@ rule subset_extracted_kmers:
     benchmark:
         config["out_dir"] / "log/subset_extracted_kmers.{datatype}.{stage}.{kmer_length}.{kmer_tool}.L{lower_boundary}.U{upper_boundary}.benchmark.txt"
     conda:
-        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
+        get_conda_env("kmer")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("subset_extracted_kmers"),

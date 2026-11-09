@@ -16,7 +16,7 @@ rule pairtools_parse:
     benchmark:
         config["out_dir"] / "log/pairtools_parse.hic_alignment.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.benchmark.txt"
     conda:
-        config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
+        get_conda_env("pairtools")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pairtools_parse"),
@@ -41,7 +41,7 @@ rule pairtools_sort:
     benchmark:
         config["out_dir"] / "log/pairtools_sort.hic_alignment.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.{pairprefix}.benchmark.txt"
     conda:
-        config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
+        get_conda_env("pairtools")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pairtools_sort"),
@@ -71,7 +71,7 @@ rule pairtools_merge:
     benchmark:
         config["out_dir"] / "log/pairtools_merge.hic_alignment.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
+        get_conda_env("pairtools")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pairtools_merge"),
@@ -100,7 +100,7 @@ rule pairtools_dedup:
     benchmark:
         config["out_dir"] / "log/pairtools_dedup.hic_alignment.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
+        get_conda_env("pairtools")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pairtools_dedup"),
@@ -133,7 +133,7 @@ rule pairtools_split:
     benchmark:
         config["out_dir"] / "log/pairtools_split.hic_alignment.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
+        get_conda_env("pairtools")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pairtools_split"),
@@ -164,7 +164,7 @@ rule pairtools_index_pairs:
     benchmark:
         config["out_dir"] / "log/pairtools_index_pairs.hic_alignment.{parameters}.{genome_prefix}.{phasing_kmer_length}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["pairtools"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["pairtools"]["yaml"])
+        get_conda_env("pairtools")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pairtools_index_pairs"),

@@ -113,7 +113,7 @@ rule pretext_inject_tracks:
     benchmark:
         "{fasta_dir}/log/pretext_inject_tracks.{fasta_prefix}.{phasing_kmer_length}.{subset}.{mapq}.{pretext_res}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("pretext_inject_tracks"),

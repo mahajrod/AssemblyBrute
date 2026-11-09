@@ -19,7 +19,7 @@ rule last_index: #
     benchmark:
         "{fasta_dir}/log/last_index.{fasta_prefix}.softmasked.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("last_index"),
@@ -55,7 +55,7 @@ rule last_alignment: #
     benchmark:
         "{target_dir}/log/last_alignment.{query_prefix}.to.{target_prefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("last_alignment"),
@@ -92,7 +92,7 @@ rule filter_last_alignment_by_target_hit_len: #
     benchmark:
         "{tab_file_dir}/log/{tab_file_prefix}.min_len{min_target_len}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("filter_last_alignment_by_target_hit_len"),
@@ -134,7 +134,7 @@ rule draw_alignment: #
     benchmark:
         "{target_dir}/log/draw_alignment.{query_prefix}.{query_scaffold_length}.to.{target_prefix}.{target_scaffold_length}.min_len{min_target_len}.benchmark.txt"
     conda:
-        config["conda"]["chromodoter"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["chromodoter"]["yaml"])
+        get_conda_env("chromodoter")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("draw_alignment"),

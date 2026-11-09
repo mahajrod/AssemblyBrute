@@ -35,7 +35,7 @@ rule verkko_phasing:
     benchmark:
         config["out_dir"] / "log/flye.{parameters}.{genome_prefix}.benchmark.txt"
     conda:
-        config["conda"]["verkko"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["verkko"]["yaml"])
+        get_conda_env("verkko")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("verkko"),
@@ -80,7 +80,7 @@ rule verkko_no_phasing:
     benchmark:
         config["out_dir"] / "log/flye.{parameters}.{genome_prefix}.benchmark.txt"
     conda:
-        config["conda"]["verkko"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["verkko"]["yaml"])
+        get_conda_env("verkko")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("verkko"),

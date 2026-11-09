@@ -17,7 +17,7 @@ rule hapsolo: # hapsolo renames scaffolds
     benchmark:
         "{fasta_dir}/log/hapsolo.{fasta_prefix}.{busco_lineage}.benchmark.txt"
     conda:
-        config["conda"]["hapsolo"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["hapsolo"]["yaml"])
+        get_conda_env("hapsolo")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("hapsolo"),
@@ -64,7 +64,7 @@ rule restore_orig_scaf_ids_after_hapsolo:
     benchmark:
         "{fasta_dir}/log/restore_orig_scaf_ids_after_hapsolo.{fasta_prefix}.{busco_lineage}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("gfa2fasta"),

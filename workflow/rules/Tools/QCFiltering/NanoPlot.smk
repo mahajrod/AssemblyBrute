@@ -14,7 +14,7 @@ rule nanoplot:
     benchmark:
         config["out_dir"] / "log/nanoplot.{longread_datatype}.{stage}.{fileprefix}.benchmark.txt"
     conda:
-        config["conda"]["nanopore"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["nanopore"]["yaml"])
+        get_conda_env("nanopore")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("nanoplot"),
@@ -56,7 +56,7 @@ rule gather_nanoplot_stats_per_stage:
     benchmark:
         config["out_dir"] / "log/gather_nanoplot_stats_per_stage.{longread_datatype}.{stage}.benchmark.txt"
     conda:
-        config["conda"]["nanopore"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["nanopore"]["yaml"])
+        get_conda_env("nanopore")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("nanoplot"),

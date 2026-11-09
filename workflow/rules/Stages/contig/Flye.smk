@@ -21,7 +21,7 @@ rule flye:
     benchmark:
         config["out_dir"] / "log/flye.{parameters}.{genome_prefix}.benchmark.txt"
     conda:
-        config["conda"]["flye"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["flye"]["yaml"])
+        get_conda_env("flye")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("flye"),

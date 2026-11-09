@@ -16,7 +16,7 @@ rule combine_se_reads:
     benchmark:
         config["out_dir"] / "log/combine_long_reads.{se_datatype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" %config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("combine_long_reads"),
@@ -52,7 +52,7 @@ rule combine_paired_reads:
     benchmark:
         config["out_dir"] / "log/combine_long_reads.{pe_datatype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" %config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("combine_long_reads"),

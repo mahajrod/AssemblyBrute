@@ -17,7 +17,7 @@ rule downsample_pe_reads:
     benchmark:
         config["out_dir"] / "log/downsample_pe_reads.{datatype}.{pairprefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("downsample_pe_reads"),
@@ -81,7 +81,7 @@ rule mitoz:
     benchmark:
         config["out_dir"] / "log/mitoz.{datatype}.{stage}.{pairprefix}.benchmark.txt"
     conda:
-        config["conda"]["mitoz"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["mitoz"]["yaml"])
+        get_conda_env("mitoz")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("mitoz"),

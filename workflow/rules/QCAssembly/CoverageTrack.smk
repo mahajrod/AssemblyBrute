@@ -31,7 +31,7 @@ rule minimap2_cov:
     benchmark:
         "{fasta_dir}/log/minimap2_cov.{fasta_prefix}.{longread_datatype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("minimap2_cov"),
@@ -101,7 +101,7 @@ rule bwa_cov:
     benchmark:
         "{fasta_dir}/log/bwa_cov.{fasta_prefix}.{pe_datatype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("bwa_cov"),
@@ -162,7 +162,7 @@ rule calculate_coverage:
     benchmark:
         "{bam_dir}/log/calculate_coverage.{bam_prefix}.{cov_settings}.{datatype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("calculate_coverage"),
@@ -190,7 +190,7 @@ rule create_coverage_table:
     benchmark:
         "{bam_dir}/log/create_coverage_table.{bam_prefix}.{datatype}.{cov_settings}.{window}.{step}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_coverage_table"),
@@ -220,7 +220,7 @@ rule create_bedgraph_from_coverage_table:
     benchmark:
         "{bam_dir}/log/create_bedgraph_from_coverage_table.{bam_prefix}.{datatype}.{cov_settings}.{cov_type}.{track_type}.{window}.{step}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_bedgraph_from_coverage_table"),
@@ -251,7 +251,7 @@ rule draw_coverage_heatmap:
     benchmark:
         "{fasta_dir}/log/draw_coverage_heatmap.{fasta_prefix}.{datatype}.{track_type}.{cov_settings}.{scaffold_length}.{window}.{step}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("draw_coverage_heatmap"),
@@ -284,7 +284,7 @@ rule gather_coverage_track_files:
     benchmark:
         "{fasta_dir}/log/gather_coverage_track_files.{fasta_prefix}.{datatype}.{track_type}.{cov_settings}.{cov_type}.{window}.{step}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_links"),
@@ -309,7 +309,7 @@ rule create_per_hap_coverage_tracks_for_merged_haplotype:
     benchmark:
         "{fasta_dir}/log/gather_coverage_track_files.{genome_prefix}.{assembly_stage}.{merged_haplotype}.{haplotype}.{datatype}.{track_type}.{cov_settings}.{cov_type}.{window}.{step}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_per_hap_coverage_tracks_for_merged_haplotype"),

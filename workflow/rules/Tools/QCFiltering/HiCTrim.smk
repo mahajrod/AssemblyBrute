@@ -17,7 +17,7 @@ rule trim_hic: # trims arima hic files from 5', but creates links to raw files i
     benchmark:
         config["out_dir"] / "log/trim_hic.{fileprefix}.benchmark.txt",
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("preprocess_hic_fastq"),

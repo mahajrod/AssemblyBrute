@@ -1,7 +1,7 @@
 
 rule krater_from_histo:
     input:
-        histo="{db_dir}/{datatype}.{stage}.{kmer_length}.{kmer_tool}.histo",
+        histo=get_kmer_histo,
         log="{db_dir}/log/"
     output:
         summary="{db_dir}/krater/{datatype}.{stage}.{kmer_length}.{kmer_tool}/{genome_prefix}.{datatype}.{stage}.{kmer_length}.{kmer_tool}.histo.stats",
@@ -24,7 +24,7 @@ rule krater_from_histo:
     benchmark:
         "{db_dir}/log/krater_from_histo.{datatype}.{stage}.{kmer_length}.{kmer_tool}.{genome_prefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("krater_from_histo"),

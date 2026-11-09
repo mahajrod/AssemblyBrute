@@ -26,7 +26,7 @@ rule arima_bwa_map: #
     benchmark:
         config["out_dir"]  / "log/bwa_map.hic_alignment.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{fileprefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("bwa_map"),
@@ -55,7 +55,7 @@ rule arima_filter_five_end: #
     benchmark:
         config["out_dir"] / "log/bwa_map.hic_alignment.{parameters}.{genome_prefix}.{haplotype}.{phasing_kmer_length}.{fileprefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("bwa_map"),
@@ -93,7 +93,7 @@ rule arima_two_read_bam_combiner:
     benchmark:
         config["out_dir"] / "log/bam_merge_pairs.{parameters}.{genome_prefix}.hic_alignment.{haplotype}.{phasing_kmer_length}.{pairprefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         cpus=parameters["threads"]["arima_two_read_bam_combiner"] ,
         node_options=parse_node_list("bwa_merge_pairs"),

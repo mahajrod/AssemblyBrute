@@ -58,6 +58,7 @@ def get_filter(name):
 
 def config_logger(main_config):
     out_dir_path = Path(main_config["out_dir"])
+    out_dir_path.mkdir(parents=True, exist_ok=True)
     init_stage_log_prefix = main_config["init_stage_log_prefix"]
 
 

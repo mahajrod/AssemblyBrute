@@ -11,7 +11,7 @@ rule nanoqc:
     benchmark:
         config["out_dir"] / "log/nanoqc.{longread_datatype}.{stage}.{fileprefix}.benchmark.txt"
     conda:
-        config["conda"]["nanopore"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["nanopore"]["yaml"])
+        get_conda_env("nanopore")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("nanoqc"),

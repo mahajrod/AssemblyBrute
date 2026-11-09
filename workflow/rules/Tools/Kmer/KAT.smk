@@ -17,7 +17,7 @@ rule kat_gcp:
     benchmark:
         config["out_dir"] / "log/jellyfish.{datatype}.{stage}.{kmer_length}.benchmark.txt"
     conda:
-        config["conda"]["kat"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kat"]["yaml"])
+        get_conda_env("kat")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("kat_gcp"),

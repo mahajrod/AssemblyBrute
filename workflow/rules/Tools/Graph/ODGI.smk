@@ -12,7 +12,7 @@ rule gfa2og:
     benchmark:
         "{gfa_dir}/log/gfa2og.{gfa_prefix}.benchmark.txt"
     conda:
-        config["conda"]["hifiasm"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["hifiasm"]["yaml"])
+        get_conda_env("hifiasm")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("gfa2og"),
@@ -37,7 +37,7 @@ rule og_sort_1d:
     benchmark:
         "{gfa_dir}/log/og_sort_1d{gfa_prefix}.benchmark.txt"
     conda:
-        config["conda"]["hifiasm"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["hifiasm"]["yaml"])
+        get_conda_env("hifiasm")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("og_sort_1d"),
@@ -62,7 +62,7 @@ rule og_viz_1d:
     benchmark:
         "{gfa_dir}/log/og_viz_1d{gfa_prefix}.benchmark.txt"
     conda:
-        config["conda"]["hifiasm"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["hifiasm"]["yaml"])
+        get_conda_env("hifiasm")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("og_viz_1d"),

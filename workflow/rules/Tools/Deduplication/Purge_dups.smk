@@ -22,7 +22,7 @@ rule minimap2_purge_dups_reads:
     benchmark:
         "{fasta_dir}/log/minimap2_purge_dups_reads.{fasta_prefix}.{dtype}.{fileprefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("minimap2_purge_dups_reads"),
@@ -73,7 +73,7 @@ rule get_purge_dups_read_stat:
     benchmark:
         "{fasta_dir}/log/minimap2_purge_dups_reads.{fasta_prefix}.{datatype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("get_purge_dups_read_stat"),
@@ -109,7 +109,7 @@ rule minimap2_purge_dups_assembly:
     benchmark:
         "{fasta_dir}/log/minimap2_purge_dups_assembly.{fasta_prefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("minimap2_purge_dups_assembly"),
@@ -137,7 +137,7 @@ rule purge_dups: #
     benchmark:
         "{fasta_dir}/log/qc_purge_dups.{fasta_prefix}.{datatype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("purge_dups"),
@@ -172,7 +172,7 @@ rule extract_stats_from_purge_dups_file:
     benchmark:
         "{fasta_dir}/log/extract_stats_from_purge_dups_file.{fasta_prefix}.purge_dups.{datatype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("extract_stats_from_purge_dups_file"),
@@ -204,7 +204,7 @@ rule create_purge_dups_track:
     benchmark:
         "{fasta_dir}/log/create_purge_dups_track.{fasta_prefix}.{datatype}.{artefact_type}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("busco5_intersect_all"),

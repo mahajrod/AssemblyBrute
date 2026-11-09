@@ -27,7 +27,7 @@ rule get_purged_seqs: #
     benchmark:
         config["out_dir"] / "{assembly_stage}/{parameters}/log/qc_get_purged_seqs.{parameters}.{genome_prefix}.{assembly_stage}.{haplotype}.{datatype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("purge_dups"),
@@ -65,7 +65,7 @@ rule copy_purge_dups_track:
     benchmark:
         "{fasta_dir}/log/create_purge_dups_track.{fasta_prefix}.{datatype}.{artefact_type}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("busco5_intersect_all"),
@@ -109,7 +109,7 @@ rule create_purge_dups_track_for_combined_haplotype:
     benchmark:
         config["out_dir"] / "{assembly_stage}/{parameters}/log/create_purge_dups_for_combined_haplotype.{assembly_stage}.{parameters}.{genome_prefix}.{merged_haplotype}.purge_dups.{datatype}.{artefact_type}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("busco5_intersect_all"),

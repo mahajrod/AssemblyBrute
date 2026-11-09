@@ -24,7 +24,7 @@ rule yak_reads:
     benchmark:
         config["out_dir"] / "log/yak_reads.{datatype}.{stage}.{kmer_length}.benchmark.txt"
     conda:
-        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
+        get_conda_env("kmer")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("yak_reads"),
@@ -51,7 +51,7 @@ rule yak_histo:
     benchmark:
         "{yak_db_dir}/log/yak_histo.{yak_db_prefix}.yak.benchmark.txt"
     conda:
-        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
+        get_conda_env("kmer")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("yak_reads"),

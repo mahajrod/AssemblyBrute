@@ -7,6 +7,21 @@ from copy import deepcopy
 from pathlib import Path, PosixPath
 
 
+def get_conda_env(tool):
+    environment = config["conda"][tool]
+    if config["use_existing_envs"]:
+        return environment["name"]
+    return str(Path(workflow.main_snakefile).parent / environment["yaml"])
+
+
+def get_kmer_histo(wildcards):
+    counter = wildcards.kmer_tool
+    if counter == "fastk":
+        min_count = parameters["tool_options"]["fastk"][wildcards.datatype]["min_kmer_count"]
+        counter = f"fastk_min{min_count}"
+    return f"{wildcards.db_dir}/{wildcards.datatype}.{wildcards.stage}.{wildcards.kmer_length}.{counter}.histo"
+
+
 def detect_phasing_parameters(current_stage_parameters, phasing_stage, stage_separator=".."):
     parameter_list = current_stage_parameters.split(stage_separator)
 

@@ -13,7 +13,7 @@ rule busco5_download: #
     benchmark:
         config["out_dir"] / "log/busco5_download.{busco5_lineage}.benchmark.txt"
     conda:
-        config["conda"]["busco5.8"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco5.8"]["yaml"])
+        get_conda_env("busco5.8")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("busco_download"),
@@ -48,7 +48,7 @@ rule busco5_8_odb12: # Downloading of busco datasets is performed by a different
     benchmark:
         "{fasta_dir}/log/busco5.{fasta_prefix}.{busco5_lineage}.benchmark.txt"
     conda:
-        config["conda"]["busco5.8"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco5.8"]["yaml"])
+        get_conda_env("busco5.8")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("busco5"),
@@ -79,4 +79,4 @@ use rule busco5_8_odb12 as busco5_6_odb10 with: #BUSCO 5.8.3 returns strange res
     params:
         gene_predictor="--{0}".format(parameters["tool_options"]["busco"]["gene_predictor"]) if parameters["tool_options"]["busco"]["gene_predictor"] == "augustus" else "", # BUSCO5.6 has only --augustus option. metaeuk is enabled by default
     conda:
-        config["conda"]["busco5.6"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["busco5.6"]["yaml"])
+        get_conda_env("busco5.6")

@@ -22,7 +22,7 @@ rule bwa_map_for_hic_map: #
     benchmark:
         "{fasta_dir}/log/bwa_map.{fasta_prefix}.NA.{pairprefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("bwa_map"),

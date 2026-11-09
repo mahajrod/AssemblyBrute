@@ -19,7 +19,7 @@ rule simulate_pcr:
     benchmark:
         "{fasta_dir}/blast2.2.27.{fasta_prefix}.{primer_prefix}.benchmark.txt"
     conda:
-        config["conda"]["simulate_pcr"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["simulate_pcr"]["yaml"])
+        get_conda_env("simulate_pcr")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("simulate_pcr"),

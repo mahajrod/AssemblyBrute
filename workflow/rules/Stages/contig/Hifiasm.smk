@@ -41,7 +41,7 @@ rule hifiasm_correct:
     benchmark:
         config["out_dir"] / "log/hifiasm_correct.{correction_options}.{correction_mode}.{genome_prefix}.benchmark.txt"
     conda:
-        config["conda"]["hifiasm"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["hifiasm"]["yaml"])
+        get_conda_env("hifiasm")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("hifiasm_correct"),
@@ -129,7 +129,7 @@ rule hifiasm_hic_2p:
     benchmark:
         config["out_dir"] / "log/hifiasm.{parameters}.{genome_prefix}.benchmark.txt"
     conda:
-        config["conda"]["hifiasm"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["hifiasm"]["yaml"])
+        get_conda_env("hifiasm")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("hifiasm_hic"),
@@ -144,9 +144,9 @@ rule hifiasm_hic_2p:
          " >{log.std}; "
          " if [[ '{params.ont_mode}' != 'True' ]]; "
          "     then "
-         "     ln -sf ../../../{input.ec_bin} ${{OUT_DIR}} >>{log.std} 2>&1; "
-         "     ln -sf ../../../{input.ovlp_reverse_bin} ${{OUT_DIR}} >>{log.std} 2>&1; "
-         "     ln -sf ../../../{input.ovlp_source_bin} ${{OUT_DIR}} >>{log.std} 2>&1; "
+         "     ln -srf {input.ec_bin} ${{OUT_DIR}} >>{log.std} 2>&1; "
+         "     ln -srf {input.ovlp_reverse_bin} ${{OUT_DIR}} >>{log.std} 2>&1; "
+         "     ln -srf {input.ovlp_source_bin} ${{OUT_DIR}} >>{log.std} 2>&1; "
          "     fi; "
          " LAMBDA=`head -n 1 {input.lambda_file}` >> {log.std} 2>&1;  "
          " COV_UPPER_BOUNDARY=`echo \"{params.cov_multiplicator}*{params.ploidy}*${{LAMBDA}}\" | bc` >>{log.std} 2>&1;  "
@@ -315,7 +315,7 @@ rule get_length_and_coverage_from_hifiasm_graph:
     benchmark:
         "{gfa_dir}/log/{gfa_prefix}.get_length_and_coverage_from_hifiasm_graph.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("get_length_and_coverage_from_hifiasm_graph"),
@@ -344,7 +344,7 @@ rule get_lowcoverage_contig_ids:
     benchmark:
         config["out_dir"] / "log/get_lowcoverage_contig_ids.{parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("get_lowcoverage_contig_ids"),
@@ -376,7 +376,7 @@ rule filter_contigs_by_coverage:
     benchmark:
         config["out_dir"] / "log/filter_contigs_by_coverage.{parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("filter_contigs_by_coverage"),

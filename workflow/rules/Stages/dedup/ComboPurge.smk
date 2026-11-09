@@ -33,7 +33,7 @@ rule combined_dedup: #rule for combined deduplication using both purge_dups and 
     benchmark:
         config["out_dir"] / "dedup/{parameters_prefix}@{busco_lineage}/log/combined_dedup.{parameters_prefix}@{busco_lineage}.{input_fasta_prefix}.{datatype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("purge_dups"),

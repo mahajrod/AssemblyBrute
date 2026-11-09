@@ -20,7 +20,7 @@ rule tadbit:
     benchmark:
         config["out_dir"] / "log/tadbit.{stage}.{datatype}.{pairprefix}.benchmark.txt"
     conda:
-        config["conda"]["tadbit"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["tadbit"]["yaml"])
+        get_conda_env("tadbit")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("tadbit"),
@@ -54,7 +54,7 @@ rule merge_tadbit_stats:
     benchmark:
         config["out_dir"] / "log/tadbit.{stage}.{datatype}.{genome_prefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("merge_tadbit_stats"),

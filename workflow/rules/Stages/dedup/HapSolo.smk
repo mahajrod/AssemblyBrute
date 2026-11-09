@@ -41,7 +41,7 @@ rule hapsolo_assembly:
     benchmark:
         config["out_dir"]  / "dedup/{prev_stage_parameters}..hapsolo_{dedup_parameters}@{busco_lineage}/log/hapsolo.{busco_lineage}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["hapsolo"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["hapsolo"]["yaml"])
+        get_conda_env("hapsolo")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("hapsolo"),

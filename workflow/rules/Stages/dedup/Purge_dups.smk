@@ -27,7 +27,7 @@ rule get_purged_seqs: #
     benchmark:
         config["out_dir"] / "dedup/{parameters}/log/purge_dups.{parameters}.{input_fasta_prefix}.{datatype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("purge_dups"),

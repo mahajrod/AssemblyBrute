@@ -52,7 +52,7 @@ rule create_windows: #
     benchmark:
         "{len_dir}/log/create_windows.{len_prefix}.win{window}.step{step}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_windows"),
@@ -81,7 +81,7 @@ rule create_bedgraph_track: #
     benchmark:
         "{len_dir}/log/create_bedgraph_track.{len_prefix}.{track_type}.win{window}.step{step}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_bedgraph_track"),
@@ -112,7 +112,7 @@ rule scale_create_bedgraph_track: #
     benchmark:
         config["out_dir"] / "log/scale_create_bedgraph_track.{assembly_stage}.{parameters}.{track_type}.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("scale_create_bedgraph_track"),
@@ -140,7 +140,7 @@ rule liftover_contig_bedgraph: #
     benchmark:
         config["out_dir"] / "log/create_bedgraph_track.{prev_stage_parameters}..{curation_parameters}.contigs.{genome_prefix}.{haplotype}.{track_type}.win{window}.step{step}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("liftover_contig_bedgraph"),
@@ -172,7 +172,7 @@ rule get_track_stats: #
     benchmark:
         "{len_dir}/log/get_track_stats.{len_prefix}.{track_type}.win{window}.step{step}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("get_track_stats"),
@@ -220,7 +220,7 @@ rule draw_track: #
     benchmark:
         "{len_dir}/log/draw_track.{len_prefix}.{track_type}.{scaffold_length}.win{window}.step{step}.{threshold_type}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("draw_track"),

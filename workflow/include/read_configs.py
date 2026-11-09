@@ -2,8 +2,10 @@
 
 #---- Read config files ----
 #-------- Read core config file --------
+project_paths = {key: config[key] for key in ("input_dir", "out_dir", "tmp_dir") if key in config}
 with open(config["main_config_file"], "r") as core_yaml_fd:
     config.update(yaml.safe_load(core_yaml_fd))
+config.update(project_paths)
 #--------
 #-------- Read secondary tools config file -------
 with open(config["secondary_tool_config_file"], "r") as secondary_tool_fd:

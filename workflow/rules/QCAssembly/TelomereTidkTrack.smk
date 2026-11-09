@@ -21,7 +21,7 @@ rule filter_tidk_telomere_tracks_for_pretext:
     benchmark:
         "{fasta_dir}/log/copy_telomere_track_for_pretext.{fasta_prefix}.win{window}.step{window}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("telo_container"),

@@ -32,7 +32,7 @@ brute_logger = config_logger(config)
 
 #---- Set conda environment for singularity ----
 singularity_conda_env_title = config["singularity_load_env"] if config["singularity_load_mode"] == "cluster" else "singularity"
-singularity_conda_env = config["conda"][singularity_conda_env_title]["name"] if config["use_existing_envs"] else f"../../../{config['conda'][singularity_conda_env_title]['yaml']}"
+singularity_conda_env = get_conda_env(singularity_conda_env_title)
 #-----
 
 #---- Initialization of path variables from config file ----

@@ -41,7 +41,7 @@ rule samba:
     benchmark:
         config["out_dir"] / "log/samba.gap_closing.{prev_stage_parameters}..samba_{gap_closing_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["masurca"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["masurca"]["yaml"])
+        get_conda_env("masurca")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("samba"),
@@ -79,7 +79,7 @@ rule reorder_samba_output:
     benchmark:
         config["out_dir"] / "log/reorder_samba_output.{prev_stage_parameters}..samba_{gap_closing_parameters}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("reorder_samba_output"),

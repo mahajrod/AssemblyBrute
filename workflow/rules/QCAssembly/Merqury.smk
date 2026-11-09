@@ -39,7 +39,7 @@ rule merqury:
     benchmark:
         config["out_dir"] / "log/merqury.{assembly_stage}.{parameters}.{genome_prefix}.{datatype}.benchmark.txt"
     conda:
-        config["conda"]["kmer"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["kmer"]["yaml"])
+        get_conda_env("kmer")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("merqury"),

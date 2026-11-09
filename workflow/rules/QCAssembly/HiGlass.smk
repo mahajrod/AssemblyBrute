@@ -14,7 +14,7 @@ rule bam2bed_for_hic_map: # TODO: move code to bam2bed, do better management for
     benchmark:
         "{bam_dir}/log/bam2bed_for_hic_map.{bam_prefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("bam2bed_for_hic_map"),
@@ -46,7 +46,7 @@ rule bed2pairs_for_hic_map:
     benchmark:
         "{bam_dir}/log/bed2pairs.{bam_prefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("bed2pairs"),
@@ -87,7 +87,7 @@ rule create_higlass_track_from_bed: #
     benchmark:
         "{bam_dir}/log/create_higlass_track.{bam_prefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("create_higlass_track_from_bed"),

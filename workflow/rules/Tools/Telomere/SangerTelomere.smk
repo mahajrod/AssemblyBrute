@@ -26,7 +26,7 @@ rule telo_finder:
     benchmark:
         "{fasta_dir}/log/telo_finder.{fasta_prefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("telo_finder"),
@@ -195,7 +195,7 @@ rule collapse_overlapping_telomere_windows:
     benchmark:
         "{fasta_dir}/log/collapse_telomere_track.{fasta_prefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("telo_container"),
@@ -246,7 +246,7 @@ rule classify_telomeric_regions_windows:
     benchmark:
         "{fasta_dir}/log/classify_telomeric_regions_windows.{fasta_prefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("get_telomere_warning"),
@@ -288,7 +288,7 @@ rule get_telomere_warning:
     benchmark:
         "{fasta_dir}/log/get_telomere_warning.{fasta_prefix}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("get_telomere_warning"),

@@ -29,7 +29,7 @@ rule ragtag_ref_scaf: #
     benchmark:
         config["out_dir"] / "log/ragtag.{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["ragtag"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["ragtag"]["yaml"])
+        get_conda_env("ragtag")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("ragtag"),
@@ -71,7 +71,7 @@ rule ragtag_filter: #
     benchmark:
         config["out_dir"] / "log/ragtag_filter.{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("ragtag_filter"),
@@ -105,7 +105,7 @@ rule ragtag_generate_filtered_fasta: #
     benchmark:
         config["out_dir"] / "log/ragtag_filter.{prev_stage_parameters}..ragtag_{ref_scaf_parameters}@{reference}.{genome_prefix}.{haplotype}.benchmark.txt"
     conda:
-        config["conda"]["ragtag"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["ragtag"]["yaml"])
+        get_conda_env("ragtag")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("ragtag_filter"),

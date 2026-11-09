@@ -22,7 +22,7 @@ rule add_basequalities_to_bam: #adds basequalities to bam generated from fasta (
     benchmark:
         config["out_dir"] / "log/add_basequalities_to_bam.{prev_stage_parameters}.{curation_parameters}.{seq_type}.{haplotype}.{genome_prefix}.{datatype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         node_options=parse_node_list("add_basequalities_to_bam"),
@@ -116,7 +116,7 @@ rule deepvariant_filter: #
     benchmark:
         config["out_dir"] / "log/deepvariant_filter.{prev_stage_parameters}.{curation_parameters}.{haplotype}.{genome_prefix}.{datatype}.benchmark.txt"
     conda:
-        config["conda"]["common"]["name"] if config["use_existing_envs"] else ("../../../%s" % config["conda"]["common"]["yaml"])
+        get_conda_env("common")
     resources:
         queue=config["queue"]["cpu"]["name"],
         cpus=parameters["threads"]["deepvariant_filter"],

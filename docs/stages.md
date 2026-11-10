@@ -39,7 +39,7 @@ for runnable configurations is recorded in the [example catalog](examples/README
 | `mtdna` | MitoHiFi, MitoZ | MitoHiFi requires HiFi; MitoZ uses selected Hi-C/Illumina paths. Requires references, taxonomy settings, and containers. |
 | `contig` | Hifiasm | Main reads and permitted phasing data determine assembly ploidy. |
 | `contig` | Flye | Reads matching the preset; assembly ploidy is 1. |
-| `contig` | Verkko | Phased output links have a known defect: both haplotypes link to the same source FASTA. |
+| `contig` | Verkko | HiFi/Nanopore inputs and permitted phasing data. |
 | `contig` | NextDenovo | Stage integration is disabled/incomplete. |
 | `draft_qc` | Existing assemblies and shared QC | Draft FASTA count must match `ploidy`; parsing also requires HiFi. Mutually exclusive with `contig`. |
 | `polishing` | NextPolish2 | Previous assembly, HiFi, and Illumina-derived Yak databases at k=21/31. |

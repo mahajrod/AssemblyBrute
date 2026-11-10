@@ -101,7 +101,7 @@ and draft-QC rows also identify the later executed examples.
 | `mtdna` | MitoHiFi and MitoZ | HiFi for MitoHiFi; Hi-C/Illumina for selected MitoZ paths; reference/taxonomy settings | HiFi + Hi-C dry-run passed; reference retrieval, containers, and execution unverified. |
 | `contig` | Hifiasm | Main reads; permitted phasing data affects inferred assembly ploidy | Phase 1 diploid HiFi + Hi-C dry-run passed; Phase 2 HiFi-only primary assembly executed. Other modes remain unverified. |
 | `contig` | Flye | Reads matching the chosen preset | `hifi` preset dry-run passed; stage assigns assembly ploidy 1. |
-| `contig` | Verkko | Configured HiFi/Nanopore inputs and phasing choice | `default` preset dry-run passed with HiFi + Hi-C, but phased output links have a correctness defect; see below. |
+| `contig` | Verkko | Configured HiFi/Nanopore inputs and phasing choice | `default` preset dry-run passed with HiFi + Hi-C. |
 | `contig` | NextDenovo | No usable stage implementation established | Rule include is disabled and rule body is a quoted TODO; test also failed on absent tool options. |
 | `draft_qc` | Existing assemblies and shared QC | `draft` input; mutually exclusive with `contig`; current parsing also accesses HiFi | Phase 1 diploid import/level-5 QC dry-runs passed; Phase 4 single-draft level-1 QUAST/statistics executed. |
 | `polishing` | NextPolish2 | Previous assembly, HiFi reads, and Illumina-derived Yak databases at k=21/31 | HiFi + Hi-C alone failed; adding Illumina passed. |
@@ -165,22 +165,17 @@ draft import at level 0 and draft QC at level 5; levels 6–7 remain unverified.
 1. **Output initialization (resolved locally).** Missing `out_dir` caused
    `Unable to configure handler 'debug_file'` in the initial tests. The logger now
    creates that directory before opening handlers; fresh nested roots were checked.
-2. **Keep phased Verkko out of the verified quickstart.** In
-   [`Verkko.smk`](../../workflow/rules/Stages/contig/Verkko.smk), both `hap1_fasta` and
-   `hap2_fasta` link to `assembly.haplotype1.fasta`. Also, `--haplo-divergence` reads
-   the `polishing_iterations` option rather than `haplo_divergence`. A successful
-   DAG check does not detect these shell-command defects.
-3. **Do not promise reference scaffolding, NextDenovo, or a standalone
+2. **Do not promise reference scaffolding, NextDenovo, or a standalone
    `smudgeplot` recipe.** Their incomplete wiring is distinct from optional
    analyses requiring external resources.
-4. **Review reference side effects before examples.** If `.syn` is absent,
+3. **Review reference side effects before examples.** If `.syn` is absent,
    initialization attempts to create one through a shell command; missing required
    reference files are indexed without an explicit empty-list check. Audit runs
    supplied all reference sidecars and used synthetic copies only.
-5. **Replace site-specific database/container paths.** The shipped database config
+4. **Replace site-specific database/container paths.** The shipped database config
    points at external locations. A dependency declaration or local container
    filename is not proof that the asset exists or that execution will work.
-6. **Treat scheduler support separately.** `profile/slurm/` uses the legacy
+5. **Treat scheduler support separately.** `profile/slurm/` uses the legacy
    `cluster: sbatch ...` interface. `profile/slurm8.30/` uses `executor: slurm` and
    a different configuration shape. Neither profile was submitted to a scheduler;
    the latter's directory name is not a compatibility guarantee.

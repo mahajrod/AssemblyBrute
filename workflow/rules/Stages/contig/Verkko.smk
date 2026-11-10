@@ -21,7 +21,7 @@ rule verkko_phasing:
     params:
         hifi_reads=lambda wildcards: " --hifi %s " % " ".join(get_hifi_read_filelist(wildcards)) if get_hifi_read_filelist(wildcards) else "",
         nano_reads=lambda wildcards: " --nano %s " % " ".join(get_nano_read_filelist(wildcards)) if get_nano_read_filelist(wildcards) else "",
-        haplo_divergence=lambda wildcards: parse_option("polishing_iterations", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --haplo-divergence "),
+        haplo_divergence=lambda wildcards: parse_option("haplo_divergence", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --haplo-divergence "),
         uneven_cov=lambda wildcards: parse_option_flag("uneven_cov", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --uneven-depth "),
         no_rdna_tangle=lambda wildcards: parse_option_flag("no_rdna_tangle", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --no-rdna-tangle "),
         no_nano=lambda wildcards: parse_option_flag("no_nano", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --no-nano "),
@@ -53,7 +53,7 @@ rule verkko_phasing:
          "        --local --local-cpus {threads} --local-memory {params.local_mem_gb} > {log.std} 2>&1;"
          " ln -sf assembly.fasta {output.consensus_fasta}; "
          " ln -sf assembly.haplotype1.fasta {output.hap1_fasta}; "
-         " ln -sf assembly.haplotype1.fasta {output.hap2_fasta}; "
+         " ln -sf assembly.haplotype2.fasta {output.hap2_fasta}; "
          " ln -sf assembly.unassigned.fasta {output.unassigned_fasta}; "
 
 rule verkko_no_phasing:
@@ -66,7 +66,7 @@ rule verkko_no_phasing:
     params:
         hifi_reads=lambda wildcards: " --hifi %s " % " ".join(get_hifi_read_filelist(wildcards)) if get_hifi_read_filelist(wildcards) else "",
         nano_reads=lambda wildcards: " --nano %s " % " ".join(get_nano_read_filelist(wildcards)) if get_nano_read_filelist(wildcards) else "",
-        haplo_divergence=lambda wildcards: parse_option("polishing_iterations", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --haplo-divergence "),
+        haplo_divergence=lambda wildcards: parse_option("haplo_divergence", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --haplo-divergence "),
         uneven_cov=lambda wildcards: parse_option_flag("uneven_cov", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --uneven-depth "),
         no_rdna_tangle=lambda wildcards: parse_option_flag("no_rdna_tangle", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --no-rdna-tangle "),
         no_nano=lambda wildcards: parse_option_flag("no_nano", stage_dict["contig"].parameters[wildcards.parameters]["option_set"], " --no-nano "),

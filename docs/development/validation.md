@@ -62,7 +62,7 @@ template selections remain in place.
 | `mitochondrial` | `mtdna` | Template MitoHiFi/MitoZ settings | Passed; 15 jobs. |
 | `polishing` | `contig, polishing` | HiFi + Hi-C only | Failed: `yak_reads` input function requires missing `illumina` data. |
 | `polishing-with-illumina` | `contig, polishing` | Inputs `hifi,hic,illumina` | Passed; 215 jobs. |
-| `verkko` | `contig` | `stage_coretools.contig: [verkko]`; `coretool_option_sets.verkko: [default]` | Passed; 98 jobs; source defects remain. |
+| `verkko` | `contig` | `stage_coretools.contig: [verkko]`; `coretool_option_sets.verkko: [default]` | Passed; 98 jobs. |
 | `ref-scaffolding` | `contig, ref_scaffolding` | Inputs `hifi,hic,reference` | Failed during initialization: template lacks `coretool_option_sets.ragtag`. |
 | `ref-scaffolding-configured` | `contig, ref_scaffolding` | Inputs `hifi,hic,reference`; `coretool_option_sets.ragtag: [default]` | Failed: missing reference-scaffolding stage FASTA, with no active stage producer. |
 | `nextdenovo` | `contig` | `stage_coretools.contig: [nextdenovo]`; `coretool_option_sets.nextdenovo: [def]` | Failed: missing tool options. Source also has no active NextDenovo rule. |
@@ -99,8 +99,8 @@ paths within the archive.
   assemblers/presets, HapSolo/combined purge, non-Arima alignment, 3D-DNA, and the
   optional Smudgeplot path within `ploidy_check`.
 
-Successful dry runs do not clear the Verkko shell-command defects or the other
-limitations recorded in the [implementation audit](implementation-audit.md).
+These initial dry runs do not resolve the limitations recorded in the
+[implementation audit](implementation-audit.md).
 
 ## Phase 2: first-run guide
 

@@ -111,8 +111,7 @@ to a private directory such as `config/local/resources/local/`. Point the
 private core's `resources_dir` to `config/local/resources/`, set
 `resource_profile: local` in the project, and edit the relevant rule/column cells.
 Keep table headers and rule rows: included rules can require entries even when
-their tool is not selected. The shipped `low` profile currently fails parsing on
-a missing `combine_long_reads` entry.
+their tool is not selected.
 
 `threads` controls rule threads, `memory_mb` supplies the custom `mem` resource,
 and `time` supplies scheduler time strings. Values loaded from these tables

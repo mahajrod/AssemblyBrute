@@ -12,7 +12,6 @@
 | `KeyError: 'hifi'` with draft-only input | Included MitoHiFi rules access HiFi during parsing even when mtDNA is disabled. Retain HiFi inputs for draft QC. |
 | Reference parsing fails or tries to create a synonym file | Supply the FASTA, whitelist, order list, and synonym file explicitly; missing-sidecar handling needs review. |
 | `KeyError` for a preset or tool | Check tool-table row names and project mappings against [tool support](stages.md#tool-support). |
-| `KeyError: combine_long_reads` with `resource_profile: low` | The shipped low resource table is incomplete. Use `high` or complete private copies of all three tables. |
 
 ## Empty or surprising job graphs
 

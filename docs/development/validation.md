@@ -176,9 +176,7 @@ Automatic environment resolution was checked using the same project with
 `--config use_existing_envs=False --list-conda-envs`. It failed on an incorrectly
 relative `conda.kmer.yaml` path before creating an environment. This historical
 path failure is now fixed; see [Conda YAML path resolution](#conda-yaml-path-resolution).
-The `low` resource
-profile also failed at parse time on a missing `combine_long_reads` table entry;
-the published example uses `high`/`micro` instead. Fresh Conda solves/creation from
+Fresh Conda solves/creation from
 the manual installation commands remain unverified.
 
 ### Executed quickstart

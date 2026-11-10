@@ -201,9 +201,8 @@ Report code defects separately; this audit changes documentation only.
 The historical HiFi-only execution used a private core with Hifiasm's initial
 Bloom filter disabled and named environments; its results remain in
 [validation](validation.md#executed-quickstart). The current runnable examples are
-listed in the [example catalog](../examples/README.md). Additional checks established that
-the `low` resource table lacks `combine_long_reads` entries required during
-parsing. The previously observed Conda YAML path failure was fixed by resolving
+listed in the [example catalog](../examples/README.md). The previously observed
+Conda YAML path failure was fixed by resolving
 specifications from the main `Snakefile` directory. All ten then-current example
 configurations passed DAG/environment-list checks in both selection modes;
 fresh Conda solves remain unverified. See

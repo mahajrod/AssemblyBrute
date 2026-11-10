@@ -240,6 +240,8 @@ if "reference" in config["data"]: # REQUIRED FILE: *.fasta, *.whitelist and *.or
     for filename in config["data"]["reference"]["in_dir"].glob("*"):
         if filename.is_dir():
             config["data"]["reference"]["ref_dict"][filename.name] = {}
+    if not config["data"]["reference"]["ref_dict"]:
+        raise ValueError(f"ERROR!!! No reference directories found in {config['data']['reference']['in_dir']}. Expected reference/<name>/ with *.fasta, *.whitelist and *.orderlist files.")
     for genome in config["data"]["reference"]["ref_dict"]:
         brute_logger.info(TAB * 2 + f"Checking reference {genome}...")
         for filetype in "fasta", "whitelist", "orderlist", "syn":
@@ -247,6 +249,9 @@ if "reference" in config["data"]: # REQUIRED FILE: *.fasta, *.whitelist and *.or
 
             if len(config["data"]["reference"]["ref_dict"][genome][filetype]) > 1:
                 raise ValueError(f"ERROR!!! There is more than one {filetype} file for reference {genome}")
+
+            if (filetype != "syn") and (not config["data"]["reference"]["ref_dict"][genome][filetype]):
+                raise ValueError(f"ERROR!!! Missing *.{filetype} file for reference {genome} in {config['data']['reference']['in_dir'] / genome}")
 
             if (filetype == "syn") and (not config["data"]["reference"]["ref_dict"][genome]["syn"]): # create syn file from the whitelist if it is absent
                 syn_filename = ".".join(str(config['data']['reference']['ref_dict'][genome]['whitelist']).split(".")[:-1]) + ".syn"

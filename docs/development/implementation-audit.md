@@ -69,7 +69,7 @@ not proof that every conversion/tool combination has been executed:
 | `illumina`, `hic` | `fastq`: `.fq.gz`/`.fastq.gz`; `fasta`: `.fa.gz`/`.fasta.gz`; `mapped_bam`/`unmapped_bam`: `.bam` | Marked paired. Consecutive sorted files are paired; an odd count is rejected, and paired filenames must differ at no more than one character. |
 | `hifi`, `lqccs`, `nanopore`, `simplex`, `duplex`, `ultralongnano`, `adaptivenano` | Same declared read formats/extensions | Marked single-end; datatype feature flags control applicable tools. |
 | `draft` | `draft/fasta/*.fasta` | File count must equal `ploidy`; with multiple haplotypes, names must end in `hap1.fasta`, `hap2.fasta`, etc. A single assembly becomes `hap0`. |
-| `reference` | `reference/<name>/*` | Parser expects one `.fasta`, `.whitelist`, and `.orderlist`; provide a `.syn` file too. Missing-file handling needs review. |
+| `reference` | `reference/<name>/*` | Parser requires one `.fasta`, `.whitelist`, and `.orderlist`; provide a `.syn` file too. |
 
 For each selected read datatype, discovery rejects missing files, multiple
 recognized formats, or mixed extensions within a format. For example, `.fq.gz`
@@ -169,8 +169,7 @@ draft import at level 0 and draft QC at level 5; levels 6–7 remain unverified.
    `smudgeplot` recipe.** Their incomplete wiring is distinct from optional
    analyses requiring external resources.
 3. **Review reference side effects before examples.** If `.syn` is absent,
-   initialization attempts to create one through a shell command; missing required
-   reference files are indexed without an explicit empty-list check. Audit runs
+   initialization attempts to create one through a shell command. Audit runs
    supplied all reference sidecars and used synthetic copies only.
 4. **Replace site-specific database/container paths.** The shipped database config
    points at external locations. A dependency declaration or local container

@@ -10,7 +10,7 @@
 | Paired-read count or suffix error | Files are paired after sorting; use an even count and mate names differing by one character. See [paired-read names](inputs.md#paired-read-names). |
 | Draft count/haplotype suffix error | Match the uncompressed `.fasta` count to `ploidy`; multi-haplotype names must end in `hap1.fasta`, `hap2.fasta`, etc. |
 | `KeyError: 'hifi'` with draft-only input | Included MitoHiFi rules access HiFi during parsing even when mtDNA is disabled. Retain HiFi inputs for draft QC. |
-| Reference parsing fails or tries to create a synonym file | Supply the FASTA, whitelist, order list, and synonym file explicitly; missing-sidecar handling needs review. |
+| Missing reference directory or required file | Use `reference/<name>/` with one `.fasta`, `.whitelist`, and `.orderlist`; the error identifies the missing type and directory. Supply `.syn` explicitly to avoid automatic creation. |
 | `KeyError` for a preset or tool | Check tool-table row names and project mappings against [tool support](stages.md#tool-support). |
 
 ## Empty or surprising job graphs

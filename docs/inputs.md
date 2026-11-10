@@ -103,8 +103,7 @@ References use their own directory layout:
 Provide one file of each type. The whitelist identifies selected sequence IDs;
 the order list specifies their ordering; the synonym file supplies tab-separated
 ID mappings. Check that IDs agree with the FASTA headers. Provide `.syn` explicitly
-because the current fallback that tries to create it needs review. Empty or
-incomplete reference directories can fail during initialization.
+because the current fallback that tries to create it needs review.
 
 Reference-based QC and the separate `ref_scaffolding` stage have different
 implementation status. The latter is incomplete; see the

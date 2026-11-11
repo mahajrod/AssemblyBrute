@@ -167,7 +167,7 @@
         "low_limit": null
         "high_limit": null
     "genomescope":
-        "starting_lambda": null
+        "starting_lambda": 20
         "start_shift": null
     "hapsolo":
         "busco_lineage_list":

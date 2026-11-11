@@ -330,7 +330,7 @@
 "skip_ragtag_qc": False
 #----
 #---- mtDNA ----
-"skip_mitohifi_reads": True
+"skip_mitohifi_reads": False
 "skip_mitohifi_reads_per_file": False
 "skip_mitohifi_reads_combined": False
 "skip_mitohifi_assembly": False

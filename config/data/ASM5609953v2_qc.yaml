@@ -220,7 +220,7 @@
         - "absolute"
         - "relative"
 
-"ploidy": 1
+"ploidy": 2
 "kmer_ploidy_test_list": # [] # requests genomescope runs with ploidies from this list
     - 2
     - 3

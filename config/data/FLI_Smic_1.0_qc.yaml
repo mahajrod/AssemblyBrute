@@ -222,7 +222,7 @@
         - "relative"
 
 "ploidy": 1
-"kmer_ploidy_test_list": # [] # requests genomescope runs with ploidies from this list
+"ploidy_test_list": # [] # requests genomescope runs with ploidies from this list
     - 2
     - 3
     - 4

@@ -56,6 +56,7 @@
     - "filtered_read_qc"
     - "kmer_qc"
     - "mtdna"
+    - "ploidy_check"
     - "read_contamination_scan" # TODO: test after refactoring
     - "draft_qc"         # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
     #- "contig"            # SELECT EITHER 'contig' or 'draft_qc'. This stages actually initiate assembly process
